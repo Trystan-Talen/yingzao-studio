@@ -1,0 +1,9 @@
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  sharp: true
+  canvas: false
+minimumReleaseAgeExclude:
+  - fastify@5.12.7
+  - lucide-react@1.56.0
+  - nodemailer@10.1.1

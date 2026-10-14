@@ -1,0 +1,13 @@
+ALTER TABLE orders ADD COLUMN provider_session_id TEXT;
+ALTER TABLE orders ADD COLUMN provider_invoice_id TEXT;
+ALTER TABLE orders ADD COLUMN provider_payment_intent_id TEXT;
+CREATE UNIQUE INDEX orders_stripe_invoice ON orders(provider_invoice_id) WHERE provider_invoice_id IS NOT NULL;
+CREATE INDEX orders_stripe_payment ON orders(provider_payment_intent_id);
+ALTER TABLE subscriptions ADD COLUMN provider_subscription_id TEXT;
+ALTER TABLE subscriptions ADD COLUMN source_order_id TEXT REFERENCES orders(id);
+CREATE UNIQUE INDEX subscriptions_stripe_id ON subscriptions(provider_subscription_id) WHERE provider_subscription_id IS NOT NULL;
+CREATE TABLE stripe_checkouts(order_id TEXT PRIMARY KEY REFERENCES orders(id),idempotency_key TEXT NOT NULL UNIQUE,session_id TEXT UNIQUE,checkout_url TEXT,expires_at TEXT,created_at TEXT NOT NULL,updated_at TEXT NOT NULL);
+CREATE TABLE stripe_events(event_id TEXT PRIMARY KEY,event_type TEXT NOT NULL,object_id TEXT NOT NULL,event_created INTEGER NOT NULL,processed_at TEXT NOT NULL);
+CREATE TABLE billing_fulfillments(event_key TEXT PRIMARY KEY,workspace_id TEXT NOT NULL REFERENCES workspaces(id),order_id TEXT NOT NULL REFERENCES orders(id),credits INTEGER NOT NULL CHECK(credits>=0),created_at TEXT NOT NULL);
+CREATE TABLE billing_risks(id TEXT PRIMARY KEY,provider_event_id TEXT NOT NULL UNIQUE,kind TEXT NOT NULL,charge_id TEXT,payment_intent_id TEXT,order_id TEXT REFERENCES orders(id),workspace_id TEXT REFERENCES workspaces(id),amount_minor INTEGER,status TEXT NOT NULL DEFAULT 'review_required',created_at TEXT NOT NULL);
+ALTER TABLE workspace_billing ADD COLUMN payment_review_required INTEGER NOT NULL DEFAULT 0 CHECK(payment_review_required IN (0,1));

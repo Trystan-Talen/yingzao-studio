@@ -1,0 +1,328 @@
+import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+// SQL migrations are authoritative for foreign keys, checks, and composite indexes.
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  email: text('email').notNull(),
+  passwordHash: text('password_hash').notNull(),
+  displayName: text('display_name').notNull(),
+  avatarAssetId: text('avatar_asset_id'),
+  preferencesJson: text('preferences_json').notNull(),
+  activeWorkspaceId: text('active_workspace_id'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+export const workspaces = sqliteTable('workspaces', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  kind: text('kind').notNull(),
+  isDemo: integer('is_demo').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  archivedAt: text('archived_at'),
+});
+export const memberships = sqliteTable('memberships', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  userId: text('user_id').notNull(),
+  role: text('role').notNull(),
+  creditLimit: integer('credit_limit'),
+  nickname: text('nickname').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+export const sessions = sqliteTable('sessions', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  tokenHash: text('token_hash').notNull(),
+  expiresAt: text('expires_at').notNull(),
+  createdAt: text('created_at').notNull(),
+  lastUsedAt: text('last_used_at').notNull(),
+  revokedAt: text('revoked_at'),
+});
+export const invitations = sqliteTable('invitations', {
+  creditLimit: integer('credit_limit'),
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  email: text('email').notNull(),
+  role: text('role').notNull(),
+  tokenHash: text('token_hash').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  expiresAt: text('expires_at').notNull(),
+  consumedAt: text('consumed_at'),
+  revokedAt: text('revoked_at'),
+});
+export const projects = sqliteTable('projects', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  kind: text('kind').notNull(),
+  coverAssetId: text('cover_asset_id'),
+  documentId: text('document_id').notNull(),
+  tagsJson: text('tags_json').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  deletedAt: text('deleted_at'),
+});
+export const documents = sqliteTable('documents', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  projectId: text('project_id').notNull(),
+  name: text('name').notNull(),
+  revision: integer('revision').notNull(),
+  schemaVersion: integer('schema_version').notNull(),
+  sceneJson: text('scene_json').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+export const documentVersions = sqliteTable('document_versions', {
+  id: text('id').primaryKey(),
+  documentId: text('document_id').notNull(),
+  revision: integer('revision').notNull(),
+  sceneJson: text('scene_json').notNull(),
+  reason: text('reason').notNull(),
+  createdBy: text('created_by').notNull(),
+  sourceJobId: text('source_job_id'),
+  restoredFromRevision: integer('restored_from_revision'),
+  createdAt: text('created_at').notNull(),
+});
+export const assets = sqliteTable('assets', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  projectId: text('project_id'),
+  name: text('name').notNull(),
+  kind: text('kind').notNull(),
+  mimeType: text('mime_type').notNull(),
+  byteSize: integer('byte_size').notNull(),
+  width: integer('width'),
+  height: integer('height'),
+  durationMs: real('duration_ms'),
+  source: text('source').notNull(),
+  sourceJobId: text('source_job_id'),
+  tagsJson: text('tags_json').notNull(),
+  sha256: text('sha256').notNull(),
+  extractionStatus: text('extraction_status').notNull(),
+  extractedText: text('extracted_text'),
+  extractionErrorJson: text('extraction_error_json'),
+  extractionTruncated: integer('extraction_truncated').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  deletedAt: text('deleted_at'),
+});
+export const assetVariants = sqliteTable('asset_variants', {
+  id: text('id').primaryKey(),
+  assetId: text('asset_id').notNull(),
+  variant: text('variant').notNull(),
+  storageKey: text('storage_key').notNull(),
+  mimeType: text('mime_type').notNull(),
+  byteSize: integer('byte_size').notNull(),
+  width: integer('width'),
+  height: integer('height'),
+});
+export const favorites = sqliteTable('favorites', {
+  userId: text('user_id').notNull(),
+  workspaceId: text('workspace_id').notNull(),
+  resourceType: text('resource_type').notNull(),
+  resourceId: text('resource_id').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+export const collections = sqliteTable('collections', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  name: text('name').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  deletedAt: text('deleted_at'),
+});
+export const assetCollections = sqliteTable('asset_collections', {
+  collectionId: text('collection_id').notNull(),
+  assetId: text('asset_id').notNull(),
+});
+export const brands = sqliteTable('brands', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  colorsJson: text('colors_json').notNull(),
+  fontsJson: text('fonts_json').notNull(),
+  coverAssetId: text('cover_asset_id'),
+  visibility: text('visibility').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  deletedAt: text('deleted_at'),
+});
+export const brandReferences = sqliteTable('brand_references', {
+  brandId: text('brand_id').notNull(),
+  assetId: text('asset_id').notNull(),
+  position: integer('position').notNull(),
+});
+export const characterProfiles = sqliteTable('character_profiles', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  referenceAssetIdsJson: text('reference_asset_ids_json').notNull(),
+  coverAssetId: text('cover_asset_id'),
+  verificationStatus: text('verification_status').notNull(),
+  verificationProviderId: text('verification_provider_id'),
+  verificationExpiresAt: text('verification_expires_at'),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  deletedAt: text('deleted_at'),
+});
+export const apiKeys = sqliteTable('api_keys', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  createdBy: text('created_by').notNull(),
+  name: text('name').notNull(),
+  prefix: text('prefix').notNull(),
+  tokenHash: text('token_hash').notNull(),
+  scopesJson: text('scopes_json').notNull(),
+  creditLimit: integer('credit_limit'),
+  createdAt: text('created_at').notNull(),
+  lastUsedAt: text('last_used_at'),
+  expiresAt: text('expires_at'),
+  revokedAt: text('revoked_at'),
+});
+export const auditEvents = sqliteTable('audit_events', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  actorId: text('actor_id').notNull(),
+  action: text('action').notNull(),
+  resourceType: text('resource_type').notNull(),
+  resourceId: text('resource_id'),
+  detailsJson: text('details_json').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+export const notifications = sqliteTable('notifications', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  userId: text('user_id').notNull(),
+  title: text('title').notNull(),
+  message: text('message').notNull(),
+  eventKey: text('event_key'),
+  readAt: text('read_at'),
+  createdAt: text('created_at').notNull(),
+});
+export const plans = sqliteTable('plans', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  kind: text('kind').notNull(),
+  priceMinor: integer('price_minor').notNull(),
+  currency: text('currency').notNull(),
+  interval: text('interval'),
+  credits: integer('credits').notNull(),
+  limitsJson: text('limits_json').notNull(),
+  active: integer('active').notNull(),
+});
+export const orders = sqliteTable('orders', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  number: text('number').notNull(),
+  kind: text('kind').notNull(),
+  status: text('status').notNull(),
+  amountMinor: integer('amount_minor').notNull(),
+  currency: text('currency').notNull(),
+  planId: text('plan_id'),
+  planSnapshotJson: text('plan_snapshot_json').notNull(),
+  providerId: text('provider_id'),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  paidAt: text('paid_at'),
+});
+export const subscriptions = sqliteTable('subscriptions', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  planId: text('plan_id').notNull(),
+  status: text('status').notNull(),
+  currentPeriodStart: text('current_period_start'),
+  currentPeriodEnd: text('current_period_end'),
+  cancelAtPeriodEnd: integer('cancel_at_period_end').notNull(),
+  providerId: text('provider_id'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+export const invoiceTitles = sqliteTable('invoice_titles', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  type: text('type').notNull(),
+  name: text('name').notNull(),
+  taxId: text('tax_id'),
+  email: text('email'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+  deletedAt: text('deleted_at'),
+});
+export const invoiceRequests = sqliteTable('invoice_requests', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  titleSnapshotJson: text('title_snapshot_json').notNull(),
+  status: text('status').notNull(),
+  amountMinor: integer('amount_minor').notNull(),
+  currency: text('currency').notNull(),
+  providerId: text('provider_id'),
+  downloadStorageKey: text('download_storage_key'),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+export const invoiceOrders = sqliteTable('invoice_orders', {
+  invoiceId: text('invoice_id').notNull(),
+  orderId: text('order_id').notNull(),
+});
+export const supportTickets = sqliteTable('support_tickets', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  createdBy: text('created_by').notNull(),
+  subject: text('subject').notNull(),
+  category: text('category').notNull(),
+  message: text('message').notNull(),
+  jobId: text('job_id'),
+  assetIdsJson: text('asset_ids_json').notNull(),
+  status: text('status').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+export const ticketMessages = sqliteTable('ticket_messages', {
+  id: text('id').primaryKey(),
+  ticketId: text('ticket_id').notNull(),
+  userId: text('user_id').notNull(),
+  message: text('message').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+export const referrals = sqliteTable('referrals', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  code: text('code').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+export const referralEvents = sqliteTable('referral_events', {
+  id: text('id').primaryKey(),
+  referralId: text('referral_id').notNull(),
+  eventKey: text('event_key').notNull(),
+  kind: text('kind').notNull(),
+  rewardCredits: integer('reward_credits').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+export const shares = sqliteTable('shares', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull(),
+  projectId: text('project_id').notNull(),
+  tokenHash: text('token_hash').notNull(),
+  createdBy: text('created_by').notNull(),
+  createdAt: text('created_at').notNull(),
+  expiresAt: text('expires_at').notNull(),
+  revokedAt: text('revoked_at'),
+  allowOriginalDownload: integer('allow_original_download', { mode: 'boolean' })
+    .notNull()
+    .default(true),
+});
