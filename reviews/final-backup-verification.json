@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-10-14T09:39:25.700Z",
+  "source": "var/backups/2026-10-14T09-38-24.349Z",
+  "restored": "var/final-restore-2026-10-14",
+  "migrationCount": 17,
+  "projects": 9,
+  "originals": 8,
+  "variants": 22,
+  "originalHashesMatch": true,
+  "allVariantCopiesMatch": true,
+  "integrity": [
+    {
+      "integrity_check": "ok"
+    }
+  ],
+  "foreignKeyErrors": 0
+}

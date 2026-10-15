@@ -1,0 +1,232 @@
+[
+  {
+    "url": "http://127.0.0.1:5174/tools/image-inpaint",
+    "title": [
+      "局部重绘",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-replica",
+    "title": [
+      "爆款图片复刻",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/video-replica",
+    "title": [
+      "爆款视频复刻",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-fusion",
+    "title": [
+      "多图融合",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-naturalize",
+    "title": [
+      "AI 洗图",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/product-tagging",
+    "title": [
+      "主图打标",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/product-replace",
+    "title": [
+      "商品替换",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-cutout",
+    "title": [
+      "AI 抠图",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/scene-replace",
+    "title": [
+      "场景替换",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-translate",
+    "title": [
+      "图片翻译",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-enhance",
+    "title": [
+      "AI 超清",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-upscale",
+    "title": [
+      "无损放大",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/image-extend",
+    "title": [
+      "智能延展",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/product-recolor",
+    "title": [
+      "商品换色",
+      "输入与参数",
+      "处理记录",
+      "你的好作品，值得再进一步。"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/image.ocr",
+    "title": [
+      "图片文字识别",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/image.text-edit",
+    "title": [
+      "图片改字",
+      "输入与参数",
+      "文字替换",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/image.layers",
+    "title": [
+      "图层拆分",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/video.extend",
+    "title": [
+      "视频延长",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/video.edit",
+    "title": [
+      "视频编辑",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/video.upscale",
+    "title": [
+      "视频超分",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/video.erase-subtitles",
+    "title": [
+      "视频去字幕",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/advanced/video.translate",
+    "title": [
+      "视频翻译",
+      "输入与参数",
+      "处理记录",
+      "准备好素材，开始下一步"
+    ],
+    "crashed": false
+  },
+  {
+    "url": "http://127.0.0.1:5174/tools/local.resize",
+    "title": [
+      "图片缩放",
+      "输入与参数",
+      "处理记录"
+    ],
+    "crashed": false
+  }
+]

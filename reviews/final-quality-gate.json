@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-14",
+  "testFiles": 20,
+  "testsPassed": 278,
+  "testSeconds": 43.31,
+  "checks": [
+    "TypeScript",
+    "ESLint",
+    "Prettier",
+    "Vitest",
+    "Vite+tsup build",
+    "production runtime on fresh DB",
+    "existing demo upgrade",
+    "SQLite backup and restore",
+    "browser UI and actual exports"
+  ],
+  "migrations": 17,
+  "entryScriptKB": 620.86,
+  "entryGzipKB": 203.38,
+  "i18nEntries": 1617,
+  "i18nStaticPhrases": 1532,
+  "missingStaticTranslations": 0,
+  "realExternalProvidersTested": false,
+  "realExternalMailSent": false,
+  "allOriginalFunctionsEquivalent": false,
+  "sourceCommit": "0e3067ee18c4be9a7205ab8a1b21af9215a62798"
+}

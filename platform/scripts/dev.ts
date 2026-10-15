@@ -56,4 +56,4 @@ for (const args of [
   });
   child.on('error', () => close(1));
 }
-for (const signal of ['SIGINT', 'SIGTERM'] as const) process.once(signal, () => close());
+for (const signal of ['SIGINT', 'SIGTERM', 'SIGHUP'] as const) process.once(signal, () => close());

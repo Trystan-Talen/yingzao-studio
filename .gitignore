@@ -1,8 +1,23 @@
+# Dependencies, build output and private runtime data
 node_modules/
+.pnpm-store/
 dist/
 var/
 .env
 .env.*
 !.env.example
-.DS_Store
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
 *.log
+.DS_Store
+
+# Local delivery archives and third-party investigation material
+*.zip
+/research/
+
+# Browser screenshot containing unrelated tabs and bookmarks
+/reviews/screenshots/watermark-policy-failure.png

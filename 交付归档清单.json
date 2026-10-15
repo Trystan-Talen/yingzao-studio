@@ -1,0 +1,15 @@
+{
+  "file": "映造Studio-本机交付-2026-10-14.zip",
+  "sourceCommit": "0e3067ee18c4be9a7205ab8a1b21af9215a62798",
+  "entries": 301,
+  "bytes": 10606827,
+  "sha256": "059f1d814413a7edc26d07365a9ad12e29d79dba94b6bb68dd041e42fc2e7c7a",
+  "excluded": [
+    "var: private database, media and keys",
+    "node_modules",
+    "dist",
+    ".env",
+    ".git",
+    "downloaded third-party public JS bundles"
+  ]
+}

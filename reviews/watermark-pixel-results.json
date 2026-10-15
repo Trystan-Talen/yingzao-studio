@@ -1,0 +1,109 @@
+{
+  "plain.png": {
+    "width": 320,
+    "height": 240,
+    "format": "png",
+    "alpha": true,
+    "changedPixelsVersusPlain": 0
+  },
+  "marked.png": {
+    "width": 320,
+    "height": 240,
+    "format": "png",
+    "alpha": true,
+    "changedPixelsVersusPlain": 2024
+  },
+  "exempt.png": {
+    "width": 320,
+    "height": 240,
+    "format": "png",
+    "alpha": true,
+    "changedPixelsVersusPlain": 0
+  },
+  "selected.png": {
+    "width": 100,
+    "height": 80,
+    "format": "png",
+    "alpha": true,
+    "changedPixelsVersusPlain": null
+  },
+  "transparent.png": {
+    "width": 320,
+    "height": 240,
+    "format": "png",
+    "alpha": true,
+    "changedPixelsVersusPlain": 68800
+  },
+  "doubled.jpg": {
+    "width": 640,
+    "height": 480,
+    "format": "jpeg",
+    "alpha": false,
+    "changedPixelsVersusPlain": null
+  },
+  "bundle": {
+    "files": [
+      "001-board.png",
+      "002-layer.png",
+      "manifest.json"
+    ],
+    "manifest": {
+      "version": "yingzao-export-policy/v1",
+      "workspaceId": "e45a056a-f8fa-4880-b588-59d7d89db5ad",
+      "evaluatedAt": "2026-10-14T08:58:09.178Z",
+      "scope": "application-exports",
+      "mode": "non-subscribers",
+      "reason": "required",
+      "watermark": {
+        "text": "YINGZAO QA",
+        "opacity": 0.6
+      },
+      "applied": true,
+      "enforcement": "Application rendering only; originals and client-side modification are outside this policy."
+    },
+    "001-board.png": {
+      "format": "png",
+      "mediaType": "image/png",
+      "size": 4545,
+      "width": 320,
+      "height": 240,
+      "space": "srgb",
+      "channels": 4,
+      "depth": "uchar",
+      "density": 72,
+      "isProgressive": false,
+      "isPalette": false,
+      "bitsPerSample": 8,
+      "hasProfile": false,
+      "hasAlpha": true,
+      "autoOrient": {
+        "width": 320,
+        "height": 240
+      }
+    },
+    "002-layer.png": {
+      "format": "png",
+      "mediaType": "image/png",
+      "size": 2267,
+      "width": 100,
+      "height": 80,
+      "space": "srgb",
+      "channels": 4,
+      "depth": "uchar",
+      "density": 72,
+      "isProgressive": false,
+      "isPalette": false,
+      "bitsPerSample": 8,
+      "hasProfile": false,
+      "hasAlpha": true,
+      "autoOrient": {
+        "width": 100,
+        "height": 80
+      }
+    }
+  },
+  "selectedWatermarkPixels": 2024,
+  "transparentWatermarkPixels": 2024,
+  "bundlePixelsMatchSingles": true,
+  "editorDownloadMatchesMarkedPixels": true
+}

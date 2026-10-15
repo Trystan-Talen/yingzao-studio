@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-10-14T09:29:23.260Z",
+  "translationEntries": 1617,
+  "staticChinesePhrases": 1532,
+  "missing": [],
+  "scope": "src/web (excluding tests and dictionary) + src/contracts/catalog.ts; dynamic template interpolations and backend messages are outside static coverage count"
+}
