@@ -52,6 +52,7 @@ export function operationName(id: string): string {
       (
         {
           'image.generate': '图片创作',
+          'media.import': '分享链接导入视频',
           'video.generate': '视频创作',
           'text.assist': 'AI 创作助手',
           'image.ocr': '图片文字识别',

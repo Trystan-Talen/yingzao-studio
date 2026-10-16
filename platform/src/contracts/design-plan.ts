@@ -1,20 +1,35 @@
 import { z } from 'zod';
+const section = z.string().trim().min(1).max(2000);
 export const designPlanSchema = z
   .object({
-    analysis: z.string(),
-    objective: z.string(),
-    style: z.string(),
-    palette: z.array(z.string()),
-    composition: z.string(),
-    copy: z.array(z.string()),
-    scene: z.string(),
+    analysis: section,
+    objective: section,
+    style: section,
+    palette: z.array(z.string().trim().min(1).max(100)).min(1).max(12),
+    composition: section,
+    copy: z.array(z.string().trim().min(1).max(500)).max(12),
+    scene: section,
     technical: z
-      .object({ ratio: z.string(), resolution: z.string(), language: z.string() })
+      .object({
+        ratio: z.string().trim().min(1).max(40),
+        resolution: z.string().trim().min(1).max(40),
+        language: z.string().trim().min(1).max(80),
+      })
       .strict(),
-    directions: z.array(z.object({ title: z.string(), prompt: z.string() }).strict()),
+    directions: z
+      .array(z.object({ title: z.string().trim().min(1).max(80), prompt: section }).strict())
+      .length(3),
   })
   .strict();
 export type DesignPlan = z.infer<typeof designPlanSchema>;
+export const designPlanResultSchema = z
+  .object({
+    type: z.literal('design-plan'),
+    version: z.literal(1),
+    plan: designPlanSchema,
+  })
+  .strict();
+export type DesignPlanResult = z.infer<typeof designPlanResultSchema>;
 export function formatDesignPlan(p: DesignPlan) {
   return [
     `素材分析：${p.analysis}`,

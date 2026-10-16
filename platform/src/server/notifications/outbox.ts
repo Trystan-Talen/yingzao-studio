@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from 'node:crypto';
 import type { DatabaseContext } from '../db/connection';
+import { isInstallationOwner } from '../core/installation-owner';
 import { mailTemplate, openMessage, sealMessage, type MailMessage } from './message';
 import { validateSmtpConfig, type SmtpConfig } from './config';
 export type MailState =
@@ -392,10 +393,7 @@ export function createMailOutbox(
           !['failed', 'reconciliation_required', 'queued', 'retry'].includes(item.status)
         )
           throw new Error('Mail state does not allow operator reconciliation.');
-        const operator = sql
-          .prepare('SELECT id FROM users ORDER BY created_at,id LIMIT 1')
-          .get() as { id: string } | undefined;
-        if (!operator || operator.id !== input.operatorId)
+        if (!isInstallationOwner(db, input.operatorId))
           throw new Error('Mail reconciliation requires the installation administrator account.');
         if (input.action === 'confirm-accepted' && item.status !== 'reconciliation_required')
           throw new Error('Only ambiguous submission can be confirmed accepted.');

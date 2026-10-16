@@ -141,7 +141,7 @@ beforeEach(async () => {
     workspaceId: null,
     scopes: [],
   };
-  wid = core.team.create(owner, { name: 'QA <script>escaped</script>' }).id;
+  wid = core.auth.createWorkspace(owner.userId, 'QA <script>escaped</script>', 'team').id;
   time = Date.now();
 });
 afterEach(async () => {
@@ -578,7 +578,7 @@ describe('SMTP durable outbox using actual loopback TCP', () => {
       expect(result.statusCode).toBe(200);
       expect(result.json().data.items[0]).toMatchObject({ id, status: 'queued' });
       expect(result.body).not.toMatch(/ciphertext|guest@example|token=|password/);
-      const other = core.team.create(owner, { name: 'Other' }).id;
+      const other = core.auth.createWorkspace(owner.userId, 'Other', 'team').id;
       expect(
         (
           await app.inject({ url: '/api/v1/mail-deliveries', headers: { 'x-workspace-id': other } })

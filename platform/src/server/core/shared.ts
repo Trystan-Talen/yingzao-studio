@@ -3,6 +3,7 @@ import type { DatabaseContext } from '../db/connection';
 import { AppError } from '../errors';
 import type { Actor, Page, Permission, WorkspaceAccess, Role } from '../../contracts/core';
 import type { ExportWatermarkConfig } from '../../contracts/export-policy';
+import type { SupportChannelsDto } from '../../contracts/support';
 export interface CoreConfig {
   storageDir: string;
   sessionSecret: string;
@@ -10,6 +11,7 @@ export interface CoreConfig {
   isProduction: boolean;
   demoMode: boolean;
   exportWatermark?: ExportWatermarkConfig;
+  support?: SupportChannelsDto;
 }
 export interface CoreHooks {
   onInvitationCreated?: (input: {
@@ -73,6 +75,13 @@ export class CoreContext {
   }
   requireAccess(actor: Actor, workspaceId: string, permission: Permission): WorkspaceAccess {
     if (
+      this.get(
+        "SELECT 1 FROM team_provisioning WHERE workspace_id=? AND state='pending'",
+        workspaceId,
+      )
+    )
+      throw new AppError(403, 'TEAM_NOT_ACTIVE', '团队会员付款尚未核验，团队内容暂不可用');
+    if (
       actor.authType === 'apiKey' &&
       (actor.workspaceId !== workspaceId || permission === 'manage' || permission === 'owner')
     )
@@ -102,6 +111,19 @@ export class CoreContext {
     )
       throw new AppError(403, 'FORBIDDEN', '当前角色无权执行此操作');
     return { workspaceId, userId: actor.userId, membershipId: str(member, 'id'), role };
+  }
+  // This exception is restricted to order operations. It must never authorize content access.
+  requireBillingAccess(actor: Actor, workspaceId: string): void {
+    const pending = this.get(
+      "SELECT p.user_id FROM team_provisioning p JOIN workspaces w ON w.id=p.workspace_id WHERE p.workspace_id=? AND p.state='pending' AND w.archived_at IS NULL",
+      workspaceId,
+    );
+    if (pending) {
+      if (actor.authType !== 'session' || pending.user_id !== actor.userId)
+        throw new AppError(403, 'FORBIDDEN', '仅预留创建者可处理此团队会员付款');
+      return;
+    }
+    this.requireAccess(actor, workspaceId, 'manage');
   }
   requireScope(actor: Actor, scope: string): void {
     if (actor.authType === 'apiKey' && !actor.scopes.includes(scope))

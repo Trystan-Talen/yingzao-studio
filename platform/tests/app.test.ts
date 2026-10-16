@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { mkdtemp, rm, readFile } from 'node:fs/promises';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mkdtemp, rm, readFile, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID, createHash } from 'node:crypto';
@@ -50,6 +50,169 @@ afterEach(async () => {
 });
 const headers = () => ({ cookie, origin: config.publicOrigin, 'x-workspace-id': wid });
 describe('assembled HTTP application', () => {
+  it('removes partially prepared media if writing a later variant fails before any transaction', async () => {
+    const storage = instance.services.core.assets.storage;
+    const original = storage.write.bind(storage);
+    let count = 0;
+    const write = vi.spyOn(storage, 'write').mockImplementation(async (buffer, suffix) => {
+      if (++count === 2) throw new Error('injected disk failure');
+      return original(buffer, suffix);
+    });
+    try {
+      const result = await instance.app.inject({
+        method: 'POST',
+        url: '/api/v1/inspirations/botanical-serum/reuse',
+        headers: { cookie, origin: config.publicOrigin, 'x-workspace-id': wid },
+        payload: { requestId: randomUUID(), prompt: '中途写盘失败验收' },
+      });
+      expect(result.statusCode).toBe(500);
+      const files = await readdir(config.storageDir, { recursive: true, withFileTypes: true });
+      expect(files.filter((entry) => entry.isFile())).toHaveLength(0);
+      for (const table of ['projects', 'assets', 'inspiration_reuses'])
+        expect(
+          instance.services.db.sqlite.prepare(`SELECT COUNT(*) n FROM ${table}`).get(),
+        ).toMatchObject({ n: 0 });
+    } finally {
+      write.mockRestore();
+    }
+  });
+  it('atomically reuses built-in inspiration media and parameters with replay protection', async () => {
+    const payload = { requestId: randomUUID(), prompt: '保留原产品，调整为清晨场景' };
+    const request = () =>
+      instance.app.inject({
+        method: 'POST',
+        url: '/api/v1/inspirations/botanical-serum/reuse',
+        headers: headers(),
+        payload,
+      });
+    const [first, second] = await Promise.all([request(), request()]);
+    expect(first.statusCode, first.body).toBe(201);
+    expect(second.statusCode, second.body).toBe(201);
+    expect(first.json().data.project.id).toBe(second.json().data.project.id);
+    const result = first.json().data;
+    expect(result.draft.options.ratio).toBe('2:3');
+    expect(result.draft.prompt).toBe(payload.prompt);
+    expect(result.draft.assetIds).toHaveLength(1);
+    const media = await instance.app.inject({
+      url: `/api/v1/assets/${result.draft.assetIds[0]}/content`,
+      headers: headers(),
+    });
+    expect(media.statusCode).toBe(200);
+    expect((await sharp(media.rawPayload).metadata()).width).toBeGreaterThan(0);
+    const messages = await instance.app.inject({
+      url: `/api/v1/projects/${result.project.id}/messages`,
+      headers: headers(),
+    });
+    expect(messages.json().data.total).toBe(1);
+    expect(messages.json().data.items[0].metadata.draft).toEqual(result.draft);
+    expect(
+      instance.services.db.sqlite
+        .prepare('SELECT COUNT(*) n FROM projects WHERE workspace_id=?')
+        .get(wid),
+    ).toEqual({ n: 1 });
+    expect(
+      instance.services.db.sqlite
+        .prepare('SELECT COUNT(*) n FROM assets WHERE workspace_id=?')
+        .get(wid),
+    ).toEqual({ n: 1 });
+    const conflict = await instance.app.inject({
+      method: 'POST',
+      url: '/api/v1/inspirations/botanical-serum/reuse',
+      headers: headers(),
+      payload: { ...payload, prompt: '另一个请求' },
+    });
+    expect(conflict.statusCode).toBe(409);
+  });
+  it('rolls back inspiration project/media/journal and removes prepared files after persistence failure', async () => {
+    instance.services.db.sqlite.exec(
+      "CREATE TRIGGER reject_reuse_message BEFORE INSERT ON messages BEGIN SELECT RAISE(ABORT,'injected persistence failure'); END",
+    );
+    const payload = { requestId: randomUUID(), prompt: '回滚验收' };
+    const request = () =>
+      instance.app.inject({
+        method: 'POST',
+        url: '/api/v1/inspirations/botanical-serum/reuse',
+        headers: headers(),
+        payload,
+      });
+    const failed = await request();
+    expect(failed.statusCode).toBe(500);
+    for (const table of [
+      'projects',
+      'documents',
+      'assets',
+      'asset_variants',
+      'messages',
+      'inspiration_reuses',
+    ])
+      expect(instance.services.db.sqlite.prepare(`SELECT COUNT(*) n FROM ${table}`).get()).toEqual({
+        n: 0,
+      });
+    expect(
+      (await readdir(config.storageDir, { recursive: true, withFileTypes: true })).filter((entry) =>
+        entry.isFile(),
+      ),
+    ).toHaveLength(0);
+    instance.services.db.sqlite.exec('DROP TRIGGER reject_reuse_message');
+    expect((await request()).statusCode).toBe(201);
+  });
+  it('rejects inspiration reuse from read-only members before writing files', async () => {
+    instance.services.db.sqlite
+      .prepare("UPDATE memberships SET role='viewer' WHERE workspace_id=? AND user_id=?")
+      .run(wid, uid);
+    const response = await instance.app.inject({
+      method: 'POST',
+      url: '/api/v1/inspirations/botanical-serum/reuse',
+      headers: headers(),
+      payload: { requestId: randomUUID(), prompt: '无权限操作' },
+    });
+    expect(response.statusCode).toBe(403);
+    expect(instance.services.db.sqlite.prepare('SELECT COUNT(*) n FROM projects').get()).toEqual({
+      n: 0,
+    });
+    expect(instance.services.db.sqlite.prepare('SELECT COUNT(*) n FROM assets').get()).toEqual({
+      n: 0,
+    });
+  });
+  it('saves unresolved creation warnings with a project draft and rejects unbounded warning metadata', async () => {
+    const project = await instance.app.inject({
+      method: 'POST',
+      url: '/api/v1/projects',
+      headers: headers(),
+      payload: { name: '参数待确认', kind: 'image' },
+    });
+    const url = `/api/v1/projects/${project.json().data.id}/messages`;
+    const metadata = {
+      draft: {
+        operation: 'image.generate',
+        providerId: 'openai',
+        prompt: '方向二',
+        options: { ratio: '3:4' },
+      },
+      creationWarnings: ['建议8K不支持，当前保留1K'],
+    };
+    const saved = await instance.app.inject({
+      method: 'POST',
+      url,
+      headers: headers(),
+      payload: { content: '方向二', metadata },
+    });
+    expect(saved.statusCode, saved.body).toBe(200);
+    await instance.app.close();
+    instance = await createApp(config, { serveWeb: false });
+    const read = await instance.app.inject({ url, headers: headers() });
+    expect(read.json().data.items[0].metadata.creationWarnings).toEqual(metadata.creationWarnings);
+    const rejected = await instance.app.inject({
+      method: 'POST',
+      url,
+      headers: headers(),
+      payload: {
+        content: 'invalid',
+        metadata: { ...metadata, creationWarnings: Array(31).fill('x') },
+      },
+    });
+    expect(rejected.statusCode).toBe(400);
+  });
   it('integrates disabled Google and SMTP with protected callback headers, including rate-limited responses', async () => {
     const state = await instance.app.inject({
       method: 'GET',
@@ -146,7 +309,11 @@ describe('assembled HTTP application', () => {
       pageSize: 1,
       items: [{ id, isFavorite: true, mediaUnavailable: false, assetId: asset.id }],
     });
-    const otherSpace = instance.services.core.team.create(actor, { name: '隔离空间' });
+    const otherSpace = instance.services.core.auth.createWorkspace(
+      actor.userId,
+      '隔离空间',
+      'team',
+    );
     const forbidden = await instance.app.inject({
       method: 'PUT',
       url: `/api/v1/inspirations/${id}/favorite`,
@@ -154,6 +321,19 @@ describe('assembled HTTP application', () => {
       payload: { favorite: true },
     });
     expect(forbidden.statusCode).toBe(404);
+    const reuse = (targetWid: string) =>
+      instance.app.inject({
+        method: 'POST',
+        url: `/api/v1/inspirations/${id}/reuse`,
+        headers: { ...headers(), 'x-workspace-id': targetWid },
+        payload: { requestId: randomUUID(), prompt: '复用本空间素材' },
+      });
+    expect((await reuse(otherSpace.id)).statusCode).toBe(404);
+    const reused = await reuse(wid);
+    expect(reused.statusCode, reused.body).toBe(201);
+    expect(reused.json().data.draft.assetIds).toEqual([asset.id]);
+    expect(reused.json().data.draft.options).toMatchObject({ ratio: '4:5', platform: 'Shopify' });
+
     const archive = await instance.app.inject({
       method: 'PATCH',
       url: `/api/v1/inspirations/${id}`,
@@ -161,6 +341,7 @@ describe('assembled HTTP application', () => {
       payload: { archived: true },
     });
     expect(archive.statusCode, archive.body).toBe(200);
+    expect((await reuse(wid)).statusCode).toBe(409);
     const hidden = await instance.app.inject({
       url: '/api/v1/inspirations?category=' + encodeURIComponent('自有行业'),
       headers: headers(),

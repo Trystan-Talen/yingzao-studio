@@ -146,7 +146,7 @@ describe('persistent entitlement enforcement', () => {
   });
   it('counts live invitations as reserved seats and rechecks quota at invited registration', async () => {
     defaults({ seats: 2 });
-    const team = core.team.create(actor, { name: 'Team' });
+    const team = core.auth.createWorkspace(actor.userId, 'Team', 'team');
     const invite = core.team.invite(actor, team.id, { email: 'new@example.local', role: 'member' });
     expect(() =>
       core.team.invite(actor, team.id, { email: 'extra@example.local', role: 'member' }),

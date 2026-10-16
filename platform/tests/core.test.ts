@@ -92,7 +92,7 @@ afterEach(async () => {
   await rm(temp, { recursive: true, force: true });
 });
 async function invited(email: string, role: 'member' | 'viewer' = 'member') {
-  const team = core.team.create(owner, { name: 'Studio Team' });
+  const team = core.auth.createWorkspace(owner.userId, 'Studio Team', 'team');
   const invite = core.team.invite(owner, team.id, { email, role });
   const secret = new URL(invite.inviteUrl).hash.slice('#token='.length);
   const user = await core.auth.register({
@@ -226,7 +226,7 @@ describe('core persistence and boundaries', () => {
     });
     expect(range.statusCode).toBe(206);
     expect(range.rawPayload.length).toBe(10);
-    const other = core.team.create(owner, { name: 'Other' });
+    const other = core.auth.createWorkspace(owner.userId, 'Other', 'team');
     expect(() => core.assets.get(owner, other.id, asset.id)).toThrow(AppError);
     const brand = core.references.createBrand(owner, wid, {
       name: 'Brand',
@@ -541,7 +541,7 @@ describe('core persistence and boundaries', () => {
     expect(core.assets.text(owner, wid, long.id).extractedText).toHaveLength(100000);
   });
   it('imports CSV and XLSX with row errors, deduplication and persistent invitations', async () => {
-    const team = core.team.create(owner, { name: 'Import Team' });
+    const team = core.auth.createWorkspace(owner.userId, 'Import Team', 'team');
     const preview = await core.memberImport.preview(
       owner,
       team.id,
@@ -569,7 +569,7 @@ describe('core persistence and boundaries', () => {
     expect(exported.buffer.subarray(0, 2).toString()).toBe('PK');
   });
   it('rolls back invited registration on budget failure and rejects expired invitations', async () => {
-    const team = core.team.create(owner, { name: 'Atomic Team' }),
+    const team = core.auth.createWorkspace(owner.userId, 'Atomic Team', 'team'),
       invite = core.team.invite(owner, team.id, {
         email: 'new@example.local',
         role: 'member',

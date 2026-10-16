@@ -82,6 +82,8 @@ export const flyelepProvider: ProviderAdapter = {
     if (!secret) throw new ProviderError('请先连接 Flyelep 官方 API。');
     const i = c.input,
       o = i.options;
+    if (i.operation === 'product-replace' && i.referenceAssetIds.length > 1)
+      throw new ProviderError('商品替换每个执行子项只能包含一张商品参考，请先按组合拆分任务。');
     if (i.operation === 'image.layers')
       throw new ProviderError('图层返回需要坐标与费用核对，此能力当前未启用。');
     const language = o.needText ? (languages[o.language] ?? o.language) : '无文本';

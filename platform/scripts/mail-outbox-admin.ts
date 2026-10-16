@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { loadConfig } from '../src/server/config';
 import { createDatabaseContext, closeDatabase } from '../src/server/db/connection';
 import { createMailOutbox } from '../src/server/notifications';
+import { isInstallationOwner } from '../src/server/core/installation-owner';
 const common = { operatorId: z.string().uuid() };
 const statusSchema = z.object({ ...common, workspaceId: z.string().uuid() }).strict();
 const actionSchema = z
@@ -27,9 +28,7 @@ if (!path || !['status', 'reconcile'].includes(command ?? '')) {
     if (!parsed.success) throw new Error('Mail administration input is invalid.');
     const config = loadConfig();
     db = createDatabaseContext(config.databasePath);
-    const first = db.sqlite.prepare('SELECT id FROM users ORDER BY created_at,id LIMIT 1').get() as
-      { id: string } | undefined;
-    if (first?.id !== parsed.data.operatorId)
+    if (!isInstallationOwner(db, parsed.data.operatorId))
       throw new Error('Installation administrator account is required.');
     const outbox = createMailOutbox(db, config);
     if ('workspaceId' in parsed.data)

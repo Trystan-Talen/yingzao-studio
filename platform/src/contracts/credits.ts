@@ -1,7 +1,9 @@
+import { billingChannelSchema } from './billing-channel';
 import { z } from 'zod';
 export const creditBucketSchema = z.object({
   id: z.string(),
   workspaceId: z.string().uuid(),
+  billingChannel: billingChannelSchema.optional(),
   source: z.enum([
     'initial',
     'legacy',

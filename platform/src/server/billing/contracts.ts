@@ -14,6 +14,7 @@ export interface SubscriptionCancellation {
   currentPeriodEnd: string | null;
 }
 export interface BillingAdapter {
+  environment?(): 'test' | 'live';
   isConfigured(): boolean;
   canCheckoutPlan(planId: string): boolean;
   checkout(actor: Actor, workspaceId: string, orderId: string): Promise<CheckoutResult>;

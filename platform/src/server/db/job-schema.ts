@@ -1,13 +1,20 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-export const creditAccounts = sqliteTable('credit_accounts', {
-  workspaceId: text('workspace_id').primaryKey(),
-  balance: integer('balance').notNull(),
-  reserved: integer('reserved').notNull(),
-  updatedAt: text('updated_at').notNull(),
-});
+import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core';
+export const creditAccounts = sqliteTable(
+  'credit_accounts',
+  {
+    workspaceId: text('workspace_id').notNull(),
+    billingChannel: text('billing_channel').notNull().default('web'),
+    paymentReviewRequired: integer('payment_review_required').notNull().default(0),
+    balance: integer('balance').notNull(),
+    reserved: integer('reserved').notNull(),
+    updatedAt: text('updated_at').notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.workspaceId, table.billingChannel] })],
+);
 export const jobs = sqliteTable('jobs', {
   id: text('id').primaryKey(),
   workspaceId: text('workspace_id').notNull(),
+  billingChannel: text('billing_channel').notNull().default('web'),
   userId: text('user_id').notNull(),
   projectId: text('project_id'),
   operation: text('operation').notNull(),
@@ -29,6 +36,7 @@ export const jobItems = sqliteTable('job_items', {
   id: text('id').primaryKey(),
   jobId: text('job_id').notNull(),
   workspaceId: text('workspace_id').notNull(),
+  billingChannel: text('billing_channel').notNull().default('web'),
   userId: text('user_id').notNull(),
   itemIndex: integer('item_index').notNull(),
   inputJson: text('input_json').notNull(),
@@ -40,6 +48,9 @@ export const jobItems = sqliteTable('job_items', {
   remoteJson: text('remote_json'),
   resultJson: text('result_json'),
   resultText: text('result_text'),
+  resultDataJson: text('result_data_json'),
+  retrySourceItemId: text('retry_source_item_id'),
+  retryRootItemId: text('retry_root_item_id'),
   errorMessage: text('error_message'),
   leaseOwner: text('lease_owner'),
   leaseUntil: text('lease_until'),

@@ -1,7 +1,7 @@
 /** Provider overrides below are deterministic contract fixtures, never claims of live AI inference. */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { randomUUID } from 'node:crypto';
-import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, readFile, writeFile, readdir } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
@@ -72,15 +72,31 @@ beforeEach(async () => {
     scopes: [],
   };
   wid = registered.workspace.id;
+  credits.forChannel('api').grant({
+    workspaceId: wid,
+    userId: actor.userId,
+    eventKey: 'fixture-api-funding',
+    amount: 500,
+    source: 'manual',
+    description: 'API fixture credits',
+  });
   png = await sharp({ create: { width: 64, height: 64, channels: 3, background: '#cfaa79' } })
     .png()
     .toBuffer();
 });
 afterEach(async () => {
   for (const worker of workers.splice(0)) await worker.stop();
+  vi.restoreAllMocks();
   closeDatabase(db);
   await rm(temp, { recursive: true, force: true });
 });
+async function mediaFiles() {
+  const files = await readdir(config.storageDir, { recursive: true, withFileTypes: true });
+  return files
+    .filter((entry) => entry.isFile() && !entry.parentPath.includes('/.job-results'))
+    .map((entry) => join(entry.parentPath, entry.name))
+    .sort();
+}
 function input(overrides: Partial<JobInput> = {}): JobInput {
   return jobInputSchema.parse({
     operation: 'image.generate',
@@ -163,6 +179,10 @@ describe('durable tasks, credits and worker integration', () => {
     await w.runItem(item);
     const done = tasks.get(actor, wid, job.id);
     expect(done.status).toBe('succeeded');
+    expect(await readdir(join(config.storageDir, '.job-results'))).toEqual([]);
+    expect(db.sqlite.prepare('SELECT result_json FROM job_items WHERE id=?').get(item.id)).toEqual({
+      result_json: null,
+    });
     expect(done.outputAssets).toHaveLength(1);
     expect(
       (await core.assets.readOriginal(actor, wid, done.outputAssets[0]!.id)).buffer.equals(png),
@@ -175,6 +195,92 @@ describe('durable tasks, credits and worker integration', () => {
         .prepare('SELECT COUNT(*) n FROM credit_ledger WHERE event_key=?')
         .get(`final:${item.id}`),
     ).toEqual({ n: 1 });
+  });
+  it('cleans a completed result after restart without rerunning the provider or changing durable assets', async () => {
+    const { job } = submit();
+    const first = worker(complete());
+    const item = first.claim()!;
+    await first.runItem(item);
+    const before = tasks.get(actor, wid, job.id);
+    const balance = tasks.balance(actor, wid);
+    // Recreate the narrow crash window after DB commit and before scratch cleanup.
+    const cached = join(config.storageDir, '.job-results', `${item.id}-${item.fence}-0.bin`);
+    await writeFile(cached, png);
+    const manifest = JSON.stringify([{ path: cached, name: 'fixture.png', mimeType: 'image/png' }]);
+    db.sqlite.prepare('UPDATE job_items SET result_json=? WHERE id=?').run(manifest, item.id);
+    const execute = vi.fn(complete().execute);
+    const restarted = worker({ id: 'openai', execute });
+    await restarted.tick();
+    await restarted.drain();
+    expect(execute).not.toHaveBeenCalled();
+    expect(await readdir(join(config.storageDir, '.job-results'))).toEqual([]);
+    expect(tasks.get(actor, wid, job.id)).toEqual(before);
+    expect(tasks.balance(actor, wid)).toEqual(balance);
+    expect((await core.assets.readOriginal(actor, wid, before.outputAssets[0]!.id)).buffer).toEqual(
+      png,
+    );
+    expect(db.sqlite.prepare('SELECT result_json FROM job_items WHERE id=?').get(item.id)).toEqual({
+      result_json: null,
+    });
+  });
+  it('removes only newly written cache files when a later provider output is invalid before manifest persistence', async () => {
+    const { job } = submit();
+    const w = worker({
+      id: 'openai',
+      execute: async () => ({
+        state: 'complete',
+        outputs: [
+          { buffer: png, name: 'first.png', mimeType: 'image/png' },
+          {
+            text: 'Invalid structured result',
+            name: 'second.txt',
+            mimeType: 'text/plain',
+            resultData: {} as never,
+          },
+        ],
+      }),
+    });
+    await w.runItem(w.claim()!);
+    expect(tasks.get(actor, wid, job.id).status).toBe('reconciliation_required');
+    expect(await readdir(join(config.storageDir, '.job-results'))).toEqual([]);
+    expect(db.sqlite.prepare('SELECT count(*) n FROM assets').get()).toEqual({ n: 0 });
+    expect(tasks.balance(actor, wid)).toMatchObject({ balance: 500, reserved: 8 });
+  });
+  it('retains pending recovery files and rejects an entire completed manifest with an unowned path', async () => {
+    submit();
+    const first = worker(complete());
+    const item = first.claim()!;
+    await first.runItem(item);
+    const owned = join(config.storageDir, '.job-results', `${item.id}-${item.fence}-0.bin`);
+    const outside = join(config.storageDir, 'keep-original.png');
+    await writeFile(owned, png);
+    await writeFile(outside, png);
+    const manifest = JSON.stringify({ outputs: [{ path: owned }, { path: outside }] });
+    db.sqlite.prepare('UPDATE job_items SET result_json=? WHERE id=?').run(manifest, item.id);
+    submit();
+    const pending = first.claim()!;
+    const pendingPath = join(
+      config.storageDir,
+      '.job-results',
+      `${pending.id}-${pending.fence}-0.bin`,
+    );
+    await writeFile(pendingPath, png);
+    const pendingManifest = JSON.stringify({ outputs: [{ path: pendingPath }] });
+    db.sqlite
+      .prepare("UPDATE job_items SET phase='downloading',result_json=? WHERE id=?")
+      .run(pendingManifest, pending.id);
+    const execute = vi.fn(complete().execute);
+    const restarted = worker({ id: 'openai', execute });
+    await restarted.tick();
+    await restarted.drain();
+    expect(execute).not.toHaveBeenCalled();
+    for (const path of [owned, outside, pendingPath]) expect(await readFile(path)).toEqual(png);
+    expect(db.sqlite.prepare('SELECT result_json FROM job_items WHERE id=?').get(item.id)).toEqual({
+      result_json: manifest,
+    });
+    expect(
+      db.sqlite.prepare('SELECT result_json FROM job_items WHERE id=?').get(pending.id),
+    ).toEqual({ result_json: pendingManifest });
   });
   it('releases definitive failure and preserves uncertain submissions for reconciliation', async () => {
     const failed = submit().job,
@@ -334,7 +440,7 @@ describe('durable tasks, credits and worker integration', () => {
     expect(() => tasks.apply(actor, wid, pending.id, 3, 'new-layer')).toThrow(AppError);
   });
   it('rejects foreign resources and applies API-key scope and budget limits', () => {
-    const other = core.team.create(actor, { name: 'Other workspace' }),
+    const other = core.auth.createWorkspace(actor.userId, 'Other workspace', 'team'),
       foreign = core.projects.create(actor, other.id, { name: 'Foreign' });
     expect(() => tasks.quote(actor, wid, input({ projectId: foreign.id }))).toThrow(AppError);
     const { job } = submit();
@@ -358,7 +464,7 @@ describe('durable tasks, credits and worker integration', () => {
     );
   });
   it('cancels removed members queued jobs but lets already submitted results finish in the original space', async () => {
-    const team = core.team.create(actor, { name: 'Team' }),
+    const team = core.auth.createWorkspace(actor.userId, 'Team', 'team'),
       invite = core.team.invite(actor, team.id, { email: 'member@example.local', role: 'member' }),
       registered = await core.auth.register({
         email: 'member@example.local',
@@ -418,7 +524,7 @@ describe('security and recovery regressions', () => {
     expect(tasks.balance(actor, wid)).toMatchObject({ balance: 492, reserved: 0 });
   });
   it('guards allocated pools and collects unused limits without discarding in-flight reservations', async () => {
-    wid = core.team.create(actor, { name: 'Allocation team' }).id;
+    wid = core.auth.createWorkspace(actor.userId, 'Allocation team', 'team').id;
     const invite = core.team.invite(actor, wid, { email: 'budget@example.local', role: 'member' });
     const joined = await core.auth.register({
       email: 'budget@example.local',
@@ -505,7 +611,11 @@ describe('security and recovery regressions', () => {
       .run('2000-01-01T00:00:00.000Z', job.id);
     await w.runItem(w.claim()!);
     expect(tasks.get(actor, wid, job.id).status).toBe('succeeded');
-    expect(tasks.balance(actor, wid)).toMatchObject({ balance: 492, reserved: 0 });
+    expect(tasks.credits.forChannel('api').account(wid)).toMatchObject({
+      balance: 492,
+      reserved: 0,
+    });
+    expect(tasks.balance(actor, wid)).toMatchObject({ balance: 500, reserved: 0 });
   });
   it('does not count successful polling against transient recovery retry allowance', async () => {
     const { job } = submit();
@@ -621,6 +731,7 @@ describe('explicit layer output transactions and media-based estimates', () => {
     const { job } = submit(
       input({ operation: 'image.layers', providerId: 'fal', assetIds: [source.id] }),
     );
+    const filesBefore = await mediaFiles();
     const w = worker({
       id: 'fal',
       execute: async () => ({
@@ -639,6 +750,57 @@ describe('explicit layer output transactions and media-based estimates', () => {
       db.sqlite.prepare('SELECT COUNT(*) n FROM assets WHERE source_job_id=?').get(job.id),
     ).toEqual({ n: 0 });
     expect(tasks.balance(actor, wid)).toMatchObject({ balance: 500, reserved: 12, spent: 0 });
+    expect(await mediaFiles()).toEqual(filesBefore);
+  });
+  it('removes newly prepared files after rolled-back commits and recovers the same result without calling the provider again', async () => {
+    const { job } = submit();
+    const adapter = complete();
+    const execute = vi.spyOn(adapter, 'execute');
+    const w = worker(adapter);
+    db.sqlite.exec(`CREATE TRIGGER fixture_save_failure BEFORE INSERT ON asset_variants
+      BEGIN SELECT RAISE(ABORT,'fixture media commit failure'); END`);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      db.sqlite
+        .prepare('UPDATE job_items SET next_attempt_at=? WHERE job_id=?')
+        .run('2000-01-01T00:00:00.000Z', job.id);
+      await w.runItem(w.claim()!);
+      expect(await mediaFiles()).toEqual([]);
+      expect(db.sqlite.prepare('SELECT COUNT(*) n FROM assets').get()).toEqual({ n: 0 });
+      expect(tasks.balance(actor, wid)).toMatchObject({ balance: 500, reserved: 8, spent: 0 });
+    }
+    db.sqlite.exec('DROP TRIGGER fixture_save_failure');
+    db.sqlite
+      .prepare('UPDATE job_items SET next_attempt_at=? WHERE job_id=?')
+      .run('2000-01-01T00:00:00.000Z', job.id);
+    await w.runItem(w.claim()!);
+    expect(tasks.get(actor, wid, job.id).status).toBe('succeeded');
+    expect(execute).toHaveBeenCalledTimes(1);
+    expect(await mediaFiles()).toHaveLength(3);
+    expect(db.sqlite.prepare('SELECT COUNT(*) n FROM assets').get()).toEqual({ n: 1 });
+    expect(tasks.balance(actor, wid)).toMatchObject({ balance: 492, reserved: 0, spent: 8 });
+  });
+  it('discards a stale workers prepared variants when its lease is lost before commit', async () => {
+    const { job } = submit();
+    const adapter = complete();
+    const execute = vi.spyOn(adapter, 'execute');
+    const prepare = core.assets.prepare.bind(core.assets);
+    const lostLease = vi.spyOn(core.assets, 'prepare').mockImplementationOnce(async (input) => {
+      const prepared = await prepare(input);
+      db.sqlite
+        .prepare('UPDATE job_items SET lease_until=? WHERE job_id=?')
+        .run('2000-01-01T00:00:00.000Z', job.id);
+      return prepared;
+    });
+    const w = worker(adapter);
+    await w.runItem(w.claim()!);
+    expect(await mediaFiles()).toEqual([]);
+    expect(db.sqlite.prepare('SELECT COUNT(*) n FROM assets').get()).toEqual({ n: 0 });
+    lostLease.mockRestore();
+    w.recover();
+    await w.runItem(w.claim()!);
+    expect(tasks.get(actor, wid, job.id).status).toBe('succeeded');
+    expect(execute).toHaveBeenCalledTimes(1);
+    expect(await mediaFiles()).toHaveLength(3);
   });
   it('does not widen multi-output permission to unrelated providers and operations', async () => {
     const { job } = submit();
@@ -704,7 +866,12 @@ describe('explicit layer output transactions and media-based estimates', () => {
           providerId: 'fal',
           operation,
           assetIds: [source.id],
-          options: { ...input().options, duration: 9, language: 'en' },
+          options: {
+            ...input().options,
+            duration: operation === 'video-replica' ? Math.ceil(source.durationMs! / 1000) : 9,
+            language: 'en',
+            ...(operation === 'video-replica' ? { ratio: 'auto', resolution: 'auto' } : {}),
+          },
         }),
       );
       expect(q.units).toBe(4);

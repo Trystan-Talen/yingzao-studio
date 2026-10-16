@@ -1,10 +1,14 @@
+import { referralPolicySchema } from '../../contracts/referrals';
+import { prepaidTermsSchema, promotionSchema } from '../../contracts/promotions';
 import { randomUUID, createHash } from 'node:crypto';
 import { z } from 'zod';
 import type { DatabaseContext } from '../db/connection';
+import { isInstallationOwner } from '../core/installation-owner';
 import { AppError } from '../errors';
 import { createCreditService } from '../tasks/credits';
 import { now } from '../tasks/types';
 import { EntitlementLimitsSchema, PlanLimitsSchema } from '../../contracts/entitlements';
+import { billingChannelSchema, type BillingChannel } from '../../contracts/billing-channel';
 const operator = { actorUserId: z.string().uuid(), reason: z.string().trim().min(20).max(2000) };
 const plan = z
   .object({
@@ -17,11 +21,29 @@ const plan = z
     interval: z.enum(['month', 'year']).nullable(),
     limits: PlanLimitsSchema.default({}),
     active: z.boolean().default(true),
+    prepaidTerms: prepaidTermsSchema.nullable().optional(),
+    promotion: promotionSchema.nullable().optional(),
   })
   .strict()
   .refine((p) => (p.kind === 'subscription' ? p.interval !== null : p.interval === null), {
     message: '订阅必须指定月/年周期，算力包不能带续费周期',
-  });
+  })
+  .refine((p) => !p.prepaidTerms || p.kind === 'subscription', '固定期仅适用于会员套餐')
+  .refine(
+    (p) =>
+      p.limits.brandQuotaScope !== 'member' ||
+      p.prepaidTerms === undefined ||
+      (p.kind === 'subscription' && p.prepaidTerms?.audience === 'team'),
+    '每成员品牌额度只能配置在明确适用于团队的会员合同中',
+  )
+  .refine(
+    (p) =>
+      !p.promotion ||
+      (p.prepaidTerms === undefined
+        ? p.promotion.priceMinor < p.priceMinor
+        : !!p.prepaidTerms && p.promotion.priceMinor < p.priceMinor),
+    '活动须绑定固定期会员且活动价低于原价',
+  );
 export const planImportSchema = z
   .object({
     ...operator,
@@ -49,12 +71,12 @@ export const referralProgramSchema = z
     ...operator,
     registrationEnabled: z.boolean(),
     rewardsEnabled: z.boolean(),
+    policy: referralPolicySchema.nullable().optional(),
     rewardCredits: z.number().int().min(0).max(1_000_000),
     minimumPaidMinor: z.number().int().min(1).max(99_999_999),
     currency: z.string().regex(/^[A-Z]{3}$/),
   })
-  .strict()
-  .refine((v) => !v.rewardsEnabled || v.rewardCredits > 0, { message: '启用奖励时额度必须为正数' });
+  .strict();
 export const channelApprovalSchema = z
   .object({ ...operator, userId: z.string().uuid(), enabled: z.boolean() })
   .strict();
@@ -90,6 +112,7 @@ export const creditGrantSchema = z
   .object({
     ...operator,
     workspaceId: z.string().uuid(),
+    billingChannel: billingChannelSchema.default('web'),
     userId: z.string().uuid(),
     eventKey: z.string().trim().min(1).max(200),
     amount: z.number().int().positive().max(1_000_000_000),
@@ -102,6 +125,7 @@ export const creditValiditySchema = z
   .object({
     ...operator,
     workspaceId: z.string().uuid(),
+    billingChannel: billingChannelSchema.default('web'),
     lotId: z.string().min(1).max(100),
     eventKey: z.string().trim().min(1).max(200),
     expiresAt: z.string().datetime(),
@@ -117,13 +141,11 @@ export function createBillingAdmin(
     credits = createCreditService(db),
     atomic = <T>(fn: () => T): T => sql.transaction(fn).immediate();
   function requireOperator(uid: string) {
-    const owner = sql.prepare('SELECT id FROM users ORDER BY created_at,id LIMIT 1').get() as
-      { id: string } | undefined;
-    if (!owner || owner.id !== uid)
+    if (!isInstallationOwner(db, uid))
       throw new AppError(
         403,
         'INSTALLATION_ADMIN_REQUIRED',
-        '离线商业管理须使用此安装的首位管理员账户ID',
+        '离线商业管理须使用此安装已登记的管理员账户ID',
       );
   }
   function audit(
@@ -141,7 +163,26 @@ export function createBillingAdmin(
     const input = planImportSchema.parse(raw);
     return atomic(() => {
       requireOperator(input.actorUserId);
-      for (const p of input.plans) {
+      for (const rawPlan of input.plans) {
+        const existing = sql
+          .prepare('SELECT prepaid_terms_json,promotion_json FROM plans WHERE id=?')
+          .get(rawPlan.id) as
+          { prepaid_terms_json: string | null; promotion_json: string | null } | undefined;
+        const p = plan.parse({
+          ...rawPlan,
+          prepaidTerms:
+            rawPlan.prepaidTerms === undefined
+              ? existing?.prepaid_terms_json
+                ? JSON.parse(existing.prepaid_terms_json)
+                : null
+              : rawPlan.prepaidTerms,
+          promotion:
+            rawPlan.promotion === undefined
+              ? existing?.promotion_json
+                ? JSON.parse(existing.promotion_json)
+                : null
+              : rawPlan.promotion,
+        });
         sql
           .prepare(
             `INSERT INTO plans(id,name,kind,price_minor,currency,interval,credits,limits_json,active,catalog_mode,catalog_version,approved_at,approved_by) VALUES(?,?,?,?,?,?,?,?,?,'official',1,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,kind=excluded.kind,price_minor=excluded.price_minor,currency=excluded.currency,interval=excluded.interval,credits=excluded.credits,limits_json=excluded.limits_json,active=excluded.active,catalog_mode='official',catalog_version=plans.catalog_version+1,approved_at=excluded.approved_at,approved_by=excluded.approved_by`,
@@ -159,6 +200,14 @@ export function createBillingAdmin(
             now(),
             input.actorUserId,
           );
+        if (p.prepaidTerms !== undefined)
+          sql
+            .prepare('UPDATE plans SET prepaid_terms_json=? WHERE id=?')
+            .run(p.prepaidTerms ? JSON.stringify(p.prepaidTerms) : null, p.id);
+        if (p.promotion !== undefined)
+          sql
+            .prepare('UPDATE plans SET promotion_json=? WHERE id=?')
+            .run(p.promotion ? JSON.stringify(p.promotion) : null, p.id);
       }
       audit(input.actorUserId, 'catalog.import-official', input.reason, { plans: input.plans });
       return { imported: input.plans.length, ids: input.plans.map((p) => p.id) };
@@ -173,32 +222,80 @@ export function createBillingAdmin(
           sql
             .prepare('SELECT * FROM billing_risks WHERE id=? AND workspace_id=?')
             .get(id, input.workspaceId) as
-            { id: string; status: string; referral_reward_id: string | null } | undefined,
+            | {
+                id: string;
+                status: string;
+                referral_reward_id: string | null;
+                order_id: string | null;
+                billing_channel?: BillingChannel;
+              }
+            | undefined,
       );
       if (risks.some((r) => !r))
         throw new AppError(404, 'RISK_NOT_FOUND', '风险记录不存在或不属于指定空间');
       if (risks.some((r) => r!.status !== 'review_required'))
         throw new AppError(409, 'RISK_ALREADY_RESOLVED', '选择中包含已处理风险，不能重复调账');
+      const channels = new Set(
+        risks.map((r) => billingChannelSchema.parse(r!.billing_channel ?? 'web')),
+      );
+      if (channels.size !== 1)
+        throw new AppError(
+          400,
+          'BILLING_CHANNEL_MISMATCH',
+          '请分别核对网页和接口账户的风险，不能混合冲正',
+        );
+      const channel = [...channels][0]!,
+        accountCredits = credits.forChannel(channel);
       const rewards = [
         ...new Set(risks.map((r) => r!.referral_reward_id).filter((v): v is string => !!v)),
       ];
-      const debt = rewards.reduce(
-        (sum, id) =>
+      const rewardRows = rewards.map(
+        (id) =>
+          sql
+            .prepare(
+              'SELECT id,debt_credits,policy_snapshot_json,reward_workspace_id FROM referral_rewards WHERE id=?',
+            )
+            .get(id) as {
+            id: string;
+            debt_credits: number;
+            policy_snapshot_json: string | null;
+            reward_workspace_id: string;
+          },
+      );
+      const referralDebt = rewardRows.reduce(
+        (sum, reward) =>
           sum +
-          (
-            sql.prepare('SELECT debt_credits FROM referral_rewards WHERE id=?').get(id) as {
-              debt_credits: number;
-            }
-          ).debt_credits,
+          (reward.policy_snapshot_json
+            ? (
+                sql
+                  .prepare(
+                    'SELECT COALESCE(SUM(debt_credits),0) debt FROM referral_reward_items WHERE reward_id=? AND workspace_id=?',
+                  )
+                  .get(reward.id, input.workspaceId) as { debt: number }
+              ).debt
+            : reward.debt_credits),
         0,
       );
+      const prepaidOrders = [
+        ...new Set(risks.map((r) => r!.order_id).filter((id): id is string => !!id)),
+      ];
+      const prepaidRows = prepaidOrders.flatMap((id) => {
+        const row = sql
+          .prepare(
+            'SELECT order_id,debt_credits FROM prepaid_membership_purchases WHERE order_id=? AND workspace_id=?',
+          )
+          .get(id, input.workspaceId) as { order_id: string; debt_credits: number } | undefined;
+        return row ? [row] : [];
+      });
+      const prepaidDebt = prepaidRows.reduce((sum, row) => sum + row.debt_credits, 0),
+        debt = referralDebt + prepaidDebt;
       if (input.creditsToRevoke < debt)
         throw new AppError(
           409,
-          'REFERRAL_DEBT_UNRESOLVED',
-          '额度冲正数小于仍未追回的推荐奖励，不能解除风险',
+          prepaidDebt ? 'PREPAID_DEBT_UNRESOLVED' : 'REFERRAL_DEBT_UNRESOLVED',
+          '额度冲正数小于仍未追回的奖励或固定期会员额度，不能解除风险',
         );
-      const account = credits.account(input.workspaceId);
+      const account = accountCredits.account(input.workspaceId);
       if (account.balance - account.reserved < input.creditsToRevoke)
         throw new AppError(
           409,
@@ -211,11 +308,15 @@ export function createBillingAdmin(
       const allocated = (
         sql
           .prepare(
-            'SELECT COALESCE(SUM(MAX(COALESCE(credit_limit-spent,0),reserved)),0) total FROM member_budgets WHERE workspace_id=?',
+            "SELECT COALESCE(SUM(MAX(COALESCE(credit_limit-spent,0),reserved)),0) total FROM member_budgets WHERE workspace_id=? AND billing_channel='web'",
           )
           .get(input.workspaceId) as { total: number }
       ).total;
-      if (mode.credit_mode === 'allocated' && allocated > account.balance - input.creditsToRevoke)
+      if (
+        channel === 'web' &&
+        mode.credit_mode === 'allocated' &&
+        allocated > account.balance - input.creditsToRevoke
+      )
         throw new AppError(
           409,
           'BUDGET_POOL_EXCEEDED',
@@ -223,7 +324,7 @@ export function createBillingAdmin(
         );
       const resolutionId = randomUUID();
       if (input.creditsToRevoke) {
-        credits.debit({
+        accountCredits.debit({
           workspaceId: input.workspaceId,
           userId: input.actorUserId,
           eventKey: `risk-resolution:${resolutionId}`,
@@ -231,10 +332,30 @@ export function createBillingAdmin(
           description: '管理员完成支付风险核对后的额度冲正',
         });
       }
-      for (const rewardId of rewards)
+      for (const reward of rewardRows) {
+        if (reward.policy_snapshot_json)
+          sql
+            .prepare(
+              'UPDATE referral_reward_items SET debt_credits=0,updated_at=? WHERE reward_id=? AND workspace_id=?',
+            )
+            .run(now(), reward.id, input.workspaceId);
+        if (!reward.policy_snapshot_json || reward.reward_workspace_id === input.workspaceId)
+          sql
+            .prepare('UPDATE referral_rewards SET debt_credits=0,updated_at=? WHERE id=?')
+            .run(now(), reward.id);
+      }
+      for (const row of prepaidRows) {
         sql
-          .prepare('UPDATE referral_rewards SET debt_credits=0,updated_at=? WHERE id=?')
-          .run(now(), rewardId);
+          .prepare(
+            'UPDATE prepaid_membership_purchases SET debt_credits=0 WHERE order_id=? AND workspace_id=?',
+          )
+          .run(row.order_id, input.workspaceId);
+        sql
+          .prepare(
+            "UPDATE prepaid_refund_reservations SET status='manually-settled',updated_at=? WHERE order_id=? AND status='reserved'",
+          )
+          .run(now(), row.order_id);
+      }
       for (const riskId of input.riskIds)
         sql
           .prepare(
@@ -244,13 +365,19 @@ export function createBillingAdmin(
       const unresolved = (
         sql
           .prepare(
-            "SELECT COUNT(*) n FROM billing_risks WHERE workspace_id=? AND status='review_required'",
+            "SELECT COUNT(*) n FROM billing_risks WHERE workspace_id=? AND billing_channel=? AND status='review_required'",
           )
-          .get(input.workspaceId) as { n: number }
+          .get(input.workspaceId, channel) as { n: number }
       ).n;
       sql
-        .prepare('UPDATE workspace_billing SET payment_review_required=? WHERE workspace_id=?')
-        .run(unresolved ? 1 : 0, input.workspaceId);
+        .prepare(
+          'UPDATE credit_accounts SET payment_review_required=? WHERE workspace_id=? AND billing_channel=?',
+        )
+        .run(unresolved ? 1 : 0, input.workspaceId, channel);
+      if (channel === 'web')
+        sql
+          .prepare('UPDATE workspace_billing SET payment_review_required=? WHERE workspace_id=?')
+          .run(unresolved ? 1 : 0, input.workspaceId);
       audit(
         input.actorUserId,
         'billing.risks-manually-resolved',
@@ -258,6 +385,7 @@ export function createBillingAdmin(
         {
           resolutionId,
           workspaceId: input.workspaceId,
+          billingChannel: channel,
           riskIds: input.riskIds,
           creditsRevoked: input.creditsToRevoke,
           holdReleased: unresolved === 0,
@@ -265,6 +393,7 @@ export function createBillingAdmin(
         input.evidenceReference,
       );
       return {
+        billingChannel: channel,
         resolved: input.riskIds.length,
         holdReleased: unresolved === 0,
         unresolved,
@@ -276,9 +405,20 @@ export function createBillingAdmin(
     const input = referralProgramSchema.parse(raw);
     return atomic(() => {
       requireOperator(input.actorUserId);
+      const current = sql
+        .prepare("SELECT policy_json FROM referral_program WHERE id='default'")
+        .get() as { policy_json: string | null };
+      const policyJson =
+        input.policy === undefined
+          ? current.policy_json
+          : input.policy
+            ? JSON.stringify(input.policy)
+            : null;
+      if (input.rewardsEnabled && !policyJson && input.rewardCredits === 0)
+        throw new AppError(400, 'REFERRAL_PROGRAM_INVALID', '启用固定奖励时额度必须为正数');
       sql
         .prepare(
-          "UPDATE referral_program SET registration_enabled=?,rewards_enabled=?,reward_credits=?,minimum_paid_minor=?,currency=?,version=version+1,updated_by=?,updated_at=? WHERE id='default'",
+          "UPDATE referral_program SET registration_enabled=?,rewards_enabled=?,reward_credits=?,minimum_paid_minor=?,currency=?,policy_json=?,version=version+1,updated_by=?,updated_at=? WHERE id='default'",
         )
         .run(
           input.registrationEnabled ? 1 : 0,
@@ -286,6 +426,7 @@ export function createBillingAdmin(
           input.rewardCredits,
           input.minimumPaidMinor,
           input.currency,
+          policyJson,
           input.actorUserId,
           now(),
         );
@@ -377,15 +518,21 @@ export function createBillingAdmin(
           refunded,
           date,
         );
+      const job = sql
+        .prepare('SELECT billing_channel FROM jobs WHERE id=? AND workspace_id=?')
+        .get(ticket.job_id, input.workspaceId) as { billing_channel: BillingChannel } | undefined;
+      if (!job) throw new AppError(404, 'JOB_NOT_FOUND', '申诉关联任务不存在');
       for (const item of input.items)
-        credits.refundSettledItem({
-          workspaceId: input.workspaceId,
-          jobId: ticket.job_id,
-          itemId: item.itemId,
-          credits: item.credits,
-          resolutionId,
-          reason: `申诉审核退回应用额度：${input.reason}`,
-        });
+        credits
+          .forChannel(billingChannelSchema.parse(job.billing_channel ?? 'web'))
+          .refundSettledItem({
+            workspaceId: input.workspaceId,
+            jobId: ticket.job_id,
+            itemId: item.itemId,
+            credits: item.credits,
+            resolutionId,
+            reason: `申诉审核退回应用额度：${input.reason}`,
+          });
       sql
         .prepare("UPDATE support_tickets SET status='resolved',updated_at=? WHERE id=?")
         .run(date, input.ticketId);
@@ -457,7 +604,7 @@ export function createBillingAdmin(
           .get(eventKey);
       if (!previous && input.expiresAt && input.expiresAt <= now())
         throw new AppError(400, 'INVALID_EXPIRY', '人工授予的到期时间必须在未来');
-      const result = credits.grant({
+      const result = credits.forChannel(input.billingChannel).grant({
         workspaceId: input.workspaceId,
         userId: input.userId,
         eventKey,
@@ -480,7 +627,7 @@ export function createBillingAdmin(
         previous = sql
           .prepare('SELECT 1 FROM credit_lot_operations WHERE event_key=?')
           .get(eventKey);
-      const result = credits.changeLot({
+      const result = credits.forChannel(input.billingChannel).changeLot({
         workspaceId: input.workspaceId,
         userId: input.actorUserId,
         eventKey,

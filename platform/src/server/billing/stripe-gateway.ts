@@ -25,6 +25,7 @@ export const checkoutSchema = z.object({
   url: z.string().url().nullish(),
   expires_at: z.number().int(),
   payment_intent: reference,
+  invoice: reference,
   subscription: reference,
   customer: reference,
   line_items: z
@@ -40,6 +41,7 @@ export const subscriptionSchema = z.object({
   metadata,
   customer: reference,
   cancel_at_period_end: z.boolean(),
+  ended_at: z.number().int().positive().nullish(),
   items: z.object({
     data: z.array(
       z.object({
@@ -53,6 +55,8 @@ export const subscriptionSchema = z.object({
   }),
 });
 export const invoiceSchema = z.object({
+  metadata,
+  status_transitions: z.object({ paid_at: z.number().int().positive().nullable() }).nullish(),
   id: z.string(),
   status: z.string().nullable(),
   amount_paid: z.number().int(),
@@ -83,7 +87,18 @@ export const invoiceSchema = z.object({
   hosted_invoice_url: z.string().url().nullish(),
   invoice_pdf: z.string().url().nullish(),
 });
+export const refundSchema = z.object({
+  id: z.string().min(1),
+  charge: reference,
+  payment_intent: reference,
+  amount: z.number().int().positive(),
+  currency: z.string(),
+  created: z.number().int().positive(),
+  status: z.enum(['pending', 'requires_action', 'succeeded', 'failed', 'canceled']).nullable(),
+});
 export const chargeSchema = z.object({
+  currency: z.string().optional(),
+  refunds: z.object({ data: z.array(refundSchema).max(100), has_more: z.boolean() }).optional(),
   id: z.string(),
   payment_intent: reference,
   refunded: z.boolean(),
@@ -146,7 +161,10 @@ export function createStripeGateway(secret: string): StripeGateway {
       return invoiceSchema.parse(await stripe.invoices.retrieve(id, { expand: ['payments'] }));
     },
     async retrieveCharge(id) {
-      return chargeSchema.parse(await stripe.charges.retrieve(id));
+      const charge = await stripe.charges.retrieve(id);
+      // A bounded complete list provides refund timestamps; an incomplete list is explicit.
+      const refunds = await stripe.refunds.list({ charge: id, limit: 100 });
+      return chargeSchema.parse({ ...charge, refunds });
     },
   };
 }

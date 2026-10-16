@@ -110,6 +110,11 @@ export class AssetService {
   prepare(input: IngestAssetInput): Promise<PreparedAsset> {
     return this.storage.prepare({ ...input, tags: TagsSchema.parse(input.tags ?? []) });
   }
+  async discardPrepared(prepared: PreparedAsset): Promise<void> {
+    await Promise.all(
+      prepared.variants.map((v) => rm(this.storage.path(v.storageKey), { force: true })),
+    );
+  }
   private insertPrepared(actor: Actor, wid: string, prepared: PreparedAsset): AssetDto {
     if (!this.c.db.sqlite.inTransaction)
       throw new Error('commitPrepared requires an existing transaction');

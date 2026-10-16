@@ -1,4 +1,4 @@
-import { mkdir, writeFile, rename, readFile, stat } from 'node:fs/promises';
+import { mkdir, writeFile, rename, readFile, stat, rm } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFile } from 'node:child_process';
@@ -73,14 +73,35 @@ export class PrivateStorage {
       path = this.path(key);
     await mkdir(resolve(path, '..'), { recursive: true, mode: 0o700 });
     const temp = `${path}.tmp`;
-    await writeFile(temp, buffer, { flag: 'wx', mode: 0o600 });
-    await rename(temp, path);
+    try {
+      await writeFile(temp, buffer, { flag: 'wx', mode: 0o600 });
+      await rename(temp, path);
+    } catch (error) {
+      await rm(temp, { force: true }).catch(() => {});
+      throw error;
+    }
     return key;
   }
   async read(key: string): Promise<Buffer> {
     return readFile(this.path(key));
   }
   async prepare(input: IngestAssetInput): Promise<PreparedAsset> {
+    const written: string[] = [];
+    try {
+      return await this.prepareAsset(input, async (buffer, suffix) => {
+        const key = await this.write(buffer, suffix);
+        written.push(key);
+        return key;
+      });
+    } catch (error) {
+      await Promise.allSettled(written.map((key) => rm(this.path(key), { force: true })));
+      throw error;
+    }
+  }
+  private async prepareAsset(
+    input: IngestAssetInput,
+    write: (buffer: Buffer, suffix: string) => Promise<string>,
+  ): Promise<PreparedAsset> {
     if (!input.buffer.length || input.buffer.length > 100 * 1024 * 1024)
       throw new AppError(413, 'FILE_TOO_LARGE', '文件大小须为1字节至100MiB');
     const name = input.name.replace(/[\x00-\x1f/\\]/g, '_').slice(0, 200) || '未命名素材',
@@ -145,7 +166,7 @@ export class PrivateStorage {
           .toBuffer({ resolveWithObject: true });
         variants.push({
           variant,
-          storageKey: await this.write(output.data, '.webp'),
+          storageKey: await write(output.data, '.webp'),
           mimeType: 'image/webp',
           byteSize: output.data.length,
           width: output.info.width,
@@ -153,7 +174,7 @@ export class PrivateStorage {
         });
       }
     }
-    const originalKey = await this.write(input.buffer, detected ? `.${detected.ext}` : extension);
+    const originalKey = await write(input.buffer, detected ? `.${detected.ext}` : extension);
     if (kind === 'video' || kind === 'audio') {
       try {
         const { stdout } = await execFileAsync(

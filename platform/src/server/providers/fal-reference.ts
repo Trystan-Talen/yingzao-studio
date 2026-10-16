@@ -1,3 +1,4 @@
+import { buildVideoAudioRequest, validateVideoAudioInput } from './video-audio';
 /** Protocol evidence: research/fal-reference-schemas/manifest.json. No live-quality claims. */
 import sharp from 'sharp';
 import type { JobInput, ModelCapability } from '../../contracts/jobs';
@@ -15,6 +16,10 @@ export const FAL_REFERENCE_MODELS: ModelCapability[] = [
   {
     id: 'kling-o1-first-last',
     name: 'Kling O1 · 首尾帧',
+    textOverlay: {
+      mode: 'prompt-guidance',
+      note: '画面文字与语言仅作为提示词指引，不保证精确字幕或文字生成。',
+    },
     ratios: ['auto'],
     resolutions: ['auto'],
     durations: [3, 4, 5, 6, 7, 8, 9, 10],
@@ -22,6 +27,10 @@ export const FAL_REFERENCE_MODELS: ModelCapability[] = [
   {
     id: 'kling-o1-reference',
     name: 'Kling O1 · 多图参考',
+    textOverlay: {
+      mode: 'prompt-guidance',
+      note: '画面文字与语言仅作为提示词指引，不保证精确字幕或文字生成。',
+    },
     ratios: ['16:9', '9:16', '1:1'],
     resolutions: ['auto'],
     durations: [3, 4, 5, 6, 7, 8, 9, 10],
@@ -29,6 +38,14 @@ export const FAL_REFERENCE_MODELS: ModelCapability[] = [
   {
     id: 'kling-o3-4k-reference',
     name: 'Kling O3 · 4K 多模态参考',
+    textOverlay: {
+      mode: 'prompt-guidance',
+      note: '画面文字与语言仅作为提示词指引，不保证精确字幕或文字生成。',
+    },
+    audio: {
+      mode: 'generated',
+      note: '按模型生成音轨，不是声音克隆或保证精确字幕；真实音画效果未验证。',
+    },
     ratios: ['16:9', '9:16', '1:1'],
     resolutions: ['4K'],
     durations: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
@@ -53,6 +70,7 @@ interface ReferencePlan {
   referenceIds: string[];
 }
 function plan(input: JobInput): ReferencePlan {
+  validateVideoAudioInput(input);
   const model = input.options.model;
   if (
     input.providerId !== 'fal' ||
@@ -94,6 +112,34 @@ function plan(input: JobInput): ReferencePlan {
     throw new ProviderError('多参考模式需要1–7份图片或视频参考；首尾帧之外最多7份参考。');
   return { model, endpoint: FAL_REFERENCE_ENDPOINTS[model], frameIds, referenceIds };
 }
+function referencePrompt(
+  input: JobInput,
+  selected: ReferencePlan,
+  imageCount: number,
+  videoCount: number,
+) {
+  const instructions: string[] = [];
+  if (selected.frameIds.length)
+    instructions.push(
+      selected.model === 'kling-o1-first-last'
+        ? 'Animate a transition from @Image1 (first frame) to @Image2 (last frame).'
+        : 'Animate from the supplied start frame to the supplied end frame.',
+    );
+  if (imageCount)
+    instructions.push(
+      `Visual references in order: ${Array.from({ length: imageCount }, (_, n) => `@Image${n + 1}`).join(', ')}.`,
+    );
+  if (videoCount) instructions.push('Use @Element1 as the referenced character or object.');
+  instructions.push(
+    input.options.needText
+      ? `On-screen text direction: use ${input.options.language} for requested visible text or captions. This is prompt guidance, not a precise subtitle track.`
+      : 'Do not add on-screen text, captions or subtitles. Preserve text already present in the reference.',
+  );
+  const prompt = [input.prompt.trim(), ...instructions].join('\n');
+  if (prompt.length > 2500) throw new ProviderError('包含参考说明后的提示词超过模型长度限制。');
+  return prompt;
+}
+
 function validateImage(asset: FalReferenceAsset) {
   const width = asset.width || 0,
     height = asset.height || 0;
@@ -148,6 +194,7 @@ export function validateFalReferenceInput(
         throw new ProviderError('Kling视频参考需3–10秒MP4/MOV，宽高720–2160像素，最多200MB。');
     } else validateImage(asset);
   }
+  referencePrompt(input, selected, selected.referenceIds.length - videos, videos);
   return selected;
 }
 
@@ -202,20 +249,7 @@ export async function buildFalReferenceRequest(
   const byId = new Map(metadata.map((asset) => [asset.id, asset]));
   const imageIds = selected.referenceIds.filter((id) => byId.get(id)!.kind === 'image');
   const videoIds = selected.referenceIds.filter((id) => byId.get(id)!.kind === 'video');
-  const instructions: string[] = [];
-  if (selected.frameIds.length)
-    instructions.push(
-      selected.model === 'kling-o1-first-last'
-        ? 'Animate a transition from @Image1 (first frame) to @Image2 (last frame).'
-        : 'Animate from the supplied start frame to the supplied end frame.',
-    );
-  if (imageIds.length)
-    instructions.push(
-      `Visual references in order: ${imageIds.map((_, n) => `@Image${n + 1}`).join(', ')}.`,
-    );
-  if (videoIds.length) instructions.push('Use @Element1 as the referenced character or object.');
-  const prompt = [context.input.prompt.trim(), ...instructions].join('\n');
-  if (prompt.length > 2500) throw new ProviderError('包含参考说明后的提示词超过模型长度限制。');
+  const prompt = referencePrompt(context.input, selected, imageIds.length, videoIds.length);
   const body: Record<string, unknown> = {
     prompt,
     duration: String(context.input.options.duration),
@@ -226,7 +260,7 @@ export async function buildFalReferenceRequest(
   if (imageIds.length) body.image_urls = imageIds.map(media);
   if (selected.model !== 'kling-o1-first-last') body.aspect_ratio = context.input.options.ratio;
   if (selected.model === 'kling-o3-4k-reference') {
-    body.generate_audio = false;
+    Object.assign(body, await buildVideoAudioRequest(context));
     if (videoIds.length) body.elements = videoIds.map((id) => ({ video_url: media(id) }));
   }
   return { endpoint: selected.endpoint, body };

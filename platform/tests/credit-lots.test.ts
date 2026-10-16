@@ -397,6 +397,7 @@ function orderFixture(kind: 'credits' | 'subscription', amount = 30): OrderRow {
       '{}',
     );
   const order = core.business.createOrder(actor, wid, { planId });
+  db.sqlite.prepare("UPDATE orders SET payment_environment='test' WHERE id=?").run(order.id);
   return db.sqlite.prepare('SELECT * FROM orders WHERE id=?').get(order.id) as OrderRow;
 }
 describe('verified payment validity rules', () => {

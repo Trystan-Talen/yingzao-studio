@@ -176,6 +176,7 @@ it('validates structured design plans and preserves all required design sections
   if (result.state !== 'complete') throw new Error('Expected text result');
   expect(result.outputs[0]!.text).toContain('构图与版式：左侧产品右侧文字');
   expect(result.outputs[0]!.text).toContain('3. 方向3');
+  expect(result.outputs[0]!.resultData).toEqual({ type: 'design-plan', version: 1, plan });
   call.mockResolvedValue({
     output: [
       { type: 'message', content: [{ type: 'output_text', text: '{"style":"incomplete"}' }] },

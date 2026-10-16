@@ -2,7 +2,11 @@ import { z } from 'zod';
 import sharp from 'sharp';
 import { providerJson } from './http';
 import { ProviderError, type ProviderAdapter } from '../tasks/types';
-import { designPlanSchema, formatDesignPlan } from '../../contracts/design-plan';
+import {
+  designPlanSchema,
+  formatDesignPlan,
+  type DesignPlanResult,
+} from '../../contracts/design-plan';
 import { ocrRegionsSchema, ocrResponseJsonSchema } from '../../contracts/ocr';
 import { canonicalImage } from './image-input';
 const imageResponse = z.object({
@@ -20,6 +24,10 @@ const responseText = z.object({
   ),
 });
 const recipes: Record<string, string> = {
+  'image-erase':
+    'Remove the objects marked by the transparent mask and reconstruct a natural continuation of the surrounding background. Do not replace them with a new subject. Preserve all unmasked content, product identity and lighting.',
+  'model-replace':
+    'Use the first image as the garment/clothing source, including clothing on a mannequin. Dress the target model from the second image in exactly that garment. Preserve the source garment silhouette, construction, fabric texture, logos, colors and accessories. Preserve the target model identity and anatomy. If a third image is provided, use it only as the background reference. Do not copy the source mannequin or source model identity.',
   'image-replica':
     'Use the reference image composition and art direction as inspiration. Create a new original advertisement for the product in the other reference images. Preserve product identity.',
   'image-naturalize':
@@ -151,6 +159,7 @@ export const openaiProvider: ProviderAdapter = {
         .map((v) => v.text || '')
         .join('\n');
       if (!text.trim()) throw new ProviderError('服务未返回文字结果。', true);
+      let resultData: DesignPlanResult | undefined;
       if (i.operation === 'image.ocr') {
         try {
           const result = ocrRegionsSchema.parse(JSON.parse(text));
@@ -188,7 +197,7 @@ export const openaiProvider: ProviderAdapter = {
       if (o.assistantMode === 'design-plan') {
         try {
           const plan = designPlanSchema.parse(JSON.parse(text));
-          if (plan.directions.length !== 3) throw new Error('方向数量不符');
+          resultData = { type: 'design-plan', version: 1, plan };
           text = formatDesignPlan(plan);
         } catch {
           throw new ProviderError('服务返回的设计方案结构不完整，需要核对本次结果。', true);
@@ -196,7 +205,14 @@ export const openaiProvider: ProviderAdapter = {
       }
       return {
         state: 'complete',
-        outputs: [{ text, mimeType: 'text/plain', name: '创作建议.txt' }],
+        outputs: [
+          {
+            text,
+            ...(resultData ? { resultData } : {}),
+            mimeType: 'text/plain',
+            name: '创作建议.txt',
+          },
+        ],
       };
     }
     if (i.operation === 'image-translate' && !o.forceTranslation) {
@@ -270,7 +286,13 @@ export const openaiProvider: ProviderAdapter = {
     }
     const model = o.model || 'gpt-image-2.5-flare';
     const images = await Promise.all(
-      [...new Set([...i.assetIds, ...i.referenceAssetIds])]
+      [
+        ...new Set([
+          ...i.assetIds,
+          ...i.referenceAssetIds,
+          ...(i.backgroundAssetId ? [i.backgroundAssetId] : []),
+        ]),
+      ]
         .slice(0, 16)
         .map(async (id) => ({ image_url: await dataUrl(id) })),
     );
@@ -296,7 +318,7 @@ export const openaiProvider: ProviderAdapter = {
       model,
       prompt,
       n: 1,
-      size: imageSize(o.ratio, o.resolution),
+      size: i.operation === 'image-erase' ? 'auto' : imageSize(o.ratio, o.resolution),
       quality: 'high',
       output_format: 'png',
     };

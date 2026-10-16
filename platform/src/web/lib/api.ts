@@ -1,4 +1,4 @@
-import { getLocale } from './i18n';
+import { getLocale, t } from './i18n';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export class ApiError extends Error {
@@ -25,7 +25,17 @@ export async function api<T>(
     headers.set('x-workspace-id', workspaceOverride);
   if (init.body && !(init.body instanceof FormData))
     headers.set('content-type', 'application/json');
-  const response = await fetch(`/api/v1${path}`, { ...init, headers, credentials: 'same-origin' });
+  let response: Response;
+  try {
+    response = await fetch(`/api/v1${path}`, { ...init, headers, credentials: 'same-origin' });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') throw error;
+    throw new ApiError(
+      'NETWORK_ERROR',
+      '网络连接中断，请恢复网络；已确认的任务请先核对提交结果。',
+      0,
+    );
+  }
   const payload = (await response.json().catch(() => null)) as {
     data?: T;
     error?: { code?: string; message?: string; details?: Record<string, unknown> };
@@ -82,8 +92,18 @@ export function useRefresh() {
   const client = useQueryClient();
   return () => client.invalidateQueries({ queryKey: ['api'] });
 }
-export const errorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : '操作未完成，请重试。';
+const brandErrorCopy: Readonly<Record<string, string>> = {
+  ENTITLEMENT_LIMIT: '已达到对应合同的品牌数量上限',
+  BRAND_QUOTA_INVALID: '品牌配额合同无效，请核对套餐配置',
+};
+export const errorMessage = (error: unknown) => {
+  if (!(error instanceof Error)) return '操作未完成，请重试。';
+  // Only exact, known application errors are localized. Provider messages and
+  // user-authored text, including lookalikes with a different code, stay intact.
+  return error instanceof ApiError && brandErrorCopy[error.code] === error.message
+    ? t(error.message)
+    : error.message;
+};
 export const dateTime = (date: string | null | undefined) =>
   date
     ? new Intl.DateTimeFormat(getLocale(), {

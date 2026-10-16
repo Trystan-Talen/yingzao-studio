@@ -146,7 +146,7 @@ describe('delivery regressions', () => {
     await expect(
       core.assets.ingest(actor, wid, { ...upload, name: 'changed.png' }, requestId),
     ).rejects.toMatchObject({ code: 'UPLOAD_ID_CONFLICT' });
-    const other = core.team.create(actor, { name: 'Other space' });
+    const other = core.auth.createWorkspace(actor.userId, 'Other space', 'team');
     expect(
       (await instance.app.inject({ url: `/api/v1/assets/${aid}`, headers: headers(other.id) }))
         .statusCode,
@@ -167,7 +167,7 @@ describe('delivery regressions', () => {
     expect(separate.id).not.toBe(aid);
   });
   it('archives and restores history per user while preserving completed artifacts and download markers', async () => {
-    const team = instance.services.core.team.create(actor, { name: 'Shared team' });
+    const team = instance.services.core.auth.createWorkspace(actor.userId, 'Shared team', 'team');
     wid = team.id;
     const invitation = instance.services.core.team.invite(actor, wid, {
       email: 'member@example.local',
@@ -261,7 +261,7 @@ describe('delivery regressions', () => {
         })
       ).json().data.total,
     ).toBe(0);
-    const other = instance.services.core.team.create(actor, { name: 'Isolated' });
+    const other = instance.services.core.auth.createWorkspace(actor.userId, 'Isolated', 'team');
     for (const [method, url, payload] of [
       ['PATCH', `/api/v1/jobs/${active.id}/history`, { archived: true }],
       ['POST', `/api/v1/jobs/${active.id}/downloaded`, undefined],
@@ -328,7 +328,7 @@ describe('delivery regressions', () => {
         { id: asset.id, mimeType: 'image/png', sourceJobId: done.id, width: 48, height: 64 },
       ],
     });
-    const other = instance.services.core.team.create(actor, { name: 'Other' }),
+    const other = instance.services.core.auth.createWorkspace(actor.userId, 'Other', 'team'),
       foreign = await storedPng(other.id);
     const mixed = await instance.app.inject({
       method: 'POST',
@@ -379,7 +379,7 @@ describe('delivery regressions', () => {
       db.sqlite.prepare("SELECT COUNT(*) n FROM credit_ledger WHERE kind='settle'").get(),
     ).toEqual({ n: 0 });
     expect(instance.services.get(actor, wid, pending.id).status).toBe('reconciliation_required');
-    const other = core.team.create(actor, { name: 'Other' }),
+    const other = core.auth.createWorkspace(actor.userId, 'Other', 'team'),
       foreign = await storedPng(other.id);
     expect((await reconcile(foreign.id)).statusCode).toBe(404);
     expect((await reconcile(foreign.id, other.id)).statusCode).toBe(404);

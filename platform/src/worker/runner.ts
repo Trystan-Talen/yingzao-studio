@@ -1,7 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileTypeFromBuffer } from 'file-type';
 import { jobInputSchema } from '../contracts/jobs';
+import { designPlanResultSchema, type DesignPlanResult } from '../contracts/design-plan';
 import type { ProviderId } from '../contracts/catalog';
 import type { TaskServices } from '../server/tasks/service';
 import type { PreparedAsset } from '../server/core';
@@ -19,8 +21,11 @@ import { openaiProvider } from '../server/providers/openai';
 import { falProvider } from '../server/providers/fal';
 import { flyelepProvider } from '../server/providers/flyelep';
 import { localProvider } from '../server/providers/local';
+import { tikhubProvider } from '../server/providers/tikhub';
 import { downloadPublicMedia } from '../server/providers/http';
+import { composeErasureResult } from '../server/providers/erasure';
 import { AppError } from '../server/errors';
+import { cleanupSucceededResults } from './result-cleanup';
 interface StoredResult {
   outputKind: 'single' | 'layers';
   outputs: StoredOutput[];
@@ -36,6 +41,7 @@ interface StoredOutput {
   mimeType: string;
   name: string;
   text?: string;
+  resultData?: DesignPlanResult;
 }
 export function createWorker(
   services: TaskServices,
@@ -45,6 +51,7 @@ export function createWorker(
     sql = db.sqlite;
   const owner = randomUUID();
   const adapters: Record<ProviderId, ProviderAdapter> = {
+    tikhub: tikhubProvider,
     openai: openaiProvider,
     fal: falProvider,
     flyelep: flyelepProvider,
@@ -54,6 +61,21 @@ export function createWorker(
   let stopped = false;
   const running = new Set<Promise<void>>();
   const textChecks = new Map<string, Promise<boolean>>();
+  let nextResultCleanup = 0;
+  let resultCleanupCursor: string | undefined;
+  async function cleanupResults(itemId?: string) {
+    try {
+      const result = await cleanupSucceededResults(db, config.storageDir, {
+        itemId,
+        afterId: itemId ? undefined : resultCleanupCursor,
+      });
+      if (!itemId) resultCleanupCursor = result.nextCursor;
+      if (result.deferred)
+        console.warn(`Result cache cleanup deferred for ${result.deferred} item(s).`);
+    } catch {
+      console.warn('Result cache cleanup unavailable; completed task results remain valid.');
+    }
+  }
   function recover() {
     services.transaction(() => {
       const expired = sql
@@ -125,7 +147,9 @@ export function createWorker(
                 "UPDATE job_items SET status='cancelled',phase='done',error_message=?,updated_at=? WHERE id=?",
               )
               .run('提交者已失去创作权限，尚未执行的任务已取消。', now(), i.id);
-            services.credits.finish(i.workspace_id, i.user_id, i.credits, i.job_id, i.id, false);
+            services.credits
+              .forChannel(i.billing_channel)
+              .finish(i.workspace_id, i.user_id, i.credits, i.job_id, i.id, false);
             services.refresh(i.job_id);
             continue;
           }
@@ -201,7 +225,9 @@ export function createWorker(
           i.fence,
         );
       if (!uncertain)
-        services.credits.finish(i.workspace_id, i.user_id, i.credits, i.job_id, i.id, false);
+        services.credits
+          .forChannel(i.billing_channel)
+          .finish(i.workspace_id, i.user_id, i.credits, i.job_id, i.id, false);
       services.refresh(i.job_id);
     });
   }
@@ -209,18 +235,42 @@ export function createWorker(
     const dir = join(config.storageDir, '.job-results');
     await mkdir(dir, { recursive: true, mode: 0o700 });
     const stored: StoredOutput[] = [];
-    for (const [n, o] of outputs.entries()) {
-      if (o.buffer) {
-        const path = join(dir, `${i.id}-${i.fence}-${n}.bin`);
-        await writeFile(path, o.buffer, { mode: 0o600 });
-        stored.push({ path, name: o.name, mimeType: o.mimeType, text: o.text });
-      } else stored.push({ url: o.url, text: o.text, mimeType: o.mimeType, name: o.name });
+    const written: string[] = [];
+    try {
+      for (const [n, o] of outputs.entries()) {
+        const resultData =
+          o.resultData === undefined ? undefined : designPlanResultSchema.parse(o.resultData);
+        if (o.buffer) {
+          const path = join(dir, `${i.id}-${i.fence}-${n}.bin`);
+          written.push(path);
+          await writeFile(path, o.buffer, { mode: 0o600 });
+          stored.push({ path, name: o.name, mimeType: o.mimeType, text: o.text, resultData });
+        } else
+          stored.push({ url: o.url, text: o.text, mimeType: o.mimeType, name: o.name, resultData });
+      }
+    } catch (error) {
+      const removed = await Promise.allSettled(written.map((path) => rm(path, { force: true })));
+      if (removed.some((result) => result.status === 'rejected'))
+        console.warn('Uncommitted result cache cleanup incomplete; inspect private storage.');
+      throw error;
     }
     return stored;
   }
   async function finish(i: ItemRow, result: StoredResult) {
     const outputs = result.outputs;
     const input = jobInputSchema.parse(JSON.parse(i.input_json));
+    const structured = outputs.find((output) => output.resultData !== undefined)?.resultData;
+    let resultData: DesignPlanResult | undefined;
+    if (structured !== undefined) {
+      const parsed = designPlanResultSchema.safeParse(structured);
+      if (
+        !parsed.success ||
+        input.operation !== 'text.assist' ||
+        input.options.assistantMode !== 'design-plan'
+      )
+        throw new ProviderError('服务返回了不完整或不属于当前任务的方案结构，请核对结果。', true);
+      resultData = parsed.data;
+    }
     const waived = result.billingDisposition === 'no-visible-text';
     if (waived && (input.operation !== 'image-translate' || input.providerId !== 'openai'))
       throw new ProviderError('不支持此任务的免扣费结果，需核对服务商结果。', true);
@@ -240,114 +290,162 @@ export function createWorker(
     if ((result.outputKind === 'layers' && !layered) || outputs.length > (layered ? 10 : 1))
       throw new ProviderError('单项任务返回了多个未关联产物，需要人工核对，未自动结算。', true);
     const prepared: PreparedAsset[] = [];
-    for (const output of outputs) {
-      if (output.path || output.url) {
-        const buffer = output.path
-          ? await readFile(output.path)
-          : await downloadPublicMedia(output.url!);
-        prepared.push(
-          await core.assets.prepare({
-            buffer,
-            name: output.name,
-            mimeType: output.mimeType,
-            projectId: projectId || undefined,
-            source: input.providerId === 'local' ? 'local-processing' : 'generation',
-            sourceJobId: i.job_id,
-          }),
-        );
+    let committed = false;
+    try {
+      for (const output of outputs) {
+        if (output.path || output.url) {
+          let buffer = output.path
+            ? await readFile(output.path)
+            : await downloadPublicMedia(
+                output.url!,
+                input.operation === 'media.import' ? 100 * 1024 * 1024 : undefined,
+              );
+          if (
+            input.operation === 'media.import' &&
+            !(await fileTypeFromBuffer(buffer))?.mime.startsWith('video/')
+          )
+            throw new ProviderError('解析返回的内容不是可验证的视频文件，请核对服务商结果。', true);
+          if (input.operation === 'image-erase') {
+            const [source, mask] = await Promise.all([
+              core.assets.readOriginalForJob(context, input.assetIds[0]!),
+              core.assets.readOriginalForJob(context, input.maskAssetId!),
+            ]);
+            buffer = await composeErasureResult(source, mask, buffer);
+          }
+          prepared.push(
+            await core.assets.prepare({
+              buffer,
+              name: output.name,
+              mimeType: input.operation === 'image-erase' ? 'image/png' : output.mimeType,
+              projectId: projectId || undefined,
+              source:
+                input.operation === 'media.import'
+                  ? 'import'
+                  : input.providerId === 'local'
+                    ? 'local-processing'
+                    : 'generation',
+              sourceJobId: i.job_id,
+            }),
+          );
+        }
       }
-    }
-    if (layered && (prepared.length !== outputs.length || prepared.some((a) => a.kind !== 'image')))
-      throw new ProviderError('图层结果必须全部为有效图片。', true);
-    if (
-      layered &&
-      prepared.some((a) => a.width !== prepared[0]!.width || a.height !== prepared[0]!.height)
-    )
-      throw new ProviderError('分层图片画幅不一致，需核对供应商产物。', true);
-    const resultText =
-      outputs
-        .map((o) => o.text ?? '')
-        .filter(Boolean)
-        .join('\n') || null;
-    if (!prepared.length && !resultText)
-      throw new ProviderError('服务返回了空产物。', input.providerId !== 'local');
-    services.transaction(() => {
-      if (!owns(i)) return;
-      const assets = prepared.map((p) => core.assets.commitPreparedForJob(context, p)),
-        asset = assets[0] ?? null;
-      for (const [index, a] of assets.entries())
-        sql.prepare('INSERT INTO job_item_assets VALUES (?,?,?)').run(i.id, a.id, index);
-      sql
-        .prepare('UPDATE job_items SET output_kind=? WHERE id=?')
-        .run(layered ? 'layers' : 'single', i.id);
-      sql
-        .prepare(
-          "UPDATE job_items SET status='succeeded',phase='done',asset_id=?,result_text=?,lease_owner=NULL,lease_until=NULL,error_message=NULL,updated_at=? WHERE id=? AND fence=?",
-        )
-        .run(asset?.id || null, resultText, now(), i.id, i.fence);
-      services.credits.finish(
-        i.workspace_id,
-        i.user_id,
-        i.credits,
-        i.job_id,
-        i.id,
-        !waived,
-        waived ? '未检测到文字，任务保留原图并释放预留' : undefined,
-      );
-      if (waived)
-        core.context.audit(actorForJob(i), i.workspace_id, 'job.no_visible_text', 'job', i.job_id, {
-          itemId: i.id,
-          releasedCredits: i.credits,
-        });
-      if (asset && input.documentId && input.baseRevision) {
+      if (
+        layered &&
+        (prepared.length !== outputs.length || prepared.some((a) => a.kind !== 'image'))
+      )
+        throw new ProviderError('图层结果必须全部为有效图片。', true);
+      if (
+        layered &&
+        prepared.some((a) => a.width !== prepared[0]!.width || a.height !== prepared[0]!.height)
+      )
+        throw new ProviderError('分层图片画幅不一致，需核对供应商产物。', true);
+      const resultText =
+        outputs
+          .map((o) => o.text ?? '')
+          .filter(Boolean)
+          .join('\n') || null;
+      if (!prepared.length && !resultText)
+        throw new ProviderError('服务返回了空产物。', input.providerId !== 'local');
+      committed = services.transaction(() => {
+        if (!owns(i)) return false;
+        const assets = prepared.map((p) => core.assets.commitPreparedForJob(context, p)),
+          asset = assets[0] ?? null;
+        for (const [index, a] of assets.entries())
+          sql.prepare('INSERT INTO job_item_assets VALUES (?,?,?)').run(i.id, a.id, index);
+        sql
+          .prepare('UPDATE job_items SET output_kind=? WHERE id=?')
+          .run(layered ? 'layers' : 'single', i.id);
         sql
           .prepare(
-            'INSERT OR IGNORE INTO pending_applies(id,workspace_id,document_id,job_id,item_id,asset_id,base_revision,target_layer_id,status,created_at,updated_at,asset_ids_json,output_kind) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            "UPDATE job_items SET status='succeeded',phase='done',asset_id=?,result_text=?,result_data_json=?,lease_owner=NULL,lease_until=NULL,error_message=NULL,updated_at=? WHERE id=? AND fence=?",
           )
           .run(
-            randomUUID(),
+            asset?.id || null,
+            resultText,
+            resultData ? JSON.stringify(resultData) : null,
+            now(),
+            i.id,
+            i.fence,
+          );
+        services.credits
+          .forChannel(i.billing_channel)
+          .finish(
             i.workspace_id,
-            input.documentId,
+            i.user_id,
+            i.credits,
             i.job_id,
             i.id,
-            asset.id,
-            input.baseRevision,
-            input.targetLayerId || null,
-            'pending',
-            now(),
-            now(),
-            JSON.stringify(assets.map((a) => a.id)),
-            layered ? 'layers' : 'single',
+            !waived,
+            waived ? '未检测到文字，任务保留原图并释放预留' : undefined,
           );
-      }
-      if (projectId) {
-        sql.prepare('INSERT INTO messages VALUES(?,?,?,?,?,?,?,?,?)').run(
-          randomUUID(),
-          i.workspace_id,
-          projectId,
-          i.user_id,
-          'assistant',
-          resultText ||
-            (asset?.kind === 'video'
-              ? '视频已完成，可预览并添加到画布。'
-              : '图片已完成，可预览并添加到画布。'),
-          i.job_id,
-          JSON.stringify({
-            assetId: asset?.id || null,
-            assetIds: assets.map((a) => a.id),
-            outputKind: layered ? 'layers' : 'single',
-          }),
-          now(),
-        );
-        if (asset)
+        if (waived)
+          core.context.audit(
+            actorForJob(i),
+            i.workspace_id,
+            'job.no_visible_text',
+            'job',
+            i.job_id,
+            {
+              itemId: i.id,
+              releasedCredits: i.credits,
+            },
+          );
+        if (asset && input.documentId && input.baseRevision) {
           sql
             .prepare(
-              'UPDATE projects SET cover_asset_id=COALESCE(cover_asset_id,?),updated_at=? WHERE id=?',
+              'INSERT OR IGNORE INTO pending_applies(id,workspace_id,document_id,job_id,item_id,asset_id,base_revision,target_layer_id,status,created_at,updated_at,asset_ids_json,output_kind) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
             )
-            .run(asset.id, now(), projectId);
-      }
-      services.refresh(i.job_id);
-    });
+            .run(
+              randomUUID(),
+              i.workspace_id,
+              input.documentId,
+              i.job_id,
+              i.id,
+              asset.id,
+              input.baseRevision,
+              input.targetLayerId || null,
+              'pending',
+              now(),
+              now(),
+              JSON.stringify(assets.map((a) => a.id)),
+              layered ? 'layers' : 'single',
+            );
+        }
+        if (projectId) {
+          sql.prepare('INSERT INTO messages VALUES(?,?,?,?,?,?,?,?,?)').run(
+            randomUUID(),
+            i.workspace_id,
+            projectId,
+            i.user_id,
+            'assistant',
+            resultText ||
+              (asset?.kind === 'video'
+                ? '视频已完成，可预览并添加到画布。'
+                : '图片已完成，可预览并添加到画布。'),
+            i.job_id,
+            JSON.stringify({
+              assetId: asset?.id || null,
+              assetIds: assets.map((a) => a.id),
+              outputKind: layered ? 'layers' : 'single',
+              ...(resultData ? { resultData } : {}),
+            }),
+            now(),
+          );
+          if (asset)
+            sql
+              .prepare(
+                'UPDATE projects SET cover_asset_id=COALESCE(cover_asset_id,?),updated_at=? WHERE id=?',
+              )
+              .run(asset.id, now(), projectId);
+        }
+        services.refresh(i.job_id);
+        return true;
+      });
+    } finally {
+      if (!committed)
+        await Promise.allSettled(prepared.map((asset) => core.assets.discardPrepared(asset)));
+    }
+    if (committed) await cleanupResults(i.id);
   }
   async function runItem(i: ItemRow) {
     if (!owns(i)) return;
@@ -396,7 +494,9 @@ export function createWorker(
                 "UPDATE job_items SET status='cancelled',phase='done',lease_owner=NULL,lease_until=NULL,error_message=?,updated_at=? WHERE id=?",
               )
               .run('执行前授权已撤销，任务已取消。', now(), i.id);
-            services.credits.finish(i.workspace_id, i.user_id, i.credits, i.job_id, i.id, false);
+            services.credits
+              .forChannel(i.billing_channel)
+              .finish(i.workspace_id, i.user_id, i.credits, i.job_id, i.id, false);
             services.refresh(i.job_id);
           });
           return;
@@ -411,6 +511,8 @@ export function createWorker(
           ...input.assetIds,
           ...input.referenceAssetIds,
           ...(input.maskAssetId ? [input.maskAssetId] : []),
+          ...(input.backgroundAssetId ? [input.backgroundAssetId] : []),
+          ...(input.backgroundAudioAssetId ? [input.backgroundAudioAssetId] : []),
         ]);
         const lease = sql
           .prepare(
@@ -552,6 +654,10 @@ export function createWorker(
   }
   async function tick() {
     recover();
+    if (Date.now() >= nextResultCleanup) {
+      nextResultCleanup = Date.now() + 60_000;
+      await cleanupResults();
+    }
     await core.assets.processPendingExtractions(2);
     while (!stopped && running.size < 2) {
       const item = claim();

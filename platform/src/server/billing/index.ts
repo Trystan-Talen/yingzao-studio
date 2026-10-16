@@ -1,3 +1,10 @@
+import { createRefundEvidence } from './refund-evidence';
+import { assertPendingTeamOrder } from '../core/team-creation';
+import { createPromotions } from './promotions';
+import { createPrepaidMemberships } from './prepaid';
+import { bindPaymentEnvironment, boundPaymentEnvironment } from './environment';
+import { prepaidTermsSchema } from '../../contracts/promotions';
+import { createBillingPeriods, verifiedInvoicePeriod } from './periods';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import type { Actor } from '../../contracts/core';
@@ -13,7 +20,13 @@ import {
   type StripeEvent,
   type CheckoutSession,
 } from './stripe-gateway';
-import { createBillingStore, iso, type OrderRow } from './store';
+import {
+  createBillingStore,
+  iso,
+  matchesBillingChannel,
+  orderChannel,
+  type OrderRow,
+} from './store';
 import type { BillingAdapter, CheckoutResult } from './contracts';
 export type { BillingAdapter, CheckoutResult } from './contracts';
 interface CheckoutRow {
@@ -31,14 +44,23 @@ export function createBillingService(
   credits: CreditService,
   gatewayOverride?: StripeGateway,
 ) {
+  const periods = createBillingPeriods(db);
+  const refundEvidence = createRefundEvidence(db);
+  const promotions = createPromotions(db),
+    prepaid = createPrepaidMemberships(db);
   const store = createBillingStore(db, core, credits),
     { sql, atomic } = store;
   const key = config.billing?.stripeSecretKey,
     webhookSecret = config.billing?.stripeWebhookSecret;
-  const environment = key?.startsWith('sk_live_') ? 'live' : 'test';
   const configured = Boolean(
     key && webhookSecret && (!config.demoMode || key.startsWith('sk_test_')),
   );
+  const environment = configured
+    ? key?.startsWith('sk_live_')
+      ? 'live'
+      : 'test'
+    : (boundPaymentEnvironment(db) ?? 'test');
+  if (configured) bindPaymentEnvironment(db, environment);
   function canCheckoutPlan(planId: string) {
     const plan = sql
       .prepare('SELECT catalog_mode FROM plans WHERE id=? AND active=1')
@@ -53,6 +75,7 @@ export function createBillingService(
         'PAYMENT_PROVIDER_UNAVAILABLE',
         '支付服务未配置；订单保留草稿，尚未支付或发放额度',
       );
+    bindPaymentEnvironment(db, environment);
     return gateway;
   }
   const external = async <T>(fn: () => Promise<T>): Promise<T> => {
@@ -83,12 +106,19 @@ export function createBillingService(
     };
   }
   async function checkout(actor: Actor, wid: string, oid: string): Promise<CheckoutResult> {
-    core.requireAccess(actor, wid, 'manage');
+    core.context.requireBillingAccess(actor, wid);
     core.business.getOrder(actor, wid, oid);
     const api = requireGateway();
     const { order, record } = atomic(() => {
       const order = store.order(oid);
       const snapshot = store.plan(order);
+      assertPendingTeamOrder(
+        core.context,
+        actor,
+        wid,
+        snapshot as unknown as import('../core/shared').Row,
+        orderChannel(order),
+      );
       const workspace = sql.prepare('SELECT is_demo FROM workspaces WHERE id=?').get(wid) as {
         is_demo: number;
       };
@@ -112,24 +142,43 @@ export function createBillingService(
       let record = sql.prepare('SELECT * FROM stripe_checkouts WHERE order_id=?').get(oid) as
         CheckoutRow | undefined;
       if (!record) {
+        const expires = promotions.assertCheckout({
+          orderId: oid,
+          userId: order.created_by,
+          workspaceId: wid,
+          environment,
+          snapshot: snapshot.promotion_snapshot,
+        });
+        if (snapshot.prepaid_terms_json)
+          prepaid.assertCheckout(
+            wid,
+            order.plan_id,
+            prepaidTermsSchema.parse(JSON.parse(snapshot.prepaid_terms_json)),
+          );
         if (
           order.kind === 'subscription' &&
-          sql
+          !snapshot.prepaid_terms_json &&
+          (sql
             .prepare(
               "SELECT 1 FROM subscriptions WHERE workspace_id=? AND status IN ('active','trialing','incomplete','past_due','unpaid')",
             )
-            .get(wid)
+            .get(wid) ||
+            sql
+              .prepare(
+                "SELECT 1 FROM orders o JOIN stripe_checkouts c ON c.order_id=o.id WHERE o.workspace_id=? AND o.id<>? AND o.kind='subscription' AND o.status='pending' LIMIT 1",
+              )
+              .get(wid, oid))
         )
           throw new AppError(
             409,
             'SUBSCRIPTION_EXISTS',
-            '当前空间已有订阅，请先在订阅管理中处理现有授权',
+            '当前空间已有订阅或待核对的会员支付，请先处理原订阅或订单',
           );
         sql
           .prepare(
-            'INSERT INTO stripe_checkouts(order_id,idempotency_key,created_at,updated_at) VALUES(?,?,?,?)',
+            'INSERT INTO stripe_checkouts(order_id,idempotency_key,created_at,updated_at,expires_at) VALUES(?,?,?,?,?)',
           )
-          .run(oid, `yingzao:checkout:${oid}`, now(), now());
+          .run(oid, `yingzao:checkout:${oid}`, now(), now(), expires ? iso(expires) : null);
         sql
           .prepare(
             "UPDATE orders SET status='pending',provider_id='stripe',payment_environment=?,updated_at=? WHERE id=?",
@@ -143,6 +192,16 @@ export function createBillingService(
     });
     if (record.session_id) {
       const existing = await external(() => api.retrieveCheckout(record.session_id!));
+      validateSession(existing, order);
+      if (existing.status === 'expired' && existing.payment_status !== 'paid')
+        atomic(() => {
+          promotions.complete(order.id, false);
+          sql
+            .prepare(
+              "UPDATE orders SET status='failed',updated_at=? WHERE id=? AND status='pending'",
+            )
+            .run(now(), order.id);
+        });
       return checkoutResult(oid, existing);
     }
     if (Date.now() - Date.parse(record.created_at) > 23 * 60 * 60 * 1000)
@@ -152,11 +211,19 @@ export function createBillingService(
         '支付会话创建结果待核对，已停止自动重复创建',
       );
     const plan = store.plan(order),
-      metadata = { order_id: order.id, workspace_id: wid };
+      recurring = plan.kind === 'subscription' && !plan.prepaid_terms_json,
+      metadata = { order_id: order.id, workspace_id: wid, billing_channel: orderChannel(order) },
+      accountQuery = orderChannel(order) === 'api' ? '&account=api' : '';
     const session = await external(() =>
       api.createCheckout(
         {
-          mode: plan.kind === 'subscription' ? 'subscription' : 'payment',
+          mode: recurring ? 'subscription' : 'payment',
+          ...(record.expires_at
+            ? { expires_at: Math.floor(Date.parse(record.expires_at) / 1000) }
+            : {}),
+          ...(plan.prepaid_terms_json
+            ? { invoice_creation: { enabled: true, invoice_data: { metadata } } }
+            : {}),
           client_reference_id: order.id,
           metadata,
           line_items: [
@@ -166,22 +233,24 @@ export function createBillingService(
                 currency: plan.currency.toLowerCase(),
                 unit_amount: plan.price_minor,
                 product_data: { name: plan.name },
-                ...(plan.kind === 'subscription'
-                  ? { recurring: { interval: plan.interval! } }
-                  : {}),
+                ...(recurring ? { recurring: { interval: plan.interval! } } : {}),
               },
             },
           ],
-          ...(plan.kind === 'subscription'
+          ...(recurring
             ? { subscription_data: { metadata } }
             : { payment_intent_data: { metadata } }),
-          success_url: `${config.publicOrigin}/usage?tab=orders&order=${order.id}&checkout=success`,
-          cancel_url: `${config.publicOrigin}/usage?tab=orders&order=${order.id}&checkout=cancelled`,
+          success_url: `${config.publicOrigin}/usage?tab=orders&order=${order.id}&checkout=success${accountQuery}`,
+          cancel_url: `${config.publicOrigin}/usage?tab=orders&order=${order.id}&checkout=cancelled${accountQuery}`,
         },
         record.idempotency_key,
       ),
     );
-    if (session.metadata.order_id !== order.id || session.metadata.workspace_id !== wid)
+    if (
+      session.metadata.order_id !== order.id ||
+      session.metadata.workspace_id !== wid ||
+      !matchesBillingChannel(session.metadata, order)
+    )
       throw new AppError(409, 'CHECKOUT_MISMATCH', '支付会话与订单不匹配');
     atomic(() => {
       sql
@@ -192,6 +261,12 @@ export function createBillingService(
       sql
         .prepare('UPDATE orders SET provider_session_id=?,updated_at=? WHERE id=?')
         .run(session.id, now(), oid);
+      if (session.status === 'expired' && session.payment_status !== 'paid') {
+        promotions.complete(oid, false);
+        sql
+          .prepare("UPDATE orders SET status='failed',updated_at=? WHERE id=? AND status='pending'")
+          .run(now(), oid);
+      }
     });
     return checkoutResult(oid, session);
   }
@@ -289,8 +364,10 @@ export function createBillingService(
     if (
       session.metadata.order_id !== o.id ||
       session.metadata.workspace_id !== o.workspace_id ||
+      !matchesBillingChannel(session.metadata, o) ||
       session.client_reference_id !== o.id ||
-      session.mode !== (p.kind === 'subscription' ? 'subscription' : 'payment') ||
+      session.mode !==
+        (p.kind === 'subscription' && !p.prepaid_terms_json ? 'subscription' : 'payment') ||
       session.amount_total !== o.amount_minor ||
       session.currency?.toLowerCase() !== o.currency.toLowerCase() ||
       session.line_items?.has_more ||
@@ -334,6 +411,33 @@ export function createBillingService(
       const sub = session.subscription
         ? await external(() => api.retrieveSubscription(session.subscription!))
         : null;
+      const prepaidPlan = store.plan(o).prepaid_terms_json;
+      const receipt =
+        prepaidPlan && session.payment_status === 'paid' && session.invoice
+          ? await external(() => api.retrieveInvoice(session.invoice!))
+          : null;
+      if (
+        prepaidPlan &&
+        session.payment_status === 'paid' &&
+        (!receipt ||
+          receipt.status !== 'paid' ||
+          !receipt.status_transitions?.paid_at ||
+          receipt.amount_paid !== o.amount_minor ||
+          receipt.total !== o.amount_minor ||
+          receipt.currency.toLowerCase() !== o.currency.toLowerCase() ||
+          receipt.metadata.order_id !== o.id ||
+          receipt.metadata.workspace_id !== o.workspace_id ||
+          !matchesBillingChannel(receipt.metadata, o) ||
+          receipt.lines.has_more ||
+          receipt.lines.data.length !== 1 ||
+          receipt.lines.data[0]?.amount !== o.amount_minor ||
+          receipt.lines.data[0]?.quantity !== 1)
+      )
+        throw new AppError(
+          409,
+          'PREPAID_RECEIPT_PENDING',
+          '固定期会员的已支付账单与付款时间尚未核验，等待原支付回调重试，不会重复创建付款',
+        );
       return completeEvent(event, objectId, () => {
         sql
           .prepare(
@@ -346,16 +450,24 @@ export function createBillingService(
           )
           .run(session.id, session.url ?? null, iso(session.expires_at), now(), o.id);
         if (sub) store.syncSubscription(sub, o);
-        if (session.mode === 'payment' && session.payment_status === 'paid')
+        if (receipt)
+          sql.prepare('UPDATE orders SET provider_invoice_id=? WHERE id=?').run(receipt.id, o.id);
+        if (session.mode === 'payment' && session.payment_status === 'paid') {
           store.grant(store.order(o.id), `checkout:${session.id}`, store.plan(o).credits, {
-            paidAt: iso(event.created),
+            paidAt: receipt?.status_transitions?.paid_at
+              ? iso(receipt.status_transitions.paid_at)
+              : iso(event.created),
           });
-        else if (
+          promotions.complete(o.id, true);
+        } else if (
           !['paid', 'refunded'].includes(store.order(o.id).status) &&
           (session.status === 'expired' || event.type === 'checkout.session.async_payment_failed')
-        )
+        ) {
           sql.prepare("UPDATE orders SET status='failed',updated_at=? WHERE id=?").run(now(), o.id);
+          promotions.complete(o.id, false);
+        }
         store.linkRisk(store.order(o.id));
+        core.teamCreation.activateVerifiedPurchase(o.id);
       });
     }
     if (event.type === 'invoice.paid' || event.type === 'invoice.payment_failed') {
@@ -421,11 +533,14 @@ export function createBillingService(
             'UPDATE orders SET provider_invoice_id=?,provider_payment_intent_id=COALESCE(?,provider_payment_intent_id),updated_at=? WHERE id=?',
           )
           .run(invoice.id, payment, now(), o.id);
+        const period = verifiedInvoicePeriod(invoice);
+        periods.record({ orderId: o.id, invoiceId: invoice.id, subscriptionId: sub.id, ...period });
         store.grant(store.order(o.id), `invoice:${invoice.id}`, store.plan(source).credits, {
-          paidAt: iso(event.created),
-          expiresAt: iso(sub.items.data[0]!.current_period_end),
+          paidAt: period.paidAt,
+          expiresAt: period.periodEnd,
         });
         store.linkRisk(store.order(o.id));
+        core.teamCreation.activateVerifiedPurchase(o.id);
       });
     }
     if (
@@ -473,9 +588,10 @@ export function createBillingService(
               .prepare('SELECT * FROM orders WHERE provider_payment_intent_id=?')
               .get(charge.payment_intent) as OrderRow | undefined)
           : undefined;
+        if (charge) refundEvidence.record(charge, o?.id);
         sql
           .prepare(
-            'INSERT INTO billing_risks(id,provider_event_id,kind,charge_id,payment_intent_id,order_id,workspace_id,amount_minor,created_at) VALUES(?,?,?,?,?,?,?,?,?)',
+            'INSERT INTO billing_risks(id,provider_event_id,kind,charge_id,payment_intent_id,order_id,workspace_id,amount_minor,created_at,billing_channel) VALUES(?,?,?,?,?,?,?,?,?,?)',
           )
           .run(
             randomUUID(),
@@ -487,6 +603,7 @@ export function createBillingService(
             o?.workspace_id ?? null,
             charge?.amount_refunded ?? null,
             now(),
+            o ? orderChannel(o) : 'web',
           );
         if (o) {
           if (event.type === 'charge.refunded' && charge) {
@@ -495,7 +612,9 @@ export function createBillingService(
                 'UPDATE orders SET refunded_minor=MAX(refunded_minor,?),updated_at=? WHERE id=?',
               )
               .run(Math.min(charge.amount_refunded, o.amount_minor), now(), o.id);
-            core.referrals.reversePurchase(o.id, charge.amount_refunded, event.id);
+            if (orderChannel(o) === 'web')
+              core.referrals.reversePurchase(o.id, charge.amount_refunded, event.id);
+            if (orderChannel(o) === 'web') prepaid.refund(o.id, event.id);
             const requests = sql
               .prepare(
                 'SELECT invoice_id FROM invoice_orders WHERE order_id=? AND released_at IS NULL',
@@ -519,9 +638,7 @@ export function createBillingService(
                 );
             }
           }
-          sql
-            .prepare('UPDATE workspace_billing SET payment_review_required=1 WHERE workspace_id=?')
-            .run(o.workspace_id);
+          store.hold(o.workspace_id, orderChannel(o), true);
           if (charge?.refunded)
             sql
               .prepare("UPDATE orders SET status='refunded',updated_at=? WHERE id=?")
@@ -538,7 +655,7 @@ export function createBillingService(
             'billing.review-required',
             'order',
             o.id,
-            { event: event.type, eventId: event.id },
+            { event: event.type, eventId: event.id, billingChannel: orderChannel(o) },
           );
         }
       });
@@ -546,6 +663,7 @@ export function createBillingService(
     return completeEvent(event, objectId, () => {});
   }
   const adapter: BillingAdapter = {
+    environment: () => environment,
     isConfigured: () => configured,
     canCheckoutPlan,
     checkout,

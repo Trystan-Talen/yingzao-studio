@@ -1,6 +1,12 @@
 import { z } from 'zod';
 import * as c from '../../contracts/core';
+import { TeamReservationInputSchema } from '../../contracts/team-creation';
 import { EntitlementsSchema } from '../../contracts/entitlements';
+import {
+  notificationPageSchema,
+  notificationQuerySchema,
+  notificationUnreadSchema,
+} from '../../contracts/notifications';
 const data = (schema: z.ZodType) => z.object({ data: schema });
 const page = (schema: z.ZodType) =>
   data(
@@ -12,6 +18,7 @@ const page = (schema: z.ZodType) =>
     }),
   );
 const bodySchemas: Record<string, z.ZodType> = {
+  'POST /team-creation': TeamReservationInputSchema,
   'POST /auth/register': c.RegisterInputSchema,
   'POST /auth/login': c.LoginInputSchema,
   'PATCH /auth/me': c.UpdateMeInputSchema,
@@ -72,6 +79,7 @@ export function coreRouteSchema(method: string, url: string) {
     body?: z.ZodType;
     params?: z.ZodType;
     response?: Record<number, z.ZodType>;
+    querystring?: z.ZodType;
   } = { tags: [resource], summary: `${method} ${url}` };
   if (body) schema.body = body;
   const pathParams: Record<string, z.ZodType> = {};
@@ -92,6 +100,12 @@ export function coreRouteSchema(method: string, url: string) {
   if (url === '/characters/:id/authorization')
     schema.response = { 200: data(c.CharacterAuthorizationSchema) };
   if (url === '/entitlements') schema.response = { 200: data(EntitlementsSchema) };
+  if (method === 'GET' && url === '/notifications') {
+    schema.querystring = notificationQuerySchema;
+    schema.response = { 200: data(notificationPageSchema) };
+  }
+  if (method === 'GET' && url === '/notifications/unread')
+    schema.response = { 200: data(notificationUnreadSchema) };
   if (method === 'GET' && url === '/projects/:id/shares')
     schema.response = { 200: page(c.ShareSchema) };
   if (method === 'POST' && url === '/shares') schema.response = { 201: data(c.CreatedShareSchema) };

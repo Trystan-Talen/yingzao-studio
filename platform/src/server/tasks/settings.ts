@@ -11,6 +11,7 @@ import type { DatabaseContext } from '../db/connection';
 import { AppError } from '../errors';
 import { hasFfmpeg } from '../providers/local';
 import { FAL_REFERENCE_MODELS } from '../providers/fal-reference';
+import { FAL_MOTION_MODELS } from '../providers/fal-motion';
 interface Setting {
   provider_id: ProviderId;
   encrypted_secret: string | null;
@@ -42,6 +43,8 @@ const imageModels = [
   },
 ];
 export const OPENAI_OPERATIONS = [
+  'image-erase',
+  'model-replace',
   'image.generate',
   'image-replica',
   'image-naturalize',
@@ -184,6 +187,7 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
           TOOLS.find((t) => t.id === id)?.name ||
           {
             'image.generate': '图片创作',
+            'media.import': '分享链接导入视频',
             'video.generate': '视频创作',
             'text.assist': 'AI 帮写',
             'image.ocr': '文字识别',
@@ -208,6 +212,14 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
         liveVerified: providerId === 'local',
       });
     };
+    add(
+      'media.import',
+      'tikhub',
+      [],
+      0,
+      'request',
+      ffmpeg ? null : '本机未检测到 FFmpeg（媒体处理工具）',
+    );
     for (const id of OPENAI_OPERATIONS)
       add(
         id,
@@ -242,10 +254,18 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       [
         {
           id: 'wan-2.6',
+          audio: {
+            mode: 'background-music',
+            note: 'MP3/WAV、3–30秒、不超过15MB；长于视频只使用前段，短于视频剩余静音。不是声音克隆或逐拍同步。',
+          },
           name: 'Wan 2.6',
           ratios: ['16:9', '9:16', '1:1', '4:3', '3:4'],
           resolutions: ['720p', '1080p'],
           durations: [5, 10, 15],
+          textOverlay: {
+            mode: 'prompt-guidance',
+            note: '画面文案与语言仅作为提示词指引，不能保证文字、语言或排版准确；当前没有逐字字幕合成能力。',
+          },
         },
         ...FAL_REFERENCE_MODELS,
       ],
@@ -257,6 +277,26 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       'fal',
       [{ id: 'birefnet', name: 'BiRefNet', ratios: [], resolutions: [], durations: [] }],
       4,
+    );
+    add(
+      'image-erase',
+      'fal',
+      [{ id: 'bria-eraser', name: 'Bria · 蒙版消除', ratios: [], resolutions: [], durations: [] }],
+      4,
+    );
+    add(
+      'model-replace',
+      'fal',
+      [
+        {
+          id: 'virtual-try-on',
+          name: '虚拟试衣 · 服装与目标人物',
+          ratios: ['1:1', '16:9', '9:16', '4:3', '3:4'],
+          resolutions: [],
+          durations: [],
+        },
+      ],
+      8,
     );
     add(
       'image-upscale',
@@ -278,6 +318,14 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       [{ id: 'ffmpeg', name: 'FFmpeg', ratios: [], resolutions: [], durations: [] }],
       0,
       'request',
+      ffmpeg ? null : '本机未检测到 FFmpeg',
+    );
+    add(
+      'video.motion-replica',
+      'fal',
+      FAL_MOTION_MODELS,
+      5,
+      'second',
       ffmpeg ? null : '本机未检测到 FFmpeg',
     );
     for (const id of ['video-replica', 'video.edit'])

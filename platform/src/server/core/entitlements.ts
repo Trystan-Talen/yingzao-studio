@@ -8,6 +8,7 @@ import type { Actor } from '../../contracts/core';
 import { resolveExportPolicy } from '../../contracts/export-policy';
 import { AppError } from '../errors';
 import { CoreContext, str, num, now, json } from './shared';
+import { readBrandQuota } from './brand-quota';
 /** All mutations call these guards under the same SQLite write transaction as their insert. */
 export class EntitlementService {
   constructor(private c: CoreContext) {}
@@ -42,7 +43,7 @@ export class EntitlementService {
     for (const row of subscriptions) {
       const snapshot = json<{ limits_json?: string }>(row.plan_snapshot_json, {});
       const saved = PlanLimitsSchema.parse(json(snapshot.limits_json, {}));
-      for (const key of Object.keys(saved) as (keyof EntitlementLimits)[]) {
+      for (const key of Object.keys(limits) as (keyof EntitlementLimits)[]) {
         const value = saved[key];
         if (value !== undefined)
           combined[key] = combined[key] === undefined ? value : Math.max(combined[key]!, value);
@@ -100,6 +101,15 @@ export class EntitlementService {
         limit,
       });
   }
+  assertCreateBrand(wid: string, creatorUserId: string) {
+    if (!this.c.db.sqlite.inTransaction) throw new Error('Brand quota guard requires transaction');
+    const quota = readBrandQuota(this.c, wid, creatorUserId);
+    if (!quota.canCreate)
+      throw new AppError(409, 'ENTITLEMENT_LIMIT', '已达到对应合同的品牌数量上限', {
+        resource: 'brands',
+        ...quota,
+      });
+  }
   get(actor: Actor, wid: string) {
     this.c.requireAccess(actor, wid, 'read');
     const effective = this.effective(wid),
@@ -116,6 +126,7 @@ export class EntitlementService {
     return {
       ...effective,
       used: this.usage(wid),
+      brandQuota: readBrandQuota(this.c, wid, actor.userId),
       freeTextAssist: {
         limit,
         used,

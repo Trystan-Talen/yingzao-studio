@@ -59,6 +59,18 @@ export function validateFalExtraOptions(input: JobInput) {
   if (input.assetIds.length !== 1) throw new ProviderError('此模型每次接受一份原始素材。');
   if (input.maskAssetId) throw new ProviderError('此模型不接受区域遮罩。');
   const editing = input.operation === 'video-replica' || input.operation === 'video.edit';
+  if (input.operation === 'video-replica' && input.options.mode !== 'creative')
+    throw new ProviderError('精准人物动作请使用人物动作复刻模型；此入口仅支持创意参考编辑。');
+  if (
+    input.operation === 'video-replica' &&
+    (input.options.trimStart !== 0 || input.options.trimEnd !== undefined)
+  )
+    throw new ProviderError('创意参考编辑尚未接入选段，请先本机裁剪视频，或使用人物动作复刻。');
+  if (
+    input.operation === 'video-replica' &&
+    (input.options.ratio !== 'auto' || input.options.resolution !== 'auto')
+  )
+    throw new ProviderError('创意参考编辑的画幅与清晰度跟随源视频，请选择自动。');
   const maxReferences = editing ? 4 : input.operation === 'video.extend' ? 1 : 0;
   if (input.referenceAssetIds.length > maxReferences)
     throw new ProviderError(`此模型最多接受 ${maxReferences} 张参考图片。`);
@@ -72,6 +84,32 @@ export function validateFalExtraOptions(input: JobInput) {
     throw new ProviderError('短片文字区域擦除说明最多1000字符。');
   if (input.operation === 'video.translate' && !FAL_TRANSLATION_LANGUAGES[input.options.language])
     throw new ProviderError('当前视频翻译模型不支持这个目标语言。');
+  if (input.operation === 'video-replica') buildFalReplicaPrompt(input);
+}
+
+/** Visible text is prompt guidance only; the O1 edit endpoint has no subtitle/language fields. */
+export function buildFalReplicaPrompt(input: JobInput): string {
+  const target = { model: 'person', clothing: 'clothing', face: 'face', product: 'product' }[
+    input.options.replacementType
+  ];
+  const count = input.referenceAssetIds.length;
+  const text = input.options.needText
+    ? `On-screen text direction: use ${input.options.language} for any requested visible copy or captions. Preserve user-provided facts. Text accuracy and layout are not guaranteed.`
+    : 'Do not add new on-screen text, lettering, captions or subtitles. Preserve existing source text.';
+  const prompt = [
+    "Preserve the reference video's motion and camera structure.",
+    count ? `Replace the ${target} using @Image1.` : '',
+    input.prompt.trim(),
+    count
+      ? `Reference images in order: ${Array.from({ length: count }, (_, index) => `@Image${index + 1}`).join(', ')}.`
+      : '',
+    text,
+  ]
+    .filter(Boolean)
+    .join('\n');
+  if (prompt.length > 2500)
+    throw new ProviderError('包含素材与文字指引后的创意视频提示词超过2500字符，请精简说明。');
+  return prompt;
 }
 
 export interface FalVideoMetadata {
@@ -180,7 +218,12 @@ export async function buildFalExtraRequest(
     throw new ProviderError('Kling 视频编辑只接受 MP4 或 MOV。');
   if (!original.buffer.length || original.buffer.length > 200 * 1024 * 1024)
     throw new ProviderError('原始素材为空或超过 200 MB。');
-  if (!isImage) validateFalExtraVideo(operation, await probe(original.buffer));
+  if (!isImage) {
+    const metadata = await probe(original.buffer);
+    validateFalExtraVideo(operation, metadata);
+    if (operation === 'video-replica' && input.options.duration !== Math.ceil(metadata.duration))
+      throw new ProviderError('创意参考编辑的时长须等于源视频秒数向上取整，请核对源片与报价。');
+  }
   const source = `data:${original.mimeType};base64,${original.buffer.toString('base64')}`;
   const references: string[] = [];
   for (const id of input.referenceAssetIds) {
@@ -202,17 +245,13 @@ export async function buildFalExtraRequest(
   }
   let body: Record<string, unknown>;
   if (editing) {
-    const target = { model: 'person', clothing: 'clothing', face: 'face', product: 'product' }[
-      input.options.replacementType
-    ];
-    const instructions =
-      operation === 'video-replica'
-        ? `Preserve the reference video's motion and camera structure. ${references.length ? `Replace the ${target} using @Image1.` : ''} ${input.options.needText ? '' : 'Do not add new captions or text.'}`
-        : '';
     const referenceNote = references.length
       ? `Reference images in order: ${references.map((_, index) => `@Image${index + 1}`).join(', ')}.`
       : '';
-    const prompt = [instructions, input.prompt.trim(), referenceNote].filter(Boolean).join('\n');
+    const prompt =
+      operation === 'video-replica'
+        ? buildFalReplicaPrompt(input)
+        : [input.prompt.trim(), referenceNote].filter(Boolean).join('\n');
     if (prompt.length > 2500) throw new ProviderError('包含参考说明后的提示词超过模型长度限制。');
     body = {
       prompt,

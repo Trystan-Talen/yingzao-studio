@@ -225,7 +225,7 @@ async function issue(
   return { code, state: value.state };
 }
 function invite(email = 'person@example.local') {
-  const team = core.team.create(actor, { name: 'Google invite team' }),
+  const team = core.auth.createWorkspace(actor.userId, 'Google invite team', 'team'),
     invitation = core.team.invite(actor, team.id, { email, role: 'member' });
   return { team, invitation, token: new URL(invitation.inviteUrl).hash.slice('#token='.length) };
 }
@@ -290,7 +290,12 @@ describe('Google protocol and cryptographic verification', () => {
       const afterUser = legacy.sqlite
         .prepare('SELECT * FROM users WHERE id=?')
         .get(registered.user.id) as Record<string, unknown>;
-      expect(afterUser).toEqual({ ...beforeUser, local_password_enabled: 1 });
+      expect(afterUser).toEqual({
+        ...beforeUser,
+        local_password_enabled: 1,
+        password_revision: 0,
+        email_verified: 0,
+      });
       expect(legacy.sqlite.prepare('SELECT * FROM external_identities').all()).toEqual(
         beforeIdentities,
       );

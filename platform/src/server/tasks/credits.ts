@@ -1,3 +1,4 @@
+import type { BillingChannel } from '../../contracts/billing-channel';
 import { randomUUID } from 'node:crypto';
 import type { DatabaseContext } from '../db/connection';
 import { AppError } from '../errors';
@@ -17,6 +18,7 @@ interface Budget {
   reserved: number;
 }
 interface LedgerEntry {
+  billing_channel: BillingChannel;
   kind: string;
   workspace_id: string;
   user_id: string;
@@ -24,7 +26,7 @@ interface LedgerEntry {
   item_id: string | null;
   amount: number;
 }
-export function createCreditService(db: DatabaseContext) {
+export function createCreditService(db: DatabaseContext, billingChannel: BillingChannel = 'web') {
   const sql = db.sqlite;
   const atomic = <T>(fn: () => T): T =>
     sql.inTransaction ? fn() : sql.transaction(fn).immediate();
@@ -34,8 +36,10 @@ export function createCreditService(db: DatabaseContext) {
   }
   function rawAccount(wid: string): Account {
     const a = sql
-      .prepare('SELECT balance,reserved FROM credit_accounts WHERE workspace_id=?')
-      .get(wid) as Account | undefined;
+      .prepare(
+        'SELECT balance,reserved FROM credit_accounts WHERE workspace_id=? AND billing_channel=?',
+      )
+      .get(wid, billingChannel) as Account | undefined;
     if (!a) throw new AppError(404, 'CREDIT_ACCOUNT_NOT_FOUND', '工作空间额度账户不存在');
     return a;
   }
@@ -51,7 +55,9 @@ export function createCreditService(db: DatabaseContext) {
   ) {
     const a = rawAccount(wid);
     sql
-      .prepare('INSERT INTO credit_ledger VALUES(?,?,?,?,?,?,?,?,?,?,?,?)')
+      .prepare(
+        'INSERT INTO credit_ledger(id,workspace_id,user_id,job_id,item_id,event_key,kind,amount,balance_after,reserved_after,description,created_at,billing_channel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+      )
       .run(
         randomUUID(),
         wid,
@@ -65,9 +71,10 @@ export function createCreditService(db: DatabaseContext) {
         a.reserved,
         description,
         now(),
+        billingChannel,
       );
   }
-  const lots = createCreditLotService(db, record);
+  const lots = createCreditLotService(db, record, billingChannel);
   function account(wid: string): Account {
     return atomic(() => {
       lots.sweep(wid);
@@ -83,14 +90,22 @@ export function createCreditService(db: DatabaseContext) {
   function initialize(wid: string, uid: string, credits = 0) {
     return atomic(() => {
       integer(credits);
-      if (sql.prepare('SELECT 1 FROM credit_accounts WHERE workspace_id=?').get(wid)) return;
-      sql.prepare('INSERT INTO credit_accounts VALUES(?,?,0,?)').run(wid, 0, now());
+      const existed = !!sql
+        .prepare("SELECT 1 FROM credit_accounts WHERE workspace_id=? AND billing_channel='web'")
+        .get(wid);
+      for (const channel of ['web', 'api'])
+        sql
+          .prepare(
+            'INSERT OR IGNORE INTO credit_accounts(workspace_id,billing_channel,balance,reserved,updated_at) VALUES(?,?,0,0,?)',
+          )
+          .run(wid, channel, now());
       sql.prepare('INSERT OR IGNORE INTO workspace_billing(workspace_id) VALUES(?)').run(wid);
       sql
         .prepare(
-          'INSERT OR IGNORE INTO member_budgets(workspace_id,user_id,credit_limit) VALUES(?,?,NULL)',
+          'INSERT OR IGNORE INTO member_budgets(workspace_id,user_id,billing_channel,credit_limit) VALUES(?,?,?,NULL)',
         )
-        .run(wid, uid);
+        .run(wid, uid, billingChannel);
+      if (existed) return;
       grant({
         workspaceId: wid,
         userId: uid,
@@ -110,6 +125,7 @@ export function createCreditService(db: DatabaseContext) {
     itemId: string,
   ): boolean {
     return (
+      entry.billing_channel === billingChannel &&
       entry.workspace_id === wid &&
       entry.user_id === uid &&
       entry.amount === amount &&
@@ -129,8 +145,10 @@ export function createCreditService(db: DatabaseContext) {
         return;
       }
       const review = sql
-        .prepare('SELECT payment_review_required FROM workspace_billing WHERE workspace_id=?')
-        .get(wid) as { payment_review_required: number } | undefined;
+        .prepare(
+          'SELECT payment_review_required FROM credit_accounts WHERE workspace_id=? AND billing_channel=?',
+        )
+        .get(wid, billingChannel) as { payment_review_required: number } | undefined;
       if (review?.payment_review_required)
         throw new AppError(
           409,
@@ -142,24 +160,32 @@ export function createCreditService(db: DatabaseContext) {
         throw new AppError(409, 'INSUFFICIENT_CREDITS', '可用额度不足');
       sql
         .prepare(
-          'INSERT OR IGNORE INTO member_budgets(workspace_id,user_id,credit_limit) VALUES(?,?,NULL)',
+          'INSERT OR IGNORE INTO member_budgets(workspace_id,user_id,billing_channel,credit_limit) VALUES(?,?,?,NULL)',
         )
-        .run(wid, uid);
+        .run(wid, uid, billingChannel);
       const b = sql
-        .prepare('SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=?')
-        .get(wid, uid) as Budget;
+        .prepare(
+          'SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+        )
+        .get(wid, uid, billingChannel) as Budget;
       const mode = (
         sql.prepare('SELECT credit_mode FROM workspace_billing WHERE workspace_id=?').get(wid) as
           { credit_mode: string } | undefined
       )?.credit_mode;
-      if (mode === 'allocated' && b.credit_limit === null)
+      if (billingChannel === 'web' && mode === 'allocated' && b.credit_limit === null)
         throw new AppError(409, 'BUDGET_NOT_ALLOCATED', '请管理员先分配成员额度');
-      if (b.credit_limit !== null && b.spent + b.reserved + amount > b.credit_limit)
+      if (
+        billingChannel === 'web' &&
+        b.credit_limit !== null &&
+        b.spent + b.reserved + amount > b.credit_limit
+      )
         throw new AppError(409, 'MEMBER_BUDGET_EXCEEDED', '本次任务超出成员额度上限');
       lots.reserve(wid, uid, amount, jobId, itemId);
       sql
-        .prepare('UPDATE member_budgets SET reserved=reserved+? WHERE workspace_id=? AND user_id=?')
-        .run(amount, wid, uid);
+        .prepare(
+          'UPDATE member_budgets SET reserved=reserved+? WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+        )
+        .run(amount, wid, uid, billingChannel);
       record(wid, uid, `reserve:${itemId}`, 'reserve', amount, '任务额度预留', jobId, itemId);
     });
   }
@@ -192,16 +218,18 @@ export function createCreditService(db: DatabaseContext) {
         throw new AppError(500, 'LEDGER_INVARIANT', '缺少与本项匹配的预留记录');
       const a = account(wid),
         b = sql
-          .prepare('SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=?')
-          .get(wid, uid) as Budget | undefined;
+          .prepare(
+            'SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+          )
+          .get(wid, uid, billingChannel) as Budget | undefined;
       if (a.reserved < amount || !b || b.reserved < amount)
         throw new AppError(500, 'LEDGER_INVARIANT', '额度预留记录不一致');
       const expiredRelease = lots.finish(wid, uid, amount, jobId, itemId, success);
       sql
         .prepare(
-          'UPDATE member_budgets SET spent=spent+?,reserved=reserved-? WHERE workspace_id=? AND user_id=?',
+          'UPDATE member_budgets SET spent=spent+?,reserved=reserved-? WHERE workspace_id=? AND user_id=? AND billing_channel=?',
         )
-        .run(success ? amount : 0, amount, wid, uid);
+        .run(success ? amount : 0, amount, wid, uid, billingChannel);
       record(
         wid,
         uid,
@@ -229,9 +257,9 @@ export function createCreditService(db: DatabaseContext) {
     return (
       sql
         .prepare(
-          'SELECT COALESCE(SUM(MAX(COALESCE(credit_limit-spent,0),reserved)),0) total FROM member_budgets WHERE workspace_id=? AND (? IS NULL OR user_id<>?)',
+          'SELECT COALESCE(SUM(MAX(COALESCE(credit_limit-spent,0),reserved)),0) total FROM member_budgets WHERE workspace_id=? AND billing_channel=? AND (? IS NULL OR user_id<>?)',
         )
-        .get(wid, exceptUser, exceptUser) as { total: number }
+        .get(wid, billingChannel, exceptUser, exceptUser) as { total: number }
     ).total;
   }
   function budget(wid: string, uid: string, limit: number | null) {
@@ -239,12 +267,14 @@ export function createCreditService(db: DatabaseContext) {
       if (limit !== null) integer(limit);
       sql
         .prepare(
-          'INSERT OR IGNORE INTO member_budgets(workspace_id,user_id,credit_limit) VALUES(?,?,NULL)',
+          'INSERT OR IGNORE INTO member_budgets(workspace_id,user_id,billing_channel,credit_limit) VALUES(?,?,?,NULL)',
         )
-        .run(wid, uid);
+        .run(wid, uid, billingChannel);
       const b = sql
-        .prepare('SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=?')
-        .get(wid, uid) as Budget;
+        .prepare(
+          'SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+        )
+        .get(wid, uid, billingChannel) as Budget;
       if (limit !== null && limit < b.spent + b.reserved)
         throw new AppError(409, 'BUDGET_BELOW_COMMITTED', '新额度不能低于已使用和已预留额度');
       const mode = (
@@ -252,14 +282,17 @@ export function createCreditService(db: DatabaseContext) {
           { credit_mode: string } | undefined
       )?.credit_mode;
       if (
+        billingChannel === 'web' &&
         mode === 'allocated' &&
         allocatedTotal(wid, uid) + Math.max(limit === null ? 0 : limit - b.spent, b.reserved) >
           account(wid).balance
       )
         throw new AppError(409, 'BUDGET_POOL_EXCEEDED', '成员分配总额超过团队未消耗额度');
       sql
-        .prepare('UPDATE member_budgets SET credit_limit=? WHERE workspace_id=? AND user_id=?')
-        .run(limit, wid, uid);
+        .prepare(
+          'UPDATE member_budgets SET credit_limit=? WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+        )
+        .run(limit, wid, uid, billingChannel);
       record(
         wid,
         uid,
@@ -285,7 +318,11 @@ export function createCreditService(db: DatabaseContext) {
             '已有成员上限超过团队可分配总额，请先调整额度',
           );
       } else {
-        sql.prepare('UPDATE member_budgets SET credit_limit=NULL WHERE workspace_id=?').run(wid);
+        sql
+          .prepare(
+            'UPDATE member_budgets SET credit_limit=NULL WHERE workspace_id=? AND billing_channel=?',
+          )
+          .run(wid, billingChannel);
         sql.prepare('UPDATE memberships SET credit_limit=NULL WHERE workspace_id=?').run(wid);
       }
       sql.prepare('UPDATE workspace_billing SET credit_mode=? WHERE workspace_id=?').run(mode, wid);
@@ -304,14 +341,16 @@ export function createCreditService(db: DatabaseContext) {
   function releaseMemberBudget(wid: string, uid: string) {
     return atomic(() => {
       const budget = sql
-        .prepare('SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=?')
-        .get(wid, uid) as Budget | undefined;
+        .prepare(
+          'SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+        )
+        .get(wid, uid, billingChannel) as Budget | undefined;
       if (!budget) return;
       sql
         .prepare(
-          'UPDATE member_budgets SET credit_limit=spent+reserved WHERE workspace_id=? AND user_id=?',
+          'UPDATE member_budgets SET credit_limit=spent+reserved WHERE workspace_id=? AND user_id=? AND billing_channel=?',
         )
-        .run(wid, uid);
+        .run(wid, uid, billingChannel);
       record(
         wid,
         uid,
@@ -329,14 +368,17 @@ export function createCreditService(db: DatabaseContext) {
     credits: number;
     resolutionId: string;
     reason: string;
-  }) {
+  }): void {
     if (!sql.inTransaction) throw new Error('Appeal refund must share resolution transaction');
     integer(input.credits);
     if (input.credits === 0) throw new AppError(400, 'INVALID_AMOUNT', '申诉退回额度必须为正数');
     const item = sql
       .prepare('SELECT * FROM job_items WHERE id=? AND job_id=? AND workspace_id=?')
       .get(input.itemId, input.jobId, input.workspaceId) as
-      { user_id: string; status: string; credits: number } | undefined;
+      | { user_id: string; status: string; credits: number; billing_channel: BillingChannel }
+      | undefined;
+    if (item && item.billing_channel !== billingChannel)
+      return forChannel(item.billing_channel).refundSettledItem(input);
     const final = sql
       .prepare('SELECT * FROM credit_ledger WHERE event_key=?')
       .get(`final:${input.itemId}`) as LedgerEntry | undefined;
@@ -360,8 +402,10 @@ export function createCreditService(db: DatabaseContext) {
     }
     const a = account(input.workspaceId),
       b = sql
-        .prepare('SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=?')
-        .get(input.workspaceId, item.user_id) as Budget | undefined;
+        .prepare(
+          'SELECT * FROM member_budgets WHERE workspace_id=? AND user_id=? AND billing_channel=?',
+        )
+        .get(input.workspaceId, item.user_id, billingChannel) as Budget | undefined;
     if (!b || b.spent < input.credits || !Number.isSafeInteger(a.balance + input.credits))
       throw new AppError(409, 'LEDGER_INVARIANT', '成员用量或账户余额不支持此次冲正');
     const currentMember = !!sql
@@ -376,7 +420,7 @@ export function createCreditService(db: DatabaseContext) {
     );
     sql
       .prepare(
-        'UPDATE member_budgets SET spent=spent-?,credit_limit=? WHERE workspace_id=? AND user_id=?',
+        'UPDATE member_budgets SET spent=spent-?,credit_limit=? WHERE workspace_id=? AND user_id=? AND billing_channel=?',
       )
       .run(
         input.credits,
@@ -385,6 +429,7 @@ export function createCreditService(db: DatabaseContext) {
           : b.credit_limit,
         input.workspaceId,
         item.user_id,
+        billingChannel,
       );
     sql
       .prepare('INSERT INTO support_refunds VALUES(?,?,?,?,?,?,?,?)')
@@ -409,7 +454,12 @@ export function createCreditService(db: DatabaseContext) {
       input.itemId,
     );
   }
-  return {
+  function forChannel(channel: BillingChannel): CreditService {
+    return channel === billingChannel ? service : createCreditService(db, channel);
+  }
+  const service = {
+    billingChannel,
+    forChannel,
     account,
     record,
     initialize,
@@ -421,9 +471,13 @@ export function createCreditService(db: DatabaseContext) {
     refundSettledItem,
     grant,
     debit,
+    revokeGrant: lots.revokeGrant,
+    revokePrepaid: lots.revokePrepaid,
+    reconcilePrepaidValidity: lots.reconcilePrepaidValidity,
     buckets: lots.buckets,
     changeLot: lots.change,
     renewSource: lots.renew,
   };
+  return service;
 }
 export type CreditService = ReturnType<typeof createCreditService>;

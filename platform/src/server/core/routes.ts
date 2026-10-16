@@ -8,6 +8,9 @@ import { IdSchema, PaginationSchema, type Actor } from '../../contracts/core';
 import type { CoreServices } from './index';
 import type { ListQuery } from './shared';
 import { coreRouteSchema } from './route-schemas';
+import { billingChannelSchema } from '../../contracts/billing-channel';
+import { notificationQuerySchema } from '../../contracts/notifications';
+import { supportChannelsSchema } from '../../contracts/support';
 const listSchema = PaginationSchema.extend({
   q: z.string().max(200).optional(),
   kind: z.string().max(30).optional(),
@@ -117,6 +120,16 @@ export async function registerCoreRoutes(app: FastifyInstance, core: CoreService
   app.get('/api/v1/auth/me', { schema: coreRouteSchema('GET', '/auth/me') }, async (req) => ({
     data: core.auth.me(await session(req)),
   }));
+  app.get(
+    '/api/v1/support/channels',
+    {
+      schema: { response: { 200: z.object({ data: supportChannelsSchema }) } },
+    },
+    async (req) => {
+      await session(req);
+      return { data: supportChannelsSchema.parse(core.context.config.support ?? {}) };
+    },
+  );
   app.patch('/api/v1/auth/me', { schema: coreRouteSchema('PATCH', '/auth/me') }, async (req) => ({
     data: core.auth.update(await session(req), req.body),
   }));
@@ -142,6 +155,20 @@ export async function registerCoreRoutes(app: FastifyInstance, core: CoreService
     const items = core.auth.listWorkspaces(await session(req));
     return { data: { items, total: items.length, page: 1, pageSize: items.length } };
   });
+  app.get(
+    '/api/v1/team-creation',
+    { schema: coreRouteSchema('GET', '/team-creation') },
+    async (req) => ({ data: core.teamCreation.status(await session(req)) }),
+  );
+  app.post(
+    '/api/v1/team-creation',
+    { schema: coreRouteSchema('POST', '/team-creation') },
+    async (req, reply) => {
+      const result = core.teamCreation.reserve(await session(req), req.body);
+      reply.code(201);
+      return { data: result };
+    },
+  );
   app.post(
     '/api/v1/workspaces',
     { schema: coreRouteSchema('POST', '/workspaces') },
@@ -439,11 +466,20 @@ export async function registerCoreRoutes(app: FastifyInstance, core: CoreService
   app.get('/api/v1/plans', { schema: coreRouteSchema('GET', '/plans') }, async (req) => ({
     data: core.business.plans(query(req)),
   }));
+  route('GET', '/plans/eligible', null, (a, w, r) => core.business.plans(query(r), a, w));
   route('GET', '/subscriptions', null, (a, w, r) => core.business.subscriptions(a, w, query(r)));
   route('POST', '/subscriptions/:id/cancel', null, (a, w, r) =>
     core.business.cancelSubscription(a, w, pid(r)),
   );
-  route('GET', '/orders', null, (a, w, r) => core.business.orders(a, w, query(r)));
+  route('GET', '/orders', null, (a, w, r) =>
+    core.business.orders(
+      a,
+      w,
+      query(r),
+      z.object({ billingChannel: billingChannelSchema.default('web') }).parse(r.query)
+        .billingChannel,
+    ),
+  );
   route('GET', '/orders/:id', null, (a, w, r) => core.business.getOrder(a, w, pid(r)));
   route('GET', '/orders/:id/billing-document', null, (a, w, r) =>
     core.business.billingDocument(a, w, pid(r)),
@@ -517,7 +553,10 @@ export async function registerCoreRoutes(app: FastifyInstance, core: CoreService
     core.identity.poll(a, w, pid(r), IdSchema.parse(params(r).sessionId)),
   );
 
-  route('GET', '/notifications', null, (a, w, r) => core.business.notifications(a, w, query(r)));
+  route('GET', '/notifications', null, (a, w, r) =>
+    core.business.notifications(a, w, notificationQuerySchema.parse(r.query)),
+  );
+  route('GET', '/notifications/unread', null, (a, w) => core.business.notificationUnread(a, w));
   route('GET', '/entitlements', null, (a, w) => core.entitlements.get(a, w));
   route('POST', '/notifications/:id/read', null, (a, w, r) =>
     core.business.readNotification(a, w, pid(r)),

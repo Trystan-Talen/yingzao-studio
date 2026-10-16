@@ -133,10 +133,12 @@ export class IdentityService {
         '人物参考授权尚未声明、已撤回或素材版本已改变',
       );
     const character = this.c.resource('character_profiles', wid, cid);
+    const referenceAssetIds = json<string[]>(character.reference_asset_ids_json, []);
+    for (const assetId of referenceAssetIds) this.c.resource('assets', wid, assetId);
     return {
       id: cid,
       referenceRevision: num(character, 'reference_revision'),
-      referenceAssetIds: json<string[]>(character.reference_asset_ids_json, []),
+      referenceAssetIds,
     };
   }
   verification(actor: Actor, wid: string, cid: string) {

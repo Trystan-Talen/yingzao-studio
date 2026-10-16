@@ -21,6 +21,13 @@ export class ReferenceService {
       if (row.kind !== 'image') throw new AppError(400, 'IMAGE_REQUIRED', '参考素材必须是图片');
     }
   }
+  private characterMedia(wid: string, ids: string[]): void {
+    for (const aid of ids) {
+      const row = this.c.resource('assets', wid, aid);
+      if (row.kind !== 'image' && row.kind !== 'video')
+        throw new AppError(400, 'CHARACTER_MEDIA_REQUIRED', '人物参考素材必须是图片或视频');
+    }
+  }
   private brandRow(actor: Actor, wid: string, bid: string, includeDeleted = false): Row {
     const row = this.c.resource('brands', wid, bid, includeDeleted);
     if (row.visibility === 'private' && row.created_by !== actor.userId)
@@ -56,7 +63,7 @@ export class ReferenceService {
   brands(actor: Actor, wid: string, q: ListQuery) {
     this.c.requireAccess(actor, wid, 'read');
     return this.c.page(
-      "SELECT * FROM brands WHERE workspace_id=? AND deleted_at IS NULL AND (visibility='workspace' OR created_by=?) AND name LIKE ? ORDER BY updated_at DESC,id",
+      `SELECT * FROM brands WHERE workspace_id=? AND deleted_at IS ${q.deleted ? 'NOT NULL' : 'NULL'} AND (visibility='workspace' OR created_by=?) AND name LIKE ? ORDER BY updated_at DESC,id`,
       [wid, actor.userId, `%${q.q ?? ''}%`],
       q,
       (r) => this.brandDto(r),
@@ -66,7 +73,7 @@ export class ReferenceService {
     const input = BrandInputSchema.parse(raw);
     return this.c.transaction(() => {
       this.c.requireAccess(actor, wid, 'write');
-      new EntitlementService(this.c).assertCreate(wid, 'brands');
+      new EntitlementService(this.c).assertCreateBrand(wid, actor.userId);
       this.images(wid, [
         ...input.referenceAssetIds,
         ...(input.coverAssetId ? [input.coverAssetId] : []),
@@ -136,7 +143,8 @@ export class ReferenceService {
     return this.c.transaction(() => {
       this.c.requireAccess(actor, wid, 'write');
       const brand = this.brandRow(actor, wid, bid, true);
-      if (brand.deleted_at) new EntitlementService(this.c).assertCreate(wid, 'brands');
+      if (brand.deleted_at)
+        new EntitlementService(this.c).assertCreateBrand(wid, str(brand, 'created_by'));
       this.c.run('UPDATE brands SET deleted_at=NULL,updated_at=? WHERE id=?', now(), bid);
       return this.getBrand(actor, wid, bid);
     });
@@ -179,7 +187,7 @@ export class ReferenceService {
       this.c.requireAccess(actor, wid, 'write');
       new EntitlementService(this.c).assertCreate(wid, 'characters');
       const input = CharacterInputSchema.parse(raw);
-      this.images(wid, [
+      this.characterMedia(wid, [
         ...input.referenceAssetIds,
         ...(input.coverAssetId ? [input.coverAssetId] : []),
       ]);
@@ -206,7 +214,7 @@ export class ReferenceService {
       const input = CharacterPatchSchema.parse(raw),
         old = this.getCharacter(actor, wid, cid),
         refs = input.referenceAssetIds ?? old.referenceAssetIds;
-      this.images(wid, [...refs, ...(input.coverAssetId ? [input.coverAssetId] : [])]);
+      this.characterMedia(wid, [...refs, ...(input.coverAssetId ? [input.coverAssetId] : [])]);
       const referenceChanged =
         input.referenceAssetIds !== undefined &&
         JSON.stringify(refs) !== JSON.stringify(old.referenceAssetIds);

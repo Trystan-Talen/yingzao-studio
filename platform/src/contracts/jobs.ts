@@ -1,7 +1,15 @@
+import type { BillingChannel } from './billing-channel';
 import { z } from 'zod';
 import { OPERATION_IDS } from './catalog';
 import type { AssetDto } from './core';
-export const providerIdSchema = z.enum(['local', 'openai', 'fal', 'flyelep']);
+import type { DesignPlanResult } from './design-plan';
+function normalizeColor(value: string): string {
+  const color = value.trim().toLowerCase();
+  return /^#[0-9a-f]{3}$/.test(color)
+    ? `#${[...color.slice(1)].map((digit) => digit + digit).join('')}`
+    : color;
+}
+export const providerIdSchema = z.enum(['local', 'openai', 'fal', 'flyelep', 'tikhub']);
 export const jobOptionsSchema = z
   .object({
     model: z.string().max(120).optional(),
@@ -33,9 +41,16 @@ export const jobOptionsSchema = z
     channel: z.enum(['promotion', 'premium']).default('premium'),
     needText: z.boolean().default(true),
     referenceMode: z.enum(['all', 'first-last']).default('all'),
+    motionOrientation: z.enum(['video', 'image']).default('video'),
+    referenceAuthorized: z.boolean().default(false),
+    externalCostAccepted: z.boolean().default(false),
     scale: z.union([z.literal(2), z.literal(4), z.literal(8)]).default(2),
     strength: z.enum(['light', 'standard', 'strong']).default('standard'),
-    colors: z.array(z.string().max(40)).max(20).optional(),
+    colors: z
+      .array(z.string().trim().min(1).max(40))
+      .max(20)
+      .transform((values) => [...new Set(values.map(normalizeColor))])
+      .optional(),
     background: z.string().max(30).default('#ffffff'),
     width: z.number().int().min(16).max(8192).optional(),
     height: z.number().int().min(16).max(8192).optional(),
@@ -46,6 +61,7 @@ export const jobOptionsSchema = z
     price: z.string().max(40).optional(),
     replacementType: z.enum(['model', 'clothing', 'face', 'product']).default('product'),
     keepMusicRhythm: z.boolean().default(true),
+    generateAudio: z.boolean().optional(),
     mode: z.enum(['creative', 'exact', 'ai', 'stitch']).default('creative'),
     textReplacements: z
       .array(
@@ -69,10 +85,14 @@ export const jobInputSchema = z
     targetLayerId: z.string().uuid().optional(),
     prompt: z.string().max(12000).default(''),
     referenceText: z.string().max(20000).optional(),
+    linkUrl: z.string().max(4096).optional(),
     conversationContext: z.string().max(6000).optional(),
+    creationWarnings: z.array(z.string().max(1000)).max(30).optional(),
     assetIds: z.array(z.string().uuid()).max(20).default([]),
     referenceAssetIds: z.array(z.string().uuid()).max(20).default([]),
     maskAssetId: z.string().uuid().optional(),
+    backgroundAssetId: z.string().uuid().optional(),
+    backgroundAudioAssetId: z.string().uuid().optional(),
     brandId: z.string().uuid().optional(),
     characterId: z.string().uuid().optional(),
     characterRevision: z.number().int().positive().optional(),
@@ -95,6 +115,7 @@ export const JOB_STATUSES = [
 ] as const;
 export type JobStatus = (typeof JOB_STATUSES)[number];
 export interface QuoteDto {
+  billingChannel?: BillingChannel;
   id: string;
   inputHash: string;
   pricingVersion: string;
@@ -103,6 +124,16 @@ export interface QuoteDto {
   providerId: string;
   operation: string;
   units: number;
+  items?: QuoteItemSummary[];
+}
+export interface QuoteItemSummary {
+  index: number;
+  assetIds: string[];
+  referenceAssetIds: string[];
+  backgroundAssetId?: string;
+  backgroundAudioAssetId?: string;
+  color?: string;
+  language?: string;
 }
 export interface JobItemDto {
   id: string;
@@ -114,8 +145,18 @@ export interface JobItemDto {
   remoteId: string | null;
   errorMessage: string | null;
   resultText: string | null;
+  resultData?: DesignPlanResult | null;
+  sourceAssetIds?: string[];
+  referenceAssetIds?: string[];
+  backgroundAssetId?: string;
+  backgroundAudioAssetId?: string;
+  retrySourceItemId?: string | null;
+  retryRootItemId?: string | null;
+  retryable?: boolean;
+  retryJobId?: string | null;
 }
 export interface JobDto {
+  billingChannel?: BillingChannel;
   createdBy: string;
   isArchived: boolean;
   downloadedAt: string | null;
@@ -142,6 +183,14 @@ export interface ModelCapability {
   ratios: string[];
   resolutions: string[];
   durations: number[];
+  audio?: {
+    mode: 'background-music' | 'generated';
+    note: string;
+  };
+  textOverlay?: {
+    mode: 'prompt-guidance' | 'unsupported' | 'native';
+    note: string;
+  };
 }
 export interface OperationCapability {
   id: string;
@@ -159,6 +208,7 @@ export interface CapabilitiesDto {
   operations: OperationCapability[];
 }
 export interface CreditDto {
+  billingChannel?: BillingChannel;
   balance: number;
   reserved: number;
   available: number;
@@ -178,7 +228,7 @@ export interface ProviderSettingDto {
 }
 export const providerSettingsInputSchema = z
   .object({
-    providerId: z.enum(['openai', 'fal', 'flyelep']),
+    providerId: z.enum(['openai', 'fal', 'flyelep', 'tikhub']),
     secret: z.string().min(10).max(500).optional(),
     enabled: z.boolean().default(true),
     removeSecret: z.boolean().optional(),

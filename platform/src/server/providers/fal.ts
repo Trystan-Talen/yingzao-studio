@@ -1,7 +1,12 @@
+import { buildVideoAudioRequest, validateVideoAudioInput } from './video-audio';
 import { z } from 'zod';
 import { providerJson } from './http';
 import { buildFalReferenceRequest, isFalReferenceModel } from './fal-reference';
 import { falExtraProvider, isFalExtraOperation, isFalExtraEndpoint } from './fal-extra';
+import { buildWanPrompt } from './wan-options';
+import { buildFalErasureRequest } from './erasure';
+import { canonicalImage } from './image-input';
+import { buildFalMotionRequest } from './fal-motion';
 import {
   ProviderError,
   type ProviderAdapter,
@@ -30,18 +35,25 @@ function queueUrl(s: string) {
 }
 async function inputMedia(c: ExecutionContext, id: string) {
   const a = await c.readAsset(id);
+  if (!/^image\/(png|jpeg|webp)$/.test(a.mimeType))
+    throw new ProviderError('此输入需要PNG/JPEG/WebP图片，不能将音频、视频或文档作为图片提交。');
   return `data:${a.mimeType};base64,${a.buffer.toString('base64')}`;
 }
 export const falProvider: ProviderAdapter = {
   id: 'fal',
   async execute(c, secret) {
-    if (isFalExtraOperation(c.input.operation)) return falExtraProvider.execute(c, secret);
+    validateVideoAudioInput(c.input);
+    const motion = c.input.operation === 'video.motion-replica';
+    if (!motion && isFalExtraOperation(c.input.operation))
+      return falExtraProvider.execute(c, secret);
     if (!secret) throw new ProviderError('请先连接 fal 服务。');
     const i = c.input,
       o = i.options;
     let endpoint = '';
     let body: Record<string, unknown> = {};
-    if (i.operation === 'video.generate' && isFalReferenceModel(o.model)) {
+    if (motion) {
+      ({ endpoint, body } = await buildFalMotionRequest(c));
+    } else if (i.operation === 'video.generate' && isFalReferenceModel(o.model)) {
       ({ endpoint, body } = await buildFalReferenceRequest(c));
     } else if (i.operation === 'video.generate') {
       if (o.model && o.model !== 'wan-2.6') throw new ProviderError('视频模型不受支持。');
@@ -55,7 +67,7 @@ export const falProvider: ProviderAdapter = {
         throw new ProviderError('Wan 2.6仅接受文本或一张首帧图片。');
       endpoint = i.assetIds.length ? 'wan/v2.6/image-to-video' : 'wan/v2.6/text-to-video';
       body = {
-        prompt: i.prompt,
+        prompt: buildWanPrompt(i),
         duration: String(o.duration),
         resolution: o.resolution.toLowerCase(),
         enable_prompt_expansion: true,
@@ -64,6 +76,27 @@ export const falProvider: ProviderAdapter = {
       };
       if (i.assetIds[0]) body.image_url = await inputMedia(c, i.assetIds[0]);
       else body.aspect_ratio = o.ratio === 'auto' ? '16:9' : o.ratio;
+      Object.assign(body, await buildVideoAudioRequest(c));
+    } else if (i.operation === 'image-erase') {
+      endpoint = 'fal-ai/bria/eraser';
+      body = await buildFalErasureRequest(c);
+    } else if (i.operation === 'model-replace') {
+      if (i.assetIds.length !== 1 || i.referenceAssetIds.length !== 1)
+        throw new ProviderError('模特替换需要一张服装原图和一张目标模特图。');
+      if (i.backgroundAssetId)
+        throw new ProviderError('此试衣模型不支持背景参考，请使用OpenAI服务。');
+      if (i.prompt.trim()) throw new ProviderError('此试衣模型不支持补充说明，请使用OpenAI服务。');
+      const [clothing, person] = await Promise.all([
+        c.readAsset(i.assetIds[0]!).then(canonicalImage),
+        c.readAsset(i.referenceAssetIds[0]!).then(canonicalImage),
+      ]);
+      endpoint = 'fal-ai/image-apps-v2/virtual-try-on';
+      body = {
+        clothing_image_url: `data:${clothing.mimeType};base64,${clothing.buffer.toString('base64')}`,
+        person_image_url: `data:${person.mimeType};base64,${person.buffer.toString('base64')}`,
+        preserve_pose: true,
+        aspect_ratio: { ratio: o.ratio },
+      };
     } else if (i.operation === 'image-cutout') {
       endpoint = 'fal-ai/birefnet';
       body = {
@@ -121,14 +154,20 @@ export const falProvider: ProviderAdapter = {
         stage: status.status === 'IN_QUEUE' ? '服务商排队中' : '视频与图像模型正在处理',
       };
     if (status.error) return { state: 'failed', message: '服务商未能完成该任务。' };
-    const result = z.object({ video: media.optional(), image: media.optional() }).parse(
-      await providerJson(queueUrl(remote.responseUrl), {
-        method: 'GET',
-        headers: { Authorization: `Key ${secret}` },
-        timeoutMs: 30000,
-      }),
-    );
-    const m = result.video || result.image;
+    const result = z
+      .object({
+        video: media.optional(),
+        image: media.optional(),
+        images: z.array(media).min(1).max(1).optional(),
+      })
+      .parse(
+        await providerJson(queueUrl(remote.responseUrl), {
+          method: 'GET',
+          headers: { Authorization: `Key ${secret}` },
+          timeoutMs: 30000,
+        }),
+      );
+    const m = result.video || result.image || result.images?.[0];
     if (!m) throw new ProviderError('模型任务没有返回可下载产物。');
     return {
       state: 'complete',

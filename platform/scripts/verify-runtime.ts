@@ -36,12 +36,16 @@ const env = {
   OPENAI_API_KEY: '',
   FAL_KEY: '',
   FLYELEP_SECRET_KEY: '',
+  TIKHUB_API_KEY: '',
   STRIPE_SECRET_KEY: '',
   STRIPE_WEBHOOK_SECRET: '',
   GOOGLE_OIDC_ENABLED: 'false',
   GOOGLE_CLIENT_ID: '',
   GOOGLE_CLIENT_SECRET: '',
   SMTP_ENABLED: 'false',
+  PASSWORD_RECOVERY_ENABLED: 'false',
+  SMS_AUTH_ENABLED: 'false',
+  WECHAT_AUTH_ENABLED: 'false',
 };
 async function stop(child: ChildProcess) {
   if (child.exitCode !== null || child.signalCode !== null) return;

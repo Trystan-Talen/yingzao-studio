@@ -61,6 +61,30 @@ export const PLATFORMS = [
 ];
 export const TOOLS = [
   {
+    id: 'image-erase',
+    name: '魔法消除',
+    description: '涂画移除物体，补全背景并保留未编辑区域',
+    category: '编辑',
+    icon: 'Paintbrush',
+    minInputs: 1,
+    maxInputs: 1,
+    reference: false,
+    options: ['mask'],
+    color: '#E9EFE8',
+  },
+  {
+    id: 'model-replace',
+    name: '模特替换',
+    description: '保留服装细节，替换为指定模特与可选背景',
+    category: '编辑',
+    icon: 'Replace',
+    minInputs: 1,
+    maxInputs: 1,
+    reference: true,
+    options: ['model', 'ratio'],
+    color: '#EEE8F2',
+  },
+  {
     id: 'image-replica',
     name: '爆款图片复刻',
     description: '提取构图与风格，为你的商品重新创作',
@@ -231,8 +255,10 @@ export const TOOLS = [
 ] as const;
 export type ToolId = (typeof TOOLS)[number]['id'];
 export const OPERATION_IDS = [
+  'media.import',
   'image.generate',
   'video.generate',
+  'video.motion-replica',
   ...TOOLS.map((t) => t.id),
   'image.ocr',
   'image.text-edit',
@@ -250,6 +276,7 @@ export const OPERATION_IDS = [
 ] as const;
 export type OperationId = (typeof OPERATION_IDS)[number];
 export const PROVIDERS = [
+  { id: 'tikhub', name: 'TikHub（视频链接解析）' },
   { id: 'openai', name: 'OpenAI 图片与文案' },
   { id: 'fal', name: 'fal · Wan 视频' },
   { id: 'flyelep', name: 'Flyelep 官方 API' },

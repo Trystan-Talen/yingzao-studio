@@ -2,9 +2,67 @@
  * Unknown strings remain unchanged; no substring replacement or external translation is performed.
  * Generated from the actual UI inventory and reviewed translations, not an online runtime service.
  */
+import { ACCOUNT_TRANSLATIONS } from './account-translations';
+import { CREATION_TRANSLATIONS } from './creation-translations';
+import { CREDIT_TRANSLATIONS } from './credit-translations';
+import { WORKFLOW_TRANSLATIONS } from './workflow-translations';
+import { SUPPORT_TRANSLATIONS } from './support-translations';
+import { TEAM_CREATION_TRANSLATIONS } from './team-creation-translations';
 export type Locale = 'zh-CN' | 'en' | 'ar';
 export const SUPPORTED_LOCALES: readonly Locale[] = ['zh-CN', 'en', 'ar'];
 export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: string }>>> = {
+  魔法消除: { en: 'Object eraser', ar: 'إزالة العناصر' },
+  模特替换: { en: 'Model replacement', ar: 'استبدال العارض' },
+  '涂画移除物体，补全背景并保留未编辑区域': {
+    en: 'Paint to remove objects, rebuild the background and preserve untouched areas',
+    ar: 'حدّد العناصر بالرسم لإزالتها وإكمال الخلفية مع الحفاظ على المناطق الأخرى',
+  },
+  '保留服装细节，替换为指定模特与可选背景': {
+    en: 'Transfer clothing to a chosen model with an optional background',
+    ar: 'انقل الملابس إلى عارض محدد مع خلفية اختيارية',
+  },
+  '从细节调整到画面重构，为每一步创作提供独立工具。': {
+    en: 'Dedicated tools for every step, from fine adjustments to a new composition.',
+    ar: 'أدوات مخصصة لكل خطوة، من تعديل التفاصيل إلى إعادة تكوين الصورة.',
+  },
+  '服装 / 人台原图': {
+    en: 'Clothing or mannequin source',
+    ar: 'صورة الملابس أو المانيكان الأصلية',
+  },
+  目标模特图: { en: 'Target model image', ar: 'صورة العارض المستهدف' },
+  '背景参考（可选）': { en: 'Background reference (optional)', ar: 'مرجع الخلفية (اختياري)' },
+  '补充说明（可选）': { en: 'Additional instructions (optional)', ar: 'تعليمات إضافية (اختيارية)' },
+  '涂画要移除的物体，未涂画区域保留原图像素。图片最多10MiB、宽高8192、6400万像素、长短边比不超过5。':
+    {
+      en: 'Paint over objects to remove. Untouched pixels remain from the original. Maximum 10 MiB, 8192 pixels per side, 64 megapixels and 5:1 aspect ratio.',
+      ar: 'ارسم فوق العناصر المراد إزالتها. تبقى البكسلات غير المحددة من الأصل. الحد الأقصى 10 ميبيبايت و8192 بكسل لكل ضلع و64 مليون بكسل ونسبة أبعاد 5:1.',
+    },
+  '服装、目标模特与背景分别保存。请使用获授权的素材，服装细节与人物一致性需检查真实结果。': {
+    en: 'Clothing, target model and background are saved separately. Use authorized images and inspect clothing details and identity in the actual result.',
+    ar: 'تُحفظ الملابس والعارض والخلفية بشكل منفصل. استخدم صورًا مصرحًا بها وتحقق من تفاصيل الملابس وهوية العارض في النتيجة الفعلية.',
+  },
+  '此消除模型只接受原图与蒙版、最多2500万像素；补充说明请选择OpenAI服务。': {
+    en: 'This eraser accepts an image and mask up to 25 megapixels. Choose OpenAI for additional instructions.',
+    ar: 'تقبل أداة الإزالة صورة وقناعًا حتى 25 مليون بكسل. اختر OpenAI للتعليمات الإضافية.',
+  },
+  '此试衣模型只接受服装与目标模特；使用背景或补充说明请选择OpenAI服务。': {
+    en: 'This try-on model accepts only clothing and a target person. Choose OpenAI for a background or additional instructions.',
+    ar: 'يقبل نموذج تجربة الملابس صورة الملابس والشخص المستهدف فقط. اختر OpenAI للخلفية أو التعليمات الإضافية.',
+  },
+  '请先涂画需要消除的区域，空遮罩不能提交。': {
+    en: 'Paint the area to erase first. An empty mask cannot be submitted.',
+    ar: 'ارسم المنطقة المراد إزالتها أولًا. لا يمكن إرسال قناع فارغ.',
+  },
+  消除区域已保存: { en: 'Erasure region saved', ar: 'تم حفظ منطقة الإزالة' },
+  在原图上涂画需要消除的物体: {
+    en: 'Paint over objects to erase in the original image',
+    ar: 'ارسم فوق العناصر المراد إزالتها في الصورة الأصلية',
+  },
+  '白色涂画区域中的物体将被移除。蒙版按原图尺寸保存。': {
+    en: 'Objects in the white painted area will be removed. The mask keeps the original dimensions.',
+    ar: 'ستُزال العناصر في المنطقة المرسومة بالأبيض. يُحفظ القناع بأبعاد الصورة الأصلية.',
+  },
+  保存消除区域: { en: 'Save erasure region', ar: 'حفظ منطقة الإزالة' },
   '授权地址无法验证，请重新开始。': {
     en: 'The authorization address could not be verified. Please start again.',
     ar: 'تعذّر التحقق من عنوان التفويض. يُرجى البدء مجددًا.',
@@ -623,6 +681,61 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
     ar: 'التسجيل المفتوح غير متاح. لا تتجاوز روابط الإحالة قواعد التسجيل؛ ويمكن استخدام دعوات الفريق الصالحة للتسجيل.',
   },
   奖励条件: { en: 'Reward conditions', ar: 'شروط المكافأة' },
+  自动返奖尚未就绪: { en: 'Automatic rewards are not ready', ar: 'المكافآت التلقائية غير جاهزة' },
+  该版本未启用奖励: {
+    en: 'Rewards are disabled for this version',
+    ar: 'المكافآت غير مفعلة لهذا الإصدار',
+  },
+  每位被邀请人首次达标奖励一次: {
+    en: 'One reward per invitee on their first qualifying payment',
+    ar: 'مكافأة واحدة لكل مدعو عند أول دفعة مؤهلة',
+  },
+  计入邀请人的个人空间: {
+    en: 'Credited to the referrer’s personal workspace',
+    ar: 'تضاف إلى المساحة الشخصية للداعي',
+  },
+  '注册后30天内首次购买个人会员：邀请人获得套餐算力15%，被邀请人获得10%。奖励发放后7天有效，分别计入双方个人空间。':
+    {
+      en: 'First personal membership purchase within 30 days of signup: the referrer receives 15% of the package credits and the invitee 10%. Each reward goes to the recipient’s personal workspace and expires 7 days after issue.',
+      ar: 'عند أول شراء لعضوية شخصية خلال 30 يومًا من التسجيل، يحصل الداعي على 15٪ من رصيد الباقة والمدعو على 10٪. تضاف المكافآت إلى المساحتين الشخصيتين وتنتهي بعد 7 أيام من الإصدار.',
+    },
+  '算力包、团队订阅、接口充值和测试付款不参与；退款按比例冲回奖励。': {
+    en: 'Credit packs, team subscriptions, API top-ups and test payments are excluded. Refunds reverse rewards proportionally.',
+    ar: 'لا تشمل المكافآت حزم الرصيد واشتراكات الفرق وشحن الواجهة ومدفوعات الاختبار. تسترد المكافآت نسبيًا عند رد الأموال.',
+  },
+  本部署已确认规则: {
+    en: 'Confirmed rules for this installation',
+    ar: 'القواعد المؤكدة لهذا التثبيت',
+  },
+  向下取整: { en: 'Round down', ar: 'التقريب للأسفل' },
+  向上取整: { en: 'Round up', ar: 'التقريب للأعلى' },
+  四舍五入: { en: 'Round to nearest integer', ar: 'التقريب لأقرب عدد صحيح' },
+  不额外要求会员身份: { en: 'No additional membership requirement', ar: 'لا يشترط اشتراك إضافي' },
+  付款时邀请人须为有效个人会员: {
+    en: 'Referrer must have an active personal membership at payment',
+    ar: 'يجب أن يكون للداعي اشتراك شخصي نشط عند الدفع',
+  },
+  付款时被邀请人须为有效个人会员: {
+    en: 'Invitee must have an active personal membership at payment',
+    ar: 'يجب أن يكون للمدعو اشتراك شخصي نشط عند الدفع',
+  },
+  付款时双方须为有效个人会员: {
+    en: 'Both must have active personal memberships at payment',
+    ar: 'يجب أن يكون لكليهما اشتراك شخصي نشط عند الدفع',
+  },
+  当前新注册适用规则: {
+    en: 'Current rules for new signups',
+    ar: 'القواعد الحالية للتسجيلات الجديدة',
+  },
+  '历史邀请按注册时保存的规则结算，不随当前规则更新；累计奖励不等于当前可用余额。': {
+    en: 'Past referrals use the rules saved at signup. Later changes do not alter them. Cumulative rewards are not the currently available balance.',
+    ar: 'تستخدم الإحالات السابقة القواعد المحفوظة عند التسجيل ولا تغيرها التحديثات اللاحقة. المكافآت التراكمية ليست الرصيد المتاح حاليًا.',
+  },
+  注册时适用规则: { en: 'Rules at signup', ar: 'القواعد عند التسجيل' },
+  待配置或核对: { en: 'Awaiting configuration or review', ar: 'بانتظار الإعداد أو المراجعة' },
+  规则版本: { en: 'Rule version', ar: 'إصدار القواعد' },
+  邀请人: { en: 'Referrer', ar: 'الداعي' },
+  被邀请人: { en: 'Invitee', ar: 'المدعو' },
   最低已支付金额: { en: 'Minimum paid amount', ar: 'الحد الأدنى للمبلغ المدفوع' },
   每次符合条件奖励: {
     en: 'Reward per qualifying referral',
@@ -5934,6 +6047,42 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
     en: "Total member budgets exceed the team's remaining credits",
     ar: 'يتجاوز مجموع ميزانيات الأعضاء أرصدة الفريق المتبقية',
   },
+  创意视频编辑: { en: 'Creative video editing', ar: 'تحرير فيديو إبداعي' },
+  人物动作复刻: { en: 'Character motion transfer', ar: 'نقل حركة الشخصية' },
+  人物主体图片: { en: 'Character image', ar: 'صورة الشخصية' },
+  动作参考视频: { en: 'Motion reference video', ar: 'فيديو مرجعي للحركة' },
+  画面方向: { en: 'Character orientation', ar: 'اتجاه الشخصية' },
+  '跟随动作视频（最长30秒）': {
+    en: 'Follow the video (up to 30 seconds)',
+    ar: 'اتباع الفيديو (حتى 30 ثانية)',
+  },
+  '跟随主体图片（最长10秒）': {
+    en: 'Follow the image (up to 10 seconds)',
+    ar: 'اتباع الصورة (حتى 10 ثوانٍ)',
+  },
+  我有权使用人物图片与动作参考视频: {
+    en: 'I am authorized to use the character image and motion video',
+    ar: 'أنا مخول باستخدام صورة الشخصية وفيديو الحركة',
+  },
+  '人物图片+动作视频选段，按片段秒数报价；先在本机真实裁剪再发送。画幅与清晰度由模型决定，不提供独立字幕控制。服装、人脸、商品的精准替换尚未支持；不承诺原视频背景或逐像素1:1。':
+    {
+      en: 'Use a character image and a selected video segment. Credits use the segment duration; the video is clipped locally before submission. The model controls framing and resolution, with no separate subtitle control. Precise clothing, face, and product replacement is not supported. Original backgrounds and pixel-exact copying are not guaranteed.',
+      ar: 'استخدم صورة شخصية ومقطعاً محدداً من الفيديو. تُحسب الأرصدة حسب مدة المقطع، ويُقص محلياً قبل الإرسال. يحدد النموذج الإطار والدقة، دون تحكم مستقل بالترجمة. الاستبدال الدقيق للملابس والوجه والمنتج غير مدعوم، ولا نضمن الخلفية الأصلية أو النسخ المطابق لكل بكسل.',
+    },
+  'Kling 2.6 · 标准人物动作复刻': {
+    en: 'Kling 2.6 · Standard character motion',
+    ar: 'Kling 2.6 · حركة الشخصية القياسية',
+  },
+  'Kling 2.6 · 专业人物动作复刻': {
+    en: 'Kling 2.6 · Pro character motion',
+    ar: 'Kling 2.6 · حركة الشخصية الاحترافية',
+  },
+  ...ACCOUNT_TRANSLATIONS,
+  ...CREATION_TRANSLATIONS,
+  ...CREDIT_TRANSLATIONS,
+  ...WORKFLOW_TRANSLATIONS,
+  ...SUPPORT_TRANSLATIONS,
+  ...TEAM_CREATION_TRANSLATIONS,
 };
 let activeLocale: Locale = 'zh-CN';
 /** The application calls this before rendering a new account or preference state. */

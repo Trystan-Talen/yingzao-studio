@@ -1,6 +1,9 @@
+import type { BillingChannel } from '../../contracts/billing-channel';
 import type { JobStatus, JobInput } from '../../contracts/jobs';
 import type { Actor } from '../../contracts/core';
+import type { DesignPlanResult } from '../../contracts/design-plan';
 export interface JobRow {
+  billing_channel: BillingChannel;
   id: string;
   workspace_id: string;
   user_id: string;
@@ -21,6 +24,7 @@ export interface JobRow {
   updated_at: string;
 }
 export interface ItemRow {
+  billing_channel: BillingChannel;
   id: string;
   job_id: string;
   workspace_id: string;
@@ -36,6 +40,9 @@ export interface ItemRow {
   remote_json: string | null;
   result_json: string | null;
   result_text: string | null;
+  retry_source_item_id: string | null;
+  retry_root_item_id: string | null;
+  result_data_json: string | null;
   error_message: string | null;
   lease_owner: string | null;
   lease_until: string | null;
@@ -48,6 +55,7 @@ export interface ItemRow {
   updated_at: string;
 }
 export interface QuoteRow {
+  billing_channel: BillingChannel;
   id: string;
   workspace_id: string;
   user_id: string;
@@ -61,6 +69,7 @@ export interface QuoteRow {
   items_json: string | null;
   used_job_id: string | null;
   retry_job_id: string | null;
+  retry_item_ids_json: string | null;
 }
 export interface ProviderOutput {
   buffer?: Buffer;
@@ -68,6 +77,7 @@ export interface ProviderOutput {
   mimeType: string;
   name: string;
   text?: string;
+  resultData?: DesignPlanResult;
 }
 export interface RemoteTask {
   id: string;

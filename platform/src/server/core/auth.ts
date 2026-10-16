@@ -239,7 +239,18 @@ export class AuthService {
       workspaceId: null,
       scopes: [],
     };
-    return { ...this.me(actor), sessionToken: this.session(actor.userId) };
+    return this.c.transaction(() => {
+      const current = this.c.get('SELECT * FROM users WHERE id=?', actor.userId);
+      // Password comparison yields; a concurrent recovery must not issue a stale session.
+      if (
+        !current ||
+        current.password_hash !== row.password_hash ||
+        current.password_revision !== row.password_revision ||
+        current.local_password_enabled === 0
+      )
+        throw new AppError(401, 'INVALID_CREDENTIALS', '邮箱或密码错误');
+      return { ...this.me(actor), sessionToken: this.session(actor.userId) };
+    });
   }
   async confirmPassword(actor: Actor, password: string): Promise<void> {
     if (actor.authType !== 'session') throw new AppError(403, 'FORBIDDEN', '需要账户会话');
@@ -248,7 +259,15 @@ export class AuthService {
       typeof password === 'string' && password.length <= 200 ? password : '',
       row ? str(row, 'password_hash') : '00000000000000000000000000000000:' + '0'.repeat(128),
     );
-    if (!row || !valid || row.local_password_enabled === 0)
+    const current = row ? this.c.get('SELECT * FROM users WHERE id=?', actor.userId) : undefined;
+    if (
+      !row ||
+      !valid ||
+      row.local_password_enabled === 0 ||
+      !current ||
+      current.password_hash !== row.password_hash ||
+      current.password_revision !== row.password_revision
+    )
       throw new AppError(401, 'INVALID_CREDENTIALS', '密码确认未通过，请重新输入');
   }
   async authenticate(request: FastifyRequest): Promise<Actor | null> {

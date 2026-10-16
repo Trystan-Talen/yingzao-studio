@@ -1,3 +1,5 @@
+import { selectedMotionDuration } from '../providers/fal-motion';
+import { channelForActor, type BillingChannel } from '../../contracts/billing-channel';
 import { randomUUID, createHmac, timingSafeEqual } from 'node:crypto';
 import type { Actor } from '../../contracts/core';
 import {
@@ -10,6 +12,7 @@ import {
   type PendingApplyDto,
 } from '../../contracts/jobs';
 import type { SceneLayer, LayerBase } from '../../contracts/scene';
+import { designPlanResultSchema } from '../../contracts/design-plan';
 import type { DatabaseContext } from '../db/connection';
 import type { CoreServices } from '../core';
 import type { AppConfig } from '../config';
@@ -41,6 +44,13 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       .all(item.id) as { asset_id: string }[];
     return rows.length ? rows.map((r) => r.asset_id) : item.asset_id ? [item.asset_id] : [];
   }
+  function liveRetry(item: ItemRow): { job_id: string } | undefined {
+    return sql
+      .prepare(
+        "SELECT job_id FROM job_items WHERE retry_root_item_id=? AND status IN('queued','running','reconciliation_required','succeeded') ORDER BY created_at DESC LIMIT 1",
+      )
+      .get(item.retry_root_item_id || item.id) as { job_id: string } | undefined;
+  }
   function dto(actor: Actor, row: JobRow): JobDto {
     const items = sql
       .prepare('SELECT * FROM job_items WHERE job_id=? ORDER BY item_index')
@@ -48,6 +58,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     return {
       id: row.id,
       workspaceId: row.workspace_id,
+      billingChannel: row.billing_channel,
       createdBy: row.user_id,
       projectId: row.project_id,
       operation: row.operation,
@@ -70,17 +81,32 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
             .get(actor.userId, row.id) as { downloaded_at: string } | undefined
         )?.downloaded_at ?? null,
       input: jobInputSchema.parse(JSON.parse(row.input_json)),
-      items: items.map((i) => ({
-        id: i.id,
-        index: i.item_index,
-        status: i.status,
-        assetId: i.asset_id,
-        assetIds: itemAssetIds(i),
-        outputKind: i.output_kind,
-        remoteId: i.remote_id,
-        errorMessage: i.error_message,
-        resultText: i.result_text,
-      })),
+      items: items.map((i) => {
+        const input = jobInputSchema.parse(JSON.parse(i.input_json));
+        const retry = liveRetry(i);
+        return {
+          id: i.id,
+          index: i.item_index,
+          status: i.status,
+          assetId: i.asset_id,
+          assetIds: itemAssetIds(i),
+          outputKind: i.output_kind,
+          remoteId: i.remote_id,
+          errorMessage: i.error_message,
+          resultText: i.result_text,
+          resultData: i.result_data_json
+            ? designPlanResultSchema.parse(JSON.parse(i.result_data_json))
+            : null,
+          sourceAssetIds: input.assetIds,
+          referenceAssetIds: input.referenceAssetIds,
+          backgroundAssetId: input.backgroundAssetId,
+          backgroundAudioAssetId: input.backgroundAudioAssetId,
+          retrySourceItemId: i.retry_source_item_id,
+          retryRootItemId: i.retry_root_item_id,
+          retryable: ['failed', 'cancelled'].includes(i.status) && !retry,
+          retryJobId: retry?.job_id ?? null,
+        };
+      }),
       outputAssets: [...new Set(items.flatMap(itemAssetIds))].flatMap((id) => {
         try {
           return [core.assets.get(actor, row.workspace_id, id)];
@@ -104,6 +130,14 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       const character = core.identity.assertCanReference(actor, wid, i.characterId);
       if (i.characterRevision && i.characterRevision !== character.referenceRevision)
         throw new AppError(409, 'CHARACTER_REFERENCE_CHANGED', '人物素材版本已变更，请重新选择');
+      if (
+        character.referenceAssetIds.some((aid) => core.assets.get(actor, wid, aid).kind !== 'image')
+      )
+        throw new AppError(
+          400,
+          'CHARACTER_VIDEO_REFERENCE_UNSUPPORTED',
+          '人物视频参考尚不能用于当前创作；资料和草稿已保留，请选择仅含图片的人物参考。',
+        );
     }
     if (
       i.options.assistantMode === 'design-plan' &&
@@ -124,6 +158,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       ...i.assetIds,
       ...i.referenceAssetIds,
       ...(i.options.designs?.flatMap((d) => d.assetIds) || []),
+      ...(i.backgroundAssetId ? [i.backgroundAssetId] : []),
+      ...(i.backgroundAudioAssetId ? [i.backgroundAudioAssetId] : []),
       ...(i.brandId ? core.brands.get(actor, wid, i.brandId).referenceAssetIds : []),
     ]);
     for (const mention of extractAssetMentions(
@@ -250,6 +286,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     }
     if (
       frozen.providerId === 'openai' &&
+      frozen.operation !== 'product-replace' &&
       frozen.assetIds.length + frozen.referenceAssetIds.length > 16
     )
       throw new AppError(400, 'INPUT_COUNT', '品牌与参考图片合计不能超过16张');
@@ -259,14 +296,20 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       for (const mention of extractAssetMentions(part.prompt)) {
         if (
           !part.assetIds.includes(mention.assetId) &&
-          !part.referenceAssetIds.includes(mention.assetId)
+          !part.referenceAssetIds.includes(mention.assetId) &&
+          mention.assetId !== part.backgroundAudioAssetId &&
+          mention.assetId !== part.backgroundAssetId
         )
           part.referenceAssetIds.push(mention.assetId);
         const references = [...new Set([...part.assetIds, ...part.referenceAssetIds])];
         const asset = core.assets.get(actor, wid, mention.assetId);
         part.prompt = part.prompt.replaceAll(
           mention.token,
-          `【参考素材：${asset.name}；输入序号 ${references.indexOf(mention.assetId) + 1}】`,
+          mention.assetId === part.backgroundAudioAssetId
+            ? `【背景音乐：${asset.name}】`
+            : mention.assetId === part.backgroundAssetId
+              ? `【背景参考：${asset.name}】`
+              : `【参考素材：${asset.name}；输入序号 ${references.indexOf(mention.assetId) + 1}】`,
         );
       }
       validate(actor, wid, part);
@@ -275,6 +318,12 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
   }
   function billableUnits(actor: Actor, wid: string, item: JobInput, unit: string): number {
     if (unit !== 'second') return 1;
+    if (item.operation === 'video.motion-replica') {
+      const video = core.assets.get(actor, wid, item.referenceAssetIds[0]!);
+      if (video.kind !== 'video' || !video.durationMs)
+        throw new AppError(400, 'VIDEO_DURATION_REQUIRED', '动作参考缺少探测时长');
+      return Math.ceil(selectedMotionDuration(item, video.durationMs));
+    }
     if (
       [
         'video-replica',
@@ -297,6 +346,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     input: JobInput,
     items: JobInput[],
     retryJobId: string | null = null,
+    retryItemIds: string[] | null = null,
   ): QuoteDto {
     const cap = settings.validateCapability(wid, input);
     const units = items.reduce(
@@ -304,6 +354,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       0,
     );
     const freeText =
+      channelForActor(actor) === 'web' &&
       input.operation === 'text.assist' &&
       core.entitlements.get(actor, wid).freeTextAssist.remaining >= units;
     const maxCredits = freeText ? 0 : units * cap.priceCredits;
@@ -313,7 +364,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     const hash = inputHash(input);
     sql
       .prepare(
-        'INSERT INTO quotes(id,workspace_id,user_id,input_hash,input_json,pricing_version,max_credits,units,expires_at,created_at,items_json,retry_job_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',
+        'INSERT INTO quotes(id,workspace_id,user_id,input_hash,input_json,pricing_version,max_credits,units,expires_at,created_at,items_json,retry_job_id,retry_item_ids_json,billing_channel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
       )
       .run(
         id,
@@ -328,16 +379,28 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         time,
         JSON.stringify(items),
         retryJobId,
+        retryItemIds ? JSON.stringify(retryItemIds) : null,
+        channelForActor(actor),
       );
     return {
       id,
       inputHash: hash,
       pricingVersion: PRICING,
+      billingChannel: channelForActor(actor),
       maxCredits,
       expiresAt,
       providerId: input.providerId,
       operation: input.operation,
       units,
+      items: items.map((part, index) => ({
+        index,
+        assetIds: part.assetIds,
+        referenceAssetIds: part.referenceAssetIds,
+        backgroundAssetId: part.backgroundAssetId,
+        backgroundAudioAssetId: part.backgroundAudioAssetId,
+        ...(part.operation === 'product-recolor' ? { color: part.options.colors?.[0] } : {}),
+        ...(part.operation === 'image-translate' ? { language: part.options.language } : {}),
+      })),
     };
   }
   function quote(actor: Actor, wid: string, raw: unknown): QuoteDto {
@@ -346,24 +409,28 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
   }
   function retryQuote(actor: Actor, wid: string, id: string): QuoteDto {
     const job = getRow(actor, wid, id);
+    if (job.billing_channel !== channelForActor(actor))
+      throw new AppError(409, 'BILLING_CHANNEL_CONFLICT', '重试必须使用原任务的计费渠道');
     const input = validate(actor, wid, JSON.parse(job.input_json));
     const rows = sql
       .prepare(
         "SELECT * FROM job_items WHERE job_id=? AND status IN('failed','cancelled') ORDER BY item_index",
       )
       .all(id) as ItemRow[];
-    if (!rows.length)
+    const retryable = rows.filter((row) => !liveRetry(row));
+    if (!retryable.length)
       throw new AppError(
         409,
         'NO_RETRYABLE_ITEMS',
-        '没有可重试的失败或取消项；待核对任务不能重复提交',
+        '没有可重试项；已在重试中、已成功重试或待核对的条目不能重复提交',
       );
     return writeQuote(
       actor,
       wid,
       input,
-      rows.map((r) => jobInputSchema.parse(JSON.parse(r.input_json))),
+      retryable.map((r) => jobInputSchema.parse(JSON.parse(r.input_json))),
       id,
+      retryable.map((r) => r.id),
     );
   }
   function submit(
@@ -382,7 +449,15 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         .prepare('SELECT * FROM jobs WHERE workspace_id=? AND user_id=? AND request_id=?')
         .get(wid, actor.userId, requestId) as JobRow | undefined;
       if (previous) {
-        if (previous.input_hash !== hash)
+        let savedHash = previous.input_hash;
+        if (savedHash !== hash) {
+          try {
+            savedHash = inputHash(jobInputSchema.parse(JSON.parse(previous.input_json)));
+          } catch {
+            /* Corrupt historical input remains an explicit identity conflict. */
+          }
+        }
+        if (savedHash !== hash || previous.billing_channel !== channelForActor(actor))
           throw new AppError(409, 'IDEMPOTENCY_CONFLICT', '同一请求标识不能用于不同参数');
         return dto(actor, previous);
       }
@@ -392,6 +467,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         .get(quoteId, wid, actor.userId) as QuoteRow | undefined;
       if (
         !q ||
+        q.billing_channel !== channelForActor(actor) ||
         q.used_job_id ||
         q.expires_at < now() ||
         q.input_hash !== hash ||
@@ -417,10 +493,37 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       const id = randomUUID(),
         date = now(),
         parts: JobInput[] = q.items_json ? JSON.parse(q.items_json) : snapshot(actor, wid, input);
+      let retrySources: ItemRow[] = [];
+      if (q.retry_job_id) {
+        if (!q.retry_item_ids_json)
+          throw new AppError(409, 'QUOTE_EXPIRED', '旧版重试报价需要重新获取');
+        const ids = JSON.parse(q.retry_item_ids_json) as string[];
+        if (ids.length !== parts.length)
+          throw new AppError(409, 'QUOTE_EXPIRED', '重试报价的来源记录不完整，请重新获取');
+        retrySources = ids.map((sourceId, index) => {
+          const source = sql
+            .prepare('SELECT * FROM job_items WHERE id=? AND job_id=? AND workspace_id=?')
+            .get(sourceId, q.retry_job_id, wid) as ItemRow | undefined;
+          if (
+            !source ||
+            source.billing_channel !== q.billing_channel ||
+            !['failed', 'cancelled'].includes(source.status) ||
+            liveRetry(source) ||
+            inputHash(jobInputSchema.parse(JSON.parse(source.input_json))) !==
+              inputHash(parts[index])
+          )
+            throw new AppError(
+              409,
+              'RETRY_ALREADY_SUBMITTED',
+              '来源条目已被重试或状态改变，请刷新任务',
+            );
+          return source;
+        });
+      }
       for (const part of parts) validate(actor, wid, part);
       sql
         .prepare(
-          'INSERT INTO jobs(id,workspace_id,user_id,project_id,api_key_id,operation,provider_id,prompt,input_json,input_hash,request_id,pricing_version,status,stage,requested_credits,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+          'INSERT INTO jobs(id,workspace_id,user_id,project_id,api_key_id,operation,provider_id,prompt,input_json,input_hash,request_id,pricing_version,status,stage,requested_credits,created_at,updated_at,billing_channel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         )
         .run(
           id,
@@ -440,6 +543,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           q.max_credits,
           date,
           date,
+          q.billing_channel,
         );
       sql.prepare('UPDATE quotes SET used_job_id=? WHERE id=?').run(id, q.id);
       const unit = settings.validateCapability(wid, input).unit;
@@ -452,7 +556,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           amount = (q.max_credits / q.units) * partUnits[index]!;
         sql
           .prepare(
-            'INSERT INTO job_items(id,job_id,workspace_id,user_id,item_index,input_json,status,credits,next_attempt_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+            'INSERT INTO job_items(id,job_id,workspace_id,user_id,item_index,input_json,status,credits,next_attempt_at,created_at,updated_at,retry_source_item_id,retry_root_item_id,billing_channel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
           )
           .run(
             itemId,
@@ -466,8 +570,13 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
             date,
             date,
             date,
+            retrySources[index]?.id ?? null,
+            retrySources[index]
+              ? retrySources[index]!.retry_root_item_id || retrySources[index]!.id
+              : null,
+            q.billing_channel,
           );
-        credits.reserve(wid, actor.userId, amount, id, itemId);
+        credits.forChannel(q.billing_channel).reserve(wid, actor.userId, amount, id, itemId);
         if (input.operation === 'text.assist' && q.max_credits === 0) freeItemIds.push(itemId);
       }
       if (freeItemIds.length) core.entitlements.claimFreeTextAssist(actor, wid, id, freeItemIds);
@@ -482,7 +591,13 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
             'user',
             input.prompt,
             id,
-            JSON.stringify({ draft: input }),
+            JSON.stringify(
+              input.operation === 'text.assist'
+                ? { assistantRequest: input }
+                : input.operation === 'media.import'
+                  ? { importRequest: input }
+                  : { draft: input, creationWarnings: input.creationWarnings },
+            ),
             date,
           );
       event(wid, id, 'created', { status: 'queued' });
@@ -536,7 +651,9 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           sql
             .prepare("UPDATE job_items SET status='cancelled',phase='done',updated_at=? WHERE id=?")
             .run(now(), item.id);
-          credits.finish(wid, item.user_id, item.credits, id, item.id, false);
+          credits
+            .forChannel(item.billing_channel)
+            .finish(wid, item.user_id, item.credits, id, item.id, false);
         } else if (item.status === 'running') {
           sql.prepare('UPDATE job_items SET cancel_requested=1 WHERE id=?').run(item.id);
         }
@@ -553,22 +670,33 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       sql
         .prepare("UPDATE job_items SET status='cancelled',phase='done',updated_at=? WHERE id=?")
         .run(now(), r.id);
-      credits.finish(wid, uid, r.credits, r.job_id, r.id, false);
+      credits.forChannel(r.billing_channel).finish(wid, uid, r.credits, r.job_id, r.id, false);
       refresh(r.job_id);
     }
     credits.releaseMemberBudget(wid, uid);
+    credits.forChannel('api').releaseMemberBudget(wid, uid);
   }
-  function balance(actor: Actor, wid: string): CreditDto {
+  function balance(
+    actor: Actor,
+    wid: string,
+    billingChannel: BillingChannel = channelForActor(actor),
+  ): CreditDto {
     core.requireAccess(actor, wid, 'read');
     checkScope(actor, 'credits:read');
-    const a = credits.account(wid);
+    if (billingChannel !== channelForActor(actor)) {
+      if (actor.authType !== 'session')
+        throw new AppError(403, 'SESSION_REQUIRED', '账户管理需要网页登录');
+      core.requireAccess(actor, wid, 'manage');
+    }
+    const a = credits.forChannel(billingChannel).account(wid);
     const spent = sql
       .prepare(
-        "SELECT COALESCE(SUM(amount),0) AS total FROM credit_ledger WHERE workspace_id=? AND kind='settle'",
+        "SELECT COALESCE(SUM(amount),0) AS total FROM credit_ledger WHERE workspace_id=? AND billing_channel=? AND kind='settle'",
       )
-      .get(wid) as { total: number };
+      .get(wid, billingChannel) as { total: number };
     return {
       ...a,
+      billingChannel,
       available: a.balance - a.reserved,
       spent: spent.total,
       isDemo: config.demoMode,
@@ -853,6 +981,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       return [
         ...input.assetIds,
         ...input.referenceAssetIds,
+        ...(input.backgroundAssetId ? [input.backgroundAssetId] : []),
+        ...(input.backgroundAudioAssetId ? [input.backgroundAudioAssetId] : []),
         ...(input.maskAssetId ? [input.maskAssetId] : []),
       ].includes(assetId);
     });
@@ -891,6 +1021,15 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     quote,
     retryQuote,
     submit,
+    getByRequest: (a: Actor, w: string, requestId: string) => {
+      core.requireAccess(a, w, 'read');
+      checkScope(a, 'jobs:read');
+      const row = sql
+        .prepare('SELECT * FROM jobs WHERE workspace_id=? AND user_id=? AND request_id=?')
+        .get(w, a.userId, requestId) as JobRow | undefined;
+      if (!row) throw new AppError(404, 'JOB_NOT_FOUND', '未找到对应的已提交任务');
+      return dto(a, row);
+    },
     get: (a: Actor, w: string, id: string) => dto(a, getRow(a, w, id)),
     getRow,
     dto,

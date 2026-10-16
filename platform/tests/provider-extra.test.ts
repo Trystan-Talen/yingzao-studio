@@ -31,7 +31,10 @@ function input(
     providerId: 'fal',
     assetIds: [sourceId],
     prompt: 'Replace the product with the reference product.',
-    options,
+    options:
+      operation === 'video-replica'
+        ? { mode: 'creative', ratio: 'auto', resolution: 'auto', duration: 5, ...options }
+        : options,
     ...changes,
   });
 }
@@ -94,6 +97,35 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 describe('official fal extra request contracts', () => {
+  it('refuses exact/crop/output overrides in creative replica and consumes text guidance explicitly', async () => {
+    for (const options of [
+      { mode: 'exact' },
+      { trimStart: 1 },
+      { trimEnd: 4 },
+      { ratio: '16:9' },
+      { resolution: '720p' },
+    ])
+      expect(() => validateFalExtraOptions(input('video-replica', options))).toThrow();
+    await expect(
+      buildFalExtraRequest(context(input('video-replica', { duration: 8 })), probe),
+    ).rejects.toThrow('时长');
+    const chinese = await buildFalExtraRequest(
+      context(input('video-replica', { language: 'zh-CN', needText: true })),
+      probe,
+    );
+    const japanese = await buildFalExtraRequest(
+      context(input('video-replica', { language: 'ja', needText: true })),
+      probe,
+    );
+    const plain = await buildFalExtraRequest(
+      context(input('video-replica', { needText: false })),
+      probe,
+    );
+    expect(chinese.body.prompt).not.toBe(japanese.body.prompt);
+    expect(japanese.body.prompt).toContain('use ja');
+    expect(plain.body.prompt).toContain('Do not add new on-screen text');
+    expect(http).not.toHaveBeenCalled();
+  });
   it('builds seven operations with only documented input keys and all required keys', async () => {
     for (const operation of Object.keys(
       FAL_EXTRA_ENDPOINTS,
@@ -120,7 +152,7 @@ describe('official fal extra request contracts', () => {
       context(
         input(
           'video-replica',
-          { mode: 'exact', keepMusicRhythm: true },
+          { mode: 'creative', keepMusicRhythm: true },
           { referenceAssetIds: [referenceId] },
         ),
         png,

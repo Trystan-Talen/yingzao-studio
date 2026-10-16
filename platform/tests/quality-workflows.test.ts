@@ -211,7 +211,7 @@ describe('reference authorization is distinct from identity verification', () =>
     expect(started.sessions[0]?.status).toBe('processing');
     await service.poll(actor, wid, item.id, started.sessions[0]!.id);
     expect(core.references.getCharacter(actor, wid, item.id).verification.status).toBe('verified');
-    const other = core.team.create(actor, { name: 'Other' });
+    const other = core.auth.createWorkspace(actor.userId, 'Other', 'team');
     expect(() => service.getAuthorization(actor, other.id, item.id)).toThrow(AppError);
     db.sqlite.prepare("UPDATE identity_sessions SET expires_at='2000-01-01T00:00:00.000Z'").run();
     db.sqlite

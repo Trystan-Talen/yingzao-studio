@@ -1,0 +1,23 @@
+-- Historical reservations, including API-key submissions, retain their original web account.
+CREATE TABLE credit_accounts_channel(workspace_id TEXT NOT NULL REFERENCES workspaces(id),billing_channel TEXT NOT NULL CHECK(billing_channel IN('web','api')),balance INTEGER NOT NULL DEFAULT 0 CHECK(balance>=0),reserved INTEGER NOT NULL DEFAULT 0 CHECK(reserved>=0 AND reserved<=balance),updated_at TEXT NOT NULL,payment_review_required INTEGER NOT NULL DEFAULT 0 CHECK(payment_review_required IN(0,1)),PRIMARY KEY(workspace_id,billing_channel));
+INSERT INTO credit_accounts_channel SELECT a.workspace_id,'web',a.balance,a.reserved,a.updated_at,COALESCE(w.payment_review_required,0) FROM credit_accounts a LEFT JOIN workspace_billing w ON w.workspace_id=a.workspace_id;
+INSERT INTO credit_accounts_channel SELECT workspace_id,'api',0,0,updated_at,0 FROM credit_accounts;
+DROP TABLE credit_accounts;
+ALTER TABLE credit_accounts_channel RENAME TO credit_accounts;
+CREATE TABLE member_budgets_channel(workspace_id TEXT NOT NULL REFERENCES workspaces(id),user_id TEXT NOT NULL REFERENCES users(id),billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api')),credit_limit INTEGER CHECK(credit_limit>=0),spent INTEGER NOT NULL DEFAULT 0 CHECK(spent>=0),reserved INTEGER NOT NULL DEFAULT 0 CHECK(reserved>=0),PRIMARY KEY(workspace_id,user_id,billing_channel));
+INSERT INTO member_budgets_channel SELECT workspace_id,user_id,'web',credit_limit,spent,reserved FROM member_budgets;
+DROP TABLE member_budgets;
+ALTER TABLE member_budgets_channel RENAME TO member_budgets;
+ALTER TABLE credit_lots ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE credit_ledger ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE credit_lot_allocations ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE credit_lot_events ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE credit_lot_operations ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE quotes ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE jobs ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE job_items ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE orders ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE billing_risks ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+ALTER TABLE billing_fulfillments ADD COLUMN billing_channel TEXT NOT NULL DEFAULT 'web' CHECK(billing_channel IN('web','api'));
+CREATE INDEX credit_ledger_channel_time ON credit_ledger(workspace_id,billing_channel,created_at DESC,id);
+CREATE INDEX credit_lots_channel ON credit_lots(workspace_id,billing_channel,status,expires_at,created_at,id);

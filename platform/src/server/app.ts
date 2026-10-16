@@ -24,7 +24,15 @@ import { AppError } from './errors';
 import { createBillingService } from './billing';
 import { createMailOutbox, registerMailRoutes } from './notifications';
 import { createGoogleAuthService, registerGoogleRoutes } from './auth/google';
-export function createServices(config: AppConfig, existingDb?: DatabaseContext) {
+import { createPasswordRecoveryService } from './auth/password/service';
+import { registerPasswordRoutes } from './auth/password/routes';
+import { createIdentityAuthService, type IdentityAuthOptions } from './auth/identity/service';
+import { registerIdentityRoutes } from './auth/identity/routes';
+export function createServices(
+  config: AppConfig,
+  existingDb?: DatabaseContext,
+  identityOptions?: IdentityAuthOptions,
+) {
   const db = existingDb ?? createDatabaseContext(config.databasePath);
   migrateDatabase(db, { migrationsDir: resolve('migrations') });
   const credits = createCreditService(db);
@@ -50,14 +58,21 @@ export function createServices(config: AppConfig, existingDb?: DatabaseContext) 
   const tasks = createTaskServices(db, core, config);
   const billing = createBillingService(db, core, config, credits);
   const google = createGoogleAuthService(db, core, config);
+  const passwordRecovery = createPasswordRecoveryService(db, config);
+  const identities = createIdentityAuthService(db, core, config, identityOptions);
   core.business.setBilling(billing);
-  return { ...tasks, billing, mail, google };
+  return { ...tasks, billing, mail, google, passwordRecovery, identities };
 }
 export async function createApp(
   config: AppConfig,
-  options: { db?: DatabaseContext; logging?: boolean; serveWeb?: boolean } = {},
+  options: {
+    db?: DatabaseContext;
+    logging?: boolean;
+    serveWeb?: boolean;
+    identity?: IdentityAuthOptions;
+  } = {},
 ) {
-  const services = createServices(config, options.db);
+  const services = createServices(config, options.db, options.identity);
   const app = Fastify({
     logController: new LogController({ disableRequestLogging: true }),
     logger: options.logging
@@ -69,6 +84,20 @@ export async function createApp(
             'res.headers.set-cookie',
             'req.body.secret',
             'req.body.password',
+            'req.body.token',
+            'req.body.newPassword',
+            'req.body.confirmPassword',
+            'req.body.phone',
+            'req.body.code',
+            'req.body.registrationId',
+            'req.body.access_token',
+            'req.body.refresh_token',
+            'req.body.appSecret',
+            'req.body.inviteToken',
+            'req.body.referralCode',
+            'req.query.code',
+            'req.query.state',
+            'req.url',
           ],
         }
       : false,
@@ -121,10 +150,19 @@ export async function createApp(
   });
   app.addHook('onSend', async (req, reply, payload) => {
     reply.header('X-Content-Type-Options', 'nosniff').header('X-Frame-Options', 'DENY');
-    if (req.url.split('?')[0] === '/api/v1/auth/google/callback')
+    if (
+      req.url.split('?')[0] === '/api/v1/auth/google/callback' ||
+      req.url.split('?')[0]?.startsWith('/password/') ||
+      req.url.split('?')[0] === '/auth/complete-registration'
+    )
       reply.header('Referrer-Policy', 'no-referrer');
     else if (!reply.hasHeader('Referrer-Policy')) reply.header('Referrer-Policy', 'same-origin');
     if (req.url.startsWith('/api')) reply.header('Cache-Control', 'no-store');
+    if (
+      req.url.split('?')[0]?.startsWith('/password/') ||
+      req.url.split('?')[0] === '/auth/complete-registration'
+    )
+      reply.header('Cache-Control', 'no-store');
     return payload;
   });
   app.setErrorHandler((error, req, reply) => {
@@ -179,6 +217,8 @@ export async function createApp(
   }));
   await registerCoreRoutes(app, services.core);
   await registerGoogleRoutes(app, services.google, services.core);
+  await registerPasswordRoutes(app, services.passwordRecovery, services.core);
+  await registerIdentityRoutes(app, services.identities, services.core);
   await registerTaskRoutes(app, services);
   await registerMailRoutes(app, services.mail, services.core);
   await app.register(async (scoped) => {

@@ -20,6 +20,7 @@ import {
 } from './shared';
 import { AuthService } from './auth';
 import { EntitlementService } from './entitlements';
+import { claimTeamSlot, teamSlot } from './team-creation';
 export class TeamService {
   constructor(
     private c: CoreContext,
@@ -29,6 +30,18 @@ export class TeamService {
     if (actor.authType !== 'session') throw new AppError(403, 'FORBIDDEN', '需要账户会话');
     const { name } = inputs.WorkspaceInputSchema.parse(raw);
     return this.c.transaction(() => {
+      if (teamSlot(this.c, actor.userId))
+        throw new AppError(
+          409,
+          'TEAM_SLOT_USED',
+          '此账号已占用一个团队名额，请进入已有团队或核对原付款',
+        );
+      if (!this.c.config.demoMode)
+        throw new AppError(
+          403,
+          'TEAM_MEMBERSHIP_REQUIRED',
+          '创建团队需要先购买明确适用于团队的团队会员',
+        );
       const workspace = this.auth.createWorkspace(
         actor.userId,
         name,
@@ -314,6 +327,9 @@ export class TeamService {
         userId,
       );
       if (!target) throw new AppError(404, 'NOT_FOUND', '目标成员不存在');
+      if (this.c.get('SELECT kind FROM workspaces WHERE id=?', wid)?.kind !== 'team')
+        throw new AppError(400, 'TEAM_REQUIRED', '仅团队空间支持转让');
+      claimTeamSlot(this.c, userId, wid, 'ownership');
       this.c.run(
         "UPDATE memberships SET role='admin',updated_at=? WHERE workspace_id=? AND user_id=?",
         now(),

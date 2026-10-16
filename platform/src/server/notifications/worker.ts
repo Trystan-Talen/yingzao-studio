@@ -1,6 +1,16 @@
 import nodemailer from 'nodemailer';
 import { randomUUID } from 'node:crypto';
-import type { MailOutbox, MailOutcome } from './outbox';
+import type { ClaimedMail, MailOutcome } from './outbox';
+import type { SmtpConfig } from './config';
+
+/** Shared transport contract; account mail never inherits workspace visibility. */
+export interface MailDeliveryQueue {
+  smtp: SmtpConfig;
+  cleanup?(): void;
+  claim(owner: string): ClaimedMail | undefined;
+  heartbeat(item: Pick<ClaimedMail, 'id' | 'owner'>): boolean;
+  finish(item: ClaimedMail, outcome: MailOutcome): boolean;
+}
 
 /** Deliberately never retain message, response, command or original error text. */
 export function classifySmtpError(error: unknown): MailOutcome {
@@ -39,13 +49,16 @@ export function classifySmtpError(error: unknown): MailOutcome {
     return { status: 'retry', errorCode: 'SMTP_CONNECTION_NOT_ESTABLISHED' };
   return { status: 'reconciliation_required', errorCode: 'SMTP_ACCEPTANCE_UNKNOWN' };
 }
-export function createMailWorker(outbox: MailOutbox) {
+export function createMailWorker(outbox: MailDeliveryQueue) {
   let stopped = false;
   let running: Promise<void> | null = null;
   const owner = randomUUID();
   async function runOne(): Promise<void> {
     const smtp = outbox.smtp;
-    if (stopped || !smtp.enabled) return;
+    if (stopped) return;
+    // Expired account secrets must be erased even when delivery was disabled after enqueueing.
+    outbox.cleanup?.();
+    if (!smtp.enabled) return;
     const item = outbox.claim(owner);
     if (!item) return;
     const transport = nodemailer.createTransport({

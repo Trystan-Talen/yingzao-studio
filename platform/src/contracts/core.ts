@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { sceneDocumentSchema, sceneDocumentOutputSchema } from './scene';
 import { ExportPolicySchema } from './export-policy';
+import { billingChannelSchema } from './billing-channel';
 
 export const IdSchema = z.string().uuid();
 export const IsoDateSchema = z.string().datetime();
@@ -234,7 +235,20 @@ export const BrandInputSchema = z
     visibility: z.enum(['private', 'workspace']).default('workspace'),
   })
   .strict();
-export const BrandPatchSchema = BrandInputSchema.partial();
+export const BrandPatchSchema = z
+  .object({
+    name: NameSchema.optional(),
+    description: z.string().max(4000).optional(),
+    colors: z
+      .array(z.string().regex(/^#[0-9a-fA-F]{6}$/))
+      .max(16)
+      .optional(),
+    fonts: z.array(z.string().max(80)).max(12).optional(),
+    referenceAssetIds: z.array(IdSchema).max(20).optional(),
+    coverAssetId: IdSchema.nullable().optional(),
+    visibility: z.enum(['private', 'workspace']).optional(),
+  })
+  .strict();
 export const CharacterInputSchema = z
   .object({
     name: NameSchema,
@@ -243,7 +257,16 @@ export const CharacterInputSchema = z
     coverAssetId: IdSchema.nullable().optional(),
   })
   .strict();
-export const CharacterPatchSchema = CharacterInputSchema.partial();
+// Patch omissions must stay omitted: Zod defaults from create inputs otherwise
+// turn a rename into clearing references and revoking their authorization.
+export const CharacterPatchSchema = z
+  .object({
+    name: NameSchema.optional(),
+    description: z.string().max(4000).optional(),
+    referenceAssetIds: z.array(IdSchema).max(20).optional(),
+    coverAssetId: IdSchema.nullable().optional(),
+  })
+  .strict();
 export const InvitationInputSchema = z
   .object({
     email: z.email().max(254),
@@ -319,7 +342,14 @@ export const AcceptInvitationInputSchema = z
 export const SetCollectionAssetsInputSchema = z
   .object({ assetIds: z.array(IdSchema).max(500) })
   .strict();
-export const CreateOrderInputSchema = z.object({ planId: z.string().min(1).max(100) }).strict();
+export const CreateOrderInputSchema = z
+  .object({
+    planId: z.string().min(1).max(100),
+    billingChannel: billingChannelSchema.default('web'),
+    expectedAmountMinor: z.number().int().positive().optional(),
+    expectedCatalogVersion: z.number().int().min(0).optional(),
+  })
+  .strict();
 export const CreateInvoiceInputSchema = z
   .object({ orderIds: z.array(IdSchema).min(1).max(100), titleId: IdSchema })
   .strict();

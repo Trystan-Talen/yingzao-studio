@@ -102,7 +102,12 @@ export async function downloadPublicMedia(
   limit = 200 * 1024 * 1024,
   redirects = 0,
 ): Promise<Buffer> {
-  const url = new URL(value);
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new ProviderError('产物地址不是有效的媒体地址。');
+  }
   if (url.protocol !== 'https:' || url.username || url.password || (url.port && url.port !== '443'))
     throw new ProviderError('产物地址不是允许的 HTTPS 媒体地址。');
   const addresses = await lookup(url.hostname, { all: true });
@@ -123,6 +128,7 @@ export async function downloadPublicMedia(
         timeout: 120000,
       },
       (res) => {
+        res.on('error', () => reject(new ProviderError('下载产物中断，请重试保存结果。')));
         if (
           res.statusCode &&
           [301, 302, 303, 307, 308].includes(res.statusCode) &&
@@ -133,10 +139,12 @@ export async function downloadPublicMedia(
             reject(new ProviderError('产物地址重定向过多。'));
             return;
           }
-          downloadPublicMedia(new URL(res.headers.location, url).href, limit, redirects + 1).then(
-            resolve,
-            reject,
-          );
+          try {
+            const target = new URL(res.headers.location, url).href;
+            downloadPublicMedia(target, limit, redirects + 1).then(resolve, reject);
+          } catch {
+            reject(new ProviderError('产物返回了无效的跳转地址，请核对服务商结果。'));
+          }
           return;
         }
         if (res.statusCode !== 200) {
@@ -160,7 +168,6 @@ export async function downloadPublicMedia(
           parts.push(chunk);
         });
         res.on('end', () => resolve(Buffer.concat(parts)));
-        res.on('error', () => reject(new ProviderError('下载产物中断，请重试保存结果。')));
       },
     );
     req.on('timeout', () => req.destroy(new Error('TIMEOUT')));

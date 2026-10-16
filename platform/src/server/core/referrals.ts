@@ -2,20 +2,12 @@ import { CoreContext, id, now, str, num, json, type ListQuery } from './shared';
 import type { Actor } from '../../contracts/core';
 import { AppError } from '../errors';
 import { createCreditService } from '../tasks/credits';
-interface Program {
-  registration_enabled: number;
-  rewards_enabled: number;
-  reward_credits: number;
-  minimum_paid_minor: number;
-  currency: string;
-  version: number;
-}
-interface Attribution {
-  id: string;
-  referral_id: string;
-  program_snapshot_json: string;
-  referrer_id: string;
-}
+import {
+  PersonalReferralPolicy,
+  referralRule,
+  type ReferralProgram as Program,
+  type ReferralAttribution as Attribution,
+} from './referral-policy';
 interface Reward {
   id: string;
   attribution_id: string;
@@ -25,11 +17,14 @@ interface Reward {
   credits: number;
   reversed_credits: number;
   debt_credits: number;
+  policy_snapshot_json: string | null;
 }
 export class ReferralService {
   private credits;
+  private personalPolicy;
   constructor(private c: CoreContext) {
     this.credits = createCreditService(c.db);
+    this.personalPolicy = new PersonalReferralPolicy(c);
   }
   program() {
     return this.c.get<Program>("SELECT * FROM referral_program WHERE id='default'")!;
@@ -81,28 +76,58 @@ export class ReferralService {
         'SELECT 1 FROM channel_partners WHERE user_id=? AND enabled=1',
         actor.userId,
       ),
-      rewardRule: p.rewards_enabled
-        ? {
-            credits: p.reward_credits,
-            minimumPaidMinor: p.minimum_paid_minor,
-            currency: p.currency,
-          }
-        : null,
+      rewardRule: p.rewards_enabled || p.policy_json ? referralRule(p) : null,
     };
   }
   records(actor: Actor, wid: string, q: ListQuery) {
     this.c.requireAccess(actor, wid, 'read');
     return this.c.page(
-      `SELECT a.id,a.created_at,COALESCE(r.credits,0) credits,COALESCE(r.reversed_credits,0) reversed_credits,r.id AS reward_id FROM referral_attributions a JOIN referrals f ON f.id=a.referral_id LEFT JOIN referral_rewards r ON r.attribution_id=a.id WHERE f.user_id=? ORDER BY a.created_at DESC,a.id`,
+      `SELECT a.id,a.created_at,a.program_snapshot_json,COALESCE(r.credits,0) credits,COALESCE(r.reversed_credits,0) reversed_credits,r.id AS reward_id FROM referral_attributions a JOIN referrals f ON f.id=a.referral_id LEFT JOIN referral_rewards r ON r.attribution_id=a.id WHERE f.user_id=? ORDER BY a.created_at DESC,a.id`,
       [actor.userId],
       q,
-      (r) => ({
-        id: str(r, 'id'),
-        registeredAt: str(r, 'created_at'),
-        qualified: !!r.reward_id,
-        rewardCredits: num(r, 'credits'),
-        reversedCredits: num(r, 'reversed_credits'),
-      }),
+      (r) => {
+        const check = this.c.get(
+          'SELECT status,reason FROM referral_qualification_checks WHERE attribution_id=? ORDER BY checked_at DESC,order_id LIMIT 1',
+          r.id,
+        );
+        const review =
+          r.reward_id &&
+          this.c.get(
+            "SELECT 1 FROM billing_risks WHERE referral_reward_id=? AND status='review_required' LIMIT 1",
+            r.reward_id,
+          );
+        return {
+          id: str(r, 'id'),
+          registeredAt: str(r, 'created_at'),
+          qualified: !!r.reward_id,
+          rewardCredits: num(r, 'credits'),
+          reversedCredits: num(r, 'reversed_credits'),
+          rule: referralRule(json<Program>(r.program_snapshot_json, this.program())),
+          qualificationStatus: review
+            ? 'blocked'
+            : r.reward_id
+              ? 'qualified'
+              : (check?.status ?? 'pending'),
+          qualificationReason: review
+            ? '奖励已发放，退款或首购资格仍有待核对事项'
+            : r.reward_id
+              ? '已按注册时规则发放，退款会按比例冲回'
+              : (check?.reason ?? '尚未核验符合条件的真实付款'),
+          rewards: r.reward_id
+            ? this.c
+                .all(
+                  'SELECT role,credits,reversed_credits,expires_at FROM referral_reward_items WHERE reward_id=? ORDER BY role',
+                  r.reward_id,
+                )
+                .map((item) => ({
+                  role: str(item, 'role'),
+                  credits: num(item, 'credits'),
+                  reversedCredits: num(item, 'reversed_credits'),
+                  expiresAt: str(item, 'expires_at'),
+                }))
+            : [],
+        };
+      },
     );
   }
   channelSummary(actor: Actor, wid: string) {
@@ -145,6 +170,10 @@ export class ReferralService {
     );
     if (!attribution || attribution.referrer_id === order.created_by) return;
     const rule = json<Program>(attribution.program_snapshot_json, this.program());
+    if (rule.policy_json) {
+      this.personalPolicy.qualify(order, attribution, rule);
+      return;
+    }
     if (
       !rule.rewards_enabled ||
       rule.reward_credits <= 0 ||
@@ -202,6 +231,10 @@ export class ReferralService {
       ),
       order = this.c.get('SELECT * FROM orders WHERE id=?', orderId);
     if (!reward || !order) return;
+    if (reward.policy_snapshot_json) {
+      this.personalPolicy.reverse(order, reward, refundedMinor, sourceEventId);
+      return;
+    }
     const target = Math.min(
         reward.credits,
         Math.ceil(
@@ -246,7 +279,7 @@ export class ReferralService {
       reward.reward_workspace_id,
     );
     const allocated = this.c.get(
-      'SELECT COALESCE(SUM(MAX(COALESCE(credit_limit-spent,0),reserved)),0) total FROM member_budgets WHERE workspace_id=?',
+      "SELECT COALESCE(SUM(MAX(COALESCE(credit_limit-spent,0),reserved)),0) total FROM member_budgets WHERE workspace_id=? AND billing_channel='web'",
       reward.reward_workspace_id,
     )!;
     const overallocated =

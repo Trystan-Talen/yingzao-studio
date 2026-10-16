@@ -1,10 +1,39 @@
 import { z } from 'zod';
-import { jobOptionsSchema } from './jobs';
+import { jobOptionsSchema, type JobInput } from './jobs';
+import type { ProjectDto } from './core';
+export const videoInspirationCategorySchema = z.enum([
+  'talking-head',
+  'recommendation',
+  'brand',
+  'story',
+]);
+export const VIDEO_INSPIRATION_LABELS: Record<
+  z.infer<typeof videoInspirationCategorySchema>,
+  string
+> = {
+  'talking-head': '口播',
+  recommendation: '种草',
+  brand: '品牌',
+  story: '剧情',
+};
+export const reuseInspirationSchema = z
+  .object({
+    requestId: z.string().uuid(),
+    prompt: z.string().trim().min(1).max(12000),
+    language: z.string().min(1).max(80).default('zh-CN'),
+    intent: z.enum(['create', 'replicate']).default('create'),
+  })
+  .strict();
+export interface InspirationReuseDto {
+  project: ProjectDto;
+  draft: JobInput;
+}
 export const inspirationInputSchema = z
   .object({
     title: z.string().trim().min(1).max(120),
     category: z.string().trim().min(1).max(60),
     kind: z.enum(['image', 'video']),
+    videoCategory: videoInspirationCategorySchema.nullable().optional(),
     tag: z.string().max(100),
     platform: z.string().max(80).default('通用电商'),
     ratio: z.string().regex(/^\d{1,2}:\d{1,2}$/),
@@ -17,7 +46,11 @@ export const inspirationInputSchema = z
     assetId: z.string().uuid(),
     options: jobOptionsSchema.optional(),
   })
-  .strict();
+  .strict()
+  .refine((value) => value.kind === 'video' || !value.videoCategory, {
+    path: ['videoCategory'],
+    message: '只有视频灵感可以设置视频内容分类',
+  });
 export type InspirationInput = z.infer<typeof inspirationInputSchema>;
 export interface InspirationDto extends Omit<InspirationInput, 'assetId'> {
   id: string;

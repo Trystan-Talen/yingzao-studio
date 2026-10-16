@@ -1,3 +1,4 @@
+import { channelForActor, type BillingChannel } from '../../contracts/billing-channel';
 import { registerInspirationRoutes } from './inspirations';
 import JSZip from 'jszip';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
@@ -6,6 +7,7 @@ import { z } from 'zod';
 import type { ServerResponse } from 'node:http';
 import type { Actor, Permission } from '../../contracts/core';
 import { jobInputSchema, jobSubmitSchema, providerSettingsInputSchema } from '../../contracts/jobs';
+import { designPlanResultSchema, type DesignPlanResult } from '../../contracts/design-plan';
 import { AppError } from '../errors';
 import type { TaskServices } from './service';
 import { checkScope } from './validation';
@@ -100,6 +102,15 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     async (req) => {
       const { actor, wid } = await access(req, 'read', 'jobs:read');
       return response(s.list(actor, wid, req.query as z.infer<typeof pageQuery>));
+    },
+  );
+  app.get(
+    '/api/v1/jobs/by-request/:requestId',
+    { schema: { params: z.object({ requestId: z.string().uuid() }) } },
+    async (req) => {
+      const { actor, wid } = await access(req, 'read', 'jobs:read');
+      const { requestId } = req.params as { requestId: string };
+      return response(s.getByRequest(actor, wid, requestId));
     },
   );
   app.get('/api/v1/jobs/:id', { schema: { params: idParams } }, async (req) => {
@@ -261,6 +272,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
           assetId: z.string().uuid().optional(),
           assetIds: z.array(z.string().uuid()).min(1).max(10).optional(),
           resultText: z.string().max(50000).optional(),
+          resultData: designPlanResultSchema.optional(),
           evidence: z.string().min(10).max(2000),
         }),
       },
@@ -275,6 +287,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
         assetId?: string;
         assetIds?: string[];
         resultText?: string;
+        resultData?: DesignPlanResult;
         evidence: string;
       };
       return response(
@@ -290,7 +303,12 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
           const isText = ['text.assist', 'image.ocr'].includes(input.operation);
           const ids = [...new Set(b.assetIds ?? (b.assetId ? [b.assetId] : []))];
           const text = b.resultText?.trim() || null;
-          if (b.outcome === 'failed' && (ids.length || text))
+          if (
+            b.resultData &&
+            (input.operation !== 'text.assist' || input.options.assistantMode !== 'design-plan')
+          )
+            throw new AppError(400, 'RESULT_KIND', '只有设计方案任务可以附带方案结构');
+          if (b.outcome === 'failed' && (ids.length || text || b.resultData))
             throw new AppError(400, 'UNEXPECTED_RESULT', '失败核对不能附加成功产物');
           const assets = ids.map((id) => core.assets.get(actor, wid, id));
           if (b.outcome === 'succeeded') {
@@ -306,7 +324,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
               );
             const expectedKind =
               input.operation.startsWith('video.') ||
-              ['video-replica', 'local.video-trim'].includes(input.operation)
+              ['video-replica', 'local.video-trim', 'media.import'].includes(input.operation)
                 ? 'video'
                 : 'image';
             if (assets.some((a) => a.kind !== expectedKind))
@@ -319,9 +337,17 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
           }
           sql
             .prepare(
-              "UPDATE job_items SET status=?,phase='done',asset_id=?,result_text=?,output_kind=?,lease_owner=NULL,lease_until=NULL,error_message=NULL,updated_at=? WHERE id=?",
+              "UPDATE job_items SET status=?,phase='done',asset_id=?,result_text=?,result_data_json=?,output_kind=?,lease_owner=NULL,lease_until=NULL,error_message=NULL,updated_at=? WHERE id=?",
             )
-            .run(b.outcome, ids[0] || null, text, layered ? 'layers' : 'single', now(), item.id);
+            .run(
+              b.outcome,
+              ids[0] || null,
+              text,
+              b.resultData ? JSON.stringify(b.resultData) : null,
+              layered ? 'layers' : 'single',
+              now(),
+              item.id,
+            );
           for (const [index, id] of ids.entries())
             sql.prepare('INSERT INTO job_item_assets VALUES(?,?,?)').run(item.id, id, index);
           if (b.outcome === 'succeeded' && ids[0] && input.documentId && input.baseRevision) {
@@ -359,18 +385,14 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
                 assetId: ids[0] || null,
                 outputKind: layered ? 'layers' : 'single',
                 reconciled: true,
+                ...(b.resultData ? { resultData: b.resultData } : {}),
               }),
               now(),
             );
           }
-          s.credits.finish(
-            wid,
-            item.user_id,
-            item.credits,
-            jobId,
-            item.id,
-            b.outcome === 'succeeded',
-          );
+          s.credits
+            .forChannel(item.billing_channel)
+            .finish(wid, item.user_id, item.credits, jobId, item.id, b.outcome === 'succeeded');
           core.context.audit(actor, wid, 'job.reconcile', 'job', jobId, {
             itemId: item.id,
             outcome: b.outcome,
@@ -398,9 +420,21 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       Connection: 'keep-alive',
       'X-Accel-Buffering': 'no',
     });
-    const flush = () => {
+    let flushing = false;
+    const flush = async () => {
+      if (flushing || reply.raw.destroyed || reply.raw.writableEnded) return;
+      flushing = true;
       try {
-        core.requireAccess(actor, wid, 'read');
+        const current = await core.authenticate(req);
+        if (
+          !current ||
+          current.userId !== actor.userId ||
+          current.authType !== actor.authType ||
+          current.apiKeyId !== actor.apiKeyId
+        )
+          throw new AppError(401, 'UNAUTHENTICATED', '登录或密钥已撤销');
+        core.requireAccess(current, wid, 'read');
+        checkScope(current, 'jobs:read');
         const rows = sql
           .prepare(
             'SELECT id,job_id,type,payload,created_at FROM job_events WHERE workspace_id=? AND id>? ORDER BY id LIMIT 100',
@@ -421,9 +455,11 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
         reply.raw.write(': keepalive\n\n');
       } catch {
         reply.raw.end();
+      } finally {
+        flushing = false;
       }
     };
-    flush();
+    void flush();
     const timer = setInterval(flush, 2500);
     timer.unref();
     reply.raw.on('close', () => {
@@ -431,24 +467,33 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       streams.delete(reply.raw);
     });
   });
-  app.get('/api/v1/credits', async (req) => {
-    const { actor, wid } = await access(req, 'read', 'credits:read');
-    return response(s.balance(actor, wid));
+  async function creditAccess(req: FastifyRequest, apiAdmin = false) {
+    const result = await access(
+      req,
+      apiAdmin ? 'manage' : 'read',
+      apiAdmin ? undefined : 'credits:read',
+    );
+    if (apiAdmin && result.actor.authType !== 'session')
+      throw new AppError(403, 'SESSION_REQUIRED', '接口账户管理需要管理员网页登录');
+    return {
+      ...result,
+      channel: (apiAdmin ? 'api' : channelForActor(result.actor)) as BillingChannel,
+    };
+  }
+  const ledgerQuery = pageQuery.extend({
+    kind: z.enum(['grant', 'reserve', 'settle', 'release', 'adjustment']).optional(),
   });
-  app.get(
-    '/api/v1/credits/ledger',
-    {
-      schema: {
-        querystring: pageQuery.extend({
-          kind: z.enum(['grant', 'reserve', 'settle', 'release', 'adjustment']).optional(),
-        }),
-      },
-    },
-    async (req) => {
-      const { wid } = await access(req, 'read', 'credits:read');
-      const q = req.query as z.infer<typeof pageQuery> & { kind?: string };
-      const where = q.kind ? 'workspace_id=? AND kind=?' : 'workspace_id=?';
-      const args = q.kind ? [wid, q.kind] : [wid];
+  for (const apiAdmin of [false, true]) {
+    const base = apiAdmin ? '/api/v1/credits/api' : '/api/v1/credits';
+    app.get(base, async (req) => {
+      const { actor, wid, channel } = await creditAccess(req, apiAdmin);
+      return response(s.balance(actor, wid, channel));
+    });
+    app.get(`${base}/ledger`, { schema: { querystring: ledgerQuery } }, async (req) => {
+      const { wid, channel } = await creditAccess(req, apiAdmin);
+      const q = ledgerQuery.parse(req.query);
+      const where = `workspace_id=? AND billing_channel=?${q.kind ? ' AND kind=?' : ''}`;
+      const args = q.kind ? [wid, channel, q.kind] : [wid, channel];
       const total = (
         sql.prepare(`SELECT COUNT(*) AS n FROM credit_ledger WHERE ${where}`).get(...args) as {
           n: number;
@@ -456,14 +501,20 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       ).n;
       const items = sql
         .prepare(
-          `SELECT id,user_id AS userId,job_id AS jobId,item_id AS itemId,kind,amount,balance_after AS balanceAfter,reserved_after AS reservedAfter,description,created_at AS createdAt FROM credit_ledger WHERE ${where} ORDER BY created_at DESC,id LIMIT ? OFFSET ?`,
+          `SELECT id,user_id AS userId,job_id AS jobId,item_id AS itemId,billing_channel AS billingChannel,kind,amount,balance_after AS balanceAfter,reserved_after AS reservedAfter,description,created_at AS createdAt FROM credit_ledger WHERE ${where} ORDER BY created_at DESC,id LIMIT ? OFFSET ?`,
         )
         .all(...args, q.pageSize, (q.page - 1) * q.pageSize);
       return response({ ...q, items, total });
-    },
-  );
+    });
+    app.get(`${base}/buckets`, async (req) => {
+      const { wid, channel } = await creditAccess(req, apiAdmin);
+      return response(s.credits.forChannel(channel).buckets(wid));
+    });
+  }
   app.get('/api/v1/credits/settings', async (req) => {
-    const { wid } = await access(req, 'read', 'credits:read');
+    const { actor, wid } = await access(req, 'read', 'credits:read');
+    if (actor.authType !== 'session')
+      throw new AppError(403, 'SESSION_REQUIRED', '网页预算设置需要网页登录');
     const stored = sql
       .prepare(
         'SELECT credit_mode AS mode,concurrency_limit AS concurrencyLimit FROM workspace_billing WHERE workspace_id=?',
@@ -477,10 +528,6 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       ),
     });
   });
-  app.get('/api/v1/credits/buckets', async (req) => {
-    const { wid } = await access(req, 'read', 'credits:read');
-    return response(s.credits.buckets(wid));
-  });
   app.get('/api/v1/export-policy', async (req, reply) => {
     const { wid } = await access(req, 'read', 'projects:read');
     reply.header('Cache-Control', 'no-store');
@@ -491,6 +538,8 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     { schema: { body: z.object({ mode: z.enum(['shared', 'allocated']) }).strict() } },
     async (req) => {
       const { actor, wid } = await access(req, 'manage');
+      if (actor.authType !== 'session')
+        throw new AppError(403, 'SESSION_REQUIRED', '网页预算设置需要网页登录');
       const { mode } = req.body as { mode: string };
       s.transaction(() => {
         s.credits.setMode(wid, mode as 'shared' | 'allocated', actor.userId);
@@ -501,10 +550,12 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
   );
   app.get('/api/v1/credits/members', async (req) => {
     const { actor, wid } = await access(req, 'read', 'credits:read');
+    if (actor.authType !== 'session')
+      throw new AppError(403, 'SESSION_REQUIRED', '网页成员预算需要网页登录');
     const role = core.requireAccess(actor, wid, 'read').role;
     const items = sql
       .prepare(
-        `SELECT m.user_id AS userId,u.display_name AS displayName,b.credit_limit AS creditLimit,COALESCE(b.spent,0) AS spent,COALESCE(b.reserved,0) AS reserved FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN member_budgets b ON b.user_id=m.user_id AND b.workspace_id=m.workspace_id WHERE m.workspace_id=? ${['owner', 'admin'].includes(role) ? '' : 'AND m.user_id=?'}`,
+        `SELECT m.user_id AS userId,u.display_name AS displayName,b.credit_limit AS creditLimit,COALESCE(b.spent,0) AS spent,COALESCE(b.reserved,0) AS reserved FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN member_budgets b ON b.user_id=m.user_id AND b.workspace_id=m.workspace_id AND b.billing_channel='web' WHERE m.workspace_id=? ${['owner', 'admin'].includes(role) ? '' : 'AND m.user_id=?'}`,
       )
       .all(...(['owner', 'admin'].includes(role) ? [wid] : [wid, actor.userId]));
     return response(page(items));
@@ -556,8 +607,8 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       const { actor, wid } = await access(req, 'read', 'credits:read');
       const { from, to } = req.query as { from?: string; to?: string };
       const role = core.requireAccess(actor, wid, 'read').role;
-      const clauses = ['l.workspace_id=?', "l.kind='settle'"];
-      const args: string[] = [wid];
+      const clauses = ['l.workspace_id=?', 'l.billing_channel=?', "l.kind='settle'"];
+      const args: string[] = [wid, channelForActor(actor)];
       if (!['owner', 'admin'].includes(role)) {
         clauses.push('l.user_id=?');
         args.push(actor.userId);
@@ -621,6 +672,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
               .object({
                 draft: jobInputSchema.optional(),
                 inspirationId: z.string().max(100).optional(),
+                creationWarnings: z.array(z.string().max(1000)).max(30).optional(),
               })
               .strict()
               .default({}),

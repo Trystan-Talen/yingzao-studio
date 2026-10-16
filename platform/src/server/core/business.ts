@@ -1,7 +1,14 @@
 import { ReferralService } from './referrals';
+import { createPromotions } from '../billing/promotions';
+import { createPrepaidMemberships } from '../billing/prepaid';
+import { prepaidTermsSchema } from '../../contracts/promotions';
 import { EntitlementService } from './entitlements';
+import { assertPendingTeamOrder } from './team-creation';
+import { NotificationService } from './notifications';
+import type { NotificationListQuery } from '../../contracts/notifications';
 import * as inputs from '../../contracts/core';
 import type { BillingAdapter } from '../billing/contracts';
+import { billingChannelSchema, type BillingChannel } from '../../contracts/billing-channel';
 import {
   ApiKeyInputSchema,
   InvoiceTitleInputSchema,
@@ -27,6 +34,12 @@ export class BusinessService {
   constructor(private c: CoreContext) {}
   setBilling(adapter: BillingAdapter) {
     this.billing = adapter;
+  }
+  canCheckoutPlan(planId: string) {
+    return !!this.billing?.isConfigured() && this.billing.canCheckoutPlan(planId);
+  }
+  paymentEnvironment() {
+    return this.billing?.environment?.() ?? 'test';
   }
   private keyDto(r: Row) {
     return {
@@ -87,16 +100,33 @@ export class BusinessService {
     this.c.audit(actor, wid, 'api-key.revoke', 'api-key', kid);
     return { id: kid, revokedAt: date };
   }
-  plans(q: ListQuery) {
-    return this.c.page(
-      'SELECT * FROM plans WHERE active=1 ORDER BY price_minor,id',
-      [],
-      q,
-      (r) => ({
+  plans(q: ListQuery, actor?: Actor, wid?: string) {
+    if (actor && wid) this.c.requireAccess(actor, wid, 'read');
+    const workspaceKind = wid
+      ? this.c.get('SELECT kind FROM workspaces WHERE id=?', wid)?.kind
+      : null;
+    return this.c.page('SELECT * FROM plans WHERE active=1 ORDER BY price_minor,id', [], q, (r) => {
+      const terms = r.prepaid_terms_json
+        ? prepaidTermsSchema.parse(JSON.parse(str(r, 'prepaid_terms_json')))
+        : null;
+      const promotion =
+        actor && wid
+          ? createPromotions(this.c.db).offer(
+              nullable(r, 'promotion_json'),
+              num(r, 'price_minor'),
+              actor.userId,
+              terms?.audience === 'team' && workspaceKind !== 'team' ? '' : wid,
+              this.billing?.environment?.() ?? 'test',
+            )
+          : null;
+      return {
         id: str(r, 'id'),
         name: str(r, 'name'),
         kind: str(r, 'kind'),
-        priceMinor: num(r, 'price_minor'),
+        priceMinor: promotion?.priceMinor ?? num(r, 'price_minor'),
+        originalPriceMinor: num(r, 'price_minor'),
+        promotion,
+        prepaidTerms: terms,
         currency: str(r, 'currency'),
         interval: nullable(r, 'interval'),
         credits: num(r, 'credits'),
@@ -105,8 +135,8 @@ export class BusinessService {
         catalogVersion: num(r, 'catalog_version'),
         providerConfigured:
           (this.billing?.isConfigured() ?? false) && this.billing!.canCheckoutPlan(str(r, 'id')),
-      }),
-    );
+      };
+    });
   }
   subscriptions(actor: Actor, wid: string, q: ListQuery) {
     this.c.requireAccess(actor, wid, 'manage');
@@ -144,6 +174,7 @@ export class BusinessService {
       id: str(r, 'id'),
       workspaceId: str(r, 'workspace_id'),
       number: str(r, 'number'),
+      billingChannel: billingChannelSchema.parse(r.billing_channel ?? 'web'),
       kind: str(r, 'kind'),
       status: str(r, 'status'),
       amountMinor: num(r, 'amount_minor'),
@@ -152,6 +183,17 @@ export class BusinessService {
       providerId: nullable(r, 'provider_id'),
       billingDocumentAvailable:
         !!r.provider_invoice_id && ['paid', 'refunded'].includes(str(r, 'status')),
+      purchaseTerms: json<{ prepaid_terms_json?: string; promotion_snapshot?: unknown }>(
+        r.plan_snapshot_json,
+        {},
+      ).prepaid_terms_json
+        ? JSON.parse(
+            json<{ prepaid_terms_json: string }>(r.plan_snapshot_json, {} as never)
+              .prepaid_terms_json,
+          )
+        : null,
+      promotion:
+        json<{ promotion_snapshot?: unknown }>(r.plan_snapshot_json, {}).promotion_snapshot ?? null,
       createdAt: str(r, 'created_at'),
       updatedAt: str(r, 'updated_at'),
       paidAt: nullable(r, 'paid_at'),
@@ -168,45 +210,122 @@ export class BusinessService {
       ),
     };
   }
-  orders(actor: Actor, wid: string, q: ListQuery) {
-    this.c.requireAccess(actor, wid, 'manage');
+  orders(actor: Actor, wid: string, q: ListQuery, billingChannel: BillingChannel = 'web') {
+    this.c.requireBillingAccess(actor, wid);
     return this.c.page(
-      'SELECT * FROM orders WHERE workspace_id=? ORDER BY created_at DESC,id',
-      [wid],
+      'SELECT * FROM orders WHERE workspace_id=? AND billing_channel=? ORDER BY created_at DESC,id',
+      [wid, billingChannelSchema.parse(billingChannel)],
       q,
       (r) => this.orderDto(r),
     );
   }
   getOrder(actor: Actor, wid: string, oid: string) {
-    this.c.requireAccess(actor, wid, 'manage');
+    this.c.requireBillingAccess(actor, wid);
     return this.orderDto(this.c.resource('orders', wid, oid));
   }
   createOrder(actor: Actor, wid: string, raw: unknown) {
-    this.c.requireAccess(actor, wid, 'manage');
-    const { planId } = inputs.CreateOrderInputSchema.parse(raw);
-    const plan = this.c.get('SELECT * FROM plans WHERE id=? AND active=1', planId);
-    if (!plan) throw new AppError(404, 'NOT_FOUND', '套餐不存在');
-    const oid = id(),
-      date = now(),
-      number = `YZ${Date.now()}${oid.slice(0, 8)}`;
-    this.c.run(
-      'INSERT INTO orders(id,workspace_id,number,kind,status,amount_minor,currency,plan_id,plan_snapshot_json,provider_id,created_by,created_at,updated_at,paid_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,NULL)',
-      oid,
-      wid,
-      number,
-      str(plan, 'kind'),
-      'draft',
-      num(plan, 'price_minor'),
-      str(plan, 'currency'),
-      planId,
-      JSON.stringify(plan),
-      null,
-      actor.userId,
-      date,
-      date,
-    );
-    this.c.audit(actor, wid, 'order.create', 'order', oid);
-    return this.getOrder(actor, wid, oid);
+    return this.c.transaction(() => {
+      this.c.requireBillingAccess(actor, wid);
+      if (actor.authType !== 'session')
+        throw new AppError(403, 'FORBIDDEN', '充值需要账户管理会话');
+      const { planId, billingChannel, expectedAmountMinor, expectedCatalogVersion } =
+        inputs.CreateOrderInputSchema.parse(raw);
+      const plan = this.c.get('SELECT * FROM plans WHERE id=? AND active=1', planId);
+      if (!plan) throw new AppError(404, 'NOT_FOUND', '套餐不存在');
+      assertPendingTeamOrder(this.c, actor, wid, plan, billingChannel);
+      if (
+        this.c.get("SELECT 1 FROM team_provisioning WHERE workspace_id=? AND state='pending'", wid)
+      ) {
+        if (!this.canCheckoutPlan(planId))
+          throw new AppError(503, 'PAYMENT_PROVIDER_UNAVAILABLE', '支付服务未配置，暂不可开通团队');
+        if (
+          this.c.get(
+            "SELECT 1 FROM orders WHERE workspace_id=? AND status IN('draft','pending')",
+            wid,
+          )
+        )
+          throw new AppError(
+            409,
+            'TEAM_PAYMENT_PENDING',
+            '已有团队付款草稿或待核对付款，请先处理原订单',
+          );
+      }
+      if (
+        expectedCatalogVersion !== undefined &&
+        expectedCatalogVersion !== num(plan, 'catalog_version')
+      )
+        throw new AppError(
+          409,
+          'ORDER_TERMS_CHANGED',
+          '套餐内容或购买规则已更新，请刷新后重新确认',
+        );
+      const terms = plan.prepaid_terms_json
+        ? prepaidTermsSchema.parse(JSON.parse(str(plan, 'prepaid_terms_json')))
+        : null;
+      if (terms) createPrepaidMemberships(this.c.db).assertCheckout(wid, planId, terms);
+      const offer = createPromotions(this.c.db).offer(
+        nullable(plan, 'promotion_json'),
+        num(plan, 'price_minor'),
+        actor.userId,
+        wid,
+        this.billing?.environment?.() ?? 'test',
+      );
+      const amount = offer?.priceMinor ?? num(plan, 'price_minor');
+      if (
+        (offer && expectedAmountMinor === undefined) ||
+        (expectedAmountMinor !== undefined && expectedAmountMinor !== amount)
+      )
+        throw new AppError(
+          409,
+          'ORDER_PRICE_CHANGED',
+          '方案价格或优惠资格已变化，请刷新后重新确认',
+        );
+      const frozen = {
+        ...plan,
+        price_minor: amount,
+        ...(offer?.status === 'available'
+          ? {
+              promotion_snapshot: {
+                definition: offer.definition,
+                originalPriceMinor: offer.originalPriceMinor,
+              },
+            }
+          : {}),
+      };
+      if (billingChannel === 'api' && str(plan, 'kind') !== 'credits')
+        throw new AppError(
+          400,
+          'API_SUBSCRIPTION_UNSUPPORTED',
+          '接口账户仅支持充值额度包，不包含会员权益',
+        );
+      const oid = id(),
+        date = now(),
+        number = `YZ${Date.now()}${oid.slice(0, 8)}`;
+      this.c.run(
+        'INSERT INTO orders(id,workspace_id,number,kind,status,amount_minor,currency,plan_id,plan_snapshot_json,provider_id,created_by,created_at,updated_at,paid_at,billing_channel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?)',
+        oid,
+        wid,
+        number,
+        str(plan, 'kind'),
+        'draft',
+        amount,
+        str(plan, 'currency'),
+        planId,
+        JSON.stringify(frozen),
+        null,
+        actor.userId,
+        date,
+        date,
+        billingChannel,
+      );
+      this.c.audit(actor, wid, 'order.create', 'order', oid);
+      this.c.run(
+        "UPDATE team_provisioning SET order_id=? WHERE workspace_id=? AND state='pending'",
+        oid,
+        wid,
+      );
+      return this.getOrder(actor, wid, oid);
+    });
   }
   checkout(actor: Actor, wid: string, oid: string) {
     if (this.billing) return this.billing.checkout(actor, wid, oid);
@@ -608,20 +727,11 @@ export class BusinessService {
       ...new ReferralService(this.c).summary(actor, wid),
     };
   }
-  notifications(actor: Actor, wid: string, q: ListQuery) {
-    this.c.requireAccess(actor, wid, 'read');
-    return this.c.page(
-      'SELECT * FROM notifications WHERE workspace_id=? AND user_id=? ORDER BY created_at DESC,id',
-      [wid, actor.userId],
-      q,
-      (r) => ({
-        id: str(r, 'id'),
-        title: str(r, 'title'),
-        message: str(r, 'message'),
-        readAt: nullable(r, 'read_at'),
-        createdAt: str(r, 'created_at'),
-      }),
-    );
+  notifications(actor: Actor, wid: string, q: NotificationListQuery) {
+    return new NotificationService(this.c).list(actor, wid, q);
+  }
+  notificationUnread(actor: Actor, wid: string) {
+    return new NotificationService(this.c).summary(actor, wid);
   }
   readNotification(actor: Actor, wid: string, nid: string) {
     this.c.requireAccess(actor, wid, 'read');
