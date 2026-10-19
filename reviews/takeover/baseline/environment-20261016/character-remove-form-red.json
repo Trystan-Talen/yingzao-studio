@@ -1,0 +1,22 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "playwright",
+    "test",
+    "character-video.spec.ts",
+    "--project=desktop",
+    "--grep",
+    "uploads"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T10:09:01.358795+00:00",
+  "endedUtc": "2026-10-16T10:09:15.053160+00:00",
+  "elapsedSeconds": 13.694,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1",
+    "PATHPrefix": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "output": "character-remove-form-red.txt"
+}

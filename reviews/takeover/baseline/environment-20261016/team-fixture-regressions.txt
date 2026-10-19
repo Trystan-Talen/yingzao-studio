@@ -1,0 +1,27 @@
+$ pnpm exec vitest run tests/app.test.ts tests/core.test.ts tests/delivery-regressions.test.ts tests/entitlements-appeals.test.ts tests/google-oidc.test.ts tests/identity-auth.test.ts tests/installation-owner.test.ts tests/mail-outbox.test.ts tests/password-recovery.test.ts tests/quality-workflows.test.ts tests/takeover-backend.test.ts tests/takeover-tools.test.ts tests/tasks.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/tasks.test.ts (36 tests | 1 failed) 2285ms
+   ❯ explicit layer output transactions and media-based estimates (6)
+     × quotes source-video operations using actual duration and extension using newly requested seconds 57ms
+ ❯ tests/takeover-backend.test.ts (12 tests | 1 failed) 967ms
+   ❯ takeover backend regression boundaries (12)
+     × scopes and freezes the separate music asset through quote, job, provider media and worker access 131ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/takeover-backend.test.ts > takeover backend regression boundaries > scopes and freezes the separate music asset through quote, job, provider media and worker access
+ FAIL  tests/tasks.test.ts > explicit layer output transactions and media-based estimates > quotes source-video operations using actual duration and extension using newly requested seconds
+Error: spawn ffmpeg ENOENT
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  2 failed | 11 passed (13)
+      Tests  2 failed | 208 passed (210)
+   Start at  17:34:10
+   Duration  23.88s (tests 72%, import 27%, transform 1%)
+
+     Import  133 modules were evaluated 191 times · 6.31s total, 27% of tracked time
+             ~1.91s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation

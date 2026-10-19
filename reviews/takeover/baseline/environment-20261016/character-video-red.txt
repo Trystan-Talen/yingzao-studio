@@ -1,0 +1,103 @@
+$ pnpm exec vitest run tests/character-video.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/character-video.test.ts (6 tests | 5 failed) 564ms
+   × stores and reloads mixed image/video references and a video cover without asserting identity verification 119ms
+   × invalidates the old authorization and verification when a video reference is added, while preserving renames 80ms
+   × preserves deleted reference IDs until explicit removal and refuses their later use 75ms
+   × keeps original media on profile deletion and enforces viewer/cross-space permissions 79ms
+   × rejects the whole mixed character in current image model input without a quote, job or credit reservation 82ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/character-video.test.ts > stores and reloads mixed image/video references and a video cover without asserting identity verification
+AppError: 参考素材必须是图片
+ ❯ ReferenceService.images src/server/core/references.ts:21:39
+     19|     for (const aid of ids) {
+     20|       const row = this.c.resource('assets', wid, aid);
+     21|       if (row.kind !== 'image') throw new AppError(400, 'IMAGE_REQUIRE…
+       |                                       ^
+     22|     }
+     23|   }
+ ❯ Function.<anonymous> src/server/core/references.ts:182:12
+ ❯ Function.sqliteTransaction node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/methods/transaction.js:65:24
+ ❯ CoreContext.transaction src/server/core/shared.ts:74:43
+ ❯ ReferenceService.createCharacter src/server/core/references.ts:178:19
+ ❯ tests/character-video.test.ts:48:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/character-video.test.ts > invalidates the old authorization and verification when a video reference is added, while preserving renames
+AppError: 参考素材必须是图片
+ ❯ ReferenceService.images src/server/core/references.ts:21:39
+     19|     for (const aid of ids) {
+     20|       const row = this.c.resource('assets', wid, aid);
+     21|       if (row.kind !== 'image') throw new AppError(400, 'IMAGE_REQUIRE…
+       |                                       ^
+     22|     }
+     23|   }
+ ❯ Function.<anonymous> src/server/core/references.ts:209:12
+ ❯ Function.sqliteTransaction node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/methods/transaction.js:65:24
+ ❯ CoreContext.transaction src/server/core/shared.ts:74:43
+ ❯ ReferenceService.updateCharacter src/server/core/references.ts:204:19
+ ❯ tests/character-video.test.ts:63:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/character-video.test.ts > preserves deleted reference IDs until explicit removal and refuses their later use
+AppError: 参考素材必须是图片
+ ❯ ReferenceService.images src/server/core/references.ts:21:39
+     19|     for (const aid of ids) {
+     20|       const row = this.c.resource('assets', wid, aid);
+     21|       if (row.kind !== 'image') throw new AppError(400, 'IMAGE_REQUIRE…
+       |                                       ^
+     22|     }
+     23|   }
+ ❯ Function.<anonymous> src/server/core/references.ts:182:12
+ ❯ Function.sqliteTransaction node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/methods/transaction.js:65:24
+ ❯ CoreContext.transaction src/server/core/shared.ts:74:43
+ ❯ ReferenceService.createCharacter src/server/core/references.ts:178:19
+ ❯ tests/character-video.test.ts:83:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/character-video.test.ts > keeps original media on profile deletion and enforces viewer/cross-space permissions
+AppError: 参考素材必须是图片
+ ❯ ReferenceService.images src/server/core/references.ts:21:39
+     19|     for (const aid of ids) {
+     20|       const row = this.c.resource('assets', wid, aid);
+     21|       if (row.kind !== 'image') throw new AppError(400, 'IMAGE_REQUIRE…
+       |                                       ^
+     22|     }
+     23|   }
+ ❯ Function.<anonymous> src/server/core/references.ts:182:12
+ ❯ Function.sqliteTransaction node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/methods/transaction.js:65:24
+ ❯ CoreContext.transaction src/server/core/shared.ts:74:43
+ ❯ ReferenceService.createCharacter src/server/core/references.ts:178:19
+ ❯ tests/character-video.test.ts:95:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/character-video.test.ts > rejects the whole mixed character in current image model input without a quote, job or credit reservation
+AppError: 参考素材必须是图片
+ ❯ ReferenceService.images src/server/core/references.ts:21:39
+     19|     for (const aid of ids) {
+     20|       const row = this.c.resource('assets', wid, aid);
+     21|       if (row.kind !== 'image') throw new AppError(400, 'IMAGE_REQUIRE…
+       |                                       ^
+     22|     }
+     23|   }
+ ❯ Function.<anonymous> src/server/core/references.ts:182:12
+ ❯ Function.sqliteTransaction node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/methods/transaction.js:65:24
+ ❯ CoreContext.transaction src/server/core/shared.ts:74:43
+ ❯ ReferenceService.createCharacter src/server/core/references.ts:178:19
+ ❯ tests/character-video.test.ts:109:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 1 passed (6)
+   Start at  17:47:11
+   Duration  1.15s (tests 52%, import 40%, transform 8%)

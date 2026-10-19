@@ -1,0 +1,21 @@
+{
+  "fullSuite": {
+    "passed": 96,
+    "failed": 0,
+    "archive": "e2e/20261016T102637Z-final-full",
+    "state": "Before final two brand static-copy changes"
+  },
+  "finalCopyTarget": {
+    "passed": 4,
+    "failed": 0,
+    "archive": "e2e/20261016T102847Z-final-copy"
+  },
+  "productionFilesChangedAfterFullSuite": [
+    "src/web/lib/workflow-translations.ts",
+    "src/web/pages/Identities.tsx"
+  ],
+  "fullProductionHash": "56f51508f50a1e620f2e8f4bad3ad0ee61b817f4759470e9827839ed365cd8c7",
+  "finalProductionHash": "d876cd6c177ad37039098a04fdff38fb5250a0fa8f68dc4e224dac60a742eab6",
+  "unitTests": "Root owns final 728/728 result, not rerun after static-copy changes.",
+  "checks": "Final-copy typecheck/lint/format/build passed; final runtime result recorded separately."
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "node",
+    "-e",
+    "const {createRequire}=require(\"node:module\"); const req=createRequire(require.resolve(\"vite/package.json\")); req(\"rollup\"); const Database=require(\"better-sqlite3\"); const db=new Database(\":memory:\"); console.log(JSON.stringify({runtime:process.version,architecture:process.arch,rollup:\"loaded\",sqlite:db.prepare(\"select sqlite_version() as version\").get()})); db.close(); const sharp=require(\"sharp\"); console.log(JSON.stringify({sharp:sharp.versions.sharp,vips:sharp.versions.vips}));"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:29:56.353718+00:00",
+  "endedUtc": "2026-10-16T06:29:57.294479+00:00",
+  "elapsedSeconds": 0.941,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "native-load.txt"
+}

@@ -1,0 +1,19 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "tests/product-errors.test.ts",
+    "tests/product-messages.test.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T10:18:43.392091+00:00",
+  "endedUtc": "2026-10-16T10:18:43.918148+00:00",
+  "elapsedSeconds": 0.526,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "product-errors-final.txt"
+}

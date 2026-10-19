@@ -1,0 +1,20 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "tests/identity-auth.test.ts",
+    "tests/aliyun-sms.test.ts",
+    "tests/wechat-gateway.test.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:15:53.907523+00:00",
+  "endedUtc": "2026-10-16T08:15:57.305491+00:00",
+  "elapsedSeconds": 3.398,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "identity-root-review-green.txt"
+}

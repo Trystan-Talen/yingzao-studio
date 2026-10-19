@@ -1,0 +1,18 @@
+{
+  "command": [
+    "pnpm",
+    "test:e2e",
+    "brand-quota.spec.ts",
+    "character-video.spec.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T10:14:44.191566+00:00",
+  "endedUtc": "2026-10-16T10:15:55.120046+00:00",
+  "elapsedSeconds": 70.929,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1",
+    "PATHPrefix": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "output": "brand-person-final-target.txt"
+}

@@ -1,0 +1,9 @@
+$ pnpm exec vitest run tests/character-video.test.ts tests/quality-workflows.test.ts tests/core.test.ts tests/tasks.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  4 passed (4)
+      Tests  73 passed (73)
+   Start at  17:55:43
+   Duration  8.31s (tests 73%, import 25%, transform 2%)

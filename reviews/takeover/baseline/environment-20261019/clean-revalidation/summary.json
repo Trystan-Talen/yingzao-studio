@@ -1,0 +1,114 @@
+{
+  "clientDate": "2026-10-19",
+  "recordedAtExecutionClock": "2026-10-19T02:21:13.126976+00:00",
+  "source": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "stage": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+  "status": "passed",
+  "reuse": "Reused the separate installation created and verified on 2026-10-16; no new install, lockfile update or dependency copy.",
+  "copiedRoots": [
+    "src",
+    "scripts",
+    "migrations",
+    "public",
+    "tests"
+  ],
+  "copiedConfiguration": [
+    "index.html",
+    "tsconfig.json",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "eslint.config.js"
+  ],
+  "copiedFiles": 328,
+  "dependencyManifestsBefore": {
+    "package.json": {
+      "source": "cbca9be6c6702969a6ddbc6be14eb5f9eb73ab45b0e7f26385f109f175e228e5",
+      "stage": "cbca9be6c6702969a6ddbc6be14eb5f9eb73ab45b0e7f26385f109f175e228e5"
+    },
+    "pnpm-lock.yaml": {
+      "source": "efe06e8a4c4a4a4d16775741ee5dc8be4284811ab40c528f9ef68c23c41f883f",
+      "stage": "efe06e8a4c4a4a4d16775741ee5dc8be4284811ab40c528f9ef68c23c41f883f"
+    },
+    "pnpm-workspace.yaml": {
+      "source": "02184f621ea6e5c1d963beb11bfefd6dd74f52de716e2f1591506d3fa3b259de",
+      "stage": "02184f621ea6e5c1d963beb11bfefd6dd74f52de716e2f1591506d3fa3b259de"
+    }
+  },
+  "installedPackageManifestFiles": 671,
+  "environment": "Minimal inherited allowlist; no provider, payment, identity, email, database or storage configuration inherited.",
+  "sourceHashMismatches": [],
+  "commands": [
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "startedAtExecutionClock": "2026-10-19T02:21:13.128132+00:00",
+      "elapsedSeconds": 5.529,
+      "exitCode": 0,
+      "output": "typecheck.txt"
+    },
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "startedAtExecutionClock": "2026-10-19T02:21:18.657587+00:00",
+      "elapsedSeconds": 2.833,
+      "exitCode": 0,
+      "output": "build.txt"
+    },
+    {
+      "name": "runtime",
+      "command": [
+        "pnpm",
+        "verify:runtime"
+      ],
+      "startedAtExecutionClock": "2026-10-19T02:21:36.749290+00:00",
+      "elapsedSeconds": 1.501,
+      "exitCode": 0,
+      "output": "runtime.txt"
+    },
+    {
+      "name": "typecheck-final",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "startedAtExecutionClock": "2026-10-19T02:23:34.022935+00:00",
+      "elapsedSeconds": 5.367,
+      "exitCode": 0,
+      "output": "typecheck-final.txt"
+    }
+  ],
+  "installedPackageManifestsUnchanged": true,
+  "dependencyManifestsAfter": {
+    "package.json": {
+      "source": "cbca9be6c6702969a6ddbc6be14eb5f9eb73ab45b0e7f26385f109f175e228e5",
+      "stage": "cbca9be6c6702969a6ddbc6be14eb5f9eb73ab45b0e7f26385f109f175e228e5"
+    },
+    "pnpm-lock.yaml": {
+      "source": "efe06e8a4c4a4a4d16775741ee5dc8be4284811ab40c528f9ef68c23c41f883f",
+      "stage": "efe06e8a4c4a4a4d16775741ee5dc8be4284811ab40c528f9ef68c23c41f883f"
+    },
+    "pnpm-workspace.yaml": {
+      "source": "02184f621ea6e5c1d963beb11bfefd6dd74f52de716e2f1591506d3fa3b259de",
+      "stage": "02184f621ea6e5c1d963beb11bfefd6dd74f52de716e2f1591506d3fa3b259de"
+    }
+  },
+  "dependencyManifestsUnchanged": true,
+  "verifiedInPlaceFiles": 1,
+  "synchronizedOrVerifiedFiles": 329,
+  "missingPreviousFiles": [],
+  "addedSincePreviousSnapshot": [
+    "tests/e2e/library-canvas-review.spec.ts",
+    "tests/e2e/material-designs.spec.ts",
+    "tests/e2e/onboarding-defaults.spec.ts"
+  ],
+  "sourceSnapshotFinal": "source-snapshot-final.json",
+  "productionSourceChangedAfterBuild": [],
+  "completedAtExecutionClock": "2026-10-19T02:23:39.405565+00:00"
+}

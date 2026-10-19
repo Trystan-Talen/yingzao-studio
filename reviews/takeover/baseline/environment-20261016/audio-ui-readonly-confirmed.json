@@ -1,0 +1,18 @@
+{
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "var/e2e/audio-ui-review.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:23:32.118172+00:00",
+  "endedUtc": "2026-10-16T08:23:36.398007+00:00",
+  "elapsedSeconds": 4.28,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1",
+    "PATHPrefix": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "output": "audio-ui-readonly-confirmed.txt"
+}

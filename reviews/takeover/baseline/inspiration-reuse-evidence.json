@@ -1,0 +1,57 @@
+{
+  "project": {
+    "id": "ecfb9a83-25b1-41ac-8432-ad6c1ceaf2ed",
+    "name": "把清晨，装进一滴精华",
+    "kind": "image",
+    "description": "为植物修护精华创作一张清新自然的商业摄影。透明玻璃瓶置于浅色石台，柔和晨光穿过绿色叶片，在瓶身留下精致水珠。清晰展现产品质感，空间简洁，保留适量排版留白。"
+  },
+  "message": {
+    "role": "user",
+    "metadata": {
+      "inspirationId": "botanical-serum",
+      "draft": {
+        "operation": "image.generate",
+        "providerId": "openai",
+        "projectId": "ecfb9a83-25b1-41ac-8432-ad6c1ceaf2ed",
+        "prompt": "为植物修护精华创作一张清新自然的商业摄影。透明玻璃瓶置于浅色石台，柔和晨光穿过绿色叶片，在瓶身留下精致水珠。清晰展现产品质感，空间简洁，保留适量排版留白。",
+        "assetIds": [
+          "6eef31e7-7881-478f-b1a7-d61e4e032d15"
+        ],
+        "referenceAssetIds": [],
+        "options": {
+          "kind": "single",
+          "assistantMode": "ideas",
+          "ratio": "2:3",
+          "count": 1,
+          "resolution": "1K",
+          "duration": 5,
+          "language": "zh-CN",
+          "forceTranslation": false,
+          "platform": "通用电商",
+          "channel": "premium",
+          "needText": true,
+          "referenceMode": "all",
+          "scale": 2,
+          "strength": "standard",
+          "background": "#ffffff",
+          "format": "png",
+          "trimStart": 0,
+          "replacementType": "product",
+          "keepMusicRhythm": true,
+          "mode": "creative"
+        }
+      }
+    }
+  },
+  "asset": {
+    "id": "6eef31e7-7881-478f-b1a7-d61e4e032d15",
+    "name": "灵感参考 · 把清晨，装进一滴精华.webp",
+    "mime_type": "image/webp",
+    "width": 1000,
+    "height": 1500,
+    "byte_size": 171038,
+    "source": "import"
+  },
+  "mediaExists": true,
+  "jobs": 0
+}

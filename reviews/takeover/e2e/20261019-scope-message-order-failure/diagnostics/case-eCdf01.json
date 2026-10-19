@@ -1,0 +1,18 @@
+{
+  "errors": [],
+  "failedRequests": [],
+  "responses": [
+    {
+      "path": "/api/v1/brands/ea0e7f22-1991-4b5a-810b-a0f306e6fa48/restore",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/brands/1934ba3f-606c-47d4-9ef7-a78a966466f3/restore",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/brands/1934ba3f-606c-47d4-9ef7-a78a966466f3/restore",
+      "status": 409
+    }
+  ]
+}

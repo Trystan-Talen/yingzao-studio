@@ -1,0 +1,164 @@
+{
+  "sourceRun": "platform/var/e2e/run-scope-green-r9mc1i60",
+  "passed": 8,
+  "failed": 0,
+  "scope": "Same production build, test corrected to read newest message and await real POST. Brand 4, onboarding 2, marketing/free 2.",
+  "productionChangesByThisSlice": [],
+  "externalServices": "disabled; browser requests allowed only isolated loopback",
+  "privateArtifactsOmitted": [
+    "SQLite databases",
+    "session/config files",
+    "traces",
+    "videos",
+    "uploaded original files"
+  ],
+  "screenshots": [
+    {
+      "file": "screenshots/case-4SDfkC-brand-quota-ar.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "58f5f9c862d468dcd3a95f65157a50f2973d091f74a4f77730dd4fa27dbdd4ae"
+    },
+    {
+      "file": "screenshots/case-4SDfkC-brand-quota-en.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "317ca6b502fcfda9c4600dfce683c84858e079b8ef1edf122788834db9c80b5a"
+    },
+    {
+      "file": "screenshots/case-HUpDpv-onboarding-defaults-new-project.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "b13c181eeee731e1fa0ec4bd1531343f8f070deb4357bb23d01c7534a5f60b06"
+    },
+    {
+      "file": "screenshots/case-HYAorU-onboarding-defaults-new-project.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "08ec6f601e04b7a356c8a531db35e8a1bfc4f0cd43e748d7681fd96ba4b5fe42"
+    },
+    {
+      "file": "screenshots/case-J8We1Y-brand-recovery-races.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "68b3edee3d01f99222f7c97369269d56b9f471823dec67922b130ac82081a727"
+    },
+    {
+      "file": "screenshots/case-UFYyvk-brand-quota-ar.png",
+      "pixels": [
+        1170,
+        3084
+      ],
+      "sha256": "12904aea288755e844d378781839180e362eb9fe233949eaeabf34af058f1627"
+    },
+    {
+      "file": "screenshots/case-UFYyvk-brand-quota-en.png",
+      "pixels": [
+        1170,
+        3144
+      ],
+      "sha256": "9e4117247a7d60d17782b5c3630f0b8ef035312a20eaf2eabcaff0b5ccb1c1d2"
+    },
+    {
+      "file": "screenshots/case-VPtfaq-free-creation-marketing-draft-retained.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "55c11c7f4217a0635c5ecb17f26441f03c6f9438f9d7260e3ba3fffbb9b87f84"
+    },
+    {
+      "file": "screenshots/case-VPtfaq-marketing-modules-restored.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "6b33f288c9c7a8bdb38765bdf088ebefbf95bbb8d1412ec19df8546cb9369dda"
+    },
+    {
+      "file": "screenshots/case-d0C45T-brand-recovery-races.png",
+      "pixels": [
+        1170,
+        4266
+      ],
+      "sha256": "629535d472e6ca79c5cb4c2f38b03a5fa95010515db6b604328178dd98c3cdf3"
+    },
+    {
+      "file": "screenshots/case-wu0SmE-free-creation-marketing-draft-retained.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "2e9584b5842074164eea62a57363fd649a475418ad323f645492feb627312a5b"
+    },
+    {
+      "file": "screenshots/case-wu0SmE-marketing-modules-restored.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "e9b140df4f14809fde3be8df560c19839c29210f3e32ac8c36946f8c449a0f23"
+    }
+  ],
+  "diagnostics": [
+    {
+      "file": "diagnostics/case-4SDfkC.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 3
+    },
+    {
+      "file": "diagnostics/case-HUpDpv.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-HYAorU.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-J8We1Y.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 2
+    },
+    {
+      "file": "diagnostics/case-UFYyvk.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 3
+    },
+    {
+      "file": "diagnostics/case-VPtfaq.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-d0C45T.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 2
+    },
+    {
+      "file": "diagnostics/case-wu0SmE.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    }
+  ],
+  "uncaughtExceptions": 0
+}

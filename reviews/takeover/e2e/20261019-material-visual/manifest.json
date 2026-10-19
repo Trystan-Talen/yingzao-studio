@@ -1,0 +1,80 @@
+{
+  "sourceRun": "platform/var/e2e/run-material-visual-12da3_50",
+  "passed": 2,
+  "failed": 0,
+  "scope": "Same production build; additional first/last module screenshots only.",
+  "productionChangesByThisSlice": [],
+  "externalServices": "disabled; browser requests allowed only isolated loopback",
+  "privateArtifactsOmitted": [
+    "SQLite databases",
+    "session/config files",
+    "traces",
+    "videos",
+    "uploaded original files"
+  ],
+  "screenshots": [
+    {
+      "file": "screenshots/case-FFcqkX-marketing-final-module.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "d130d3e11feabf79da4df02f9bbb0347a23dacd0f7a212c70553379595693883"
+    },
+    {
+      "file": "screenshots/case-FFcqkX-free-creation-marketing-draft-retained.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "2e9584b5842074164eea62a57363fd649a475418ad323f645492feb627312a5b"
+    },
+    {
+      "file": "screenshots/case-FFcqkX-marketing-modules-restored.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "c314d35eb555502de7d00b2ed18333ee8ee4e346b52486a8b28f32434d26faf9"
+    },
+    {
+      "file": "screenshots/case-sGhV57-marketing-final-module.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "1886d10e1fa2ff03f41679147bd1dcc7f3475629e587b03ca369688da239d9d4"
+    },
+    {
+      "file": "screenshots/case-sGhV57-free-creation-marketing-draft-retained.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "55c11c7f4217a0635c5ecb17f26441f03c6f9438f9d7260e3ba3fffbb9b87f84"
+    },
+    {
+      "file": "screenshots/case-sGhV57-marketing-modules-restored.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "e3eacf956a9fee3b790041bdb86c8d81baf91e54062b0d20cbda751c54a8d333"
+    }
+  ],
+  "diagnostics": [
+    {
+      "file": "diagnostics/case-FFcqkX.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-sGhV57.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    }
+  ],
+  "uncaughtExceptions": 0
+}

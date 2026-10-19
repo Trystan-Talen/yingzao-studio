@@ -1,0 +1,101 @@
+{
+  "sourceRun": "platform/var/e2e/run-mFSATm",
+  "passed": 10,
+  "failed": 0,
+  "failureExpectation": null,
+  "screenshots": [
+    {
+      "file": "screenshots/mobile-team-roles-ar.png",
+      "pixels": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "file": "screenshots/desktop-team-roles-en.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-team-roles-ar.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-team-roles-en.png",
+      "pixels": [
+        1170,
+        2532
+      ]
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/notifications",
+          "status": 503
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/notifications",
+          "status": 503
+        }
+      ]
+    }
+  ],
+  "data": "isolated fictional test accounts; no source databases or configuration copied",
+  "reportIncludes": "HTML report and its referenced test screenshots/videos; synthetic isolated data only"
+}

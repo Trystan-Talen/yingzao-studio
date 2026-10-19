@@ -1,0 +1,9 @@
+{
+  "files": {
+    "platform/src/web/pages/Usage.tsx": "0f7c6d6aa7aefa6aaf32e0e8ec9bcfd323515c4cef941d20ce1b10b41d19dd31",
+    "platform/tests/e2e/credits-locale.spec.ts": "6805c53bf8a35396702f29630fb7d35998a91abe572a71dbdadc2b0f08698be7",
+    "platform/src/web/components/ReferralDetails.tsx": "c63ff099fb0595f74d95a80b16afdb3208e37017d928304fd132ecc7fa27964e",
+    "platform/src/web/lib/credit-translations.ts": "97c57c53cd58445e538be760f445e37d124ba8e88174bce09c1793990cbb18e5"
+  },
+  "note": "Hashes identify final reviewed display/test code and parent-owned dictionary. No source configuration or databases included."
+}

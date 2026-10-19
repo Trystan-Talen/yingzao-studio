@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "test"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:30:13.877753+00:00",
+  "endedUtc": "2026-10-16T06:35:32.222271+00:00",
+  "elapsedSeconds": 318.341,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "test.txt"
+}

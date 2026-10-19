@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "test:e2e",
+    "credits-locale.spec.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T09:02:51.162653+00:00",
+  "endedUtc": "2026-10-16T09:03:48.259301+00:00",
+  "elapsedSeconds": 57.098,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "credits-locale-green.txt"
+}

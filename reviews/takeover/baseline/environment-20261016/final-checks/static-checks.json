@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-16",
+  "workingDirectory": "platform",
+  "initial": [
+    { "command": "pnpm typecheck", "exitCode": 0 },
+    { "command": "pnpm lint", "exitCode": 0 },
+    { "command": "pnpm format:check", "exitCode": 1, "warnings": ["src/server/providers/openai.ts", "tests/billing-channel.test.ts", "tests/credit-grant-reversal.test.ts", "tests/e2e/upload-recovery.spec.ts"] }
+  ],
+  "repair": "Applied the existing formatter only to the four reported files; no assertions or behavior changed.",
+  "final": [
+    { "command": "pnpm typecheck", "exitCode": 0 },
+    { "command": "pnpm lint", "exitCode": 0 },
+    { "command": "pnpm format:check", "exitCode": 0 },
+    { "command": "git diff --check", "exitCode": 0 }
+  ],
+  "boundary": "Includes the frozen product source and latest browser test files. Any later test-only edits receive a final follow-up static check before commit."
+}

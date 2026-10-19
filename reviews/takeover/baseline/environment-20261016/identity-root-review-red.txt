@@ -1,0 +1,53 @@
+$ pnpm exec vitest run tests/identity-auth.test.ts -t old login code|local detach
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/identity-auth.test.ts (26 tests | 2 failed | 24 skipped) 339ms
+   × rejects an old login code after the phone is detached from A and explicitly bound to B 236ms
+   × allows password-proven local detach when external providers are disabled and makes no gateway call 102ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/identity-auth.test.ts > rejects an old login code after the phone is detached from A and explicitly bound to B
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ tests/identity-auth.test.ts:188:111
+    186|   time += 61_000;
+    187|   await bindPhone(other.current);
+    188|   expect(() => service().verifySms({ challengeId: old.challengeId, cod…
+       |                                                                                                               ^
+    189|   expect(sql().prepare('SELECT user_id FROM phone_identities').get()).…
+    190| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/identity-auth.test.ts > allows password-proven local detach when external providers are disabled and makes no gateway call
+AssertionError: promise rejected "AppError: 短信登录尚未启用或配置不完整 { …(3) }" instead of resolving
+ ❯ tests/identity-auth.test.ts:198:69
+    196|   const count = sent.length, wxCount = exchanges.length;
+    197|   const disabled = createIdentityAuthService(db(), core(), { ...config…
+    198|   await expect(disabled.unlink('sms', { password }, account.current)).…
+       |                                                                     ^
+    199|   await expect(disabled.unlink('wechat', { password }, account.current…
+    200|   expect(sql().prepare('SELECT count(*) n FROM phone_identities').get(…
+
+Caused by: AppError: 短信登录尚未启用或配置不完整
+ ❯ ready src/server/auth/identity/service.ts:169:13
+ ❯ Object.unlink src/server/auth/identity/service.ts:693:5
+ ❯ tests/identity-auth.test.ts:198:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { statusCode: 503, code: 'IDENTITY_NOT_CONFIGURED', details: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 24 skipped (26)
+   Start at  16:13:44
+   Duration  1.20s (import 62%, tests 30%, transform 8%)

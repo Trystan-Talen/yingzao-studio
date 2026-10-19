@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "test"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:11:49.781044+00:00",
+  "endedUtc": "2026-10-16T08:12:34.516501+00:00",
+  "elapsedSeconds": 44.738,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1",
+    "PATHPrefix": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "output": "takeover-integrated-tests.txt"
+}

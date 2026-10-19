@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "tests/identity-auth.test.ts",
+    "tests/password-recovery.test.ts",
+    "tests/google-oidc.test.ts",
+    "tests/mail-outbox.test.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T07:54:12.895947+00:00",
+  "endedUtc": "2026-10-16T07:54:20.704863+00:00",
+  "elapsedSeconds": 7.809,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "identity-auth-first-green.txt"
+}

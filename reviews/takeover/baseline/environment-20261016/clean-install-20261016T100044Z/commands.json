@@ -1,0 +1,18 @@
+[
+  {
+    "name": "install",
+    "command": [
+      "pnpm",
+      "install",
+      "--offline",
+      "--frozen-lockfile",
+      "--store-dir",
+      "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/\u751f\u56fe\u751f\u89c6\u9891/platform/.pnpm-store"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/\u751f\u56fe\u751f\u89c6\u9891/platform/var/takeover/final-validation/20261016T100044Z/clean-platform",
+    "startedUtc": "2026-10-16T10:00:44.716665+00:00",
+    "elapsedSeconds": 6.494,
+    "exitCode": 1,
+    "output": "install.txt"
+  }
+]

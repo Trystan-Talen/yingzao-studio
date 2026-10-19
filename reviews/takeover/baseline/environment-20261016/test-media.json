@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "test"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:35:57.989050+00:00",
+  "endedUtc": "2026-10-16T06:36:15.801100+00:00",
+  "elapsedSeconds": 17.812,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1",
+    "PATHPrefix": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "output": "test-media.txt"
+}

@@ -1,0 +1,61 @@
+{
+  "scenario": "server accepted response lost then browser refresh and read-only recovery",
+  "jobs": [
+    {
+      "id": "c4191041-bd3d-4543-bdc9-c5ddb1b746f8",
+      "operation": "local.resize",
+      "status": "succeeded",
+      "request_id": "ee16c0a5-6ae8-42ae-8187-ebb54db626ac",
+      "requested_credits": 0,
+      "settled_credits": 0,
+      "input_json": "{\"operation\":\"local.resize\",\"providerId\":\"local\",\"prompt\":\"恢复验收：丢弃提交响应只执行一次\",\"assetIds\":[\"d024992a-a11b-49a7-a66b-9b425be98ccd\"],\"referenceAssetIds\":[],\"options\":{\"model\":\"sharp\",\"kind\":\"free\",\"assistantMode\":\"ideas\",\"ratio\":\"1:1\",\"count\":1,\"resolution\":\"720p\",\"duration\":5,\"language\":\"en\",\"languages\":[\"en\"],\"forceTranslation\":false,\"platform\":\"通用电商\",\"channel\":\"premium\",\"needText\":true,\"referenceMode\":\"all\",\"scale\":2,\"strength\":\"standard\",\"colors\":[\"#426856\"],\"background\":\"#ffffff\",\"width\":320,\"height\":240,\"format\":\"png\",\"trimStart\":0,\"trimEnd\":5,\"sellingPoints\":\"\",\"price\":\"\",\"replacementType\":\"product\",\"keepMusicRhythm\":true,\"mode\":\"creative\"}}"
+    }
+  ],
+  "count": 1,
+  "items": [
+    {
+      "id": "198ef0dd-4596-4117-8249-fd4f136f8ba1",
+      "status": "succeeded",
+      "asset_id": "e13c8582-51f3-4b19-aead-d3b0ec38d099"
+    }
+  ],
+  "assets": [
+    {
+      "id": "e13c8582-51f3-4b19-aead-d3b0ec38d099",
+      "width": 160,
+      "height": 240,
+      "mime_type": "image/png",
+      "byte_size": 101937
+    }
+  ],
+  "ledger": [
+    {
+      "id": "0b722f44-5f76-41d9-99f9-b1feae9fec1a",
+      "workspace_id": "4b8cd9ef-0532-489a-a888-7bd03522b426",
+      "user_id": "1a3abdf7-6094-46a3-b5f1-c6e54276c766",
+      "job_id": "c4191041-bd3d-4543-bdc9-c5ddb1b746f8",
+      "item_id": "198ef0dd-4596-4117-8249-fd4f136f8ba1",
+      "event_key": "reserve:198ef0dd-4596-4117-8249-fd4f136f8ba1",
+      "kind": "reserve",
+      "amount": 0,
+      "balance_after": 1000,
+      "reserved_after": 0,
+      "description": "任务额度预留",
+      "created_at": "2026-10-16T07:09:22.787Z"
+    },
+    {
+      "id": "bede0fb2-c02f-4774-b8c2-1ab543c1d9ff",
+      "workspace_id": "4b8cd9ef-0532-489a-a888-7bd03522b426",
+      "user_id": "1a3abdf7-6094-46a3-b5f1-c6e54276c766",
+      "job_id": "c4191041-bd3d-4543-bdc9-c5ddb1b746f8",
+      "item_id": "198ef0dd-4596-4117-8249-fd4f136f8ba1",
+      "event_key": "final:198ef0dd-4596-4117-8249-fd4f136f8ba1",
+      "kind": "settle",
+      "amount": 0,
+      "balance_after": 1000,
+      "reserved_after": 0,
+      "description": "任务已完成，结算额度",
+      "created_at": "2026-10-16T07:09:23.321Z"
+    }
+  ]
+}

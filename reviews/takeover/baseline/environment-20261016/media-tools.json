@@ -1,0 +1,117 @@
+{
+  "installedUtc": "2026-10-16T06:35:26.363297+00:00",
+  "sourcePage": "https://ffmpeg.martin-riedl.de/",
+  "version": "9.0.2",
+  "target": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64",
+  "programs": [
+    {
+      "program": "ffmpeg",
+      "source": "https://ffmpeg.martin-riedl.de/download/macos/arm64/1789931890_9.0.2/ffmpeg.zip",
+      "checksumSource": "https://ffmpeg.martin-riedl.de/download/macos/arm64/1789931890_9.0.2/ffmpeg.zip.sha256",
+      "archiveSha256": "c8ed4c4e6978a03c485edbfe4e0a5dc2380f8a30bba5150531b31b094492d924",
+      "binarySha256": "2e11c6f90993cdb79fff84d3f90044d28316b310e75b3e030cfc9a54f2c9d384",
+      "binary": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg",
+      "validation": [
+        {
+          "command": [
+            "file",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg"
+          ],
+          "exitCode": 0,
+          "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg: Mach-O 64-bit executable arm64\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--verbose=4",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg"
+          ],
+          "exitCode": 0,
+          "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg: valid on disk\n/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg: satisfies its Designated Requirement\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "-dvvv",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg"
+          ],
+          "exitCode": 0,
+          "output": "Executable=/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg\nIdentifier=ffmpeg\nFormat=Mach-O thin (arm64)\nCodeDirectory v=20500 size=514258 flags=0x10000(runtime) hashes=16065+2 location=embedded\nHash type=sha256 size=32\nCandidateCDHash sha256=fd85e48d3177aaef58277f1055fe570634146169\nCandidateCDHashFull sha256=fd85e48d3177aaef58277f1055fe57063414616933ebf017acaf7363265fba17\nHash choices=sha256\nCMSDigest=fd85e48d3177aaef58277f1055fe57063414616933ebf017acaf7363265fba17\nCMSDigestType=2\nCDHash=fd85e48d3177aaef58277f1055fe570634146169\nSignature size=8974\nAuthority=Developer ID Application: Martin Riedl (KU3N25YGLU)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=21 Sep 2026 at 03:13:57\nInfo.plist=not bound\nTeamIdentifier=KU3N25YGLU\nRuntime Version=12.3.0\nSealed Resources=none\nInternal requirements count=1 size=168\n"
+        },
+        {
+          "command": [
+            "xattr",
+            "-l",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg"
+          ],
+          "exitCode": 0,
+          "output": "com.apple.provenance: \u0001\u0002\n"
+        },
+        {
+          "command": [
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffmpeg",
+            "-version"
+          ],
+          "exitCode": 0,
+          "output": "ffmpeg version 9.0.2-https://www.martin-riedl.de Copyright (c) 2000-2026 the FFmpeg developers\nbuilt with Apple clang version 14.0.0 (clang-1400.0.29.102)\nconfiguration: --prefix=/Volumes/ffmpeg_arm64/out --pkg-config-flags=--static --extra-version='https://www.martin-riedl.de' --enable-gray --enable-libxml2 --enable-version3 --enable-gpl --enable-openssl --enable-libfreetype --enable-fontconfig --enable-libharfbuzz --enable-libbluray --enable-libsnappy --enable-libsrt --enable-libvmaf --enable-libass --enable-libklvanc --enable-libzimg --enable-libzvbi --enable-libaom --enable-libdav1d --enable-libopenh264 --enable-libopenjpeg --enable-librav1e --enable-libsvtav1 --enable-libvpx --enable-libvvenc --enable-libwebp --enable-libx264 --enable-libx265 --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libtheora\nlibavutil      61.  1.102 / 61.  1.102\nlibavcodec     63.  1.102 / 63.  1.102\nlibavformat    63.  1.102 / 63.  1.102\nlibavdevice    63.  1.102 / 63.  1.102\nlibavfilter    12.  1.102 / 12.  1.102\nlibswscale     10.  1.102 / 10.  1.102\nlibswresample   7.  1.102 /  7.  1.102\n\nExiting with exit code 0\n"
+        }
+      ]
+    },
+    {
+      "program": "ffprobe",
+      "source": "https://ffmpeg.martin-riedl.de/download/macos/arm64/1789931890_9.0.2/ffprobe.zip",
+      "checksumSource": "https://ffmpeg.martin-riedl.de/download/macos/arm64/1789931890_9.0.2/ffprobe.zip.sha256",
+      "archiveSha256": "fcbe839537485eaee7a7a8bc5cbc0f90d53617e80943e8a5b2e31cb851197ea6",
+      "binarySha256": "2738aa46a7f9acbc8ab09a6715554c90f7de603171ac403726765685df6a0059",
+      "binary": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe",
+      "validation": [
+        {
+          "command": [
+            "file",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe"
+          ],
+          "exitCode": 0,
+          "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe: Mach-O 64-bit executable arm64\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "--verify",
+            "--verbose=4",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe"
+          ],
+          "exitCode": 0,
+          "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe: valid on disk\n/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe: satisfies its Designated Requirement\n"
+        },
+        {
+          "command": [
+            "codesign",
+            "-dvvv",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe"
+          ],
+          "exitCode": 0,
+          "output": "Executable=/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe\nIdentifier=ffprobe\nFormat=Mach-O thin (arm64)\nCodeDirectory v=20500 size=512915 flags=0x10000(runtime) hashes=16023+2 location=embedded\nHash type=sha256 size=32\nCandidateCDHash sha256=534bd248fb5077bea5a523a2a6b79fd98bfcb8fd\nCandidateCDHashFull sha256=534bd248fb5077bea5a523a2a6b79fd98bfcb8fd33e0d688c06cccd8ce1e9fe9\nHash choices=sha256\nCMSDigest=534bd248fb5077bea5a523a2a6b79fd98bfcb8fd33e0d688c06cccd8ce1e9fe9\nCMSDigestType=2\nCDHash=534bd248fb5077bea5a523a2a6b79fd98bfcb8fd\nSignature size=8973\nAuthority=Developer ID Application: Martin Riedl (KU3N25YGLU)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=21 Sep 2026 at 03:13:57\nInfo.plist=not bound\nTeamIdentifier=KU3N25YGLU\nRuntime Version=12.3.0\nSealed Resources=none\nInternal requirements count=1 size=168\n"
+        },
+        {
+          "command": [
+            "xattr",
+            "-l",
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe"
+          ],
+          "exitCode": 0,
+          "output": "com.apple.provenance: \u0001\u0002\n"
+        },
+        {
+          "command": [
+            "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin/ffprobe",
+            "-version"
+          ],
+          "exitCode": 0,
+          "output": "ffprobe version 9.0.2-https://www.martin-riedl.de Copyright (c) 2007-2026 the FFmpeg developers\nbuilt with Apple clang version 14.0.0 (clang-1400.0.29.102)\nconfiguration: --prefix=/Volumes/ffmpeg_arm64/out --pkg-config-flags=--static --extra-version='https://www.martin-riedl.de' --enable-gray --enable-libxml2 --enable-version3 --enable-gpl --enable-openssl --enable-libfreetype --enable-fontconfig --enable-libharfbuzz --enable-libbluray --enable-libsnappy --enable-libsrt --enable-libvmaf --enable-libass --enable-libklvanc --enable-libzimg --enable-libzvbi --enable-libaom --enable-libdav1d --enable-libopenh264 --enable-libopenjpeg --enable-librav1e --enable-libsvtav1 --enable-libvpx --enable-libvvenc --enable-libwebp --enable-libx264 --enable-libx265 --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libtheora\nlibavutil      61.  1.102 / 61.  1.102\nlibavcodec     63.  1.102 / 63.  1.102\nlibavformat    63.  1.102 / 63.  1.102\nlibavdevice    63.  1.102 / 63.  1.102\nlibavfilter    12.  1.102 / 12.  1.102\nlibswscale     10.  1.102 / 10.  1.102\nlibswresample   7.  1.102 /  7.  1.102\n"
+        }
+      ]
+    }
+  ],
+  "globalConfigurationChanged": false
+}

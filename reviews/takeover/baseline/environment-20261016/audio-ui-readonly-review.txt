@@ -1,0 +1,26 @@
+$ node --import tsx var/e2e/audio-ui-review.ts
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at captureRawStack (/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/playwright-core@1.64.1/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+    at callMatcherAsStep (/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/playwright@1.64.1/node_modules/playwright/lib/matchers/expect.js:13316:57)
+    at Object.toBe (/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/playwright@1.64.1/node_modules/playwright/lib/matchers/expect.js:13308:23)
+    at <anonymous> (/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/audio-ui-review.ts:46:105) {
+  matcherResult: {
+    actual: false,
+    expected: true,
+    message: 'expect(received).toBe(expected) // Object.is equality\n' +
+      '\n' +
+      'Expected: true\n' +
+      'Received: false',
+    name: 'toBe',
+    pass: false
+  }
+}
+
+Node.js v22.23.1

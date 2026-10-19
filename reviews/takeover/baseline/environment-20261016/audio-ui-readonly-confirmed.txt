@@ -1,0 +1,2 @@
+$ node --import tsx var/e2e/audio-ui-review.ts
+{"passed":true,"viewport":[390,844],"externalRequests":[],"jobs":{"n":0},"hasSavedAudio":true,"hasSavedGeneratedAudio":true,"folder":"/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/audio-ui-review-oxIluP"}

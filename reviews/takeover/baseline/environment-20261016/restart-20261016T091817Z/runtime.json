@@ -1,0 +1,68 @@
+{
+  "recordedUtc": "2026-10-16T09:22:14.273642+00:00",
+  "before": {
+    "apiPid": 74004,
+    "workerPid": 74027,
+    "stopSignal": "SIGTERM",
+    "confirmedExited": true
+  },
+  "after": {
+    "apiPid": 13276,
+    "workerPid": 13800,
+    "apiExecSession": 17997,
+    "workerExecSession": 66441
+  },
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "commonEnvironment": {
+    "DEMO_MODE": "true",
+    "DATABASE_PATH": "var/takeover/baseline-app/demo.sqlite",
+    "STORAGE_DIR": "var/takeover/baseline-app/media",
+    "HOST": "127.0.0.1",
+    "PORT": "4310",
+    "PUBLIC_ORIGIN": "http://127.0.0.1:5174",
+    "PASSWORD_RECOVERY_ENABLED": "false",
+    "SMS_AUTH_ENABLED": "false",
+    "WECHAT_AUTH_ENABLED": "false",
+    "SMTP_ENABLED": "false",
+    "PATHPrefix": "$PWD/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "commands": {
+    "api": [
+      "node",
+      "--import",
+      "tsx",
+      "src/server/main.ts"
+    ],
+    "worker": [
+      "node",
+      "--import",
+      "tsx",
+      "src/worker/main.ts"
+    ]
+  },
+  "readiness": {
+    "GET /api/v1/health": {
+      "status": 200,
+      "body": {
+        "data": {
+          "status": "ok",
+          "database": "sqlite",
+          "demoMode": true,
+          "ffmpeg": true
+        }
+      }
+    },
+    "GET /api/v1/auth/identity/status": {
+      "status": 200,
+      "smsReady": false,
+      "wechatReady": false
+    },
+    "GET /api/v1/auth/password/status": {
+      "status": 200,
+      "enabled": false
+    },
+    "workerStartup": "confirmed"
+  },
+  "databaseBackupCopiedIntoReview": false,
+  "sourceDatabaseTouched": false
+}

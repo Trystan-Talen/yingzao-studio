@@ -1,0 +1,44 @@
+$ pnpm exec vitest run tests/identity-auth.test.ts tests/password-recovery.test.ts tests/google-oidc.test.ts tests/mail-outbox.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/google-oidc.test.ts (30 tests | 1 failed) 2541ms
+   ❯ Google protocol and cryptographic verification (15)
+     × upgrades the already-applied original 0016 through 0018 without rewriting history or losing accounts and bindings 157ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > upgrades the already-applied original 0016 through 0018 without rewriting history or losing accounts and bindings
+AssertionError: expected { …(12) } to deeply equal { …(11) }
+
+- Expected
++ Received
+
+@@ -2,10 +2,11 @@
+    "active_workspace_id": "c97582bd-6a08-4f97-ba8f-ccf362fe039b",
+    "avatar_asset_id": null,
+    "created_at": "2026-10-16T07:54:14.752Z",
+    "display_name": "Original user",
+    "email": "old@example.local",
++   "email_verified": 0,
+    "id": "11a28bde-c746-4267-a750-30136604f665",
+    "local_password_enabled": 1,
+    "password_hash": "d29925fa6f69772b2b21c5619b9f3905:a82372245e6bf7f353c4d2301ccd52f971caff2da3d0860dec0b39de8bd1a840055e84342167ec550b939343865949f63aa714e0e627a738972100b0c7b17185",
+    "password_revision": 0,
+    "preferences_json": "{\"theme\":\"system\",\"locale\":\"zh-CN\",\"confirmGeneration\":true,\"onboardingCompleted\":false,\"defaultPlatform\":\"通用电商\",\"defaultCreationLanguage\":\"zh-CN\"}",
+
+ ❯ tests/google-oidc.test.ts:293:25
+    291|         .prepare('SELECT * FROM users WHERE id=?')
+    292|         .get(registered.user.id) as Record<string, unknown>;
+    293|       expect(afterUser).toEqual({ ...beforeUser, local_password_enable…
+       |                         ^
+    294|       expect(legacy.sqlite.prepare('SELECT * FROM external_identities'…
+    295|         beforeIdentities,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 70 passed (71)
+   Start at  15:54:13
+   Duration  7.46s (tests 71%, import 27%, transform 2%)

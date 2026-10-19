@@ -1,0 +1,162 @@
+$ pnpm test:e2e character-video.spec.ts
+$ tsx scripts/e2e.ts character-video.spec.ts
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2211 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-DzXZusV4.css                 67.77 kB │ gzip:  13.12 kB
+dist/web/assets/arrow-left-CSmt7-8P.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-C_Ean3uj.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-eLGVAJuH.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-CWB_V5Ve.js            0.33 kB │ gzip:   0.27 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-D9ghmUxf.js                0.39 kB │ gzip:   0.27 kB │ map:     2.02 kB
+dist/web/assets/save-BuuTiqf_.js                    0.40 kB │ gzip:   0.28 kB │ map:     1.33 kB
+dist/web/assets/shield-check-wSswbXVQ.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-TUpuLc-a.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-C6YwgOzc.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-DGT3Eo1F.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-BmmbtBUF.js                 0.59 kB │ gzip:   0.33 kB │ map:     1.83 kB
+dist/web/assets/export-policy-yZFd_9vw.js           1.15 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-DYVDisns.js    2.50 kB │ gzip:   1.37 kB │ map:     7.46 kB
+dist/web/assets/product-messages-Dp7xE8aq.js        2.79 kB │ gzip:   1.02 kB │ map:     5.13 kB
+dist/web/assets/PasswordRecovery-aZRxUgED.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-DAX6MiMI.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-CWqGDn_V.js                  4.02 kB │ gzip:   2.10 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-BBTnHX0p.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-MQyb07qk.js                   4.16 kB │ gzip:   2.11 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-CajsxQ12.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-IrBg2ypO.js        7.72 kB │ gzip:   3.06 kB │ map:    23.36 kB
+dist/web/assets/Settings-DQdO72qt.js               14.04 kB │ gzip:   5.52 kB │ map:    40.50 kB
+dist/web/assets/Inspiration-RLcvLWXD.js            15.56 kB │ gzip:   6.86 kB │ map:    46.46 kB
+dist/web/assets/Developer-DDA0u31c.js              15.64 kB │ gzip:   5.32 kB │ map:    47.80 kB
+dist/web/assets/Team-C1QCPk79.js                   15.80 kB │ gzip:   5.38 kB │ map:    51.87 kB
+dist/web/assets/Identities-C8D_isA1.js             15.86 kB │ gzip:   5.85 kB │ map:    50.54 kB
+dist/web/assets/Support-Cpkvi63-.js                17.68 kB │ gzip:   6.75 kB │ map:    51.55 kB
+dist/web/assets/Workbench-D0UDqumm.js              18.87 kB │ gzip:   7.16 kB │ map:    63.38 kB
+dist/web/assets/AdvancedTools-tLXGr8ng.js          20.43 kB │ gzip:   8.01 kB │ map:    70.21 kB
+dist/web/assets/Library-BAsiCPa5.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Usage-T3izfbyq.js                  29.37 kB │ gzip:   9.79 kB │ map:    88.78 kB
+dist/web/assets/Tools-Cjr2T2jO.js                  29.38 kB │ gzip:  11.35 kB │ map:    93.79 kB
+dist/web/assets/Composer-CSC9rg2j.js               30.85 kB │ gzip:  11.72 kB │ map:   104.07 kB
+dist/web/assets/react-Czy9g9O-.js                 106.07 kB │ gzip:  35.89 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-BISVQkcl.js          151.25 kB │ gzip:  49.24 kB │ map:   415.94 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-CyQckaOe.js                 741.38 kB │ gzip: 240.76 kB │ map: 2,553.81 kB
+✓ built in 2.06s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        70.80 KB
+ESM dist/runtime/chunk-OUWB2VC3.js     658.23 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/worker/main.js.map    109.95 KB
+ESM dist/runtime/chunk-OUWB2VC3.js.map 1.12 MB
+ESM ⚡️ Build success in 62ms
+
+Running 4 tests using 1 worker
+
+(node:34147) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (7.7s)
+  ✘  2 [desktop] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (13.8s)
+(node:34233) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [mobile] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (8.0s)
+  ✘  4 [mobile] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (13.6s)
+
+
+  1) [desktop] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: '人物资料', exact: true }).getByRole('button', { name: '重新加载', exact: true })
+
+
+      288 |   await expect(dialog).toContainText('读取失败夹具');
+      289 |   await expect(dialog.getByRole('button', { name: '保存人物', exact: true })).toBeDisabled();
+    > 290 |   await dialog.getByRole('button', { name: '重新加载', exact: true }).click();
+          |                                                                   ^
+      291 |   await expect(dialog.locator('.asset-chip')).toContainText('existing.png');
+      292 |   await expect(dialog.getByRole('button', { name: '保存人物', exact: true })).toBeEnabled();
+      293 |   await dialog.getByRole('button', { name: '保存人物', exact: true }).click();
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/character-video.spec.ts:290:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: '人物资料', exact: true }).getByRole('button', { name: '重新加载', exact: true })
+
+
+      288 |   await expect(dialog).toContainText('读取失败夹具');
+      289 |   await expect(dialog.getByRole('button', { name: '保存人物', exact: true })).toBeDisabled();
+    > 290 |   await dialog.getByRole('button', { name: '重新加载', exact: true }).click();
+          |                                                                   ^
+      291 |   await expect(dialog.locator('.asset-chip')).toContainText('existing.png');
+      292 |   await expect(dialog.getByRole('button', { name: '保存人物', exact: true })).toBeEnabled();
+      293 |   await dialog.getByRole('button', { name: '保存人物', exact: true }).click();
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/character-video.spec.ts:290:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-btPPG0/results/character-video-blocks-sav-38a3b-ponses-for-a-closed-profile-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile
+    [mobile] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile
+  2 passed (45.9s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-btPPG0
+[ELIFECYCLE] Command failed with exit code 1.

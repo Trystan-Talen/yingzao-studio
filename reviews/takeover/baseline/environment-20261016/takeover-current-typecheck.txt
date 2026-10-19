@@ -1,0 +1,7 @@
+$ pnpm typecheck
+$ tsc --noEmit
+tests/credit-grant-reversal.test.ts(18,92): error TS2339: Property 'revokeGrant' does not exist on type '{ billingChannel: "web" | "api"; forChannel: (channel: "web" | "api") => ...; account: (wid: string) => Account; record: (wid: string, uid: string, key: string, kind: string, amount: number, description: string, jobId?: string | null, itemId?: string | null) => void; ... 11 more ...; renewSource: (wid: string, uid: ...'.
+tests/credit-grant-reversal.test.ts(42,39): error TS2339: Property 'revokeGrant' does not exist on type '{ billingChannel: "web" | "api"; forChannel: (channel: "web" | "api") => ...; account: (wid: string) => Account; record: (wid: string, uid: string, key: string, kind: string, amount: number, description: string, jobId?: string | null, itemId?: string | null) => void; ... 11 more ...; renewSource: (wid: string, uid: ...'.
+tests/fal-motion.test.ts(13,145): error TS2307: Cannot find module '../src/server/providers/fal-motion' or its corresponding type declarations.
+tests/fal-motion.test.ts(55,35): error TS7006: Parameter 'model' implicitly has an 'any' type.
+[ELIFECYCLE] Command failed with exit code 2.

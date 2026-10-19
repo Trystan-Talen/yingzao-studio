@@ -1,0 +1,9 @@
+$ pnpm exec vitest run tests/identity-auth.test.ts tests/aliyun-sms.test.ts tests/wechat-gateway.test.ts tests/password-recovery.test.ts tests/google-oidc.test.ts tests/mail-outbox.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  6 passed (6)
+      Tests  184 passed (184)
+   Start at  16:07:37
+   Duration  8.55s (tests 75%, import 24%, transform 2%)

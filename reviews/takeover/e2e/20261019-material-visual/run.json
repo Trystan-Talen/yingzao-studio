@@ -1,0 +1,8 @@
+{
+  "started": "2026-10-19T02:18:50.730472+00:00",
+  "finished": "2026-10-19T02:19:06.935749+00:00",
+  "exitCode": 0,
+  "build": "Reused run-fjuXMJ build; test-only screenshot scroll added after 8/8 scope pass",
+  "dataIsolation": "fresh SQLite and media per test",
+  "externalServices": "disabled; loopback fixtures only"
+}

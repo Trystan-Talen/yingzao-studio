@@ -1,0 +1,20 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "tests/character-video.test.ts",
+    "tests/quality-workflows.test.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T09:49:09.330932+00:00",
+  "endedUtc": "2026-10-16T09:49:12.101757+00:00",
+  "elapsedSeconds": 2.771,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1",
+    "PATHPrefix": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "output": "character-video-green.txt"
+}

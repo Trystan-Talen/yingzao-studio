@@ -1,0 +1,18 @@
+{
+  "command": [
+    "pnpm",
+    "install",
+    "--frozen-lockfile",
+    "--store-dir",
+    "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:29:19.628469+00:00",
+  "endedUtc": "2026-10-16T06:29:47.895492+00:00",
+  "elapsedSeconds": 28.267,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "install.txt"
+}

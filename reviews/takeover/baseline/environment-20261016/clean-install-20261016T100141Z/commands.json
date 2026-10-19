@@ -1,0 +1,167 @@
+[
+  {
+    "name": "install",
+    "command": [
+      "pnpm",
+      "install",
+      "--frozen-lockfile",
+      "--store-dir",
+      "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store",
+      "--registry",
+      "https://registry.npmjs.org"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:01:41.413480+00:00",
+    "elapsedSeconds": 14.676,
+    "exitCode": 0,
+    "output": "install.txt"
+  },
+  {
+    "name": "native-probe",
+    "command": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "\nimport assert from 'node:assert/strict';\nimport {createRequire} from 'node:module';\nimport {parseAst} from 'rollup/parseAst';\nimport sharp from 'sharp';\nconst require=createRequire(import.meta.url), Database=require('better-sqlite3');\nassert.equal(parseAst('const value = 1').body.length,1);\nconst db=new Database(':memory:');assert.equal(db.prepare('SELECT 42 answer').get().answer,42);db.close();\nconst result=await sharp({create:{width:2,height:3,channels:3,background:{r:40,g:70,b:165}}}).raw().toBuffer({resolveWithObject:true});\nassert.deepEqual([result.info.width,result.info.height],[2,3]);assert.deepEqual([...result.data.subarray(0,3)],[40,70,165]);\nconsole.log(JSON.stringify({node:process.version,arch:process.arch,platform:process.platform,abi:process.versions.modules,rollupNativeParser:true,sqlite:true,sharpPixels:true}));\n"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:01:56.089326+00:00",
+    "elapsedSeconds": 0.044,
+    "exitCode": 1,
+    "output": "native-probe.txt"
+  },
+  {
+    "name": "native-probe-fixed",
+    "command": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {pathToFileURL} from 'node:url';const require=createRequire(import.meta.url),viteRequire=createRequire(require.resolve('vite'));const {parseAst}=await import(pathToFileURL(viteRequire.resolve('rollup/parseAst')));const sharp=require('sharp'),Database=require('better-sqlite3');assert.equal(parseAst('const value = 1').body.length,1);const db=new Database(':memory:');assert.equal(db.prepare('SELECT 42 answer').get().answer,42);db.close();const result=await sharp({create:{width:2,height:3,channels:3,background:{r:40,g:70,b:165}}}).raw().toBuffer({resolveWithObject:true});assert.deepEqual([result.info.width,result.info.height],[2,3]);assert.deepEqual([...result.data.subarray(0,3)],[40,70,165]);console.log(JSON.stringify({node:process.version,arch:process.arch,platform:process.platform,abi:process.versions.modules,rollupNativeParser:true,sqlite:true,sharpPixels:true}));"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:02:51.518453+00:00",
+    "elapsedSeconds": 1.112,
+    "exitCode": 0,
+    "output": "native-probe-fixed.txt"
+  },
+  {
+    "name": "clean-typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:15:32.733300+00:00",
+    "elapsedSeconds": 5.863,
+    "exitCode": 0,
+    "output": "clean-typecheck.txt"
+  },
+  {
+    "name": "clean-build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:15:38.597165+00:00",
+    "elapsedSeconds": 1.383,
+    "exitCode": 1,
+    "output": "clean-build.txt"
+  },
+  {
+    "name": "clean-build-resume",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:16:51.072167+00:00",
+    "elapsedSeconds": 3.272,
+    "exitCode": 0,
+    "output": "clean-build-resume.txt"
+  },
+  {
+    "name": "clean-runtime-resume",
+    "command": [
+      "pnpm",
+      "verify:runtime"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:16:54.344589+00:00",
+    "elapsedSeconds": 2.311,
+    "exitCode": 0,
+    "output": "clean-runtime-resume.txt"
+  },
+  {
+    "name": "clean-typecheck-final",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:19:52.470365+00:00",
+    "elapsedSeconds": 5.172,
+    "exitCode": 0,
+    "output": "clean-typecheck-final.txt"
+  },
+  {
+    "name": "clean-build-final",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:19:57.643425+00:00",
+    "elapsedSeconds": 2.4,
+    "exitCode": 0,
+    "output": "clean-build-final.txt"
+  },
+  {
+    "name": "clean-runtime-final",
+    "command": [
+      "pnpm",
+      "verify:runtime"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:20:00.044117+00:00",
+    "elapsedSeconds": 1.094,
+    "exitCode": 0,
+    "output": "clean-runtime-final.txt"
+  },
+  {
+    "name": "clean-typecheck-copy-final",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:31:09.812610+00:00",
+    "elapsedSeconds": 5.066,
+    "exitCode": 0,
+    "output": "clean-typecheck-copy-final.txt"
+  },
+  {
+    "name": "clean-build-copy-final",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:31:14.879043+00:00",
+    "elapsedSeconds": 2.402,
+    "exitCode": 0,
+    "output": "clean-build-copy-final.txt"
+  },
+  {
+    "name": "clean-runtime-copy-final",
+    "command": [
+      "pnpm",
+      "verify:runtime"
+    ],
+    "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+    "startedUtc": "2026-10-16T10:31:17.281541+00:00",
+    "elapsedSeconds": 1.415,
+    "exitCode": 0,
+    "output": "clean-runtime-copy-final.txt"
+  }
+]

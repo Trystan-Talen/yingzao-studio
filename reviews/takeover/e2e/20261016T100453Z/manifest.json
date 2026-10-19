@@ -1,0 +1,178 @@
+{
+  "sourceRun": "platform/var/e2e/run-Fd1n4A",
+  "passed": 6,
+  "failed": 0,
+  "scenarios": [
+    "video category create/filter/refresh/update/favorite/locales",
+    "delayed category response isolation",
+    "support contacts/QR retry/survey/RTL phone"
+  ],
+  "screenshots": [
+    {
+      "file": "screenshots/mobile-video-category-response-scope.png",
+      "pixels": [
+        1170,
+        4611
+      ],
+      "sha256": "44b9c9828143590dbdc32753272ca71fad12bd0002c5d2d59f17e6b7dc33e650"
+    },
+    {
+      "file": "screenshots/desktop-configured-support-channels.png",
+      "pixels": [
+        1440,
+        1727
+      ],
+      "sha256": "b116af555f33aff265ec270450b05c1c9fff6322369e83856becfa1efdf59bb7"
+    },
+    {
+      "file": "screenshots/desktop-support-channels-ar.png",
+      "pixels": [
+        1440,
+        1471
+      ],
+      "sha256": "cb55b780df8d4954ef220ff3796dc4c1439f20cdab798c09f99131a7618de435"
+    },
+    {
+      "file": "screenshots/desktop-support-channels-en.png",
+      "pixels": [
+        1440,
+        1471
+      ],
+      "sha256": "abddf8513d769dda286f8661777924303d2a4c1fb749391139d19375300322eb"
+    },
+    {
+      "file": "screenshots/mobile-configured-support-channels.png",
+      "pixels": [
+        1170,
+        6132
+      ],
+      "sha256": "01d61a74a9eca5b80ab052ca42b8bfcbd834604736695370ebdcb5c1b9388e66"
+    },
+    {
+      "file": "screenshots/mobile-support-channels-ar.png",
+      "pixels": [
+        1170,
+        5436
+      ],
+      "sha256": "404f59e847317ebb0e3b63695c423e34685827842fa5842dea9c0166ffce27e2"
+    },
+    {
+      "file": "screenshots/mobile-support-channels-en.png",
+      "pixels": [
+        1170,
+        5625
+      ],
+      "sha256": "166707eba7e0a3889012336f3bfa353738bb3af52293bacbe9c0fe743069fcaf"
+    },
+    {
+      "file": "screenshots/mobile-video-category-ar.png",
+      "pixels": [
+        1170,
+        5028
+      ],
+      "sha256": "0aefc9f16ef610666675afc30bd120e86cd25ddd87af2415667ad9ea7eb03b47"
+    },
+    {
+      "file": "screenshots/mobile-video-category-en.png",
+      "pixels": [
+        1170,
+        5088
+      ],
+      "sha256": "1fb9d93309df28dd3fe9c6e7d8e3707cf9445bd2f63db127d794e8e9c9f00088"
+    },
+    {
+      "file": "screenshots/mobile-video-category-filter.png",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "sha256": "74eb65a8b8ec867c146559241a5dc86bb81a5b47e237045bbed9a4eee6e5ada9"
+    },
+    {
+      "file": "screenshots/desktop-video-category-ar.png",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "eb507781ce4461aa4e3100040955bffcbfe06946a279f90656de9d9a1e952267"
+    },
+    {
+      "file": "screenshots/desktop-video-category-en.png",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "a69ace7d0e2b29f917fe050b46ac03b20b50a4e65aae4aa21add497ebc40d524"
+    },
+    {
+      "file": "screenshots/desktop-video-category-filter.png",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "ae5e199831da1f47af804f8341fe95a05434356a7a82c54d141b34aa1825edb0"
+    },
+    {
+      "file": "screenshots/desktop-video-category-response-scope.png",
+      "pixels": [
+        1440,
+        1593
+      ],
+      "sha256": "f05ca2a3fb54ce94d57bc2ebc8ab5ed85e084f9eee448be1e49842037d41dac5"
+    }
+  ],
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/fixture-qr.png",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/fixture-qr.png",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "externalCalls": "Blocked; isolated local video and fixture survey/QR only. No model or payments.",
+  "uncaughtExceptions": 0
+}

@@ -1,0 +1,4304 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-10-16",
+  "phase": "当前实现与隔离合同验证；原站只读观察和外部效果分开记录",
+  "fieldLabels": {
+    "implementationStatus": "实现状态",
+    "verificationStatus": "本轮验证状态",
+    "blocker": "首要阻塞原因",
+    "semanticEquivalent": "业务语义等价；空值表示未知",
+    "evidence": "本轮证据",
+    "historicalEvidence": "历史证据",
+    "remaining": "剩余工作",
+    "assessmentBasis": "判定依据",
+    "sourceReviewed": "本轮是否阅读相关源码",
+    "currentOriginalEvidence": "当前原站证据",
+    "children": "原子子项",
+    "scopeStatus": "原站范围状态",
+    "currentOriginalAssessment": "当前原站证据缺口说明"
+  },
+  "rules": [
+    "保留F01–F52，数量不代表完成比例。",
+    "默认未验证；旧测试/截图只放历史证据。",
+    "部分实现为保守基线；未阅读模块明确标记历史线索。",
+    "语义未知用空值；内存探针不能证明真实模型效果。",
+    "F38/F52范围保留未知，不沿用旧非强制结论。"
+  ],
+  "statusVocabulary": {
+    "implementationStatus": [
+      "未实现",
+      "部分实现",
+      "已实现"
+    ],
+    "verificationStatus": [
+      "未验证",
+      "自动化验证",
+      "真实浏览器验证",
+      "真实外部联调验证",
+      "验收失败"
+    ],
+    "blocker": [
+      "无",
+      "代码缺失",
+      "配置缺失",
+      "账号权限",
+      "预算授权",
+      "外部服务限制",
+      "原站证据不足"
+    ]
+  },
+  "features": [
+    {
+      "id": "F01",
+      "name": "灵感分类",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "无",
+      "semanticEquivalent": null,
+      "assessmentBasis": "视频内容分类独立于行业分类，新增字段、合同/管理/筛选已落；历史无分类保留空值，详情慢响应对象与空间守卫已真实复现后修复。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/inspiration-categories-validation.md",
+          "note": "合同/API10项，单轮桌面/手机分类4项通过；慢A覆盖B红后修复。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "inspiration-categories 4项：真实视频分类、收藏组合筛选、刷新与迟到响应保护。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 14,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "`tasks/inspirations.ts`、`pages/Inspiration.tsx`、`contracts/inspirations.ts`；原创目录、空间自建、组合筛选、归档",
+          "validationClaim": "app.test 管理目录/素材/过滤/跨空间",
+          "externalClaim": "不涉及",
+          "browserClaim": "GUI创建/刷新/下架/恢复图片灵感；真实3秒合成视频播放、以此创作自动O3/4K/5秒/全能参考；见web-ui-self-review末节",
+          "boundaryClaim": "主题以搜索支持；合成测试视频不证明付费AI质量"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-inspiration-and-renewal.md",
+          "note": "视频当前内容分类与图片创作类型均已实见，不能据未观察断言图片图库下线。"
+        }
+      ],
+      "remaining": [
+        "原站推荐/排序及素材覆盖仍未知，不复制第三方内容或伪造目录。"
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "复用收藏",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "无",
+      "semanticEquivalent": null,
+      "assessmentBasis": "原子复用/重放已复核；视频创作与人物动作复刻两种意图，响应丢失后同项目恢复、实际时长/音轨与提醒确认已桌面/手机验证。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/app.test.ts",
+          "note": "原子复用与权限/回滚"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/STATUS.md",
+          "note": "主代理记录灵感原子复用浏览器验证"
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/e2e/inspiration-replica.spec.ts",
+          "note": "桌面/手机2项真实本机通过，先前失败仅精确标签定位已纠正；5场景×2视口整体分轮结果另记。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "media 2项图片复用及 inspiration-replica 2项视频复刻草稿：实际素材与原项目恢复。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 15,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "inspiration_favorites、项目草稿来源；收藏/取消/以此创作",
+          "validationClaim": "app.test 收藏持久化/归档历史",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI 收藏、复用新项目",
+          "boundaryClaim": "自建案例素材已不可用时显示缺失；不能复制未授权空间数据"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-inspiration-and-renewal.md",
+          "note": "视频灵感预览可进入视频复刻，继承15.45秒参考，音乐保留默认打开；未请求模型。私有原件位于忽略research目录。"
+        }
+      ],
+      "remaining": [
+        "图片与视频复用的原子保存/重放、素材槽位和刷新已验证；视频缺主体/授权时不能提交。",
+        "保留通用视频创作与人物动作复刻两个明确意图，后者真实模型效果仍未验证。"
+      ],
+      "children": [
+        {
+          "id": "F02.1",
+          "name": "视频灵感进入人物动作复刻草稿",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "无",
+          "semanticEquivalent": null,
+          "sourceReviewed": true,
+          "evidence": [
+            {
+              "kind": "本轮当前合同回归",
+              "path": "platform/tests/inspiration-replica.test.ts",
+              "note": "6项新合同+13项旧app合同合并19项通过；合成视频继承、意图区分幂等、旧默认指纹兼容、图片/未知/过短拒绝、长视频明确选段提醒。"
+            },
+            {
+              "kind": "本轮已执行浏览器用例",
+              "path": "platform/tests/e2e/inspiration-replica.spec.ts",
+              "note": "完整报告中桌面/手机2项通过：复用响应丢失后同一草稿恢复，15.45秒、保留音乐和已确认提醒持久化；零生成任务。"
+            },
+            {
+              "kind": "本轮完整浏览器证据",
+              "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+              "note": "inspiration-replica桌面/手机2项通过；原素材、同一项目、提醒清除及缺主体禁提交。"
+            }
+          ],
+          "historicalEvidence": [],
+          "remaining": [
+            "本机复刻草稿恢复、15.45秒/保留音乐与清空提醒持久化已验；真实模型效果及其他替换类型未验证。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "name": "引导偏好",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "完整完成引导、默认平台/创作语言持久化、新项目采用以及修改默认后既有项目保持已桌面/手机验证；清除项目本机缓存后仍从服务端恢复原值。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/app.test.ts",
+          "note": "显式偏好增量合并与未改字段保留。"
+        },
+        {
+          "kind": "2026-10-19补充真实浏览器验证",
+          "path": "reviews/takeover/scope-local-validation.md",
+          "note": "同构建8项全部通过，含桌面/手机完整引导2项、营销/自由2项及品牌复验4项；后续营销视觉截图2项单独通过，未调用外部服务。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 16,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "`Onboarding.tsx`、auth preferences merge",
+          "validationClaim": "app.test 偏好字段合并",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI 引导可跳过；偏好实际操作",
+          "boundaryClaim": "不是完整最近参数云端模板系统"
+        }
+      ],
+      "currentOriginalEvidence": [],
+      "remaining": [
+        "完整引导与本地新旧项目默认值边界已验；原站引导当前字段与推荐规则仍未观察，不宣称等价。",
+        "本地偏好扩展不称为原站最近参数云端模板。"
+      ],
+      "currentOriginalAssessment": "本轮已核读本机源码；此项未取得可独立归档的当前原站行为证据，保留原站等价未知，历史资料仅作线索。"
+    },
+    {
+      "id": "F04",
+      "name": "电商图片",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/service.ts",
+          "line": 157,
+          "endLine": 274
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/web/components/DesignPlanner.tsx",
+          "line": 21,
+          "endLine": 39
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/client-implementation-review.md",
+          "note": "图片和视频草稿独立恢复、素材失败保留、先建同一项目与响应丢失恢复；未验证模型成图质量"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "creation-race 4项、upload-context 4项等覆盖双模式草稿/素材恢复；不代表所有图片模块成图质量。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 17,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "`Composer/DesignPlanner`、jobs/snapshot、OpenAI/Flyelep image.generate",
+          "validationClaim": "openai-provider 具体白底意图/参考；tasks 模块顺序/快照",
+          "externalClaim": "未验；需密钥",
+          "browserClaim": "UI 多物料3模块保存刷新",
+          "boundaryClaim": "实际成图质量/白底/文字准确率未验；Flyelep专用请求合同34项已通过，实际模型效果未验"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读汇总",
+          "path": "reviews/takeover/reference-inspiration-and-renewal.md",
+          "note": "图片创作当前入口为详情图/产品套图/主副图/白底图/单图/营销物料/自由创作，参考菜单有品牌模型与参考图；只观察界面，未生成。"
+        }
+      ],
+      "remaining": [
+        "当前保存、刷新和素材缺失处理已有本地与浏览器验证；真实主体一致性、画面文字和各电商模块成图质量仍待外部验收。"
+      ]
+    },
+    {
+      "id": "F05",
+      "name": "营销/自由创作",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "营销模块顺序、各自比例/真实专属参考、保存后清除本机缓存的服务端恢复，以及自由创作保存回切已桌面/手机验证；模块报价拆分另有自动合同，未生成外部图像。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 197,
+          "endLine": 207
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/web/components/DesignPlanner.tsx",
+          "line": 11,
+          "endLine": 39
+        },
+        {
+          "kind": "本轮当前自动化证据",
+          "path": "platform/tests/tasks.test.ts",
+          "note": "quotes and executes ordered design modules用例：两种营销模块、独立比例/参考和4个子项；本轮728全量包含本套。"
+        },
+        {
+          "kind": "2026-10-19补充真实浏览器验证",
+          "path": "reviews/takeover/scope-local-validation.md",
+          "note": "同构建8项全部通过，含桌面/手机完整引导2项、营销/自由2项及品牌复验4项；后续营销视觉截图2项单独通过，未调用外部服务。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 18,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "多模块类型/尺寸/素材/排序与自由描述",
+          "validationClaim": "tasks 模块输出/报价",
+          "externalClaim": "未验；需密钥",
+          "browserClaim": "UI 模块名称/顺序/比例恢复",
+          "boundaryClaim": "物料类型仍代码枚举；不是运营可管理的活动模板库"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读汇总",
+          "path": "reviews/takeover/reference-inspiration-and-renewal.md",
+          "note": "图片创作当前入口为详情图/产品套图/主副图/白底图/单图/营销物料/自由创作，参考菜单有品牌模型与参考图；只观察界面，未生成。"
+        }
+      ],
+      "remaining": [
+        "营销模块与自由创作草稿已真实浏览器验证，模板内容及各模块真实成图质量仍未验证。",
+        "本机三模块与专属参考规则有明确合同，不由入口观察推断原站全部模板/编辑语义等价。"
+      ]
+    },
+    {
+      "id": "F06",
+      "name": "视频生成",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "背景音乐、生成音轨与画面文字为独立合同；音乐素材权限、冻结、真实原件探测和工作进程传递已回归，真实模型效果尚未验证。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/video-audio-options.test.ts",
+          "note": "5项：真实WAV探测、模拟Wan请求正式audio_url字段、O3生成音轨与文字语言指引分离"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/takeover-backend.test.ts",
+          "note": "12项含音乐跨空间、未入快照及排队访问拒绝、领任务后读取、工作进程原件探测"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "specs/takeover-video-audio.md",
+          "note": "官方协议、限制及本地验证边界"
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "reviews/takeover/account-e2e-results.md",
+          "note": "本机WAV上传/保存/刷新、不支持模型保留及O3生成音轨开关真实浏览器，0任务。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "composer-media 2项配乐/生成音轨保存及 quote-confirmation 2项报价确认；未提交外部模型。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 19,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "WAN + Kling O1首尾/O1多图/O3 4K混合参考；`fal-reference.ts`",
+          "validationClaim": "16参考合同 + 真SQLite秒数报价",
+          "externalClaim": "未验；需fal",
+          "browserClaim": "视频表单路由；新模型待最后UI重验",
+          "boundaryClaim": "音频参考无适配；O3最多1视频；不承诺字幕/口播/真实4K质量"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读证据（忽略路径）",
+          "path": "research/takeover/20261016-video-parameters.jpg",
+          "note": "本轮已观察视频参数界面；未执行付费模型，不据此证明输出效果。"
+        },
+        {
+          "kind": "本轮原站只读证据（忽略路径）",
+          "path": "research/takeover/20261016-video-replica.txt",
+          "note": "人物/服装/脸/商品与1:1/创意入口、参考选段和保留配乐可见；本地人物动作专用能力不冒充全部精准替换。"
+        }
+      ],
+      "remaining": [
+        "真实视频、音乐截断/静音尾部、生成音轨、精确字幕和口播效果未验证。",
+        "Wan音乐槽位不等于O3语音主体绑定或声音克隆；O3最多一个视频元素，更多主体/声音控制尚待正式协议与界面对照。"
+      ],
+      "children": [
+        {
+          "id": "F06.1",
+          "name": "文本与单图视频",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/provider-reference.test.ts",
+              "note": "本地请求合同与真实媒体探测；不代表付费模型效果"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "文本或单首帧、5/10/15秒路径存在，真实结果未验。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/fal.ts",
+              "line": 46,
+              "endLine": 66
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F06.2",
+          "name": "首尾帧与多图参考",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/provider-reference.test.ts",
+              "note": "本地请求合同与真实媒体探测；不代表付费模型效果"
+            },
+            {
+              "kind": "本轮已复核证据",
+              "path": "platform/tests/provider-reference.test.ts",
+              "note": "明确核验首尾实际字节顺序及同图重复，不仅数组数量。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "本地首尾字段与真实红/蓝字节顺序及重复同图已验；真实供应商首尾视觉效果未验。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/fal-reference.ts",
+              "line": 14,
+              "endLine": 35
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/fal-reference.ts",
+              "line": 80,
+              "endLine": 95
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F06.3",
+          "name": "图片与视频混合参考",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/provider-reference.test.ts",
+              "note": "本地请求合同与真实媒体探测；不代表付费模型效果"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "当前仅O3最多1视频元素；原站边界待当前观察。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/fal-reference.ts",
+              "line": 129,
+              "endLine": 148
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F06.4",
+          "name": "独立背景音乐参考",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/video-audio-options.test.ts",
+              "note": "MP3/WAV、3–30秒、15MB；真实WAV正式字段和不支持模型拒绝"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "note": "独立素材ID全任务链、权限和工作进程"
+            },
+            {
+              "kind": "本轮已复核证据",
+              "path": "reviews/takeover/account-e2e-results.md",
+              "note": "对应音乐槽/音轨开关保存恢复已真实本机验证，外部音画效果未验。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "仅Wan2.6文字/单图视频；不是O3声音主体绑定或声音克隆，真实背景音乐输出效果未验证。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/fal-reference.ts",
+              "line": 129,
+              "endLine": 149
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F06.5",
+          "name": "画面文字语言、字幕与音轨",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/video-audio-options.test.ts",
+              "note": "O3 generate_audio音轨开关独立于needText/language提示词指引"
+            },
+            {
+              "kind": "本轮已复核证据",
+              "path": "reviews/takeover/account-e2e-results.md",
+              "note": "对应音乐槽/音轨开关保存恢复已真实本机验证，外部音画效果未验。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "文字/语言为提示词指引，不能承诺精确字幕、口播或语言发音；真实生成音轨与字幕效果未验证。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/fal.ts",
+              "line": 56,
+              "endLine": 66
+            },
+            {
+              "kind": "本轮内存隔离复现",
+              "path": "reviews/takeover/baseline/backend-memory-probes.json",
+              "line": 1
+            }
+          ],
+          "sourceReviewed": true
+        }
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal-reference.ts",
+          "line": 55,
+          "endLine": 95
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal-reference.ts",
+          "line": 129,
+          "endLine": 148
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/web/components/Composer.tsx",
+          "line": 504,
+          "endLine": 543
+        },
+        {
+          "kind": "本轮内存隔离复现",
+          "path": "reviews/takeover/baseline/backend-memory-probes.json",
+          "line": 1,
+          "note": "字幕/语言切换产生相同请求。"
+        }
+      ]
+    },
+    {
+      "id": "F07",
+      "name": "多模态/@引用",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/client-implementation-review.md",
+          "note": "真实浏览器故障恢复及缺失素材"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/creation-recovery.test.ts",
+          "note": "状态隔离与恢复"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "实际上传、模式切换归属、响应丢失与刷新；不证明外部多模态质量。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 20,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "AssetPicker拖放/粘贴/逐文件进度与重试；upload_requests指纹幂等；文档提取；按拆分item绑定@真实资产名/序号",
+          "validationClaim": "core真实四类文档；tasks上下文/引用拒绝与冻结合同；delivery-regressions上传5并发只1份、磁盘无多余变体、冲突409",
+          "externalClaim": "模型未验",
+          "browserClaim": "素材选择/预览；拖粘与断网真实浏览器未独立验",
+          "boundaryClaim": "文件读取/进度/幂等是本地实现；外部音频参考不支持的模型明确拒绝"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读汇总",
+          "path": "reviews/takeover/reference-inspiration-and-renewal.md",
+          "note": "图片创作当前入口为详情图/产品套图/主副图/白底图/单图/营销物料/自由创作，参考菜单有品牌模型与参考图；只观察界面，未生成。"
+        }
+      ],
+      "remaining": [
+        "素材缺失逐项恢复、响应丢失及长历史恢复已有浏览器夹具；真实多模态模型效果未验。"
+      ]
+    },
+    {
+      "id": "F08",
+      "name": "AI帮写/报价",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "报价确认真实浏览器通过；帮写独立草稿/请求恢复和免费次数约束为自动合同，真实正文质量与免费运营等价未验。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/takeover-backend.test.ts",
+          "note": "帮写草稿隔离与请求恢复"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/creation-recovery.test.ts",
+          "note": "请求日志持久化/恢复"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/entitlements-appeals.test.ts",
+          "note": "免费次数原子约束"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "quote-confirmation 2项：真实报价区分一项视频任务与按秒计费、配乐与生成音轨；未执行帮写正文生成。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 21,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "AIWriter重开同步prompt；JobSubmit快照；EntitlementService每日免费文本尝试",
+          "validationClaim": "tasks幂等/预算；entitlements日界线/并发领取/失败不返还；OpenAI文字合同",
+          "externalClaim": "未验；需TEXT",
+          "browserClaim": "UI确认偏好/报价；助手重开行为待前端末轮记录",
+          "boundaryClaim": "免费按空间UTC日、提交消耗，不代表供应商免费；不能转为余额"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日可见生成报价；未观察帮写免费规则，不能据报价验证帮写正文。"
+        }
+      ],
+      "remaining": [
+        "帮写任务不污染媒体草稿；免费次数原子约束和请求身份持久恢复有回归。",
+        "真实帮写质量、供应商价格与原站免费运营规则等价性仍未验证。"
+      ]
+    },
+    {
+      "id": "F09",
+      "name": "会话/方案",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "当前原站既有项目七段长文本与复制已实见；3方向结构化编辑/采用是明确本地合同与体验改进，非原站编辑能力证明。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/src/contracts/design-plan.ts",
+          "line": 25
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-backend.test.ts",
+          "line": 119,
+          "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/design-plan.test.ts"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/client-implementation-review.md",
+          "note": "当前浏览器方案采用/响应丢失/缺失素材证据；真实模型质量除外"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "本轮结构采用/长会话另有分片证据；本次完整报告复验创作草稿恢复，不将未列用例称为统一重跑。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 22,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI image.generate/text.assist冻结本项目最近8条、≤6000字符；design-plan严格结构与3方向、保存消息/复制采用",
+          "validationClaim": "tasks上下文冻结/跨项目隔离；openai-provider结构完整及拒绝不完整",
+          "externalClaim": "未验；需TEXT",
+          "browserClaim": "AIWriter设计方案模式、会话/配置恢复；真实模型多轮未验",
+          "boundaryClaim": "有限文本上下文，不是无限记忆；其他provider不冒充同等会话；当前计划保存为完整格式化文本"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站既有项目只读观察",
+          "path": "research/takeover/20261016-existing-design-plan.txt",
+          "note": "7个长文本段落和复制方案；未见编辑/采用；未验证新生成或模型效果。"
+        },
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/interaction-decisions.md",
+          "note": "当前七段长文/复制入口，不是新生成效果；未观察可编辑/采用。"
+        }
+      ],
+      "remaining": [
+        "原站已存在项目显示七段长文和复制；本地结构化编辑/应用是体验改进，不能反推原站具备该操作。",
+        "真实图像分析、多轮质量与新方案生成效果仍未验证。"
+      ],
+      "children": [
+        {
+          "id": "F09.1",
+          "name": "项目会话与文本上下文快照",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/service.ts",
+              "line": 157,
+              "endLine": 178
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/client-implementation-review.md",
+              "note": "长历史和缓存重入、结构方向编辑采用与警告刷新；明确的非模型交互夹具"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "真实模型图像分析和多轮生成质量未验证；当前本地恢复与结构采用交互已有浏览器证据。"
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F09.2",
+          "name": "方案生成与内容校验",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/src/contracts/design-plan.ts",
+              "line": 25
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/design-plan.test.ts"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "结构校验与本地采用流程已验证；真实供应商方案质量尚未验证。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/openai.ts",
+              "line": 188,
+              "endLine": 199
+            },
+            {
+              "kind": "本轮内存隔离复现",
+              "path": "reviews/takeover/baseline/backend-memory-probes.json",
+              "line": 1
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F09.3",
+          "name": "结构持久化、方向选择与可操作采用",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/src/contracts/design-plan.ts",
+              "line": 25
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/design-plan.test.ts"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/client-implementation-review.md",
+              "note": "长历史和缓存重入、结构方向编辑采用与警告刷新；明确的非模型交互夹具"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [
+            {
+              "kind": "本轮原站既有项目只读观察",
+              "path": "research/takeover/20261016-existing-design-plan.txt",
+              "note": "7个长文本段落和复制方案；未见编辑/采用；未验证新生成或模型效果。"
+            }
+          ],
+          "remaining": [
+            "真实模型图像分析和多轮生成质量未验证；当前本地恢复与结构采用交互已有浏览器证据。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/contracts/jobs.ts",
+              "line": 107,
+              "endLine": 117
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/web/components/AIWriter.tsx",
+              "line": 138,
+              "endLine": 159
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/web/components/Composer.tsx",
+              "line": 565,
+              "endLine": 573
+            }
+          ],
+          "sourceReviewed": true
+        }
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/contracts/design-plan.ts",
+          "line": 2,
+          "endLine": 29
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/openai.ts",
+          "line": 188,
+          "endLine": 199
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/web/components/AIWriter.tsx",
+          "line": 138,
+          "endLine": 159
+        },
+        {
+          "kind": "本轮内存隔离复现",
+          "path": "reviews/takeover/baseline/backend-memory-probes.json",
+          "line": 1,
+          "note": "3个空方向及空正文被接受为完成。"
+        }
+      ]
+    },
+    {
+      "id": "F10",
+      "name": "任务生命周期",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "幂等身份恢复端点、重试来源防重、结构产物恢复、鉴权撤销事件流均已本地验证。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-backend.test.ts",
+          "line": 119,
+          "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-migration.test.ts"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/creation-recovery.test.ts"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/job-events-auth.test.ts"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/client-implementation-review.md",
+          "note": "当前浏览器方案采用/响应丢失/缺失素材证据；真实模型质量除外"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/installation-worker-independent-review.md",
+          "note": "新文件清理、事务失败、租约失效、恢复原结果仅执行一次"
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "reviews/takeover/installation-and-media-review.md",
+          "note": "成功提交后/重启缓存回收、未完成与越界保留；原供应商产物中途失败只清本次路径。具体最终任务数由主代理报告。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "media真实本机任务、工作进程重启与历史恢复；提交响应丢失证据另见既有独立记录。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 23,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "jobs/items/events、worker lease/fence、恢复、取消、待核对、部分重试",
+          "validationClaim": "tasks 并发/取消/未知/恢复/撤销key/移除成员",
+          "externalClaim": "远端终态未验",
+          "browserClaim": "UI真实本机任务报价→队列→成功",
+          "boundaryClaim": "外部取消请求不等于已取消，unknown保持预留"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日队列最近50条、进行中/已完成、个人并发与排队/处理数；旧成功任务可查看，未提交/取消/重试。"
+        }
+      ],
+      "remaining": [
+        "本机响应丢失后刷新找回同一任务、单份预留及结算已有真实浏览器和数据库证据。",
+        "远端未知终态、真实供应商取消和供应商控制台核对仍需外部验证。"
+      ],
+      "children": [
+        {
+          "id": "F10.1",
+          "name": "幂等、租约、未知结果与产物恢复",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "无",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-migration.test.ts"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/creation-recovery.test.ts"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "当前本机合同通过，浏览器与外部恢复场景分别记录。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/service.ts",
+              "line": 369,
+              "endLine": 400
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/worker/runner.ts",
+              "line": 57,
+              "endLine": 79
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/worker/runner.ts",
+              "line": 352,
+              "endLine": 548
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F10.2",
+          "name": "失败项重试来源与防重",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "无",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-migration.test.ts"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/creation-recovery.test.ts"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "当前本机合同通过，浏览器与外部恢复场景分别记录。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/service.ts",
+              "line": 347,
+              "endLine": 365
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/service.ts",
+              "line": 417,
+              "endLine": 470
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/web/components/TaskCenter.tsx",
+              "line": 232,
+              "endLine": 285
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F10.3",
+          "name": "响应未知时刷新恢复请求身份",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "无",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-migration.test.ts"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/creation-recovery.test.ts"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/baseline/client-response-loss-evidence.json",
+              "note": "响应丢失找回同任务与一次结算"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "真实付费供应商未知提交后人工核对仍需外部验证；本机响应丢失恢复已验。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/web/components/JobSubmit.tsx",
+              "line": 28,
+              "endLine": 68
+            }
+          ],
+          "sourceReviewed": true
+        }
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/service.ts",
+          "line": 369,
+          "endLine": 400
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/worker/runner.ts",
+          "line": 57,
+          "endLine": 79
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/worker/runner.ts",
+          "line": 158,
+          "endLine": 205
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/worker/runner.ts",
+          "line": 352,
+          "endLine": 548
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/service.ts",
+          "line": 347,
+          "endLine": 365
+        }
+      ]
+    },
+    {
+      "id": "F11",
+      "name": "智能延展",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "未验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/openai.ts",
+          "line": 37,
+          "endLine": 38
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 197,
+          "endLine": 250
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 24,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI edit recipe / Flyelep官方端点",
+          "validationClaim": "通用输入/任务测试；无专门画面效果测试",
+          "externalClaim": "未验",
+          "browserClaim": "工具入口smoke",
+          "boundaryClaim": "主体保留、延展区域与像素效果未验"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "智能延展表单及比例/固定尺寸；未上传或执行。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "主体保留、延展区域与像素效果未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F12",
+      "name": "局部重绘",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/openai.ts",
+          "line": 304,
+          "endLine": 314
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 197,
+          "endLine": 250
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/openai-provider.test.ts",
+          "note": "蒙版预检与实字节；跨供应商坐标约定分开。 已通过早期稳定测试节点，非冻结后的最终全量。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 25,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "透明编辑区MaskEditor；OpenAI原尺寸alpha；Flyelep签名mask-white转换+image-oriented源",
+          "validationClaim": "openai-provider透明/错尺寸/EXIF；tasks签名；flyelep-provider专门协议与mask",
+          "externalClaim": "未验",
+          "browserClaim": "UI真实绘制PNG1000×1500，alpha.min0/max255（web-ui自评）",
+          "boundaryClaim": "跨供应商协议分离；EXIF原件保留/模型坐标归一；实际模型效果未验"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "局部重绘原图/替换图、画笔橡皮和提示词；未上传或执行。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "跨供应商协议分离；EXIF原件保留/模型坐标归一；实际模型效果未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F13",
+      "name": "放大/超清",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 233
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-backend.test.ts",
+          "line": 119,
+          "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 26,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "fal AuraSR4倍；Flyelep enlarge/enhance",
+          "validationClaim": "fal基础不含专门请求合同；静态协议",
+          "externalClaim": "未验",
+          "browserClaim": "工具表单入口",
+          "boundaryClaim": "fal仅4倍；2/8与强度需对应Flyelep，不是任意模型支持"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "无损放大2/4/8倍、超清轻度/标准/强力；未执行。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "放大前64,000,000输出像素预算阻止先付费后本地超限；真实放大质量未验。"
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 146,
+          "endLine": 147
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal.ts",
+          "line": 74,
+          "endLine": 80
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/core/storage.ts",
+          "line": 124,
+          "endLine": 136
+        },
+        {
+          "kind": "本轮内存隔离复现",
+          "path": "reviews/takeover/baseline/backend-memory-probes.json",
+          "line": 1
+        }
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F14",
+      "name": "抠图",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "未验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal.ts",
+          "line": 67,
+          "endLine": 73
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 197,
+          "endLine": 250
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 27,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "fal BiRefNet / Flyelep matting",
+          "validationClaim": "通用任务/产物校验",
+          "externalClaim": "未验",
+          "browserClaim": "工具入口",
+          "boundaryClaim": "真实alpha与边缘质量未验"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "抠图空态仅上传与执行，未见手工模式；未执行。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "真实alpha与边缘质量未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F15",
+      "name": "图片翻译",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/openai.ts",
+          "line": 202,
+          "endLine": 269
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 197,
+          "endLine": 250
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/tasks.test.ts",
+          "note": "无文字释放、强制翻译、跨语言和重启一次检测；真实版式未验。 已通过早期稳定测试节点，非冻结后的最终全量。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 28,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI图像编辑、多语拆项；文字预检缓存按空间+源SHA+检测版本；无字原图返回且免平台结算；可强制翻译",
+          "validationClaim": "openai预检/强制/有字合同；tasks多语言/重启缓存/免扣恢复",
+          "externalClaim": "未验",
+          "browserClaim": "GUI force=true保存项目→刷新→工具草稿恢复，素材/英语/说明保持；translation-force-draft-restored.jpg",
+          "boundaryClaim": "免平台费不代表供应商预检免费；仍需提交预留余额；识别漏字可强制，真实版式质量未验"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "图片翻译展开18种语言；未执行。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "免平台费不代表供应商预检免费；仍需提交预留余额；识别漏字可强制，真实版式质量未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F16",
+      "name": "替换/换色",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 301
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-backend.test.ts",
+          "line": 119,
+          "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 29,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI/Flyelep工具映射、颜色组合子项",
+          "validationClaim": "任务分项/通用合同；无全部专用端点测试",
+          "externalClaim": "未验",
+          "browserClaim": "工具入口",
+          "boundaryClaim": "换主体/背景实际效果未验；重复颜色警告不完整"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "商品/场景替换及换色输入槽；不证明组合输出规则。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读证据（忽略路径）",
+          "path": "research/takeover/20261016-product-replace.txt",
+          "note": "商品替换原图与新商品槽位均最多20；未执行生成。"
+        },
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "笛卡尔组合与20输出上限是明确的本地产品规则，原站是否同规则未知。",
+        "参考保持、商品保持与换色真实视觉质量未验证。"
+      ],
+      "children": [
+        {
+          "id": "F16.1",
+          "name": "多原图与多商品参考组合",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/src/contracts/jobs.ts",
+              "line": 120
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "前端报价逐项展示；真实生成质量仍待预算授权。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/validation.ts",
+              "line": 230,
+              "endLine": 235
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/flyelep.ts",
+              "line": 180,
+              "endLine": 181
+            },
+            {
+              "kind": "本轮内存隔离复现",
+              "path": "reviews/takeover/baseline/backend-memory-probes.json",
+              "line": 1
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F16.2",
+          "name": "场景替换与商品保持",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/openai.ts",
+              "line": 33,
+              "endLine": 34
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/providers/flyelep.ts",
+              "line": 183,
+              "endLine": 185
+            },
+            {
+              "kind": "本轮已复核证据",
+              "path": "platform/tests/flyelep-provider.test.ts",
+              "note": "原图/参考角色专用字段合同，真实参考保持未验。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "实际主体保持与参考可选规则待验。"
+          ]
+        },
+        {
+          "id": "F16.3",
+          "name": "换色组合与重复处理",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/takeover-backend.test.ts",
+              "line": 119,
+              "note": "临时SQLite、伪供应商协议；不证明真实模型效果"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/src/contracts/jobs.ts",
+              "line": 120
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "前端报价逐项展示；真实生成质量仍待预算授权。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/validation.ts",
+              "line": 243,
+              "endLine": 248
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/web/pages/Tools.tsx",
+              "line": 289
+            },
+            {
+              "kind": "本轮内存隔离复现",
+              "path": "reviews/takeover/baseline/backend-memory-probes.json",
+              "line": 1
+            }
+          ],
+          "sourceReviewed": true
+        }
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/web/pages/Tools.tsx",
+          "line": 457,
+          "endLine": 478
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 230,
+          "endLine": 248
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/flyelep.ts",
+          "line": 180,
+          "endLine": 191
+        },
+        {
+          "kind": "本轮内存隔离复现",
+          "path": "reviews/takeover/baseline/backend-memory-probes.json",
+          "line": 1
+        }
+      ]
+    },
+    {
+      "id": "F17",
+      "name": "图片复刻",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "未验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "共享结果对比与继续创作组件已通过本机缩放结果的浏览器验证；图片复刻专用表单/提交未在本轮独立执行，不用共享组件通过代替此项验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/openai.ts",
+          "line": 23,
+          "endLine": 24
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/validation.ts",
+          "line": 197,
+          "endLine": 250
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/web/components/ResultComparison.tsx",
+          "note": "按各自原始比例查看输入图和结果"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/web/components/TaskCenter.tsx",
+          "note": "原图对比与参考继续创作入口"
+        },
+        {
+          "kind": "共享组件浏览器证据；非本功能执行",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "creation-locale 4项包含本机缩放原图/结果对比；仅支持共享组件，不作为图片复刻专用流程通过。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 30,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "参考/商品图、prompt、通用编辑/生成",
+          "validationClaim": "通用任务与参考透传",
+          "externalClaim": "未验",
+          "browserClaim": "工具入口",
+          "boundaryClaim": "新广告参考生成，不保证1:1；未见专用参考/结果对比器完整验收"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "图片复刻参考/商品槽、通道、模型、比例与文字参数；空态未见数量字段。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        },
+        {
+          "kind": "2026-10-19主代理只读观察记录；缺完整表单原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "主代理见20张参考/10MB、产品图、11比例、文字语言、4模型/双通道；保存文件只有“无变化”，不冒称参数独立原件。"
+        }
+      ],
+      "remaining": [
+        "新广告参考生成不保证逐像素一致；当前已有输入原图与产物对比器及作为参考继续创作入口，真实复刻视觉质量未验证。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F18",
+      "name": "创意视频复刻",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "外部服务限制",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/fal-motion.test.ts",
+          "note": "19项含真实彩色视频裁剪、音轨与参数边界"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/takeover-motion.test.ts",
+          "note": "素材探测→4秒片段报价20额度→worker裁片→产物入库→仅结算一次"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/provider-extra.test.ts",
+          "note": "创意编辑拒绝无效模式/裁剪/画幅清晰度及源片时长不符"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 31,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "fal-extra Kling O1参考编辑，视频+图片",
+          "validationClaim": "21扩展合同中的参考编辑、音轨/metadata",
+          "externalClaim": "未验",
+          "browserClaim": "工具表单",
+          "boundaryClaim": "单源3–10秒；不是多视频逐镜头复刻；保留原语义差异"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "创意视频复刻及按模型变化的时长/清晰度；未生成。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "research/takeover/20261016-video-replica.txt",
+          "note": "主体图、参考视频/链接、选段、保留配乐、人物/衣服/脸/商品与Dance模型；只读界面未生成"
+        },
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "已实现人物图+参考视频选段动作复刻、本机裁剪、真实原声开关与按片段报价；真实动作保真效果未验证。",
+        "创意视频编辑与人物动作复刻是独立合同；不冒称Dance、逐像素1:1或原视频背景保持。",
+        "服装、人脸、商品精准替换仍未实现；原站对应模型完整语义待外部协议及效果验收。"
+      ]
+    },
+    {
+      "id": "F19",
+      "name": "1:1视频/裁剪",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "外部服务限制",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/fal-motion.test.ts",
+          "note": "19项含真实彩色视频裁剪、音轨与参数边界"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/takeover-motion.test.ts",
+          "note": "素材探测→4秒片段报价20额度→worker裁片→产物入库→仅结算一次"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/provider-extra.test.ts",
+          "note": "创意编辑拒绝无效模式/裁剪/画幅清晰度及源片时长不符"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 32,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "同Kling编辑+真实本机FFmpeg裁剪",
+          "validationClaim": "原件probe/时间校验；无真实替换质量证据",
+          "externalClaim": "AI未验",
+          "browserClaim": "入口/类型表单",
+          "boundaryClaim": "四类身份/服饰/商品槽位并不等于四个专用模型；不可承诺精准1:1"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "1:1模特/服饰/人脸/商品入口；人脸当时未打开，其他三类表单已见。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "research/takeover/20261016-video-replica.txt",
+          "note": "主体图、参考视频/链接、选段、保留配乐、人物/衣服/脸/商品与Dance模型；只读界面未生成"
+        },
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "已实现人物图+参考视频选段动作复刻、本机裁剪、真实原声开关与按片段报价；真实动作保真效果未验证。",
+        "创意视频编辑与人物动作复刻是独立合同；不冒称Dance、逐像素1:1或原视频背景保持。",
+        "服装、人脸、商品精准替换仍未实现；原站对应模型完整语义待外部协议及效果验收。"
+      ],
+      "children": [
+        {
+          "id": "F19.1",
+          "name": "人物图片与动作参考视频",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/fal-motion.test.ts",
+              "note": "官方Kling2.6动作控制合同，非Dance等价"
+            }
+          ],
+          "historicalEvidence": [],
+          "remaining": [
+            "真实模型人物/动作保真待验证。"
+          ]
+        },
+        {
+          "id": "F19.2",
+          "name": "选段、原声音轨与片段计价",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/takeover-motion.test.ts",
+              "note": "实际FFmpeg裁2–6秒、音轨保留和4秒计价"
+            }
+          ],
+          "historicalEvidence": [],
+          "remaining": [
+            "真实供应商最终输出音轨与长度待验。"
+          ]
+        },
+        {
+          "id": "F19.3",
+          "name": "服装、人脸与商品精准替换",
+          "implementationStatus": "未实现",
+          "verificationStatus": "未验证",
+          "blocker": "代码缺失",
+          "semanticEquivalent": false,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/src/server/providers/fal-motion.ts",
+              "note": "人物动作模型明确拒绝其他替换类型"
+            }
+          ],
+          "historicalEvidence": [],
+          "remaining": [
+            "不得把泛化文字指导或人物动作控制标作三类精准替换完成。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F20",
+      "name": "社交链接导入",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "semanticEquivalent": null,
+      "assessmentBasis": "抖音与国际版抖音正式解析合同、持久任务和媒体导入已落地；本地回归与真实浏览器收费门禁通过，未调用外部收费接口。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/social-import.test.ts",
+          "note": "5项离线协议、权限/确认、请求重放与真实本机视频下载恢复，仅一次模拟解析"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/social-import-spec.md",
+          "note": "当前范围与小红书协议缺口"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/screenshots/after-social-import-gate.jpg",
+          "note": "真实浏览器费用确认门禁；没有调用收费解析"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 33,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "只有缺能力说明/禁用路径",
+          "validationClaim": "无解析器合同",
+          "externalClaim": "**未实现解析适配**",
+          "browserClaim": "表单缺服务说明",
+          "boundaryClaim": "不是仅差密钥；TikTok/抖音/小红书抓取未实现"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "链接字段提示TikTok/抖音/小红书与授权说明；未调用解析。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日视频复刻有三平台链接字段与授权说明；未输入、解析或下载。"
+        },
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日目录确认视频复刻所属入口；链接导入字段仍以10月16日表单观察为据，目录不证明解析可用。"
+        }
+      ],
+      "remaining": [
+        "抖音与国际版抖音真实平台返回、下载可用性与服务商收费尚未外部验证。",
+        "小红书没有可核验视频响应结构，付费前明确拒绝；仍缺正式协议与真实效果验收。"
+      ]
+    },
+    {
+      "id": "F21",
+      "name": "主图打标",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读Flyelep主图打标正式字段与结果结构；当前专用合同存在。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/flyelep-provider.test.ts",
+          "note": "mainImageTagging正式字段与响应结构，早期稳定节点通过。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 34,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "商品/布局/价格/卖点输入，provider映射",
+          "validationClaim": "必填/组合校验；通用任务",
+          "externalClaim": "未验",
+          "browserClaim": "工具入口",
+          "boundaryClaim": "字价可读性、位置与字符准确性未验"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "打标参考1张、商品20张、卖点/价格；未生成。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "本地专用字段/结果解析已有合同；真实文字可读性、位置与字符准确性及原站等价性未验。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F22",
+      "name": "AI洗图",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "未验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读通用图像编辑自然化提示映射；没有证据称为原站独立算法。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/src/server/providers/openai.ts",
+          "note": "当前自然化编辑提示映射，仅源码证据。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 35,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI真实感重绘recipe `image-naturalize`",
+          "validationClaim": "通用OpenAI构造；未有独立自然化结果测评",
+          "externalClaim": "未验",
+          "browserClaim": "工具入口",
+          "boundaryClaim": "通用图像编辑语义映射，不是原站专用算法；不承诺隐藏AI来源"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "洗图1张与可选说明；不能按卡片推断批量输入。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        }
+      ],
+      "remaining": [
+        "通用自然化/图像编辑路径存在；本项未找到独立当前专项回归，仍未验证。",
+        "不承诺隐藏AI来源或原站算法效果等价。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F23",
+      "name": "多图融合",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读专用长图融合与本机真实拼接，两者独立，不再显示本机伪AI融合能力。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/flyelep-provider.test.ts",
+          "note": "longImageFusion专用字段合同。"
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/local-provider.test.ts",
+          "note": "真实拼接与拒绝伪AI别名。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 36,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI/Flyelep融合与local.stitch分离",
+          "validationClaim": "本地真实拼接新回归；通用AI任务",
+          "externalClaim": "AI未验",
+          "browserClaim": "工具草稿/素材排序入口",
+          "boundaryClaim": "已删除local image-fusion伪能力；拼接/resize面积预检已修，7个本地文件回归通过"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "融合上传20张；无素材，未验证排序或生成。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日16项工具目录已独立归档，可确认本项所属工具入口；不把目录当成完整表单参数或执行效果验证。"
+        },
+        {
+          "kind": "2026-10-19主代理只读观察记录；缺完整表单原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "主代理见20张/10MB/8192²/比例≤5；前台切换导致完整快照未保留，未生成。"
+        }
+      ],
+      "remaining": [
+        "专用字段与真实本机拼接/面积边界已测；真实融合视觉质量及原站效果未验。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F24",
+      "name": "工具历史",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对普通/高级工具按操作恢复、逐槽缺失保留、历史过滤及下载记录；恢复消息读取前保存覆盖已红测修复。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/tool-recovery.test.ts",
+          "note": "逐槽恢复成功素材，保留失败ID直到重试或明确移除；蒙版与背景分开"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/advanced-recovery-implementation.md",
+          "note": "工具按操作保存恢复、逐素材错误和旧参数保留的真实浏览器证据"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/account-e2e-results.md",
+          "note": "本机真实媒体处理与下载持久记录"
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/e2e/tool-draft-loading.spec.ts",
+          "note": "先实红“保存enabled”，修后桌面手机2项通过；阻止空默认草稿覆盖。"
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "reviews/takeover/advanced-recovery-implementation.md",
+          "note": "高级工具独立草稿与历史分页、异步编辑保护。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "tool-draft-loading 2项与media 2项真实处理/下载历史；高级工具专属分片另记。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 37,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "组合状态/类型/项目/成员/日期/搜索/下载状态；个人归档恢复；真实产物+输入ZIP",
+          "validationClaim": "delivery-regressions历史/跨空间/ZIP/上传幂等；tasks持久化",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI实际任务ZIP含600×900PNG与local.resize清单；筛选/归档入口",
+          "boundaryClaim": "下载标记在取得Blob后写入，不能保证用户最终磁盘落盘；归档不删除账本"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "历史的类型/下载/生成状态/日期筛选、批量按钮与分页；数据为空。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月19日目录可见历史记录入口；完整筛选表单独立原件仍为10月13日空态，不证明当日有结果可操作。"
+        }
+      ],
+      "remaining": [
+        "普通工具读取中/失败时禁止编辑保存提交，失败重试后恢复原参数，桌面手机已验；旧会话逐页寻找。",
+        "未完成上传二进制不属于草稿，刷新需重选；下载标记不证明最终磁盘写入，外部工具效果未验。"
+      ],
+      "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
+    },
+    {
+      "id": "F25",
+      "name": "画布对象",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "四尺寸真实图片/文字对象、坐标字号、画布尺寸与保存刷新已验。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "reviews/takeover/canvas-and-upload-validation.md",
+          "note": "四尺寸编辑、像素导出、版本恢复和匿名分享；非完整原站编辑器等价。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "canvas 4项：四视口真实图片/文字编辑、保存/刷新和像素导出。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 38,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "独立SceneDocument+Fabric，位置/旋转/裁剪/文字/只读；EXIF逻辑尺寸",
+          "validationClaim": "11 scene几何；image-orientation全部8方向真实JPEG",
+          "externalClaim": "不涉及",
+          "browserClaim": "ED桌面/390/视频帧/文件",
+          "boundaryClaim": "视频画布导出是静态帧；下载原件保持原文件；不是完整排版软件"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日已有画布显示尺寸、图层/全选及工具栏；只读打开，未编辑对象、分组锁定或撤销。"
+        }
+      ],
+      "remaining": [
+        "真实PNG导出尺寸与像素已验；视频导出为静态帧、原件下载保持原文件。",
+        "复杂对象与原站完整排版语义仍待独立对照，不称完整排版软件。"
+      ]
+    },
+    {
+      "id": "F26",
+      "name": "图层/撤销",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "矩形添加、撤销/重做及图层数量持久化已四尺寸验证；窄屏焦点与画布键盘另有独审。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "reviews/takeover/canvas-and-upload-validation.md",
+          "note": "四尺寸编辑、像素导出、版本恢复和匿名分享；非完整原站编辑器等价。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "canvas 4项与canvas-focus-review 2项：撤销/重做与键盘焦点；未覆盖全套分组/锁定。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "10月19日本机真实专项",
+          "path": "reviews/takeover/library-canvas-statistics-validation.md",
+          "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 39,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "多选/组合/层序/显隐/锁定/复制/历史",
+          "validationClaim": "11 scene + document revision",
+          "externalClaim": "不涉及",
+          "browserClaim": "ED实际组合/撤销/移动/文本",
+          "boundaryClaim": "已验证单次语义撤销；复杂嵌套仍受层数/深度预算"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日已有画布显示尺寸、图层/全选及工具栏；只读打开，未编辑对象、分组锁定或撤销。"
+        }
+      ],
+      "remaining": [
+        "两对象分组/锁定/解锁/解组、禁删除/移动、位移、撤销重做与刷新已在桌面/手机专项通过；任意深度嵌套分组未穷尽。",
+        "层数与深度预算保留；原站复杂图层语义仍未知。"
+      ]
+    },
+    {
+      "id": "F27",
+      "name": "OCR/拆层",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/openai.ts",
+          "line": 88,
+          "endLine": 199
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal-extra.ts",
+          "line": 224,
+          "endLine": 231
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/worker/runner.ts",
+          "line": 236,
+          "endLine": 266
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/provider-extra.test.ts",
+          "note": "固定层数/透明顺序、实际坐标与任务事务合同。 已通过早期稳定测试节点，非冻结后的最终全量。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 40,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "OpenAI结构化regions+原图尺寸+有限坐标校验；OCRResultPanel点选→改字草稿；Qwen透明层整组应用",
+          "validationClaim": "openai-provider有效/越界/EXIF；fal-extra层合同；tasks分层入库原子性",
+          "externalClaim": "未验",
+          "browserClaim": "新OCR面板已接；未运行收费识别；ED实际组合",
+          "boundaryClaim": "坐标明确model-estimate，需人工核对；Flyelep OCR仍纯文字；栅格拆层不等于PSD可编辑文字"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日画布可见图层分离/编辑文字入口及标价；未运行，不能证明识别坐标、透明层或可编辑语义。"
+        }
+      ],
+      "remaining": [
+        "结构坐标校验与固定层数拆分路径存在；视觉估计坐标、透明层重组、真实可编辑语义分别验收。"
+      ]
+    },
+    {
+      "id": "F28",
+      "name": "视频后处理",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal-extra.ts",
+          "line": 56,
+          "endLine": 75
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal-extra.ts",
+          "line": 136,
+          "endLine": 155
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/providers/fal-extra.ts",
+          "line": 205,
+          "endLine": 242
+        },
+        {
+          "kind": "本轮已复核证据",
+          "path": "platform/tests/provider-extra.test.ts",
+          "note": "正式后处理字段、真实探测与边界合同，外部输出未验。 已通过早期稳定测试节点，非冻结后的最终全量。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 41,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "Kling编辑、LTX延长、RealESRGAN倍数、HeyGen口播翻译、Bria短片文字区域擦除",
+          "validationClaim": "fal-extra21：官方字段/语言/时长/禁自动裁剪；reference16",
+          "externalClaim": "未验",
+          "browserClaim": "参数入口与限制文案；字幕模型无真实推理",
+          "boundaryClaim": "Bria仅0<时长<5s的通用编辑，保留音轨、效果需确认，不保证专用OCR或无痕；口播翻译≠画面字幕翻译"
+        }
+      ],
+      "currentOriginalEvidence": [],
+      "remaining": [
+        "编辑/延长/超清/口播翻译/短片擦除须分项验收。",
+        "短于5秒通用擦除不等于专用无痕字幕去除；真实输出均未验。"
+      ],
+      "currentOriginalAssessment": "10月16日已有画布只读原件尚不能证明此项具体交互；没有看到入口不等于不存在，原站语义保持未知。"
+    },
+    {
+      "id": "F29",
+      "name": "待应用",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "无",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/worker/runner.ts",
+          "line": 302,
+          "endLine": 320
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/service.ts",
+          "line": 735,
+          "endLine": 800
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/tasks.test.ts",
+          "note": "待应用、多层组、版本冲突和事务失败后恢复；本轮独审5套108项含本套"
+        },
+        {
+          "kind": "10月19日本机真实专项",
+          "path": "reviews/takeover/library-canvas-statistics-validation.md",
+          "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 42,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "pending_applies、revision、原目标/新层/替换/丢弃",
+          "validationClaim": "tasks异步冲突/重复/分层group",
+          "externalClaim": "不涉及",
+          "browserClaim": "Workbench集成入口，结果层组主要合同",
+          "boundaryClaim": "任务结果不会覆盖新文档；真实收费图组尚未验"
+        }
+      ],
+      "currentOriginalEvidence": [],
+      "remaining": [
+        "本机真实产物在晚到版本冲突、刷新恢复、仅应用一次和重复请求拒绝场景已在桌面/手机通过。",
+        "真实模型拆层输出与完整原站待应用语义仍需独立验证。"
+      ],
+      "currentOriginalAssessment": "10月16日已有画布只读原件尚不能证明此项具体交互；没有看到入口不等于不存在，原站语义保持未知。"
+    },
+    {
+      "id": "F30",
+      "name": "版本",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读递增版本、恢复旧版生成新版本及内容一致，当前保留最近30版本。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮已复核证据",
+          "path": "reviews/takeover/canvas-and-upload-validation.md",
+          "note": "四尺寸编辑、像素导出、版本恢复和匿名分享；非完整原站编辑器等价。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "canvas 4项：编辑出新版本、恢复旧版再生成新版本。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 43,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "DocumentService保存/恢复新revision、列表",
+          "validationClaim": "core版本冲突/恢复",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI保存/刷新/版本入口",
+          "boundaryClaim": "原件保留；不等于无限永久保留运营服务"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "2026-10-16原站只读观察；2026-10-19归档核对",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "10月16日版本面板显示最近30条，本项目空态；未恢复，不由空态推断全部保留策略。"
+        }
+      ],
+      "remaining": [
+        "真实编辑/刷新/恢复旧版已验；原件保留不等于无限永久版本运营承诺。"
+      ]
+    },
+    {
+      "id": "F31",
+      "name": "导出下载",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已复核客户端导出策略、真实像素下载与当前原站导出面板；来源附属文件与内嵌元信息明确区分。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/account-e2e-results.md",
+          "note": "真实缩放图片浏览器下载、尺寸像素和原件摘要一致，刷新保留下载记录"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/canvas-and-upload-validation.md",
+          "note": "四尺寸真实导出320×240与像素、版本恢复；未外部生成。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "canvas 4项实际320×240导出，加media实际48×32原件下载/字节核对。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 44,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "PNG/JPG、选层/整板/多项目ZIP；真实来源sidecar；服务端当前订阅解水印策略，全部应用导出统一标记",
+          "validationClaim": "scene11+bundle6+policy3；根API/share policy；浏览器实物像素",
+          "externalClaim": "不涉及",
+          "browserClaim": "多项目UI真实两张1200×900；ED裁切/倍数；水印2024px、豁免0差异、ZIP与单图字节相等；整合策略刷新遇服务中断拒绝导出，恢复后真实PNG1200×900",
+          "boundaryClaim": "来源sidecar不是PNG嵌入；水印默认off/demo豁免，应用客户端渲染不冒充防绕过；原件下载独立"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读导出面板",
+          "path": "research/takeover/20261016-canvas-export.txt",
+          "note": "PNG/JPG，合并长图或ZIP，比例锁，普通导出免费，亚马逊AI元信息默认勾选；未确认实际下载。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "research/takeover/20261016-canvas-export.txt",
+          "note": "只读导出面板：PNG/JPG、长图/压缩包、比例锁及默认AI元信息；未实际下载"
+        }
+      ],
+      "remaining": [
+        "四尺寸画布真实PNG像素、保存刷新与原件下载已验证；原站实际下载、亚马逊元信息写入及所有导出组合仍未对照。",
+        "本地来源附属文件不能冒充图片内嵌元信息；应用水印不承诺防绕过。"
+      ]
+    },
+    {
+      "id": "F32",
+      "name": "分享",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对签名分享的范围、过期撤销、服务端原件权限和匿名真实浏览器。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/shares.ts",
+          "note": "分享只包含画布引用、服务端重验原件授权/过期/撤销。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/canvas-and-upload-validation.md",
+          "note": "无登录上下文预览/原件403/撤销四尺寸真实验证。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "canvas 4项：无登录分享、原件403/预览200及所有者撤销。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 45,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "allowOriginalDownload持久化；签名token过期/撤销；原件禁用403，previewVariant仅已生成预览",
+          "validationClaim": "core新分享拒原件/旧迁移兼容/无预览视频；ED禁下载开关实测",
+          "externalClaim": "不涉及",
+          "browserClaim": "PublicShare只读/缩略图不可播放说明；ED导出按钮隐藏实际DOM",
+          "boundaryClaim": "预览可截图/保存，不宣称禁止；没有预览的视频在原件未授权时不播放"
+        }
+      ],
+      "currentOriginalEvidence": [],
+      "remaining": [
+        "默认原件403、预览200及撤销后不可访问已真实验证；预览本身可截图/保存。",
+        "当前原站完整分享交互未独立观察，不由本地测试推断等价。"
+      ],
+      "currentOriginalAssessment": "10月16日已有画布只读原件尚不能证明此项具体交互；没有看到入口不等于不存在，原站语义保持未知。"
+    },
+    {
+      "id": "F33",
+      "name": "项目/收藏",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对项目搜索、媒体类型、个人收藏、日期范围、软删除与版本接口；原站有项目/收藏及名称时间筛选。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/projects.ts",
+          "note": "按空间、名称、类型、日期、个人收藏过滤；软删除保留。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/core.test.ts",
+          "note": "项目版本/恢复及个人收藏边界当前合同；最终全量另记。"
+        },
+        {
+          "kind": "10月19日本机真实专项",
+          "path": "reviews/takeover/library-canvas-statistics-validation.md",
+          "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 46,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "Project/Library搜索/分页/CRUD/软删除",
+          "validationClaim": "core权限/持久化/收藏",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI新项目/刷新/收藏",
+          "boundaryClaim": "部分日期/作者组合筛选未见完整合同；已删除素材有独立说明"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "资产页面实见项目/收藏、名称和时间筛选；未修改已有资产。"
+        }
+      ],
+      "remaining": [
+        "本地名称、类型、个人收藏组合筛选及回收恢复已有桌面/手机实际通过；日期查询仅有接口合同，当前界面没有日期/作者筛选。",
+        "原站作者筛选及全部归档规则仍未知，不把旧文档要求自动当成已确认范围。"
+      ]
+    },
+    {
+      "id": "F34",
+      "name": "素材/集合",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "真实上传、丢失响应恢复、原件摘要与刷新已有浏览器验证；集合增改和空间边界有源码/合同，集合完整管理界面未在96项中执行。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/references.ts",
+          "note": "集合增改、素材集合关联与同空间检查。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/canvas-and-upload-validation.md",
+          "note": "拖放/粘贴、上传响应丢失原ID重试、真实字节一致及刷新。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "upload-recovery 2项与media 2项实际原件上传/字节/刷新；集合管理未在此轮操作。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "10月19日本机真实专项",
+          "path": "reviews/takeover/library-canvas-statistics-validation.md",
+          "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 47,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "真实原件/预览/缩略、tags/收藏/集合/文档提取",
+          "validationClaim": "core素材文件/隔离/提取/真实下载",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI集合新增/素材查看/原件",
+          "boundaryClaim": "文件hash元数据存在，不代表跨空间物理去重；未冒充原站公共模特库"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "素材库图片/视频上传与命名集合入口已见；无上传操作。"
+        }
+      ],
+      "remaining": [
+        "命名集合新建/改名/关联/移除/组合搜索/删除集合保留原件已有桌面/手机实际通过；手机搜索压缩缺陷已真实红绿修复。",
+        "集合删除为软删除并保留历史关联；不声称跨空间物理去重。",
+        "原站公共模特库与人像视频语义另归F36；未复制第三方公共模特原件。"
+      ]
+    },
+    {
+      "id": "F35",
+      "name": "人脸授权认证",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "外部服务限制",
+      "semanticEquivalent": null,
+      "assessmentBasis": "本轮已复核相关源码与下列当前证据；当前实现与原站语义等价分别判定。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/identity.ts",
+          "note": "IdentityProvider仅接口，状态机含start/poll/过期/撤回"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/index.ts",
+          "note": "固定new IdentityService(context)，没有正式provider"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/quality-workflows.test.ts",
+          "note": "仅注入合同夹具，无真实人脸核验"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 48,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "身份自述授权版本/撤回 + IdentityProvider接口与会话状态",
+          "validationClaim": "quality-workflows自述/假provider证据/到期/跨空间",
+          "externalClaim": "**真实认证适配未实现**",
+          "browserClaim": "UI人物未认证；新授权页待末轮验证",
+          "boundaryClaim": "只有接口注入契约，部署无实际FACE实现；不可说加密钥即完成实名认证"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "research/takeover/20261016-person-upload-current.txt",
+          "note": "只读：上传到我的人像，明确虚拟人物图片、支持视频/图片、名称必填；未上传，未观察实名认证/扫码/授权勾选"
+        }
+      ],
+      "remaining": [
+        "当前人物素材上传界面不能证明历史认证已下线，也不能证明原站采用身份证实名或活体。",
+        "现有本地人物授权声明/素材版本与认证状态机不等于正式核验；无明确供应商/业务协议前不得用政府实名适配冒充人物使用授权。"
+      ]
+    },
+    {
+      "id": "F36",
+      "name": "人物素材组",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "semanticEquivalent": null,
+      "assessmentBasis": "人物库已支持图片/视频独立存储预览与引用版本；混合参考对不支持模型整体明确拒绝并保留草稿，未将视频放入图片槽。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/character-video-validation.md",
+          "note": "服务73项和桌面/手机4项本轮通过；加载恢复、PATCH不默认清空、混合引用拒绝均有回归。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "character-video 4项：真实视频播放、图片视频分槽、读取恢复与迟到响应保护。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 49,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "references CRUD/revision、授权声明关联、characterId冻结revision并入真实参考",
+          "validationClaim": "quality-workflows素材变更/撤回；tasks撤回后不外呼",
+          "externalClaim": "生成未验",
+          "browserClaim": "UI真实人物新建；授权后创作入口",
+          "boundaryClaim": "历史产物保留；普通授权声明不标认证"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "当前私有人像与10个公共模特，另虚拟人物上传支持图片/视频，未实际上传。"
+        }
+      ],
+      "remaining": [
+        "本机视频人物管理与预览已验；供应商人物视频参考仅在专用能力协议明确支持时可启用，当前模型明确拒绝。",
+        "原站10个公共模特素材未复制，公共库内容与使用权需独立确定；真实模型效果未外呼验证。"
+      ]
+    },
+    {
+      "id": "F37",
+      "name": "个人品牌参考与品牌模型入口",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "新增显式workspace/member额度合同；历史无scope仍按空间，已批准team快照才接受每成员合同；按原创建者在创建/恢复事务内计数，混合合同分别判定且不相加。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/brand-quota-contract-tests.json",
+          "note": "独立helper18+集成7=25项通过；原创建者恢复、降级保留、旧快照不改、private重命名保留参考/样式均验。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/brand-quota-and-capacity.md",
+          "note": "已冻结的作用域兼容、事务内计数、并发容量边界与真实外部限制。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/brand-recycle-tests.json",
+          "note": "品牌服务集成8项：新增回收记录按workspace/private过滤，跨空间读取/恢复拒绝；7绿1红后修复8绿。"
+        },
+        {
+          "kind": "本轮真实浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "冻结业务版本单轮96/96通过，含品牌桌面/手机4项：成员独立限额、到限额拒绝、删除/补建、恢复拒绝/成功、500/404和读取保存迟到响应隔离。"
+        },
+        {
+          "kind": "最后文案构建定向证据",
+          "path": "reviews/takeover/e2e/20261016T102847Z-final-copy/report/index.html",
+          "note": "两处旧静态翻译及fallback字典后的品牌4/4通过；英/阿fallback、编辑aria原品牌名和满额恢复错误精确断言。类型/规范/格式/构建/运行检查全过，未把此前728/96冒充为最后文案构建重复执行。"
+        },
+        {
+          "kind": "2026-10-19最终品牌浏览器复验",
+          "path": "reviews/takeover/e2e/20261019-scope-green/report/index.html",
+          "note": "桌面/手机品牌4项通过，含当前回收视图翻译精确断言；与新增引导/营销同构建运行8项，不重复累加。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 50,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "多图/颜色字体/私有共享/CRUD/任务快照；EntitlementService品牌上限",
+          "validationClaim": "core私有品牌；tasks冻结；reference限量；entitlements创建/恢复/降级",
+          "externalClaim": "未验",
+          "browserClaim": "UI品牌创建刷新",
+          "boundaryClaim": "参考资料不是训练；真实模型品牌一致性未验"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "品牌配额加载完成1/1；创建受限，名称与参考图编辑只读可见。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "当前品牌模型与编辑弹窗、每成员额度"
+        }
+      ],
+      "remaining": [
+        "品牌参考资料管理与配额合同已实现，真实生成一致性未外呼验证；不能称模型训练。",
+        "原站套餐价格与10/15/20数值未复制，新合同需实例负责人明确批准配置。"
+      ]
+    },
+    {
+      "id": "F38",
+      "name": "预设品牌模板与订阅（范围待确认）",
+      "implementationStatus": "未实现",
+      "verificationStatus": "未验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已区分当前品牌参考编辑入口与旧指南中的预设品牌模板订阅；当前相应订阅入口未观察。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/references.ts",
+          "note": "当前只有品牌参考资料CRUD，没有模板订阅服务。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 51,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "当前无入口",
+          "validationClaim": "不适用",
+          "externalClaim": "不适用",
+          "browserClaim": "不适用",
+          "boundaryClaim": "阶段2保留非强制；未实现且不冒充现成功能"
+        },
+        {
+          "kind": "历史原站只读观察",
+          "source": "reviews/takeover/original-evidence-date-map.md",
+          "sourceDate": "2026-10-13",
+          "observation": "当日个人品牌页没有旧模板订阅入口，不能推断下线。"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "当前界面与旧官方指南分开记录；不使用加载态0/0"
+        }
+      ],
+      "remaining": [
+        "当前个人品牌模型存在，不能推出旧预设模板订阅存在或下线。",
+        "保留范围未知；不因旧文档“非强制”而删项。"
+      ],
+      "scopeStatus": "未知"
+    },
+    {
+      "id": "F39",
+      "name": "空间切换",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "0029账号终身一队占用、待开通付款门禁、正式权益激活与跨空间隔离已实现；独审10项及桌面/手机8项真实浏览器通过。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/team-creation-implementation.md",
+          "note": "0029冻结；团队创建/套餐/未付款重放、刷新不提交订单与英阿门禁桌面/手机8项通过。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/team-delta-tests.json",
+          "note": "独审10项：旧关闭订单真实付款晚到可激活同预留空间，全退先到仍不激活，权限与归属无公开绕过。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "team-creation 8项：缺合同门禁、同一未付款订单恢复、已有团队引导、英阿文案。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 52,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "context取消旧查询、捕获wid、服务端requireAccess",
+          "validationClaim": "core跨空间/被移除拒绝",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI创建团队/回个人",
+          "boundaryClaim": "浏览器晚到响应隔离有代码与自评，所有竞态未穷举"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "原站空间菜单当前仅个人项；创建团队进入会员门禁，每账号最多一队，未付款或创建团队。"
+        }
+      ],
+      "remaining": [
+        "正式启用需已批准team固定期会员合同；真实支付未执行，当前原站账号无现有团队，不能声称真实团队切换等价。"
+      ]
+    },
+    {
+      "id": "F40",
+      "name": "成员角色",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对四角色、所有者保护、邀请席位与邮件队列；原站角色页面受会员门禁不可读。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/local-team-account-support-review.md",
+          "note": "当前源码、隔离合同与通知/角色真实浏览器对照；未知原站规则保持。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/team.ts",
+          "note": "当前权限、事务与数据保留实现已核读。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "notifications-team中角色英阿4项；角色权限矩阵仍主要由自动合同验证。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 53,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "invitation/roles/owner保护/导入撤回；成功邀请同事务入邮件outbox，默认关闭",
+          "validationClaim": "core邀请注册事务/过期/viewer/owner；mail-outbox真实SMTP23项（含createServices队列不可写回滚）",
+          "externalClaim": "SMTP协议已实现；无真实外部发信",
+          "browserClaim": "UI真实viewer邀请/撤回；邮件disabled及空队列/筛选实际验证",
+          "boundaryClaim": "关闭保留复制链接；排队≠送达，发信前重验邀请；token加密入队、接受后清除"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "当前创建团队显示会员选择，无法只读进入成员/预算/导入/退出；不是已下线。"
+        }
+      ],
+      "remaining": [
+        "本地成员权限与邀请/撤销存在合同，角色英阿真实浏览器已验；原站详细角色矩阵仍未知。",
+        "邀请邮件默认关闭，排队和SMTP接受均不等于收件；真实外部送达未验。"
+      ]
+    },
+    {
+      "id": "F41",
+      "name": "团队额度",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对网页/接口渠道、共享/分配额度、预留、预算下限与移除成员约束；原站团队额度细则未进入。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/local-team-account-support-review.md",
+          "note": "当前源码、隔离合同与通知/角色真实浏览器对照；未知原站规则保持。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/tasks/credits.ts",
+          "note": "当前权限、事务与数据保留实现已核读。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/migrations/0030-concurrency-capacity.sql",
+          "note": "仅扩显式并发配置边界到100并保留原billing字段；供应商4/每tick2容量保护不变，实际claim100/101另有回归。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 54,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "credits事务shared/allocated/预留/预算/移除成员",
+          "validationClaim": "tasks余额/分配/并发/模式迁移",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI团队额度入口",
+          "boundaryClaim": "平台预算单位≠供应商余额/现金"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "当前创建团队显示会员选择，无法只读进入成员/预算/导入/退出；不是已下线。"
+        }
+      ],
+      "remaining": [
+        "平台预算单位是额度，不是供应商余额或现金。",
+        "本地事务和来源隔离已有回归；原站团队预算、回收和分配规则仍待有权限时核对。"
+      ]
+    },
+    {
+      "id": "F42",
+      "name": "导入统计审计",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对CSV/XLSX预览、去重、逐行事务导入、授权成员导出和审计；统计来源为实际账本。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/local-team-account-support-review.md",
+          "note": "当前源码、隔离合同与通知/角色真实浏览器对照；未知原站规则保持。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/team.ts",
+          "note": "当前权限、事务与数据保留实现已核读。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/member-import.ts",
+          "note": "逐行验证、去重、同空间成员更新及邀请事务，CSV/XLSX导出。"
+        },
+        {
+          "kind": "10月19日本机真实专项",
+          "path": "reviews/takeover/library-canvas-statistics-validation.md",
+          "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 55,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "XLSX/CSV预览、成员导出、账本聚合、audit",
+          "validationClaim": "core真实表格/行错误/重复；tasks统计数据源",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI页面与团队入口",
+          "boundaryClaim": "自定义日界线/统计时区完整场景未浏览器验收"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "当前创建团队显示会员选择，无法只读进入成员/预算/导入/退出；不是已下线。"
+        }
+      ],
+      "remaining": [
+        "当前协调世界时日期的起日/末日边界及统计导出已有桌面/手机实际通过；当前界面没有自定义统计时区选项。",
+        "原站团队管理受会员门禁；导入、导出及审计的其余语义仍以各自合同和台账为准。"
+      ]
+    },
+    {
+      "id": "F43",
+      "name": "团队退出解散",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读转让/退出/归档、所有者保护、待支付与在途任务约束；原站真实团队退出未观察。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/local-team-account-support-review.md",
+          "note": "当前源码、隔离合同与通知/角色真实浏览器对照；未知原站规则保持。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/team.ts",
+          "note": "当前权限、事务与数据保留实现已核读。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/team-delta-tests.json",
+          "note": "10项独审含账号永久占用、转让隔离与晚到支付/全退激活边界。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 56,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "owner transfer/leave/archive、在途/预留阻断",
+          "validationClaim": "coreowner规则；tasks移除成员",
+          "externalClaim": "不涉及",
+          "browserClaim": "UI团队入口/邀请",
+          "boundaryClaim": "使用归档保留数据；真实付费席位运营未联调"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "当前创建团队显示会员选择，无法只读进入成员/预算/导入/退出；不是已下线。"
+        }
+      ],
+      "remaining": [
+        "本地解散以归档保留数据；新一队永久占用与转让兼容已独审并有重复/归档/转让回归。",
+        "真实付费席位/原站退出结算细则未联调，不宣称现金或套餐自动退还。"
+      ]
+    },
+    {
+      "id": "F44",
+      "name": "登录会话",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "邮件密码恢复、短信与微信身份完整状态链和生产协议适配已落，默认关闭；本地协议及真实浏览器已验证，不代表外部送达或真实授权。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/password-recovery.test.ts",
+          "note": "原密码17项、谷歌30项和邮件23项定向70项此前通过"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/aliyun-sms.test.ts",
+          "note": "42项本地阿里云协议"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/wechat-gateway.test.ts",
+          "note": "52项微信协议"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/identity-auth.test.ts",
+          "note": "27项身份与安全；最新三套合并121项通过"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/account-e2e-results.md",
+          "note": "保留分轮账户与媒体证据；最终完整96项包含account 6项和identities 6项，不将早期分轮相加成单轮。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/e2e/20261016T081323Z/report/index.html",
+          "note": "18项真实浏览器完整报告"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "account 6项与identities 6项：本机邮件恢复、仅谷歌夹具设置密码、本机短信登录和关闭后解绑；非真实外部授权/送达。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 57,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "本地密码会话+首次owner/邀请；Google OIDC code+PKCE/state/nonce、显式绑定/解除、Google-only保护",
+          "validationClaim": "core/app；Google作者30项本机HTTP/RSA/SQLite；独审见phase-4-google-independent-review",
+          "externalClaim": "Google协议已实现，真实Google授权未联调；微信/短信未实现",
+          "browserClaim": "UI本地登录；Google未配置入口隐藏、设置未关联、同邮箱提示、伪成功URL均实测",
+          "boundaryClaim": "不按同邮箱自动合并；Google-only不能移除唯一登录；无本地密码恢复/Google风险推送"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "已登录系统设置仅实见主题/生成确认；未看到密码入口不等于该功能不存在。"
+        }
+      ],
+      "remaining": [
+        "阿里云签名、模板、最小权限密钥及已审核微信网站应用和固定回调域名需正式配置并显式开启。",
+        "真实短信送达、真实微信扫码和应用审核、正式邮件送达和谷歌授权均未外部联调。",
+        "最终完整报告已包含账户与身份分支；真实谷歌、微信及外部短信/邮件送达仍未联调。"
+      ],
+      "children": [
+        {
+          "id": "F44.1",
+          "name": "本地密码登录与会话",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "无",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/password-recovery.test.ts",
+              "note": "本机协议与会话安全回归通过"
+            },
+            {
+              "kind": "本轮完整浏览器证据",
+              "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+              "note": "account桌面/手机：本机邮件、同一发起会话、真实密码与旧会话失效；谷歌账号为隔离夹具。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "真实浏览器账户闭环已验证；正式邮件送达另行外部验收。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/core/auth.ts",
+              "line": 232,
+              "endLine": 251
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F44.2",
+          "name": "谷歌登录、显式关联与解除",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/google-oidc.test.ts",
+              "note": "本机协议与会话安全回归通过"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "真实谷歌授权仍待正式配置。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/auth/google/service.ts",
+              "line": 266
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/auth/google/service.ts",
+              "line": 318,
+              "endLine": 369
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F44.3",
+          "name": "仅谷歌账号设置本地密码",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/password-recovery.test.ts"
+            },
+            {
+              "kind": "本轮完整浏览器证据",
+              "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+              "note": "account桌面/手机：本机邮件、同一发起会话、真实密码与旧会话失效；谷歌账号为隔离夹具。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "本地协议与邮件队列测试通过；真实邮件送达、真实谷歌授权待配置联调。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/auth/google/service.ts",
+              "line": 318,
+              "endLine": 323
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/auth/google/service.ts",
+              "line": 355,
+              "endLine": 369
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F44.4",
+          "name": "本地密码找回",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/password-recovery.test.ts"
+            },
+            {
+              "kind": "本轮完整浏览器证据",
+              "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+              "note": "account桌面/手机：本机邮件、同一发起会话、真实密码与旧会话失效；谷歌账号为隔离夹具。"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "本地协议与邮件队列测试通过；真实邮件送达、真实谷歌授权待配置联调。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "本轮源码调查",
+              "path": "reviews/takeover/baseline/backend-audit.md",
+              "line": 1
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F44.5",
+          "name": "短信与微信登录",
+          "implementationStatus": "已实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/identity-auth.test.ts",
+              "note": "身份注册、登录、显式绑定、换绑、解除、撤销与冲突"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/aliyun-sms.test.ts",
+              "note": "正式阿里云协议适配，本机夹具"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/tests/wechat-gateway.test.ts",
+              "note": "正式微信网站登录协议适配，本机夹具"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "platform/OPERATIONS-IDENTITY.md",
+              "note": "默认关闭、正式配置条件及运行指引"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "正式签名、模板与微信审核应用等配置缺失；没有真实短信送达或真实微信扫码验收。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "本轮源码调查",
+              "path": "reviews/takeover/baseline/backend-audit.md",
+              "line": 1
+            }
+          ],
+          "sourceReviewed": true
+        }
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/core/auth.ts",
+          "line": 232,
+          "endLine": 251
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/auth/google/service.ts",
+          "line": 266
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/auth/google/service.ts",
+          "line": 318,
+          "endLine": 323
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/auth/google/service.ts",
+          "line": 355,
+          "endLine": 369
+        }
+      ]
+    },
+    {
+      "id": "F45",
+      "name": "资料主题语言",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读真实偏好增量保存、主题、界面语言/文字方向与独立创作语言；本轮英阿动态提示不改用户正文。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/i18n-current-validation.md",
+          "note": "静态/动态调用修复、英阿按模块浏览器及50项参数边界；非母语审校。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/web/context.tsx",
+          "note": "界面语言、主题和RTL方向实际应用；设置与创作语言分开。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "locale/creation-locale及credits-locale各分支、其他功能英阿检查；不是全站母语审校。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 58,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "真实偏好/主题/zh/en/ar；1617词条，Google/邮件状态新增已译",
+          "validationClaim": "AST当前1532静态中文0缺失（09:29:23Z）；动态后端不计",
+          "externalClaim": "不涉及",
+          "browserClaim": "整站EN深色刷新、AR390无溢出；编辑器EN/AR实测；新Google/邮件组件QA另记",
+          "boundaryClaim": "用户数据不翻译；静态零缺词不是所有动态路径穷尽验证"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "当前主题/生成确认与中英阿菜单均展开实见，未修改原站偏好。"
+        }
+      ],
+      "remaining": [
+        "当前账户、帮助、创作、工具、额度的已覆盖分支已真实浏览器验证；未做母语审校或所有动态错误穷尽测试。",
+        "用户提示词、名称、资料与模型正文保留原值；原站语言菜单存在不证明全部翻译等价。"
+      ]
+    },
+    {
+      "id": "F46",
+      "name": "套餐账本兑换",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对订单快照、兑换、真实来源额度、到期/封存/恢复、固定期同档续费和退款原来源隔离。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/f52-billing-independent-final-tests.json",
+          "note": "9套83项含封存/恢复、退款预留失败减债及支付环境隔离，非最终全库。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/member-promotion-implementation.md",
+          "note": "0028已冻结；同档固定期与促销本机目录/订单草稿真实浏览器已验，未付款。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/migrations/0030-concurrency-capacity.sql",
+          "note": "仅扩显式并发配置边界到100并保留原billing字段；供应商4/每tick2容量保护不变，实际claim100/101另有回归。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "credits-locale 12项中的期限/来源/续订合同显示；真实金额和账本合同另记。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 59,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "商业快照/兑换；资源席位并发权益；每日免费桶；credit_lots按到期优先预留、结算、封存、恢复、延期、退款原来源",
+          "validationClaim": "credit-lots20与tasks/billing/entitlements/quality/delivery/app作者报告92pass；真实SQLite+签名fixture",
+          "externalClaim": "未实际付款",
+          "browserClaim": "GUI CreditBuckets历史导入1000/未知期限/预留0，封存筛选空态；credit-buckets-live.jpg",
+          "boundaryClaim": "会员到期封存3UTC月；pack1年及有效同类延长；历史余额期限未知，赠送/兑换按本地明确规则，不冒充原站运营值"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前证据",
+          "path": "research/takeover/20261016-membership-renewal-terms.txt",
+          "note": "主代理只读实见：会员到期封存3个月、续费恢复并重算封存、会员权益与剩余额度叠加；跨档换算规则仍未知"
+        }
+      ],
+      "remaining": [
+        "同档会员3个月封存、续费恢复和重算已实现并独立验证，旧无封存合同仅兼容明确旧条款。",
+        "跨档期限/权益换算和原站充值转换价表仍未知且混购明确阻止；旧初始余额期限不作历史猜测。"
+      ]
+    },
+    {
+      "id": "F47",
+      "name": "支付订阅",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核读付款金额/币种/环境/订单绑定、历史周期/逐退款证据与独立网页/API账务；固定期与活动已落并冻结。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/api-billing.test.ts",
+          "note": "渠道隔离、到期、风险、申诉及已核验付款时间"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/billing.test.ts",
+          "note": "原支付合同回归"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/billing-periods.test.ts",
+          "note": "7项：历史会员、旧资料未知、不可变周期、早期部分退款回调不倒推全退、真实逐退款时间上下界"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/billing.test.ts",
+          "note": "已核验paid_at和账单周期，逐退款事实持久化；5套账务定向48项通过"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/member-promotion-implementation.md",
+          "note": "0028冻结、财务定向和本机优惠/订单草稿验证；没有真实付款。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/f52-billing-independent-final-tests.json",
+          "note": "含历史资格、真实付款时间、退款上下界与异环境数据库拒绝。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 60,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "Stripe Checkout/webhook签名/幂等/退款/风险/订阅取消、绑定订单的Stripe账单/PDF",
+          "validationClaim": "billing 12（含账单授权/安全链接/在途撤权） + quality购买/退款/风险fixture",
+          "externalClaim": "未联调；需商户配置",
+          "browserClaim": "UI订单、支付返回提示",
+          "boundaryClaim": "与正式审批套餐联动；不以success URL认支付；API前台独立现金账户未实现双账本"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读汇总",
+          "path": "reviews/takeover/reference-inspiration-and-renewal.md",
+          "note": "当前会员固定期、同档续费和3个月封存已实见；跨档换算算法与真实支付未验证。"
+        }
+      ],
+      "remaining": [
+        "网页/接口独立平台额度全链路已实现，非独立现金账户或原站换算等价。",
+        "旧资料缺付款周期/退款成功时间时保留未知并核对；真实支付未获授权、未执行。",
+        "固定期同档叠加、3个月封存和定时/首购活动已定向回归及本机目录订单浏览器验证；跨档换算仍未知。"
+      ]
+    },
+    {
+      "id": "F48",
+      "name": "发票抬头",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "外部服务限制",
+      "semanticEquivalent": null,
+      "assessmentBasis": "已核对抬头、订单净额占用、申请、撤回和退款复核；submitInvoice明确只写本地登记，未有正式开票适配。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/src/server/core/business.ts",
+          "note": "createInvoice/submitInvoice/withdrawInvoice本地状态与金额保护，不发送正式开票。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/quality-workflows.test.ts",
+          "note": "本地开票申请净额占用/撤回历史合同，非正式税务出票。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 61,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "标题CRUD、本地申请/金额占用/撤回/退款复核",
+          "validationClaim": "core草稿；quality发票净额/释放",
+          "externalClaim": "**正式INVOICE适配未实现**",
+          "browserClaim": "UI申请/详情入口待新回归",
+          "boundaryClaim": "本地登记不发送、不生成正式票；不是仅差发票API key"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "当前订阅开票提示，无完整出票结果"
+        }
+      ],
+      "remaining": [
+        "本地发票抬头、申请、金额占用、撤回、退款复核已实现；正式开票、取票与状态供应商适配缺失。",
+        "用户未提供开票供应商或正式协议，现阶段真实阻塞是协议和配置；不能把本地登记或Stripe账单冒称正式发票。",
+        "原站2026-05-16起自助开票界面已观察；无订单，真实开票未验证。"
+      ]
+    },
+    {
+      "id": "F49",
+      "name": "开放平台",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "assessmentBasis": "认证类型冻结渠道；报价、任务、预留、结算、释放、冲正、到期与订单支付全链路隔离；旧密钥在途仍网页结算。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/billing-channel.test.ts",
+          "line": 87,
+          "note": "独立网页/接口额度、交叉报价/幂等/重试、密钥预算、权限、到期隔离"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/billing-channel-migration.test.ts"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/api-billing.test.ts"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/api-billing-ui.test.ts"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "credits-locale中网页/接口渠道和原值显示；未进行真实支付或外部任务。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 62,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "可用API、一次明文Key摘要/scopes/到期/预算/OpenAPI",
+          "validationClaim": "core实际Key/跨空间/撤销；app OpenAPI",
+          "externalClaim": "API核心本地已测，模型外部未验",
+          "browserClaim": "UI开发者入口/文档",
+          "boundaryClaim": "未把原站API Key自动导入；同本地任务/账本核心"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站只读观察",
+          "path": "research/takeover/20261016-api-overview.txt",
+          "note": "网页余额160、接口总览0，证明显示为独立账户，未读取密钥。"
+        },
+        {
+          "kind": "本轮原站只读充值入口",
+          "path": "research/takeover/20261016-api-recharge.txt",
+          "note": "不把充值入口推断为已知金额到算力换算规则。"
+        }
+      ],
+      "remaining": [
+        "使用独立平台额度账户，非独立现金账户；原站金额转算力规则和价表仍未知。",
+        "真实支付、真实接口模型调用以及原站账户等价性未验证。"
+      ],
+      "children": [
+        {
+          "id": "F49.1",
+          "name": "空间密钥、权限与任务调用",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/billing-channel.test.ts",
+              "line": 87,
+              "note": "独立网页/接口额度、交叉报价/幂等/重试、密钥预算、权限、到期隔离"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/tasks.test.ts",
+              "line": 346
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [],
+          "remaining": [
+            "真实模型请求与供应商效果未验证。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/core/business.ts",
+              "line": 48,
+              "endLine": 86
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/service.ts",
+              "line": 401,
+              "endLine": 415
+            }
+          ],
+          "sourceReviewed": true
+        },
+        {
+          "id": "F49.2",
+          "name": "独立接口额度账户与渠道充值",
+          "implementationStatus": "已实现",
+          "verificationStatus": "自动化验证",
+          "blocker": "预算授权",
+          "semanticEquivalent": null,
+          "evidence": [
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/billing-channel.test.ts",
+              "line": 87,
+              "note": "独立网页/接口额度、交叉报价/幂等/重试、密钥预算、权限、到期隔离"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/billing-channel-migration.test.ts"
+            },
+            {
+              "kind": "当前源码或回归",
+              "path": "platform/tests/api-billing.test.ts"
+            }
+          ],
+          "historicalEvidence": [],
+          "currentOriginalEvidence": [
+            {
+              "kind": "本轮原站只读观察",
+              "path": "research/takeover/20261016-api-overview.txt",
+              "note": "网页余额160、接口总览0，证明显示为独立账户，未读取密钥。"
+            },
+            {
+              "kind": "本轮原站只读充值入口",
+              "path": "research/takeover/20261016-api-recharge.txt",
+              "note": "不把充值入口推断为已知金额到算力换算规则。"
+            }
+          ],
+          "remaining": [
+            "平台额度不等于原站现金账户；金额转算力换算及真实付款未知。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/service.ts",
+              "line": 450,
+              "endLine": 470
+            },
+            {
+              "kind": "源码确认",
+              "path": "platform/src/server/tasks/credits.ts",
+              "line": 37
+            }
+          ],
+          "sourceReviewed": true
+        }
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "源码确认",
+          "path": "platform/src/web/pages/Developer.tsx",
+          "line": 44,
+          "endLine": 69
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/core/business.ts",
+          "line": 48,
+          "endLine": 86
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/service.ts",
+          "line": 401,
+          "endLine": 415
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/service.ts",
+          "line": 450,
+          "endLine": 470
+        },
+        {
+          "kind": "源码确认",
+          "path": "platform/src/server/tasks/credits.ts",
+          "line": 37
+        }
+      ]
+    },
+    {
+      "id": "F50",
+      "name": "通知工单申诉",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "semanticEquivalent": null,
+      "assessmentBasis": "系统/审核分类、同用户同空间真实未读汇总、分页与已读同步已实现；未知历史保守系统分类，支持联系方式/问卷可配置。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/notifications-contract-tests.json",
+          "note": "9项服务+1项HTTP，含用户/空间隔离、未知事件和双连接一致快照。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/e2e/20261016T095855Z/report/index.html",
+          "note": "正式归档单轮12/12桌面/手机：分类/计数/已读/分页/切空间与原团队通知。"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/notifications-validation.md",
+          "note": "明确本机事件语义和原站未知范围；Support另有root独立2项浏览器。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "notifications-team 12项、support-channels 2项：通知分页/计数/隔离及客服二维码重试、问卷新页。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 63,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "站内通知/工单补充撤回/管理员审核退平台额度；真实事件触发加密持久邮件outbox、SMTP worker、只读状态/审计核对CLI",
+          "validationClaim": "entitlements-appeals；mail-outbox23项真实TCP+SQLite含通知/回复、4xx重试/5xx永久失败/DATA不明/租约/权限",
+          "externalClaim": "标准SMTP已实现，默认关闭；真实外部发信/客服工单商/短信未验或未接",
+          "browserClaim": "工单补充/撤回持久化；邮件只读disabled/筛选/空状态实际验证",
+          "boundaryClaim": "accepted仅SMTP接受；不明结果不自动重发；客服外部商未适配；平台额度退款非现金退款"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/reference-team-account-support.md",
+          "note": "当前系统/审核分类实见；客服为微信/电话/时段，反馈为飞书调研，不等同站内工单。"
+        }
+      ],
+      "remaining": [
+        "通知分类与计数以本地真实事件为准，不复制原站7条未读异常或伪造消息。",
+        "客服/问卷真实资料须实例负责人配置，本机地址与二维码夹具不等于外部客服接入。",
+        "邮件accepted仅表示SMTP接受，未知结果不盲发；平台额度退款不等于现金退款。"
+      ]
+    },
+    {
+      "id": "F51",
+      "name": "邀请渠道",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "新双向奖励、原来源撤回、跨个人空间债务隔离、历史会员资格已定向回归；运营未定规则明确阻止发放。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/referral-policy.test.ts",
+          "note": "当前规则资格与双向发放合同"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/credit-grant-reversal.test.ts",
+          "note": "原来源定向撤回、已过期不重复扣、已花/预留记债务"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/referral-policy-spec.md",
+          "note": "规则/未知配置与验收"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/referral-independent-review.md",
+          "note": "独审问题与修复、48项账务/推荐定向结果"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+          "note": "credits-locale中推荐奖励配置英阿显示；不启用奖励或执行外部付款。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 64,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "开关默认关闭、推荐注册归因、正式付款奖励/退款反向、CSV渠道",
+          "validationClaim": "quality-workflows归因/首次购买/测试支付排除/退款/渠道",
+          "externalClaim": "真实支付/外发未验",
+          "browserClaim": "ReferralDetails入口待末轮验证",
+          "boundaryClaim": "规则由管理员启用；不承诺未开启现金或额度奖励"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/original-site-observations.md",
+          "note": "当前邀请规则原文、比例以套餐算力为基数"
+        }
+      ],
+      "remaining": [
+        "取整和资格中套餐过期主语未明，默认显式未配置并阻止返奖；运营须留审计证据后启用。",
+        "历史会员资格使用真实付款周期与退款时间证据，旧资料不足时须人工核对；真实付款未验。"
+      ]
+    },
+    {
+      "id": "F52",
+      "name": "营销活动（当前会员促销与历史抽奖）",
+      "implementationStatus": "部分实现",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "semanticEquivalent": null,
+      "assessmentBasis": "当前会员促销/固定期同档续购有原站实见且本机合同已实现；历史抽奖另保留未知，不能以父项未实现掩盖已完成子项。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "本轮当前证据",
+          "path": "reviews/takeover/member-promotion-implementation.md",
+          "note": "0028已冻结；优惠状态、确认、未付款订单快照与停用目录真实浏览器。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "source": "delivery-feature-matrix.md",
+          "line": 65,
+          "sourceDate": "2026-10-14",
+          "implementationClaim": "当前不展示假活动",
+          "validationClaim": "不适用",
+          "externalClaim": "不适用",
+          "browserClaim": "不适用",
+          "boundaryClaim": "阶段2保留非强制，未实现"
+        }
+      ],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站观察由主代理转述",
+          "note": "当前10月16日至26日促销；不把历史营销范围作为当前完整范围。"
+        },
+        {
+          "kind": "本轮原站当前证据",
+          "path": "research/takeover/20261016-membership-renewal-terms.txt",
+          "note": "主代理只读实见：会员到期封存3个月、续费恢复并重算封存、会员权益与剩余额度叠加；跨档换算规则仍未知"
+        }
+      ],
+      "remaining": [
+        "历史抽奖是否仍可用保持未知，当前促销不能代替其范围。",
+        "当前同档固定期与3个月封存已实现；跨档叠加存在但换算/权益规则未知，本地明确阻止混购。",
+        "活动资格采用明示本地结账发起时确认合同，未声称与原站截止付款语义完全等价；真实支付未执行。"
+      ],
+      "scopeStatus": "部分范围已确认，历史抽奖未知",
+      "children": [
+        {
+          "id": "F52.1",
+          "name": "定时会员促销与首购资格",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "配置缺失",
+          "semanticEquivalent": null,
+          "sourceReviewed": true,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/member-promotion-gap-spec.md",
+              "note": "0028已冻结并在隔离备份副本升级；默认关闭。当前优惠、条款确认与未付款订单真实浏览器已验，真实支付未执行。"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/f52-billing-integration-tests.json",
+              "note": "此前8文件71项无封存兼容节点，不作为新3个月合同证明；最终新合同见独立83项结果。"
+            },
+            {
+              "kind": "本轮独立财务整合",
+              "path": "reviews/takeover/f52-billing-independent-final-tests.json",
+              "note": "9套83项通过；含新3个月同档封存/恢复、退款预留失败减债、人工先偿还避免二次回收与严格支付环境隔离。"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/member-promotion-implementation.md",
+              "note": "新合同已冻结与本机UI验收，不是实际商户付款。"
+            }
+          ],
+          "historicalEvidence": [],
+          "remaining": [
+            "0028已冻结升级；当前本机目录、条款确认和未付款订单快照已真实浏览器验证，财务实质状态按独立合同与促销分片验证，96项仅复验相关账务显示。",
+            "同档3个月封存/恢复与退款原来源已定向验证；跨档换算仍未知并明确阻止，真实支付未执行。"
+          ]
+        },
+        {
+          "id": "F52.2",
+          "name": "固定期会员重复购买与期限叠加",
+          "implementationStatus": "部分实现",
+          "verificationStatus": "真实浏览器验证",
+          "blocker": "原站证据不足",
+          "semanticEquivalent": null,
+          "sourceReviewed": true,
+          "evidence": [
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/member-promotion-gap-spec.md",
+              "note": "同档叠加、核验付款时点、原来源退款和历史资格的明确本地合同"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/f52-billing-integration-tests.json",
+              "note": "此前8文件71项无封存兼容节点，不作为新3个月合同证明；最终新合同见独立83项结果。"
+            },
+            {
+              "kind": "本轮独立回归",
+              "path": "reviews/takeover/f52-environment-guard-tests.json",
+              "note": "3项环境拒绝与原余额/会员保持；含旧测试充值包和自动续费事实"
+            },
+            {
+              "kind": "本轮独立财务整合",
+              "path": "reviews/takeover/f52-billing-independent-final-tests.json",
+              "note": "9套83项通过；含新3个月同档封存/恢复、退款预留失败减债、人工先偿还避免二次回收与严格支付环境隔离。"
+            },
+            {
+              "kind": "本轮当前证据",
+              "path": "reviews/takeover/member-promotion-implementation.md",
+              "note": "新合同已冻结与本机UI验收，不是实际商户付款。"
+            }
+          ],
+          "historicalEvidence": [],
+          "remaining": [
+            "0028已冻结升级；当前本机目录、条款确认和未付款订单快照已真实浏览器验证，财务实质状态按独立合同与促销分片验证，96项仅复验相关账务显示。",
+            "同档3个月封存/恢复与退款原来源已定向验证；跨档换算仍未知并明确阻止，真实支付未执行。"
+          ],
+          "baselineEvidence": [
+            {
+              "kind": "本轮独立失败基线",
+              "path": "reviews/takeover/baseline/f52-environment-red.json",
+              "note": "同空间同套餐测试购买错误延长随后正式购买的会员与额度有效期；此失败不混入此前59项通过节点"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "F53",
+      "name": "魔法消除",
+      "implementationStatus": "已实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-tools.test.ts",
+          "line": 1,
+          "note": "有效蒙版、图像角色、像素保持、独立端点合同"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "specs/takeover-image-tools.md"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/tool-recovery.test.ts",
+          "note": "逐槽恢复成功素材，保留失败ID直到重试或明确移除；蒙版与背景分开"
+        }
+      ],
+      "historicalEvidence": [],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/interaction-decisions.md",
+          "note": "当前工具箱新增魔法消除与模特替换，输入槽/画笔已实见，未上传或生成。"
+        },
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "16项完整目录中的该工具可见；详细输入与画笔/槽位仍以10月16日原件为据，未执行。"
+        }
+      ],
+      "remaining": [
+        "独立操作、角色、蒙版与供应商协议已有本地合同；真实生成效果未验证。",
+        "原图本地64MP安全上限、fal消除25MP保守上限、fal模特替换不支持背景/提示词均明确展示，与原站输入上限不完全等价。"
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "本轮原站观察由主代理转述及待验规格",
+          "path": "specs/takeover-image-tools.md",
+          "line": 1
+        }
+      ],
+      "sourceReviewed": true
+    },
+    {
+      "id": "F54",
+      "name": "模特替换",
+      "implementationStatus": "已实现",
+      "verificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "semanticEquivalent": null,
+      "evidence": [
+        {
+          "kind": "当前源码或回归",
+          "path": "platform/tests/takeover-tools.test.ts",
+          "line": 1,
+          "note": "有效蒙版、图像角色、像素保持、独立端点合同"
+        },
+        {
+          "kind": "当前源码或回归",
+          "path": "specs/takeover-image-tools.md"
+        },
+        {
+          "kind": "本轮当前证据",
+          "path": "platform/tests/tool-recovery.test.ts",
+          "note": "逐槽恢复成功素材，保留失败ID直到重试或明确移除；蒙版与背景分开"
+        }
+      ],
+      "historicalEvidence": [],
+      "currentOriginalEvidence": [
+        {
+          "kind": "本轮原站当前只读证据",
+          "path": "reviews/takeover/interaction-decisions.md",
+          "note": "当前工具箱新增魔法消除与模特替换，输入槽/画笔已实见，未上传或生成。"
+        },
+        {
+          "kind": "2026-10-19原站目录独立原件",
+          "path": "reviews/takeover/original-evidence-date-map.md",
+          "note": "16项完整目录中的该工具可见；详细输入与画笔/槽位仍以10月16日原件为据，未执行。"
+        }
+      ],
+      "remaining": [
+        "独立操作、角色、蒙版与供应商协议已有本地合同；真实生成效果未验证。",
+        "原图本地64MP安全上限、fal消除25MP保守上限、fal模特替换不支持背景/提示词均明确展示，与原站输入上限不完全等价。"
+      ],
+      "baselineEvidence": [
+        {
+          "kind": "本轮原站观察由主代理转述及待验规格",
+          "path": "specs/takeover-image-tools.md",
+          "line": 1
+        }
+      ],
+      "sourceReviewed": true
+    }
+  ],
+  "currentEvidenceIndex": [
+    {
+      "path": "reviews/takeover/baseline/backend-audit.md",
+      "kind": "本轮源码审计"
+    },
+    {
+      "path": "reviews/takeover/baseline/backend-memory-probes.json",
+      "kind": "本轮内存隔离复现；无外呼或数据库"
+    },
+    {
+      "path": "reviews/takeover/backend-fixes.md",
+      "kind": "本轮实现和验证边界"
+    },
+    {
+      "path": "specs/takeover-api-account.md",
+      "kind": "独立接口账户规格"
+    },
+    {
+      "path": "platform/tests/billing-channel-migration.test.ts",
+      "kind": "旧密钥在途迁移回归"
+    },
+    {
+      "path": "platform/tests/job-events-auth.test.ts",
+      "kind": "真实本机事件流撤销回归"
+    },
+    {
+      "path": "reviews/takeover/backend-current-tests.json",
+      "kind": "历史分账稳定节点31文件344项快照；非当前最终全量"
+    },
+    {
+      "path": "platform/tests/fal-motion.test.ts",
+      "kind": "人物动作协议及实际裁片/音轨验证"
+    },
+    {
+      "path": "platform/tests/takeover-motion.test.ts",
+      "kind": "动作完整本机链路"
+    },
+    {
+      "path": "reviews/takeover/original-site-observations.md",
+      "kind": "净化当前原站调查"
+    },
+    {
+      "path": "reviews/takeover/original-evidence-date-map.md",
+      "kind": "按日期脱敏的原站观察与本地验收范围映射"
+    },
+    {
+      "path": "reviews/takeover/baseline/environment-20261016/final-browser-summary.json",
+      "kind": "96项完整业务构建与4项末版文案复验分开记录"
+    },
+    {
+      "path": "reviews/takeover/scope-local-validation.md",
+      "kind": "10月19日完整引导及营销/自由创作真实浏览器与视觉补验"
+    }
+  ],
+  "historicalFeatureCount": 52,
+  "totalFeatureCount": 54,
+  "evidenceReconciledDate": "2026-10-19"
+}

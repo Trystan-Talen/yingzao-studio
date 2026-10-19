@@ -1,0 +1,16 @@
+{
+  "command": [
+    "node",
+    "-e",
+    "const base=\"./var/takeover/20261016T062801Z/dependencies-original/\"; let failed=0; for(const [name,path] of [[\"rollup\",\".pnpm/rollup@4.64.5/node_modules/rollup/dist/native.js\"],[\"better-sqlite3\",\".pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/prebuilds/darwin-arm64.node\"]]) {try {require(base+path);console.log(JSON.stringify({name,status:\"loaded\"}));} catch(error) {failed++;const cause=error.cause||error;console.log(JSON.stringify({name,status:\"failed\",code:cause.code,message:cause.message}));}} process.exitCode=failed?1:0;"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:36:40.387906+00:00",
+  "endedUtc": "2026-10-16T06:36:45.904181+00:00",
+  "elapsedSeconds": 5.516,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "native-load-original.txt"
+}

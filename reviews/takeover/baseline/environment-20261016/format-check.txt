@@ -1,0 +1,4 @@
+$ pnpm format:check
+$ prettier --check src scripts tests *.ts *.json
+Checking formatting...
+All matched files use Prettier code style!

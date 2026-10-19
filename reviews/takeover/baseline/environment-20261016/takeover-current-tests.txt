@@ -1,0 +1,63 @@
+$ pnpm test
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/credit-grant-reversal.test.ts (3 tests | 3 failed) 157ms
+   × only revokes the original grant and reports spent or reserved debt, without touching purchases 65ms
+   × does not charge unrelated credits when the reward already expired 45ms
+   × applies cumulative partial reversals and idempotent event replay within the account 47ms
+ ❯ tests/fal-motion.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/fal-motion.test.ts [ tests/fal-motion.test.ts ]
+Error: Cannot find module '/src/server/providers/fal-motion' imported from /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/fal-motion.test.ts
+ ❯ tests/fal-motion.test.ts:13:1
+     11| import type { ExecutionContext } from '../src/server/tasks/types';
+     12| import { inspectFalVideo } from '../src/server/providers/fal-extra';
+     13| import { buildFalMotionRequest, FAL_MOTION_MODELS, isFalMotionModel, s…
+       | ^
+     14| import { falProvider } from '../src/server/providers/fal';
+     15| import { providerJson } from '../src/server/providers/http';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/credit-grant-reversal.test.ts > only revokes the original grant and reports spent or reserved debt, without touching purchases
+TypeError: credits.revokeGrant is not a function
+ ❯ reverse tests/credit-grant-reversal.test.ts:18:92
+
+ ❯ tests/credit-grant-reversal.test.ts:25:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/credit-grant-reversal.test.ts > does not charge unrelated credits when the reward already expired
+TypeError: credits.revokeGrant is not a function
+ ❯ reverse tests/credit-grant-reversal.test.ts:18:92
+
+ ❯ tests/credit-grant-reversal.test.ts:32:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/credit-grant-reversal.test.ts > applies cumulative partial reversals and idempotent event replay within the account
+TypeError: credits.revokeGrant is not a function
+ ❯ reverse tests/credit-grant-reversal.test.ts:18:92
+
+ ❯ tests/credit-grant-reversal.test.ts:37:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed | 31 passed (33)
+      Tests  3 failed | 345 passed (348)
+   Start at  15:41:28
+   Duration  34.30s (tests 68%, import 31%, transform 1%)
+
+     Import  149 modules were evaluated 204 times · 10.03s total, 31% of tracked time
+             ~2.70s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+
+[ELIFECYCLE] Test failed. See above for more details.

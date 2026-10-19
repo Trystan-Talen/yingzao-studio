@@ -1,0 +1,8 @@
+{
+  "started": "2026-10-19T02:17:40.636806+00:00",
+  "finished": "2026-10-19T02:18:28.407319+00:00",
+  "exitCode": 0,
+  "build": "Reused successful build from run-fjuXMJ; only test message selection corrected",
+  "dataIsolation": "fresh SQLite and media per test",
+  "externalServices": "disabled; loopback fixtures only"
+}

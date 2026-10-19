@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "format:check"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:30:13.877631+00:00",
+  "endedUtc": "2026-10-16T06:30:16.900089+00:00",
+  "elapsedSeconds": 3.022,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "format-check.txt"
+}

@@ -1,0 +1,105 @@
+{
+  "sourceRun": "platform/var/e2e/run-ep7f2A",
+  "passed": 4,
+  "failed": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/mobile-video-category-response-scope.png",
+      "pixels": [
+        1170,
+        5013
+      ],
+      "sha256": "cafa3b308cce375b626c0db162eefe988f3ca9f60957a26647cce615894c34d5"
+    },
+    {
+      "file": "screenshots/mobile-video-category-ar.png",
+      "pixels": [
+        1170,
+        5430
+      ],
+      "sha256": "fc992d2069a4b1e5996334e6a07f3a628efd4d80e39f32e5ee2211884b288f68"
+    },
+    {
+      "file": "screenshots/mobile-video-category-en.png",
+      "pixels": [
+        1170,
+        5490
+      ],
+      "sha256": "27578f502255b4c1272eeb3701b8d5e9dcefc244bd6c2a568ace0056de310786"
+    },
+    {
+      "file": "screenshots/mobile-video-category-filter.png",
+      "pixels": [
+        1170,
+        5019
+      ],
+      "sha256": "19d8e47b188571876b4beb4973c51746a59cbde51928fc01f511dbff1d199418"
+    },
+    {
+      "file": "screenshots/desktop-video-category-ar.png",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "bc4a32694a324517690da3e1337fbab3e1f712bb196087cd5a1f0918fef79278"
+    },
+    {
+      "file": "screenshots/desktop-video-category-en.png",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "7bb2c5975c851d1b57070d10b9c732003b84ad7bca82d02acbd2a44274bcfd2c"
+    },
+    {
+      "file": "screenshots/desktop-video-category-filter.png",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "da5de58a6d12d771d19d84c6fbc110581d2bd2638ee8bde68faf52c0eea1c09c"
+    },
+    {
+      "file": "screenshots/desktop-video-category-response-scope.png",
+      "pixels": [
+        1440,
+        1593
+      ],
+      "sha256": "aece77cfd39501edcd8d89e163222e8434a81b6aa86fc6477b612177e32a84aa"
+    }
+  ],
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "scope": "Final video category functionality and responsive filter-width assertions, static locale availability reason; fictional local videos only.",
+  "uncaughtExceptions": 0
+}

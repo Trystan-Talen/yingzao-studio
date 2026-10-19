@@ -1,0 +1,30 @@
+$ pnpm exec vitest run tests/character-video.test.ts tests/quality-workflows.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/character-video.test.ts (6 tests | 1 failed) 514ms
+   × invalidates the old authorization and verification when a video reference is added, while preserving renames 79ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/character-video.test.ts > invalidates the old authorization and verification when a video reference is added, while preserving renames
+AssertionError: expected 'stale' to be 'active' // Object.is equality
+
+Expected: "active"
+Received: "stale"
+
+ ❯ tests/character-video.test.ts:153:5
+    151|     core.references.updateCharacter(actor, wid, person.id, { name: 'Re…
+    152|       .status,
+    153|   ).toBe('active');
+       |     ^
+    154| });
+    155| it('rejects foreign, removed and nonvisual assets without changing the…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 17 passed (18)
+   Start at  17:49:09
+   Duration  2.40s (tests 58%, import 38%, transform 4%)

@@ -1,0 +1,120 @@
+{
+  "sourceRun": "platform/var/e2e/review-library-canvas-muab1b25",
+  "classification": "Initial ten-case attempt: six passed; four failed from new-test soft-delete expectation and label locator mistakes. No production regression claimed.",
+  "statistics": {
+    "total": 10,
+    "expected": 6,
+    "unexpected": 4,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": false
+  },
+  "uncaughtBrowserExceptions": 0,
+  "reportSanitization": "Trace/video attachment metadata replaced by explicit private-artifact placeholders; attachment indices preserved. Actual traces, videos, SQLite, media directories, session/config files and worker logs excluded.",
+  "files": [
+    {
+      "file": "screenshots/case-g75Gvt-collection-renamed-membership.png",
+      "sha256": "ad507e1bb73991149b6878f4a28554393427f090e06f0df2baa4e0fddd0f43bb",
+      "pixels": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "file": "screenshots/case-cyhiA4-usage-utc-date-boundary.png",
+      "sha256": "a397272e26de076c3c20df95a2643e50a0dc4d8990a3ab3c2357cd04688bc625",
+      "pixels": [
+        1170,
+        4236
+      ]
+    },
+    {
+      "file": "screenshots/case-QeDFXW-group-lock-ungroup-restored.png",
+      "sha256": "882a3bd7fe20a5c0077b2ebd0b95ee2c1e4bddd405b4f254722e15d55eda51d9",
+      "pixels": [
+        1440,
+        1107
+      ]
+    },
+    {
+      "file": "screenshots/case-XjoI5o-project-combined-filters-restored.png",
+      "sha256": "43531f616977b425649d2975bf9bf5cd1820706ed230f3c98d452d67bd5c312a",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/case-XcBljy-usage-utc-date-boundary.png",
+      "sha256": "9bdfd3a02f2905a0a48ac005e1b67082f2f71392961abacc215c982d26d4703a",
+      "pixels": [
+        1440,
+        1271
+      ]
+    },
+    {
+      "file": "screenshots/case-jCsLvG-collection-renamed-membership.png",
+      "sha256": "4996f061733951deab1900e77555331622b786a8eef4ae61608b06b0b48032ab",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/case-zslvXy-project-combined-filters-restored.png",
+      "sha256": "856d10244870fc48a4afeba11a9a3b456eb87bacfc8f2bb24272958fc872d17c",
+      "pixels": [
+        1170,
+        4023
+      ]
+    },
+    {
+      "file": "screenshots/case-8YhV1D-group-lock-ungroup-restored.png",
+      "sha256": "47ddfaa85d1526e1a9e2f4333ab2068833f672d1154c11b8d0f914583332388b",
+      "pixels": [
+        1170,
+        3306
+      ]
+    },
+    {
+      "file": "diagnostics/case-g75Gvt-browser-diagnostics.json",
+      "sha256": "976c36c98f4d64184808a8b24318cb5f64162c62fd75ea2d57b74bc227ede853"
+    },
+    {
+      "file": "diagnostics/case-cyhiA4-browser-diagnostics.json",
+      "sha256": "af4af98f3a1e5323aedab2e31af8b34e4bcca90ba1f0ce407e7f1fe0cae743d1"
+    },
+    {
+      "file": "diagnostics/case-QeDFXW-browser-diagnostics.json",
+      "sha256": "d71b28ffdd94460b28863a82fc29de6f70cdf7b55cac2d8c635c7eb717a281c0"
+    },
+    {
+      "file": "diagnostics/case-XjoI5o-browser-diagnostics.json",
+      "sha256": "c10c0b083c5ce5cf0e5a994558e94dcd197ad777408037d589ba247c6e0f1477"
+    },
+    {
+      "file": "diagnostics/case-XcBljy-browser-diagnostics.json",
+      "sha256": "dd659daba46fa315e56568f644a75af584703fced8bd23568f5abd547e752770"
+    },
+    {
+      "file": "diagnostics/case-HNtX1H-browser-diagnostics.json",
+      "sha256": "c22dbab3a36fe87c183eff9e1bb370ccf05420f341c58c9a58d0b8970b05f9d4"
+    },
+    {
+      "file": "diagnostics/case-jCsLvG-browser-diagnostics.json",
+      "sha256": "976c36c98f4d64184808a8b24318cb5f64162c62fd75ea2d57b74bc227ede853"
+    },
+    {
+      "file": "diagnostics/case-zslvXy-browser-diagnostics.json",
+      "sha256": "f4f14a3bc09b8df74d30216a9db051426e32c512d47102caba122ad4678d1370"
+    },
+    {
+      "file": "diagnostics/case-NSieWT-browser-diagnostics.json",
+      "sha256": "7cffdc9bd81b2037cea97498f33e03b2d63a55948362c5755b402254d82fc516"
+    },
+    {
+      "file": "diagnostics/case-8YhV1D-browser-diagnostics.json",
+      "sha256": "d71b28ffdd94460b28863a82fc29de6f70cdf7b55cac2d8c635c7eb717a281c0"
+    }
+  ]
+}

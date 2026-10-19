@@ -1,0 +1,9 @@
+$ pnpm exec vitest run tests/tasks.test.ts tests/takeover-backend.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  2 passed (2)
+      Tests  48 passed (48)
+   Start at  17:34:58
+   Duration  5.08s (tests 80%, import 19%, transform 2%)

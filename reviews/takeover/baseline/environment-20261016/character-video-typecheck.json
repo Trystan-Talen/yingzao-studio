@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "typecheck"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T09:49:18.224672+00:00",
+  "endedUtc": "2026-10-16T09:49:24.743616+00:00",
+  "elapsedSeconds": 6.519,
+  "exitCode": 2,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "character-video-typecheck.txt"
+}

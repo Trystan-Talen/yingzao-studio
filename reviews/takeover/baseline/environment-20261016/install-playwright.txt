@@ -1,0 +1,31 @@
+$ pnpm add -D --save-exact @playwright/test@1.64.1 --store-dir /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store
+✓ Lockfile passes supply-chain policies (verified 46m ago)
+Progress: resolved 1, reused 0, downloaded 0, added 0
+[WARN] deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+Progress: resolved 34, reused 34, downloaded 0, added 0
+Progress: resolved 37, reused 37, downloaded 0, added 0
+Progress: resolved 43, reused 42, downloaded 1, added 0
+Progress: resolved 44, reused 43, downloaded 1, added 0
+Progress: resolved 200, reused 193, downloaded 1, added 0
+Progress: resolved 221, reused 199, downloaded 1, added 0
+Progress: resolved 226, reused 202, downloaded 1, added 0
+Progress: resolved 228, reused 204, downloaded 1, added 0
+Progress: resolved 232, reused 207, downloaded 1, added 0
+Progress: resolved 470, reused 373, downloaded 1, added 0
+Progress: resolved 488, reused 380, downloaded 2, added 0
+Progress: resolved 490, reused 380, downloaded 2, added 0
+Progress: resolved 500, reused 389, downloaded 3, added 0
+Progress: resolved 619, reused 507, downloaded 5, added 0
+Progress: resolved 621, reused 509, downloaded 5, added 0
+Progress: resolved 622, reused 509, downloaded 5, added 0
+Progress: resolved 722, reused 610, downloaded 5, added 0
+[WARN] 8 deprecated subdependencies found: fstream@1.0.12, glob@7.2.3, inflight@1.0.6, lodash.isequal@4.5.0, prebuild-install@7.1.3, rimraf@2.7.1, uuid@8.3.2, whatwg-encoding@3.1.1
+Packages: +3
++++
+Progress: resolved 722, reused 610, downloaded 5, added 1
+Progress: resolved 722, reused 610, downloaded 5, added 3, done
+
+devDependencies:
++ @playwright/test 1.64.1
+
+Done in 18.9s using pnpm v11.25.0

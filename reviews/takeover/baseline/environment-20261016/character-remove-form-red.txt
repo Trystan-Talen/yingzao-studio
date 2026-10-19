@@ -1,0 +1,54 @@
+$ pnpm exec playwright test character-video.spec.ts --project=desktop --grep uploads
+
+Running 1 test using 1 worker
+
+(node:39183) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (11.6s)
+
+
+  1) [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: '人物资料', exact: true })
+    Expected substring: "原引用仍保留"
+    Received string:    "人物资料人物名称角色说明仅本机素材管理与授权声明，不代表身份认证参考图片1 / 19人物图.png添加拖入文件，或聚焦这里粘贴图片人物参考视频1 / 19视频人物视频.mp4添加拖入视频文件，或从素材选择器添加人物视频.mp4人物参考授权已声明参考授权这是对当前参考素材使用权的自述声明，只用于普通人物参考，不等同于实名认证、活体检测或身份核验。参考素材版本 1 · 声明版本 reference-use-v1声明时间 10月16日 18:09撤回参考授权身份核验尚未连接正式身份认证服务；当前授权声明仅用于普通参考，不代表身份已核验。身份核验服务未连接认证状态：未认证。身份核验服务未连接时，状态不会被人工标为“已认证”。关闭保存人物"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog', { name: '人物资料', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '人物资料', exact: true })
+        14 × locator resolved to <div role="dialog" tabindex="-1" class="modal " id="radix-_r_i_" data-state="open" aria-label="人物资料" aria-labelledby="radix-_r_j_">…</div>
+           - unexpected value "人物资料人物名称角色说明仅本机素材管理与授权声明，不代表身份认证参考图片1 / 19人物图.png添加拖入文件，或聚焦这里粘贴图片人物参考视频1 / 19视频人物视频.mp4添加拖入视频文件，或从素材选择器添加人物视频.mp4人物参考授权已声明参考授权这是对当前参考素材使用权的自述声明，只用于普通人物参考，不等同于实名认证、活体检测或身份核验。参考素材版本 1 · 声明版本 reference-use-v1声明时间 10月16日 18:09撤回参考授权身份核验尚未连接正式身份认证服务；当前授权声明仅用于普通参考，不代表身份已核验。身份核验服务未连接认证状态：未认证。身份核验服务未连接时，状态不会被人工标为“已认证”。关闭保存人物"
+
+
+      227 |   await page.reload();
+      228 |   await card.getByRole('button', { name: '编辑人物', exact: true }).click();
+    > 229 |   await expect(edit).toContainText('原引用仍保留');
+          |                      ^
+      230 |   await expect(edit.getByRole('button', { name: '保存人物', exact: true })).toBeDisabled();
+      231 |   expect(
+      232 |     JSON.parse(
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/character-video.spec.ts:229:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/character-remove-form-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/character-remove-form-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/character-remove-form-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/character-remove-form-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/character-remove-form-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references

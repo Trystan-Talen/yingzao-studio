@@ -1,0 +1,28 @@
+{
+  "sourceRun": "platform/var/e2e/review-collection-mobile-width-red-bfsksade",
+  "classification": "Actual product defect reproduced: mobile collection query input width 43 CSS pixels, required at least 240.",
+  "statistics": {
+    "total": 1,
+    "expected": 0,
+    "unexpected": 1,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": false
+  },
+  "uncaughtBrowserExceptions": 0,
+  "reportSanitization": "Trace/video attachment metadata replaced by explicit private-artifact placeholders; attachment indices preserved. Actual traces, videos, SQLite, media directories, session/config files and worker logs excluded.",
+  "files": [
+    {
+      "file": "screenshots/case-dOjLdh-collection-renamed-membership.png",
+      "sha256": "ad507e1bb73991149b6878f4a28554393427f090e06f0df2baa4e0fddd0f43bb",
+      "pixels": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "file": "diagnostics/case-dOjLdh-browser-diagnostics.json",
+      "sha256": "d71b28ffdd94460b28863a82fc29de6f70cdf7b55cac2d8c635c7eb717a281c0"
+    }
+  ]
+}

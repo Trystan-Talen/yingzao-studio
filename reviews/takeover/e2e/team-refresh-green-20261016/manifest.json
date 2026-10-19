@@ -1,0 +1,108 @@
+{
+  "sourceRun": "platform/var/e2e/team-refresh-green-20261016",
+  "build": "reused root run-Fd1n4A current dist, without rebuilding",
+  "passed": 8,
+  "failed": 0,
+  "data": "fresh isolated fictional accounts and explicit local billing availability fixture; no external payment or generation",
+  "regression": "After name and plan are complete, Refresh plans emits no POST /team-creation and leaves no pending team; browser red reproduced before type=button fix.",
+  "redEvidence": {
+    "sourceRun": "platform/var/e2e/team-refresh-red-20261016",
+    "failed": 1,
+    "observed": "Refresh plans emitted POST /api/v1/team-creation",
+    "privateTrace": "not included"
+  },
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-team-creation-unconfigured.png",
+      "sha256": "d737593bc01c5a28a8bd119859911fe3ba1c4a200a4e9d555b27b0650ea355e2"
+    },
+    {
+      "file": "screenshots/mobile-team-gate-ar.png",
+      "sha256": "00ef64b3d3bf686bbbc5303a3babee728508eaa18b84632512ab925f6365839c"
+    },
+    {
+      "file": "screenshots/mobile-team-gate-en.png",
+      "sha256": "2c5c7b8c2213802a6089dd794818d2ebf26cb608e0af90be2f0d50f591b44e8f"
+    },
+    {
+      "file": "screenshots/mobile-team-order-recovered.png",
+      "sha256": "4d3404db39f90f4cb8f9235e842589ecae592d93c60fc3232239d0f5ce2282fa"
+    },
+    {
+      "file": "screenshots/mobile-team-creation-unconfigured.png",
+      "sha256": "6acca1a6128c2a30fc0a127ae035acd669f1dc5be9a93ca58dbcf99664267222"
+    },
+    {
+      "file": "screenshots/desktop-team-gate-ar.png",
+      "sha256": "a6e7a46eda1065a93638c3eb928a68aaf51f7103bf544bbcef776f168a620175"
+    },
+    {
+      "file": "screenshots/desktop-team-gate-en.png",
+      "sha256": "370016632956ab19f6fd1102d06f2cf8cd7881267ebcd9fabde2003f39996e1a"
+    },
+    {
+      "file": "screenshots/desktop-team-existing-guidance.png",
+      "sha256": "d0fc7cb187738aa8b7a2589a1ee08710fd50df531fc25536e8c4c2466e65acb3"
+    },
+    {
+      "file": "screenshots/mobile-team-existing-guidance.png",
+      "sha256": "3bb8d977d117e7879683058c5e1ab243a91fa2ca744a6ab93404d161e51d4973"
+    },
+    {
+      "file": "screenshots/desktop-team-order-recovered.png",
+      "sha256": "45f7ed860d8876ddee0ae465c850a585bca4a4c284f279e19f8874685c72eedd"
+    }
+  ],
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ]
+}

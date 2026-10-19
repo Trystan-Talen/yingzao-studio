@@ -1,0 +1,43 @@
+{
+  "purpose": "Migrate non-team-business setup fixtures to trusted workspace construction so public team-create eligibility is not bypassed in production or conflated with unrelated permission tests.",
+  "changedCalls": 26,
+  "files": {
+    "app.test.ts": 1,
+    "core.test.ts": 4,
+    "delivery-regressions.test.ts": 5,
+    "entitlements-appeals.test.ts": 1,
+    "google-oidc.test.ts": 1,
+    "identity-auth.test.ts": 2,
+    "installation-owner.test.ts": 1,
+    "mail-outbox.test.ts": 2,
+    "password-recovery.test.ts": 1,
+    "quality-workflows.test.ts": 1,
+    "takeover-backend.test.ts": 3,
+    "takeover-tools.test.ts": 1,
+    "tasks.test.ts": 3
+  },
+  "before": "core.team.create(actor,{name})",
+  "after": "core.auth.createWorkspace(actor.userId,name,team)",
+  "preserved": "Real team.create business authorization tests in team-creation.test.ts; billing.test.ts and notification E2E owned by their implementing agents.",
+  "firstRun": {
+    "report": "team-fixture-regressions.json",
+    "files": 13,
+    "passed": 208,
+    "failed": 2,
+    "cause": "spawn ffmpeg ENOENT; command omitted project-local tools PATH; no application assertion changed."
+  },
+  "rerun": {
+    "report": "team-fixture-media-rerun.json",
+    "files": 2,
+    "passed": 48,
+    "failed": 0,
+    "fix": "Explicit project-local FFmpeg PATH; includes both failing media cases and the other 46 tests in their files."
+  },
+  "distinctExistingCasesVerifiedAcrossRuns": 210,
+  "typecheck": {
+    "report": "team-fixture-typecheck.json",
+    "exitCode": 2,
+    "remaining": "Concurrent WIP team-creation.ts BusinessService canCheckoutPlan/paymentEnvironment missing methods; not a final whole-tree verdict."
+  },
+  "scope": "Temporary test databases/media only; no source service, public permission behavior, lockfile, existing database, or real external delivery changed by this fixture patch."
+}

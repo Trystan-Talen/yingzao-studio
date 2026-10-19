@@ -1,0 +1,16 @@
+{
+  "command": [
+    "pnpm",
+    "test:e2e",
+    "notifications-team.spec.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:48:29.999769+00:00",
+  "endedUtc": "2026-10-16T08:48:50.053871+00:00",
+  "elapsedSeconds": 20.054,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "notifications-team-green.txt"
+}

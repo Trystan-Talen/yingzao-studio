@@ -1,0 +1,18 @@
+$ pnpm install --offline --frozen-lockfile --store-dir /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store
+? Verifying lockfile against supply-chain policies (722 entries)...
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +613
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+✗ Lockfile failed supply-chain policy check (722 entries in 179ms)
+Packages are cloned from the content-addressable store to the virtual store.
+  Content-addressable store is at: /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 613, reused 613, downloaded 0, added 79
+Progress: resolved 613, reused 613, downloaded 0, added 208
+Progress: resolved 613, reused 613, downloaded 0, added 326
+Progress: resolved 613, reused 613, downloaded 0, added 421
+Progress: resolved 613, reused 613, downloaded 0, added 568
+Progress: resolved 613, reused 613, downloaded 0, added 612
+Progress: resolved 613, reused 613, downloaded 0, added 613, done
+[ERR_PNPM_NO_OFFLINE_META] Failed to resolve @asamuzakjp/css-color in package mirror /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100044Z/cache/xdg/pnpm/v11/metadata-full/registry.npmjs.org/@asamuzakjp/css-color.jsonl

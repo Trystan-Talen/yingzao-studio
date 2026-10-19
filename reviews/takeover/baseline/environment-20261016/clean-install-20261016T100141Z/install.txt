@@ -1,0 +1,65 @@
+$ pnpm install --frozen-lockfile --store-dir /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store --registry https://registry.npmjs.org
+? Verifying lockfile against supply-chain policies (722 entries)...
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +613
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Packages are cloned from the content-addressable store to the virtual store.
+  Content-addressable store is at: /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 613, reused 613, downloaded 0, added 186
+Progress: resolved 613, reused 613, downloaded 0, added 551
+Progress: resolved 613, reused 613, downloaded 0, added 612
+Progress: resolved 613, reused 613, downloaded 0, added 613, done
+✓ Lockfile passes supply-chain policies (722 entries in 14.3s)
+
+dependencies:
++ @fastify/cookie 11.1.3
++ @fastify/multipart 10.1.3
++ @fastify/rate-limit 11.2.1
++ @fastify/static 10.1.6
++ @fastify/swagger 9.9.2
++ @fastify/swagger-ui 6.1.2
++ @radix-ui/react-dialog 1.3.1
++ @radix-ui/react-dropdown-menu 2.2.1
++ @radix-ui/react-tabs 1.2.1
++ @tanstack/react-query 5.104.2
++ better-sqlite3 13.0.3
++ dotenv 17.2.3
++ drizzle-orm 0.45.4
++ exceljs 4.4.0
++ fabric 7.4.0
++ fastify 5.12.7
++ fastify-type-provider-zod 7.0.0
++ file-type 22.1.1
++ jose 6.2.12
++ jszip 3.10.2
++ lucide-react 1.56.0
++ mammoth 1.13.0
++ nodemailer 10.1.1
++ pdf-parse 2.4.5
++ react 19.2.8
++ react-dom 19.2.8
++ react-router-dom 7.18.4
++ sharp 0.35.5
++ stripe 23.0.0
++ zod 4.6.7
+
+devDependencies:
++ @playwright/test 1.64.1
++ @types/better-sqlite3 9.6.0
++ @types/node 22.20.5
++ @types/nodemailer 8.0.2
++ @types/react 19.3.0
++ @types/react-dom 19.3.0
++ @vitejs/plugin-react 5.2.0
++ eslint 9.39.5
++ prettier 3.9.10
++ tsup 8.5.1
++ tsx 4.23.15
++ typescript 5.9.3
++ typescript-eslint 8.71.2
++ vite 7.3.7
++ vitest 5.0.4
+
+Done in 14.6s using pnpm v11.25.0

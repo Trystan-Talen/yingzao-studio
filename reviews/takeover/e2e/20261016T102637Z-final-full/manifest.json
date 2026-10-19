@@ -1,0 +1,2533 @@
+{
+  "sourceRun": "platform/var/e2e/run-wKtw2u",
+  "passed": 96,
+  "failed": 0,
+  "scope": "Frozen complete business suite before the two final brand static-copy changes.",
+  "productionDifferenceFromFullSuite": [
+    "src/web/lib/workflow-translations.ts",
+    "src/web/pages/Identities.tsx"
+  ],
+  "screenshots": [
+    {
+      "file": "screenshots/case-0Ed6y4-configured-support-channels.png",
+      "sourceCase": "case-0Ed6y4",
+      "pixels": [
+        1170,
+        6132
+      ],
+      "sha256": "01d61a74a9eca5b80ab052ca42b8bfcbd834604736695370ebdcb5c1b9388e66"
+    },
+    {
+      "file": "screenshots/case-0Ed6y4-support-channels-ar.png",
+      "sourceCase": "case-0Ed6y4",
+      "pixels": [
+        1170,
+        5436
+      ],
+      "sha256": "404f59e847317ebb0e3b63695c423e34685827842fa5842dea9c0166ffce27e2"
+    },
+    {
+      "file": "screenshots/case-0Ed6y4-support-channels-en.png",
+      "sourceCase": "case-0Ed6y4",
+      "pixels": [
+        1170,
+        5625
+      ],
+      "sha256": "166707eba7e0a3889012336f3bfa353738bb3af52293bacbe9c0fe743069fcaf"
+    },
+    {
+      "file": "screenshots/case-16bA56-canvas-anonymous-share.png",
+      "sourceCase": "case-16bA56",
+      "pixels": [
+        1170,
+        2772
+      ],
+      "sha256": "bf3e243ca9c5a058fd2cd49ac13942494baa448439b44a522480c2f6a431df68"
+    },
+    {
+      "file": "screenshots/case-16bA56-canvas-editable.png",
+      "sourceCase": "case-16bA56",
+      "pixels": [
+        1170,
+        3306
+      ],
+      "sha256": "9117f07fcb4fac05776b50152d3d1a1159907cbdbb6739b8c577c43a77834f04"
+    },
+    {
+      "file": "screenshots/case-16bA56-canvas-export.png",
+      "sourceCase": "case-16bA56",
+      "pixels": [
+        320,
+        240
+      ],
+      "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+    },
+    {
+      "file": "screenshots/case-16bA56-canvas-restored-properties.png",
+      "sourceCase": "case-16bA56",
+      "pixels": [
+        1170,
+        3306
+      ],
+      "sha256": "da51f8af77344643d2507113da5d049a7ebc81cdb503a27a720033450c0ebd24"
+    },
+    {
+      "file": "screenshots/case-16bA56-canvas-revoked-share.png",
+      "sourceCase": "case-16bA56",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "3b2b2c2815c85c7a1bfb923f77b48edbefa520960e433a47ea8b353752136acd"
+    },
+    {
+      "file": "screenshots/case-1SxAv2-phone-login-completed.png",
+      "sourceCase": "case-1SxAv2",
+      "pixels": [
+        1440,
+        1779
+      ],
+      "sha256": "5ebaef9b1d6c34c2360cfde13c0998d612ef0a152dfab6e6ae5be92b4058ea29"
+    },
+    {
+      "file": "screenshots/case-1df1R7-character-mixed-retained.png",
+      "sourceCase": "case-1df1R7",
+      "pixels": [
+        1170,
+        2661
+      ],
+      "sha256": "f9c4b4bf2136aaae4e2e5344f37606528bf5f8b446f9a85408b128bc462620f5"
+    },
+    {
+      "file": "screenshots/case-1df1R7-character-video-ar.png",
+      "sourceCase": "case-1df1R7",
+      "pixels": [
+        1170,
+        2793
+      ],
+      "sha256": "41b03edbdacebe7c9ca504d7276be444f773f6660431d1958e00ce8226ec78f8"
+    },
+    {
+      "file": "screenshots/case-1df1R7-character-video-en.png",
+      "sourceCase": "case-1df1R7",
+      "pixels": [
+        1170,
+        2982
+      ],
+      "sha256": "05fe03414943635b83badad17f2f667a4b96a8ea42aa11ec88a1bf693c30dcbf"
+    },
+    {
+      "file": "screenshots/case-1df1R7-character-video-preview.png",
+      "sourceCase": "case-1df1R7",
+      "pixels": [
+        1170,
+        2739
+      ],
+      "sha256": "681fc58ffe94b719e36ba5240e65e667197239f0b24a6218409c1eea56dde091"
+    },
+    {
+      "file": "screenshots/case-1grzbK-local-output-returned.png",
+      "sourceCase": "case-1grzbK",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "a8eedb95cb76fe8ffc505a5de8f0f23729eec6000c93dc264b2679d8305d866e"
+    },
+    {
+      "file": "screenshots/case-2iWnCo-team-roles-ar.png",
+      "sourceCase": "case-2iWnCo",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "0367ba291b3922e9f496d4c595d39a2c1add2207abc3bc7cfa16efe52c6be492"
+    },
+    {
+      "file": "screenshots/case-3EyoVl-credits-contract-ar-0.png",
+      "sourceCase": "case-3EyoVl",
+      "pixels": [
+        1170,
+        7374
+      ],
+      "sha256": "cbfb3a068513a4d391d4cc120629d48c450ed81e44fd21bd955a067ef56958d3"
+    },
+    {
+      "file": "screenshots/case-3EyoVl-credits-contract-ar-3.png",
+      "sourceCase": "case-3EyoVl",
+      "pixels": [
+        1170,
+        7374
+      ],
+      "sha256": "ddd81dfef4c8b40dee4591ec4c32a7057d4c5c628a951cb374970bc1bb250b54"
+    },
+    {
+      "file": "screenshots/case-3o8nER-creation-race-project.png",
+      "sourceCase": "case-3o8nER",
+      "pixels": [
+        1440,
+        1141
+      ],
+      "sha256": "c32c2326ff4a7b355d809cac26333343b6a6b09647d066170f0bd2f85f42b508"
+    },
+    {
+      "file": "screenshots/case-3z6AyG-identity-registration-ar.png",
+      "sourceCase": "case-3z6AyG",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "981ad104cc97d04bac21851cdb15e144062ebc132cade13f603db80cd13a579f"
+    },
+    {
+      "file": "screenshots/case-3z6AyG-support-ar.png",
+      "sourceCase": "case-3z6AyG",
+      "pixels": [
+        1170,
+        4776
+      ],
+      "sha256": "f878a1d4ee1b153e1a1a614693213db46ac3e68ccc3b3604d06939479611225d"
+    },
+    {
+      "file": "screenshots/case-4JcVtA-video-category-ar.png",
+      "sourceCase": "case-4JcVtA",
+      "pixels": [
+        1170,
+        5430
+      ],
+      "sha256": "fc992d2069a4b1e5996334e6a07f3a628efd4d80e39f32e5ee2211884b288f68"
+    },
+    {
+      "file": "screenshots/case-4JcVtA-video-category-en.png",
+      "sourceCase": "case-4JcVtA",
+      "pixels": [
+        1170,
+        5490
+      ],
+      "sha256": "27578f502255b4c1272eeb3701b8d5e9dcefc244bd6c2a568ace0056de310786"
+    },
+    {
+      "file": "screenshots/case-4JcVtA-video-category-filter.png",
+      "sourceCase": "case-4JcVtA",
+      "pixels": [
+        1170,
+        5019
+      ],
+      "sha256": "19d8e47b188571876b4beb4973c51746a59cbde51928fc01f511dbff1d199418"
+    },
+    {
+      "file": "screenshots/case-4OuqUg-mobile-team-gate-ar.png",
+      "sourceCase": "case-4OuqUg",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "58640c6e0267fd3a4d6f87a24639cf4a3205e3f2fb8aa146ec87626a68cfee58"
+    },
+    {
+      "file": "screenshots/case-4OuqUg-mobile-team-gate-en.png",
+      "sourceCase": "case-4OuqUg",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "da4a46f18fc5ed7380b3cd4c1e56d38864ca43aa6c85e0abfde362a4a9f983b6"
+    },
+    {
+      "file": "screenshots/case-4qYrqA-notifications-category-space-isolation.png",
+      "sourceCase": "case-4qYrqA",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "13f858ee003f7116f691939b1a52ec7a85174d03d59d03ec1d44e6f3e45d3ad6"
+    },
+    {
+      "file": "screenshots/case-7aqhst-credits-api-ar.png",
+      "sourceCase": "case-7aqhst",
+      "pixels": [
+        1440,
+        1042
+      ],
+      "sha256": "c5dd40bd113181a2ccbf39c2d3b01de0ef204285136a9e06456ba3dffb3f1d62"
+    },
+    {
+      "file": "screenshots/case-7aqhst-credits-plan-ar.png",
+      "sourceCase": "case-7aqhst",
+      "pixels": [
+        1440,
+        2063
+      ],
+      "sha256": "784c2fd12c8b73a6d90279dc85ed394bb34c21141c35818f577c4b491fb05920"
+    },
+    {
+      "file": "screenshots/case-8KULbt-brand-recovery-races.png",
+      "sourceCase": "case-8KULbt",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "68b3edee3d01f99222f7c97369269d56b9f471823dec67922b130ac82081a727"
+    },
+    {
+      "file": "screenshots/case-8R6pPn-upload-recovery-restored.png",
+      "sourceCase": "case-8R6pPn",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "a76a6ab98964555ad0c3332809bddb5be31c0ac58e5ad026fba7db0321e34f46"
+    },
+    {
+      "file": "screenshots/case-8uLlIo-video-inspiration-recovered.png",
+      "sourceCase": "case-8uLlIo",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "b1c11293e26446eb5179f5a56e608a47bb554e63fa0ce26c101749d2e49b8eda"
+    },
+    {
+      "file": "screenshots/case-8vfCSp-creation-race-project.png",
+      "sourceCase": "case-8vfCSp",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "738330b0b4d524f6c75ce405a432aa4124c26d4fa11e71634e7d3013d6679e8f"
+    },
+    {
+      "file": "screenshots/case-9cCr7a-character-mixed-retained.png",
+      "sourceCase": "case-9cCr7a",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "a4f06c24016c41100b394b51855f07c6bf9278d36bd81afbb785445181030b63"
+    },
+    {
+      "file": "screenshots/case-9cCr7a-character-video-ar.png",
+      "sourceCase": "case-9cCr7a",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "5e9490974cbe750120e63910a55af03ad80e3ac384063b0842d8de766bc6e517"
+    },
+    {
+      "file": "screenshots/case-9cCr7a-character-video-en.png",
+      "sourceCase": "case-9cCr7a",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "521d0dd48214f16e0cf9a12688034f7f7a0b2560dae87f1c44dacf550b109ed8"
+    },
+    {
+      "file": "screenshots/case-9cCr7a-character-video-preview.png",
+      "sourceCase": "case-9cCr7a",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "f915660ea1d0e6aa2155b3e628eef7258bb564727f75220385c007416a9e7bb6"
+    },
+    {
+      "file": "screenshots/case-AOOosk-configured-support-channels.png",
+      "sourceCase": "case-AOOosk",
+      "pixels": [
+        1440,
+        1727
+      ],
+      "sha256": "b116af555f33aff265ec270450b05c1c9fff6322369e83856becfa1efdf59bb7"
+    },
+    {
+      "file": "screenshots/case-AOOosk-support-channels-ar.png",
+      "sourceCase": "case-AOOosk",
+      "pixels": [
+        1440,
+        1471
+      ],
+      "sha256": "cb55b780df8d4954ef220ff3796dc4c1439f20cdab798c09f99131a7618de435"
+    },
+    {
+      "file": "screenshots/case-AOOosk-support-channels-en.png",
+      "sourceCase": "case-AOOosk",
+      "pixels": [
+        1440,
+        1471
+      ],
+      "sha256": "abddf8513d769dda286f8661777924303d2a4c1fb749391139d19375300322eb"
+    },
+    {
+      "file": "screenshots/case-B4BbS9-canvas-tab-focus-preserved.png",
+      "sourceCase": "case-B4BbS9",
+      "pixels": [
+        390,
+        1102
+      ],
+      "sha256": "733ea8c65d086c1d8db82bc39a489f3fdebec0ef3a0d4b0a9c363e1f2e3ce1c5"
+    },
+    {
+      "file": "screenshots/case-BnnFLG-video-category-ar.png",
+      "sourceCase": "case-BnnFLG",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "bc4a32694a324517690da3e1337fbab3e1f712bb196087cd5a1f0918fef79278"
+    },
+    {
+      "file": "screenshots/case-BnnFLG-video-category-en.png",
+      "sourceCase": "case-BnnFLG",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "7bb2c5975c851d1b57070d10b9c732003b84ad7bca82d02acbd2a44274bcfd2c"
+    },
+    {
+      "file": "screenshots/case-BnnFLG-video-category-filter.png",
+      "sourceCase": "case-BnnFLG",
+      "pixels": [
+        1440,
+        1615
+      ],
+      "sha256": "da5de58a6d12d771d19d84c6fbc110581d2bd2638ee8bde68faf52c0eea1c09c"
+    },
+    {
+      "file": "screenshots/case-C6ln93-credits-api-en.png",
+      "sourceCase": "case-C6ln93",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "232d8b40f1614b44e4020f698b94e5418fb523f6f5d70b030ef3ace0ce28605b"
+    },
+    {
+      "file": "screenshots/case-C6ln93-credits-plan-en.png",
+      "sourceCase": "case-C6ln93",
+      "pixels": [
+        1170,
+        10215
+      ],
+      "sha256": "67fb52f7e92ec49bb1878e11a7992a0501dcbfc8821e4bd766cf1aa7e1a24c22"
+    },
+    {
+      "file": "screenshots/case-DUISys-brand-quota-ar.png",
+      "sourceCase": "case-DUISys",
+      "pixels": [
+        1170,
+        3084
+      ],
+      "sha256": "169e15a273b230ee6df4f04651357c3506b572a896af47d3954cdc6e1407f19f"
+    },
+    {
+      "file": "screenshots/case-DUISys-brand-quota-en.png",
+      "sourceCase": "case-DUISys",
+      "pixels": [
+        1170,
+        3144
+      ],
+      "sha256": "3c75ef070c2eacb88eb7449f664f4d8b676d47dc2afc871d3c799b4da3276a7f"
+    },
+    {
+      "file": "screenshots/case-DguXRh-downloaded-output.png",
+      "sourceCase": "case-DguXRh",
+      "pixels": [
+        48,
+        32
+      ],
+      "sha256": "2e69714a800157c5d5dc13bcfad40150ec524c34332b656b3c4506ba7435a8cc"
+    },
+    {
+      "file": "screenshots/case-DguXRh-local-resize-comparison.png",
+      "sourceCase": "case-DguXRh",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "sha256": "6cf3f783068d31acd65a25b1022ea0e7fc42afb32eecade958c95213ecd18c6a"
+    },
+    {
+      "file": "screenshots/case-DguXRh-local-resize-history.png",
+      "sourceCase": "case-DguXRh",
+      "pixels": [
+        1170,
+        4383
+      ],
+      "sha256": "57c1e10cc763c8aacab16870761c2c7a8ae7cacb5fb0d04829a2c6ac02beac8b"
+    },
+    {
+      "file": "screenshots/case-Dn4U2f-credits-api-en.png",
+      "sourceCase": "case-Dn4U2f",
+      "pixels": [
+        1440,
+        1042
+      ],
+      "sha256": "8bf7424c84d48fbc3721934fc0b418c70638ef9d18412228f153406ccfac5503"
+    },
+    {
+      "file": "screenshots/case-Dn4U2f-credits-plan-en.png",
+      "sourceCase": "case-Dn4U2f",
+      "pixels": [
+        1440,
+        2190
+      ],
+      "sha256": "97234546a3c436cd4e8c8d81baf9c11fe857729216bd06b4596ead3ed3bdcc4e"
+    },
+    {
+      "file": "screenshots/case-Dr8XmX-canvas-tab-focus-preserved.png",
+      "sourceCase": "case-Dr8XmX",
+      "pixels": [
+        1170,
+        3306
+      ],
+      "sha256": "7085682df0b5c0ecd99bbc9cece4853584c1ea653b83d9d04ce2673fedc65dfc"
+    },
+    {
+      "file": "screenshots/case-ES3MOA-composer-audio-restored.png",
+      "sourceCase": "case-ES3MOA",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "c5e40bd848e293ca1353bafa369fcbace33d25d4ae5b1eae1ad83460919814e1"
+    },
+    {
+      "file": "screenshots/case-EToCtv-inspiration-draft.png",
+      "sourceCase": "case-EToCtv",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "1dcc5c93e4d063c9ad7b5802dbf001f9440a1c36f5b765689f989e07103e2b7f"
+    },
+    {
+      "file": "screenshots/case-F5YzEq-brand-recovery-races.png",
+      "sourceCase": "case-F5YzEq",
+      "pixels": [
+        1170,
+        4266
+      ],
+      "sha256": "629535d472e6ca79c5cb4c2f38b03a5fa95010515db6b604328178dd98c3cdf3"
+    },
+    {
+      "file": "screenshots/case-GgzMrw-upload-recovery-restored.png",
+      "sourceCase": "case-GgzMrw",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "b42dc393bac105e719f44c6c58308de55c4f463a40c3b56b5602fed2fd3e9260"
+    },
+    {
+      "file": "screenshots/case-LktGXs-quote-background-music.png",
+      "sourceCase": "case-LktGXs",
+      "pixels": [
+        1440,
+        1698
+      ],
+      "sha256": "b1be9e8e1f35997d0983da44df21b198ac5b099f18b38cb37f481d6f26852513"
+    },
+    {
+      "file": "screenshots/case-LktGXs-quote-generated-sound.png",
+      "sourceCase": "case-LktGXs",
+      "pixels": [
+        1440,
+        1884
+      ],
+      "sha256": "9efca3234ea507330a14f3244d6172c0eb1eea34e18a467591f7cb488cb16534"
+    },
+    {
+      "file": "screenshots/case-LprJlZ-desktop-team-existing-guidance.png",
+      "sourceCase": "case-LprJlZ",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "b96754fd1c2bdd40250b57b7bb11791973842c7d7b402a6e269cd0c5b541c568"
+    },
+    {
+      "file": "screenshots/case-M6EJkE-credits-contract-en-0.png",
+      "sourceCase": "case-M6EJkE",
+      "pixels": [
+        1170,
+        7902
+      ],
+      "sha256": "a81279c39d8b83aed4e1490a7a90133768fc757891b7b35bd680e52e9fa7732d"
+    },
+    {
+      "file": "screenshots/case-M6EJkE-credits-contract-en-3.png",
+      "sourceCase": "case-M6EJkE",
+      "pixels": [
+        1170,
+        7902
+      ],
+      "sha256": "85becf18e644d1864124f8eb6c0364afa7ad58307ee0872ab99a831e9faf22a6"
+    },
+    {
+      "file": "screenshots/case-OdsA6v-character-load-recovery.png",
+      "sourceCase": "case-OdsA6v",
+      "pixels": [
+        1170,
+        2739
+      ],
+      "sha256": "3dc088b999c32d65fdd8198e10796d99b86183a590e97d2369d704f215806262"
+    },
+    {
+      "file": "screenshots/case-OdsA6v-character-save-response-race.png",
+      "sourceCase": "case-OdsA6v",
+      "pixels": [
+        1170,
+        4011
+      ],
+      "sha256": "0be99e2b6a8f43b4d73dbc7584c9a0c7b222ba8803ea7b9ec13452be096af998"
+    },
+    {
+      "file": "screenshots/case-OtVS99-canvas-anonymous-share.png",
+      "sourceCase": "case-OtVS99",
+      "pixels": [
+        768,
+        1037
+      ],
+      "sha256": "5cb1b31b347ec4010bc7de34b1e4bdf7fc6a44d8a1c7e22b31ddbadd398d82fb"
+    },
+    {
+      "file": "screenshots/case-OtVS99-canvas-editable.png",
+      "sourceCase": "case-OtVS99",
+      "pixels": [
+        768,
+        1024
+      ],
+      "sha256": "c988098365164c413577c8f8adf5ee2f883837efc140f6ce936d5874ee29d2da"
+    },
+    {
+      "file": "screenshots/case-OtVS99-canvas-export.png",
+      "sourceCase": "case-OtVS99",
+      "pixels": [
+        320,
+        240
+      ],
+      "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+    },
+    {
+      "file": "screenshots/case-OtVS99-canvas-restored-properties.png",
+      "sourceCase": "case-OtVS99",
+      "pixels": [
+        768,
+        1024
+      ],
+      "sha256": "7524c95c285f277a7107599ca0291315014708eeebf21cb77c16d23b14e3c4c6"
+    },
+    {
+      "file": "screenshots/case-OtVS99-canvas-revoked-share.png",
+      "sourceCase": "case-OtVS99",
+      "pixels": [
+        768,
+        1024
+      ],
+      "sha256": "701165f07c109b60bde2aa6680bd0c558d4b53aa85193d01e3445a10b7b80660"
+    },
+    {
+      "file": "screenshots/case-OuIY6M-credits-api-ar.png",
+      "sourceCase": "case-OuIY6M",
+      "pixels": [
+        1170,
+        3444
+      ],
+      "sha256": "d7db66742d94aa784b0e05834d6ac4ea8c47d12207f7f4ff0686a2d39418d51c"
+    },
+    {
+      "file": "screenshots/case-OuIY6M-credits-plan-ar.png",
+      "sourceCase": "case-OuIY6M",
+      "pixels": [
+        1170,
+        9324
+      ],
+      "sha256": "9627c9c465be8ebcc1c1d5b014fef99b68434e130327f73a8c4c9ae13fc3176a"
+    },
+    {
+      "file": "screenshots/case-QNMCxi-identity-registration-en.png",
+      "sourceCase": "case-QNMCxi",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "99816c1e86ac2374a66dc145a2bfdb6c0fcd8609a46d67f7d208fbf42631ae48"
+    },
+    {
+      "file": "screenshots/case-QNMCxi-support-en.png",
+      "sourceCase": "case-QNMCxi",
+      "pixels": [
+        1170,
+        4968
+      ],
+      "sha256": "01bf881186373a79adb7d25750eaef824e9c77b246639816f5d3de173df011e7"
+    },
+    {
+      "file": "screenshots/case-QaoOmB-composer-audio-restored.png",
+      "sourceCase": "case-QaoOmB",
+      "pixels": [
+        1440,
+        1209
+      ],
+      "sha256": "cb7c8e7cd31130109b4535afe92396f529e254dbb37cdf30dac053dfbe0aa65f"
+    },
+    {
+      "file": "screenshots/case-SyfIXi-credits-referral-en.png",
+      "sourceCase": "case-SyfIXi",
+      "pixels": [
+        1170,
+        3711
+      ],
+      "sha256": "d0b18dfa19fae558ba28b83a2405675105f5fbb074c9ab65d6a42ea7b3dfac14"
+    },
+    {
+      "file": "screenshots/case-TMvBMF-team-roles-en.png",
+      "sourceCase": "case-TMvBMF",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "ff3fa65952c308864b37acaf1773206c9eb014ae1f320d67fea99c9ea8c18a6c"
+    },
+    {
+      "file": "screenshots/case-UEmOn5-video-inspiration-recovered.png",
+      "sourceCase": "case-UEmOn5",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "4f40c6a88b03d0cd72b5ea47826bf3310e8d159e7f5d35af6dc5c51c604d9d19"
+    },
+    {
+      "file": "screenshots/case-UZvFfW-identity-registration-ar.png",
+      "sourceCase": "case-UZvFfW",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "fe9135ce081125eaa2021e499b3a95962c0d50004efee1b021232cfc68c29bc3"
+    },
+    {
+      "file": "screenshots/case-UZvFfW-support-ar.png",
+      "sourceCase": "case-UZvFfW",
+      "pixels": [
+        1440,
+        1336
+      ],
+      "sha256": "f055a18e8ed7ef8878ae08a1cd939b18bb1fcfd21c2b57a1198564ba8ad5a8af"
+    },
+    {
+      "file": "screenshots/case-UrEGMN-account-settings.png",
+      "sourceCase": "case-UrEGMN",
+      "pixels": [
+        1440,
+        1368
+      ],
+      "sha256": "97deaca0b308eb22e8fd7dc25eea378349095610bd8a9b17acadd0fe47e86802"
+    },
+    {
+      "file": "screenshots/case-V8TGR1-account-settings.png",
+      "sourceCase": "case-V8TGR1",
+      "pixels": [
+        1170,
+        6384
+      ],
+      "sha256": "63a4224d34d055b009fda53c22b37aec8a83f28b22b8d48439b8dfdd4f72dfc3"
+    },
+    {
+      "file": "screenshots/case-XNxJcO-mobile-team-order-recovered.png",
+      "sourceCase": "case-XNxJcO",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "224fe8740e225c93a3a871db5d0f43f6c86e2e0fe29c31fd7ab379cca3399e05"
+    },
+    {
+      "file": "screenshots/case-Y1waN6-credits-referral-en.png",
+      "sourceCase": "case-Y1waN6",
+      "pixels": [
+        1440,
+        1192
+      ],
+      "sha256": "03c01770c65e2e9dd58dfc0f7cf6b10f6686b79fedeeee5d71123a89b8e0b345"
+    },
+    {
+      "file": "screenshots/case-YSzwc3-recovery-disabled.png",
+      "sourceCase": "case-YSzwc3",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "6de472e942751bd0451c102a467a23847308ee9a8b98ec191128941b8921d348"
+    },
+    {
+      "file": "screenshots/case-atAdUj-identity-registration-en.png",
+      "sourceCase": "case-atAdUj",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "2b93e64cb9a9805206a62065e3f0149b1e9b316d1b1942c233e6306c87c59622"
+    },
+    {
+      "file": "screenshots/case-atAdUj-support-en.png",
+      "sourceCase": "case-atAdUj",
+      "pixels": [
+        1440,
+        1360
+      ],
+      "sha256": "de720dfa9fad27434b19bbc5d7b2fe4dc54b18d19348015ac33bbd39c1a07cfb"
+    },
+    {
+      "file": "screenshots/case-bJBZOh-creation-race-message.png",
+      "sourceCase": "case-bJBZOh",
+      "pixels": [
+        1440,
+        1141
+      ],
+      "sha256": "e696db795f5027436149526449ebf2809535350f502f01dfbb81aedbc7bd3a7f"
+    },
+    {
+      "file": "screenshots/case-coYu8X-creation-ar.png",
+      "sourceCase": "case-coYu8X",
+      "pixels": [
+        1440,
+        1274
+      ],
+      "sha256": "839f8896e27c8633d922c2559cdc2660ab4dc672cacea1143ab80a50d7008ef2"
+    },
+    {
+      "file": "screenshots/case-coYu8X-local-comparison-ar.png",
+      "sourceCase": "case-coYu8X",
+      "pixels": [
+        1440,
+        1238
+      ],
+      "sha256": "95b7873617ece7b390279815cd12b809294acf2daf537a840c83b233ec6a74e2"
+    },
+    {
+      "file": "screenshots/case-dQVr0j-creation-en.png",
+      "sourceCase": "case-dQVr0j",
+      "pixels": [
+        1170,
+        3873
+      ],
+      "sha256": "2548859289c988ae92d0c32a62c09aeb9afd155192df74351bcff924b75e35a7"
+    },
+    {
+      "file": "screenshots/case-dQVr0j-local-comparison-en.png",
+      "sourceCase": "case-dQVr0j",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "sha256": "254a51fe2114ef91579b0fcf50ce3bb68bcf1ea9deb74a5e478ba0e0012ba7da"
+    },
+    {
+      "file": "screenshots/case-dslMvg-brand-quota-ar.png",
+      "sourceCase": "case-dslMvg",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "571f76366bff04e8e4b4c53b02b40167685192d17bc9ed153c7f820dd553a2a0"
+    },
+    {
+      "file": "screenshots/case-dslMvg-brand-quota-en.png",
+      "sourceCase": "case-dslMvg",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "09d33b7486f42aeba0b9d0a6344c9a48595ce571468b1f33e7e395adc5ee965b"
+    },
+    {
+      "file": "screenshots/case-e1NvFh-creation-race-message.png",
+      "sourceCase": "case-e1NvFh",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "9f8392aa74c7ba5cf824b8eaa9b12ddb9054a15e69c645aeebfdee90b616ea4d"
+    },
+    {
+      "file": "screenshots/case-e6AsOV-canvas-anonymous-share.png",
+      "sourceCase": "case-e6AsOV",
+      "pixels": [
+        1280,
+        897
+      ],
+      "sha256": "faae88210a0bf8ffe9931f4b68f22352b0c5f9ed2f820ad4c78bcd09cd87327f"
+    },
+    {
+      "file": "screenshots/case-e6AsOV-canvas-editable.png",
+      "sourceCase": "case-e6AsOV",
+      "pixels": [
+        1280,
+        907
+      ],
+      "sha256": "9534abb95a364df4759aaca76c5ce051c46c6e0e8ccb3790c31084941cd6b7fc"
+    },
+    {
+      "file": "screenshots/case-e6AsOV-canvas-export.png",
+      "sourceCase": "case-e6AsOV",
+      "pixels": [
+        320,
+        240
+      ],
+      "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+    },
+    {
+      "file": "screenshots/case-e6AsOV-canvas-restored-properties.png",
+      "sourceCase": "case-e6AsOV",
+      "pixels": [
+        1280,
+        907
+      ],
+      "sha256": "688c9f1445051b141ba8890febd81daa6994fdf8d403fd32bfeeb00e34bf6a3a"
+    },
+    {
+      "file": "screenshots/case-e6AsOV-canvas-revoked-share.png",
+      "sourceCase": "case-e6AsOV",
+      "pixels": [
+        1280,
+        800
+      ],
+      "sha256": "1424052d16813706f9e2d762a84f502c346a40ef1e67d380eaec92848c9395d3"
+    },
+    {
+      "file": "screenshots/case-eoxbV3-character-load-recovery.png",
+      "sourceCase": "case-eoxbV3",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "de330bd8ffc061b3785c82cb4ea9adcc43978a44a49d108665e3977d6946f779"
+    },
+    {
+      "file": "screenshots/case-eoxbV3-character-save-response-race.png",
+      "sourceCase": "case-eoxbV3",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "19fc63108a49ade8f52ffdf85e977cf60db8544f4cc58bbfe862d8542bf406e9"
+    },
+    {
+      "file": "screenshots/case-evyju4-desktop-team-creation-unconfigured.png",
+      "sourceCase": "case-evyju4",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "d737593bc01c5a28a8bd119859911fe3ba1c4a200a4e9d555b27b0650ea355e2"
+    },
+    {
+      "file": "screenshots/case-h7Elrq-mobile-team-creation-unconfigured.png",
+      "sourceCase": "case-h7Elrq",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "6acca1a6128c2a30fc0a127ae035acd669f1dc5be9a93ca58dbcf99664267222"
+    },
+    {
+      "file": "screenshots/case-hfzTcO-local-output-returned.png",
+      "sourceCase": "case-hfzTcO",
+      "pixels": [
+        1170,
+        2988
+      ],
+      "sha256": "e93e2a276a46bf7cd72b40796d9b1fe9f18e89334e00ab655ad4bc4b3ea90a6d"
+    },
+    {
+      "file": "screenshots/case-iGVpzf-creation-ar.png",
+      "sourceCase": "case-iGVpzf",
+      "pixels": [
+        1170,
+        3678
+      ],
+      "sha256": "eb2511b27c5340e19531946253bcd206662edc631da5ebec91350666a84f9903"
+    },
+    {
+      "file": "screenshots/case-iGVpzf-local-comparison-ar.png",
+      "sourceCase": "case-iGVpzf",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "sha256": "57e125df4c73b19161d261870b213b84b69f489369dcd1ca5fd196b2b90bfc0c"
+    },
+    {
+      "file": "screenshots/case-iHmD4z-credits-contract-ar-0.png",
+      "sourceCase": "case-iHmD4z",
+      "pixels": [
+        1440,
+        1736
+      ],
+      "sha256": "c6707344f6903a12f8083f3257d2e65f6118bb813c99e748a86181de2d5dddd7"
+    },
+    {
+      "file": "screenshots/case-iHmD4z-credits-contract-ar-3.png",
+      "sourceCase": "case-iHmD4z",
+      "pixels": [
+        1440,
+        1736
+      ],
+      "sha256": "07a1abe123c2d6ea87d8408b69a0c58dd109327b0e7acc35009748b2b991f5b8"
+    },
+    {
+      "file": "screenshots/case-iYFzg2-credits-referral-ar.png",
+      "sourceCase": "case-iYFzg2",
+      "pixels": [
+        1170,
+        3582
+      ],
+      "sha256": "d7661c00e1e31810752f6dbe6a0ce44ed293be267437dd9b3f6bded664148856"
+    },
+    {
+      "file": "screenshots/case-izZ2mc-credits-contract-en-0.png",
+      "sourceCase": "case-izZ2mc",
+      "pixels": [
+        1440,
+        1798
+      ],
+      "sha256": "324bc69febaa235cd9273d20968c3ca3a7e8d919490c1bdb6362e896c0e5a5e3"
+    },
+    {
+      "file": "screenshots/case-izZ2mc-credits-contract-en-3.png",
+      "sourceCase": "case-izZ2mc",
+      "pixels": [
+        1440,
+        1798
+      ],
+      "sha256": "69de64d8c30901fb3502fa31ee77ef824572b9d124985165e91b3418fc3da213"
+    },
+    {
+      "file": "screenshots/case-j8jQGk-upload-context-preserved.png",
+      "sourceCase": "case-j8jQGk",
+      "pixels": [
+        1440,
+        1670
+      ],
+      "sha256": "c1e6eb9dcf5f99f5eb147c58dc3caf02969663d5595b67c45fc026a75b3aae46"
+    },
+    {
+      "file": "screenshots/case-jBvPAt-video-category-response-scope.png",
+      "sourceCase": "case-jBvPAt",
+      "pixels": [
+        1440,
+        1593
+      ],
+      "sha256": "aece77cfd39501edcd8d89e163222e8434a81b6aa86fc6477b612177e32a84aa"
+    },
+    {
+      "file": "screenshots/case-lwUeQw-recovery-disabled.png",
+      "sourceCase": "case-lwUeQw",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "972994fe76fa9a7bad1eff1c0543c9fa8d4a9841c24ca7c7b81af72eb621bc79"
+    },
+    {
+      "file": "screenshots/case-n24Zo2-desktop-team-order-recovered.png",
+      "sourceCase": "case-n24Zo2",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "21ba45b77351a76e1981fce5227147e81b7716652bae373b8bdc831e29acc2cf"
+    },
+    {
+      "file": "screenshots/case-n66toN-desktop-team-gate-ar.png",
+      "sourceCase": "case-n66toN",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "a6e7a46eda1065a93638c3eb928a68aaf51f7103bf544bbcef776f168a620175"
+    },
+    {
+      "file": "screenshots/case-n66toN-desktop-team-gate-en.png",
+      "sourceCase": "case-n66toN",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "67bf313859ad24a529210b7c245479ba0f71d02f34ee630760b1b7315660186e"
+    },
+    {
+      "file": "screenshots/case-owiuMA-mobile-team-existing-guidance.png",
+      "sourceCase": "case-owiuMA",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "3bb8d977d117e7879683058c5e1ab243a91fa2ca744a6ab93404d161e51d4973"
+    },
+    {
+      "file": "screenshots/case-pZSita-canvas-anonymous-share.png",
+      "sourceCase": "case-pZSita",
+      "pixels": [
+        1440,
+        1037
+      ],
+      "sha256": "767b69ee8107b4e5ef15af65df00c071401b53ced7f0c2a1962d771bc4530b9f"
+    },
+    {
+      "file": "screenshots/case-pZSita-canvas-editable.png",
+      "sourceCase": "case-pZSita",
+      "pixels": [
+        1440,
+        1107
+      ],
+      "sha256": "d1f51939856f767d36e3df98a830dd6c673c85768fac8dea6fe1df259b83e995"
+    },
+    {
+      "file": "screenshots/case-pZSita-canvas-export.png",
+      "sourceCase": "case-pZSita",
+      "pixels": [
+        320,
+        240
+      ],
+      "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+    },
+    {
+      "file": "screenshots/case-pZSita-canvas-restored-properties.png",
+      "sourceCase": "case-pZSita",
+      "pixels": [
+        1440,
+        1107
+      ],
+      "sha256": "e5eeef74f79d02f3bc8aba2e673d165314c342487c537c8d5baaacf7588bebfa"
+    },
+    {
+      "file": "screenshots/case-pZSita-canvas-revoked-share.png",
+      "sourceCase": "case-pZSita",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "08ae621ad38867506b07ea008ed41fb1e630b4a326e39a258887f20e3d3a7a49"
+    },
+    {
+      "file": "screenshots/case-pjdMfq-downloaded-output.png",
+      "sourceCase": "case-pjdMfq",
+      "pixels": [
+        48,
+        32
+      ],
+      "sha256": "2e69714a800157c5d5dc13bcfad40150ec524c34332b656b3c4506ba7435a8cc"
+    },
+    {
+      "file": "screenshots/case-pjdMfq-local-resize-comparison.png",
+      "sourceCase": "case-pjdMfq",
+      "pixels": [
+        1440,
+        1238
+      ],
+      "sha256": "d5dc37e4fac1c10f5cd8d816054a9e3ad2598d01ba72ac5047aa7579642f40d4"
+    },
+    {
+      "file": "screenshots/case-pjdMfq-local-resize-history.png",
+      "sourceCase": "case-pjdMfq",
+      "pixels": [
+        1440,
+        1159
+      ],
+      "sha256": "9ec134fff10c4c44f1ca6842aeb96d261b51b2fc7e97a0ec922a53dd9771c2c1"
+    },
+    {
+      "file": "screenshots/case-qTnuTE-team-roles-en.png",
+      "sourceCase": "case-qTnuTE",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "ea8d983c73441cc06a46e958d6480599cbc43304f389c5f50d70ae38dccf6d7f"
+    },
+    {
+      "file": "screenshots/case-qgfDiy-credits-referral-ar.png",
+      "sourceCase": "case-qgfDiy",
+      "pixels": [
+        1440,
+        1192
+      ],
+      "sha256": "ff9f92ed74fa2eb817edc7217dcc30ad55168484742d2efd10993f8670e2bb4d"
+    },
+    {
+      "file": "screenshots/case-r8DiOs-video-category-response-scope.png",
+      "sourceCase": "case-r8DiOs",
+      "pixels": [
+        1170,
+        5013
+      ],
+      "sha256": "10d8910efd3f2869293325c7219016bde1a0884d0bf2e798ab563b5f1d4f271d"
+    },
+    {
+      "file": "screenshots/case-sJqQMo-creation-en.png",
+      "sourceCase": "case-sJqQMo",
+      "pixels": [
+        1440,
+        1339
+      ],
+      "sha256": "5940f37f6a138ecbc6c6d10504468b5479985fc34098b141b4acfb32b631b63a"
+    },
+    {
+      "file": "screenshots/case-sJqQMo-local-comparison-en.png",
+      "sourceCase": "case-sJqQMo",
+      "pixels": [
+        1440,
+        1238
+      ],
+      "sha256": "147fc573452196fe3a1d34ace1f1f0041274c600461519432e1767237821657b"
+    },
+    {
+      "file": "screenshots/case-v7axm0-phone-login-completed.png",
+      "sourceCase": "case-v7axm0",
+      "pixels": [
+        1170,
+        5913
+      ],
+      "sha256": "891bf9c28a2929234090185c5ec1c5754e83ced250a32fd4f0ced010cd51c57f"
+    },
+    {
+      "file": "screenshots/case-vqByrQ-quote-background-music.png",
+      "sourceCase": "case-vqByrQ",
+      "pixels": [
+        1170,
+        5010
+      ],
+      "sha256": "d1b0cc879f55560700fe6e2f0a2c5e796cee4a5a31e39438f10923bf55939e73"
+    },
+    {
+      "file": "screenshots/case-vqByrQ-quote-generated-sound.png",
+      "sourceCase": "case-vqByrQ",
+      "pixels": [
+        1170,
+        5742
+      ],
+      "sha256": "8d7b12d8a978beaf9f7dd38c90c6b461e3e42a861a3fc40000c9972014deafb7"
+    },
+    {
+      "file": "screenshots/case-vsRNRe-upload-context-preserved.png",
+      "sourceCase": "case-vsRNRe",
+      "pixels": [
+        1170,
+        4926
+      ],
+      "sha256": "257433bf24fc773aa4482a0f124cba1aa5dc000bc3fcda81fef1c703c4565f69"
+    },
+    {
+      "file": "screenshots/case-w6H8bv-inspiration-draft.png",
+      "sourceCase": "case-w6H8bv",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "3bed0c2d32cbc81dec7d01cfdd6853824961e7e0bcced419e2dcd32988eba12d"
+    },
+    {
+      "file": "screenshots/case-wiztiJ-notifications-category-space-isolation.png",
+      "sourceCase": "case-wiztiJ",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "fd6f22d9155ebf9f7687fa0b1b72a5a33ca7f0e817b4cda5a73c47795f2f998e"
+    },
+    {
+      "file": "screenshots/case-zAr8jL-team-roles-ar.png",
+      "sourceCase": "case-zAr8jL",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "sha256": "7c5b5d93c8ef04d92797cf6ba58bc0e76be4b6db35b50add9780b4bb06921cbb"
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "sourceCase": "case-0Ed6y4",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/fixture-qr.png",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-16bA56",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-1SxAv2",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-1df1R7",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/5fd736b0-d516-498d-a46a-84a923e56954/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/5fd736b0-d516-498d-a46a-84a923e56954/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/e9147f68-b54d-4d0e-a43b-851246e2cfa1",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-1grzbK",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-2iWnCo",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-3EyoVl",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-3o8nER",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-3z6AyG",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-4JcVtA",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-4OuqUg",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-4qYrqA",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-7aqhst",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-8KULbt",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/assets/3456a351-dac0-4afc-bb15-3395ba6ea9c7",
+          "status": 500
+        },
+        {
+          "path": "/api/v1/assets/3456a351-dac0-4afc-bb15-3395ba6ea9c7",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-8R6pPn",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/assets/upload",
+          "error": "net::ERR_CONNECTION_RESET"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/assets/upload",
+          "status": 415
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-8uLlIo",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations/b42fa383-f8bb-4332-bc02-699d938d9e49/reuse",
+          "error": "net::ERR_FAILED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-8vfCSp",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-9611Sa",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-9cCr7a",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/66d11d77-ad5e-4584-9898-0e69a602e9c9/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/66d11d77-ad5e-4584-9898-0e69a602e9c9/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/e6ca6dac-ab93-452b-ba56-4100b784564f",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-AOOosk",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/fixture-qr.png",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-B4BbS9",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-BnnFLG",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-BsPJph",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/notifications",
+          "status": 503
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-C6ln93",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-DUISys",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/brands/3b0402bd-d3dc-47a1-94b1-f25f2b6aa842/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/2129c85c-7f35-4205-b818-ba7d84a1f1bb/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/2129c85c-7f35-4205-b818-ba7d84a1f1bb/restore",
+          "status": 409
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-DguXRh",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-Dn4U2f",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-Dr8XmX",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-ELt3bs",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-ES3MOA",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-EToCtv",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-EfSUF8",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/login",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-F5YzEq",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/assets/5076976c-afa7-40aa-9e17-5045d4609348",
+          "status": 500
+        },
+        {
+          "path": "/api/v1/assets/5076976c-afa7-40aa-9e17-5045d4609348",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-GgzMrw",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/assets/upload",
+          "error": "net::ERR_CONNECTION_RESET"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/assets/upload",
+          "status": 415
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-LktGXs",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-LprJlZ",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-M6EJkE",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-OdsA6v",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/f69cc7ac-da30-4dda-9926-85920fbff37f/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/f69cc7ac-da30-4dda-9926-85920fbff37f/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/2efdfbb5-602d-419f-9e9d-348d70434f09",
+          "status": 500
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-OtVS99",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-OuIY6M",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-PXLxAM",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-QNMCxi",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-QaoOmB",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-Ricfri",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/notifications",
+          "status": 503
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-RoKqoD",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/projects/aaa0369c-5216-4984-870e-a1953d423b45/messages",
+          "error": "net::ERR_FAILED"
+        },
+        {
+          "path": "/api/v1/projects/aaa0369c-5216-4984-870e-a1953d423b45/messages",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-SyfIXi",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-TMvBMF",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-UEmOn5",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/inspirations/4737cf53-0664-4fb5-8609-25a82440e0c8/reuse",
+          "error": "net::ERR_FAILED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-UZvFfW",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-UrEGMN",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-V8TGR1",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-XNxJcO",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-Y1waN6",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-Y8hv2P",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-YSzwc3",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-YY1OzX",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/login",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-YrItrg",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-atAdUj",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-bHj8Ao",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-bJBZOh",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-bdFm1W",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-coYu8X",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-dQVr0j",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-dslMvg",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/brands/6f379100-2fbd-4da3-86fa-3f94afab2d4f/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/bb62721b-6cbb-4383-918b-440153b1bd54/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/bb62721b-6cbb-4383-918b-440153b1bd54/restore",
+          "status": 409
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-e1NvFh",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-e6AsOV",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-eoxbV3",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/07073760-1385-44c3-9ff1-37ff0ba86445/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/07073760-1385-44c3-9ff1-37ff0ba86445/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/4ab2df52-74c5-4e91-add3-fc9d0428d581",
+          "status": 500
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-evyju4",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-f0l8pc",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-h7Elrq",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-hEdmG5",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-hRWUSR",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/projects/66341f58-e234-479a-a2d5-a284e3716d8c/messages",
+          "error": "net::ERR_FAILED"
+        },
+        {
+          "path": "/api/v1/projects/66341f58-e234-479a-a2d5-a284e3716d8c/messages",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-hfzTcO",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-iGVpzf",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-iHmD4z",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-iYFzg2",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-izZ2mc",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-j8jQGk",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-jBvPAt",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-lwUeQw",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-n24Zo2",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-n66toN",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-ovQOwt",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-owiuMA",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-pZSita",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-pjdMfq",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-qTnuTE",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-qgfDiy",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-r8DiOs",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-sJqQMo",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/notifications/unread",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-v7axm0",
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-vqByrQ",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-vsRNRe",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-w6H8bv",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-wiztiJ",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "sourceCase": "case-zAr8jL",
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "data": "Only fresh isolated test databases/media and fictional users/plans/paid markers. No original database, configuration, provider keys or cookie state copied.",
+  "externalServices": "Blocked except loopback fixture SMTP/SMS/local media. No real payment, model, SMS, WeChat, email or identity-provider call.",
+  "expectedErrors": "Security tests, local injected 500/404, logout/revocation and navigation cancellation remain in diagnostics; no claim of zero failed HTTP requests.",
+  "viewport": "See report project (desktop/mobile/notebook/tablet) and explicit per-test viewport overrides; native screenshot pixels preserved."
+}

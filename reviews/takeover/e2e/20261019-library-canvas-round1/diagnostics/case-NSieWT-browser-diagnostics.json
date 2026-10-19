@@ -1,0 +1,94 @@
+{
+  "errors": [],
+  "failedRequests": [
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/capabilities",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/b8308e9c-8a5e-40bd-a695-560868673d78",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/b8308e9c-8a5e-40bd-a695-560868673d78/document",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/export-policy",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/assets",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/jobs",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/b8308e9c-8a5e-40bd-a695-560868673d78/messages",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/pending-applies",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/brands",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/capabilities",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/b8308e9c-8a5e-40bd-a695-560868673d78",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/b8308e9c-8a5e-40bd-a695-560868673d78/document",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/export-policy",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/assets",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/jobs",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/b8308e9c-8a5e-40bd-a695-560868673d78/messages",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/pending-applies",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/brands",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "responses": []
+}

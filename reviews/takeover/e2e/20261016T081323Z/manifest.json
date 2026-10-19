@@ -1,0 +1,479 @@
+{
+  "sourceRun": "platform/var/e2e/run-YICSkT",
+  "passed": 18,
+  "failed": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-phone-login-completed.png",
+      "pixels": [
+        1440,
+        1779
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-account-settings.png",
+      "pixels": [
+        1170,
+        6384
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-creation-race-message.png",
+      "pixels": [
+        1440,
+        1141
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-account-settings.png",
+      "pixels": [
+        1440,
+        1368
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-phone-login-completed.png",
+      "pixels": [
+        1170,
+        5664
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-local-resize-comparison.png",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-local-resize-history.png",
+      "pixels": [
+        1170,
+        4383
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-creation-race-message.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-recovery-disabled.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-creation-race-project.png",
+      "pixels": [
+        1440,
+        1141
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-recovery-disabled.png",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-creation-race-project.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-inspiration-draft.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-inspiration-draft.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-local-resize-comparison.png",
+      "pixels": [
+        1440,
+        1238
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-local-resize-history.png",
+      "pixels": [
+        1440,
+        1159
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/login",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "path": "/api/v1/auth/login",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    }
+  ],
+  "data": "isolated fictional test accounts; no source databases/configuration copied"
+}

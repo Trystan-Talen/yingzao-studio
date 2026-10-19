@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-16T10:21:15.837638+00:00",
+  "untrackedCandidates": 778,
+  "modifiedTracked": 97,
+  "htmlReports": 25,
+  "embeddedEntries": 44,
+  "mediaCandidates": 221,
+  "highConfidencePatternHits": [
+    {
+      "file": "platform/tests/google-oidc.test.ts",
+      "pattern": "literal_session"
+    }
+  ],
+  "privateResearchMediaDigestMatches": [],
+  "unexpectedPrivateArtifactPaths": [],
+  "limitations": "Pattern and exact-file comparison, supplemented by earlier manual screenshot review; final browser report will receive a follow-up scan. Test fixtures use fictional accounts. Ignored traces/configuration/databases excluded.",
+  "reviewedFindings": [
+    {
+      "file": "platform/tests/google-oidc.test.ts",
+      "lines": [
+        151,
+        152
+      ],
+      "classification": "Existing local mock OAuth server fixture constants; both exact matches already present in c7f7e4f baseline. No new real account/session credential."
+    }
+  ],
+  "unresolvedFindings": 0
+}

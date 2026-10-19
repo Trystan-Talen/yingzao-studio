@@ -1,0 +1,19 @@
+{
+  "recordedUtc": "2026-10-16T09:25:12.212Z",
+  "method": "Same static-literal scan after dictionary and display-call fixes. Does not exhaust templates or verify all runtime branches.",
+  "files": [
+    "components/Composer.tsx",
+    "components/AdvancedTools.tsx",
+    "components/TaskCenter.tsx",
+    "components/ReferralDetails.tsx",
+    "components/IdentityAccounts.tsx",
+    "components/PasswordSecurity.tsx",
+    "pages/Workbench.tsx",
+    "pages/Tools.tsx",
+    "pages/Usage.tsx",
+    "pages/IdentityRegistration.tsx",
+    "pages/PasswordRecovery.tsx",
+    "pages/Team.tsx"
+  ],
+  "candidates": []
+}

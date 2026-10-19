@@ -1,0 +1,9 @@
+$ pnpm exec vitest run tests/product-errors.test.ts tests/product-messages.test.ts
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  2 passed (2)
+      Tests  57 passed (57)
+   Start at  18:18:43
+   Duration  203ms (import 49%, transform 42%, tests 6%, worker 3%)

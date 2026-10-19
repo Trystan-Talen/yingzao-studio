@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-19",
+  "cwd": "platform",
+  "checks": [
+    {
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 5.69,
+      "log": "closeout-20261019-typecheck.txt"
+    },
+    {
+      "command": [
+        "pnpm",
+        "lint"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.78,
+      "log": "closeout-20261019-lint.txt"
+    },
+    {
+      "command": [
+        "pnpm",
+        "format:check"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.64,
+      "log": "closeout-20261019-format.txt"
+    },
+    {
+      "command": [
+        "pnpm",
+        "verify:runtime"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 0.27,
+      "log": "closeout-20261019-runtime.txt"
+    }
+  ],
+  "initialRuntimeFailureClassification": "Sandbox denied the tsx local IPC socket before application startup; preserved in the initial runtime log. Authorized loopback-only rerun passed.",
+  "afterFinalCssAndTestEdits": {
+    "commands": [
+      "pnpm format:check",
+      "pnpm lint",
+      "pnpm typecheck"
+    ],
+    "exitCode": 0,
+    "productionBuildExitCode": 0,
+    "productionRuntime": "closeout-20261019-runtime-authorized.json",
+    "productionRuntimeExitCode": 0,
+    "scope": "Final dictionary translation, mobile filter input sizing, and three new browser specification files. No paid or external service requests."
+  }
+}

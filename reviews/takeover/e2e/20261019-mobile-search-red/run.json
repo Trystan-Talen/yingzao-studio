@@ -1,0 +1,20 @@
+{
+  "started": "2026-10-19T02:20:05.279948+00:00",
+  "finished": "2026-10-19T02:20:10.552635+00:00",
+  "command": [
+    "pnpm",
+    "exec",
+    "playwright",
+    "test",
+    "library-canvas-review.spec.ts",
+    "--project",
+    "mobile",
+    "--grep",
+    "manages a named collection"
+  ],
+  "exitCode": 1,
+  "build": "Existing build before the mobile filter input sizing repair.",
+  "purpose": "Reproduce the actual mobile collection search input width defect.",
+  "dataIsolation": "Fresh SQLite and media.",
+  "externalServices": "Disabled."
+}

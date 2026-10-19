@@ -1,0 +1,3 @@
+$ node -e const {createRequire}=require("node:module"); const req=createRequire(require.resolve("vite/package.json")); req("rollup"); const Database=require("better-sqlite3"); const db=new Database(":memory:"); console.log(JSON.stringify({runtime:process.version,architecture:process.arch,rollup:"loaded",sqlite:db.prepare("select sqlite_version() as version").get()})); db.close(); const sharp=require("sharp"); console.log(JSON.stringify({sharp:sharp.versions.sharp,vips:sharp.versions.vips}));
+{"runtime":"v22.23.1","architecture":"arm64","rollup":"loaded","sqlite":{"version":"3.53.4"}}
+{"sharp":"0.35.5","vips":"8.18.7"}

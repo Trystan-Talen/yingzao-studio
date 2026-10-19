@@ -1,0 +1,73 @@
+{
+  "capturedUtc": "2026-10-16T06:36:16.115539+00:00",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "-p",
+        "JSON.stringify({version:process.version,execPath:process.execPath,arch:process.arch,modules:process.versions.modules})"
+      ],
+      "exitCode": 0,
+      "output": "{\"version\":\"v22.23.1\",\"execPath\":\"/Users/xm-talen/.hermes/node/bin/node\",\"arch\":\"arm64\",\"modules\":\"127\"}\n"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "exitCode": 0,
+      "output": "11.25.0\n"
+    },
+    {
+      "command": [
+        "xattr",
+        "-l",
+        "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node"
+      ],
+      "exitCode": 0,
+      "output": "com.apple.provenance: \u0001\u0002\n"
+    },
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--verbose=4",
+        "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node"
+      ],
+      "exitCode": 0,
+      "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node: valid on disk\n/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node: satisfies its Designated Requirement\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--",
+        "platform/package.json",
+        "platform/pnpm-lock.yaml",
+        "platform/pnpm-workspace.yaml"
+      ],
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "dependencyMetadata": {
+    "packageManager": "pnpm@11.25.0",
+    "storeDir": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store/v11",
+    "virtualStoreDir": ".pnpm",
+    "pendingBuilds": [],
+    "allowBuilds": {
+      "better-sqlite3": true,
+      "esbuild": true,
+      "sharp": true,
+      "canvas": false
+    }
+  },
+  "workspaceProjects": {
+    "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform": {
+      "name": "yingzao-studio",
+      "version": "1.0.0"
+    }
+  },
+  "lockSha256": "14f02d564a58f814679015702425335a40c8ee4e01d5fdf71562369e51e2d21c",
+  "rollupBinarySha256": "9a916d3945a4b66495a3da9b66c185cdf843b04196c3ba7c5fe3a2eb25253137"
+}

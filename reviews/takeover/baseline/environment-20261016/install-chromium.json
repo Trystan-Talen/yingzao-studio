@@ -1,0 +1,18 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "playwright",
+    "install",
+    "chromium"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T07:16:39.133740+00:00",
+  "endedUtc": "2026-10-16T07:17:46.411550+00:00",
+  "elapsedSeconds": 67.277,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "install-chromium.txt"
+}

@@ -1,0 +1,18 @@
+{
+  "started": "2026-10-19T02:18:41.658459+00:00",
+  "finished": "2026-10-19T02:19:08.824883+00:00",
+  "command": [
+    "pnpm",
+    "exec",
+    "playwright",
+    "test",
+    "library-canvas-review.spec.ts",
+    "--grep",
+    "manages a named collection|applies a real pending"
+  ],
+  "exitCode": 1,
+  "build": "Reused the shared successful 2026-10-19 production build.",
+  "scope": "Four targeted cases after correcting only new-test soft-delete expectations and accessible-role locator; prior six passing cases unchanged.",
+  "dataIsolation": "Fresh SQLite and media per test.",
+  "externalServices": "Disabled; local processing only."
+}

@@ -1,0 +1,111 @@
+{
+  "recordedUtc": "2026-10-19T02:04:29.834725+00:00",
+  "reason": "Resume the authorized local review after a three-day interruption. No source change or broad test rerun.",
+  "priorServices": {
+    "previousPidsExited": [
+      44946,
+      45025,
+      12938
+    ],
+    "portsInitiallyUnoccupied": [
+      4310,
+      5174
+    ]
+  },
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "commands": {
+    "api": [
+      "/Users/xm-talen/.local/bin/node",
+      "--import",
+      "tsx",
+      "src/server/main.ts"
+    ],
+    "worker": [
+      "/Users/xm-talen/.local/bin/node",
+      "--import",
+      "tsx",
+      "src/worker/main.ts"
+    ],
+    "web": [
+      "/Users/xm-talen/.local/bin/node",
+      "node_modules/vite/bin/vite.js",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "5174"
+    ]
+  },
+  "environment": {
+    "DEMO_MODE": "true",
+    "NODE_ENV": "development",
+    "DATABASE_PATH": "var/takeover/baseline-app/demo.sqlite",
+    "STORAGE_DIR": "var/takeover/baseline-app/media",
+    "HOST": "127.0.0.1",
+    "PORT": "4310",
+    "PUBLIC_ORIGIN": "http://127.0.0.1:5174",
+    "externalAuthAndDeliveryEnabled": false,
+    "externalProviderAndPaymentKeysCleared": true,
+    "ffmpegPath": "var/tools/ffmpeg-9.0.2-macos-arm64/bin"
+  },
+  "pids": {
+    "api": 30835,
+    "worker": 30836,
+    "web": 30837
+  },
+  "readiness": {
+    "apiHealth": {
+      "status": 200,
+      "body": {
+        "data": {
+          "status": "ok",
+          "database": "sqlite",
+          "demoMode": true,
+          "ffmpeg": true
+        }
+      }
+    },
+    "web": {
+      "status": 200,
+      "htmlIncludesVite": true
+    },
+    "workerStartup": true,
+    "actualDatabaseOpenFilesVerified": true,
+    "listenersLoopbackOnly": true
+  },
+  "isolatedData": {
+    "backup": "var/takeover/baseline-app/runtime-resume-backup/20261019T020327Z",
+    "backupIntegrity": "ok",
+    "sourceIntegrity": "ok",
+    "foreignKeyErrors": 0,
+    "tablesCompared": 100,
+    "changedTablesAfterRestart": [],
+    "migrations": 29,
+    "migrationChecksumsMatch": true,
+    "existingMediaFilesHashed": 32,
+    "changedOrMissingMediaFiles": [],
+    "installationKeyBytesPreserved": true,
+    "unfinishedJobCount": 0,
+    "originalDatabasesOpenedByServices": false
+  },
+  "evidenceConsistency": {
+    "finalCleanSourceSnapshotFileCount": 326,
+    "currentSourceDifferences": [],
+    "finalValidatedSourceDifferences": [],
+    "unitTests": {
+      "passed": 728,
+      "failed": 0,
+      "pending": 0
+    },
+    "fullBrowserBeforeFinalCopy": 96,
+    "finalCopyBrowserTarget": 4,
+    "finalCopyOnlyDelta": [
+      "src/web/lib/workflow-translations.ts",
+      "src/web/pages/Identities.tsx"
+    ],
+    "existingProductionRuntimeAndUpgradeReportsExitCode": 0,
+    "notes": "The 728-unit and 96-browser results predate only the recorded two-file presentation delta; 4 focused browser cases and final static/build/runtime checks cover that delta. Prior reports are retained without changing their dates or conclusions."
+  },
+  "noExternalConsumption": true,
+  "noOriginalDatabaseModification": true,
+  "privateLogs": "platform/var/takeover/baseline-app/runtime-resume-20261019"
+}

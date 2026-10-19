@@ -1,0 +1,1499 @@
+{
+  "stamp": "20261016T102240Z",
+  "database": "var/takeover/baseline-app/demo.sqlite",
+  "backup": "var/takeover/baseline-app/pre-final-restart/20261016T102240Z/demo.sqlite",
+  "sourceScope": "Only persistent isolated baseline-app; original databases excluded.",
+  "activeJobs": [],
+  "beforeMigrations": [
+    "0001-core.sql",
+    "0002-tasks.sql",
+    "0003-core-invitation-budget.sql",
+    "0004-quote-snapshots.sql",
+    "0005-worker-recovery-failures.sql",
+    "0006-layered-job-outputs.sql",
+    "0007-stripe-billing.sql",
+    "0008-quality-workflows.sql",
+    "0009-inspiration-catalog.sql",
+    "0010-share-download-permission.sql",
+    "0011-upload-history.sql",
+    "0012-entitlements-appeals.sql",
+    "0013-credit-lots.sql",
+    "0015-translation-text-checks.sql",
+    "0016-google-oidc.sql",
+    "0017-mail-outbox.sql",
+    "0018-google-local-password.sql",
+    "0019-task-recovery-lineage.sql",
+    "0020-password-recovery.sql",
+    "0021-inspiration-reuse.sql",
+    "0022-billing-channels.sql",
+    "0023-identity-auth.sql",
+    "0024-referral-policy.sql",
+    "0025-billing-period-evidence.sql",
+    "0026-refund-temporal-evidence.sql",
+    "0027-installation-owner.sql",
+    "0028-member-promotions.sql"
+  ],
+  "before": {
+    "account_mail_outbox": {
+      "columns": [
+        "id",
+        "user_id",
+        "request_id",
+        "event_key",
+        "kind",
+        "payload_ciphertext",
+        "status",
+        "attempts",
+        "next_attempt_at",
+        "expires_at",
+        "lease_owner",
+        "lease_until",
+        "last_error_code",
+        "smtp_response_code",
+        "created_at",
+        "updated_at",
+        "accepted_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "api_keys": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "created_by",
+        "name",
+        "prefix",
+        "token_hash",
+        "scopes_json",
+        "credit_limit",
+        "created_at",
+        "last_used_at",
+        "expires_at",
+        "revoked_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "asset_collections": {
+      "columns": [
+        "collection_id",
+        "asset_id"
+      ],
+      "rows": 1,
+      "sha256": "80df15d5b5b40651066aff2bba115c37e6467dee0f65e61a00b8f3ac36c3d575"
+    },
+    "asset_variants": {
+      "columns": [
+        "id",
+        "asset_id",
+        "variant",
+        "storage_key",
+        "mime_type",
+        "byte_size",
+        "width",
+        "height"
+      ],
+      "rows": 31,
+      "sha256": "bdc5e42efde3404b903052e64e10b117ec90597ded8ecd8a3652606ef3ec12d1"
+    },
+    "assets": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "project_id",
+        "name",
+        "kind",
+        "mime_type",
+        "byte_size",
+        "width",
+        "height",
+        "duration_ms",
+        "source",
+        "source_job_id",
+        "tags_json",
+        "sha256",
+        "extraction_status",
+        "extracted_text",
+        "extraction_error_json",
+        "extraction_truncated",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "rows": 11,
+      "sha256": "b57aaab0e6883185a7ac4d00644940573c61cccfea93b7730dcc64ecef0a23bd"
+    },
+    "audit_events": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "actor_id",
+        "action",
+        "resource_type",
+        "resource_id",
+        "details_json",
+        "created_at"
+      ],
+      "rows": 38,
+      "sha256": "342d2458c2999c7d85e23d239f9a27ef404b647884f721fa20110a46adf8a0ab"
+    },
+    "billing_environment_binding": {
+      "columns": [
+        "id",
+        "environment",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_events": {
+      "columns": [
+        "id",
+        "provider_id",
+        "event_id",
+        "order_id",
+        "event_json",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_fulfillments": {
+      "columns": [
+        "event_key",
+        "workspace_id",
+        "order_id",
+        "credits",
+        "created_at",
+        "billing_channel"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_periods": {
+      "columns": [
+        "provider_id",
+        "invoice_id",
+        "subscription_id",
+        "order_id",
+        "workspace_id",
+        "user_id",
+        "period_start",
+        "period_end",
+        "paid_at",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_refund_collections": {
+      "columns": [
+        "provider_id",
+        "charge_id",
+        "payment_intent_id",
+        "order_id",
+        "complete",
+        "observed_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_refund_facts": {
+      "columns": [
+        "provider_id",
+        "refund_id",
+        "charge_id",
+        "payment_intent_id",
+        "order_id",
+        "amount_minor",
+        "currency",
+        "refund_created_at",
+        "status",
+        "first_succeeded_observed_at",
+        "observed_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_risks": {
+      "columns": [
+        "id",
+        "provider_event_id",
+        "kind",
+        "charge_id",
+        "payment_intent_id",
+        "order_id",
+        "workspace_id",
+        "amount_minor",
+        "status",
+        "created_at",
+        "resolved_at",
+        "resolved_by",
+        "resolution_reason",
+        "evidence_reference",
+        "referral_reward_id",
+        "billing_channel"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "billing_subscription_endings": {
+      "columns": [
+        "provider_id",
+        "subscription_id",
+        "ended_at",
+        "observed_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "brand_references": {
+      "columns": [
+        "brand_id",
+        "asset_id",
+        "position"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "brands": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "name",
+        "description",
+        "colors_json",
+        "fonts_json",
+        "cover_asset_id",
+        "visibility",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "rows": 1,
+      "sha256": "d24ecd511746d9cb84c7387f7947d168aafe761f0a2cfc6363b2b7261e19433b"
+    },
+    "channel_partners": {
+      "columns": [
+        "user_id",
+        "enabled",
+        "approved_by",
+        "reason",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "character_authorizations": {
+      "columns": [
+        "id",
+        "character_id",
+        "workspace_id",
+        "reference_revision",
+        "asset_ids_json",
+        "statement_version",
+        "subject_relationship",
+        "status",
+        "authorized_by",
+        "authorized_at",
+        "withdrawn_at",
+        "withdrawal_reason"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "character_profiles": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "name",
+        "description",
+        "reference_asset_ids_json",
+        "cover_asset_id",
+        "verification_status",
+        "verification_provider_id",
+        "verification_expires_at",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "reference_revision"
+      ],
+      "rows": 1,
+      "sha256": "c0ad3147159c6ea202c297dec14c3b69ff772b9a5201ad9fb9a0e478a89fcbb4"
+    },
+    "collections": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "name",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "rows": 1,
+      "sha256": "6b571be44255e59d420f47665800868a6e2cba6a83b20819624b9c7dddd51a53"
+    },
+    "credit_accounts": {
+      "columns": [
+        "workspace_id",
+        "billing_channel",
+        "balance",
+        "reserved",
+        "updated_at",
+        "payment_review_required"
+      ],
+      "rows": 4,
+      "sha256": "da11840df3f8feeecef39628b98ed57a083da8da4ba6bc307e6d1ef5120abcef"
+    },
+    "credit_ledger": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "user_id",
+        "job_id",
+        "item_id",
+        "event_key",
+        "kind",
+        "amount",
+        "balance_after",
+        "reserved_after",
+        "description",
+        "created_at",
+        "billing_channel"
+      ],
+      "rows": 8,
+      "sha256": "3ec8b5e82c86954df3cb9a8b66275d24168561a185b8a5373002f79ba2c06c51"
+    },
+    "credit_lot_allocations": {
+      "columns": [
+        "item_id",
+        "lot_id",
+        "workspace_id",
+        "job_id",
+        "user_id",
+        "amount",
+        "status",
+        "refunded",
+        "created_at",
+        "updated_at",
+        "billing_channel"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "credit_lot_events": {
+      "columns": [
+        "id",
+        "lot_id",
+        "workspace_id",
+        "user_id",
+        "event_key",
+        "kind",
+        "amount",
+        "details_json",
+        "created_at",
+        "billing_channel"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "credit_lot_operations": {
+      "columns": [
+        "event_key",
+        "workspace_id",
+        "user_id",
+        "kind",
+        "input_json",
+        "result_json",
+        "created_at",
+        "billing_channel"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "credit_lots": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "user_id",
+        "source",
+        "source_id",
+        "event_key",
+        "granted",
+        "remaining",
+        "reserved",
+        "status",
+        "expires_at",
+        "archive_months",
+        "archive_until",
+        "created_at",
+        "updated_at",
+        "billing_channel"
+      ],
+      "rows": 2,
+      "sha256": "9d1b3db2148394c6373b47116b72871b4fbf13a2b9ddc453c10083b9b02b40d9"
+    },
+    "document_versions": {
+      "columns": [
+        "id",
+        "document_id",
+        "revision",
+        "scene_json",
+        "reason",
+        "created_by",
+        "source_job_id",
+        "restored_from_revision",
+        "created_at"
+      ],
+      "rows": 18,
+      "sha256": "3ebbe79a602ab98c011a579051f963466fe5908c08d1ec4f29de3a40a4367884"
+    },
+    "documents": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "project_id",
+        "name",
+        "revision",
+        "schema_version",
+        "scene_json",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 16,
+      "sha256": "d41e859b797185e60ba9a2908723c10aed857b3277c08e310fe9becf3fb21bff"
+    },
+    "entitlement_defaults": {
+      "columns": [
+        "id",
+        "limits_json",
+        "updated_by",
+        "updated_at"
+      ],
+      "rows": 2,
+      "sha256": "6a8a7d48eb9b00aa3e841513453369434e99798d216e1332cd6f7bd46e94e03f"
+    },
+    "external_identities": {
+      "columns": [
+        "id",
+        "provider",
+        "issuer",
+        "subject",
+        "user_id",
+        "email",
+        "created_at",
+        "last_login_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "external_identity_events": {
+      "columns": [
+        "id",
+        "user_id",
+        "provider",
+        "action",
+        "details_json",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "favorites": {
+      "columns": [
+        "user_id",
+        "workspace_id",
+        "resource_type",
+        "resource_id",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "free_text_claims": {
+      "columns": [
+        "item_id",
+        "job_id",
+        "workspace_id",
+        "user_id",
+        "period_day",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "google_oidc_flows": {
+      "columns": [
+        "id",
+        "state_hash",
+        "browser_hash",
+        "intent",
+        "user_id",
+        "session_token_hash",
+        "encrypted_context",
+        "created_at",
+        "expires_at",
+        "consumed_at",
+        "status",
+        "error_code"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "identity_rate_limits": {
+      "columns": [
+        "bucket_key",
+        "window_start",
+        "attempts",
+        "last_allowed_at",
+        "expires_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "identity_registrations": {
+      "columns": [
+        "id",
+        "provider",
+        "identity_ciphertext",
+        "identity_hash",
+        "browser_hash",
+        "created_at",
+        "expires_at",
+        "consumed_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "identity_sessions": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "character_id",
+        "reference_revision",
+        "provider_id",
+        "provider_session_id",
+        "verification_url",
+        "status",
+        "evidence_reference",
+        "expires_at",
+        "error_message",
+        "created_by",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inspiration_favorites": {
+      "columns": [
+        "user_id",
+        "inspiration_id",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "80579d50990a5e73e2468ccf6398a14b77d30753665952a6f8e8026e59480b5a"
+    },
+    "inspiration_reuses": {
+      "columns": [
+        "workspace_id",
+        "user_id",
+        "request_id",
+        "input_hash",
+        "inspiration_id",
+        "project_id",
+        "draft_json",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "4dfea28642edee9fcc23d0094c61b18f7625d07985c0a7ff254f7dd700c3417e"
+    },
+    "inspirations": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "asset_id",
+        "data_json",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "archived_at"
+      ],
+      "rows": 10,
+      "sha256": "6423cc6632324699c3bee4c6fcf7fc91d9a1ad889c0353ddca4038862e449a48"
+    },
+    "installation_owner": {
+      "columns": [
+        "singleton",
+        "user_id",
+        "assigned_at",
+        "source"
+      ],
+      "rows": 1,
+      "sha256": "2f1d7e84d33aab6e53ab8e0704d8b22554ff69e7679c7eb3fb470194c59394e4"
+    },
+    "invitations": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "email",
+        "role",
+        "token_hash",
+        "created_by",
+        "created_at",
+        "expires_at",
+        "consumed_at",
+        "revoked_at",
+        "credit_limit"
+      ],
+      "rows": 1,
+      "sha256": "2ffdcc60e8d1654cc235b50455bc547a5dc284c13f1da3605b723480f7079071"
+    },
+    "invoice_events": {
+      "columns": [
+        "id",
+        "invoice_id",
+        "actor_user_id",
+        "kind",
+        "details_json",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "invoice_orders": {
+      "columns": [
+        "invoice_id",
+        "order_id",
+        "amount_minor",
+        "released_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "invoice_requests": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "title_snapshot_json",
+        "status",
+        "amount_minor",
+        "currency",
+        "provider_id",
+        "download_storage_key",
+        "created_by",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "invoice_titles": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "type",
+        "name",
+        "tax_id",
+        "email",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "job_downloads": {
+      "columns": [
+        "user_id",
+        "job_id",
+        "downloaded_at"
+      ],
+      "rows": 2,
+      "sha256": "47553b40c6369a5d85a52954544182eab0fbf4163ac61011499c965f291ab35a"
+    },
+    "job_events": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "job_id",
+        "type",
+        "payload",
+        "created_at"
+      ],
+      "rows": 9,
+      "sha256": "886490201bdd8bfa40009bf8ba4b0d4015b88f875d1e7b95ea9641c8b58d7016"
+    },
+    "job_history_archives": {
+      "columns": [
+        "user_id",
+        "job_id",
+        "archived_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "job_item_assets": {
+      "columns": [
+        "item_id",
+        "asset_id",
+        "output_index"
+      ],
+      "rows": 3,
+      "sha256": "fe6fee879d45f5206717669ae4087c30bc3147a1192b36de9a49b82b7ced6f0b"
+    },
+    "job_items": {
+      "columns": [
+        "id",
+        "job_id",
+        "workspace_id",
+        "user_id",
+        "item_index",
+        "input_json",
+        "status",
+        "phase",
+        "credits",
+        "asset_id",
+        "remote_id",
+        "remote_json",
+        "result_json",
+        "result_text",
+        "error_message",
+        "lease_owner",
+        "lease_until",
+        "fence",
+        "attempts",
+        "next_attempt_at",
+        "cancel_requested",
+        "created_at",
+        "updated_at",
+        "recovery_failures",
+        "output_kind",
+        "retry_source_item_id",
+        "retry_root_item_id",
+        "result_data_json",
+        "billing_channel"
+      ],
+      "rows": 5,
+      "sha256": "8146c8b513877dc53ea085a362db302116ab3f0d60170aa346e0174c7fdb7d51"
+    },
+    "jobs": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "user_id",
+        "project_id",
+        "api_key_id",
+        "operation",
+        "provider_id",
+        "prompt",
+        "input_json",
+        "input_hash",
+        "request_id",
+        "pricing_version",
+        "status",
+        "stage",
+        "requested_credits",
+        "settled_credits",
+        "error_message",
+        "created_at",
+        "updated_at",
+        "billing_channel"
+      ],
+      "rows": 5,
+      "sha256": "8d6bef48163b52142210141fcd48ea5ae51fdb255f658a76d38c8f7117f9325f"
+    },
+    "mail_outbox": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "event_key",
+        "event_type",
+        "source_id",
+        "payload_ciphertext",
+        "status",
+        "attempts",
+        "next_attempt_at",
+        "lease_owner",
+        "lease_until",
+        "last_error_code",
+        "smtp_response_code",
+        "created_at",
+        "updated_at",
+        "accepted_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mail_outbox_actions": {
+      "columns": [
+        "id",
+        "outbox_id",
+        "operator_id",
+        "action",
+        "evidence_reference",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "member_budgets": {
+      "columns": [
+        "workspace_id",
+        "user_id",
+        "billing_channel",
+        "credit_limit",
+        "spent",
+        "reserved"
+      ],
+      "rows": 2,
+      "sha256": "cc3efd35545ff3dcb3bf26c9c62ba9bf31ac6ff9281b92d0613a7f616d75723f"
+    },
+    "memberships": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "user_id",
+        "role",
+        "credit_limit",
+        "nickname",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 2,
+      "sha256": "3a1f4e3b049ffffae3df77ede5adca481614d4d641cf9c984736c2c79d8a5d6d"
+    },
+    "messages": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "project_id",
+        "user_id",
+        "role",
+        "content",
+        "job_id",
+        "metadata_json",
+        "created_at"
+      ],
+      "rows": 619,
+      "sha256": "fb927839b885dafb8a8476612ed13b4a38cdae09cadb26121bf4f9b302f9107a"
+    },
+    "notifications": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "user_id",
+        "title",
+        "message",
+        "event_key",
+        "read_at",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "operator_audit": {
+      "columns": [
+        "id",
+        "actor_user_id",
+        "action",
+        "reason",
+        "evidence_reference",
+        "details_json",
+        "created_at"
+      ],
+      "rows": 2,
+      "sha256": "a21f9fc26791e6030b8ad1f25a3878cd7169d47166f55f767422571628ab776d"
+    },
+    "orders": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "number",
+        "kind",
+        "status",
+        "amount_minor",
+        "currency",
+        "plan_id",
+        "plan_snapshot_json",
+        "provider_id",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "paid_at",
+        "provider_session_id",
+        "provider_invoice_id",
+        "provider_payment_intent_id",
+        "payment_environment",
+        "refunded_minor",
+        "billing_channel"
+      ],
+      "rows": 1,
+      "sha256": "dd8366dbb8b01ab9cd0b2841c3efd7ebe5250d1cb4c198f84c873766643b4f40"
+    },
+    "password_request_limits": {
+      "columns": [
+        "bucket_key",
+        "window_start",
+        "attempts",
+        "last_allowed_at",
+        "expires_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "password_requests": {
+      "columns": [
+        "id",
+        "user_id",
+        "purpose",
+        "token_hash",
+        "email_snapshot",
+        "password_revision",
+        "session_token_hash",
+        "created_at",
+        "expires_at",
+        "consumed_at",
+        "revoked_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pending_applies": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "document_id",
+        "job_id",
+        "item_id",
+        "asset_id",
+        "base_revision",
+        "target_layer_id",
+        "status",
+        "created_at",
+        "updated_at",
+        "asset_ids_json",
+        "output_kind"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phone_identities": {
+      "columns": [
+        "user_id",
+        "phone_hash",
+        "phone_ciphertext",
+        "masked",
+        "created_at",
+        "verified_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "plans": {
+      "columns": [
+        "id",
+        "name",
+        "kind",
+        "price_minor",
+        "currency",
+        "interval",
+        "credits",
+        "limits_json",
+        "active",
+        "catalog_mode",
+        "catalog_version",
+        "approved_at",
+        "approved_by",
+        "prepaid_terms_json",
+        "promotion_json"
+      ],
+      "rows": 7,
+      "sha256": "ef3ed04dcaea8c9718aaa1e6520129d4d92bbc236cbbf9d02ec0b0c2e593aae5"
+    },
+    "prepaid_membership_purchases": {
+      "columns": [
+        "order_id",
+        "workspace_id",
+        "user_id",
+        "plan_id",
+        "paid_at",
+        "terms_json",
+        "amount_minor",
+        "refunded_minor",
+        "credit_lot_id",
+        "reversed_credits",
+        "debt_credits",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prepaid_refund_reservations": {
+      "columns": [
+        "order_id",
+        "event_key",
+        "item_id",
+        "lot_id",
+        "amount",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "projects": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "name",
+        "description",
+        "kind",
+        "cover_asset_id",
+        "document_id",
+        "tags_json",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "rows": 16,
+      "sha256": "e2ec392dce24109f741e72ba589ae0be61e70b12a9b62100112a76d1f3bf8861"
+    },
+    "promotion_claims": {
+      "columns": [
+        "order_id",
+        "user_id",
+        "environment",
+        "promotion_id",
+        "promotion_version",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "provider_settings": {
+      "columns": [
+        "workspace_id",
+        "provider_id",
+        "encrypted_secret",
+        "key_hint",
+        "enabled",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "quotes": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "user_id",
+        "input_hash",
+        "input_json",
+        "pricing_version",
+        "max_credits",
+        "units",
+        "expires_at",
+        "created_at",
+        "items_json",
+        "used_job_id",
+        "retry_job_id",
+        "retry_item_ids_json",
+        "billing_channel"
+      ],
+      "rows": 3,
+      "sha256": "3511ee80392c0db0b278d62672200114e992b49ba6599732e9917b0dd9cf1980"
+    },
+    "redemption_codes": {
+      "columns": [
+        "id",
+        "code_hash",
+        "credits",
+        "expires_at",
+        "redeemed_by",
+        "workspace_id",
+        "redeemed_at",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "referral_attributions": {
+      "columns": [
+        "id",
+        "user_id",
+        "referral_id",
+        "program_snapshot_json",
+        "created_at"
+      ],
+      "rows": 3,
+      "sha256": "3b20bd0e8dd7877e38fab499856a3ecda88a418872c32f54e9709dc8b0452722"
+    },
+    "referral_events": {
+      "columns": [
+        "id",
+        "referral_id",
+        "event_key",
+        "kind",
+        "reward_credits",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "referral_program": {
+      "columns": [
+        "id",
+        "registration_enabled",
+        "rewards_enabled",
+        "reward_credits",
+        "minimum_paid_minor",
+        "currency",
+        "version",
+        "updated_by",
+        "updated_at",
+        "policy_json"
+      ],
+      "rows": 1,
+      "sha256": "aa58d5bd99d8a8f98bf5e0b4afd8f958fb2faec1a22e7c36a23b487a0e510342"
+    },
+    "referral_qualification_checks": {
+      "columns": [
+        "order_id",
+        "attribution_id",
+        "status",
+        "reason",
+        "checked_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "referral_reward_items": {
+      "columns": [
+        "id",
+        "reward_id",
+        "role",
+        "workspace_id",
+        "user_id",
+        "credits",
+        "credit_lot_id",
+        "expires_at",
+        "reversed_credits",
+        "debt_credits",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "referral_rewards": {
+      "columns": [
+        "id",
+        "attribution_id",
+        "qualifying_order_id",
+        "reward_workspace_id",
+        "reward_user_id",
+        "credits",
+        "reversed_credits",
+        "debt_credits",
+        "created_at",
+        "updated_at",
+        "policy_snapshot_json"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "referrals": {
+      "columns": [
+        "id",
+        "user_id",
+        "code",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "ecf0dfe39f9095f6ac3471059e7002b280aa9803727db8df1258c1fe496f43d6"
+    },
+    "schema_migrations": {
+      "columns": [
+        "name",
+        "checksum",
+        "applied_at"
+      ],
+      "rows": 27,
+      "sha256": "406ce922121a1c414354a8021c3d06dd148f2d2da83db0a030600062ef68f35c"
+    },
+    "sessions": {
+      "columns": [
+        "id",
+        "user_id",
+        "token_hash",
+        "expires_at",
+        "created_at",
+        "last_used_at",
+        "revoked_at"
+      ],
+      "rows": 5,
+      "sha256": "9abcf8f0f2bcc858608a4d45cda99b5d02b9f70546fa20e12d625907a04d0fe0"
+    },
+    "shares": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "project_id",
+        "token_hash",
+        "created_by",
+        "created_at",
+        "expires_at",
+        "revoked_at",
+        "allow_original_download"
+      ],
+      "rows": 1,
+      "sha256": "2ae361fd66718f7360c25916b8b14d60c5ea9716873bf18b3b59ca278728c1d2"
+    },
+    "sms_challenges": {
+      "columns": [
+        "id",
+        "purpose",
+        "phone_hash",
+        "phone_ciphertext",
+        "code_hash",
+        "browser_hash",
+        "user_id",
+        "session_hash",
+        "password_revision",
+        "old_challenge_id",
+        "attempts",
+        "created_at",
+        "expires_at",
+        "verified_at",
+        "consumed_at",
+        "revoked_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sms_deliveries": {
+      "columns": [
+        "id",
+        "challenge_id",
+        "payload_ciphertext",
+        "status",
+        "lease_owner",
+        "lease_until",
+        "error_code",
+        "provider_request_id",
+        "created_at",
+        "updated_at",
+        "expires_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stripe_checkouts": {
+      "columns": [
+        "order_id",
+        "idempotency_key",
+        "session_id",
+        "checkout_url",
+        "expires_at",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stripe_events": {
+      "columns": [
+        "event_id",
+        "event_type",
+        "object_id",
+        "event_created",
+        "processed_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "subscriptions": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "plan_id",
+        "status",
+        "current_period_start",
+        "current_period_end",
+        "cancel_at_period_end",
+        "provider_id",
+        "created_at",
+        "updated_at",
+        "provider_subscription_id",
+        "source_order_id"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "support_refunds": {
+      "columns": [
+        "id",
+        "resolution_id",
+        "item_id",
+        "job_id",
+        "workspace_id",
+        "user_id",
+        "credits",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "support_resolutions": {
+      "columns": [
+        "id",
+        "ticket_id",
+        "workspace_id",
+        "decision",
+        "reason",
+        "evidence_reference",
+        "actor_user_id",
+        "request_hash",
+        "refunded_credits",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "support_tickets": {
+      "columns": [
+        "id",
+        "workspace_id",
+        "created_by",
+        "subject",
+        "category",
+        "message",
+        "job_id",
+        "asset_ids_json",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "rows": 1,
+      "sha256": "abff562617a974a0f3cbe08745eb8429fe2991b00b822db21d2645fa62e2bf15"
+    },
+    "ticket_messages": {
+      "columns": [
+        "id",
+        "ticket_id",
+        "user_id",
+        "message",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "eeff0aaa8fb2ff2b9c65a775e39f951a71bb7b09e8cf8aaf0b6333d720f7c872"
+    },
+    "translation_text_checks": {
+      "columns": [
+        "workspace_id",
+        "asset_sha256",
+        "detector_id",
+        "has_text",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "upload_requests": {
+      "columns": [
+        "workspace_id",
+        "user_id",
+        "request_id",
+        "content_hash",
+        "asset_id",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "de6d4975d680b8c7dc0140935f33e215d0729cbd8dcca5beef6e629d2d481503"
+    },
+    "users": {
+      "columns": [
+        "id",
+        "email",
+        "password_hash",
+        "display_name",
+        "avatar_asset_id",
+        "preferences_json",
+        "active_workspace_id",
+        "created_at",
+        "updated_at",
+        "local_password_enabled",
+        "password_revision",
+        "email_verified"
+      ],
+      "rows": 4,
+      "sha256": "bdfcef0155d2278f8b59189ec83595664649f6782244dbf90ad76a6395edef4c"
+    },
+    "wechat_auth_flows": {
+      "columns": [
+        "id",
+        "state_hash",
+        "browser_hash",
+        "intent",
+        "user_id",
+        "session_hash",
+        "password_revision",
+        "created_at",
+        "expires_at",
+        "consumed_at",
+        "status",
+        "error_code"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "wechat_identities": {
+      "columns": [
+        "user_id",
+        "app_id",
+        "openid",
+        "unionid",
+        "created_at",
+        "last_login_at"
+      ],
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "workspace_billing": {
+      "columns": [
+        "workspace_id",
+        "credit_mode",
+        "concurrency_limit",
+        "payment_review_required"
+      ],
+      "rows": 2,
+      "sha256": "343a36134fe508b18ba54ef259ecc1746fd032317220364b4f0eeb92dda15086"
+    },
+    "workspaces": {
+      "columns": [
+        "id",
+        "name",
+        "description",
+        "kind",
+        "is_demo",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "archived_at"
+      ],
+      "rows": 2,
+      "sha256": "e54d2aa0bd9980ddfff6119940949b2f6b58dfa89c2ca057ba5b0297b16b9940"
+    }
+  }
+}

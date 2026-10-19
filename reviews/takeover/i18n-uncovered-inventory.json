@@ -1,0 +1,675 @@
+{
+  "recordedUtc": "2026-10-16T08:43:53.652Z",
+  "method": "Static Chinese literals absent from exact-key dictionary. Candidates only; not a runtime coverage claim. Templates and existing keys without t() are not exhausted.",
+  "files": [
+    "components/Composer.tsx",
+    "components/AdvancedTools.tsx",
+    "components/TaskCenter.tsx",
+    "components/ReferralDetails.tsx",
+    "components/IdentityAccounts.tsx",
+    "components/PasswordSecurity.tsx",
+    "pages/Workbench.tsx",
+    "pages/Tools.tsx",
+    "pages/Usage.tsx",
+    "pages/IdentityRegistration.tsx",
+    "pages/PasswordRecovery.tsx",
+    "pages/Team.tsx"
+  ],
+  "candidates": [
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 74,
+      "text": "浏览器存储不可用，当前修改仅保留在此页面。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 86,
+      "text": "已恢复本机草稿"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 316,
+      "text": "草稿已保存在本机"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 318,
+      "text": "当前修改仅保留在此页面。浏览器无法保存草稿，请使用“保存草稿”保存到项目。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 421,
+      "text": "项目已创建，请保存草稿后进入项目。浏览器无法保存本机恢复记录。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 469,
+      "text": "草稿已保存到项目"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 483,
+      "text": "项目已保存，但保存期间的最新修改未能转存。当前页面保留全部修改，请恢复浏览器存储后再次保存。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 493,
+      "text": "当前角色不能编辑创作草稿。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 495,
+      "text": "模型能力尚未读取完成，请稍后采用方案。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 513,
+      "text": "当前角色不能编辑创作草稿。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 521,
+      "text": "当前模式不支持视频参考，请先选择支持视频参考的模型与模式。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 522,
+      "text": "此结果不能用作媒体参考。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 545,
+      "text": "与画布保存分别记录"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 552,
+      "text": "已核对项目草稿，用当前内容替换本机记录"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 563,
+      "text": "已核对当前参数"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 570,
+      "text": "正在恢复参考素材，完成前暂不能提交。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 571,
+      "text": "部分参考素材未恢复。请重试，或明确移除失效引用后继续。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 578,
+      "text": "移除失效引用"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 584,
+      "text": "重试恢复素材"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 616,
+      "text": "背景音乐（可选）"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 621,
+      "text": "当前模型不支持背景音乐。原音频已保留，请移除音频或切换支持的模型后提交。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 633,
+      "text": "生成视频音轨"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 638,
+      "text": "当前模型不支持生成音轨。请关闭此选项或切换支持的模型。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 779,
+      "text": "每模块生成数量"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 803,
+      "text": "收起高级设置"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 803,
+      "text": "模型与高级设置"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 808,
+      "text": "正在读取模型"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 809,
+      "text": "服务已连接"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 809,
+      "text": "服务未连接"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 814,
+      "text": "物料规划 ·"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 814,
+      "text": "个模块 · 共"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 814,
+      "text": "张，展开编辑"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 971,
+      "text": "移除失效素材及引用？"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 972,
+      "text": "将从当前草稿及物料模块移除此素材的引用，其他素材和文案保持不变。"
+    },
+    {
+      "file": "platform/src/web/components/Composer.tsx",
+      "line": 1021,
+      "text": "任务已提交，但最新修改未能转存到项目。当前页面保留修改，请先保存草稿；可在任务中心查看已提交任务。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 184,
+      "text": "浏览器草稿存储不可用。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 277,
+      "text": "工具草稿读取失败"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 376,
+      "text": "本机草稿保存失败，请保存到项目后离开。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 423,
+      "text": "项目已创建，本机恢复记录无法保存，请保持此页重试。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 434,
+      "text": "工具草稿保存失败"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 446,
+      "text": "已核对项目草稿，用当前内容替换本机记录"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 456,
+      "text": "正在读取识别结果与原图…"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 466,
+      "text": "重试导入"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 476,
+      "text": "放弃导入，手动编辑"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 483,
+      "text": "正在查找此工具的历史草稿…"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 485,
+      "text": "已查找本批历史消息，尚未找到此工具草稿。更早消息尚未读取。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 497,
+      "text": "重试查找"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 497,
+      "text": "继续查找更早草稿"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 501,
+      "text": "停止查找，使用空白草稿"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 510,
+      "text": "原参数仍保存在草稿中。请逐项选择当前支持的值后提交。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 516,
+      "text": "正在恢复素材，完成前暂不能提交。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 517,
+      "text": "部分素材未恢复，现有引用仍保留。请重试或明确移除后继续。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 524,
+      "text": "移除失效引用"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 530,
+      "text": "重试恢复素材"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 537,
+      "text": "移除失效引用？"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 538,
+      "text": "确认后将从当前工具草稿移除此素材引用；不会删除原文件。"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 629,
+      "text": "（当前不可用，原值保留）"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 652,
+      "text": "（当前不支持，原值保留）"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 688,
+      "text": "（当前不支持，原值保留）"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 700,
+      "text": "（当前不支持，原值保留）"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 715,
+      "text": "×（当前不支持，原值保留）"
+    },
+    {
+      "file": "platform/src/web/components/AdvancedTools.tsx",
+      "line": 740,
+      "text": "（当前不支持，原值保留）"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 96,
+      "text": "查看设计方案"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 147,
+      "text": "这里可查看、修改并复制方案。进入对应项目后，可从作品卡选择方向应用到创作草稿。"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 148,
+      "text": "这里可查看、修改并复制方案。此任务未关联项目，请将方案复制到新的创作草稿。"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 162,
+      "text": "原图"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 167,
+      "text": "参考"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 172,
+      "text": "已建立重试任务"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 173,
+      "text": "，不会从本项重复发起。"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 176,
+      "text": "可重试"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 240,
+      "text": "作为参考继续创作"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 306,
+      "text": "打开项目采用方案"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 311,
+      "text": "成功结果会保留。仅重试可重试且尚未建立重试任务的条目；结果待核对项需先核对。"
+    },
+    {
+      "file": "platform/src/web/components/TaskCenter.tsx",
+      "line": 333,
+      "text": "为可重试项重新估价"
+    },
+    {
+      "file": "platform/src/web/components/ReferralDetails.tsx",
+      "line": 41,
+      "text": "会员资格要求未配置"
+    },
+    {
+      "file": "platform/src/web/components/ReferralDetails.tsx",
+      "line": 150,
+      "text": "到期时间"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 261,
+      "text": "历史草稿读取失败"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 366,
+      "text": "正在打开项目…"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 389,
+      "text": "画布有未保存的修改"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 446,
+      "text": "创作会话"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 468,
+      "text": "正在恢复创作草稿…"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 473,
+      "text": "近期会话中没有媒体草稿。可继续查找更早记录，或从项目描述开始。"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 479,
+      "text": "继续查找历史草稿"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 485,
+      "text": "从项目描述开始"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 545,
+      "text": "项目作品与编辑"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 548,
+      "text": "项目作品"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 549,
+      "text": "任务、产物与编辑都保存在当前项目中。"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 566,
+      "text": "作品与任务"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 567,
+      "text": "画布编辑"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 606,
+      "text": "正在读取项目任务…"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 610,
+      "text": "第一件作品，从这里开始"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 612,
+      "text": "选择素材、写下需求并确认费用。任务提交后会在这里持续更新；离开或刷新仍可找回。"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 616,
+      "text": "先从空白画布编辑"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 632,
+      "text": "创作草稿尚未恢复，请先完成恢复。"
+    },
+    {
+      "file": "platform/src/web/pages/Workbench.tsx",
+      "line": 642,
+      "text": "创作草稿尚未恢复，请先在创作区完成恢复。"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 451,
+      "text": "正在恢复参考素材，完成前暂不能提交。"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 452,
+      "text": "部分参考素材未恢复。请重试，或明确移除失效引用后继续。"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 458,
+      "text": "原素材"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 458,
+      "text": "蒙版"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 458,
+      "text": "背景"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 469,
+      "text": "移除失效引用"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 479,
+      "text": "重试恢复素材"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 487,
+      "text": "移除失效素材及引用？"
+    },
+    {
+      "file": "platform/src/web/pages/Tools.tsx",
+      "line": 488,
+      "text": "将从当前草稿及物料模块移除此素材的引用，其他素材和文案保持不变。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 120,
+      "text": "一次付款购买"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 121,
+      "text": "个月会员，无自动续费。权益付款后生效，同档续购期限按协调世界时的日历月顺延，月底按目标月份最后一天计算。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 123,
+      "text": "额度按本次购买对应期限到期，不封存；续购不会统一延长旧额度。退款按对应购买金额比例缩短会员期限并撤回对应来源额度，已用或预留部分须核对。当前不支持跨档或与自动续费会员混购。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 137,
+      "text": "当前符合活动条件"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 139,
+      "text": "· 时区："
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 139,
+      "text": "（结束时刻不含在活动内）"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 143,
+      "text": "不限首购"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 145,
+      "text": "账号首次购买个人空间会员"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 147,
+      "text": "账号首次网页购买"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 148,
+      "text": "首购范围待配置"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 150,
+      "text": "退款历史仍计为曾购买"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 150,
+      "text": "全额退款后可重新判断首购"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 155,
+      "text": "以活动期内发起的原支付会话确认资格；异步付款完成可晚于活动结束。剩余不足 31 分钟时不新建优惠支付会话。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 158,
+      "text": "此时按页面所示普通价格购买；不会自动加入优惠。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 241,
+      "text": "只有创建者与管理员可以查看接口额度账户"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 246,
+      "text": "接口额度与订单"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 249,
+      "text": "接口任务使用独立平台额度，与网页账户分别充值、预留和结算。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 270,
+      "text": "网页创作账户"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 271,
+      "text": "接口额度账户"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 276,
+      "text": "此处是平台创作额度，不是现金余额。接口充值不购买网页会员权益。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 322,
+      "text": "接口额度包"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 434,
+      "text": "固定期会员"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 458,
+      "text": "一次付款，同档期限顺延；额度按各次购买对应期限到期，不封存。"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 545,
+      "text": "固定期"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 545,
+      "text": "个月 · 无自动续费"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 550,
+      "text": "· 原价"
+    },
+    {
+      "file": "platform/src/web/pages/Usage.tsx",
+      "line": 551,
+      "text": "· 活动内发起原支付会话"
+    }
+  ]
+}

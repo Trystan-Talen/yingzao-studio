@@ -1,0 +1,4 @@
+{"case":"team-entry","createdTeams":2,"persistedOwnedTeams":2}
+{"case":"settings-preserved","theme":"dark","locale":"en","confirmGeneration":false}
+{"case":"notifications-pagination","total":25,"firstPageCount":24,"pageSize":24,"secondPageCount":1,"otherSpaceTotal":0}
+{"case":"feedback-local-ticket","status":"open","replies":1,"externalProviderConfigured":false}

@@ -1,0 +1,10 @@
+{
+  "errors": [],
+  "failedRequests": [
+    {
+      "path": "/api/v1/assets",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "responses": []
+}

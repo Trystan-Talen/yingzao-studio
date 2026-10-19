@@ -1,0 +1,665 @@
+{
+  "backup": "var/takeover/baseline-app/pre-contract-restart/20261016T091817Z",
+  "integrity": "ok",
+  "foreignKeyErrors": 0,
+  "migrationCount": 27,
+  "migrationChecks": [
+    {
+      "name": "0001-core.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0002-tasks.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0003-core-invitation-budget.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0004-quote-snapshots.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0005-worker-recovery-failures.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0006-layered-job-outputs.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0007-stripe-billing.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0008-quality-workflows.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0009-inspiration-catalog.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0010-share-download-permission.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0011-upload-history.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0012-entitlements-appeals.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0013-credit-lots.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0015-translation-text-checks.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0016-google-oidc.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0017-mail-outbox.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0018-google-local-password.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0019-task-recovery-lineage.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0020-password-recovery.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0021-inspiration-reuse.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0022-billing-channels.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0023-identity-auth.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0024-referral-policy.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0025-billing-period-evidence.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0026-refund-temporal-evidence.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0027-installation-owner.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0028-member-promotions.sql",
+      "matchesSource": true
+    }
+  ],
+  "historicalTableChecks": [
+    {
+      "table": "account_mail_outbox",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "api_keys",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "asset_collections",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "asset_variants",
+      "rowsBefore": 31,
+      "rowsAfter": 31,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "assets",
+      "rowsBefore": 11,
+      "rowsAfter": 11,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "audit_events",
+      "rowsBefore": 37,
+      "rowsAfter": 37,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "billing_events",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "billing_fulfillments",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "billing_periods",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "billing_risks",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "billing_subscription_endings",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "brand_references",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "brands",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "channel_partners",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "character_authorizations",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "character_profiles",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "collections",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "credit_accounts",
+      "rowsBefore": 4,
+      "rowsAfter": 4,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "credit_ledger",
+      "rowsBefore": 8,
+      "rowsAfter": 8,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "credit_lot_allocations",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "credit_lot_events",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "credit_lot_operations",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "credit_lots",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "document_versions",
+      "rowsBefore": 18,
+      "rowsAfter": 18,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "documents",
+      "rowsBefore": 16,
+      "rowsAfter": 16,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "entitlement_defaults",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "external_identities",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "external_identity_events",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "favorites",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "free_text_claims",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "google_oidc_flows",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "identity_rate_limits",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "identity_registrations",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "identity_sessions",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "inspiration_favorites",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "inspiration_reuses",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "inspirations",
+      "rowsBefore": 10,
+      "rowsAfter": 10,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "invitations",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "invoice_events",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "invoice_orders",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "invoice_requests",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "invoice_titles",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "job_downloads",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "job_events",
+      "rowsBefore": 9,
+      "rowsAfter": 9,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "job_history_archives",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "job_item_assets",
+      "rowsBefore": 3,
+      "rowsAfter": 3,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "job_items",
+      "rowsBefore": 5,
+      "rowsAfter": 5,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "jobs",
+      "rowsBefore": 5,
+      "rowsAfter": 5,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "mail_outbox",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "mail_outbox_actions",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "member_budgets",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "memberships",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "messages",
+      "rowsBefore": 619,
+      "rowsAfter": 619,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "notifications",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "operator_audit",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "orders",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "password_request_limits",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "password_requests",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "pending_applies",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "phone_identities",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "plans",
+      "rowsBefore": 3,
+      "rowsAfter": 3,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "projects",
+      "rowsBefore": 16,
+      "rowsAfter": 16,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "provider_settings",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "quotes",
+      "rowsBefore": 3,
+      "rowsAfter": 3,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "redemption_codes",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referral_attributions",
+      "rowsBefore": 3,
+      "rowsAfter": 3,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referral_events",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referral_program",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referral_qualification_checks",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referral_reward_items",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referral_rewards",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "referrals",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "sessions",
+      "rowsBefore": 5,
+      "rowsAfter": 5,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "shares",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "sms_challenges",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "sms_deliveries",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "stripe_checkouts",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "stripe_events",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "subscriptions",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "support_refunds",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "support_resolutions",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "support_tickets",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "ticket_messages",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "translation_text_checks",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "upload_requests",
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "users",
+      "rowsBefore": 4,
+      "rowsAfter": 4,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "wechat_auth_flows",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "wechat_identities",
+      "rowsBefore": 0,
+      "rowsAfter": 0,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "workspace_billing",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    },
+    {
+      "table": "workspaces",
+      "rowsBefore": 2,
+      "rowsAfter": 2,
+      "originalColumnsUnchanged": true
+    }
+  ],
+  "new0028TableRows": {
+    "billing_environment_binding": 0,
+    "promotion_claims": 0,
+    "prepaid_membership_purchases": 0,
+    "prepaid_refund_reservations": 0
+  },
+  "installationOwnerIsFirstStoredUser": true
+}

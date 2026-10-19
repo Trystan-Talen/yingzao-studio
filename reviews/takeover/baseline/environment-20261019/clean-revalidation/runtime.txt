@@ -1,0 +1,3 @@
+Production runtime verified: built HTML/JS, healthy SQLite, empty-db registration, secure cookie, concurrent API/worker migrations.
+Production runtime stopped cleanly; temporary data removed.
+$ tsx scripts/verify-runtime.ts

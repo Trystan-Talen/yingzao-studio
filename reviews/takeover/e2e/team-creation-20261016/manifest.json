@@ -1,0 +1,101 @@
+{
+  "sourceRun": "platform/var/e2e/run-N1kCH4",
+  "passed": 8,
+  "failed": 0,
+  "data": "fresh isolated fictional accounts and explicit local billing availability fixture; no external payment or generation",
+  "screenshots": [
+    {
+      "file": "screenshots/mobile-team-order-recovered.png",
+      "sha256": "42d33c47c0c9a9656627067242fc731a83a0688e270025e14a8adbb9b34e1133"
+    },
+    {
+      "file": "screenshots/desktop-team-existing-guidance.png",
+      "sha256": "1f04b58148b2a5e5eb8d8ed7bfd67302b460d779b60a73ce59182110b127fea6"
+    },
+    {
+      "file": "screenshots/desktop-team-gate-ar.png",
+      "sha256": "a6e7a46eda1065a93638c3eb928a68aaf51f7103bf544bbcef776f168a620175"
+    },
+    {
+      "file": "screenshots/desktop-team-gate-en.png",
+      "sha256": "370016632956ab19f6fd1102d06f2cf8cd7881267ebcd9fabde2003f39996e1a"
+    },
+    {
+      "file": "screenshots/desktop-team-creation-unconfigured.png",
+      "sha256": "bdcc1c86bdc0f2f2c35336957890db784079567bd0f4c009d785a4cada78a736"
+    },
+    {
+      "file": "screenshots/desktop-team-order-recovered.png",
+      "sha256": "33e6f5ed4fc59755c4cc79619470012fe8aa004c2d99eefcc77f2a4e1adfc2ef"
+    },
+    {
+      "file": "screenshots/mobile-team-creation-unconfigured.png",
+      "sha256": "0aec86bc9bf4b639330fc96975582a0bc02346136deef166f8845738f1722580"
+    },
+    {
+      "file": "screenshots/mobile-team-gate-en.png",
+      "sha256": "da4a46f18fc5ed7380b3cd4c1e56d38864ca43aa6c85e0abfde362a4a9f983b6"
+    },
+    {
+      "file": "screenshots/mobile-team-gate-ar.png",
+      "sha256": "00ef64b3d3bf686bbbc5303a3babee728508eaa18b84632512ab925f6365839c"
+    },
+    {
+      "file": "screenshots/mobile-team-existing-guidance.png",
+      "sha256": "3bb8d977d117e7879683058c5e1ab243a91fa2ca744a6ab93404d161e51d4973"
+    }
+  ],
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    }
+  ],
+  "excludes": "configuration, databases, browser credentials, private media and raw traces"
+}

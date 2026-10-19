@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "lint"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:30:13.877731+00:00",
+  "endedUtc": "2026-10-16T06:30:17.276650+00:00",
+  "elapsedSeconds": 3.399,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "lint.txt"
+}

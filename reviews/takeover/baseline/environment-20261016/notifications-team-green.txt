@@ -1,0 +1,94 @@
+$ pnpm test:e2e notifications-team.spec.ts
+$ tsx scripts/e2e.ts notifications-team.spec.ts
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2202 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-DFwr4-Mv.css                 67.02 kB │ gzip:  12.94 kB
+dist/web/assets/arrow-left-1U4eVp1f.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-BIAVsOZ5.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-TXkGhGC1.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-BEgcWOL_.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-BXk1lyUG.js                0.39 kB │ gzip:   0.28 kB │ map:     2.02 kB
+dist/web/assets/save-DjqZjw2G.js                    0.40 kB │ gzip:   0.29 kB │ map:     1.33 kB
+dist/web/assets/shield-check-BQw17NHJ.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-DXVL_4Gc.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-CGC5f2Ky.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-DajFCZYe.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-C9IKtTB8.js                 0.59 kB │ gzip:   0.34 kB │ map:     1.83 kB
+dist/web/assets/export-policy-_RU3suWO.js           1.14 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-55nVaLa6.js    2.50 kB │ gzip:   1.37 kB │ map:     7.46 kB
+dist/web/assets/PasswordRecovery-VTiGLv_5.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-CpdtskTy.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-CWhRYXTQ.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-UIdg75lS.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-dGgWlLOU.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-ImJ4OkKa.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-D4jnhhqN.js        7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+dist/web/assets/Inspiration-DCtaJUh8.js            13.08 kB │ gzip:   6.09 kB │ map:    37.24 kB
+dist/web/assets/Identities-BFcbN52Q.js             13.75 kB │ gzip:   5.00 kB │ map:    43.36 kB
+dist/web/assets/Settings-Dex_m51m.js               14.04 kB │ gzip:   5.52 kB │ map:    40.50 kB
+dist/web/assets/Developer-C_cg7dhs.js              15.20 kB │ gzip:   5.29 kB │ map:    46.52 kB
+dist/web/assets/Support-CTudQpt2.js                15.41 kB │ gzip:   6.08 kB │ map:    44.30 kB
+dist/web/assets/Team-BN6lV0iM.js                   16.26 kB │ gzip:   5.44 kB │ map:    53.37 kB
+dist/web/assets/Workbench-Dqt531w2.js              18.71 kB │ gzip:   7.10 kB │ map:    63.01 kB
+dist/web/assets/AdvancedTools-01dT-9sT.js          20.31 kB │ gzip:   7.99 kB │ map:    69.32 kB
+dist/web/assets/Library-BvnWNv6A.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Tools-CfENj4I1.js                  28.42 kB │ gzip:  11.02 kB │ map:    90.74 kB
+dist/web/assets/Usage-12mLTn_b.js                  28.47 kB │ gzip:   9.47 kB │ map:    86.04 kB
+dist/web/assets/Composer-Cb2kSVBT.js               29.53 kB │ gzip:  11.32 kB │ map:    99.38 kB
+dist/web/assets/react-1LyzdIKn.js                 106.07 kB │ gzip:  35.88 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-AZyPn1A0.js          151.10 kB │ gzip:  49.19 kB │ map:   415.57 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-ChmLFOkM.js                 673.02 kB │ gzip: 219.93 kB │ map: 2,452.27 kB
+✓ built in 1.76s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        67.39 KB
+ESM dist/runtime/chunk-RWMRJAVQ.js     627.72 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/worker/main.js.map    103.43 KB
+ESM dist/runtime/chunk-RWMRJAVQ.js.map 1.07 MB
+ESM ⚡️ Build success in 38ms
+
+Running 10 tests using 1 worker
+
+(node:99302) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/notifications-team.spec.ts:61:1 › shows a loading state until the actual isolated notification response arrives (1.4s)
+  ✓   2 [desktop] › tests/e2e/notifications-team.spec.ts:120:1 › shows one injected notification failure and retries against the real API without an empty-state claim (1.4s)
+  ✓   3 [desktop] › tests/e2e/notifications-team.spec.ts:158:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries (1.7s)
+  ✓   4 [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates en team role labels while retaining the actual owner role (1.5s)
+  ✓   5 [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates ar team role labels while retaining the actual owner role (1.5s)
+(node:99364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 [mobile] › tests/e2e/notifications-team.spec.ts:61:1 › shows a loading state until the actual isolated notification response arrives (1.4s)
+  ✓   7 [mobile] › tests/e2e/notifications-team.spec.ts:120:1 › shows one injected notification failure and retries against the real API without an empty-state claim (1.4s)
+  ✓   8 [mobile] › tests/e2e/notifications-team.spec.ts:158:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries (1.7s)
+  ✓   9 [mobile] › tests/e2e/notifications-team.spec.ts:203:3 › translates en team role labels while retaining the actual owner role (1.5s)
+  ✓  10 [mobile] › tests/e2e/notifications-team.spec.ts:203:3 › translates ar team role labels while retaining the actual owner role (1.5s)
+
+  10 passed (17.1s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-mFSATm

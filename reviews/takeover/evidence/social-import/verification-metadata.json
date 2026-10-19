@@ -1,0 +1,23 @@
+{
+  "verifiedAtUtc": "2026-10-16T08:29:06.882829+00:00",
+  "cwd": "platform",
+  "commands": [
+    "node --import tsx ../reviews/takeover/evidence/social-import/yingzao-social-redirect-review.mjs",
+    "PATH=\"$PWD/var/tools/ffmpeg-9.0.2-macos-arm64/bin:$PATH\" node --import tsx ../reviews/takeover/evidence/social-import/yingzao-social-save-review.mts",
+    "PATH=\"$PWD/var/tools/ffmpeg-9.0.2-macos-arm64/bin:$PATH\" pnpm exec vitest run tests/media-download.test.ts tests/tasks.test.ts tests/social-import.test.ts --reporter=json --outputFile=../reviews/takeover/evidence/social-import/targeted-tests.json"
+  ],
+  "versions": {
+    "node": "v22.23.1",
+    "pnpm": "11.25.0",
+    "gitHead": "c7f7e4f721d33666d18bf8904a4fd7a77088ec9c"
+  },
+  "sourceSha256": {
+    "src/server/providers/http.ts": "40f542d646ed3cc6069b882f647f543dca6e90c7d14326db3595973ae7513a57",
+    "src/worker/runner.ts": "29bc7ea1c8adca1f8bef78e6d8040e1c71638017c37301248226a30ed2895931",
+    "src/server/core/assets.ts": "d7e581ade9eb50c2cb06f09a868d4248f75599bb55602ef47069d2449c04137b",
+    "src/server/core/storage.ts": "774ba79a042d62550eb050c69f7aadc44b9692c2936fcdb5b357c2174989e445",
+    "tests/media-download.test.ts": "4d856eae190c80f530e7c424495dec4405e885af219540abc73562f85bd01bd0",
+    "tests/tasks.test.ts": "b0c18080e2dce868562a3d2c4a6c5f137e519ae9437b29a0df2abd56e82a7b77",
+    "tests/social-import.test.ts": "f897e2a0dd2c45d93ce3de2bbbf124b28969c397a1a7cb359110527c6ed49fe1"
+  }
+}

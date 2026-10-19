@@ -1,0 +1,25 @@
+$ pnpm test
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/tasks.test.ts (32 tests | 1 failed) 1540ms
+   ❯ explicit layer output transactions and media-based estimates (4)
+     × quotes source-video operations using actual duration and extension using newly requested seconds 36ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/tasks.test.ts > explicit layer output transactions and media-based estimates > quotes source-video operations using actual duration and extension using newly requested seconds
+Error: spawn ffmpeg ENOENT
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 19 passed (20)
+      Tests  1 failed | 277 passed (278)
+   Start at  14:32:09
+   Duration  17.68s (tests 62%, import 35%, transform 2%)
+
+    Isolate  20 workers spawned · ~50ms startup each (spawn + environment, per file)
+             at least ~953ms faster with isolate: false — reuses workers across files instead of one per file
+
+[ELIFECYCLE] Test failed. See above for more details.

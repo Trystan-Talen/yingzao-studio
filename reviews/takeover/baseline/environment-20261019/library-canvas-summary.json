@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-19",
+  "distinctPassingCases": 10,
+  "singleTenCaseAllGreenRun": false,
+  "passingCases": [
+    {
+      "project": "desktop",
+      "title": "groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-round1/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "desktop",
+      "title": "combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-final/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "desktop",
+      "title": "uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-round1/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "mobile",
+      "title": "groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-round1/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "mobile",
+      "title": "combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-final/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "mobile",
+      "title": "uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-round1/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "desktop",
+      "title": "manages a named collection through rename, membership removal and deletion while preserving both originals",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-final/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "desktop",
+      "title": "applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-final/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "mobile",
+      "title": "manages a named collection through rename, membership removal and deletion while preserving both originals",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-final/report/index.html",
+      "outcome": "expected"
+    },
+    {
+      "project": "mobile",
+      "title": "applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice",
+      "report": "reviews/takeover/e2e/20261019-library-canvas-final/report/index.html",
+      "outcome": "expected"
+    }
+  ],
+  "finalCssFocusedCases": 6,
+  "uncaughtBrowserExceptions": 0,
+  "realDefect": "Mobile search input measured43px before repair; regression >=240px fails before fix and passes after.",
+  "productionChange": "src/web/styles.css: mobile filter input flex:1 -> flex:1 0 100%",
+  "testCorrectionsOnly": [
+    "soft deletion retains historical row",
+    "combobox role locator",
+    "duplicate applied result returns404/RESULT_NOT_FOUND"
+  ],
+  "finalVisualReview": [
+    "Final mobile collection search spans one row and selectors remain readable.",
+    "Final mobile pending result shows preserved rectangle/ellipse and one added image."
+  ],
+  "boundaries": [
+    "No external models, payments or delivery.",
+    "No arbitrary nested-group proof or custom statistics timezone capability claim."
+  ]
+}

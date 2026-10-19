@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "lint"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:11:47.942555+00:00",
+  "endedUtc": "2026-10-16T08:11:50.373884+00:00",
+  "elapsedSeconds": 2.432,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "takeover-integrated-lint.txt"
+}

@@ -1,0 +1,2 @@
+$ node --import tsx /private/tmp/yingzao-final-upgrade.mjs var/takeover/20261016T062801Z/runtime/backups/2026-10-14T09-38-24.349Z var/takeover/final-validation/20261016T1010Z/upgrade ../reviews/takeover/baseline/environment-20261016/final-upgrade-0030-result.json
+{"report":"../reviews/takeover/baseline/environment-20261016/final-upgrade-0030-result.json","historicalBusinessTables":75,"migrationCount":29,"mediaFiles":23,"referencedMedia":22,"checksPassed":12}

@@ -1,0 +1,88 @@
+$ pnpm test:e2e --grep SMS protocol fixture|detach existing
+$ tsx scripts/e2e.ts --grep 'SMS protocol fixture|detach existing'
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2201 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-BqeKjH6h.css                 66.87 kB │ gzip:  12.92 kB
+dist/web/assets/arrow-left-DsJr9gL2.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-DUej0_Mk.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-B5SJqfc7.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-BKVWOTVz.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-B04vxnGf.js                0.39 kB │ gzip:   0.27 kB │ map:     2.02 kB
+dist/web/assets/save-CJGWIEBY.js                    0.40 kB │ gzip:   0.29 kB │ map:     1.33 kB
+dist/web/assets/shield-check-DdfGMFyV.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-DS4PGnxG.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-YHiZx2F4.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-BjtZp3zW.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-CevnPf3Q.js                 0.59 kB │ gzip:   0.34 kB │ map:     1.83 kB
+dist/web/assets/export-policy-BHRVHqn0.js           1.14 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-DL5wza1a.js    2.46 kB │ gzip:   1.36 kB │ map:     7.20 kB
+dist/web/assets/PasswordRecovery-BSzfhSSB.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-C0S4llLm.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-D_Ml9bP2.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-BkryObOM.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-BgYLJwvs.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-Dmy_oAGw.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-CC_Ej6Na.js        7.52 kB │ gzip:   3.02 kB │ map:    22.38 kB
+dist/web/assets/Inspiration-D6om4T2L.js            13.08 kB │ gzip:   6.09 kB │ map:    37.24 kB
+dist/web/assets/Identities-tQHq5Bfu.js             13.75 kB │ gzip:   5.00 kB │ map:    43.36 kB
+dist/web/assets/Settings-I1hZFDga.js               14.04 kB │ gzip:   5.53 kB │ map:    40.50 kB
+dist/web/assets/Developer-jv7amPxc.js              15.14 kB │ gzip:   5.28 kB │ map:    46.41 kB
+dist/web/assets/Support-Yv-5k1SE.js                15.40 kB │ gzip:   6.08 kB │ map:    44.26 kB
+dist/web/assets/Team-BHBdBzP6.js                   16.25 kB │ gzip:   5.43 kB │ map:    53.36 kB
+dist/web/assets/Workbench-Nl2N0Bsb.js              18.36 kB │ gzip:   6.99 kB │ map:    61.86 kB
+dist/web/assets/AdvancedTools-BFGbZIgQ.js          20.31 kB │ gzip:   7.99 kB │ map:    69.32 kB
+dist/web/assets/Library-DJpzI-Tp.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Usage-Bo_koshU.js                  25.87 kB │ gzip:   8.34 kB │ map:    80.07 kB
+dist/web/assets/Tools-CC9dCiY3.js                  28.42 kB │ gzip:  11.02 kB │ map:    90.74 kB
+dist/web/assets/Composer-Crqm1b0Z.js               29.53 kB │ gzip:  11.32 kB │ map:    99.38 kB
+dist/web/assets/react-1LyzdIKn.js                 106.07 kB │ gzip:  35.88 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-CYmmvhFA.js          151.10 kB │ gzip:  49.19 kB │ map:   415.57 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-A6_NnJBg.js                 653.90 kB │ gzip: 214.78 kB │ map: 2,426.07 kB
+✓ built in 1.78s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/worker/main.js        66.88 KB
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/chunk-NFISRW3L.js     591.79 KB
+ESM dist/runtime/worker/main.js.map    102.63 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/chunk-NFISRW3L.js.map 1.01 MB
+ESM ⚡️ Build success in 57ms
+
+Running 4 tests using 1 worker
+
+(node:82085) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (5.7s)
+  ✓  2 [desktop] › tests/e2e/identities.spec.ts:72:1 › can detach existing identity fixtures with a password after both providers are disabled (3.2s)
+(node:82131) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [mobile] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (4.8s)
+  ✓  4 [mobile] › tests/e2e/identities.spec.ts:72:1 › can detach existing identity fixtures with a password after both providers are disabled (2.2s)
+
+  4 passed (18.4s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-0nS2wS

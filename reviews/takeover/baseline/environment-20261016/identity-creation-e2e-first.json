@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "test:e2e"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:07:33.030860+00:00",
+  "endedUtc": "2026-10-16T08:09:12.530999+00:00",
+  "elapsedSeconds": 99.501,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "identity-creation-e2e-first.txt"
+}

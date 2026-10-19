@@ -1,0 +1,78 @@
+{
+  "sourceRun": "platform/var/e2e/run-3wSkPZ",
+  "passed": 0,
+  "failed": 5,
+  "failureExpectation": "red: missing loading/error/pagination and role translations",
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-notifications-team-reaches-9b3d3-ad-and-workspace-boundaries-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-notifications-team-shows-a-8215a-tification-response-arrives-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-notifications-team-shows-o-09c82-ithout-an-empty-state-claim-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-notifications-team-transla-8e997-ining-the-actual-owner-role-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-notifications-team-transla-b7d7b-ining-the-actual-owner-role-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/notifications",
+          "status": 503
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "data": "isolated fictional test accounts; no source databases or configuration copied",
+  "reportIncludes": "HTML report and its referenced test screenshots/videos; synthetic isolated data only"
+}

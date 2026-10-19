@@ -1,0 +1,15 @@
+{
+  "source": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/\u751f\u56fe\u751f\u89c6\u9891/platform",
+  "stage": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/\u751f\u56fe\u751f\u89c6\u9891/platform/var/takeover/final-validation/20261016T100044Z/clean-platform",
+  "reports": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/\u751f\u56fe\u751f\u89c6\u9891/reviews/takeover/baseline/environment-20261016/clean-install-20261016T100044Z",
+  "inputHashes": {
+    "package.json": "cbca9be6c6702969a6ddbc6be14eb5f9eb73ab45b0e7f26385f109f175e228e5",
+    "pnpm-lock.yaml": "efe06e8a4c4a4a4d16775741ee5dc8be4284811ab40c528f9ef68c23c41f883f",
+    "pnpm-workspace.yaml": "02184f621ea6e5c1d963beb11bfefd6dd74f52de716e2f1591506d3fa3b259de"
+  },
+  "environment": "Minimal allowlist; provider/payment/mail/identity secrets absent; caches project-local.",
+  "store": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/\u751f\u56fe\u751f\u89c6\u9891/platform/.pnpm-store",
+  "status": "failed",
+  "exitCode": 1,
+  "sourceAndStagedManifestsUnchanged": true
+}

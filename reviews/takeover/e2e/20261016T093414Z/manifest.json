@@ -1,0 +1,392 @@
+{
+  "sourceRun": "platform/var/e2e/run-wcQX9j",
+  "passed": 10,
+  "failed": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/mobile-creation-ar.png",
+      "pixels": [
+        1170,
+        3678
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "eb2511b27c5340e19531946253bcd206662edc631da5ebec91350666a84f9903"
+    },
+    {
+      "file": "screenshots/mobile-local-comparison-ar.png",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "13c59424290d7d2f04f848e3ea47bb3360614bcc006691f850b736d167f0b927"
+    },
+    {
+      "file": "screenshots/mobile-creation-en.png",
+      "pixels": [
+        1170,
+        3873
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "2548859289c988ae92d0c32a62c09aeb9afd155192df74351bcff924b75e35a7"
+    },
+    {
+      "file": "screenshots/mobile-local-comparison-en.png",
+      "pixels": [
+        1170,
+        4617
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "f4245568a887477a627fbe4e2d9bf9db9dc66817ac92ab8b8bc952fa44e553e6"
+    },
+    {
+      "file": "screenshots/mobile-credits-api-en.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "232d8b40f1614b44e4020f698b94e5418fb523f6f5d70b030ef3ace0ce28605b"
+    },
+    {
+      "file": "screenshots/mobile-credits-plan-en.png",
+      "pixels": [
+        1170,
+        9816
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "5101264ea3f74af0d9ab0f9319abd5cdfb7e23a2287daae609b65f10662c3052"
+    },
+    {
+      "file": "screenshots/desktop-quote-background-music.png",
+      "pixels": [
+        1440,
+        1698
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "433bad3a56443f38ee8bdcb6696bacae201629b4af23498f962d8a13c073aa3a"
+    },
+    {
+      "file": "screenshots/desktop-quote-generated-sound.png",
+      "pixels": [
+        1440,
+        1884
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "3c786d8850d6c1189b46a60c17a539b473b123d4b9824e5913e06aa397464dc8"
+    },
+    {
+      "file": "screenshots/desktop-creation-en.png",
+      "pixels": [
+        1440,
+        1339
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "5940f37f6a138ecbc6c6d10504468b5479985fc34098b141b4acfb32b631b63a"
+    },
+    {
+      "file": "screenshots/desktop-local-comparison-en.png",
+      "pixels": [
+        1440,
+        1238
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "72b6f8741701d87b7b303fd289c7dc91c88ba07f20912125cc7be0fc671d52b1"
+    },
+    {
+      "file": "screenshots/desktop-credits-api-en.png",
+      "pixels": [
+        1440,
+        1042
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "8bf7424c84d48fbc3721934fc0b418c70638ef9d18412228f153406ccfac5503"
+    },
+    {
+      "file": "screenshots/desktop-credits-plan-en.png",
+      "pixels": [
+        1440,
+        2119
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "f4a049c661e49eb06d50c692f1ddc9fb1213744133238f0cac2b3ed1d9de6bc3"
+    },
+    {
+      "file": "screenshots/desktop-credits-api-ar.png",
+      "pixels": [
+        1440,
+        1042
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "c5dd40bd113181a2ccbf39c2d3b01de0ef204285136a9e06456ba3dffb3f1d62"
+    },
+    {
+      "file": "screenshots/desktop-credits-plan-ar.png",
+      "pixels": [
+        1440,
+        1992
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "7b591f005dcdfc4f9fba4c653c3ca1d93ca28084b4b5d67d992ec336e32d0bd7"
+    },
+    {
+      "file": "screenshots/mobile-credits-api-ar.png",
+      "pixels": [
+        1170,
+        3444
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "d7db66742d94aa784b0e05834d6ac4ea8c47d12207f7f4ff0686a2d39418d51c"
+    },
+    {
+      "file": "screenshots/mobile-credits-plan-ar.png",
+      "pixels": [
+        1170,
+        8985
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "b5231413366ee854bb5d8c807d384cc1cf0ffb797d6780fe19cbb9dde4d4a8a7"
+    },
+    {
+      "file": "screenshots/desktop-creation-ar.png",
+      "pixels": [
+        1440,
+        1274
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "839f8896e27c8633d922c2559cdc2660ab4dc672cacea1143ab80a50d7008ef2"
+    },
+    {
+      "file": "screenshots/desktop-local-comparison-ar.png",
+      "pixels": [
+        1440,
+        1238
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "c20e66124416a4a890da9d7fbe4ad1432d7e82a4eb7679d6fa1137616fb349d4"
+    },
+    {
+      "file": "screenshots/mobile-quote-background-music.png",
+      "pixels": [
+        1170,
+        5010
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "6f5a7d416b413b50bf119f4fef9c2315bd51e25f9bb700382cfdea100987b628"
+    },
+    {
+      "file": "screenshots/mobile-quote-generated-sound.png",
+      "pixels": [
+        1170,
+        5742
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "c5b461544ffc6965aa6f68357832583858f6409c8dc7612ac85a1a713c5e0577"
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/credits",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/capabilities",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/jobs",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    }
+  ],
+  "data": "Fresh independent temporary SQLite/media; fictional users/plans/promotions only; original data and configuration excluded.",
+  "scope": [
+    "English/Arabic creation, parameter warnings and canvas version, persisted original Chinese content",
+    "English/Arabic credit rules and per-source contract notice",
+    "Quote: one video task and five billable seconds; separate music/generateAudio choices; no task submission"
+  ],
+  "externalCalls": "Blocked; no model generation, SMS/WeChat/email, order creation or checkout."
+}

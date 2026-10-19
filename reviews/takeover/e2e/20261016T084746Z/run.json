@@ -1,0 +1,7 @@
+{
+  "started": "2026-10-16T08:47:01.749Z",
+  "finished": "2026-10-16T08:47:46.902Z",
+  "exitCode": 1,
+  "dataIsolation": "fresh SQLite and media per test",
+  "externalServices": "disabled; loopback SMTP/SMS fixtures and local media tools only"
+}

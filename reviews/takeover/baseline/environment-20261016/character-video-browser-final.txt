@@ -1,0 +1,14 @@
+$ pnpm exec playwright test character-video.spec.ts
+
+Running 4 tests using 1 worker
+
+(node:34804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (6.4s)
+  ✓  2 [desktop] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (2.5s)
+(node:34863) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [mobile] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (7.1s)
+  ✓  4 [mobile] › tests/e2e/character-video.spec.ts:220:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (2.5s)
+
+  4 passed (20.8s)

@@ -1,0 +1,84 @@
+{
+  "sourceRun": "platform/var/e2e/run-FTc925",
+  "passed": 2,
+  "failed": 4,
+  "failureExpectation": "Expected red: English/Arabic fixed-term badges and historical contract card copy remained Chinese; referral dictionary already fixed and passed. No build/import/runtime failures counted.",
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-credits-locale-distinguish-b0da2-month-renewal-contract-copy-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-locale-distinguish-ec9e7-month-renewal-contract-copy-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-locale-translates--141e3-ds-without-starting-payment-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-locale-translates--9b3f7-ds-without-starting-payment-desktop.png",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-referral-en.png",
+      "pixels": [
+        1440,
+        1192
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-referral-ar.png",
+      "pixels": [
+        1440,
+        1192
+      ]
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "data": "isolated fictional test accounts and synthetic historical display records; no source databases/configuration copied; no checkout or order-creation calls"
+}

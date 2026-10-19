@@ -1,0 +1,6 @@
+$ pnpm typecheck
+$ tsc --noEmit
+tests/e2e/character-video.spec.ts(128,9): error TS2339: Property 'content_hash' does not exist on type '{}'.
+tests/e2e/character-video.spec.ts(144,7): error TS2571: Object is of type 'unknown'.
+tests/e2e/character-video.spec.ts(168,42): error TS2339: Property 'deleted_at' does not exist on type '{}'.
+[ELIFECYCLE] Command failed with exit code 2.

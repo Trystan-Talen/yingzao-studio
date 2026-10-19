@@ -1,0 +1,20 @@
+{
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "/private/tmp/yingzao-final-upgrade.mjs",
+    "var/takeover/20261016T062801Z/runtime/backups/2026-10-14T09-38-24.349Z",
+    "var/takeover/final-validation/20261016T1010Z/upgrade",
+    "../reviews/takeover/baseline/environment-20261016/final-upgrade-0030-result.json"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T10:09:54.418707+00:00",
+  "endedUtc": "2026-10-16T10:09:54.835933+00:00",
+  "elapsedSeconds": 0.417,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "final-upgrade-0030.txt"
+}

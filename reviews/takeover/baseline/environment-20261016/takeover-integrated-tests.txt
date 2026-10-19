@@ -1,0 +1,55 @@
+$ pnpm test
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/tasks.test.ts (32 tests | 1 failed) 2396ms
+   ❯ explicit layer output transactions and media-based estimates (4)
+     × quotes source-video operations using actual duration and extension using newly requested seconds 109ms
+ ❯ tests/mail-outbox.test.ts (23 tests | 1 failed) 1256ms
+   ❯ SMTP durable outbox using actual loopback TCP (23)
+     × queues only another actor reply to a real ticket, never a self reply or arbitrary recipient 53ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > queues only another actor reply to a real ticket, never a self reply or arbitrary recipient
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ tests/mail-outbox.test.ts:557:7
+    555|         evidenceReference: 'invalid-operator-test',
+    556|       }),
+    557|     ).toThrow('installation administrator');
+       |       ^
+    558|   });
+    559|   it('exposes only safe tenant statuses to session administrators, not…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/tasks.test.ts > explicit layer output transactions and media-based estimates > quotes source-video operations using actual duration and extension using newly requested seconds
+AppError: 创意参考编辑的画幅与清晰度跟随源视频，请选择自动。
+ ❯ validateInput src/server/tasks/validation.ts:237:15
+    235|     } catch (error) {
+    236|       if (error instanceof ProviderError)
+    237|         throw new AppError(400, 'MODEL_INPUT_INVALID', error.message);
+       |               ^
+    238|       throw error;
+    239|     }
+ ❯ validate src/server/tasks/service.ts:128:15
+ ❯ Object.quote src/server/tasks/service.ts:395:19
+ ❯ tests/tasks.test.ts:714:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 42 passed (44)
+      Tests  2 failed | 530 passed (532)
+   Start at  16:11:50
+   Duration  44.26s (tests 67%, import 32%, transform 1%)
+
+[ELIFECYCLE] Test failed. See above for more details.

@@ -1,0 +1,12 @@
+$ pnpm build
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+✓ 0 modules transformed.
+✗ Build failed in 4ms
+error during build:
+Could not resolve entry module "index.html".
+    at getRollupError (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/%E7%94%9F%E5%9B%BE%E7%94%9F%E8%A7%86%E9%A2%91/platform/var/takeover/final-validation/20261016T100141Z/clean-platform/node_modules/.pnpm/rollup@4.64.5/node_modules/rollup/dist/es/shared/parseAst.js:319:41)
+    at error (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/%E7%94%9F%E5%9B%BE%E7%94%9F%E8%A7%86%E9%A2%91/platform/var/takeover/final-validation/20261016T100141Z/clean-platform/node_modules/.pnpm/rollup@4.64.5/node_modules/rollup/dist/es/shared/parseAst.js:315:42)
+    at ModuleLoader.loadEntryModule (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/%E7%94%9F%E5%9B%BE%E7%94%9F%E8%A7%86%E9%A2%91/platform/var/takeover/final-validation/20261016T100141Z/clean-platform/node_modules/.pnpm/rollup@4.64.5/node_modules/rollup/dist/es/shared/node-entry.js:22725:20)
+    at async Promise.all (index 0)
+[ELIFECYCLE] Command failed with exit code 1.

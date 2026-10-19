@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-19",
+  "command": [
+    "pnpm",
+    "verify:runtime"
+  ],
+  "exitCode": 0,
+  "reason": "Local temporary server/worker ports are required; initial sandbox attempt failed before the application started.",
+  "output": "closeout-20261019-runtime-authorized.txt"
+}

@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-10-16T06:32:44.295Z",
+  "mode": "isolated-in-memory",
+  "realNetworkCalls": 0,
+  "databaseAccess": false,
+  "mediaProcessing": false,
+  "results": [
+    {
+      "probe": "product-replacement-two-sources-two-references",
+      "items": 2,
+      "requestedReferences": 2,
+      "uniqueReplacementUrls": 1,
+      "secondReferenceUsed": false
+    },
+    {
+      "probe": "blank-design-plan-with-three-directions",
+      "state": "complete",
+      "nonEmptyOutput": true
+    },
+    {
+      "probe": "video-language-and-captions",
+      "differentSettingsProduceIdenticalRequest": true
+    },
+    {
+      "probe": "upscale-output-preflight",
+      "inputAccepted": true,
+      "predictedOutputPixels": 256000000,
+      "storageMaxPixels": 64000000
+    },
+    {
+      "probe": "duplicate-colors",
+      "outputCount": 2,
+      "distinctColors": 1
+    }
+  ]
+}

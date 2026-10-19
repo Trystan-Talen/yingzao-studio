@@ -1,0 +1,167 @@
+{
+  "sourceRun": "platform/var/e2e/run-RVYPku",
+  "command": "pnpm test:e2e canvas.spec.ts",
+  "cases": [
+    {
+      "project": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "browserDiagnostics": {
+        "errors": [],
+        "failedRequests": [],
+        "responses": [
+          {
+            "path": "/api/v1/auth/me",
+            "status": 401
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "screenshots/desktop-canvas-anonymous-share.png",
+          "sha256": "767b69ee8107b4e5ef15af65df00c071401b53ced7f0c2a1962d771bc4530b9f"
+        },
+        {
+          "path": "screenshots/desktop-canvas-editable.png",
+          "sha256": "d1f51939856f767d36e3df98a830dd6c673c85768fac8dea6fe1df259b83e995"
+        },
+        {
+          "path": "screenshots/desktop-canvas-export.png",
+          "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+        },
+        {
+          "path": "screenshots/desktop-canvas-restored-properties.png",
+          "sha256": "e5eeef74f79d02f3bc8aba2e673d165314c342487c537c8d5baaacf7588bebfa"
+        },
+        {
+          "path": "screenshots/desktop-canvas-revoked-share.png",
+          "sha256": "08ae621ad38867506b07ea008ed41fb1e630b4a326e39a258887f20e3d3a7a49"
+        }
+      ]
+    },
+    {
+      "project": "notebook",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "browserDiagnostics": {
+        "errors": [],
+        "failedRequests": [],
+        "responses": [
+          {
+            "path": "/api/v1/auth/me",
+            "status": 401
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "screenshots/notebook-canvas-anonymous-share.png",
+          "sha256": "faae88210a0bf8ffe9931f4b68f22352b0c5f9ed2f820ad4c78bcd09cd87327f"
+        },
+        {
+          "path": "screenshots/notebook-canvas-editable.png",
+          "sha256": "9534abb95a364df4759aaca76c5ce051c46c6e0e8ccb3790c31084941cd6b7fc"
+        },
+        {
+          "path": "screenshots/notebook-canvas-export.png",
+          "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+        },
+        {
+          "path": "screenshots/notebook-canvas-restored-properties.png",
+          "sha256": "688c9f1445051b141ba8890febd81daa6994fdf8d403fd32bfeeb00e34bf6a3a"
+        },
+        {
+          "path": "screenshots/notebook-canvas-revoked-share.png",
+          "sha256": "1424052d16813706f9e2d762a84f502c346a40ef1e67d380eaec92848c9395d3"
+        }
+      ]
+    },
+    {
+      "project": "tablet",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "browserDiagnostics": {
+        "errors": [],
+        "failedRequests": [],
+        "responses": [
+          {
+            "path": "/api/v1/auth/me",
+            "status": 401
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "screenshots/tablet-canvas-anonymous-share.png",
+          "sha256": "5cb1b31b347ec4010bc7de34b1e4bdf7fc6a44d8a1c7e22b31ddbadd398d82fb"
+        },
+        {
+          "path": "screenshots/tablet-canvas-editable.png",
+          "sha256": "c988098365164c413577c8f8adf5ee2f883837efc140f6ce936d5874ee29d2da"
+        },
+        {
+          "path": "screenshots/tablet-canvas-export.png",
+          "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+        },
+        {
+          "path": "screenshots/tablet-canvas-restored-properties.png",
+          "sha256": "7524c95c285f277a7107599ca0291315014708eeebf21cb77c16d23b14e3c4c6"
+        },
+        {
+          "path": "screenshots/tablet-canvas-revoked-share.png",
+          "sha256": "701165f07c109b60bde2aa6680bd0c558d4b53aa85193d01e3445a10b7b80660"
+        }
+      ]
+    },
+    {
+      "project": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "browserDiagnostics": {
+        "errors": [],
+        "failedRequests": [],
+        "responses": [
+          {
+            "path": "/api/v1/auth/me",
+            "status": 401
+          }
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "screenshots/mobile-canvas-anonymous-share.png",
+          "sha256": "bf3e243ca9c5a058fd2cd49ac13942494baa448439b44a522480c2f6a431df68"
+        },
+        {
+          "path": "screenshots/mobile-canvas-editable.png",
+          "sha256": "9117f07fcb4fac05776b50152d3d1a1159907cbdbb6739b8c577c43a77834f04"
+        },
+        {
+          "path": "screenshots/mobile-canvas-export.png",
+          "sha256": "85dba7b0d54fc51b869f1d25d3a5551f96b9f66dd7678063061f8e526d6eab9a"
+        },
+        {
+          "path": "screenshots/mobile-canvas-restored-properties.png",
+          "sha256": "da51f8af77344643d2507113da5d049a7ebc81cdb503a27a720033450c0ebd24"
+        },
+        {
+          "path": "screenshots/mobile-canvas-revoked-share.png",
+          "sha256": "3b2b2c2815c85c7a1bfb923f77b48edbefa520960e433a47ea8b353752136acd"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Local generated PNG fixture only; no external model execution.",
+    "Browser Playwright Chromium; mobile device scale factor 3 explains 1170-pixel screenshot width.",
+    "The failed locator-only initial run remains private in run-hfbDRJ."
+  ]
+}

@@ -1,0 +1,292 @@
+{
+  "sourceRun": "platform/var/e2e/run-kGwjDV",
+  "passed": 12,
+  "failed": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-credits-referral-en.png",
+      "pixels": [
+        1440,
+        1192
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-contract-en-0.png",
+      "pixels": [
+        1170,
+        7500
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-contract-en-3.png",
+      "pixels": [
+        1170,
+        7500
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-referral-ar.png",
+      "pixels": [
+        1170,
+        3582
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-contract-ar-0.png",
+      "pixels": [
+        1170,
+        7035
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-contract-ar-3.png",
+      "pixels": [
+        1170,
+        7035
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-contract-en-0.png",
+      "pixels": [
+        1440,
+        1727
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-contract-en-3.png",
+      "pixels": [
+        1440,
+        1727
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-contract-ar-0.png",
+      "pixels": [
+        1440,
+        1665
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-contract-ar-3.png",
+      "pixels": [
+        1440,
+        1665
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-api-en.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-plan-en.png",
+      "pixels": [
+        1170,
+        9816
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-api-ar.png",
+      "pixels": [
+        1440,
+        1042
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-plan-ar.png",
+      "pixels": [
+        1440,
+        1992
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-referral-en.png",
+      "pixels": [
+        1170,
+        3711
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-api-en.png",
+      "pixels": [
+        1440,
+        1042
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-plan-en.png",
+      "pixels": [
+        1440,
+        2119
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-api-ar.png",
+      "pixels": [
+        1170,
+        3444
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-credits-plan-ar.png",
+      "pixels": [
+        1170,
+        8985
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-credits-referral-ar.png",
+      "pixels": [
+        1440,
+        1192
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "data": "isolated fictional test accounts, synthetic plans/promotions/historical orders/invoice titles only; no source databases/configuration copied",
+  "paymentBoundary": "No Stripe configuration; no order-creation, checkout or payment request. Actual financial values and user-authored names preserved."
+}

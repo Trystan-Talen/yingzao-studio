@@ -1,0 +1,115 @@
+{
+  "errors": [],
+  "failedRequests": [
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/capabilities",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/115f3609-9956-4a23-a8f9-93b9868566e8",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/115f3609-9956-4a23-a8f9-93b9868566e8/document",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/export-policy",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/assets",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/jobs",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/115f3609-9956-4a23-a8f9-93b9868566e8/messages",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/pending-applies",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/brands",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/capabilities",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/115f3609-9956-4a23-a8f9-93b9868566e8",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/115f3609-9956-4a23-a8f9-93b9868566e8/document",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/export-policy",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/assets",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/jobs",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/projects/115f3609-9956-4a23-a8f9-93b9868566e8/messages",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/pending-applies",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/brands",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "responses": [
+    {
+      "path": "/api/v1/pending-applies/6a85064e-06e8-4d65-b1cc-4a1c8562d24f/apply",
+      "status": 409
+    }
+  ]
+}

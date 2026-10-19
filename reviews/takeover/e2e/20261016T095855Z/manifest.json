@@ -1,0 +1,24 @@
+{
+  "suite": "notifications-team",
+  "stats": {
+    "startTime": "2026-10-16T09:56:53.531Z",
+    "duration": 22857.269999999997,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "dataIsolation": "fresh SQLite and media per test",
+  "externalCalls": "none; loopback application and deterministic fixtures only",
+  "screenshots": [
+    "case-jnLy44-team-roles-ar.png",
+    "case-8pz7lT-team-roles-en.png",
+    "case-YePa8x-team-roles-en.png",
+    "case-LvM2XR-team-roles-ar.png",
+    "case-7G7fRe-notifications-category-space-isolation.png",
+    "case-QWqdU6-notifications-category-space-isolation.png"
+  ],
+  "command": "playwright test tests/e2e/notifications-team.spec.ts --project=desktop --project=mobile --reporter=list,html,json",
+  "sourceRun": "var/e2e/notifications-archive-final-20261016",
+  "report": "report/index.html"
+}

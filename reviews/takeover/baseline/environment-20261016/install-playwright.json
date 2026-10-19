@@ -1,0 +1,20 @@
+{
+  "command": [
+    "pnpm",
+    "add",
+    "-D",
+    "--save-exact",
+    "@playwright/test@1.64.1",
+    "--store-dir",
+    "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T07:15:59.613447+00:00",
+  "endedUtc": "2026-10-16T07:16:18.675303+00:00",
+  "elapsedSeconds": 19.062,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "install-playwright.txt"
+}

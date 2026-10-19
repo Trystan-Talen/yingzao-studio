@@ -1,0 +1,3 @@
+{"case":"import-commit-failure","attempt":1,"parserCalls":1,"originalFiles":0,"assetRows":0,"jobStatus":"running"}
+{"case":"import-commit-failure","attempt":2,"parserCalls":1,"originalFiles":0,"assetRows":0,"jobStatus":"running"}
+{"case":"import-recovered","parserCalls":1,"originalFiles":1,"assetRows":1,"jobStatus":"succeeded"}

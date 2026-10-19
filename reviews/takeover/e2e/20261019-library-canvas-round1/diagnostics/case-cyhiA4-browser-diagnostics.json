@@ -1,0 +1,94 @@
+{
+  "errors": [],
+  "failedRequests": [
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/credits",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v1/notifications/unread",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "responses": []
+}

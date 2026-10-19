@@ -1,0 +1,120 @@
+{
+  "sourceRun": "platform/var/e2e/review-library-canvas-final-15uw5u85",
+  "classification": "Six final focused cases passed after the mobile query sizing repair: collection management, pending local results/version conflict/retry and project combined filters, each on desktop and mobile.",
+  "statistics": {
+    "total": 6,
+    "expected": 6,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true
+  },
+  "uncaughtBrowserExceptions": 0,
+  "reportSanitization": "Trace/video attachment metadata replaced by explicit private-artifact placeholders; attachment indices preserved. Actual traces, videos, SQLite, media directories, session/config files and worker logs excluded.",
+  "files": [
+    {
+      "file": "screenshots/case-9aumoF-pending-result-version-conflict.png",
+      "sha256": "b736094ce4d2e492f33ae4dd1c1522f561ecfeb7eadab70a7ac7b27002ae31c4",
+      "pixels": [
+        1440,
+        1168
+      ]
+    },
+    {
+      "file": "screenshots/case-9aumoF-pending-result-applied-once.png",
+      "sha256": "4e87944c6c2e1eb98673bde352b1415cf0e60debba0b42e89941955e55e75aca",
+      "pixels": [
+        1440,
+        1107
+      ]
+    },
+    {
+      "file": "screenshots/case-gQwxiX-project-combined-filters-restored.png",
+      "sha256": "cd449a1f40a4dff4fcb63b84c22412166f8b1df807974e860f2e6c2feb712e46",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/case-m72fGh-project-combined-filters-restored.png",
+      "sha256": "89f355ae34b5549df2f9f93d2c09d089efcccd59f7352239dba261dc361a0749",
+      "pixels": [
+        1170,
+        4164
+      ]
+    },
+    {
+      "file": "screenshots/case-fblSyO-collection-deleted-originals-preserved.png",
+      "sha256": "b664e1d15fdad2c6eb878d301b38a9ad23ac6665389051b705d66adb6a297804",
+      "pixels": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "file": "screenshots/case-fblSyO-collection-renamed-membership.png",
+      "sha256": "8f7ca2a0eb0e697b626cd6f9085f427389038a33110f9d072528e8752af47215",
+      "pixels": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "file": "screenshots/case-rJ7J2Y-collection-deleted-originals-preserved.png",
+      "sha256": "83bcad0d7c8ed86929aa1519486bbcecb9f913d0c7a44c7ee4d0f4f9e7d01c0f",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/case-rJ7J2Y-collection-renamed-membership.png",
+      "sha256": "4996f061733951deab1900e77555331622b786a8eef4ae61608b06b0b48032ab",
+      "pixels": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/case-8UBqiF-pending-result-version-conflict.png",
+      "sha256": "6b96733613ef1885be95ce1576818dfd9a8735ac951d008f02161b89ca755619",
+      "pixels": [
+        1170,
+        3489
+      ]
+    },
+    {
+      "file": "screenshots/case-8UBqiF-pending-result-applied-once.png",
+      "sha256": "ac6a54d6dff9cb69c029dcf7309783063d1702c582e0ea9c1c70514d44eac15b",
+      "pixels": [
+        1170,
+        3306
+      ]
+    },
+    {
+      "file": "diagnostics/case-9aumoF-browser-diagnostics.json",
+      "sha256": "60ce1edf78bd2e14cfb2330368c4a6e6cb6a78012e674d586e0c8bc921873095"
+    },
+    {
+      "file": "diagnostics/case-gQwxiX-browser-diagnostics.json",
+      "sha256": "c10c0b083c5ce5cf0e5a994558e94dcd197ad777408037d589ba247c6e0f1477"
+    },
+    {
+      "file": "diagnostics/case-m72fGh-browser-diagnostics.json",
+      "sha256": "c10c0b083c5ce5cf0e5a994558e94dcd197ad777408037d589ba247c6e0f1477"
+    },
+    {
+      "file": "diagnostics/case-fblSyO-browser-diagnostics.json",
+      "sha256": "976c36c98f4d64184808a8b24318cb5f64162c62fd75ea2d57b74bc227ede853"
+    },
+    {
+      "file": "diagnostics/case-rJ7J2Y-browser-diagnostics.json",
+      "sha256": "976c36c98f4d64184808a8b24318cb5f64162c62fd75ea2d57b74bc227ede853"
+    },
+    {
+      "file": "diagnostics/case-8UBqiF-browser-diagnostics.json",
+      "sha256": "19d857626cf486dd1cdc2834cc626d63fa8152a76f5e936091fd480696bf8dd4"
+    }
+  ]
+}

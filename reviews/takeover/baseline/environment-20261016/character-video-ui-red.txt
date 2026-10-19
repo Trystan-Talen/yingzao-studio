@@ -1,0 +1,48 @@
+$ pnpm exec playwright test character-video.spec.ts --project=desktop --grep uploads
+
+Running 1 test using 1 worker
+
+(node:33542) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/character-video.spec.ts:53:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (4.9s)
+
+
+  1) [desktop] › tests/e2e/character-video.spec.ts:53:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references
+
+    Error: locator.click: Error: strict mode violation: getByRole('dialog', { name: '人物资料', exact: true }).getByRole('button', { name: '关闭', exact: true }) resolved to 2 elements:
+        1) <button title="关闭" type="button" aria-label="关闭" class="icon-button ">…</button> aka getByRole('button', { name: '关闭', description: '关闭', exact: true })
+        2) <button type="button" class="button secondary ">关闭</button> aka getByText('关闭')
+
+    Call log:
+      - waiting for getByRole('dialog', { name: '人物资料', exact: true }).getByRole('button', { name: '关闭', exact: true })
+
+
+      104 |   await edit.getByRole('button', { name: '保存授权声明', exact: true }).click();
+      105 |   await expect(edit.getByText('已声明参考授权', { exact: true })).toBeVisible();
+    > 106 |   await edit.getByRole('button', { name: '关闭', exact: true }).click();
+          |                                                               ^
+      107 |   await card.getByRole('button', { name: '以此形象创作', exact: true }).click();
+      108 |   await expect(page.getByText(mixedReason, { exact: true })).toBeVisible();
+      109 |   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM projects').get()).toEqual({
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/character-video.spec.ts:106:63
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/character-video-ui-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/character-video-ui-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/character-video-ui-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/character-video-ui-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/character-video-ui-red-20261016/results/character-video-uploads-pl-28d20-dles-unavailable-references-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/character-video.spec.ts:53:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references

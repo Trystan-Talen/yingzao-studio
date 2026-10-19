@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python3",
+    "/private/tmp/yingzao-install-media.py"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:35:16.108081+00:00",
+  "endedUtc": "2026-10-16T06:35:26.368573+00:00",
+  "elapsedSeconds": 10.26,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "install-media-tools.txt"
+}

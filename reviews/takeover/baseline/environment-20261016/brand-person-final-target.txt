@@ -1,0 +1,305 @@
+$ pnpm test:e2e brand-quota.spec.ts character-video.spec.ts
+$ tsx scripts/e2e.ts brand-quota.spec.ts character-video.spec.ts
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2211 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-e2D7Yxon.css                 67.89 kB │ gzip:  13.13 kB
+dist/web/assets/arrow-left-DGAa1ExE.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-DWq2NXHv.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-CnXa1Bwm.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-BqDijf0d.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-DKORW_Jk.js                0.39 kB │ gzip:   0.28 kB │ map:     2.02 kB
+dist/web/assets/save-Cp4mS-XE.js                    0.40 kB │ gzip:   0.28 kB │ map:     1.33 kB
+dist/web/assets/shield-check-ZJ3-RiC_.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-B04lBhM8.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-D6GVTC5u.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-BrHatMa-.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-D7jOOtMh.js                 0.59 kB │ gzip:   0.34 kB │ map:     1.83 kB
+dist/web/assets/export-policy-DvwymnPj.js           1.15 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-CTBkIb7p.js    2.50 kB │ gzip:   1.38 kB │ map:     7.46 kB
+dist/web/assets/Entitlements-BaWAMjMU.js            2.63 kB │ gzip:   1.36 kB │ map:     6.19 kB
+dist/web/assets/product-messages-5TXLVron.js        2.79 kB │ gzip:   1.02 kB │ map:     5.13 kB
+dist/web/assets/PasswordRecovery-DDHayRoy.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-Cu6mQFtR.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-BKIWY-m8.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-DGOk17yt.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-Bt0vbU6g.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-ciKQiYn_.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-B_Og3JV-.js        7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+dist/web/assets/Settings-mTDxHUtR.js               14.04 kB │ gzip:   5.52 kB │ map:    40.50 kB
+dist/web/assets/Inspiration-YxO9tO5S.js            15.61 kB │ gzip:   6.89 kB │ map:    46.84 kB
+dist/web/assets/Developer-Bz1VU15L.js              15.64 kB │ gzip:   5.32 kB │ map:    47.85 kB
+dist/web/assets/Team-Ir8XjDQa.js                   15.80 kB │ gzip:   5.39 kB │ map:    51.87 kB
+dist/web/assets/Identities-D-lAQQUI.js             17.61 kB │ gzip:   6.41 kB │ map:    57.47 kB
+dist/web/assets/Support-BL9rh48o.js                17.68 kB │ gzip:   6.75 kB │ map:    51.55 kB
+dist/web/assets/Workbench-0vG-819_.js              18.87 kB │ gzip:   7.16 kB │ map:    63.38 kB
+dist/web/assets/AdvancedTools-DB6wFp-4.js          20.43 kB │ gzip:   8.01 kB │ map:    70.21 kB
+dist/web/assets/Library-ZVK-U6OX.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Usage-C2BJ30UR.js                  27.94 kB │ gzip:   9.38 kB │ map:    85.28 kB
+dist/web/assets/Tools-BwPat4EC.js                  29.38 kB │ gzip:  11.35 kB │ map:    93.79 kB
+dist/web/assets/Composer-DE05Uuij.js               30.85 kB │ gzip:  11.72 kB │ map:   104.07 kB
+dist/web/assets/react-Czy9g9O-.js                 106.07 kB │ gzip:  35.89 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-C73W9sdb.js          151.25 kB │ gzip:  49.24 kB │ map:   415.94 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-n1SaIHI5.js                 744.37 kB │ gzip: 241.86 kB │ map: 2,558.65 kB
+✓ built in 1.81s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        70.80 KB
+ESM dist/runtime/chunk-LWFJIWZW.js     663.21 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/worker/main.js.map    109.95 KB
+ESM dist/runtime/chunk-LWFJIWZW.js.map 1.13 MB
+ESM ⚡️ Build success in 58ms
+
+Running 8 tests using 1 worker
+
+(node:40927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment (7.5s)
+(node:41128) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › tests/e2e/brand-quota.spec.ts:155:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting (12.4s)
+(node:41270) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (6.6s)
+  ✓  4 [desktop] › tests/e2e/character-video.spec.ts:266:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (4.5s)
+(node:41337) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 [mobile] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment (6.3s)
+(node:41380) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 [mobile] › tests/e2e/brand-quota.spec.ts:155:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting (12.5s)
+(node:41538) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  7 [mobile] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (7.0s)
+  ✓  8 [mobile] › tests/e2e/character-video.spec.ts:266:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (4.9s)
+
+
+  1) [desktop] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('[aria-label="品牌额度"]')
+    Expected substring: "每成员品牌上限"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('[aria-label="品牌额度"]') with timeout 5000ms
+      - waiting for locator('[aria-label="品牌额度"]')
+
+
+      104 |   const { owner, member, actor, wid } = await memberContract(studio);
+      105 |   await session(page, studio, owner.sessionToken);
+    > 106 |   await expect(page.locator('[aria-label="品牌额度"]')).toContainText('每成员品牌上限');
+          |                                                     ^
+      107 |   await create(page, 'Owner品牌一');
+      108 |   await create(page, 'Owner品牌二');
+      109 |   await expect(page.getByRole('button', { name: '创建品牌', exact: true })).toBeDisabled();
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/brand-quota.spec.ts:106:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/brand-quota.spec.ts:155:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: '品牌参考', exact: true }).getByRole('button', { name: '关闭', exact: true }).last()
+        - locator resolved to <button type="button" class="button secondary ">关闭</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div role="dialog" tabindex="-1" id="radix-_r_i_" data-state="open" aria-label="品牌参考" class="modal wide" aria-labelledby="radix-_r_j_">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div role="dialog" tabindex="-1" id="radix-_r_i_" data-state="open" aria-label="品牌参考" class="modal wide" aria-labelledby="radix-_r_j_">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div role="dialog" tabindex="-1" id="radix-_r_i_" data-state="open" aria-label="品牌参考" class="modal wide" aria-labelledby="radix-_r_j_">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      197 |   await seen;
+      198 |   await expect(dialog.getByRole('button', { name: '保存品牌', exact: true })).toBeDisabled();
+    > 199 |   await dialog.getByRole('button', { name: '关闭', exact: true }).last().click();
+          |                                                                        ^
+      200 |   await card(page, b.name).getByRole('button', { name: '编辑品牌', exact: true }).click();
+      201 |   await dialog.getByLabel('品牌名称', { exact: true }).fill('B当前草稿');
+      202 |   release();
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/brand-quota.spec.ts:199:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('[aria-label="品牌额度"]')
+    Expected substring: "每成员品牌上限"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('[aria-label="品牌额度"]') with timeout 5000ms
+      - waiting for locator('[aria-label="品牌额度"]')
+
+
+      104 |   const { owner, member, actor, wid } = await memberContract(studio);
+      105 |   await session(page, studio, owner.sessionToken);
+    > 106 |   await expect(page.locator('[aria-label="品牌额度"]')).toContainText('每成员品牌上限');
+          |                                                     ^
+      107 |   await create(page, 'Owner品牌一');
+      108 |   await create(page, 'Owner品牌二');
+      109 |   await expect(page.getByRole('button', { name: '创建品牌', exact: true })).toBeDisabled();
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/brand-quota.spec.ts:106:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-fEex6o/results/brand-quota-enforces-per-m-88863-ls-without-making-a-payment-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile] › tests/e2e/brand-quota.spec.ts:155:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: '品牌参考', exact: true }).getByRole('button', { name: '关闭', exact: true }).last()
+        - locator resolved to <button type="button" class="button secondary ">关闭</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div role="dialog" tabindex="-1" id="radix-_r_i_" data-state="open" aria-label="品牌参考" class="modal wide" aria-labelledby="radix-_r_j_">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div role="dialog" tabindex="-1" id="radix-_r_i_" data-state="open" aria-label="品牌参考" class="modal wide" aria-labelledby="radix-_r_j_">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        19 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div role="dialog" tabindex="-1" id="radix-_r_i_" data-state="open" aria-label="品牌参考" class="modal wide" aria-labelledby="radix-_r_j_">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      197 |   await seen;
+      198 |   await expect(dialog.getByRole('button', { name: '保存品牌', exact: true })).toBeDisabled();
+    > 199 |   await dialog.getByRole('button', { name: '关闭', exact: true }).last().click();
+          |                                                                        ^
+      200 |   await card(page, b.name).getByRole('button', { name: '编辑品牌', exact: true }).click();
+      201 |   await dialog.getByLabel('品牌名称', { exact: true }).fill('B当前草稿');
+      202 |   release();
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/brand-quota.spec.ts:199:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-fEex6o/results/brand-quota-preserves-bran-cc98f-s-assets-without-submitting-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [desktop] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment
+    [desktop] › tests/e2e/brand-quota.spec.ts:155:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting
+    [mobile] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment
+    [mobile] › tests/e2e/brand-quota.spec.ts:155:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting
+  4 passed (1.1m)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-fEex6o
+[ELIFECYCLE] Command failed with exit code 1.

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "format:check"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:11:47.942549+00:00",
+  "endedUtc": "2026-10-16T08:11:50.628504+00:00",
+  "elapsedSeconds": 2.686,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "takeover-integrated-format.txt"
+}

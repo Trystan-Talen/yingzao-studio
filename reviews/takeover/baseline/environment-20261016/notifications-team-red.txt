@@ -1,0 +1,304 @@
+$ pnpm test:e2e notifications-team.spec.ts --project=desktop
+$ tsx scripts/e2e.ts notifications-team.spec.ts --project=desktop
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2202 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-DFwr4-Mv.css                 67.02 kB │ gzip:  12.94 kB
+dist/web/assets/arrow-left-DjUvV_-w.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-CsQ5ObXI.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-pAHIXtdr.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-yeUnZRMJ.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-BwwRZp7c.js                0.39 kB │ gzip:   0.27 kB │ map:     2.02 kB
+dist/web/assets/save-sB7ppk37.js                    0.40 kB │ gzip:   0.28 kB │ map:     1.33 kB
+dist/web/assets/shield-check-SjcUJje_.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-CsyKwBnd.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-4KIQ4H7-.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-KzaaI5gO.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-CyDqja_3.js                 0.59 kB │ gzip:   0.33 kB │ map:     1.83 kB
+dist/web/assets/export-policy-CL19gBX_.js           1.14 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-CaSnvQRt.js    2.50 kB │ gzip:   1.38 kB │ map:     7.46 kB
+dist/web/assets/PasswordRecovery-yigHyLM3.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-D3h1PzKB.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-D-Ezsp93.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics--N0AvSzj.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-W1OkkO4a.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-B_TPm9oO.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-DGIhQjA6.js        7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+dist/web/assets/Inspiration-Cings6jL.js            13.08 kB │ gzip:   6.08 kB │ map:    37.24 kB
+dist/web/assets/Identities-CoQsSyZZ.js             13.75 kB │ gzip:   5.00 kB │ map:    43.36 kB
+dist/web/assets/Settings-BzUsQvRg.js               14.04 kB │ gzip:   5.53 kB │ map:    40.50 kB
+dist/web/assets/Developer-b6ypgEVp.js              15.20 kB │ gzip:   5.29 kB │ map:    46.52 kB
+dist/web/assets/Support-XW3EycfG.js                15.41 kB │ gzip:   6.08 kB │ map:    44.30 kB
+dist/web/assets/Team-Cucgz0z8.js                   16.25 kB │ gzip:   5.44 kB │ map:    53.36 kB
+dist/web/assets/Workbench-CArCOujx.js              18.71 kB │ gzip:   7.10 kB │ map:    63.01 kB
+dist/web/assets/AdvancedTools-D8SoMAlf.js          20.31 kB │ gzip:   7.99 kB │ map:    69.32 kB
+dist/web/assets/Library-CgtNGg3U.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Tools-BnTMtugn.js                  28.42 kB │ gzip:  11.02 kB │ map:    90.74 kB
+dist/web/assets/Usage-BsxHDkF2.js                  28.47 kB │ gzip:   9.47 kB │ map:    86.04 kB
+dist/web/assets/Composer-LiEqjPh5.js               29.53 kB │ gzip:  11.32 kB │ map:    99.38 kB
+dist/web/assets/react-1LyzdIKn.js                 106.07 kB │ gzip:  35.88 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-DKfyZIVs.js          151.10 kB │ gzip:  49.19 kB │ map:   415.57 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-D56Uy9Y5.js                 672.69 kB │ gzip: 219.77 kB │ map: 2,450.81 kB
+✓ built in 1.75s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        67.39 KB
+ESM dist/runtime/chunk-5EHKOGJZ.js     625.81 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/worker/main.js.map    103.43 KB
+ESM dist/runtime/chunk-5EHKOGJZ.js.map 1.07 MB
+ESM ⚡️ Build success in 41ms
+
+Running 5 tests using 1 worker
+
+(node:98643) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/notifications-team.spec.ts:61:1 › shows a loading state until the actual isolated notification response arrives (6.5s)
+(node:98681) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › tests/e2e/notifications-team.spec.ts:120:1 › shows one injected notification failure and retries against the real API without an empty-state claim (6.5s)
+(node:98714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [desktop] › tests/e2e/notifications-team.spec.ts:158:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries (11.8s)
+(node:98875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates en team role labels while retaining the actual owner role (6.5s)
+(node:98905) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates ar team role labels while retaining the actual owner role (6.5s)
+
+
+  1) [desktop] › tests/e2e/notifications-team.spec.ts:61:1 › shows a loading state until the actual isolated notification response arrives
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: '通知', exact: true }).getByRole('status')
+    Expected substring: "正在加载"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog', { name: '通知', exact: true }).getByRole('status') with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '通知', exact: true }).getByRole('status')
+
+
+      105 |       .toBe(true);
+      106 |     const drawer = page.getByRole('dialog', { name: '通知', exact: true });
+    > 107 |     await expect(drawer.getByRole('status')).toContainText('正在加载');
+          |                                              ^
+      108 |     await expect(drawer.getByText('暂时没有新消息', { exact: true })).toHaveCount(0);
+      109 |     release();
+      110 |     await expect(drawer.locator('.notification')).toHaveCount(24);
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/notifications-team.spec.ts:107:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-shows-a-8215a-tification-response-arrives-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-shows-a-8215a-tification-response-arrives-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-3wSkPZ/results/notifications-team-shows-a-8215a-tification-response-arrives-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-shows-a-8215a-tification-response-arrives-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-3wSkPZ/results/notifications-team-shows-a-8215a-tification-response-arrives-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/notifications-team.spec.ts:120:1 › shows one injected notification failure and retries against the real API without an empty-state claim
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: '通知', exact: true }).getByRole('alert')
+    Expected substring: "隔离通知读取失败"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog', { name: '通知', exact: true }).getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '通知', exact: true }).getByRole('alert')
+
+
+      144 |   await page.getByRole('button', { name: '通知', exact: true }).click();
+      145 |   const drawer = page.getByRole('dialog', { name: '通知', exact: true });
+    > 146 |   await expect(drawer.getByRole('alert')).toContainText('隔离通知读取失败');
+          |                                           ^
+      147 |   await expect(drawer.getByText('暂时没有新消息', { exact: true })).toHaveCount(0);
+      148 |   expect(failures).toBe(1);
+      149 |   expect(realRequests).toBe(0);
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/notifications-team.spec.ts:146:43
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-shows-o-09c82-ithout-an-empty-state-claim-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-shows-o-09c82-ithout-an-empty-state-claim-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-3wSkPZ/results/notifications-team-shows-o-09c82-ithout-an-empty-state-claim-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-shows-o-09c82-ithout-an-empty-state-claim-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-3wSkPZ/results/notifications-team-shows-o-09c82-ithout-an-empty-state-claim-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › tests/e2e/notifications-team.spec.ts:158:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: '通知', exact: true }).getByRole('button', { name: '下一页', exact: true })
+
+
+      166 |   await expect(drawer).not.toContainText('其他空间专有通知');
+      167 |   await expect(drawer.getByText('当前空间通知 1', { exact: true })).toHaveCount(0);
+    > 168 |   await drawer.getByRole('button', { name: '下一页', exact: true }).click();
+          |                                                                  ^
+      169 |   await expect(drawer.locator('.notification')).toHaveCount(1);
+      170 |   await expect(drawer.getByText('当前空间通知 1', { exact: true })).toBeVisible();
+      171 |   await expect(drawer).toContainText('本机真实消息正文 1');
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/notifications-team.spec.ts:168:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-reaches-9b3d3-ad-and-workspace-boundaries-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-reaches-9b3d3-ad-and-workspace-boundaries-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-3wSkPZ/results/notifications-team-reaches-9b3d3-ad-and-workspace-boundaries-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-reaches-9b3d3-ad-and-workspace-boundaries-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-3wSkPZ/results/notifications-team-reaches-9b3d3-ad-and-workspace-boundaries-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates en team role labels while retaining the actual owner role
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.team-overview')
+    Expected substring: "Owner"
+    Received string:    "RRole translation team1 members ·创建者Export members"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.team-overview') with timeout 5000ms
+      - waiting for locator('.team-overview')
+        10 × locator resolved to <div class="team-overview">…</div>
+           - unexpected value "RRole translation team1 members ·创建者Export members"
+
+
+      211 |     await page.goto(`${studio.origin}/team`);
+      212 |     await expect(page.locator('html')).toHaveAttribute('lang', language.id);
+    > 213 |     await expect(page.locator('.team-overview')).toContainText(language.owner);
+          |                                                  ^
+      214 |     const row = page.locator('tbody tr').filter({ hasText: owner.user.displayName });
+      215 |     await expect(row).toHaveCount(1);
+      216 |     await expect(row.locator('td').nth(1)).toHaveText(language.owner);
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/notifications-team.spec.ts:213:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-transla-8e997-ining-the-actual-owner-role-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-transla-8e997-ining-the-actual-owner-role-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-3wSkPZ/results/notifications-team-transla-8e997-ining-the-actual-owner-role-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-transla-8e997-ining-the-actual-owner-role-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-3wSkPZ/results/notifications-team-transla-8e997-ining-the-actual-owner-role-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates ar team role labels while retaining the actual owner role
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.team-overview')
+    Expected substring: "المالك"
+    Received string:    "RRole translation team1 أعضاء ·创建者تصدير الأعضاء"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.team-overview') with timeout 5000ms
+      - waiting for locator('.team-overview')
+        10 × locator resolved to <div class="team-overview">…</div>
+           - unexpected value "RRole translation team1 أعضاء ·创建者تصدير الأعضاء"
+
+
+      211 |     await page.goto(`${studio.origin}/team`);
+      212 |     await expect(page.locator('html')).toHaveAttribute('lang', language.id);
+    > 213 |     await expect(page.locator('.team-overview')).toContainText(language.owner);
+          |                                                  ^
+      214 |     const row = page.locator('tbody tr').filter({ hasText: owner.user.displayName });
+      215 |     await expect(row).toHaveCount(1);
+      216 |     await expect(row.locator('td').nth(1)).toHaveText(language.owner);
+        at /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/tests/e2e/notifications-team.spec.ts:213:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-transla-b7d7b-ining-the-actual-owner-role-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-transla-b7d7b-ining-the-actual-owner-role-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-3wSkPZ/results/notifications-team-transla-b7d7b-ining-the-actual-owner-role-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-3wSkPZ/results/notifications-team-transla-b7d7b-ining-the-actual-owner-role-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace var/e2e/run-3wSkPZ/results/notifications-team-transla-b7d7b-ining-the-actual-owner-role-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [desktop] › tests/e2e/notifications-team.spec.ts:61:1 › shows a loading state until the actual isolated notification response arrives
+    [desktop] › tests/e2e/notifications-team.spec.ts:120:1 › shows one injected notification failure and retries against the real API without an empty-state claim
+    [desktop] › tests/e2e/notifications-team.spec.ts:158:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries
+    [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates en team role labels while retaining the actual owner role
+    [desktop] › tests/e2e/notifications-team.spec.ts:203:3 › translates ar team role labels while retaining the actual owner role
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-3wSkPZ
+[ELIFECYCLE] Command failed with exit code 1.

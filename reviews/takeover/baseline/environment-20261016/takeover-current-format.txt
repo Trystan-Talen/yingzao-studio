@@ -1,0 +1,11 @@
+$ pnpm format:check
+$ prettier --check src scripts tests *.ts *.json
+Checking formatting...
+[warn] src/server/providers/openai.ts
+[warn] src/server/tasks/credits.ts
+[warn] tests/billing-channel.test.ts
+[warn] tests/credit-grant-reversal.test.ts
+[warn] tests/fal-motion.test.ts
+[warn] tests/tasks.test.ts
+[warn] Code style issues found in 6 files. Run Prettier with --write to fix.
+[ELIFECYCLE] Command failed with exit code 1.

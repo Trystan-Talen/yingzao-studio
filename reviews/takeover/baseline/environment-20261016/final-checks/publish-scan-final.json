@@ -1,0 +1,533 @@
+{
+  "recordedAt": "2026-10-19T02:03:37.947603+00:00",
+  "baseline": "c7f7e4f721d33666d18bf8904a4fd7a77088ec9c",
+  "head": "8c9f0f0fcf6bf847d65f76ce913a780b5037920c",
+  "scope": "Current files changed since the original baseline, including committed changes and every non-ignored untracked candidate; includes all final browser reports.",
+  "changedTrackedSinceBaseline": 202,
+  "untrackedCandidates": 848,
+  "scannedFiles": 1050,
+  "utf8TextsIncludingEmbedded": 751,
+  "htmlReports": 27,
+  "embeddedZipArchives": 21,
+  "embeddedEntries": 68,
+  "embeddedUncompressedBytes": 5757743,
+  "mediaCandidates": 358,
+  "privateResearchMediaCompared": 18,
+  "sensitiveLocalConfigurationValuesCompared": 0,
+  "highConfidencePatternHits": [
+    {
+      "file": "platform/tests/app.test.ts",
+      "pattern": "provider_secret_key",
+      "lines": [
+        458
+      ],
+      "count": 1
+    },
+    {
+      "file": "platform/tests/google-oidc.test.ts",
+      "pattern": "literal_session",
+      "lines": [
+        151,
+        152
+      ],
+      "count": 2
+    },
+    {
+      "file": "platform/tests/wechat-gateway.test.ts",
+      "pattern": "literal_session",
+      "lines": [
+        17
+      ],
+      "count": 1
+    }
+  ],
+  "localConfigurationValueMatches": [],
+  "privateResearchMediaDigestMatches": [],
+  "unexpectedPrivateArtifactPaths": [],
+  "embeddedDecodeErrors": [],
+  "ignoreRuleProbes": [
+    {
+      "path": "research/takeover/private-probe.png",
+      "ignored": true
+    },
+    {
+      "path": "platform/var/private-probe.sqlite",
+      "ignored": true
+    },
+    {
+      "path": "platform/.env",
+      "ignored": true
+    },
+    {
+      "path": "platform/.env.local",
+      "ignored": true
+    },
+    {
+      "path": ".env",
+      "ignored": true
+    },
+    {
+      "path": "private-probe.zip",
+      "ignored": true
+    },
+    {
+      "path": "private-probe.sqlite",
+      "ignored": true
+    },
+    {
+      "path": "private-probe.key",
+      "ignored": true
+    },
+    {
+      "path": "private-probe.log",
+      "ignored": true
+    }
+  ],
+  "archives": [
+    {
+      "file": "reviews/takeover/e2e/20261016T081323Z/report/index.html",
+      "entries": [
+        {
+          "name": "ad4620ead4e6d9cc2627.json",
+          "bytes": 126545
+        },
+        {
+          "name": "c77e978c96d193123e24.json",
+          "bytes": 177828
+        },
+        {
+          "name": "c69bbdfefb4ad4b25a70.json",
+          "bytes": 77111
+        },
+        {
+          "name": "66eff6f10bb92964d9d6.json",
+          "bytes": 124841
+        },
+        {
+          "name": "report.json",
+          "bytes": 8428
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T081802Z/report/index.html",
+      "entries": [
+        {
+          "name": "c69bbdfefb4ad4b25a70.json",
+          "bytes": 87412
+        },
+        {
+          "name": "report.json",
+          "bytes": 2092
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T083011Z/report/index.html",
+      "entries": [
+        {
+          "name": "c369403193c8e9817864.json",
+          "bytes": 109520
+        },
+        {
+          "name": "report.json",
+          "bytes": 2144
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T083727Z/report/index.html",
+      "entries": [
+        {
+          "name": "d65359ccff3355b68920.json",
+          "bytes": 253535
+        },
+        {
+          "name": "report.json",
+          "bytes": 2136
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084357Z/report/index.html",
+      "entries": [
+        {
+          "name": "521615c42917fec406e0.json",
+          "bytes": 79562
+        },
+        {
+          "name": "report.json",
+          "bytes": 2106
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084531Z/report/index.html",
+      "entries": [
+        {
+          "name": "7b2c8bc3cb26cda97ebf.json",
+          "bytes": 57457
+        },
+        {
+          "name": "report.json",
+          "bytes": 1309
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084746Z/report/index.html",
+      "entries": [
+        {
+          "name": "96c0578a58192ef53b2b.json",
+          "bytes": 99525
+        },
+        {
+          "name": "report.json",
+          "bytes": 4631
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084850Z/report/index.html",
+      "entries": [
+        {
+          "name": "96c0578a58192ef53b2b.json",
+          "bytes": 134984
+        },
+        {
+          "name": "report.json",
+          "bytes": 4525
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090051Z/report/index.html",
+      "entries": [
+        {
+          "name": "5dd23698ce874b40d4eb.json",
+          "bytes": 112191
+        },
+        {
+          "name": "report.json",
+          "bytes": 4586
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090235Z/report/index.html",
+      "entries": [
+        {
+          "name": "1c5814dc23fa7a5c4194.json",
+          "bytes": 109795
+        },
+        {
+          "name": "report.json",
+          "bytes": 2071
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090348Z/report/index.html",
+      "entries": [
+        {
+          "name": "5dd23698ce874b40d4eb.json",
+          "bytes": 230940
+        },
+        {
+          "name": "report.json",
+          "bytes": 5290
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T093414Z/report/index.html",
+      "entries": [
+        {
+          "name": "1c5814dc23fa7a5c4194.json",
+          "bytes": 118913
+        },
+        {
+          "name": "5dd23698ce874b40d4eb.json",
+          "bytes": 105713
+        },
+        {
+          "name": "0373e7aed32f23649db3.json",
+          "bytes": 60555
+        },
+        {
+          "name": "report.json",
+          "bytes": 4916
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T094002Z/report/index.html",
+      "entries": [
+        {
+          "name": "83a3df3e25d7200ec0ef.json",
+          "bytes": 56291
+        },
+        {
+          "name": "report.json",
+          "bytes": 1251
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T095828Z/report/index.html",
+      "entries": [
+        {
+          "name": "ec821e4ce742fc3ccde7.json",
+          "bytes": 151483
+        },
+        {
+          "name": "report.json",
+          "bytes": 2165
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T095855Z/report/index.html",
+      "entries": [
+        {
+          "name": "96c0578a58192ef53b2b.json",
+          "bytes": 183707
+        },
+        {
+          "name": "report.json",
+          "bytes": 5391
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T100453Z/report/index.html",
+      "entries": [
+        {
+          "name": "090b48883e780b2c7836.json",
+          "bytes": 109412
+        },
+        {
+          "name": "83a3df3e25d7200ec0ef.json",
+          "bytes": 57343
+        },
+        {
+          "name": "report.json",
+          "bytes": 3161
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T101136Z/report/index.html",
+      "entries": [
+        {
+          "name": "090b48883e780b2c7836.json",
+          "bytes": 127746
+        },
+        {
+          "name": "report.json",
+          "bytes": 2154
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
+      "entries": [
+        {
+          "name": "ad4620ead4e6d9cc2627.json",
+          "bytes": 126544
+        },
+        {
+          "name": "36244053cbe6fe0bd29c.json",
+          "bytes": 143822
+        },
+        {
+          "name": "ae17e85cf1c0d13cb020.json",
+          "bytes": 65254
+        },
+        {
+          "name": "d65359ccff3355b68920.json",
+          "bytes": 252978
+        },
+        {
+          "name": "ec821e4ce742fc3ccde7.json",
+          "bytes": 179320
+        },
+        {
+          "name": "c369403193c8e9817864.json",
+          "bytes": 107777
+        },
+        {
+          "name": "1c5814dc23fa7a5c4194.json",
+          "bytes": 117965
+        },
+        {
+          "name": "c77e978c96d193123e24.json",
+          "bytes": 177827
+        },
+        {
+          "name": "5dd23698ce874b40d4eb.json",
+          "bytes": 230893
+        },
+        {
+          "name": "c69bbdfefb4ad4b25a70.json",
+          "bytes": 108654
+        },
+        {
+          "name": "090b48883e780b2c7836.json",
+          "bytes": 126397
+        },
+        {
+          "name": "58e7cfd3b34f0d3eb2a2.json",
+          "bytes": 75645
+        },
+        {
+          "name": "521615c42917fec406e0.json",
+          "bytes": 78620
+        },
+        {
+          "name": "66eff6f10bb92964d9d6.json",
+          "bytes": 124839
+        },
+        {
+          "name": "96c0578a58192ef53b2b.json",
+          "bytes": 182760
+        },
+        {
+          "name": "0373e7aed32f23649db3.json",
+          "bytes": 60557
+        },
+        {
+          "name": "83a3df3e25d7200ec0ef.json",
+          "bytes": 56943
+        },
+        {
+          "name": "c3f93a7ac30f71a659ca.json",
+          "bytes": 114709
+        },
+        {
+          "name": "0992c91d44f8d3f627ab.json",
+          "bytes": 43329
+        },
+        {
+          "name": "b26df97f5fdfacf9854d.json",
+          "bytes": 82635
+        },
+        {
+          "name": "7b2c8bc3cb26cda97ebf.json",
+          "bytes": 57047
+        },
+        {
+          "name": "report.json",
+          "bytes": 43965
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T102847Z-final-copy/report/index.html",
+      "entries": [
+        {
+          "name": "36244053cbe6fe0bd29c.json",
+          "bytes": 149252
+        },
+        {
+          "name": "report.json",
+          "bytes": 2129
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/team-creation-20261016/report/index.html",
+      "entries": [
+        {
+          "name": "c3f93a7ac30f71a659ca.json",
+          "bytes": 114504
+        },
+        {
+          "name": "report.json",
+          "bytes": 3673
+        }
+      ]
+    },
+    {
+      "file": "reviews/takeover/e2e/team-refresh-green-20261016/report/index.html",
+      "entries": [
+        {
+          "name": "c3f93a7ac30f71a659ca.json",
+          "bytes": 115258
+        },
+        {
+          "name": "report.json",
+          "bytes": 3682
+        }
+      ]
+    }
+  ],
+  "limitations": "Pattern and local-configuration-value checks plus exact media digest comparison. Does not infer secrets from arbitrary prose or pixels; existing manual screenshot review and representative final screenshot review supplement the scan. Test accounts and local mock credentials require contextual review.",
+  "reviewedFindings": [
+    {
+      "file": "platform/tests/app.test.ts",
+      "lines": [
+        458
+      ],
+      "classification": "明确测试密钥常量；相同完整行已存在于原始基线，仅用于本地服务配置和脱敏断言。",
+      "exactLinePresentInOriginalBaseline": true
+    },
+    {
+      "file": "platform/tests/google-oidc.test.ts",
+      "lines": [
+        151,
+        152
+      ],
+      "classification": "本地模拟授权服务器返回值；两行均已存在于原始基线，无真实账号令牌。",
+      "exactLinePresentInOriginalBaseline": true
+    },
+    {
+      "file": "platform/tests/wechat-gateway.test.ts",
+      "lines": [
+        17
+      ],
+      "classification": "明确测试刷新令牌常量；请求由测试模拟函数注入，不访问真实微信服务。",
+      "exactLinePresentInOriginalBaseline": false
+    }
+  ],
+  "unresolvedFindings": 0,
+  "privateOriginalRuntimeMediaCompared": 102,
+  "privateOriginalRuntimeMediaDigestMatches": [
+    {
+      "file": "platform/public/gallery/amber-perfume.webp",
+      "matchingOriginalRuntimeCopies": 5,
+      "exactFilePresentInOriginalBaseline": true,
+      "classification": "原始基线已公开跟踪的演示图库文件，也被导入本地演示数据；非新增私有媒体泄漏。"
+    },
+    {
+      "file": "platform/public/gallery/botanical-serum.webp",
+      "matchingOriginalRuntimeCopies": 5,
+      "exactFilePresentInOriginalBaseline": true,
+      "classification": "原始基线已公开跟踪的演示图库文件，也被导入本地演示数据；非新增私有媒体泄漏。"
+    },
+    {
+      "file": "platform/public/gallery/trail-sneaker.webp",
+      "matchingOriginalRuntimeCopies": 5,
+      "exactFilePresentInOriginalBaseline": true,
+      "classification": "原始基线已公开跟踪的演示图库文件，也被导入本地演示数据；非新增私有媒体泄漏。"
+    },
+    {
+      "file": "platform/public/gallery/studio-headphones.webp",
+      "matchingOriginalRuntimeCopies": 5,
+      "exactFilePresentInOriginalBaseline": true,
+      "classification": "原始基线已公开跟踪的演示图库文件，也被导入本地演示数据；非新增私有媒体泄漏。"
+    }
+  ],
+  "representativeFinalScreenshotReview": {
+    "reviewedFiles": [
+      "reviews/takeover/e2e/20261016T102637Z-final-full/screenshots/case-AOOosk-configured-support-channels.png",
+      "reviews/takeover/e2e/20261016T102637Z-final-full/screenshots/case-QNMCxi-identity-registration-en.png",
+      "reviews/takeover/e2e/20261016T102637Z-final-full/screenshots/case-C6ln93-credits-api-en.png",
+      "reviews/takeover/e2e/20261016T102847Z-final-copy/screenshots/case-UqTwhR-brand-quota-en.png"
+    ],
+    "result": "抽看本地客服配置、注册、接口额度与最终品牌手机截图；未见真实账号凭据或原站私有媒体。客服图片为纯色本地夹具，电话为测试保留号码。",
+    "separateUiFinding": "最终品牌英文截图仍有静态“回收记录”按钮，已单独反馈主任务处理；不涉及凭据泄漏。"
+  },
+  "completedAt": "2026-10-19T02:05:05.975527+00:00",
+  "result": "发布候选检查未发现未解决的私有凭据、数据库、环境文件或原站私有媒体泄漏；保留扫描边界与假阳性审阅记录。"
+}

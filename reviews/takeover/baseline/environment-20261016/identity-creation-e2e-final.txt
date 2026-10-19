@@ -1,0 +1,102 @@
+$ pnpm test:e2e
+$ tsx scripts/e2e.ts
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2201 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-BqeKjH6h.css                 66.87 kB │ gzip:  12.92 kB
+dist/web/assets/arrow-left-BL-F3t0h.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-Znc1spJE.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-NM7ATUSV.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-Dx2b7XDX.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-B3AEcdzo.js                0.39 kB │ gzip:   0.27 kB │ map:     2.02 kB
+dist/web/assets/save-DbrLwR3N.js                    0.40 kB │ gzip:   0.28 kB │ map:     1.33 kB
+dist/web/assets/shield-check-C0NsvaXQ.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-B20XB0PW.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-DBZoKr-5.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-Cymbn8jL.js                  0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+dist/web/assets/palette-Y0vjjdt9.js                 0.59 kB │ gzip:   0.33 kB │ map:     1.83 kB
+dist/web/assets/export-policy-CluOPRi4.js           1.14 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-DOg_4dKV.js    2.46 kB │ gzip:   1.37 kB │ map:     7.20 kB
+dist/web/assets/PasswordRecovery-CljpdYo2.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-DvpAjJcQ.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-CTYEGwZZ.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-CUSpM9cI.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-eVn4JkWv.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-B12CSd_t.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-CMx20ef6.js        7.52 kB │ gzip:   3.02 kB │ map:    22.38 kB
+dist/web/assets/Inspiration-OZJXsh-n.js            13.08 kB │ gzip:   6.09 kB │ map:    37.24 kB
+dist/web/assets/Identities-BP322MZQ.js             13.75 kB │ gzip:   5.00 kB │ map:    43.36 kB
+dist/web/assets/Settings-BBWH5c55.js               14.04 kB │ gzip:   5.52 kB │ map:    40.50 kB
+dist/web/assets/Developer-Bt-B5omp.js              15.14 kB │ gzip:   5.28 kB │ map:    46.41 kB
+dist/web/assets/Support-53DL_Pbj.js                15.40 kB │ gzip:   6.08 kB │ map:    44.26 kB
+dist/web/assets/Team-BJ4hoP5y.js                   16.25 kB │ gzip:   5.44 kB │ map:    53.36 kB
+dist/web/assets/Workbench-BAAC2hwR.js              18.36 kB │ gzip:   6.99 kB │ map:    61.86 kB
+dist/web/assets/AdvancedTools-COSDVVI5.js          19.76 kB │ gzip:   7.89 kB │ map:    67.84 kB
+dist/web/assets/Library-D3yiwW0v.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Usage-CF-gLSR1.js                  25.87 kB │ gzip:   8.35 kB │ map:    80.07 kB
+dist/web/assets/Tools-B0tjOLh9.js                  28.42 kB │ gzip:  11.02 kB │ map:    90.74 kB
+dist/web/assets/Composer-BO0BGMAW.js               29.53 kB │ gzip:  11.32 kB │ map:    99.38 kB
+dist/web/assets/react-1LyzdIKn.js                 106.07 kB │ gzip:  35.88 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-CkryxYmH.js          151.10 kB │ gzip:  49.19 kB │ map:   415.57 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-6LLk8RQm.js                 653.90 kB │ gzip: 214.78 kB │ map: 2,426.07 kB
+✓ built in 1.70s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        66.88 KB
+ESM dist/runtime/chunk-LQ5PB52A.js     589.64 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/worker/main.js.map    102.63 KB
+ESM dist/runtime/chunk-LQ5PB52A.js.map 1.01 MB
+ESM ⚡️ Build success in 55ms
+
+Running 18 tests using 1 worker
+
+(node:77462) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/account.spec.ts:6:1 › new user recovers through a real local email, loses old sessions and logs in with the new password (6.1s)
+  ✓   2 [desktop] › tests/e2e/account.spec.ts:62:1 › Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser (5.8s)
+  ✓   3 [desktop] › tests/e2e/account.spec.ts:139:3 › explicitly disabled recovery › is readable without a session and sends no fabricated messages (1.9s)
+  ✓   4 [desktop] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the project save response is delayed (5.2s)
+  ✓   5 [desktop] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the message save response is delayed (5.2s)
+  ✓   6 [desktop] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (5.3s)
+  ✓   7 [desktop] › tests/e2e/identities.spec.ts:56:1 › shows unavailable external identity methods without fake codes or QR images (1.9s)
+  ✓   8 [desktop] › tests/e2e/media.spec.ts:27:1 › uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart (7.1s)
+  ✓   9 [desktop] › tests/e2e/media.spec.ts:101:1 › reuses an inspiration with its actual reference image and restores the persisted draft after refresh (4.2s)
+(node:78407) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 [mobile] › tests/e2e/account.spec.ts:6:1 › new user recovers through a real local email, loses old sessions and logs in with the new password (5.9s)
+  ✓  11 [mobile] › tests/e2e/account.spec.ts:62:1 › Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser (5.6s)
+  ✓  12 [mobile] › tests/e2e/account.spec.ts:139:3 › explicitly disabled recovery › is readable without a session and sends no fabricated messages (1.9s)
+  ✓  13 [mobile] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the project save response is delayed (5.2s)
+  ✓  14 [mobile] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the message save response is delayed (4.9s)
+  ✓  15 [mobile] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (6.0s)
+  ✓  16 [mobile] › tests/e2e/identities.spec.ts:56:1 › shows unavailable external identity methods without fake codes or QR images (1.9s)
+  ✓  17 [mobile] › tests/e2e/media.spec.ts:27:1 › uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart (7.3s)
+  ✓  18 [mobile] › tests/e2e/media.spec.ts:101:1 › reuses an inspiration with its actual reference image and restores the persisted draft after refresh (4.2s)
+
+  18 passed (1.5m)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-YICSkT

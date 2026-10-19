@@ -1,0 +1,84 @@
+{
+  "capturedUtc": "2026-10-16T06:29:48.644936+00:00",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "output": "v22.23.1\n"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "exitCode": 0,
+      "output": "11.25.0\n"
+    },
+    {
+      "command": [
+        "sw_vers"
+      ],
+      "exitCode": 0,
+      "output": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83\n"
+    },
+    {
+      "command": [
+        "file",
+        "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node"
+      ],
+      "exitCode": 0,
+      "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node: Mach-O 64-bit dynamically linked shared library arm64\n"
+    },
+    {
+      "command": [
+        "xattr",
+        "-l",
+        "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node"
+      ],
+      "exitCode": 0,
+      "output": "com.apple.provenance: \u0001\u0002\ncom.apple.quarantine: 0081;6ad0f028;sharingd;838DB20B-F2E0-453A-BF3B-183F293EBE67\n"
+    },
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--verbose=4",
+        "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node"
+      ],
+      "exitCode": 0,
+      "output": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node: valid on disk\n/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node: satisfies its Designated Requirement\n"
+    },
+    {
+      "command": [
+        "codesign",
+        "-dvvv",
+        "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node"
+      ],
+      "exitCode": 0,
+      "output": "Executable=/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/20261016T062801Z/dependencies-original/.pnpm/@rollup+rollup-darwin-arm64@4.64.5/node_modules/@rollup/rollup-darwin-arm64/rollup.darwin-arm64.node\nIdentifier=libbindings_napi.dylib\nFormat=Mach-O thin (arm64)\nCodeDirectory v=20400 size=14712 flags=0x20002(adhoc,linker-signed) hashes=456+0 location=embedded\nHash type=sha256 size=32\nCandidateCDHash sha256=fa7dae3fda43a331941525a2f01edebcbe7854fd\nCandidateCDHashFull sha256=fa7dae3fda43a331941525a2f01edebcbe7854fdedd2fa6a55e19355aa176311\nHash choices=sha256\nCMSDigest=fa7dae3fda43a331941525a2f01edebcbe7854fdedd2fa6a55e19355aa176311\nCMSDigestType=2\nCDHash=fa7dae3fda43a331941525a2f01edebcbe7854fd\nSignature=adhoc\nInfo.plist=not bound\nTeamIdentifier=not set\nSealed Resources=none\nInternal requirements=none\n"
+    }
+  ],
+  "originalDependencyMetadata": {
+    "packageManager": "pnpm@11.25.0",
+    "storeDir": "/Users/trystan/Library/pnpm/store/v11",
+    "virtualStoreDir": ".pnpm",
+    "pendingBuilds": [],
+    "allowBuilds": {
+      "better-sqlite3": true,
+      "esbuild": true,
+      "sharp": true,
+      "canvas": false
+    }
+  },
+  "originalWorkspaceProjects": {
+    "/Users/trystan/Desktop/生图生视频/platform": {
+      "name": "yingzao-studio",
+      "version": "1.0.0"
+    }
+  },
+  "lockSha256": "14f02d564a58f814679015702425335a40c8ee4e01d5fdf71562369e51e2d21c",
+  "installedOriginalLockSha256": "14f02d564a58f814679015702425335a40c8ee4e01d5fdf71562369e51e2d21c"
+}

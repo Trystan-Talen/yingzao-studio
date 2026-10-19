@@ -1,0 +1,14 @@
+{
+  "errors": [],
+  "failedRequests": [],
+  "responses": [
+    {
+      "path": "/api/v1/assets/389d8e23-3c72-4743-9a25-23d29e86fee3",
+      "status": 500
+    },
+    {
+      "path": "/api/v1/assets/389d8e23-3c72-4743-9a25-23d29e86fee3",
+      "status": 404
+    }
+  ]
+}

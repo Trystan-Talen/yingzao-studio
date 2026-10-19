@@ -1,0 +1,18 @@
+$ pnpm format:check
+$ prettier --check src scripts tests *.ts *.json
+Checking formatting...
+[warn] src/contracts/jobs.ts
+[warn] src/server/providers/fal-reference.ts
+[warn] src/server/providers/fal.ts
+[warn] src/server/providers/openai.ts
+[warn] src/server/providers/video-audio.ts
+[warn] src/server/tasks/service.ts
+[warn] src/server/tasks/settings.ts
+[warn] src/server/tasks/validation.ts
+[warn] tests/billing-channel.test.ts
+[warn] tests/credit-grant-reversal.test.ts
+[warn] tests/takeover-backend.test.ts
+[warn] tests/tasks.test.ts
+[warn] tests/video-audio-options.test.ts
+[warn] Code style issues found in 13 files. Run Prettier with --write to fix.
+[ELIFECYCLE] Command failed with exit code 1.

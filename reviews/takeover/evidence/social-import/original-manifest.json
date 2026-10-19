@@ -1,0 +1,22 @@
+[
+  {
+    "file": "yingzao-social-redirect-review.mjs",
+    "sha256": "4e24e23c5fd717117c022dcad4af1dbfeb3f66ed13d302f3ea46567edaf5eb85",
+    "copiedExact": true
+  },
+  {
+    "file": "yingzao-social-redirect-review.txt",
+    "sha256": "02ec58c1423b649e99b36a123e28f1a8d55396db7b962034f5c416b53ed67a43",
+    "copiedExact": true
+  },
+  {
+    "file": "yingzao-social-save-review.mts",
+    "sha256": "45db2b9db65fe943ee06ba46f7e9ea9b471e618a9b9ad0188fa8b342272a16a4",
+    "copiedExact": true
+  },
+  {
+    "file": "yingzao-social-save-review.txt",
+    "sha256": "79dfcd40ceb2e778b51feeb4a82e6bcffcbe9b5ea5c047e95b1990bd0d8925fc",
+    "copiedExact": true
+  }
+]

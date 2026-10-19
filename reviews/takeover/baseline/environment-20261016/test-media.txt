@@ -1,0 +1,13 @@
+$ pnpm test
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  20 passed (20)
+      Tests  278 passed (278)
+   Start at  14:35:58
+   Duration  17.44s (tests 66%, import 33%, transform 1%)
+
+    Isolate  20 workers spawned · ~46ms startup each (spawn + environment, per file)
+             at least ~877ms faster with isolate: false — reuses workers across files instead of one per file

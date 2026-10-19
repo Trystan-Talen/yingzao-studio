@@ -1,0 +1,553 @@
+{
+  "startedFrom": "var/takeover/20261016T062801Z/runtime/backups/2026-10-14T09-38-24.349Z",
+  "work": "var/takeover/final-validation/20261016T1010Z/upgrade",
+  "finishedUtc": "2026-10-16T10:09:54.829Z",
+  "sourceBusinessTables": 75,
+  "migrationCount": 29,
+  "upgradedTables": 100,
+  "historicalComparisons": [
+    {
+      "table": "api_keys",
+      "originalColumns": 12,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "asset_collections",
+      "originalColumns": 2,
+      "rows": 1,
+      "sha256": "80df15d5b5b40651066aff2bba115c37e6467dee0f65e61a00b8f3ac36c3d575",
+      "channelFilter": null
+    },
+    {
+      "table": "asset_variants",
+      "originalColumns": 8,
+      "rows": 22,
+      "sha256": "facde74badab95c63b7f29cf0abc901b37dcf466abcbba3b04a135880fb85968",
+      "channelFilter": null
+    },
+    {
+      "table": "assets",
+      "originalColumns": 22,
+      "rows": 8,
+      "sha256": "afa48ed9bcdcbdc62174ef3958b7bee3ad1c51de816b5335e63d70d5857a54fe",
+      "channelFilter": null
+    },
+    {
+      "table": "audit_events",
+      "originalColumns": 8,
+      "rows": 30,
+      "sha256": "e98f2a6be73f277f40e028df5204f560ddee9339b3b491eb7ac4ed43c8be9757",
+      "channelFilter": null
+    },
+    {
+      "table": "billing_events",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "billing_fulfillments",
+      "originalColumns": 5,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "billing_risks",
+      "originalColumns": 15,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "brand_references",
+      "originalColumns": 3,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "brands",
+      "originalColumns": 12,
+      "rows": 1,
+      "sha256": "d24ecd511746d9cb84c7387f7947d168aafe761f0a2cfc6363b2b7261e19433b",
+      "channelFilter": null
+    },
+    {
+      "table": "channel_partners",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "character_authorizations",
+      "originalColumns": 12,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "character_profiles",
+      "originalColumns": 14,
+      "rows": 1,
+      "sha256": "c0ad3147159c6ea202c297dec14c3b69ff772b9a5201ad9fb9a0e478a89fcbb4",
+      "channelFilter": null
+    },
+    {
+      "table": "collections",
+      "originalColumns": 7,
+      "rows": 1,
+      "sha256": "6b571be44255e59d420f47665800868a6e2cba6a83b20819624b9c7dddd51a53",
+      "channelFilter": null
+    },
+    {
+      "table": "credit_accounts",
+      "originalColumns": 4,
+      "rows": 2,
+      "sha256": "93e21b775ab237a340d0161a16cd9c281d66475195061314bb1fae148ac7e7a0",
+      "channelFilter": "web"
+    },
+    {
+      "table": "credit_ledger",
+      "originalColumns": 12,
+      "rows": 4,
+      "sha256": "8a301070775cc72f2445f6a0a810826d6c4864d4e61c69f981d1cfd45f19b4b8",
+      "channelFilter": null
+    },
+    {
+      "table": "credit_lot_allocations",
+      "originalColumns": 10,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "credit_lot_events",
+      "originalColumns": 9,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "credit_lot_operations",
+      "originalColumns": 7,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "credit_lots",
+      "originalColumns": 15,
+      "rows": 2,
+      "sha256": "656a19988644760c763c45cba9371f651d99aeae761e44440a386d3245b26950",
+      "channelFilter": null
+    },
+    {
+      "table": "document_versions",
+      "originalColumns": 9,
+      "rows": 14,
+      "sha256": "026b978bc9c5a2619874700de661902b713e8b74194dd8054dbdbbfc4e1c8dfc",
+      "channelFilter": null
+    },
+    {
+      "table": "documents",
+      "originalColumns": 9,
+      "rows": 9,
+      "sha256": "63854e3bf45d274a6f18df03bcb297a7e312384e18a399790cbcee80f16af3db",
+      "channelFilter": null
+    },
+    {
+      "table": "entitlement_defaults",
+      "originalColumns": 4,
+      "rows": 2,
+      "sha256": "6a8a7d48eb9b00aa3e841513453369434e99798d216e1332cd6f7bd46e94e03f",
+      "channelFilter": null
+    },
+    {
+      "table": "external_identities",
+      "originalColumns": 8,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "external_identity_events",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "favorites",
+      "originalColumns": 5,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "free_text_claims",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "google_oidc_flows",
+      "originalColumns": 12,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "identity_sessions",
+      "originalColumns": 14,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "inspiration_favorites",
+      "originalColumns": 3,
+      "rows": 1,
+      "sha256": "80579d50990a5e73e2468ccf6398a14b77d30753665952a6f8e8026e59480b5a",
+      "channelFilter": null
+    },
+    {
+      "table": "inspirations",
+      "originalColumns": 8,
+      "rows": 10,
+      "sha256": "6423cc6632324699c3bee4c6fcf7fc91d9a1ad889c0353ddca4038862e449a48",
+      "channelFilter": null
+    },
+    {
+      "table": "invitations",
+      "originalColumns": 11,
+      "rows": 1,
+      "sha256": "2ffdcc60e8d1654cc235b50455bc547a5dc284c13f1da3605b723480f7079071",
+      "channelFilter": null
+    },
+    {
+      "table": "invoice_events",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "invoice_orders",
+      "originalColumns": 4,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "invoice_requests",
+      "originalColumns": 11,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "invoice_titles",
+      "originalColumns": 9,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "job_downloads",
+      "originalColumns": 3,
+      "rows": 1,
+      "sha256": "f0905ef0c28f984798b7d1c031a71c45cd40d7c2faa9dad2cccec38a89863899",
+      "channelFilter": null
+    },
+    {
+      "table": "job_events",
+      "originalColumns": 6,
+      "rows": 3,
+      "sha256": "c2d10c9a3744e01c2e70f94f3360b69de5ffe46a320b9850c3c0ea0489013352",
+      "channelFilter": null
+    },
+    {
+      "table": "job_history_archives",
+      "originalColumns": 3,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "job_item_assets",
+      "originalColumns": 3,
+      "rows": 1,
+      "sha256": "8b1de5dae8d7b6c3f5fdd28cec969f099a3585bfe4d79e8f1c30c50ea3f415da",
+      "channelFilter": null
+    },
+    {
+      "table": "job_items",
+      "originalColumns": 25,
+      "rows": 1,
+      "sha256": "ea2d7a6e4d68a54d9574d321fa538d264068614fefcd8aeef24f3fa369507c10",
+      "channelFilter": null
+    },
+    {
+      "table": "jobs",
+      "originalColumns": 19,
+      "rows": 1,
+      "sha256": "647c7fc2130cdb415d7018bef2ee53cc264bdc9e92a01e9e888525a3d3bfb0d4",
+      "channelFilter": null
+    },
+    {
+      "table": "mail_outbox",
+      "originalColumns": 16,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "mail_outbox_actions",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "member_budgets",
+      "originalColumns": 5,
+      "rows": 2,
+      "sha256": "76a4404a05b6a3469893c5680e3cf79fe6e69444f709e381dadb2eb213183c48",
+      "channelFilter": null
+    },
+    {
+      "table": "memberships",
+      "originalColumns": 8,
+      "rows": 2,
+      "sha256": "3a1f4e3b049ffffae3df77ede5adca481614d4d641cf9c984736c2c79d8a5d6d",
+      "channelFilter": null
+    },
+    {
+      "table": "messages",
+      "originalColumns": 9,
+      "rows": 10,
+      "sha256": "e53bfaf430c8c46e0bf32a5b339f46aa0fc5f2dd1faa0b1d25b260d63b9a9957",
+      "channelFilter": null
+    },
+    {
+      "table": "notifications",
+      "originalColumns": 8,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "operator_audit",
+      "originalColumns": 7,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "orders",
+      "originalColumns": 19,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "pending_applies",
+      "originalColumns": 13,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "plans",
+      "originalColumns": 13,
+      "rows": 3,
+      "sha256": "83525e75b5fff312adf62cd0d697255f6adb096d90f4c49509447daf107d80cc",
+      "channelFilter": null
+    },
+    {
+      "table": "projects",
+      "originalColumns": 12,
+      "rows": 9,
+      "sha256": "6426938b48300cdc43b89f229f5cb7c44555c10cb775bab9973082c23a0e63ab",
+      "channelFilter": null
+    },
+    {
+      "table": "provider_settings",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "quotes",
+      "originalColumns": 13,
+      "rows": 1,
+      "sha256": "07cdfa3372ae0c0707fb8b4398a5d9d3f4148ecd212c2e7549363599b9e65c46",
+      "channelFilter": null
+    },
+    {
+      "table": "redemption_codes",
+      "originalColumns": 8,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "referral_attributions",
+      "originalColumns": 5,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "referral_events",
+      "originalColumns": 6,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "referral_program",
+      "originalColumns": 9,
+      "rows": 1,
+      "sha256": "9eb256f0550c9f767904ba62a4e9a53a6ec3e01fd3138b3cc3399cbfa823b8fc",
+      "channelFilter": null
+    },
+    {
+      "table": "referral_rewards",
+      "originalColumns": 10,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "referrals",
+      "originalColumns": 4,
+      "rows": 1,
+      "sha256": "ecf0dfe39f9095f6ac3471059e7002b280aa9803727db8df1258c1fe496f43d6",
+      "channelFilter": null
+    },
+    {
+      "table": "sessions",
+      "originalColumns": 7,
+      "rows": 3,
+      "sha256": "8e5d31d53c8df6b350fae623588769fa430109674af2a7411611e1573b29d89c",
+      "channelFilter": null
+    },
+    {
+      "table": "shares",
+      "originalColumns": 9,
+      "rows": 1,
+      "sha256": "2ae361fd66718f7360c25916b8b14d60c5ea9716873bf18b3b59ca278728c1d2",
+      "channelFilter": null
+    },
+    {
+      "table": "stripe_checkouts",
+      "originalColumns": 7,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "stripe_events",
+      "originalColumns": 5,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "subscriptions",
+      "originalColumns": 12,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "support_refunds",
+      "originalColumns": 8,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "support_resolutions",
+      "originalColumns": 10,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "support_tickets",
+      "originalColumns": 11,
+      "rows": 1,
+      "sha256": "abff562617a974a0f3cbe08745eb8429fe2991b00b822db21d2645fa62e2bf15",
+      "channelFilter": null
+    },
+    {
+      "table": "ticket_messages",
+      "originalColumns": 5,
+      "rows": 1,
+      "sha256": "eeff0aaa8fb2ff2b9c65a775e39f951a71bb7b09e8cf8aaf0b6333d720f7c872",
+      "channelFilter": null
+    },
+    {
+      "table": "translation_text_checks",
+      "originalColumns": 5,
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channelFilter": null
+    },
+    {
+      "table": "upload_requests",
+      "originalColumns": 6,
+      "rows": 1,
+      "sha256": "de6d4975d680b8c7dc0140935f33e215d0729cbd8dcca5beef6e629d2d481503",
+      "channelFilter": null
+    },
+    {
+      "table": "users",
+      "originalColumns": 10,
+      "rows": 1,
+      "sha256": "3b8327700b4d7b4d45d656d38fa59de4e2a454bc6337b7b7475a9c6fe156e11c",
+      "channelFilter": null
+    },
+    {
+      "table": "workspace_billing",
+      "originalColumns": 4,
+      "rows": 2,
+      "sha256": "343a36134fe508b18ba54ef259ecc1746fd032317220364b4f0eeb92dda15086",
+      "channelFilter": null
+    },
+    {
+      "table": "workspaces",
+      "originalColumns": 9,
+      "rows": 2,
+      "sha256": "e54d2aa0bd9980ddfff6119940949b2f6b58dfa89c2ca057ba5b0297b16b9940",
+      "channelFilter": null
+    }
+  ],
+  "apiZeroAccountsCreated": 2,
+  "originalMediaFiles": 23,
+  "referencedMedia": 22,
+  "checks": {
+    "sourceIntegrity": true,
+    "restoredRowsEqualBeforeUpgrade": true,
+    "historicalBusinessRowsPreserved": true,
+    "migrationChecksums": true,
+    "secondMigrationIdempotent": true,
+    "upgradedIntegrity": true,
+    "foreignKeys": true,
+    "completeBackupRestoreRows": true,
+    "completeBackupRestoreMedia": true,
+    "keyBytesPreserved": true,
+    "existingDestinationRejected": true,
+    "sourceBackupUnchanged": true
+  },
+  "secrets": "No keys, user rows, session tokens or identity values included. Digests/counts only."
+}

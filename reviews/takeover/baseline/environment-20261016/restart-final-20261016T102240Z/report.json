@@ -1,0 +1,66 @@
+{
+  "finishedUtc": "2026-10-16T10:29:01.808718+00:00",
+  "database": "var/takeover/baseline-app/demo.sqlite",
+  "preRestartBackup": "var/takeover/baseline-app/pre-final-restart/20261016T102240Z/demo.sqlite",
+  "beforeMigrations": 27,
+  "afterMigrations": 29,
+  "newMigrations": [
+    "0029-team-creation.sql",
+    "0030-concurrency-capacity.sql"
+  ],
+  "migrationOnlyBusinessTablesCompared": 97,
+  "migrationOnlyChangedTables": [],
+  "runtimeFullyUnchangedBusinessTables": 96,
+  "expectedRuntimeChangedTables": [
+    "job_items"
+  ],
+  "runtimeCacheCleanup": [
+    {
+      "status": "succeeded",
+      "changedFields": [
+        "result_json"
+      ],
+      "assetCount": 1,
+      "ownedScratchFilesAbsent": 1
+    },
+    {
+      "status": "succeeded",
+      "changedFields": [
+        "result_json"
+      ],
+      "assetCount": 1,
+      "ownedScratchFilesAbsent": 1
+    }
+  ],
+  "deferredCacheAnonymousCategories": [
+    "path-range-or-ownership"
+  ],
+  "allOriginalMediaHashesVerified": 11,
+  "preservedLedgerAndAssetTables": [
+    "assets",
+    "asset_variants",
+    "job_item_assets",
+    "credit_accounts",
+    "credit_ledger",
+    "credit_lots"
+  ],
+  "migrationChecksumsAllMatch": true,
+  "integrity": "ok",
+  "foreignKeyErrors": 0,
+  "apiPid": 44946,
+  "workerPid": 45025,
+  "apiSession": 67798,
+  "workerSession": 1773,
+  "health": {
+    "status": "ok",
+    "database": "sqlite",
+    "demoMode": true,
+    "ffmpeg": true
+  },
+  "tableCounts": {
+    "team_account_slots": 1,
+    "team_provisioning": 0,
+    "billing_environment_binding": 0
+  },
+  "dataScope": "Only persistent isolated baseline-app; original databases and old source backups are not opened by services."
+}

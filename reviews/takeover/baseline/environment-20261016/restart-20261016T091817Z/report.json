@@ -1,0 +1,112 @@
+{
+  "backup": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/baseline-app/pre-contract-restart/20261016T091817Z/demo.sqlite",
+  "integrity": "ok",
+  "foreignKeyErrors": 0,
+  "jobStatusCounts": {
+    "succeeded": 5
+  },
+  "migrationChecks": [
+    {
+      "name": "0001-core.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0002-tasks.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0003-core-invitation-budget.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0004-quote-snapshots.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0005-worker-recovery-failures.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0006-layered-job-outputs.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0007-stripe-billing.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0008-quality-workflows.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0009-inspiration-catalog.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0010-share-download-permission.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0011-upload-history.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0012-entitlements-appeals.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0013-credit-lots.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0015-translation-text-checks.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0016-google-oidc.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0017-mail-outbox.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0018-google-local-password.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0019-task-recovery-lineage.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0020-password-recovery.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0021-inspiration-reuse.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0022-billing-channels.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0023-identity-auth.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0024-referral-policy.sql",
+      "matchesSource": true
+    },
+    {
+      "name": "0025-billing-period-evidence.sql",
+      "matchesSource": true
+    }
+  ],
+  "pendingMigrations": [
+    "0026-refund-temporal-evidence.sql",
+    "0027-installation-owner.sql",
+    "0028-member-promotions.sql"
+  ],
+  "frozen0028sha256": "bf044c2943fde90d19f438d78db6d21d63a47ec072b053dd5a7b70396171dc2c"
+}

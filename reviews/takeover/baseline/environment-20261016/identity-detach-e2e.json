@@ -1,0 +1,17 @@
+{
+  "command": [
+    "pnpm",
+    "test:e2e",
+    "--grep",
+    "SMS protocol fixture|detach existing"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:17:41.279200+00:00",
+  "endedUtc": "2026-10-16T08:18:02.768793+00:00",
+  "elapsedSeconds": 21.49,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "identity-detach-e2e.txt"
+}

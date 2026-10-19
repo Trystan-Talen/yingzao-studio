@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "build"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T06:30:20.375041+00:00",
+  "endedUtc": "2026-10-16T06:30:23.586746+00:00",
+  "elapsedSeconds": 3.212,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "build.txt"
+}

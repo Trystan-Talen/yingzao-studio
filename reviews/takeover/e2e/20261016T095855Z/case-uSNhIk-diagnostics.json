@@ -1,0 +1,10 @@
+{
+  "errors": [],
+  "failedRequests": [],
+  "responses": [
+    {
+      "path": "/api/v1/notifications",
+      "status": 503
+    }
+  ]
+}

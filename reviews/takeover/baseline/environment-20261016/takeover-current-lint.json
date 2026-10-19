@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "lint"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T07:41:26.103296+00:00",
+  "endedUtc": "2026-10-16T07:41:28.203437+00:00",
+  "elapsedSeconds": 2.1,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "takeover-current-lint.txt"
+}

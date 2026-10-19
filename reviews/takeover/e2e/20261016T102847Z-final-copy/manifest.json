@@ -1,0 +1,141 @@
+{
+  "sourceRun": "platform/var/e2e/run-9FyIsM",
+  "passed": 4,
+  "failed": 0,
+  "scope": "Final source: two brand static-copy changes, plus precise English/Arabic assertions. Business behavior unchanged.",
+  "productionDifferenceFromFullSuite": [
+    "src/web/lib/workflow-translations.ts",
+    "src/web/pages/Identities.tsx"
+  ],
+  "screenshots": [
+    {
+      "file": "screenshots/case-KN3k3c-brand-recovery-races.png",
+      "sourceCase": "case-KN3k3c",
+      "pixels": [
+        1170,
+        4266
+      ],
+      "sha256": "a8682fcd6c4626efa1f3fd86b1e20305784fb84c2066b2f894f55a73f31d8662"
+    },
+    {
+      "file": "screenshots/case-OYzzwa-brand-recovery-races.png",
+      "sourceCase": "case-OYzzwa",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "68b3edee3d01f99222f7c97369269d56b9f471823dec67922b130ac82081a727"
+    },
+    {
+      "file": "screenshots/case-UqTwhR-brand-quota-ar.png",
+      "sourceCase": "case-UqTwhR",
+      "pixels": [
+        1170,
+        3084
+      ],
+      "sha256": "70e74c3d308f7bf09458510a4e443e4af4a1f11b3997342207c52261ead7e484"
+    },
+    {
+      "file": "screenshots/case-UqTwhR-brand-quota-en.png",
+      "sourceCase": "case-UqTwhR",
+      "pixels": [
+        1170,
+        3144
+      ],
+      "sha256": "b659a3bc09c55ee53cf9e6ec070d0c0788168d572d26feb98488f53b2f546794"
+    },
+    {
+      "file": "screenshots/case-YprZ33-brand-quota-ar.png",
+      "sourceCase": "case-YprZ33",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "6397da3d74ffa77ce6ab2813701a4db54830ca87adbc0b62f961df3348701275"
+    },
+    {
+      "file": "screenshots/case-YprZ33-brand-quota-en.png",
+      "sourceCase": "case-YprZ33",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "d5fc5044d5e1082f8318379a6ca854d49e32082d03b3ee87be31aac661358098"
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "sourceCase": "case-KN3k3c",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/assets/288d0fe2-a397-42a6-860c-b64f4e2e0b5b",
+          "status": 500
+        },
+        {
+          "path": "/api/v1/assets/288d0fe2-a397-42a6-860c-b64f4e2e0b5b",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-OYzzwa",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/assets/f47611af-cfcb-446d-9deb-0899dba760e1",
+          "status": 500
+        },
+        {
+          "path": "/api/v1/assets/f47611af-cfcb-446d-9deb-0899dba760e1",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-UqTwhR",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/brands/11dec6e9-03c7-4d70-bf80-c41beaf07444/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/a16d406a-10bf-4cb9-befb-5ea1b6d3723f/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/a16d406a-10bf-4cb9-befb-5ea1b6d3723f/restore",
+          "status": 409
+        }
+      ]
+    },
+    {
+      "sourceCase": "case-YprZ33",
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/brands/40102a0c-1489-4425-9beb-dc2355c9cef8/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/7ed310cb-286d-4000-a3ba-7a4ca776a786/restore",
+          "status": 409
+        },
+        {
+          "path": "/api/v1/brands/7ed310cb-286d-4000-a3ba-7a4ca776a786/restore",
+          "status": 409
+        }
+      ]
+    }
+  ],
+  "data": "Only fresh isolated test databases/media and fictional users/plans/paid markers. No original database, configuration, provider keys or cookie state copied.",
+  "externalServices": "Blocked except loopback fixture SMTP/SMS/local media. No real payment, model, SMS, WeChat, email or identity-provider call.",
+  "expectedErrors": "Security tests, local injected 500/404, logout/revocation and navigation cancellation remain in diagnostics; no claim of zero failed HTTP requests.",
+  "viewport": "See report project (desktop/mobile/notebook/tablet) and explicit per-test viewport overrides; native screenshot pixels preserved."
+}

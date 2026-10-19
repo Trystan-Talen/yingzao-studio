@@ -1,0 +1,148 @@
+{
+  "sourceRun": "platform/var/e2e/run-fjuXMJ",
+  "passed": 6,
+  "failed": 2,
+  "scope": "First run; only material test selected oldest message. Correct free draft was already committed.",
+  "productionChangesByThisSlice": [],
+  "externalServices": "disabled; browser requests allowed only isolated loopback",
+  "privateArtifactsOmitted": [
+    "SQLite databases",
+    "session/config files",
+    "traces",
+    "videos",
+    "uploaded original files"
+  ],
+  "screenshots": [
+    {
+      "file": "screenshots/case-2zXaiM-onboarding-defaults-new-project.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "08ec6f601e04b7a356c8a531db35e8a1bfc4f0cd43e748d7681fd96ba4b5fe42"
+    },
+    {
+      "file": "screenshots/case-MlBCqS-marketing-modules-restored.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "e9b140df4f14809fde3be8df560c19839c29210f3e32ac8c36946f8c449a0f23"
+    },
+    {
+      "file": "screenshots/case-UMGBpo-brand-recovery-races.png",
+      "pixels": [
+        1170,
+        4266
+      ],
+      "sha256": "a8682fcd6c4626efa1f3fd86b1e20305784fb84c2066b2f894f55a73f31d8662"
+    },
+    {
+      "file": "screenshots/case-eCdf01-brand-quota-ar.png",
+      "pixels": [
+        1170,
+        3084
+      ],
+      "sha256": "e7c26e7302e4033e2dcbc222974d636cfcd708c933df25bd632e38bc00315dcd"
+    },
+    {
+      "file": "screenshots/case-eCdf01-brand-quota-en.png",
+      "pixels": [
+        1170,
+        3144
+      ],
+      "sha256": "31b10380acd62083f8d4d401ddced0f8637cece3666800c9051ca2780846ed20"
+    },
+    {
+      "file": "screenshots/case-qdpjji-brand-recovery-races.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "68b3edee3d01f99222f7c97369269d56b9f471823dec67922b130ac82081a727"
+    },
+    {
+      "file": "screenshots/case-rlyVO9-onboarding-defaults-new-project.png",
+      "pixels": [
+        1170,
+        3549
+      ],
+      "sha256": "b13c181eeee731e1fa0ec4bd1531343f8f070deb4357bb23d01c7534a5f60b06"
+    },
+    {
+      "file": "screenshots/case-rtH4hP-marketing-modules-restored.png",
+      "pixels": [
+        1440,
+        1060
+      ],
+      "sha256": "6b33f288c9c7a8bdb38765bdf088ebefbf95bbb8d1412ec19df8546cb9369dda"
+    },
+    {
+      "file": "screenshots/case-yYb8F7-brand-quota-ar.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "62a53ba6e0f93cc5f8d8afc6b3203de4454dc52dfde786b7966601455e571765"
+    },
+    {
+      "file": "screenshots/case-yYb8F7-brand-quota-en.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "sha256": "317ca6b502fcfda9c4600dfce683c84858e079b8ef1edf122788834db9c80b5a"
+    }
+  ],
+  "diagnostics": [
+    {
+      "file": "diagnostics/case-2zXaiM.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-MlBCqS.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-UMGBpo.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 2
+    },
+    {
+      "file": "diagnostics/case-eCdf01.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 3
+    },
+    {
+      "file": "diagnostics/case-qdpjji.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 2
+    },
+    {
+      "file": "diagnostics/case-rlyVO9.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-rtH4hP.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 1
+    },
+    {
+      "file": "diagnostics/case-yYb8F7.json",
+      "uncaughtExceptions": 0,
+      "failedRequests": 0,
+      "responses400Plus": 3
+    }
+  ],
+  "uncaughtExceptions": 0
+}

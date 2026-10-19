@@ -1,0 +1,95 @@
+$ pnpm test:e2e creation-locale.spec.ts credits-locale.spec.ts quote-confirmation.spec.ts --grep uses .*creation|translates .*credit copy|shows separate music
+$ tsx scripts/e2e.ts creation-locale.spec.ts credits-locale.spec.ts quote-confirmation.spec.ts --grep 'uses .*creation|translates .*credit copy|shows separate music'
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2206 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-DFwr4-Mv.css                 67.02 kB │ gzip:  12.94 kB
+dist/web/assets/arrow-left-pSRP7I_j.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-C6Uq3bUj.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-mNpjD-Je.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-yMRfhlrN.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-DmhlCXpa.js                0.39 kB │ gzip:   0.27 kB │ map:     2.02 kB
+dist/web/assets/save-D3ywEAQw.js                    0.40 kB │ gzip:   0.29 kB │ map:     1.33 kB
+dist/web/assets/shield-check-D73m3nPJ.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-svZYFGFf.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-wVrYdGlf.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-CPcV6Htk.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-DVICo2dA.js                 0.59 kB │ gzip:   0.34 kB │ map:     1.83 kB
+dist/web/assets/export-policy-a2EoEtVL.js           1.15 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-DpuzDOM0.js    2.50 kB │ gzip:   1.38 kB │ map:     7.46 kB
+dist/web/assets/product-messages--z4jSSF2.js        2.79 kB │ gzip:   1.02 kB │ map:     5.13 kB
+dist/web/assets/PasswordRecovery-ksdYN7gP.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-BST-zDt_.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-B7zrM_yp.js                  4.02 kB │ gzip:   2.10 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-BNK7b9IQ.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-BKt7qXCK.js                   4.16 kB │ gzip:   2.11 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-adJURFT2.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-BF3KcTIh.js        7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+dist/web/assets/Inspiration-D-g3u3xH.js            13.75 kB │ gzip:   6.35 kB │ map:    39.03 kB
+dist/web/assets/Identities-DUykw0EI.js             13.75 kB │ gzip:   5.00 kB │ map:    43.36 kB
+dist/web/assets/Settings-_5r5-0Nr.js               14.04 kB │ gzip:   5.52 kB │ map:    40.50 kB
+dist/web/assets/Developer-Bicc_8hU.js              15.24 kB │ gzip:   5.31 kB │ map:    46.63 kB
+dist/web/assets/Support-B0pyFDVd.js                15.41 kB │ gzip:   6.08 kB │ map:    44.30 kB
+dist/web/assets/Team-B7vTfXyj.js                   16.26 kB │ gzip:   5.44 kB │ map:    53.37 kB
+dist/web/assets/Workbench-Bm55jSJe.js              18.87 kB │ gzip:   7.16 kB │ map:    63.38 kB
+dist/web/assets/AdvancedTools-BjD_3vWc.js          20.43 kB │ gzip:   8.02 kB │ map:    70.21 kB
+dist/web/assets/Library-B8-ZTnOh.js                22.25 kB │ gzip:   7.70 kB │ map:    69.35 kB
+dist/web/assets/Usage-BvaJ2DZN.js                  29.21 kB │ gzip:   9.74 kB │ map:    88.15 kB
+dist/web/assets/Tools-PYxfiCRL.js                  29.38 kB │ gzip:  11.35 kB │ map:    93.79 kB
+dist/web/assets/Composer-DTiFsgRS.js               30.85 kB │ gzip:  11.72 kB │ map:   104.07 kB
+dist/web/assets/react-1LyzdIKn.js                 106.07 kB │ gzip:  35.88 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-DA-iG-C6.js          151.25 kB │ gzip:  49.24 kB │ map:   415.94 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-oSXC1zNt.js                 722.65 kB │ gzip: 234.92 kB │ map: 2,519.80 kB
+✓ built in 1.72s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        70.41 KB
+ESM dist/runtime/chunk-SOOIYODM.js     636.52 KB
+ESM dist/runtime/worker/main.js.map    109.27 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/chunk-SOOIYODM.js.map 1.08 MB
+ESM ⚡️ Build success in 58ms
+
+Running 10 tests using 1 worker
+
+(node:21767) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/creation-locale.spec.ts:55:3 › uses en creation and local tool controls while retaining the original Chinese user content (7.4s)
+  ✓   2 [desktop] › tests/e2e/creation-locale.spec.ts:55:3 › uses ar creation and local tool controls while retaining the original Chinese user content (4.0s)
+  ✓   3 [desktop] › tests/e2e/credits-locale.spec.ts:77:3 › translates en credit copy while keeping real values and user fields without starting payment (5.7s)
+  ✓   4 [desktop] › tests/e2e/credits-locale.spec.ts:77:3 › translates ar credit copy while keeping real values and user fields without starting payment (5.2s)
+  ✓   5 [desktop] › tests/e2e/quote-confirmation.spec.ts:7:1 › shows separate music and generated sound choices in a real quote without submitting a model task (3.8s)
+(node:21946) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 [mobile] › tests/e2e/creation-locale.spec.ts:55:3 › uses en creation and local tool controls while retaining the original Chinese user content (6.5s)
+  ✓   7 [mobile] › tests/e2e/creation-locale.spec.ts:55:3 › uses ar creation and local tool controls while retaining the original Chinese user content (5.9s)
+  ✓   8 [mobile] › tests/e2e/credits-locale.spec.ts:77:3 › translates en credit copy while keeping real values and user fields without starting payment (5.8s)
+  ✓   9 [mobile] › tests/e2e/credits-locale.spec.ts:77:3 › translates ar credit copy while keeping real values and user fields without starting payment (5.3s)
+  ✓  10 [mobile] › tests/e2e/quote-confirmation.spec.ts:7:1 › shows separate music and generated sound choices in a real quote without submitting a model task (4.0s)
+
+  10 passed (56.0s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-wcQX9j

@@ -1,0 +1,6 @@
+{
+  "archivedFrom": "/private/tmp/yingzao-final-upgrade.mjs",
+  "sha256": "76a657022de23fd05a8c8427f090a7b43d4cc748caf575acea802ce1642d58c6",
+  "relationship": "Byte-for-byte archive of the retained verifier named in final-upgrade-0030.json; no rerun or date rewrite.",
+  "usage": "From platform: node --import tsx ../reviews/takeover/evidence/final-validation/upgrade-check.mjs <protected-backup> <new-var/takeover/final-validation-subdirectory> <new-report.json>"
+}

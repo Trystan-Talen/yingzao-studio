@@ -1,0 +1,66 @@
+{
+  "sourceRun": "platform/var/e2e/run-rWAez6",
+  "command": "pnpm test:e2e upload-recovery.spec.ts",
+  "cases": [
+    {
+      "project": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "screenshot": "screenshots/desktop-upload-recovery-restored.png",
+      "sha256": "a76a6ab98964555ad0c3332809bddb5be31c0ac58e5ad026fba7db0321e34f46",
+      "browserDiagnostics": {
+        "errors": [],
+        "failedRequests": [
+          {
+            "path": "/api/v1/assets/upload",
+            "error": "net::ERR_CONNECTION_RESET"
+          }
+        ],
+        "responses": [
+          {
+            "path": "/api/v1/auth/me",
+            "status": 401
+          },
+          {
+            "path": "/api/v1/assets/upload",
+            "status": 415
+          }
+        ]
+      }
+    },
+    {
+      "project": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "screenshots/mobile-upload-recovery-restored.png",
+      "sha256": "b42dc393bac105e719f44c6c58308de55c4f463a40c3b56b5602fed2fd3e9260",
+      "browserDiagnostics": {
+        "errors": [],
+        "failedRequests": [
+          {
+            "path": "/api/v1/assets/upload",
+            "error": "net::ERR_CONNECTION_RESET"
+          }
+        ],
+        "responses": [
+          {
+            "path": "/api/v1/auth/me",
+            "status": 401
+          },
+          {
+            "path": "/api/v1/assets/upload",
+            "status": 415
+          }
+        ]
+      }
+    }
+  ],
+  "limits": [
+    "Drop and paste use browser DragEvent/ClipboardEvent with real PNG File objects; not an operating-system clipboard or external-app drag test.",
+    "A route fault aborts only the first response after the real server has saved it; retries use the same upload ID."
+  ]
+}

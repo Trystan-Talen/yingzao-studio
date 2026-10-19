@@ -1,0 +1,40 @@
+{
+  "id": "fc92174f-07f5-4ee4-a71f-9f9ffbafbce2",
+  "number": "YZ1792142609703fc92174f",
+  "status": "draft",
+  "amount_minor": 700,
+  "currency": "USD",
+  "paid_at": null,
+  "workspace_id": "4b8cd9ef-0532-489a-a888-7bd03522b426",
+  "savedTerms": {
+    "months": 1,
+    "audience": "personal",
+    "stacking": "same-plan",
+    "timeBasis": "utc-calendar-month",
+    "refundPolicy": "proportional-duration",
+    "creditArchiveMonths": 3,
+    "creditValidity": "same-plan-renewal"
+  },
+  "savedPromotion": {
+    "definition": {
+      "id": "7a5084dd-5ff4-44b6-93ed-f013a7166270",
+      "version": 1,
+      "name": "本机界面验证·当前优惠",
+      "enabled": true,
+      "startsAt": "2026-10-16T08:22:16.969Z",
+      "endsAt": "2026-10-17T09:22:16.969Z",
+      "timeZone": "Asia/Singapore",
+      "qualificationTime": "checkout-start",
+      "priceMinor": 700,
+      "eligibility": "all",
+      "refundedPurchasesCount": null,
+      "evidenceReference": "isolated-ui-fixture: explicit local terms; not original pricing; no remote charge"
+    },
+    "originalPriceMinor": 1000
+  },
+  "creditAccount": {
+    "balance": 1000,
+    "reserved": 0
+  },
+  "fulfillments": 0
+}

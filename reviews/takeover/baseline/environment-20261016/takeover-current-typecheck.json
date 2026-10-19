@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "typecheck"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T07:41:26.103335+00:00",
+  "endedUtc": "2026-10-16T07:41:31.305190+00:00",
+  "elapsedSeconds": 5.202,
+  "exitCode": 2,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "takeover-current-typecheck.txt"
+}

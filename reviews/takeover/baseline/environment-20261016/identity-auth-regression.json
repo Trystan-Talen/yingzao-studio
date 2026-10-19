@@ -1,0 +1,23 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "tests/identity-auth.test.ts",
+    "tests/aliyun-sms.test.ts",
+    "tests/wechat-gateway.test.ts",
+    "tests/password-recovery.test.ts",
+    "tests/google-oidc.test.ts",
+    "tests/mail-outbox.test.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T08:07:36.774815+00:00",
+  "endedUtc": "2026-10-16T08:07:45.785445+00:00",
+  "elapsedSeconds": 9.01,
+  "exitCode": 0,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "identity-auth-regression.txt"
+}

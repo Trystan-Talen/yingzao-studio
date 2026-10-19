@@ -1,0 +1,119 @@
+{
+  "sourceRun": "platform/var/e2e/run-Ax72lT",
+  "passed": 4,
+  "failed": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/mobile-support-ar.png",
+      "pixels": [
+        1170,
+        3972
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-identity-registration-ar.png",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/desktop-support-en.png",
+      "pixels": [
+        1440,
+        1167
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-identity-registration-en.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-support-ar.png",
+      "pixels": [
+        1440,
+        1167
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/desktop-identity-registration-ar.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "screenshots/mobile-support-en.png",
+      "pixels": [
+        1170,
+        4161
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "file": "screenshots/mobile-identity-registration-en.png",
+      "pixels": [
+        1170,
+        2532
+      ],
+      "cssViewport": [
+        390,
+        844
+      ]
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "data": "isolated fictional test accounts; no source databases/configuration copied"
+}

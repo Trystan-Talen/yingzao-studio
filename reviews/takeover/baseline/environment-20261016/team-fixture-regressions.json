@@ -1,0 +1,30 @@
+{
+  "command": [
+    "pnpm",
+    "exec",
+    "vitest",
+    "run",
+    "tests/app.test.ts",
+    "tests/core.test.ts",
+    "tests/delivery-regressions.test.ts",
+    "tests/entitlements-appeals.test.ts",
+    "tests/google-oidc.test.ts",
+    "tests/identity-auth.test.ts",
+    "tests/installation-owner.test.ts",
+    "tests/mail-outbox.test.ts",
+    "tests/password-recovery.test.ts",
+    "tests/quality-workflows.test.ts",
+    "tests/takeover-backend.test.ts",
+    "tests/takeover-tools.test.ts",
+    "tests/tasks.test.ts"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T09:34:10.668668+00:00",
+  "endedUtc": "2026-10-16T09:34:34.879286+00:00",
+  "elapsedSeconds": 24.211,
+  "exitCode": 1,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "team-fixture-regressions.txt"
+}

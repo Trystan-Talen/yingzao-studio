@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pnpm",
+    "typecheck"
+  ],
+  "cwd": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "startedUtc": "2026-10-16T09:35:47.152131+00:00",
+  "endedUtc": "2026-10-16T09:35:52.340035+00:00",
+  "elapsedSeconds": 5.188,
+  "exitCode": 2,
+  "environmentOverrides": {
+    "NO_COLOR": "1"
+  },
+  "output": "team-fixture-typecheck.txt"
+}

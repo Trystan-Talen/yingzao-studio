@@ -1,0 +1,22 @@
+{
+  "source": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform",
+  "stage": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/takeover/final-validation/20261016T100141Z/clean-platform",
+  "reports": "/Users/xm-talen/Desktop/小明/coding/生图生视频/reviews/takeover/baseline/environment-20261016/clean-install-20261016T100141Z",
+  "inputHashes": {
+    "package.json": "cbca9be6c6702969a6ddbc6be14eb5f9eb73ab45b0e7f26385f109f175e228e5",
+    "pnpm-lock.yaml": "efe06e8a4c4a4a4d16775741ee5dc8be4284811ab40c528f9ef68c23c41f883f",
+    "pnpm-workspace.yaml": "02184f621ea6e5c1d963beb11bfefd6dd74f52de716e2f1591506d3fa3b259de"
+  },
+  "environment": "Minimal allowlist; provider/payment/mail/identity secrets absent; caches project-local.",
+  "store": "/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/.pnpm-store",
+  "offline": false,
+  "status": "passed",
+  "exitCode": 0,
+  "sourceAndStagedManifestsUnchanged": true,
+  "probeHarnessCorrection": "Rollup is a Vite transitive dependency; resolve through Vite rather than importing an undeclared root package. No install, package or lock change.",
+  "finalValidation": "passed",
+  "finalExitCode": 0,
+  "copiedSourceFiles": 326,
+  "sourceHash": "0b940e1c851646a904ce679a5275972c1b5f57b1c93967e45767ae634e7db0b0",
+  "finalValidationFinishedUtc": "2026-10-16T10:31:18.697006+00:00"
+}

@@ -1,0 +1,62 @@
+{
+  "reviewedAt": "2026-10-16T09:18:51.380046+00:00",
+  "command": "pnpm exec vitest run tests/product-messages.test.ts",
+  "passed": 50,
+  "failed": 0,
+  "productEditsByThisAudit": [],
+  "checks": [
+    {
+      "subject": "Warning display boundary",
+      "sites": [
+        "platform/src/web/components/Composer.tsx:616",
+        "platform/src/web/components/AdvancedTools.tsx:509",
+        "platform/src/web/pages/Tools.tsx:454"
+      ],
+      "result": "productWarning is invoked only while rendering; input/state/persisted warnings remain original strings. React text rendering does not interpret parameter HTML."
+    },
+    {
+      "subject": "Parameter substitution",
+      "site": "platform/src/web/lib/product-messages.ts:80",
+      "result": "A single replacement callback substitutes known placeholders. Placeholder-like text, Chinese, HTML and replacement metacharacters inside values remain literal; unknown messages remain byte-for-byte unchanged."
+    },
+    {
+      "subject": "Dynamic translation sources",
+      "sites": [
+        "platform/src/web/pages/Usage.tsx:470",
+        "platform/src/web/pages/Usage.tsx:588",
+        "platform/src/web/components/DesignPlanner.tsx:126",
+        "platform/src/web/components/DesignPlanResult.tsx:45",
+        "platform/src/web/components/ResultComparison.tsx:47"
+      ],
+      "result": "Plan/promotion/module/asset names, prompts and design-plan fields remain direct values. Reviewed variable t inputs trace to static catalog labels, fixed server reasons or enum labels. No reproducible user-field translation was found in this slice."
+    },
+    {
+      "subject": "Module initialization",
+      "scope": "65 src/web TypeScript files, top-level variable initializers including invoked map callbacks",
+      "result": "No t() calls found; separate calls after locale changes use the active locale. This static scan is not a proof about every event-state lifetime."
+    },
+    {
+      "subject": "Historical 0 vs current 3 month contract",
+      "sites": [
+        "platform/src/web/pages/Usage.tsx:135",
+        "platform/src/web/pages/Usage.tsx:490",
+        "platform/src/web/components/CreditBuckets.tsx:65"
+      ],
+      "result": "Usage uses true creditValidity for each snapshot. Audit found unconditional 3-month summary on CreditBuckets; parent independently changed it to per-contract terms. Source confirms the misleading summary is removed; no browser rerun was performed by this audit."
+    }
+  ],
+  "limits": [
+    "No build, browser run, real provider request, payment or business-helper modification in this audit. Parent separately owns browser persistence verification.",
+    "Only known product warning templates/fixed warning allowlist are translated; unknown stored messages intentionally remain unchanged.",
+    "Date formatting and localized display do not prove financial calculations or cross-tier purchases are implemented."
+  ],
+  "sha256": {
+    "platform/src/web/lib/product-messages.ts": "501c0f1ac136ff47581e7b585ef7dc49c86c72c3ceed54e33c6579bb28b5ccdb",
+    "platform/tests/product-messages.test.ts": "c66c3ff1ce61039bd98d106bd156b4f86756039f13ab6f4cfd606e9475cc286f",
+    "platform/src/web/components/Composer.tsx": "85db0aa5f3f7f5c3688bb918463f8d35b5a6554356a4ef25bbf926e1a9e93006",
+    "platform/src/web/components/AdvancedTools.tsx": "e1ac46a1a8aaf8e9c30c019eb5db7db9e6c0de0805f660ddf7740bbb11fc7240",
+    "platform/src/web/pages/Tools.tsx": "7b35ae733f20abfde768848263d160fcb23fa9921ff21a9b1f3efde61d621ce2",
+    "platform/src/web/pages/Usage.tsx": "0f7c6d6aa7aefa6aaf32e0e8ec9bcfd323515c4cef941d20ce1b10b41d19dd31",
+    "platform/src/web/components/CreditBuckets.tsx": "2a56be6aa9e2405de4cefd4b701bb2da11c40686b24d491218d4d25c8491c82f"
+  }
+}

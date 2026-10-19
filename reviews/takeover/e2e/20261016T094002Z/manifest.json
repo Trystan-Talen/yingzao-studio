@@ -1,0 +1,67 @@
+{
+  "sourceRun": "platform/var/e2e/run-LykvTR",
+  "command": "pnpm test:e2e support-channels.spec.ts",
+  "result": "2 passed",
+  "cases": [
+    {
+      "project": "desktop",
+      "screenshots": [
+        {
+          "file": "screenshots/desktop-configured-support-channels.png",
+          "sha256": "b116af555f33aff265ec270450b05c1c9fff6322369e83856becfa1efdf59bb7"
+        },
+        {
+          "file": "screenshots/desktop-support-channels-en.png",
+          "sha256": "abddf8513d769dda286f8661777924303d2a4c1fb749391139d19375300322eb"
+        },
+        {
+          "file": "screenshots/desktop-support-channels-ar.png",
+          "sha256": "05c8fd9e7389a0fb3e75c43e3299cda963537671f12cce9495223471980e74dd"
+        }
+      ],
+      "diagnostics": {
+        "errors": [],
+        "failedRequests": [
+          {
+            "path": "/fixture-qr.png",
+            "error": "net::ERR_FAILED"
+          }
+        ],
+        "responses": []
+      }
+    },
+    {
+      "project": "mobile",
+      "screenshots": [
+        {
+          "file": "screenshots/mobile-configured-support-channels.png",
+          "sha256": "01d61a74a9eca5b80ab052ca42b8bfcbd834604736695370ebdcb5c1b9388e66"
+        },
+        {
+          "file": "screenshots/mobile-support-channels-en.png",
+          "sha256": "166707eba7e0a3889012336f3bfa353738bb3af52293bacbe9c0fe743069fcaf"
+        },
+        {
+          "file": "screenshots/mobile-support-channels-ar.png",
+          "sha256": "03ed492ef35285322c0a737ffa642156bc3d48a5066bf8e819112819dbc2b61f"
+        }
+      ],
+      "diagnostics": {
+        "errors": [],
+        "failedRequests": [
+          {
+            "path": "/fixture-qr.png",
+            "error": "net::ERR_FAILED"
+          }
+        ],
+        "responses": []
+      }
+    }
+  ],
+  "limitations": [
+    "All contacts use reserved example.test domains and fictional telephone numbers.",
+    "QR fixture is a solid-color PNG, not a usable WeChat QR code.",
+    "Survey navigation uses a browser route fixture; no external survey submission or support contact occurred.",
+    "The subsequent telephone bidi isolation change still awaits the final integrated run."
+  ]
+}

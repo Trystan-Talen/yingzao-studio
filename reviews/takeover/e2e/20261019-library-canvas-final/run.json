@@ -1,0 +1,18 @@
+{
+  "started": "2026-10-19T02:21:36.338300+00:00",
+  "finished": "2026-10-19T02:22:10.505936+00:00",
+  "command": [
+    "pnpm",
+    "exec",
+    "playwright",
+    "test",
+    "library-canvas-review.spec.ts",
+    "--grep",
+    "manages a named collection|applies a real pending|combines project name"
+  ],
+  "exitCode": 0,
+  "build": "Reused shared successful build after the single mobile filter flex-basis repair; no concurrent rebuild.",
+  "scope": "Six final cases: collection management and usable mobile query, pending results and project filters. Prior layer/UTC statistics cases unchanged.",
+  "dataIsolation": "Fresh SQLite and media per test.",
+  "externalServices": "Disabled; local processing only."
+}

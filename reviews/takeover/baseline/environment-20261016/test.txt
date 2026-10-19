@@ -1,0 +1,619 @@
+$ pnpm test
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/tasks.test.ts (32 tests | 1 failed) 1620ms
+   ❯ explicit layer output transactions and media-based estimates (4)
+     × quotes source-video operations using actual duration and extension using newly requested seconds 39ms
+ ❯ tests/google-oidc.test.ts (30 tests | 30 failed) 300100ms
+   ❯ Google protocol and cryptographic verification (15)
+     × upgrades the already-applied original 0016 through 0018 without rewriting history or losing accounts and bindings 10010ms
+     × uses official discovery, state, nonce, S256 PKCE and fixed redirects; no identity/token secret persists in plaintext 10001ms
+     × rejects invalid issuer before creating an identity 10003ms
+     × rejects invalid audience before creating an identity 10001ms
+     × rejects invalid authorized party before creating an identity 10002ms
+     × rejects invalid multi audience without authorized party before creating an identity 10002ms
+     × rejects invalid nonce before creating an identity 10001ms
+     × rejects invalid expired before creating an identity 10001ms
+     × rejects invalid future issued before creating an identity 10003ms
+     × rejects invalid unverified email before creating an identity 10002ms
+     × rejects invalid string verified before creating an identity 10001ms
+     × rejects invalid missing subject before creating an identity 10000ms
+     × rejects a token signed by a different private key despite a trusted kid 10002ms
+     × refreshes official JWKS on a new kid and accepts Google legacy issuer spelling 10001ms
+     × rejects discovery endpoint substitution without fetching an arbitrary host 10001ms
+   ❯ single-use flows and account admission (7)
+     × fails closed when disabled, incomplete, or still in first-admin setup 10001ms
+     × does not consume a flow for wrong state/browser, but rejects replay after a real completion 10001ms
+     × rejects expired and cancelled flows without exchanging their authorization codes 10001ms
+     × keeps closed registration closed and never automatically links by matching email 10001ms
+     × consumes matching invitations atomically, rejects mismatched verified emails and rolls back registration on seat exhaustion 10002ms
+     × deduplicates concurrent callbacks for the same Google subject and consumes an invitation once 10003ms
+     × preserves verified referral registration rules and attributes once 10001ms
+   ❯ explicit account linking and safe HTTP surface (8)
+     × marks Google-only users, rejects password login, and prevents removing their only login method 10001ms
+     × atomically consumes the same callback before any concurrent token exchange 10001ms
+     × requires immediate password confirmation, binds callback to the same unrevoked session, and preserves local email 10001ms
+     × does not link if the confirmed session is revoked during the upstream token exchange 10001ms
+     × expires password-confirmed linking after five minutes and cannot exchange an expired flow 10003ms
+     × refuses cross-account subject reuse and never replaces an existing different Google binding 10002ms
+     × requires password to unlink, revokes other sessions and retains the confirmed local session 10000ms
+     × validates same-origin starts, uses HttpOnly cookie binding, redirects only to fixed destinations and never exposes callback code 10002ms
+ ❯ tests/mail-outbox.test.ts (23 tests | 13 failed) 845ms
+   ❯ SMTP durable outbox using actual loopback TCP (23)
+     × submits exactly one envelope, freezes Message-ID, encrypts secret link, clears accepted payload 37ms
+     × cancels revoked_at invitation before SMTP without submitting 35ms
+     × cancels consumed_at invitation before SMTP without submitting 34ms
+     × cancels expires_at invitation before SMTP without submitting 34ms
+     × retries 451 with bounded persisted exponential backoff and never before due time 34ms
+     × marks 550 permanently failed without response text, body or credentials in status/logs 34ms
+     × treats explicit DATA 451 as safe rejection and retries, but stops after 5 attempts 34ms
+     × never blindly retries DATA acceptance ambiguity and requires audited operator evidence 35ms
+     × multiple worker instances atomically claim only once and concurrent ticks coalesce 33ms
+     × disabling an existing queue prevents new claims and preserves queued data 34ms
+     × refuses TLS downgrade and sanitizes actual SMTP auth rejection 34ms
+     × queues actual notifications without confidential bodies and cancels removed memberships 34ms
+     × integrated business hooks enqueue in the invitation/reply transaction without sending from the API 33ms
+ ❯ tests/migrations.test.ts (1 test | 1 failed) 68ms
+   × serializes simultaneous API/worker migrations on the same SQLite database 68ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 45 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > upgrades the already-applied original 0016 through 0018 without rewriting history or losing accounts and bindings
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > uses official discovery, state, nonce, S256 PKCE and fixed redirects; no identity/token secret persists in plaintext
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid issuer before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid audience before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid authorized party before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid multi audience without authorized party before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid nonce before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid expired before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid future issued before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid unverified email before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid string verified before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid missing subject before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects a token signed by a different private key despite a trusted kid
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > refreshes official JWKS on a new kid and accepts Google legacy issuer spelling
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects discovery endpoint substitution without fetching an arbitrary host
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > fails closed when disabled, incomplete, or still in first-admin setup
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > does not consume a flow for wrong state/browser, but rejects replay after a real completion
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > rejects expired and cancelled flows without exchanging their authorization codes
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > keeps closed registration closed and never automatically links by matching email
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > consumes matching invitations atomically, rejects mismatched verified emails and rolls back registration on seat exhaustion
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > deduplicates concurrent callbacks for the same Google subject and consumes an invitation once
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > preserves verified referral registration rules and attributes once
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > marks Google-only users, rejects password login, and prevents removing their only login method
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > atomically consumes the same callback before any concurrent token exchange
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > requires immediate password confirmation, binds callback to the same unrevoked session, and preserves local email
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > does not link if the confirmed session is revoked during the upstream token exchange
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > expires password-confirmed linking after five minutes and cannot exchange an expired flow
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > refuses cross-account subject reuse and never replaces an existing different Google binding
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > requires password to unlink, revokes other sessions and retains the confirmed local session
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > validates same-origin starts, uses HttpOnly cookie binding, redirects only to fixed destinations and never exposes callback code
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ tests/google-oidc.test.ts:69:1
+     67|   otherPublic = { ...(await exportJWK(other.publicKey)), kid: 'key-2',…
+     68| });
+     69| beforeEach(async () => {
+       | ^
+     70|   folder = await mkdtemp(join(tmpdir(), 'yingzao-google-'));
+     71|   const migrations = join(folder, 'migrations');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/75]⎯
+
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > upgrades the already-applied original 0016 through 0018 without rewriting history or losing accounts and bindings
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > uses official discovery, state, nonce, S256 PKCE and fixed redirects; no identity/token secret persists in plaintext
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid issuer before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid audience before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid authorized party before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid multi audience without authorized party before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid nonce before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid expired before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid future issued before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid unverified email before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid string verified before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects invalid missing subject before creating an identity
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects a token signed by a different private key despite a trusted kid
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > refreshes official JWKS on a new kid and accepts Google legacy issuer spelling
+ FAIL  tests/google-oidc.test.ts > Google protocol and cryptographic verification > rejects discovery endpoint substitution without fetching an arbitrary host
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > fails closed when disabled, incomplete, or still in first-admin setup
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > does not consume a flow for wrong state/browser, but rejects replay after a real completion
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > rejects expired and cancelled flows without exchanging their authorization codes
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > keeps closed registration closed and never automatically links by matching email
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > consumes matching invitations atomically, rejects mismatched verified emails and rolls back registration on seat exhaustion
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > deduplicates concurrent callbacks for the same Google subject and consumes an invitation once
+ FAIL  tests/google-oidc.test.ts > single-use flows and account admission > preserves verified referral registration rules and attributes once
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > marks Google-only users, rejects password login, and prevents removing their only login method
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > atomically consumes the same callback before any concurrent token exchange
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > requires immediate password confirmation, binds callback to the same unrevoked session, and preserves local email
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > does not link if the confirmed session is revoked during the upstream token exchange
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > expires password-confirmed linking after five minutes and cannot exchange an expired flow
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > refuses cross-account subject reuse and never replaces an existing different Google binding
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > requires password to unlink, revokes other sessions and retains the confirmed local session
+ FAIL  tests/google-oidc.test.ts > explicit account linking and safe HTTP surface > validates same-origin starts, uses HttpOnly cookie binding, redirects only to fixed destinations and never exposes callback code
+Error: Server is not running.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/75]⎯
+
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > submits exactly one envelope, freezes Message-ID, encrypts secret link, clears accepted payload
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > cancels revoked_at invitation before SMTP without submitting
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > cancels consumed_at invitation before SMTP without submitting
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > cancels expires_at invitation before SMTP without submitting
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > retries 451 with bounded persisted exponential backoff and never before due time
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > marks 550 permanently failed without response text, body or credentials in status/logs
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > treats explicit DATA 451 as safe rejection and retries, but stops after 5 attempts
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > never blindly retries DATA acceptance ambiguity and requires audited operator evidence
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > multiple worker instances atomically claim only once and concurrent ticks coalesce
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > disabling an existing queue prevents new claims and preserves queued data
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > refuses TLS downgrade and sanitizes actual SMTP auth rejection
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > queues actual notifications without confidential bodies and cancels removed memberships
+ FAIL  tests/mail-outbox.test.ts > SMTP durable outbox using actual loopback TCP > integrated business hooks enqueue in the invitation/reply transaction without sending from the API
+Error: listen EPERM: operation not permitted 127.0.0.1
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/75]⎯
+
+ FAIL  tests/migrations.test.ts > serializes simultaneous API/worker migrations on the same SQLite database
+Error: Command failed: /Users/xm-talen/.hermes/node/bin/node /Users/xm-talen/Desktop/小明/coding/生图生视频/platform/node_modules/tsx/dist/cli.mjs -e import {createDatabaseContext,closeDatabase} from './src/server/db/connection.ts';import {migrateDatabase} from './src/server/db/migrate.ts';const db=createDatabaseContext("/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-migration-race-O6jjyT/race.sqlite");migrateDatabase(db,{migrationsDir:"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-migration-race-O6jjyT/migrations"});closeDatabase(db);
+node:net:1919
+      const error = new UVExceptionWithHostPort(rval, 'listen', address, port);
+                    ^
+
+Error: listen EPERM: operation not permitted /var/folders/lt/701jz3295z19vn2m25937y980000gn/T/tsx-501/14088.pipe
+    at Server.setupListenHandle [as _listen2] (node:net:1919:21)
+    at listenInCluster (node:net:1998:12)
+    at Server.listen (node:net:2120:5)
+    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/%E7%94%9F%E5%9B%BE%E7%94%9F%E8%A7%86%E9%A2%91/platform/node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/cli.mjs:53:32174
+    at new Promise (<anonymous>)
+    at createIpcServer (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/%E7%94%9F%E5%9B%BE%E7%94%9F%E8%A7%86%E9%A2%91/platform/node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/cli.mjs:53:32152)
+    at async file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/%E7%94%9F%E5%9B%BE%E7%94%9F%E8%A7%86%E9%A2%91/platform/node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/cli.mjs:55:542 {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/tsx-501/14088.pipe',
+  port: -1
+}
+
+Node.js v22.23.1
+
+ ❯ node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/cli.mjs:53:32174
+ ❯ createIpcServer node_modules/.pnpm/tsx@4.23.15/node_modules/tsx/dist/cli.mjs:53:32152
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/75]⎯
+
+ FAIL  tests/tasks.test.ts > explicit layer output transactions and media-based estimates > quotes source-video operations using actual duration and extension using newly requested seconds
+Error: spawn ffmpeg ENOENT
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/75]⎯
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 30 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "upgrades the already-applied original 0016 through 0018 without rewriting history or losing accounts and bindings". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "uses official discovery, state, nonce, S256 PKCE and fixed redirects; no identity/token secret persists in plaintext". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid issuer before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid audience before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid authorized party before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid multi audience without authorized party before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid nonce before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid expired before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid future issued before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid unverified email before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid string verified before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects invalid missing subject before creating an identity". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects a token signed by a different private key despite a trusted kid". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "refreshes official JWKS on a new kid and accepts Google legacy issuer spelling". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects discovery endpoint substitution without fetching an arbitrary host". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "fails closed when disabled, incomplete, or still in first-admin setup". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "does not consume a flow for wrong state/browser, but rejects replay after a real completion". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "rejects expired and cancelled flows without exchanging their authorization codes". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "keeps closed registration closed and never automatically links by matching email". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "consumes matching invitations atomically, rejects mismatched verified emails and rolls back registration on seat exhaustion". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "deduplicates concurrent callbacks for the same Google subject and consumes an invitation once". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "preserves verified referral registration rules and attributes once". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "marks Google-only users, rejects password login, and prevents removing their only login method". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "atomically consumes the same callback before any concurrent token exchange". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "requires immediate password confirmation, binds callback to the same unrevoked session, and preserves local email". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "does not link if the confirmed session is revoked during the upstream token exchange". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "expires password-confirmed linking after five minutes and cannot exchange an expired flow". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "refuses cross-account subject reuse and never replaces an existing different Google binding". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "requires password to unlink, revokes other sessions and retains the confirmed local session". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:1919:21
+ ❯ listenInCluster node:net:1998:12
+ ❯ node:net:2207:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:89:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/google-oidc.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "validates same-origin starts, uses HttpOnly cookie binding, redirects only to fixed destinations and never exposes callback code". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  4 failed | 16 passed (20)
+      Tests  45 failed | 233 passed (278)
+     Errors  30 errors
+   Start at  14:30:16
+   Duration  316.12s (tests 98%, import 2%)
+
+[ELIFECYCLE] Test failed. See above for more details.

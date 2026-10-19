@@ -1,0 +1,217 @@
+{
+  "sourceRun": "platform/var/e2e/run-19D8aT",
+  "passed": 4,
+  "failed": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-character-mixed-retained.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "c0efb64b2a544d6b927fde889ea353db3d6c753c337128077b9e7f9e31462a0f"
+    },
+    {
+      "file": "screenshots/desktop-character-video-ar.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "5e9490974cbe750120e63910a55af03ad80e3ac384063b0842d8de766bc6e517"
+    },
+    {
+      "file": "screenshots/desktop-character-video-en.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "521d0dd48214f16e0cf9a12688034f7f7a0b2560dae87f1c44dacf550b109ed8"
+    },
+    {
+      "file": "screenshots/desktop-character-video-preview.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "fcd0f3e1be7ee4053ca50c653589d6df31773c3d74becb9da2b8c5a63dcc8155"
+    },
+    {
+      "file": "screenshots/mobile-character-mixed-retained.png",
+      "pixels": [
+        1170,
+        2661
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "f9c4b4bf2136aaae4e2e5344f37606528bf5f8b446f9a85408b128bc462620f5"
+    },
+    {
+      "file": "screenshots/mobile-character-video-ar.png",
+      "pixels": [
+        1170,
+        2793
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "4330bccc8bb35b274c3c8d12b52985b5f0e9e1ccd94dde5194fe46765455ca68"
+    },
+    {
+      "file": "screenshots/mobile-character-video-en.png",
+      "pixels": [
+        1170,
+        2982
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "2b87c8b24bbbef0b655311b7ec3b0347eebe51bafcb5df260818c60a84f983df"
+    },
+    {
+      "file": "screenshots/mobile-character-video-preview.png",
+      "pixels": [
+        1170,
+        2739
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "3db4e5b768da3c7c3d4df920d823c1f2d0488a4531d408b77bdd44279832f521"
+    },
+    {
+      "file": "screenshots/desktop-character-load-recovery.png",
+      "pixels": [
+        1440,
+        1000
+      ],
+      "cssViewport": [
+        1440,
+        1000
+      ],
+      "sha256": "de330bd8ffc061b3785c82cb4ea9adcc43978a44a49d108665e3977d6946f779"
+    },
+    {
+      "file": "screenshots/mobile-character-load-recovery.png",
+      "pixels": [
+        1170,
+        2739
+      ],
+      "cssViewport": [
+        390,
+        844
+      ],
+      "sha256": "3dc088b999c32d65fdd8198e10796d99b86183a590e97d2369d704f215806262"
+    }
+  ],
+  "uncaughtExceptions": 0,
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/33b8313a-1f3f-4d99-9279-86591e43613f/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/33b8313a-1f3f-4d99-9279-86591e43613f/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/14e76f0e-6062-457b-93e2-28178e21b7dd",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/521c0c11-54d3-474b-9c14-6ed2ab8a5954/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/521c0c11-54d3-474b-9c14-6ed2ab8a5954/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/ede874dc-40ee-4a09-8d59-bfcd9c3fa06d",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/95003e29-11ae-4cff-82ce-6d8c900626af/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/95003e29-11ae-4cff-82ce-6d8c900626af/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/c6477d64-9f6e-4fed-a8d6-a776133ebdd1",
+          "status": 500
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/characters/8f253521-e541-4aeb-acec-fca3ee40c696/authorization",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "path": "/api/v1/characters/8f253521-e541-4aeb-acec-fca3ee40c696/verification",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/assets/72151c3f-2d0a-49cb-a67a-2a31bf310ccc",
+          "status": 500
+        }
+      ]
+    }
+  ],
+  "data": "Fresh temporary database/media per case. Fictional accounts, locally generated 160x120 H.264 video and PNG only. No originals/configuration copied.",
+  "externalCalls": "Blocked. No models, SMS/WeChat/email, payments or identity-provider calls.",
+  "expectedResponses": "Tests intentionally return a local asset-read 500 and delete a referenced asset; cancelled page-navigation/SSE requests remain in diagnostics.",
+  "scope": [
+    "Separate image and video upload slots, real browser decoding/playback, save and reload",
+    "Explicit whole-profile model rejection for mixed references; no project/job/reservation",
+    "English and Arabic controls, Chinese user name/description/asset names retained",
+    "Missing/deleted references retained until explicit removal; original media retained on character delete",
+    "Delayed read blocks save; closed-editor late response ignored; 500 can be retried",
+    "Viewer UI read-only and actual PATCH denied with HTTP 403"
+  ]
+}

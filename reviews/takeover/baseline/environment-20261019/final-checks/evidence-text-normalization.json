@@ -1,0 +1,282 @@
+{
+  "date": "2026-10-19",
+  "purpose": "Remove trailing spaces and redundant EOF blank lines from generated public text evidence so repository whitespace checks can validate it. Test outcomes, assertions, error messages and report data were not altered.",
+  "originalsPreservedPrivatelyAt": "platform/var/takeover/evidence-raw-whitespace-20261019",
+  "files": [
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/brand-person-final-target.txt",
+      "rawSha256": "28354d035ab9fa650c5ce465f049d41ee010279e643ee9d517a7b09ae25c13e1",
+      "normalizedSha256": "f54771c79f81f2097817e9787dce0514fa311040a8278cda7d792aa2755dab39"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-remove-form-red.txt",
+      "rawSha256": "e6db79c84049fa914669615df86469d4f6ef79d6ecb49a0c0bb9f8d905e5562c",
+      "normalizedSha256": "912c87a8d3e6412aefeec6388b1a94fb6c6d0dd26382b73bc6b17e12a4aba1c3"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-video-browser-green.txt",
+      "rawSha256": "50f2d9105acf13755109b2896a8e0541fc95455a80e02e536a111dbdbbb98006",
+      "normalizedSha256": "7c429d6c85f5d800a21eb8cc5014c17bc45155be83994ba14a290d97d378485c"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-video-combined-green.txt",
+      "rawSha256": "cdc59c45087c3d5501e8479031cafcef4497b1ced8d1a4c727fde2dcd620504e",
+      "normalizedSha256": "a4e98623032af4d71d8559d45c91bb1efd02b408ea208fe5a14bc97c44993203"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-video-green.txt",
+      "rawSha256": "f6f5714a4ebcead9360ab862b4146de878759b593414149201da0dbdfd77cd9d",
+      "normalizedSha256": "989a4950952e9daa9b88dddfdf3cc5ca7e676b3f439b18dbe75398df4ad7345d"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-video-patch-green.txt",
+      "rawSha256": "183d65d005a7237312bb554729a25595e0b9ace4d894c6f4172a8caeed9eebb2",
+      "normalizedSha256": "5bc07b5dc3836720104137fa91083fd8cded436649432dbad982c937f4fd4107"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-video-red.txt",
+      "rawSha256": "4afc314d82c4e7b4b077930ecd5ea677f152fa5a91a560939cc10654bec892bc",
+      "normalizedSha256": "7079cd5938f51c5688b8595514e49987361615bd381453ee3a3ac8d9974661d2"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/character-video-ui-red.txt",
+      "rawSha256": "50f83eaa06238bd40c479d3d2d86c0faba39431d791341d1414da239015d2b36",
+      "normalizedSha256": "5985b9be5cbc64b671fd0f7d622e730c233ee1f3ed2e21b047d5c05ec027dda0"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/clean-install-20261016T100141Z/native-probe.txt",
+      "rawSha256": "c6f784aa4fce4ed8c58b1d58134f2d949fa4c433ee8cd2604e95dd9dbcf1b9c7",
+      "normalizedSha256": "87f867c83e86944ef5d32911b241218e4353692a5f87acbda5c2f55416f1a829"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/credits-locale-red.txt",
+      "rawSha256": "a2227336f3f7edbee9c08f392f445e7d0304f413f2796753333da08b8e909f53",
+      "normalizedSha256": "7c4a93e24a0ce0c70da255c0316216e810d3b3d2f86ad208c2b0eb564eb0c635"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-auth-first-green.txt",
+      "rawSha256": "5c15bf86dcccb01f75ce40a8c02da55b748bb0ef5e76d3623909a05c169a18af",
+      "normalizedSha256": "96ef73f90805ed0097dca96a1abc573b02326260f5a4f231e6c80e14e76d322f"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-auth-integration.txt",
+      "rawSha256": "bb790beb9631de71c3daab3c33c12e8d26af3bf4deaf995307c555b02f1b12fb",
+      "normalizedSha256": "d912069b666374f76257a4b885c0d6f423e8d86fa0a084ad6d34bb7a498e593d"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-auth-red.txt",
+      "rawSha256": "cc373c9cb1bf11d10c75c2fbd071cbf3909b404ef6c25e215a61344c7523b036",
+      "normalizedSha256": "f2fcf4222d69426e7736e22446ac3d1677035de8f9995385efa04f92e8443ccd"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-auth-regression.txt",
+      "rawSha256": "7a2ff24f36af5818720854878db11bafee06c751156129666bc0d3e5340b0e4e",
+      "normalizedSha256": "3074b9719a0df49b1e072fd7d359c4939a3daf7527436d90665006d1aece0a17"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-creation-e2e-first.txt",
+      "rawSha256": "0dc3001830d59328f5c5aa2e2657e7a9b9a98d24a55ce17747477f10a47012f3",
+      "normalizedSha256": "2ed8fdacddc880b87965bd3e59b4b94d7e493b39d850835fc449a1cde5c0ced2"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-root-review-green.txt",
+      "rawSha256": "2ba9a33a2a6d30c982066f9739f64f97b9129e8caa51fbd4b5e3fa8d983504c7",
+      "normalizedSha256": "b3b2f17756b6ba22d2dd8b5182b7c2e1b9a4826b46d843b5f9ef704f754e46af"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/identity-root-review-red.txt",
+      "rawSha256": "c9d8610a47915a8a99348474d506acafa89801484c3193370bffb935171a9931",
+      "normalizedSha256": "d358752a8432f9ee25a0b038c34bf689c29d2eaad41f41f3bbb47ab485688dfb"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/install.txt",
+      "rawSha256": "6dd764e6d3eff123c7ad4f2b614f0418b417cf725ecddee62b93d6bfffc0b68f",
+      "normalizedSha256": "ac83d4895e2183d992e9a0ebdf5c5cfe7be87759f349fe41d4a696fadbefc138"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/locale-account-help-red.txt",
+      "rawSha256": "3eea4dbde3e6e7f22338fc24fc20b30bf102f3cd9e443ddab938cecbaf580874",
+      "normalizedSha256": "7f703d84d2055808c1a91ba149b53805f2cf78c2abdd6367e5867d2f85983849"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/notifications-team-red.txt",
+      "rawSha256": "5e513f3c6e3e3f1cffaa4f346583568bb248fe5a05d63d2ff0711f549c51cc11",
+      "normalizedSha256": "6f36b5ffcd096d5826a96a65e3eeb027f8244bf6689449227a11df37669173d4"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-account-cleanup.txt",
+      "rawSha256": "5187aecdd3a57cda0a163d4fdaa506991d41ae603e59cb94d7419df531b4123e",
+      "normalizedSha256": "768b2019f625e963d9c74501902d1931a32d023966f71afabf57afd33fabcb1a"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-account-final.txt",
+      "rawSha256": "439b2f9a66dbc62c17f079689f70a98cd0e2084c46dc3b2d302c0997e0b80f02",
+      "normalizedSha256": "c455dd76de1cf1c8d0cb885ad738cea14f7cce186ade05558b7610b8841b99bb"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-e2e-first.txt",
+      "rawSha256": "ca8475f513e37033fa2838dae8b0689761e6e6029d99c2f590193b7d1d4ccf73",
+      "normalizedSha256": "beb802192a8fb8ed97cec5579af4a37fec92dfaa738c74ef6bbe43f160e71861"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-first-green.txt",
+      "rawSha256": "f1a3b4568279efbd2dbaa6bfdef48201823e61718216113b7314f88c05a354e6",
+      "normalizedSha256": "69a1119d37ee64824d7b3b4e0beaab7503249b23deb01291d6f5e6eae5639cc0"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-full-regression.txt",
+      "rawSha256": "64adedfa14f9add674a13980c19c53557d9156fe1f8d884f452b112956350e8e",
+      "normalizedSha256": "c1de238e9e718217218c6ac61f58fa0019da9227ea0398184128319c4f252183"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-integration-fixed.txt",
+      "rawSha256": "f269986cd47b81a0aded61184f11329122e460e62c1216b547e92d1493371fb9",
+      "normalizedSha256": "2b182b1023ad3a292caac8cdad377d4b4a4f923f33b7eaad3c7b3e0659a35f76"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-integration.txt",
+      "rawSha256": "925ba61aea6b55ae76429d2263c2895914d5b409cd331c962289430013b2ded6",
+      "normalizedSha256": "95d66989ebdd7f53367d366907421ee05541cfc60ba41b0469bacb52dd23ac04"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-media-e2e-desktop.txt",
+      "rawSha256": "42e4527e5ef82bf6c4c8b198fad4b9902bca7a44f2b6316d89bdce0660712eca",
+      "normalizedSha256": "92e4b5e453f1182df244de58fe011d76158ba7a401ea1471f577ee1e1ca9b371"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-media-e2e-round2.txt",
+      "rawSha256": "33e2e3302ab3ab92ecea1cd456aeed0bf09bd55952542d2432c2382b169b82aa",
+      "normalizedSha256": "5d5cf980910bc8ce3755443504b2f03232f766b3489957f8d181e9eeecf84253"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-media-e2e-round3.txt",
+      "rawSha256": "318630bc058f69548e152f0b1211d53a4e0bfa82a7151ccea8bf76834967686d",
+      "normalizedSha256": "1b17cdc32776a4b4e5e926d61b54df9a6c8c280b6a4bebc14d04fa06f7753575"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-media-e2e-round4.txt",
+      "rawSha256": "7d54293f0eedcb32c7a75db97abce1ee237f98e0d4556fe0f34fcbf5e5969d52",
+      "normalizedSha256": "546ed8145dea14fe6ce56b90a3ec3ddf745fd85d3dea95856f7f09634a95558d"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/password-red.txt",
+      "rawSha256": "4270c7e090c5563b76be21f8839b1525ae74ae530e061bf9973c36bf471f3942",
+      "normalizedSha256": "49652b16c077bc3f28f2e0451c11bc228e9545e8ee09f7e760d353a7fd2b9dd3"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/product-errors-final.txt",
+      "rawSha256": "40990a23e010b8179e29cb7132ea4e73fb3243eb067f448422292f4c3ac7e592",
+      "normalizedSha256": "d6258d6e5f0262db852e74b2918dd71f40e992f189c46845d725087576a182c2"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/team-fixture-media-rerun.txt",
+      "rawSha256": "4cc4c20c75d94e4a806fb569c1f40d7c1944d8dc2ff23f79a4bf142e6d9c0bb6",
+      "normalizedSha256": "6363b01f9a8d0779b8cab71942feb29c091ac6aa0b50596416b479616bdb2eee"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/team-fixture-regressions.txt",
+      "rawSha256": "6d886e437c5b511ee07b72338e7b1a29686f1aa20bc7fe15eaa4565c2f4c91ec",
+      "normalizedSha256": "665fd38e4c4d8d3bfc82a9f33c047503d4e7cfe1ae6155da219e02ed2ec4866b"
+    },
+    {
+      "file": "reviews/takeover/baseline/environment-20261016/test-media.txt",
+      "rawSha256": "86a615b1f95396f9dc1f25a767c44db37c39f063a08518d3aa0e9e23f7d806e4",
+      "normalizedSha256": "c136a2ea3cf2ec3ad4dd7bcace7a0199ebd9b265921c1d17b25276f0cc7a9b20"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084746Z/report/data/1c6a94f2b4dacd422b24582c57a2a743702591e7.md",
+      "rawSha256": "1d6d40f024726227cba45e5a1de4a7601be3b0874a59272ba8e8579db05dfc09",
+      "normalizedSha256": "03b19ea1daae130bccf8fe9bfc1acddab15fe93f4f280908ba0364cf94603a9a"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084746Z/report/data/b0dffbc038258f8dba0e0f5eba32ebfa76f3e157.md",
+      "rawSha256": "03ae313d77592452a9712b6ef1de16ab2f4c492724aa54d470e1ed309cd49313",
+      "normalizedSha256": "e42f899ed59633056590892e157c549a5ff649c0611f036117a3d47bf8343a55"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084746Z/report/data/bf71913544dcc07442ae129ba27dc34efab53507.md",
+      "rawSha256": "7f57af4bc7881e4f5be27db6936188ddb712c8a544148361e7b3ae926c3b9fe6",
+      "normalizedSha256": "a440980643623fabbb8f09c5e85aa9eaac47dbfac118cbe2925194a32271ba5d"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084746Z/report/data/c578ef00c99af0807fe5a0d16f9a33b60a491338.md",
+      "rawSha256": "f768ffadd93850f3222c2e9900454d757de096b5c420816642d23917829ec748",
+      "normalizedSha256": "cbff6558f779d32024465380960f79f7255082bdaaed7c163743acacfa236127"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T084746Z/report/data/e4c4b6eb15291b6798233599e936dce33423b056.md",
+      "rawSha256": "7b322908cf8900cbad9a06d7dd75d26afca0d6f0b808ebdea58b4b09c3fc87e4",
+      "normalizedSha256": "519d2ab08def56ccd2928962071a5376ab42ff28228808e0ff046d489d205851"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090051Z/report/data/52cea7ed735d2607d7e512603135d313013ad4c7.md",
+      "rawSha256": "1877b96615b7a20570701aff1ceedc93138f79bfef45f32832300f085c7210cf",
+      "normalizedSha256": "63198d0484ad8b72f367ab7d1755e54597504588e69ce4316c9ec817f3d07786"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090051Z/report/data/651918bb2857a3da2a2cae95f8dcd97b65d75a5d.md",
+      "rawSha256": "c830a5f40afda3c30826d708a897e802c57295d17a357c9ec5baba6167cd25d0",
+      "normalizedSha256": "c1516fcf54cd7703dffb58ec7eb2e7dd5b35764d10c4bb542f52cb2918f40620"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090051Z/report/data/6dcb49823fad8421156f0b24aa371149faf30ce6.md",
+      "rawSha256": "a322e37a34ed257d7273404b9f969df9e5b95276325f4683fcf7593cff93e877",
+      "normalizedSha256": "677d1d38ad7d3a32d9c6206388804debf7c7a57725083de55555819f2a0c00a5"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261016T090051Z/report/data/e5013d8d8a2dd41f47d8fb522de9d5b310ebdc4e.md",
+      "rawSha256": "07dd326c294d7b4708d5560cde23b5c3756426b3fbca6e3c6ffa2e5168a10ea7",
+      "normalizedSha256": "76b4b960bd99daa4be50d0cf6f02c1ee47be9d1ec06c566bc61d2120ea44bc1e"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-library-canvas-round1/report/data/5f91b194fbb5693cf7dd6285696229cef2f8909f.md",
+      "rawSha256": "711fe0855571a8e322d9b5de3d7850098f66a5f9dc85ced341ecb94cfa11cda2",
+      "normalizedSha256": "d439a48fec9e25343b4cfc922aea999e6a9785a715fce5ef496613cc3ee615c4"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-library-canvas-round1/report/data/81c14aac896d3a511c3b6f8b895fec225d91bf7a.md",
+      "rawSha256": "ee067260506158daef75446cf9edb08bcb58b58fece6be0727a2ac1c19509f82",
+      "normalizedSha256": "cda64ad25a3f1fd1eef755c6f692deed966743456d7d4d8aff650283e745e929"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-library-canvas-round1/report/data/94009b9d42838446ec1e76eb25afaa95d1fd0ae1.md",
+      "rawSha256": "34567929e1a42f45f2a03bdecc871a639013f0d7ff853f45c416b1d848e33f11",
+      "normalizedSha256": "dcff473f5b9cf030789debeada1dea7e44285759a084c9f271907637ccb3f112"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-library-canvas-round1/report/data/aad005987f966cbeb68e314732bdd5fb367b7eea.md",
+      "rawSha256": "d71720877125a7433007639b2c5500f679387a253419561ec4fce5fd4c18d252",
+      "normalizedSha256": "b0503ea317ebbcaa978fcd254a7250862cbf62cd602f257059ced741fe800c51"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-library-canvas-round2/report/data/0fe15d9de847adff66f313e2b7a62a12153821fe.md",
+      "rawSha256": "06a68d9272f0bceed501c20ba7c63a2bf5755c9373dc4531e1db9ab17dc9add7",
+      "normalizedSha256": "25ffa036695d4ac653d0ba128aa92adbf6285982ff349774640ae0e0ecc0bb99"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-library-canvas-round2/report/data/e85fdbd06d4695d611e36ea35c248a3910ea580b.md",
+      "rawSha256": "f3b2ffa991b36b3f2f2df1a0420f364740fc238bee1f94338589376d064f6586",
+      "normalizedSha256": "89f2475681053adce8fb9a4b02d84a1a4800b62794fddb47fbbd285bf6a3059b"
+    },
+    {
+      "file": "reviews/takeover/e2e/20261019-mobile-search-red/report/data/611a91090a658a017d3976fc26f87f71cf5742cd.md",
+      "rawSha256": "3ac753cf0e92efb54b89aff408659d0f2aa2121c5cfc4585119589cdf1f58cff",
+      "normalizedSha256": "50e4bd7a8b2af36f28a4237f6926000fbbcd0b51519d945f4b2657adec231011"
+    },
+    {
+      "file": "reviews/takeover/evidence/credits-locale/product-messages-tests.txt",
+      "rawSha256": "3570dc8729eb4a514f2965e39643da08f7927cba84657ed52e21ed1399a2cb5b",
+      "normalizedSha256": "0620d673a971b196324f0f0814bd11dfd7951efabb4e69c5bf5620e7296f8926"
+    },
+    {
+      "file": "reviews/takeover/evidence/team-account-support/yingzao-team-account-support-tests.txt",
+      "rawSha256": "fefb20b486a7a2c26e4acfa312d3139577869d6bd44b4bd405503eef99ff9cff",
+      "normalizedSha256": "ab08638518a6693b37293df4eb40c2f3b559480f70484d00977b420c66d57df0"
+    },
+    {
+      "file": "reviews/takeover/referral-policy-implementation.md",
+      "rawSha256": "0f7910d858f7d281676adb05bae2069b5c194b13057709b73c8471d0d000d517",
+      "normalizedSha256": "f278bf8f8c29bbf20c027d060c15443768d716812655e035b461dcb635be42b8"
+    }
+  ]
+}
