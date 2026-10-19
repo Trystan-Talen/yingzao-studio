@@ -18,8 +18,14 @@ const sourceLabels: Record<CreditBucketDto['source'], string> = {
 const statusLabels = { active: '有效', archived: '已封存', expired: '已失效' };
 const pageSize = 20;
 
-export function CreditBuckets() {
-  const query = useApi<CreditBucketDto[]>('/credits/buckets', true, 30000);
+export function CreditBuckets({
+  endpoint = '/credits/buckets',
+  apiAccount = false,
+}: {
+  endpoint?: string;
+  apiAccount?: boolean;
+}) {
+  const query = useApi<CreditBucketDto[]>(endpoint, true, 30000);
   const [status, setStatus] = useState('all');
   const [page, setPage] = useState(1);
   const all = query.data ?? [];
@@ -54,7 +60,9 @@ export function CreditBuckets() {
       </div>
       <Notice>
         {t(
-          '会员额度到期后封存 3 个月；封存期内有效续费可恢复，超过封存期清零。额度包自付款起有效 1 年，再次购买会延长尚未失效的同类额度包。',
+          apiAccount
+            ? '接口额度包自付款起有效 1 年，再次购买会延长本账户尚未失效的额度包。网页会员额度不计入此账户。'
+            : '每笔会员额度分别遵循对应合同的到期、封存和续费规则；请查看对应订单条款。额度包自付款起有效 1 年，再次购买会延长尚未失效的同类额度包。',
         )}
       </Notice>
       {query.isLoading ? (

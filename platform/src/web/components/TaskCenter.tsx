@@ -1,8 +1,10 @@
+import type { AssetDto } from '../../contracts/core';
+import { ResultComparison } from './ResultComparison';
 import { t } from '../lib/i18n';
 import { OCRResultPanel } from './OCRResultPanel';
 import { TaskReconcile } from './TaskReconcile';
 import { useStudio } from '../context';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Download, ExternalLink, RefreshCw, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -18,6 +20,9 @@ import {
 } from '../lib/api';
 import { operationName, statusLabels, type Job, type Quote } from '../lib/tasks';
 import { AssetVisual } from './AssetPicker';
+import { JobSubmit } from './JobSubmit';
+import { designPlanResultSchema, type DesignPlan } from '../../contracts/design-plan';
+import { DesignPlanResult } from './DesignPlanResult';
 import {
   Badge,
   Button,
@@ -31,13 +36,26 @@ import {
   Pagination,
   useAction,
 } from './ui';
-export function JobCard({ job }: { job: Job }) {
+type AcceptPlan = (plan: DesignPlan, directionIndex: number) => void;
+export function JobCard({
+  job,
+  onAcceptPlan,
+  onAcceptAsset,
+}: {
+  job: Job;
+  onAcceptPlan?: AcceptPlan;
+  onAcceptAsset?: (asset: AssetDto) => void;
+}) {
   const { isAdmin, session } = useStudio();
   const action = useAction();
   const refresh = useRefresh();
   const [detail, setDetail] = useState(false);
-  const [retryQuote, setRetryQuote] = useState<Quote | null>(null);
-  const retryRequestId = useRef<string | null>(null);
+  const plans = new Map(
+    job.items.flatMap((item) => {
+      const result = designPlanResultSchema.safeParse(item.resultData);
+      return result.success ? [[item.id, result.data.plan] as const] : [];
+    }),
+  );
   return (
     <article className="job-card">
       <div className="job-heading">
@@ -63,7 +81,11 @@ export function JobCard({ job }: { job: Job }) {
       {job.outputAssets.length > 0 && (
         <div className="job-outputs">
           {job.outputAssets.map((asset) => (
-            <button key={asset.id} onClick={() => setDetail(true)} aria-label={`查看${asset.name}`}>
+            <button
+              key={asset.id}
+              onClick={() => setDetail(true)}
+              aria-label={`${t('查看')} ${asset.name}`}
+            >
               <AssetVisual asset={asset} />
             </button>
           ))}
@@ -75,7 +97,7 @@ export function JobCard({ job }: { job: Job }) {
           {t('额度')}
         </span>
         <Button variant="ghost" onClick={() => setDetail(true)}>
-          {t('查看详情')}
+          {t(plans.size ? '查看设计方案' : '查看详情')}
         </Button>
         {['queued', 'running'].includes(job.status) && (
           <Button
@@ -97,7 +119,7 @@ export function JobCard({ job }: { job: Job }) {
         open={detail}
         onClose={() => setDetail(false)}
         title={t('任务详情')}
-        description={`任务 ${job.id}`}
+        description={`${t('任务')} ${job.id}`}
         wide
       >
         <dl className="detail-list">
@@ -107,7 +129,7 @@ export function JobCard({ job }: { job: Job }) {
           </div>
           <div>
             <dt>{t('任务说明')}</dt>
-            <dd>{job.prompt || '未填写描述'}</dd>
+            <dd>{job.prompt || t('未填写描述')}</dd>
           </div>
           <div>
             <dt>{t('已结算')}</dt>
@@ -123,6 +145,13 @@ export function JobCard({ job }: { job: Job }) {
             {isAdmin && <TaskReconcile job={job} />}
           </Notice>
         )}
+        {!!plans.size && !onAcceptPlan && (
+          <Notice>
+            {job.projectId
+              ? t('这里可查看、修改并复制方案。进入对应项目后，可从作品卡选择方向应用到创作草稿。')
+              : t('这里可查看、修改并复制方案。此任务未关联项目，请将方案复制到新的创作草稿。')}
+          </Notice>
+        )}
         <div className="task-items">
           {job.items.map((item) => (
             <div key={item.id}>
@@ -132,8 +161,37 @@ export function JobCard({ job }: { job: Job }) {
                 {t('项')}
               </span>
               <Badge>{t(statusLabels[item.status] ?? item.status)}</Badge>
+              {!!item.sourceAssetIds?.length && (
+                <p className="field-hint">
+                  {t('原图')}{' '}
+                  {item.sourceAssetIds
+                    .map((id) => `${job.input.assetIds.indexOf(id) + 1 || id.slice(-8)}`)
+                    .join('、')}
+                  {!!item.referenceAssetIds?.length &&
+                    ` → ${t('参考')} ${item.referenceAssetIds.map((id) => `${job.input.referenceAssetIds.indexOf(id) + 1 || id.slice(-8)}`).join('、')}`}
+                </p>
+              )}
+              {item.retryJobId && (
+                <p className="field-hint">
+                  {t('已建立重试任务')} · {item.retryJobId.slice(-8)}
+                  {t('，不会从本项重复发起。')}
+                </p>
+              )}
+              {item.retryable === true && <Badge tone="orange">{t('可重试')}</Badge>}
               {item.errorMessage && <p className="field-error">{item.errorMessage}</p>}
-              {item.resultText && (
+              {plans.has(item.id) ? (
+                <DesignPlanResult
+                  plan={plans.get(item.id)!}
+                  onApply={
+                    onAcceptPlan
+                      ? (plan, direction) => {
+                          onAcceptPlan(plan, direction);
+                          setDetail(false);
+                        }
+                      : undefined
+                  }
+                />
+              ) : item.resultText ? (
                 <div className="task-text-result">
                   {job.operation === 'image.ocr' ? (
                     <OCRResultPanel text={item.resultText} jobId={job.id} itemId={item.id} />
@@ -152,7 +210,7 @@ export function JobCard({ job }: { job: Job }) {
                     {t('复制文本')}
                   </Button>
                 </div>
-              )}
+              ) : null}
             </div>
           ))}
         </div>
@@ -162,6 +220,29 @@ export function JobCard({ job }: { job: Job }) {
               <video src={asset.originalUrl} controls />
             ) : (
               <img src={asset.previewUrl ?? asset.originalUrl} alt={asset.name} />
+            )}
+            <ResultComparison
+              sourceIds={[
+                ...new Set(
+                  job.items.find(
+                    (item) => item.assetIds.includes(asset.id) || item.assetId === asset.id,
+                  )?.sourceAssetIds ?? [],
+                ),
+              ]}
+              result={asset}
+            />
+            {onAcceptAsset && (
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  void action.run(async () => {
+                    onAcceptAsset(asset);
+                    setDetail(false);
+                  })
+                }
+              >
+                {t('作为参考继续创作')}
+              </Button>
             )}
             <Button
               variant="secondary"
@@ -226,76 +307,54 @@ export function JobCard({ job }: { job: Job }) {
             onClick={() => setDetail(false)}
           >
             <ExternalLink size={15} />
-            {t('打开项目')}
+            {t(plans.size && !onAcceptPlan ? '打开项目采用方案' : '打开项目')}
           </Link>
         )}
         {['failed', 'partial', 'cancelled'].includes(job.status) && (
           <Notice>
-            {t('已完成的素材会保留，只重试未成功的条目，不会重复处理成功项。')}
-            <Button
-              variant="secondary"
-              busy={action.busy}
-              onClick={() =>
-                void action.run(async () => {
-                  setRetryQuote(await post<Quote>(`/jobs/${job.id}/retry-quote`));
-                  retryRequestId.current = crypto.randomUUID();
-                })
-              }
-            >
-              {t('为未成功项重新估价')}
-            </Button>
+            {t('成功结果会保留。仅重试可重试且尚未建立重试任务的条目；结果待核对项需先核对。')}
+            <JobSubmit
+              forceConfirmation
+              input={job.input}
+              recoveryScope={`retry:${job.id}`}
+              quoteFactory={() => post<Quote>(`/jobs/${job.id}/retry-quote`)}
+              operation={{
+                id: job.operation,
+                name: operationName(job.operation),
+                providerId: job.providerId,
+                available: true,
+                reason: null,
+                models: [],
+                priceCredits: 0,
+                unit: 'request',
+                liveVerified: false,
+              }}
+              valid={job.items.some(
+                (item) =>
+                  item.retryable ??
+                  (['failed', 'cancelled'].includes(item.status) && !item.retryJobId),
+              )}
+              label={t('为可重试项重新估价')}
+              onCreated={() => {
+                setDetail(false);
+                void refresh();
+              }}
+            />
           </Notice>
-        )}
-      </Modal>
-      <Modal
-        open={!!retryQuote}
-        onClose={() => {
-          if (!action.busy) setRetryQuote(null);
-        }}
-        title={t('确认重试未成功项')}
-        description={t('已经成功的条目不会再次提交。')}
-      >
-        {retryQuote && (
-          <>
-            <dl className="detail-list">
-              <div>
-                <dt>{t('本次预留上限')}</dt>
-                <dd>
-                  {retryQuote.maxCredits}
-                  {t('额度')}
-                </dd>
-              </div>
-              <div>
-                <dt>{t('处理数量')}</dt>
-                <dd>{retryQuote.units}</dd>
-              </div>
-            </dl>
-            <div className="modal-actions">
-              <Button
-                busy={action.busy}
-                onClick={() =>
-                  void action.run(async () => {
-                    await post('/jobs', {
-                      input: job.input,
-                      quoteId: retryQuote.id,
-                      clientRequestId: retryRequestId.current,
-                    });
-                    setRetryQuote(null);
-                    setDetail(false);
-                    await refresh();
-                  }, '重试任务已提交')
-                }
-              >
-                {t('确认重试')}
-              </Button>
-            </div>
-          </>
         )}
       </Modal>
     </article>
   );
 }
-export function TaskCenter({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function TaskCenter({
+  open,
+  onClose,
+  onAcceptPlan,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onAcceptPlan?: AcceptPlan;
+}) {
   const { workspace, session } = useStudio();
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({
@@ -473,7 +532,7 @@ export function TaskCenter({ open, onClose }: { open: boolean; onClose: () => vo
               />
               {t('选择此任务')}
             </label>
-            <JobCard job={job} />
+            <JobCard job={job} onAcceptPlan={onAcceptPlan} />
           </div>
         ))
       ) : (

@@ -437,6 +437,11 @@ export function CanvasEditor({
       if (
         readonlyRef.current ||
         isTyping(event.target) ||
+        (event.target instanceof Element &&
+          (!!event.target.closest('[role="tablist"]') ||
+            (!event.metaKey &&
+              !event.ctrlKey &&
+              !!event.target.closest('button,a,[role="button"],[role="slider"]')))) ||
         (canvasRef.current?.getActiveObject() instanceof Textbox &&
           (canvasRef.current.getActiveObject() as Textbox).isEditing)
       )

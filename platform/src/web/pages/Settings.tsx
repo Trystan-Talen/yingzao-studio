@@ -21,6 +21,8 @@ import {
 import { useStudio } from '../context';
 import { GoogleAccount, GoogleCallbackNotice } from '../components/GoogleAccount';
 import { MailDeliveryStatus } from '../components/MailDeliveryStatus';
+import { PasswordSecurity } from '../components/PasswordSecurity';
+import { IdentityAccounts } from '../components/IdentityAccounts';
 export function Settings() {
   const { isAdmin } = useStudio();
   const [search, setSearch] = useSearchParams();
@@ -193,9 +195,12 @@ function ProfileSettings() {
           {t('退出其他会话')}
         </Button>
         <hr />
+        <PasswordSecurity />
+        <hr />
         <h3>{t('外部账户登录')}</h3>
         <p className="muted">{t('仅展示当前实例实际可用的登录方式，不会发送演示验证码。')}</p>
         <GoogleAccount />
+        <IdentityAccounts />
       </section>
     </div>
   );

@@ -45,6 +45,7 @@ export function IconButton({
 }: ButtonHTMLAttributes<HTMLButtonElement> & { label: string }) {
   return (
     <button
+      type="button"
       {...props}
       className={`icon-button ${props.className ?? ''}`}
       aria-label={label}
@@ -109,6 +110,7 @@ export function Modal({
         <Dialog.Overlay className="modal-overlay" />
         <Dialog.Content
           className={`modal ${wide ? 'wide' : ''}`}
+          aria-label={title}
           aria-describedby={description ? 'dialog-desc' : undefined}
         >
           <div className="modal-heading">
@@ -201,7 +203,7 @@ export function ErrorState({ error, retry }: { error: unknown; retry?: () => unk
         <strong>{t('暂时无法完成')}</strong>
         <p>{errorMessage(error)}</p>
         {retry && (
-          <Button variant="secondary" onClick={() => void retry()}>
+          <Button type="button" variant="secondary" onClick={() => void retry()}>
             {t('重试')}
           </Button>
         )}

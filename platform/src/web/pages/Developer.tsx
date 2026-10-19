@@ -2,6 +2,8 @@ import { t } from '../lib/i18n';
 import { useState } from 'react';
 import { Code2, Copy, KeyRound, Plus, ShieldCheck, Trash2 } from 'lucide-react';
 import { API_SCOPES } from '../../contracts/core';
+import type { CreditDto } from '../../contracts/jobs';
+import { Link } from 'react-router-dom';
 import { dateTime, post, remove, useApi, useRefresh, type Page } from '../lib/api';
 import {
   Badge,
@@ -32,6 +34,7 @@ export function Developer() {
   const { isAdmin, workspace } = useStudio();
   const [page, setPage] = useState(1);
   const keys = useApi<Page<ApiKey>>(`/api-keys?pageSize=100&page=${page}`, isAdmin);
+  const apiCredits = useApi<CreditDto>('/credits/api', isAdmin, 15000);
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState('');
   const [scopes, setScopes] = useState<string[]>(['projects:read', 'assets:read', 'jobs:read']);
@@ -65,7 +68,7 @@ export function Developer() {
           <h2>{t('一套 API，连接素材与创作。')}</h2>
           <p>
             {t(
-              '访问项目与素材、提交真实任务、查询执行状态。API 与工作台使用相同的空间权限和额度规则。',
+              '访问项目与素材、提交真实任务、查询执行状态。接口密钥沿用空间权限，任务使用独立接口额度。',
             )}
           </p>
         </div>
@@ -73,6 +76,40 @@ export function Developer() {
           {t('查看 API 文档 ↗')}
         </a>
       </div>
+      {isAdmin && (
+        <section className="panel settings-panel section-spaced">
+          <h2>{t('接口独立额度账户')}</h2>
+          <p className="muted">{t('平台创作额度，与网页账户分别充值和结算，不是现金余额。')}</p>
+          {apiCredits.isLoading ? (
+            <Loading />
+          ) : apiCredits.error ? (
+            <ErrorState error={apiCredits.error} retry={apiCredits.refetch} />
+          ) : (
+            <div className="stat-grid">
+              <div className="stat-card">
+                <span>{t('可用额度')}</span>
+                <strong>{apiCredits.data?.available.toLocaleString() ?? '—'}</strong>
+              </div>
+              <div className="stat-card">
+                <span>{t('任务预留')}</span>
+                <strong>{apiCredits.data?.reserved.toLocaleString() ?? '—'}</strong>
+              </div>
+              <div className="stat-card">
+                <span>{t('累计使用')}</span>
+                <strong>{apiCredits.data?.spent.toLocaleString() ?? '—'}</strong>
+              </div>
+            </div>
+          )}
+          <div className="inline-actions section-spaced">
+            <Link className="button secondary" to="/usage?account=api&tab=plans">
+              {t('充值接口额度')}
+            </Link>
+            <Link className="button secondary" to="/usage?account=api&tab=ledger">
+              {t('查看接口用量')}
+            </Link>
+          </div>
+        </section>
+      )}
       {!isAdmin ? (
         <Empty icon={<ShieldCheck size={32} />} title={t('只有创建者与管理员可以管理密钥')} />
       ) : keys.isLoading ? (

@@ -5,6 +5,7 @@ import type { AssetDto } from '../../contracts/core';
 import type { JobInput } from '../../contracts/jobs';
 import { IMAGE_RATIOS } from '../../contracts/catalog';
 import { api } from '../lib/api';
+import { restoreAssets } from '../lib/creation-recovery';
 import { AssetPicker } from './AssetPicker';
 import { Button, Field, Notice } from './ui';
 export type MaterialDesign = NonNullable<JobInput['options']['designs']>[number];
@@ -43,14 +44,20 @@ export function DesignPlanner({
 }) {
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [error, setError] = useState('');
+  const [failedIds, setFailedIds] = useState<string[]>([]);
   const ids = [...new Set(value.flatMap((v) => v.assetIds))];
   useEffect(() => {
     let active = true;
-    void Promise.all(ids.map((id) => api<AssetDto>(`/assets/${id}`)))
-      .then((items) => {
+    void restoreAssets(ids, (id) => api<AssetDto>(`/assets/${id}`))
+      .then((result) => {
         if (active) {
-          setAssets(items);
-          setError('');
+          setAssets(result.assets);
+          setFailedIds(result.failures.map((failure) => failure.id));
+          setError(
+            result.ready
+              ? ''
+              : t('部分模块参考素材未恢复；现有引用仍保留，请在上方重试或明确移除。'),
+          );
         }
       })
       .catch((e) => {
@@ -165,9 +172,31 @@ export function DesignPlanner({
               setAssets((previous) => [
                 ...new Map([...previous, ...items].map((a) => [a.id, a])).values(),
               ]);
-              patch(item.id, { assetIds: items.map((a) => a.id) });
+              patch(item.id, {
+                assetIds: [
+                  ...items.map((a) => a.id),
+                  ...item.assetIds.filter((id) => !assets.some((asset) => asset.id === id)),
+                ],
+              });
             }}
           />
+          {item.assetIds
+            .filter((id) => failedIds.includes(id))
+            .map((id) => (
+              <div key={id} className="inline-actions">
+                <span className="field-error">
+                  {t('参考')} {id.slice(-8)} {t('暂不可用')}
+                </span>
+                <Button
+                  variant="ghost"
+                  onClick={() =>
+                    patch(item.id, { assetIds: item.assetIds.filter((value) => value !== id) })
+                  }
+                >
+                  {t('移除失效参考')}
+                </Button>
+              </div>
+            ))}
         </article>
       ))}
       <Button

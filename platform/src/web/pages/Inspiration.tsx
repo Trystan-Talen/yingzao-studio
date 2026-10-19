@@ -1,7 +1,7 @@
 import { t } from '../lib/i18n';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Bookmark, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Composer } from '../components/Composer';
 import {
   Badge,
@@ -14,18 +14,71 @@ import {
   Modal,
   PageHeader,
   Pagination,
+  Notice,
   useAction,
 } from '../components/ui';
-import { post, put, patch, qs, useApi, useRefresh, type Page } from '../lib/api';
-import type { AssetDto, ProjectDto } from '../../contracts/core';
-import type { InspirationDto } from '../../contracts/inspirations';
-import { jobInputSchema } from '../../contracts/jobs';
+import { api, post, put, patch, qs, useApi, useRefresh, type Page } from '../lib/api';
+import type { AssetDto } from '../../contracts/core';
+import {
+  reuseInspirationSchema,
+  type InspirationDto,
+  type InspirationReuseDto,
+  videoInspirationCategorySchema,
+  VIDEO_INSPIRATION_LABELS,
+} from '../../contracts/inspirations';
 import { useStudio } from '../context';
 import { AssetPicker } from '../components/AssetPicker';
 export function Inspiration() {
-  const { isAdmin, session } = useStudio();
+  const { isAdmin, session, workspace } = useStudio();
+  const reuseKey = `yingzao:inspiration-reuse:v1:${session?.user.id}:${workspace?.id}`;
+  const currentScope = useRef<string | null>(reuseKey);
+  currentScope.current = reuseKey;
+  const [pendingReuse, setPendingReuse] = useState<{
+    key: string;
+    id: string;
+    requestId: string;
+    prompt: string;
+    language: string;
+    intent: 'create' | 'replicate';
+  } | null>(null);
+  const [reuseError, setReuseError] = useState('');
+  useEffect(() => {
+    currentScope.current = reuseKey;
+    try {
+      const raw = localStorage.getItem(reuseKey);
+      if (!raw) setPendingReuse(null);
+      else {
+        const saved = JSON.parse(raw) as Record<string, unknown>;
+        if (typeof saved.id !== 'string' || !saved.id || saved.id.length > 80)
+          throw new Error('invalid inspiration');
+        const request = reuseInspirationSchema.parse({
+          requestId: saved.requestId,
+          prompt: saved.prompt,
+          language: saved.language,
+          intent: saved.intent,
+        });
+        setPendingReuse({ key: reuseKey, id: saved.id, ...request });
+      }
+      setReuseError('');
+    } catch {
+      setReuseError('上次灵感复用记录无法读取，请先检查项目列表，避免重复创建。');
+    }
+    return () => {
+      currentScope.current = null;
+    };
+  }, [reuseKey]);
+  const pending = pendingReuse?.key === reuseKey ? pendingReuse : null;
   const [category, setCategory] = useState('');
-  const [kind, setKind] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const kind = ['image', 'video'].includes(searchParams.get('kind') ?? '')
+    ? searchParams.get('kind')!
+    : '';
+  const parsedVideoCategory = videoInspirationCategorySchema.safeParse(
+    searchParams.get('videoCategory'),
+  );
+  const videoCategory =
+    kind === 'video' && parsedVideoCategory.success ? parsedVideoCategory.data : '';
+  const [newVideoCategory, setNewVideoCategory] = useState('');
   const [platform, setPlatform] = useState('');
   const [page, setPage] = useState(1);
   const [showArchived, setShowArchived] = useState(false);
@@ -45,7 +98,7 @@ export function Inspiration() {
   const [q, setQ] = useState('');
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const catalog = useApi<Page<InspirationDto>>(
-    `/inspirations${qs({ page, pageSize: 12, q, category, kind, platform, favorite: onlyFavorites || undefined, archived: showArchived || undefined })}`,
+    `/inspirations${qs({ page, pageSize: 12, q, category, kind, videoCategory, platform, favorite: onlyFavorites || undefined, archived: showArchived || undefined })}`,
   );
   const facets = useApi<{ categories: string[]; platforms: string[] }>('/inspirations/facets');
   const favoriteSet = new Set(catalog.data?.items.filter((i) => i.isFavorite).map((i) => i.id));
@@ -61,10 +114,12 @@ export function Inspiration() {
         ...form,
         assetId: asset.id,
         kind: asset.kind,
+        videoCategory: asset.kind === 'video' ? newVideoCategory || null : null,
         color: '#eaf1ec',
       });
       setManage(false);
       setNewAssets([]);
+      setNewVideoCategory('');
       setForm({
         title: '',
         category: '',
@@ -78,45 +133,48 @@ export function Inspiration() {
       await refresh();
     });
   }
-  async function create() {
-    if (!selected) return;
+  async function create(resume = false, intent: 'create' | 'replicate' = 'create') {
+    if (!workspace || (!selected && !resume)) return;
+    const targetWorkspace = workspace.id,
+      targetKey = reuseKey;
     await action.run(async () => {
-      const project = await post<ProjectDto>('/projects', {
-        name: selected.title,
-        kind: selected.kind,
-        description: prompt,
-      });
-      await post(`/projects/${project.id}/messages`, {
-        role: 'user',
-        content: prompt,
-        metadata: {
-          inspirationId: selected.id,
-          draft: jobInputSchema.parse({
-            operation: selected.kind === 'video' ? 'video.generate' : 'image.generate',
-            providerId: selected.kind === 'video' ? 'fal' : 'openai',
+      if (pending && !resume) throw new Error('请先找回上次复用结果，再开始新的创作。');
+      const request = resume
+        ? pending
+        : {
+            key: targetKey,
+            id: selected!.id,
+            requestId: crypto.randomUUID(),
             prompt,
-            assetIds: selected.assetId ? [selected.assetId] : [],
-            options: {
-              ...selected.options,
-              ratio: selected.ratio,
-              platform: selected.platform,
-              language: session?.user.preferences.defaultCreationLanguage ?? 'zh-CN',
-              kind: selected.kind === 'video' ? 'product' : 'single',
-              ...(selected.kind === 'video'
-                ? selected.assetId
-                  ? {
-                      model: 'kling-o3-4k-reference',
-                      resolution: '4K',
-                      referenceMode: 'all',
-                      duration: 5,
-                    }
-                  : { model: 'wan-2.6', resolution: '720p', duration: 5 }
-                : {}),
-            },
-          }),
-        },
+            language: session?.user.preferences.defaultCreationLanguage ?? 'zh-CN',
+            intent,
+          };
+      if (!request) return;
+      const payload = reuseInspirationSchema.parse({
+        requestId: request.requestId,
+        prompt: request.prompt,
+        language: request.language,
+        intent: request.intent,
       });
-      navigate(`/workbench/${project.id}`);
+      localStorage.setItem(targetKey, JSON.stringify(request));
+      setPendingReuse(request);
+      setSelected(null);
+      const result = await api<InspirationReuseDto>(
+        `/inspirations/${encodeURIComponent(request.id)}/reuse`,
+        {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        },
+        targetWorkspace,
+      );
+      localStorage.removeItem(targetKey);
+      if (currentScope.current !== targetKey) return;
+      setPendingReuse(null);
+      navigate(
+        result.draft.operation === 'video.motion-replica'
+          ? `/tools/video-replica?projectId=${result.project.id}`
+          : `/workbench/${result.project.id}`,
+      );
     });
   }
   return (
@@ -132,6 +190,30 @@ export function Inspiration() {
           </span>
         }
       />
+      {(pending || reuseError) && (
+        <Notice tone="warning">
+          <p>{reuseError || `上次灵感复用结果待确认：${pending?.prompt.slice(0, 80)}`}</p>
+          <p>继续会使用原请求编号找回同一个项目，不会调用模型。</p>
+          {pending && (
+            <Button busy={action.busy} variant="secondary" onClick={() => void create(true)}>
+              继续上次灵感复用
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            disabled={action.busy}
+            onClick={() =>
+              void action.run(async () => {
+                localStorage.removeItem(reuseKey);
+                setPendingReuse(null);
+                setReuseError('');
+              })
+            }
+          >
+            已检查项目，清除复用记录
+          </Button>
+        </Notice>
+      )}
       <Composer />
       <section className="inspiration-section">
         <div className="section-heading">
@@ -189,7 +271,17 @@ export function Inspiration() {
             aria-label={t('灵感类型')}
             value={kind}
             onChange={(e) => {
-              setKind(e.target.value);
+              const value = e.target.value;
+              setSearchParams(
+                (previous) => {
+                  const next = new URLSearchParams(previous);
+                  if (value) next.set('kind', value);
+                  else next.delete('kind');
+                  next.delete('videoCategory');
+                  return next;
+                },
+                { replace: true },
+              );
               setPage(1);
             }}
           >
@@ -197,6 +289,32 @@ export function Inspiration() {
             <option value="image">{t('图片')}</option>
             <option value="video">{t('视频')}</option>
           </select>
+          {kind === 'video' && (
+            <select
+              aria-label={t('视频内容分类')}
+              value={videoCategory}
+              onChange={(event) => {
+                const value = event.target.value;
+                setSearchParams(
+                  (previous) => {
+                    const next = new URLSearchParams(previous);
+                    if (value) next.set('videoCategory', value);
+                    else next.delete('videoCategory');
+                    return next;
+                  },
+                  { replace: true },
+                );
+                setPage(1);
+              }}
+            >
+              <option value="">{t('全部视频内容')}</option>
+              {videoInspirationCategorySchema.options.map((value) => (
+                <option key={value} value={value}>
+                  {t(VIDEO_INSPIRATION_LABELS[value])}
+                </option>
+              ))}
+            </select>
+          )}
           <select
             aria-label={t('发布平台')}
             value={platform}
@@ -247,7 +365,14 @@ export function Inspiration() {
                     {t(item.mediaUnavailable ? '素材已不可用' : '视频灵感')}
                   </div>
                 )}
-                {item.kind === 'video' && <span className="sample-label">{t('视频')}</span>}
+                {item.kind === 'video' && (
+                  <span className="sample-label">
+                    {t('视频')}
+                    {item.videoCategory
+                      ? ` · ${t(VIDEO_INSPIRATION_LABELS[item.videoCategory])}`
+                      : ''}
+                  </span>
+                )}
                 <span className="image-overlay">
                   <span>{t('以此创作')}</span>
                   <ArrowUpRight size={20} />
@@ -318,7 +443,12 @@ export function Inspiration() {
               </Badge>
               <label className="field">
                 <span className="field-label">{t('创作提示词')}</span>
-                <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={8} />
+                <textarea
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  rows={8}
+                  maxLength={12000}
+                />
               </label>
               <dl className="detail-list">
                 <div>
@@ -330,15 +460,88 @@ export function Inspiration() {
                   <dd>{t('创建可编辑草稿')}</dd>
                 </div>
               </dl>
+              {selected.kind === 'video' && (
+                <Field label={t('视频内容分类')}>
+                  {isAdmin && selected.workspaceId ? (
+                    <select
+                      value={selected.videoCategory ?? ''}
+                      disabled={action.busy}
+                      onChange={(event) => {
+                        const value = event.target.value,
+                          targetId = selected.id,
+                          targetScope = reuseKey;
+                        void action.run(async () => {
+                          const updated = await patch<InspirationDto>(`/inspirations/${targetId}`, {
+                            videoCategory: value || null,
+                          });
+                          if (currentScope.current === targetScope)
+                            setSelected((current) =>
+                              current?.id === targetId ? updated : current,
+                            );
+                          await refresh();
+                        });
+                      }}
+                    >
+                      <option value="">{t('未分类')}</option>
+                      {videoInspirationCategorySchema.options.map((value) => (
+                        <option key={value} value={value}>
+                          {t(VIDEO_INSPIRATION_LABELS[value])}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span>
+                      {t(
+                        selected.videoCategory
+                          ? VIDEO_INSPIRATION_LABELS[selected.videoCategory]
+                          : '未分类',
+                      )}
+                    </span>
+                  )}
+                </Field>
+              )}
               <Button
                 onClick={() => void create()}
                 busy={action.busy}
-                disabled={selected.archived || selected.mediaUnavailable}
+                disabled={
+                  selected.archived ||
+                  selected.mediaUnavailable ||
+                  !prompt.trim() ||
+                  !!pending ||
+                  !!reuseError
+                }
               >
                 <Sparkles size={16} />
                 {t('以此创作')}
               </Button>
-              <p className="muted small">{t('此操作仅保存草稿。模型生成会在你确认报价后开始。')}</p>
+              {selected.kind === 'video' && (
+                <Button
+                  variant="secondary"
+                  onClick={() => void create(false, 'replicate')}
+                  busy={action.busy}
+                  disabled={
+                    selected.archived ||
+                    selected.mediaUnavailable ||
+                    !prompt.trim() ||
+                    !!pending ||
+                    !!reuseError
+                  }
+                >
+                  {t('进入视频复刻')}
+                </Button>
+              )}
+              {selected.kind === 'video' && (
+                <p className="muted small">
+                  {t(
+                    '动作复刻会继承视频；请补充主体图片、检查片段及授权，再确认费用。仅支持人物动作参考；超过30秒先预选前30秒，不会自动生成。',
+                  )}
+                </p>
+              )}
+              <p className="muted small">
+                {t(
+                  '将继承参考素材、需求、类型与已有参数。模型不支持的设置会在创作页说明；此操作只保存草稿，不调用模型。',
+                )}
+              </p>
               <p className="muted small">{selected.source}</p>
               {isAdmin && selected.workspaceId && (
                 <Button
@@ -395,6 +598,21 @@ export function Inspiration() {
           max={1}
           label={t('灵感素材')}
         />
+        {newAssets[0]?.kind === 'video' && (
+          <Field label={t('视频内容分类')}>
+            <select
+              value={newVideoCategory}
+              onChange={(event) => setNewVideoCategory(event.target.value)}
+            >
+              <option value="">{t('未分类')}</option>
+              {videoInspirationCategorySchema.options.map((value) => (
+                <option key={value} value={value}>
+                  {t(VIDEO_INSPIRATION_LABELS[value])}
+                </option>
+              ))}
+            </select>
+          </Field>
+        )}
         <Field label={t('创作提示词')}>
           <textarea
             value={form.prompt}

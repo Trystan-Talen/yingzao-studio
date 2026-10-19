@@ -1,9 +1,9 @@
+import { TOOLS } from '../../contracts/catalog';
 import { t } from '../lib/i18n';
 import { Onboarding } from './Onboarding';
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Bell,
   ChevronDown,
   Code2,
   FolderOpen,
@@ -22,11 +22,13 @@ import {
   Workflow,
 } from 'lucide-react';
 import { useStudio } from '../context';
-import type { ProjectDto, WorkspaceDto } from '../../contracts/core';
-import { post, useApi, useRefresh, type Page } from '../lib/api';
+import type { ProjectDto } from '../../contracts/core';
+import { useApi, type Page } from '../lib/api';
 import type { CreditDto } from '../../contracts/jobs';
-import { Badge, Button, Drawer, Empty, Field, IconButton, Modal, useAction } from './ui';
+import { Badge, Drawer, Empty, IconButton, Modal, useAction } from './ui';
 import { TaskCenter } from './TaskCenter';
+import { NotificationCenter } from './NotificationCenter';
+import { TeamCreation } from './TeamCreation';
 const nav = [
   {
     title: '创作',
@@ -74,22 +76,16 @@ export function Layout() {
   const [mobile, setMobile] = useState(false);
   const [spaces, setSpaces] = useState(false);
   const [createSpace, setCreateSpace] = useState(false);
-  const [spaceName, setSpaceName] = useState('');
   const [tasks, setTasks] = useState(false);
   const [search, setSearch] = useState(false);
   const [q, setQ] = useState('');
-  const [notifications, setNotifications] = useState(false);
   const credit = useApi<CreditDto>('/credits', !!workspace, 30000);
   const projects = useApi<Page<ProjectDto>>(
     `/projects?q=${encodeURIComponent(q)}&pageSize=8`,
     search && q.length > 0,
   );
-  const notices = useApi<
-    Page<{ id: string; title: string; message: string; readAt: string | null }>
-  >('/notifications', notifications);
   const navigate = useNavigate();
   const action = useAction();
-  const refresh = useRefresh();
   const locale = session?.user.preferences.locale;
   const translated = (item: { label: string; en: string; ar: string }) =>
     locale === 'en' ? item.en : locale === 'ar' ? item.ar : item.label;
@@ -165,7 +161,7 @@ export function Layout() {
               >
                 <item.icon size={19} strokeWidth={1.75} />
                 <span>{translated(item)}</span>
-                {item.to === '/tools' && <span className="nav-count">14</span>}
+                {item.to === '/tools' && <span className="nav-count">{TOOLS.length}</span>}
               </NavLink>
             ))}
           </div>
@@ -233,9 +229,7 @@ export function Layout() {
             <IconButton label={t('全局搜索')} onClick={() => setSearch(true)}>
               <Search size={19} />
             </IconButton>
-            <IconButton label={t('通知')} onClick={() => setNotifications(true)}>
-              <Bell size={19} />
-            </IconButton>
+            <NotificationCenter />
             <button
               aria-label={t('任务中心')}
               className="task-button"
@@ -281,67 +275,7 @@ export function Layout() {
         ))}
         {q && projects.data?.items.length === 0 && <Empty title={t('没有找到相关项目')} />}
       </Modal>
-      <Modal
-        open={createSpace}
-        onClose={() => setCreateSpace(false)}
-        title={t('创建团队空间')}
-        description={t('团队拥有独立的项目、素材与用量。')}
-      >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void action.run(async () => {
-              const created = await post<WorkspaceDto>('/workspaces', { name: spaceName });
-              await switchWorkspace(created.id);
-              setCreateSpace(false);
-              setSpaceName('');
-              navigate('/team');
-            }, '团队空间已创建');
-          }}
-        >
-          <Field label={t('团队名称')}>
-            <input
-              value={spaceName}
-              onChange={(e) => setSpaceName(e.target.value)}
-              required
-              maxLength={120}
-            />
-          </Field>
-          <div className="modal-actions">
-            <Button busy={action.busy} type="submit">
-              {t('创建团队')}
-            </Button>
-          </div>
-        </form>
-      </Modal>
-      <Drawer open={notifications} onClose={() => setNotifications(false)} title={t('通知')}>
-        {notices.data?.items.length ? (
-          notices.data.items.map((notice) => (
-            <article className="notification" key={notice.id}>
-              <strong>{notice.title}</strong>
-              <p>{notice.message}</p>
-              {!notice.readAt && (
-                <Button
-                  variant="ghost"
-                  onClick={() =>
-                    void action.run(async () => {
-                      await post(`/notifications/${notice.id}/read`);
-                      await refresh();
-                    })
-                  }
-                >
-                  {t('标为已读')}
-                </Button>
-              )}
-            </article>
-          ))
-        ) : (
-          <Empty
-            title={t('暂时没有新消息')}
-            description={t('任务结果与工作空间动态会在这里通知你。')}
-          />
-        )}
-      </Drawer>
+      <TeamCreation open={createSpace} onClose={() => setCreateSpace(false)} />
     </div>
   );
 }

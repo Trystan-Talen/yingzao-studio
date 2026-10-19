@@ -1,6 +1,10 @@
 /** Static workflow controls. Model output and user-authored content remain unchanged. */
 export const WORKFLOW_TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: string }>>> =
   {
+    '为下一次创作建立一致的视觉参考。': {
+      en: 'Build a consistent visual reference for your next creation.',
+      ar: 'أنشئ مرجعًا بصريًا متناسقًا لإبداعك القادم.',
+    },
     已达到对应合同的品牌数量上限: {
       en: 'The brand limit for the applicable contract has been reached.',
       ar: 'تم بلوغ حد العلامات التجارية للعقد المعمول به.',
@@ -9,6 +13,7 @@ export const WORKFLOW_TRANSLATIONS: Readonly<Record<string, Readonly<{ en: strin
       en: 'The brand quota contract is invalid. Check the plan configuration.',
       ar: 'عقد حصة العلامات التجارية غير صالح. تحقّق من إعدادات الباقة.',
     },
+    回收记录: { en: 'Deleted records', ar: 'السجلات المحذوفة' },
     暂无回收记录: { en: 'No deleted records', ar: 'لا توجد سجلات محذوفة' },
     品牌额度: { en: 'Brand quota', ar: 'حصة العلامات التجارية' },
     我的品牌用量: { en: 'My brand usage', ar: 'استخدامي للعلامات التجارية' },

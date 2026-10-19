@@ -1,9 +1,16 @@
 import { jobInputSchema } from '../../contracts/jobs';
 import { t } from '../lib/i18n';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, CheckCircle2, Coins, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ApiError, post, useRefresh } from '../lib/api';
+import { api, ApiError, useRefresh } from '../lib/api';
+import {
+  readPendingSubmissions,
+  writePendingSubmission,
+  removePendingSubmission,
+  submissionWasRejected,
+  type PendingSubmission,
+} from '../lib/creation-recovery';
 import type { Job, JobInput, Operation, Quote } from '../lib/tasks';
 import { Button, Modal, Notice, useAction } from './ui';
 import { useStudio } from '../context';
@@ -14,6 +21,9 @@ export function JobSubmit({
   onCreated,
   label = '开始创作',
   forceConfirmation = false,
+  prepareInput,
+  recoveryScope,
+  quoteFactory,
 }: {
   input: JobInput;
   operation: Operation | undefined;
@@ -21,8 +31,40 @@ export function JobSubmit({
   onCreated?: (job: Job) => void;
   label?: string;
   forceConfirmation?: boolean;
+  prepareInput?: (input: JobInput) => Promise<JobInput>;
+  recoveryScope?: string;
+  quoteFactory?: (input: JobInput) => Promise<Quote>;
 }) {
-  const { canEdit, session } = useStudio();
+  const { canEdit, session, workspace } = useStudio();
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+  const scope = recoveryScope ?? `${input.operation}:${input.projectId ?? 'new'}`;
+  const [journal] = useState(() => {
+    try {
+      return readPendingSubmissions(localStorage, session!.user.id, workspace!.id);
+    } catch {
+      return { value: [], error: t('浏览器存储不可用，无法可靠记录提交。请检查浏览器设置。') };
+    }
+  });
+  const [recovery, setRecovery] = useState<PendingSubmission | null>(
+    () =>
+      journal.value.find(
+        (entry) =>
+          entry.scope === scope ||
+          (scope.startsWith('composer:') &&
+            !entry.scope.startsWith('retry:') &&
+            input.projectId &&
+            entry.input.projectId === input.projectId &&
+            entry.input.operation === input.operation),
+      ) ?? null,
+  );
+  const [recoveryMissing, setRecoveryMissing] = useState(false);
+  const [storageError, setStorageError] = useState(journal.error);
   const confirmGeneration =
     forceConfirmation || session?.user.preferences.confirmGeneration !== false;
   const pendingRequest = useRef<{ quote: Quote; input: JobInput; id: string } | null>(null);
@@ -33,19 +75,52 @@ export function JobSubmit({
   const action = useAction();
   const refresh = useRefresh();
   async function dispatch(data: Quote, payload: JobInput, id: string) {
+    if (!session || !workspace) return;
+    const record: PendingSubmission =
+      recovery?.requestId === id
+        ? recovery
+        : {
+            version: 1,
+            scope,
+            input: payload,
+            quote: data,
+            requestId: id,
+            confirmedAt: new Date().toISOString(),
+          };
     try {
-      const job = await post<Job>('/jobs', {
-        input: payload,
-        quoteId: data.id,
-        clientRequestId: id,
-      });
+      writePendingSubmission(localStorage, session.user.id, workspace.id, record);
+    } catch {
+      setStorageError(t('无法保存提交记录，本次尚未发送。请检查浏览器存储后重试。'));
+      throw new Error(t('无法保存提交记录，本次尚未发送。'));
+    }
+    setStorageError(null);
+    setRecovery(record);
+    setRecoveryMissing(false);
+    try {
+      const job = await api<Job>(
+        '/jobs',
+        {
+          method: 'POST',
+          body: JSON.stringify({ input: payload, quoteId: data.id, clientRequestId: id }),
+        },
+        workspace.id,
+      );
+      try {
+        removePendingSubmission(localStorage, session.user.id, workspace.id, id);
+      } catch {
+        setStorageError(t('任务已提交，但本机记录清理失败。再次进入时请核对该任务。'));
+      }
+      setRecovery(null);
       pendingRequest.current = null;
       setQuote(null);
       setSnapshot(null);
       await refresh();
-      onCreated?.(job);
+      if (mounted.current) onCreated?.(job);
     } catch (error) {
-      if (error instanceof ApiError && ['QUOTE_EXPIRED', 'QUOTE_NOT_FOUND'].includes(error.code)) {
+      setQuote(null);
+      if (error instanceof ApiError && submissionWasRejected(error)) {
+        removePendingSubmission(localStorage, session.user.id, workspace.id, id);
+        setRecovery(null);
         pendingRequest.current = null;
         setQuote(null);
       }
@@ -56,10 +131,19 @@ export function JobSubmit({
     await action.run(
       async () => {
         if (!validated.success) throw new Error(t('请检查必填参数与数值范围。'));
+        if (recovery) throw new Error(t('请先核对上次提交结果。'));
         let pending = pendingRequest.current;
         if (!pending || JSON.stringify(pending.input) !== JSON.stringify(input)) {
-          const data = await post<Quote>('/quotes', input);
-          pending = { quote: data, input: structuredClone(input), id: crypto.randomUUID() };
+          const payload = prepareInput ? await prepareInput(input) : input;
+          if (!mounted.current) return;
+          const data = quoteFactory
+            ? await quoteFactory(payload)
+            : await api<Quote>(
+                '/quotes',
+                { method: 'POST', body: JSON.stringify(payload) },
+                workspace!.id,
+              );
+          pending = { quote: data, input: structuredClone(payload), id: crypto.randomUUID() };
           pendingRequest.current = pending;
         }
         setSnapshot(pending.input);
@@ -77,8 +161,61 @@ export function JobSubmit({
       t('任务已提交，可在任务中心查看进度'),
     );
   }
+  async function recover() {
+    if (!recovery || !session || !workspace) return;
+    await action.run(async () => {
+      try {
+        const job = await api<Job>(`/jobs/by-request/${recovery.requestId}`, {}, workspace.id);
+        removePendingSubmission(localStorage, session.user.id, workspace.id, recovery.requestId);
+        setRecovery(null);
+        setQuote(null);
+        pendingRequest.current = null;
+        await refresh();
+        if (mounted.current) onCreated?.(job);
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+          setRecoveryMissing(true);
+          return;
+        }
+        throw error;
+      }
+    }, t('提交结果已核对'));
+  }
   return (
     <div className="submit-block">
+      {storageError && <Notice tone="warning">{storageError}</Notice>}
+      {recovery && (
+        <Notice tone="warning">
+          <strong>{t('上次提交结果待核对')}</strong>
+          <p>
+            {recovery.input.prompt || t('已确认的创作任务')} · {recovery.quote.maxCredits}{' '}
+            {t('额度上限')}
+          </p>
+          <p>{t('核对不会再次生成。请先找回原任务，避免重复提交。')}</p>
+          <Button variant="secondary" busy={action.busy} onClick={() => void recover()}>
+            {t('核对提交结果')}
+          </Button>
+          {recoveryMissing && (
+            <>
+              <p>
+                {t('暂未找到原任务。你可以继续提交同一份已确认请求，系统会按原编号避免重复创建。')}
+              </p>
+              <Button
+                disabled={!canEdit}
+                busy={action.busy}
+                onClick={() =>
+                  void action.run(
+                    () => dispatch(recovery.quote, recovery.input, recovery.requestId),
+                    t('原请求已提交'),
+                  )
+                }
+              >
+                {t('继续提交原请求')}
+              </Button>
+            </>
+          )}
+        </Notice>
+      )}
       {!validated.success && <Notice tone="warning">{t('请检查必填参数与数值范围。')}</Notice>}
       {!operation?.available && (
         <Notice>
@@ -107,7 +244,14 @@ export function JobSubmit({
         </span>
         <Button
           busy={action.busy}
-          disabled={!canEdit || !valid || !validated.success || !operation?.available}
+          disabled={
+            !canEdit ||
+            !valid ||
+            !validated.success ||
+            !operation?.available ||
+            !!recovery ||
+            !!journal.error
+          }
           onClick={() => void estimate()}
         >
           <Sparkles size={16} />
@@ -136,15 +280,55 @@ export function JobSubmit({
               <div>
                 <dt>{t('素材')}</dt>
                 <dd>
-                  {snapshot.assetIds.length + snapshot.referenceAssetIds.length}
+                  {
+                    new Set(
+                      [
+                        ...snapshot.assetIds,
+                        ...snapshot.referenceAssetIds,
+                        snapshot.maskAssetId,
+                        snapshot.backgroundAssetId,
+                        snapshot.backgroundAudioAssetId,
+                      ].filter((id): id is string => !!id),
+                    ).size
+                  }
                   {t('项')}
                 </dd>
               </div>
+              {[
+                ['蒙版', snapshot.maskAssetId],
+                ['背景参考', snapshot.backgroundAssetId],
+                ['背景音乐', snapshot.backgroundAudioAssetId],
+              ]
+                .filter(([, id]) => !!id)
+                .map(([label]) => (
+                  <div key={label}>
+                    <dt>{t(label!)}</dt>
+                    <dd>1{t('项')}</dd>
+                  </div>
+                ))}
+              {snapshot.options.generateAudio !== undefined && (
+                <div>
+                  <dt>{t('生成视频音轨')}</dt>
+                  <dd>{t(snapshot.options.generateAudio ? '开启' : '关闭')}</dd>
+                </div>
+              )}
+              {quote.items && (
+                <div>
+                  <dt>{t('处理任务')}</dt>
+                  <dd>
+                    {quote.items.length}
+                    {t('项')}
+                  </dd>
+                </div>
+              )}
               <div>
-                <dt>{t('输出')}</dt>
+                <dt>{t('计费数量')}</dt>
                 <dd>
                   {quote.units}
-                  {t('项')}
+                  {operation &&
+                    t(
+                      operation.unit === 'second' ? '秒' : operation.unit === 'image' ? '张' : '次',
+                    )}
                 </dd>
               </div>
               <div>
@@ -157,6 +341,41 @@ export function JobSubmit({
                 </dd>
               </div>
             </dl>
+            {!!quote.items?.length && (
+              <details className="section-spaced" open={quote.items.length <= 6}>
+                <summary>
+                  {t('本次处理组合')} · {quote.items.length}
+                </summary>
+                <ol>
+                  {quote.items.map((item) => (
+                    <li key={item.index}>
+                      {item.assetIds.length
+                        ? item.assetIds
+                            .map(
+                              (id) =>
+                                `${t('原图')} ${snapshot.assetIds.indexOf(id) + 1 || id.slice(-8)}`,
+                            )
+                            .join('、')
+                        : t('文字输入')}
+                      {item.referenceAssetIds.length > 0 &&
+                        ` → ${item.referenceAssetIds.map((id) => `${t('参考')} ${snapshot.referenceAssetIds.indexOf(id) + 1 || id.slice(-8)}`).join('、')}`}
+                      {snapshot.maskAssetId && ` · ${t('蒙版')}`}
+                      {item.backgroundAssetId && ` · ${t('背景参考')}`}
+                      {item.backgroundAudioAssetId && ` · ${t('背景音乐')}`}
+                      {item.color && ` · ${t('颜色')} ${item.color}`}
+                      {item.language && ` · ${t('语言')} ${item.language}`}
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )}
+            {snapshot.operation === 'media.import' && (
+              <Notice>
+                {t(
+                  '解析服务按调用另行收费，链接失效或解析后无法下载也可能收费。确认仅对当前链接执行一次；连接中断时请先核对原任务。',
+                )}
+              </Notice>
+            )}
             <Notice>
               {t(
                 '这里显示的是工作空间额度。供应商可能按实际调用另行收取费用。失败与取消按实际执行情况结算。',

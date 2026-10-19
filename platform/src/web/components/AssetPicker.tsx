@@ -5,6 +5,7 @@ import type { AssetDto } from '../../contracts/core';
 import { bytes, errorMessage, qs, uploadAsset, useApi, useRefresh, type Page } from '../lib/api';
 import { Button, Empty, ErrorState, IconButton, Loading, Modal, Pagination, useToast } from './ui';
 import { useStudio } from '../context';
+import { SocialVideoImport } from './SocialVideoImport';
 export function AssetVisual({ asset, className = '' }: { asset: AssetDto; className?: string }) {
   return asset.kind === 'image' ? (
     <img
@@ -32,6 +33,8 @@ interface UploadRow {
   progress: number;
   error?: string;
   asset?: AssetDto;
+  scope?: string;
+  onAccepted?: (asset: AssetDto) => void;
 }
 export function AssetPicker({
   value,
@@ -42,6 +45,9 @@ export function AssetPicker({
   projectId,
   compact = false,
   roleLabels,
+  disabled = false,
+  uploadScope,
+  onUploaded,
 }: {
   value: AssetDto[];
   onChange: (value: AssetDto[]) => void;
@@ -51,8 +57,13 @@ export function AssetPicker({
   projectId?: string;
   compact?: boolean;
   roleLabels?: string[];
+  disabled?: boolean;
+  uploadScope?: string;
+  /** Retained per queued file so delayed uploads return to their original draft. */
+  onUploaded?: (asset: AssetDto) => void;
 }) {
-  const { canEdit, workspace } = useStudio();
+  const { canEdit: workspaceCanEdit, workspace, session } = useStudio();
+  const canEdit = workspaceCanEdit && !disabled;
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [page, setPage] = useState(1);
@@ -93,7 +104,7 @@ export function AssetPicker({
     try {
       for (const row of rowsRef.current.filter((item) => item.status === 'queued')) {
         if (abortController.signal.aborted) break;
-        if (valueRef.current.length >= max) {
+        if (!row.onAccepted && valueRef.current.length >= max) {
           row.status = 'failed';
           row.error = t('已达到素材数量上限，请先移除部分素材。');
           updateRows(rowsRef.current);
@@ -117,7 +128,8 @@ export function AssetPicker({
           row.asset = asset;
           row.progress = 100;
           updateRows(rowsRef.current);
-          if (!valueRef.current.some((item) => item.id === asset.id)) {
+          if (row.onAccepted) row.onAccepted(asset);
+          else if (!valueRef.current.some((item) => item.id === asset.id)) {
             if (valueRef.current.length < max) {
               const next = [...valueRef.current, asset];
               valueRef.current = next;
@@ -141,7 +153,11 @@ export function AssetPicker({
     }
   }
   function upload(files: FileList | File[] | null) {
-    if (!files || !canEdit || inFlight.current) return;
+    if (!files || !canEdit) return;
+    if (inFlight.current) {
+      toast(t('正在上传素材，请等待本批完成后再添加文件。'), 'error');
+      return;
+    }
     const accepted = Array.from(files).filter((file) => {
       const category = file.type.split('/')[0] ?? '';
       return (
@@ -158,6 +174,7 @@ export function AssetPicker({
     for (const file of accepted.slice(0, remaining)) {
       const existing = rowsRef.current.find(
         (item) =>
+          item.scope === uploadScope &&
           item.file.name === file.name &&
           item.file.size === file.size &&
           item.file.lastModified === file.lastModified,
@@ -171,13 +188,23 @@ export function AssetPicker({
           valueRef.current.length < max &&
           !valueRef.current.some((item) => item.id === existing.asset?.id)
         ) {
-          const next = [...valueRef.current, existing.asset];
-          valueRef.current = next;
-          changeRef.current(next);
+          if (existing.onAccepted) existing.onAccepted(existing.asset);
+          else {
+            const next = [...valueRef.current, existing.asset];
+            valueRef.current = next;
+            changeRef.current(next);
+          }
         }
         continue;
       }
-      additions.push({ id: crypto.randomUUID(), file, status: 'queued', progress: 0 });
+      additions.push({
+        id: crypto.randomUUID(),
+        file,
+        status: 'queued',
+        progress: 0,
+        scope: uploadScope,
+        onAccepted: onUploaded,
+      });
     }
     updateRows([...rowsRef.current, ...additions]);
     void processRows();
@@ -207,50 +234,64 @@ export function AssetPicker({
       <div
         className={`upload-drop-zone ${dragging ? 'dragging' : ''}`}
         tabIndex={canEdit ? 0 : -1}
+        aria-busy={busy}
         {...transferEvents}
       >
         <Upload size={16} />
-        <span>{t('拖入文件，或聚焦这里粘贴图片')}</span>
+        <span>
+          {t(
+            kind === 'video'
+              ? '拖入视频文件，或从素材选择器添加'
+              : kind === 'audio'
+                ? '拖入音频文件，或从素材选择器添加'
+                : kind === 'document'
+                  ? '拖入文档文件，或从素材选择器添加'
+                  : '拖入文件，或聚焦这里粘贴图片',
+          )}
+        </span>
       </div>
       {!!uploads.length && (
         <div className="upload-queue" aria-live="polite">
-          {uploads.map((row) => (
-            <div key={row.id} className="upload-row">
-              <div>
-                <strong>{row.file.name}</strong>
-                <small>
-                  {row.status === 'succeeded'
-                    ? t('已保存')
-                    : row.status === 'failed'
-                      ? row.error
-                      : row.progress === 100
-                        ? t('正在校验并保存…')
-                        : `${row.progress}%`}
-                </small>
-                {['uploading', 'queued'].includes(row.status) && (
-                  <progress
-                    max={100}
-                    value={row.progress}
-                    aria-label={`${t('上传进度')} ${row.file.name}`}
-                  />
+          {uploads
+            .filter((row) => row.scope === uploadScope)
+            .map((row) => (
+              <div key={row.id} className="upload-row">
+                <div>
+                  <strong>{row.file.name}</strong>
+                  <small>
+                    {row.status === 'succeeded'
+                      ? t('已保存')
+                      : row.status === 'failed'
+                        ? row.error
+                        : row.progress === 100
+                          ? t('正在校验并保存…')
+                          : `${row.progress}%`}
+                  </small>
+                  {['uploading', 'queued'].includes(row.status) && (
+                    <progress
+                      max={100}
+                      value={row.progress}
+                      aria-label={`${t('上传进度')} ${row.file.name}`}
+                    />
+                  )}
+                </div>
+                {row.status === 'failed' && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={busy}
+                    onClick={() => {
+                      row.status = 'queued';
+                      row.progress = 0;
+                      updateRows(rowsRef.current);
+                      void processRows();
+                    }}
+                  >
+                    {t('重试')}
+                  </Button>
                 )}
               </div>
-              {row.status === 'failed' && (
-                <Button
-                  variant="ghost"
-                  disabled={busy}
-                  onClick={() => {
-                    row.status = 'queued';
-                    row.progress = 0;
-                    updateRows(rowsRef.current);
-                    void processRows();
-                  }}
-                >
-                  {t('重试')}
-                </Button>
-              )}
-            </div>
-          ))}
+            ))}
         </div>
       )}
     </>
@@ -326,6 +367,7 @@ export function AssetPicker({
             }}
           />
           <Button
+            type="button"
             onClick={() => input.current?.click()}
             busy={busy}
             disabled={!canEdit || value.length >= max}
@@ -335,6 +377,26 @@ export function AssetPicker({
           </Button>
         </div>
         {canEdit && uploadFeedback}
+        {open && canEdit && ['video', 'visual', 'all'].includes(kind) && (
+          <details className="section-spaced">
+            <summary>{t('从视频分享链接导入')}</summary>
+            <SocialVideoImport
+              key={`${session?.user.id}:${workspace?.id}:${projectId ?? 'library'}`}
+              projectId={projectId}
+              disabled={value.length >= max}
+              onSelect={(asset) => {
+                if (
+                  valueRef.current.length >= max ||
+                  valueRef.current.some((item) => item.id === asset.id)
+                )
+                  return;
+                const next = [...valueRef.current, asset];
+                valueRef.current = next;
+                changeRef.current(next);
+              }}
+            />
+          </details>
+        )}
         {query.isLoading ? (
           <Loading />
         ) : query.error ? (
@@ -373,7 +435,12 @@ export function AssetPicker({
             title={t('还没有可用素材')}
             description={t('上传的原件会保存在当前空间，可在各个项目间复用。')}
             action={
-              <Button variant="secondary" onClick={() => input.current?.click()} busy={busy}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => input.current?.click()}
+                busy={busy}
+              >
                 <Plus size={16} />
                 {t('上传素材')}
               </Button>
@@ -394,7 +461,9 @@ export function AssetPicker({
             {value.length}
             {t('项')}
           </span>
-          <Button onClick={() => setOpen(false)}>{t('完成选择')}</Button>
+          <Button type="button" onClick={() => setOpen(false)}>
+            {t('完成选择')}
+          </Button>
         </div>
       </Modal>
     </div>

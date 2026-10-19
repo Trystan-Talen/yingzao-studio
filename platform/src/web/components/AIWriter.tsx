@@ -1,5 +1,5 @@
 import type { EntitlementsDto } from './Entitlements';
-import { dateTime } from '../lib/api';
+import { dateTime, qs, type Page } from '../lib/api';
 import { t } from '../lib/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
@@ -7,7 +7,20 @@ import type { AssetDto } from '../../contracts/core';
 import { jobInput, type Capabilities, type Job } from '../lib/tasks';
 import { useApi } from '../lib/api';
 import { JobSubmit } from './JobSubmit';
-import { Badge, Button, Field, Loading, Modal, Notice, Segments, useAction } from './ui';
+import { designPlanResultSchema, type DesignPlan } from '../../contracts/design-plan';
+import { DesignPlanResult } from './DesignPlanResult';
+import {
+  Badge,
+  Button,
+  Field,
+  Loading,
+  Modal,
+  Notice,
+  Segments,
+  Pagination,
+  ErrorState,
+  useAction,
+} from './ui';
 export function AIWriter({
   open,
   onClose,
@@ -15,6 +28,8 @@ export function AIWriter({
   assets,
   projectId,
   onAccept,
+  onAcceptPlan,
+  technical,
 }: {
   open: boolean;
   onClose: () => void;
@@ -22,19 +37,25 @@ export function AIWriter({
   assets: AssetDto[];
   projectId?: string;
   onAccept: (text: string) => void;
+  onAcceptPlan?: (plan: DesignPlan, directionIndex: number) => void;
+  technical?: DesignPlan['technical'];
 }) {
   const [request, setRequest] = useState(prompt);
   const wasOpen = useRef(false);
   useEffect(() => {
     if (open && !wasOpen.current) {
       setRequest(prompt);
-      setJobId(null);
     }
     wasOpen.current = open;
   }, [open, prompt]);
   const [provider, setProvider] = useState('');
   const [assistantMode, setAssistantMode] = useState<'ideas' | 'design-plan'>('ideas');
   const [jobId, setJobId] = useState<string | null>(null);
+  const [historyPage, setHistoryPage] = useState(1);
+  const history = useApi<Page<Job>>(
+    `/jobs${qs({ projectId, operation: 'text.assist', page: historyPage, pageSize: 10 })}`,
+    open && !!projectId,
+  );
   const caps = useApi<Capabilities>('/capabilities', open);
   const entitlements = useApi<EntitlementsDto>('/entitlements', open);
   const query = useApi<Job>(
@@ -57,10 +78,9 @@ export function AIWriter({
     assetIds: assets.map((a) => a.id),
     referenceAssetIds: [],
     ...(projectId ? { projectId } : {}),
-    options: { model: operation?.models[0]?.id, assistantMode },
+    options: { ...technical, model: operation?.models[0]?.id, assistantMode },
   });
-  const texts =
-    query.data?.items.flatMap((item) => (item.resultText ? [item.resultText] : [])) ?? [];
+  const results = query.data?.items ?? [];
   const action = useAction();
   return (
     <Modal
@@ -84,9 +104,33 @@ export function AIWriter({
       {assistantMode === 'design-plan' && (
         <Notice>{t('生成包含目标、受众、视觉方向、文案与物料规划的设计方案。')}</Notice>
       )}
+      {!!history.data?.items.length && (
+        <Field label={t('本项目已保存的建议与方案')}>
+          <select value={jobId ?? ''} onChange={(e) => setJobId(e.target.value || null)}>
+            <option value="">{t('选择历史任务')}</option>
+            {history.data.items.map((job) => (
+              <option key={job.id} value={job.id}>
+                {dateTime(job.createdAt)} ·{' '}
+                {t(job.input.options.assistantMode === 'design-plan' ? '设计方案' : '创作建议')} ·{' '}
+                {job.input.prompt.slice(0, 50)}
+              </option>
+            ))}
+          </select>
+        </Field>
+      )}
       {projectId && operation?.providerId === 'openai' && (
         <p className="field-hint">{t('会参考本项目最近的创作对话，最多 8 条、6000 字符。')}</p>
       )}
+      {history.data && (
+        <Pagination
+          page={historyPage}
+          total={history.data.total}
+          pageSize={history.data.pageSize}
+          onPage={setHistoryPage}
+        />
+      )}
+      {history.error && <ErrorState error={history.error} retry={history.refetch} />}
+      {query.error && <ErrorState error={query.error} retry={query.refetch} />}
       <Field label={t('你的需求')}>
         <textarea
           value={request}
@@ -135,32 +179,52 @@ export function AIWriter({
       )}
       <div className="section-spaced">
         {query.data?.errorMessage && <Notice tone="warning">{query.data.errorMessage}</Notice>}
-        {texts.map((text, index) => (
-          <div className="assistant-result" key={index}>
-            <Badge tone="green">{t('真实生成建议')}</Badge>
-            <pre>{text}</pre>
-            <div className="inline-actions">
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  void action.run(() => navigator.clipboard.writeText(text), '建议已复制')
+        {results.map((item) => {
+          const structured = designPlanResultSchema.safeParse(item.resultData);
+          if (structured.success)
+            return (
+              <DesignPlanResult
+                key={item.id}
+                plan={structured.data.plan}
+                onApply={
+                  onAcceptPlan
+                    ? (plan, index) => {
+                        onAcceptPlan(plan, index);
+                        onClose();
+                      }
+                    : undefined
                 }
-              >
-                <Copy size={15} />
-                {t('复制')}
-              </Button>
-              <Button
-                onClick={() => {
-                  onAccept(text);
-                  onClose();
-                }}
-              >
-                <Check size={15} />
-                {t('采用这份建议')}
-              </Button>
+              />
+            );
+          const text = item.resultText;
+          if (!text) return null;
+          return (
+            <div className="assistant-result" key={item.id}>
+              <Badge tone="green">{t('真实生成建议')}</Badge>
+              <pre>{text}</pre>
+              <div className="inline-actions">
+                <Button
+                  variant="secondary"
+                  onClick={() =>
+                    void action.run(() => navigator.clipboard.writeText(text), '建议已复制')
+                  }
+                >
+                  <Copy size={15} />
+                  {t('复制')}
+                </Button>
+                <Button
+                  onClick={() => {
+                    onAccept(text);
+                    onClose();
+                  }}
+                >
+                  <Check size={15} />
+                  {t('采用这份建议')}
+                </Button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </Modal>
   );

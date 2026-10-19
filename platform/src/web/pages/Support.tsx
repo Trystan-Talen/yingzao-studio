@@ -1,4 +1,5 @@
 import { ReferralDetails, type ReferralSummary } from '../components/ReferralDetails';
+import { SupportChannels } from '../components/SupportChannels';
 import { t } from '../lib/i18n';
 import { useState } from 'react';
 import {
@@ -111,6 +112,7 @@ export function Support() {
       />
       {tab === 'help' ? (
         <>
+          <SupportChannels />
           <div className="support-cards">
             <Link to="/settings?tab=providers">
               <span className="feature-symbol">
@@ -150,10 +152,10 @@ export function Support() {
                   onClick={() => setExpanded(expanded === index ? -1 : index)}
                   aria-expanded={expanded === index}
                 >
-                  <strong>{item.title}</strong>
+                  <strong>{t(item.title)}</strong>
                   {expanded === index ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
-                {expanded === index && <p>{item.body}</p>}
+                {expanded === index && <p>{t(item.body)}</p>}
               </article>
             ))}
           </section>

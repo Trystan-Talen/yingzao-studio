@@ -11,7 +11,7 @@ import {
   UserPlus,
   Users,
 } from 'lucide-react';
-import type { WorkspaceDto } from '../../contracts/core';
+import { TeamCreation } from '../components/TeamCreation';
 import {
   api,
   dateTime,
@@ -82,7 +82,7 @@ const roles: Record<string, string> = {
   viewer: '只读成员',
 };
 export function Team() {
-  const { workspace, session, isAdmin, refreshSession, switchWorkspace } = useStudio();
+  const { workspace, session, isAdmin, refreshSession } = useStudio();
   const [tab, setTab] = useState<'members' | 'invitations' | 'activity' | 'settings'>('members');
   const [q, setQ] = useState('');
   const [invite, setInvite] = useState(false);
@@ -221,7 +221,7 @@ export function Team() {
                 <p className="muted">
                   {members.data?.total ?? '—'}
                   {t('位成员 ·')}
-                  {roles[workspace.role]}
+                  {t(roles[workspace.role]!)}
                 </p>
               </div>
             </div>
@@ -304,7 +304,7 @@ export function Team() {
                           </td>
                           <td>
                             <Badge tone={member.role === 'owner' ? 'green' : 'neutral'}>
-                              {roles[member.role]}
+                              {t(roles[member.role]!)}
                             </Badge>
                           </td>
                           <td>{member.nickname || '—'}</td>
@@ -363,7 +363,7 @@ export function Team() {
                       {invitations.data.items.map((item) => (
                         <tr key={item.id}>
                           <td>{item.email}</td>
-                          <td>{roles[item.role]}</td>
+                          <td>{t(roles[item.role]!)}</td>
                           <td>{dateTime(item.expiresAt)}</td>
                           <td>
                             <Badge>
@@ -546,34 +546,7 @@ export function Team() {
           />
         ) : null;
       })()}
-      <Modal open={create} onClose={() => setCreate(false)} title={t('创建团队空间')}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void action.run(async () => {
-              const result = await post<WorkspaceDto>('/workspaces', { name });
-              await switchWorkspace(result.id);
-              setName(result.name);
-              setCreate(false);
-              await refresh();
-            }, '团队已创建');
-          }}
-        >
-          <Field label={t('团队名称')}>
-            <input
-              required
-              maxLength={120}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Field>
-          <div className="modal-actions">
-            <Button type="submit" busy={action.busy}>
-              {t('创建团队')}
-            </Button>
-          </div>
-        </form>
-      </Modal>
+      <TeamCreation open={create} onClose={() => setCreate(false)} />
       <Modal
         open={invite}
         onClose={() => setInvite(false)}

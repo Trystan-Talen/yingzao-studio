@@ -1,12 +1,23 @@
 import { EntitlementsPanel, entitlementLabels } from '../components/Entitlements';
 import { CreditBuckets } from '../components/CreditBuckets';
-import { useSearchParams } from 'react-router-dom';
-import { t } from '../lib/i18n';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getLocale, t } from '../lib/i18n';
 import { useEffect, useState } from 'react';
 import { FileText, Gift, Plus, Receipt, Wallet } from 'lucide-react';
 import type { CreditDto } from '../../contracts/jobs';
 import type { StripeInvoiceDocument } from '../../contracts/billing';
-import { dateTime, money, patch, post, remove, useApi, useRefresh, type Page } from '../lib/api';
+import type { PrepaidTerms, PromotionOffer, PromotionSnapshot } from '../../contracts/promotions';
+import {
+  api,
+  dateTime,
+  money,
+  patch,
+  post,
+  remove,
+  useApi,
+  useRefresh,
+  type Page,
+} from '../lib/api';
 import {
   Badge,
   Button,
@@ -42,12 +53,17 @@ interface Plan {
   currency: string;
   interval: string | null;
   credits: number;
-  limits: Record<string, number>;
+  limits: import('../../contracts/entitlements').PlanLimits;
   providerConfigured: boolean;
+  catalogVersion: number;
+  originalPriceMinor: number;
+  prepaidTerms: PrepaidTerms | null;
+  promotion: PromotionOffer | null;
 }
 interface Order {
   id: string;
   number: string;
+  billingChannel: 'web' | 'api';
   kind: string;
   status: string;
   amountMinor: number;
@@ -59,6 +75,8 @@ interface Order {
   invoiceableMinor: number;
   paymentEnvironment: string;
   billingDocumentAvailable: boolean;
+  purchaseTerms: PrepaidTerms | null;
+  promotion: PromotionSnapshot | null;
 }
 interface Title {
   id: string;
@@ -106,11 +124,81 @@ const orderLabels: Record<string, string> = {
   issued: '已开具',
   rejected: '未通过',
 };
+function PrepaidNotice({ terms }: { terms: PrepaidTerms }) {
+  return (
+    <Notice>
+      {t(
+        '一次付款购买 {months} 个月会员，无自动续费。权益付款后生效，同档续购期限按协调世界时的日历月顺延，月底按目标月份最后一天计算。',
+      ).replace('{months}', String(terms.months))}
+      <br />
+      {t(
+        terms.creditValidity === 'same-plan-renewal'
+          ? '同档续费会延长仍有效的剩余额度，并恢复尚在3个月封存期内的额度；重新计算到期与封存时限，超过封存期清零的额度不恢复。'
+          : '额度按本次购买对应期限到期，不封存；续购不会统一延长旧额度。',
+      )}
+      <br />
+      {t(
+        '退款按对应购买金额比例缩短会员期限并撤回对应来源额度，已用或预留部分须核对。当前不支持跨档或与自动续费会员混购。',
+      )}
+    </Notice>
+  );
+}
+function PromotionNotice({ offer }: { offer: PromotionOffer }) {
+  const p = offer.definition;
+  const date = (s: string) =>
+    new Intl.DateTimeFormat(getLocale(), {
+      timeZone: p.timeZone,
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(new Date(s));
+  return (
+    <Notice tone={offer.status === 'available' ? 'info' : 'warning'}>
+      <strong>{p.name}</strong> ·{' '}
+      {offer.status === 'available'
+        ? t('当前符合活动条件')
+        : offer.reason
+            .split('；')
+            .map((reason) => t(reason))
+            .join(' · ')}
+      <p>
+        {date(p.startsAt)} — {date(p.endsAt)} ·{' '}
+        {t('时区：{timeZone}（结束时刻不含在活动内）').replace('{timeZone}', p.timeZone)}
+      </p>
+      <p>
+        {t(
+          p.eligibility === 'all'
+            ? '不限首购'
+            : p.eligibility === 'first-personal-membership'
+              ? '账号首次购买个人空间会员'
+              : p.eligibility === 'first-web-purchase'
+                ? '账号首次网页购买'
+                : '首购范围待配置',
+        )}
+        {p.eligibility !== 'all' && p.refundedPurchasesCount !== null && (
+          <>
+            {' · '}
+            {t(p.refundedPurchasesCount ? '退款历史仍计为曾购买' : '全额退款后可重新判断首购')}
+          </>
+        )}
+      </p>
+      <p>
+        {t(
+          '以活动期内发起的原支付会话确认资格；异步付款完成可晚于活动结束。剩余不足 31 分钟时不新建优惠支付会话。',
+        )}
+      </p>
+      {offer.status !== 'available' && <p>{t('此时按页面所示普通价格购买；不会自动加入优惠。')}</p>}
+    </Notice>
+  );
+}
 export function Usage() {
+  const navigate = useNavigate();
   const { workspace, isAdmin } = useStudio();
-  const [search] = useSearchParams();
+  const [search, setSearch] = useSearchParams();
+  const apiAccount = search.get('account') === 'api';
+  const canView = !apiAccount || isAdmin;
+  const creditPath = apiAccount ? '/credits/api' : '/credits';
   const fromCheckout = search.get('checkout');
-  const [tab, setTab] = useState<
+  const [selectedTab, setTab] = useState<
     'ledger' | 'buckets' | 'statistics' | 'plans' | 'orders' | 'invoices'
   >(
     ['ledger', 'buckets', 'statistics', 'plans', 'orders', 'invoices'].includes(
@@ -119,21 +207,32 @@ export function Usage() {
       ? (search.get('tab') as 'ledger' | 'buckets' | 'statistics' | 'plans' | 'orders' | 'invoices')
       : 'ledger',
   );
+  const tab =
+    apiAccount && ['statistics', 'invoices'].includes(selectedTab) ? 'ledger' : selectedTab;
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState('all');
-  useEffect(() => setPage(1), [tab, filter]);
-  const credits = useApi<CreditDto>('/credits', true, 15000);
+  useEffect(() => setPage(1), [tab, filter, apiAccount]);
+  useEffect(() => {
+    const value = search.get('tab');
+    if (value && ['ledger', 'buckets', 'statistics', 'plans', 'orders', 'invoices'].includes(value))
+      setTab(value as typeof selectedTab);
+  }, [search]);
+  const credits = useApi<CreditDto>(creditPath, canView, 15000);
   const ledger = useApi<Page<Ledger>>(
-    `/credits/ledger?pageSize=100&page=${page}${filter === 'all' ? '' : `&kind=${filter}`}`,
-    tab === 'ledger',
+    `${creditPath}/ledger?pageSize=100&page=${page}${filter === 'all' ? '' : `&kind=${filter}`}`,
+    canView && tab === 'ledger',
   );
-  const plans = useApi<Page<Plan>>('/plans?pageSize=100', tab === 'plans');
+  const plans = useApi<Page<Plan>>('/plans/eligible?pageSize=100', canView && tab === 'plans');
+  const availablePlans = plans.data?.items.filter((plan) => !apiAccount || plan.kind === 'credits');
   const orders = useApi<Page<Order>>(
-    `/orders?pageSize=100&page=${page}`,
+    `/orders?pageSize=100&page=${page}&billingChannel=${apiAccount ? 'api' : 'web'}`,
     (tab === 'orders' || tab === 'invoices') && isAdmin,
     fromCheckout === 'success' ? 5000 : undefined,
   );
-  const subscriptions = useApi<Page<Subscription>>('/subscriptions', tab === 'plans');
+  const subscriptions = useApi<Page<Subscription>>(
+    '/subscriptions',
+    !apiAccount && tab === 'plans',
+  );
   const titles = useApi<Page<Title>>('/invoice-titles', tab === 'invoices' && isAdmin);
   const invoices = useApi<Page<Invoice>>(
     `/invoices?pageSize=100&page=${page}`,
@@ -142,6 +241,7 @@ export function Usage() {
   const [redeem, setRedeem] = useState(false);
   const [code, setCode] = useState('');
   const [purchase, setPurchase] = useState<Plan | null>(null);
+  useEffect(() => setPurchase(null), [workspace?.id]);
   const [editingTitle, setEditingTitle] = useState<Title | null>(null);
   const [titleModal, setTitleModal] = useState(false);
   const [titleType, setTitleType] = useState('company');
@@ -170,19 +270,44 @@ export function Usage() {
   useEffect(() => {
     if (fromCheckout) void refresh();
   }, [fromCheckout]);
+  if (!canView) return <Empty title={t('只有创建者与管理员可以查看接口额度账户')} />;
   return (
     <div className="page">
       <PageHeader
         eyebrow="KNOW WHERE YOUR CREATIVITY GOES"
-        title={t('用量与订单')}
-        description={t('清楚了解每一次创作的预留、结算与记录。')}
+        title={t(apiAccount ? '接口额度与订单' : '用量与订单')}
+        description={t(
+          apiAccount
+            ? '接口任务使用独立平台额度，与网页账户分别充值、预留和结算。'
+            : '清楚了解每一次创作的预留、结算与记录。',
+        )}
         action={
-          <Button variant="secondary" onClick={() => setRedeem(true)}>
-            <Gift size={16} />
-            {t('兑换额度')}
-          </Button>
+          !apiAccount && (
+            <Button variant="secondary" onClick={() => setRedeem(true)}>
+              <Gift size={16} />
+              {t('兑换额度')}
+            </Button>
+          )
         }
       />
+      {isAdmin && (
+        <Segments
+          value={apiAccount ? 'api' : 'web'}
+          onChange={(account) => {
+            setSearch({ account, tab: 'ledger' });
+            setTab('ledger');
+            setPurchase(null);
+          }}
+          options={[
+            { value: 'web', label: '网页创作账户' },
+            { value: 'api', label: '接口额度账户' },
+          ]}
+        />
+      )}
+      {apiAccount && (
+        <Notice>{t('此处是平台创作额度，不是现金余额。接口充值不购买网页会员权益。')}</Notice>
+      )}
+      {credits.error && <ErrorState error={credits.error} retry={credits.refetch} />}
       {fromCheckout === 'success' && <Notice>{t('正在确认支付，请以订单状态为准。')}</Notice>}
       {fromCheckout === 'cancelled' && (
         <Notice>{t('已返回工作空间，订单是否支付以实际状态为准。')}</Notice>
@@ -225,17 +350,17 @@ export function Usage() {
         options={[
           { value: 'ledger', label: '额度明细' },
           { value: 'buckets', label: '来源与有效期' },
-          { value: 'statistics', label: '成员统计' },
-          { value: 'plans', label: '套餐与权益' },
+          ...(!apiAccount ? [{ value: 'statistics' as const, label: '成员统计' }] : []),
+          { value: 'plans', label: apiAccount ? '接口额度包' : '套餐与权益' },
           ...(isAdmin
             ? [
                 { value: 'orders' as const, label: '订单' },
-                { value: 'invoices' as const, label: '发票与抬头' },
+                ...(!apiAccount ? [{ value: 'invoices' as const, label: '发票与抬头' }] : []),
               ]
             : []),
         ]}
       />
-      {tab === 'plans' && (
+      {tab === 'plans' && !apiAccount && (
         <div className="section-spaced">
           <EntitlementsPanel />
         </div>
@@ -323,7 +448,7 @@ export function Usage() {
           )}
         </section>
       ) : tab === 'buckets' ? (
-        <CreditBuckets />
+        <CreditBuckets endpoint={`${creditPath}/buckets`} apiAccount={apiAccount} />
       ) : tab === 'statistics' ? (
         <UsageStatistics />
       ) : tab === 'plans' ? (
@@ -332,32 +457,78 @@ export function Usage() {
             <Loading />
           ) : plans.error ? (
             <ErrorState error={plans.error} />
-          ) : plans.data?.items.length ? (
+          ) : availablePlans?.length ? (
             <div className="plans-grid">
-              {plans.data.items.map((plan) => (
+              {availablePlans.map((plan) => (
                 <article className="panel plan-card" key={plan.id}>
-                  <Badge>{plan.kind === 'credits' ? t('额度包') : t('订阅方案')}</Badge>
+                  <Badge>
+                    {plan.prepaidTerms
+                      ? t('固定期会员')
+                      : plan.kind === 'credits'
+                        ? t('额度包')
+                        : t('订阅方案')}
+                  </Badge>
                   <h2>{plan.name}</h2>
                   <p className="plan-price">
+                    {plan.promotion?.status === 'available' && (
+                      <del className="muted" style={{ fontSize: 14, marginRight: 8 }}>
+                        {money(plan.originalPriceMinor, plan.currency)}
+                      </del>
+                    )}
                     {money(plan.priceMinor, plan.currency)}
                     <small>
-                      {plan.interval ? ` / ${t(plan.interval === 'month' ? '月' : '年')}` : ''}
+                      {plan.prepaidTerms
+                        ? ` / ${t('{months}个月（一次付款）').replace('{months}', String(plan.prepaidTerms.months))}`
+                        : plan.interval
+                          ? ` / ${t(plan.interval === 'month' ? '月' : '年')}`
+                          : ''}
                     </small>
                   </p>
+                  {plan.promotion && <PromotionNotice offer={plan.promotion} />}
+                  {plan.prepaidTerms && (
+                    <p className="muted">
+                      {t(
+                        plan.prepaidTerms.creditValidity === 'same-plan-renewal'
+                          ? '同档续费可叠加与恢复封存额度；到期封存3个月。'
+                          : '一次付款，同档期限顺延；额度按各次购买对应期限到期，不封存。',
+                      )}
+                    </p>
+                  )}
                   <p>
                     {plan.credits.toLocaleString()}
                     {t('创作额度')}
                   </p>
-                  <ul>
-                    {Object.entries(plan.limits).map(([key, value]) => (
-                      <li key={key}>
-                        {t(entitlementLabels[key] ?? key)}：{value}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button variant="secondary" disabled={!isAdmin} onClick={() => setPurchase(plan)}>
-                    {plan.providerConfigured ? t('选择方案') : t('查看并保存订单草稿')}
-                  </Button>
+                  {!apiAccount && (
+                    <ul>
+                      {Object.entries(plan.limits)
+                        .filter(([key]) => key !== 'brandQuotaScope')
+                        .map(([key, value]) => (
+                          <li key={key}>
+                            {t(
+                              key === 'brands'
+                                ? plan.limits.brandQuotaScope === 'member'
+                                  ? '每成员品牌上限'
+                                  : '空间共用品牌'
+                                : (entitlementLabels[key] ?? key),
+                            )}
+                            ：{value}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                  {plan.prepaidTerms?.audience === 'team' && workspace?.kind !== 'team' ? (
+                    <Button variant="secondary" onClick={() => navigate('/team')}>
+                      {t('前往团队开通')}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      disabled={!isAdmin}
+                      onClick={() => setPurchase(plan)}
+                    >
+                      {plan.providerConfigured ? t('选择方案') : t('查看并保存订单草稿')}
+                    </Button>
+                  )}
                   {!plan.providerConfigured && (
                     <span className="field-hint">{t('支付服务未配置，不会发放购买额度。')}</span>
                   )}
@@ -370,7 +541,7 @@ export function Usage() {
               description={t('管理员配置真实商业方案后，将在这里展示。')}
             />
           )}
-          {!!subscriptions.data?.items.length && (
+          {!apiAccount && !!subscriptions.data?.items.length && (
             <section className="panel settings-panel">
               <h2>{t('当前订阅')}</h2>
               {subscriptions.data?.items.map((item) => (
@@ -424,6 +595,23 @@ export function Usage() {
                     <tr key={order.id}>
                       <td>
                         <strong>{order.number}</strong>
+                        {order.purchaseTerms && (
+                          <p className="muted">
+                            {t('固定期 {months} 个月 · 无自动续费').replace(
+                              '{months}',
+                              String(order.purchaseTerms.months),
+                            )}
+                          </p>
+                        )}
+                        {order.promotion && (
+                          <p className="muted">
+                            {order.promotion.definition.name} ·{' '}
+                            {t('原价 {amount} · 活动内发起原支付会话').replace(
+                              '{amount}',
+                              money(order.promotion.originalPriceMinor, order.currency),
+                            )}
+                          </p>
+                        )}
                       </td>
                       <td>{money(order.amountMinor, order.currency)}</td>
                       <td>
@@ -562,8 +750,8 @@ export function Usage() {
               <article className="panel title-card" key={title.id}>
                 <Badge>{title.type === 'company' ? t('企业') : t('个人')}</Badge>
                 <h3>{title.name}</h3>
-                <p>{title.taxId ?? '个人抬头'}</p>
-                <span className="muted">{title.email ?? '未设置邮箱'}</span>
+                <p>{title.taxId ?? t('个人抬头')}</p>
+                <span className="muted">{title.email ?? t('未设置邮箱')}</span>
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -808,6 +996,8 @@ export function Usage() {
                 <dd>{purchase.credits}</dd>
               </div>
             </dl>
+            {purchase.promotion && <PromotionNotice offer={purchase.promotion} />}
+            {purchase.prepaidTerms && <PrepaidNotice terms={purchase.prepaidTerms} />}
             {!purchase.providerConfigured && (
               <Notice>{t('支付服务尚未连接。可以保存订单草稿，连接真实商户服务后再支付。')}</Notice>
             )}
@@ -816,7 +1006,19 @@ export function Usage() {
                 busy={action.busy}
                 onClick={() =>
                   void action.run(async () => {
-                    await post('/orders', { planId: purchase.id });
+                    await api(
+                      '/orders',
+                      {
+                        method: 'POST',
+                        body: JSON.stringify({
+                          planId: purchase.id,
+                          billingChannel: apiAccount ? 'api' : 'web',
+                          expectedAmountMinor: purchase.priceMinor,
+                          expectedCatalogVersion: purchase.catalogVersion,
+                        }),
+                      },
+                      workspace!.id,
+                    );
                     setPurchase(null);
                     setTab('orders');
                     await refresh();

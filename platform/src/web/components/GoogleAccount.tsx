@@ -126,7 +126,8 @@ export function GoogleAccount() {
       )}
       {status.data?.linked && !status.data.hasLocalPassword && (
         <p className="muted">
-          {t('此账户通过 Google 创建，尚未设置本地密码，不能解除唯一登录方式。')}
+          {t('此账户通过 Google 创建，尚未设置本地密码，不能解除唯一登录方式。')}{' '}
+          <a href="#local-password">{t('前往本地密码设置')}</a>
         </p>
       )}
       {status.data?.linked && status.data.hasLocalPassword && (

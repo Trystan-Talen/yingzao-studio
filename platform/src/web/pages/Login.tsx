@@ -1,11 +1,12 @@
 import { t } from '../lib/i18n';
 import { useState } from 'react';
 import { ArrowUpRight, LockKeyhole, Sparkles } from 'lucide-react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { post, useApi } from '../lib/api';
 import { Button, Field, Loading, Notice, useAction } from '../components/ui';
 import { useStudio } from '../context';
 import { GoogleCallbackNotice, GoogleLoginButton } from '../components/GoogleAccount';
+import { IdentityLoginButtons } from '../components/IdentityAccounts';
 export function Login() {
   const { refreshSession } = useStudio();
   const [search] = useSearchParams();
@@ -80,6 +81,11 @@ export function Login() {
             <Notice>{t('当前暂未开放自由注册。推荐链接不会绕过注册或团队邀请规则。')}</Notice>
           )}
           <GoogleCallbackNotice result={search.get('google')} code={search.get('code')} />
+          {search.get('password') === 'changed' && (
+            <Notice tone="success">
+              {t('密码已更新，所有网页会话已退出。请使用新密码或已有谷歌登录方式重新登录。')}
+            </Notice>
+          )}
           {status.isLoading ? (
             <Loading />
           ) : (
@@ -119,6 +125,11 @@ export function Login() {
                   maxLength={128}
                 />
               </Field>
+              {!registration && (
+                <Link className="text-button" to="/password/forgot">
+                  {t('忘记密码？')}
+                </Link>
+              )}
               <Button type="submit" busy={action.busy}>
                 {registration ? t('创建并开始创作') : t('登录工作空间')}
                 <ArrowUpRight size={17} />
@@ -137,6 +148,7 @@ export function Login() {
           {!status.data?.setupRequired && (
             <GoogleLoginButton inviteToken={invite} referralCode={referralCode} />
           )}
+          <IdentityLoginButtons inviteToken={invite} referralCode={referralCode} />
           <div className="login-note">
             <LockKeyhole size={15} />
             <span>{t('你的原始素材与创作记录保存在所属工作空间。')}</span>

@@ -5,6 +5,14 @@ import { useStudio } from './context';
 import { Layout } from './components/Layout';
 import { Empty, Button, Loading } from './components/ui';
 const Login = lazy(() => import('./pages/Login').then((module) => ({ default: module.Login })));
+const PasswordRecovery = lazy(() =>
+  import('./pages/PasswordRecovery').then((module) => ({ default: module.PasswordRecovery })),
+);
+const IdentityRegistration = lazy(() =>
+  import('./pages/IdentityRegistration').then((module) => ({
+    default: module.IdentityRegistration,
+  })),
+);
 const Inspiration = lazy(() =>
   import('./pages/Inspiration').then((module) => ({ default: module.Inspiration })),
 );
@@ -84,6 +92,10 @@ class PageBoundary extends Component<{ children: ReactNode }, { error: Error | n
 }
 export function App() {
   const { session, workspace } = useStudio();
+  if (location.pathname === '/auth/complete-registration')
+    return <PageBoundary>{page(<IdentityRegistration />)}</PageBoundary>;
+  if (['/password/forgot', '/password/reset'].includes(location.pathname))
+    return <PageBoundary>{page(<PasswordRecovery />)}</PageBoundary>;
   if (location.pathname.startsWith('/share'))
     return <PageBoundary>{page(<PublicShare />)}</PageBoundary>;
   if (!session) return page(<Login />);
