@@ -1,0 +1,107 @@
+{
+  "startedAt": "2026-10-31T04:28:20.354Z",
+  "isolatedDatabaseCopy": true,
+  "mediaReadByApplication": false,
+  "mediaCopiedOrReadForThisCheck": false,
+  "workerConstructed": false,
+  "serverListened": false,
+  "generationCalls": 0,
+  "allTableDigestsUnchanged": true,
+  "tables": 100,
+  "liveProcessUnchanged": true,
+  "completed": true,
+  "finishedAt": "2026-10-31T04:28:23.652Z",
+  "requests": [
+    {
+      "provider": "openai",
+      "origin": "https://xingyunyinli.com",
+      "path": "/v1/models",
+      "method": "GET",
+      "httpStatus": 200,
+      "outcome": "response"
+    },
+    {
+      "provider": "seedance",
+      "origin": "https://xingyunyinli.com",
+      "path": "/v1/models",
+      "method": "GET",
+      "httpStatus": 200,
+      "outcome": "response"
+    }
+  ],
+  "results": [
+    {
+      "providerId": "openai",
+      "modelId": "doubao-seedream-5.0-lite",
+      "source": "upstream-model-list",
+      "status": "limited",
+      "modelVerified": true,
+      "parametersVerified": false,
+      "reasonCode": "MODEL_LIST_ONLY",
+      "parameterSources": [
+        {
+          "key": "ratio",
+          "source": "local-adapter",
+          "adjustable": true
+        },
+        {
+          "key": "resolution",
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "count",
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "size",
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "format",
+          "source": "local-adapter",
+          "adjustable": false
+        }
+      ]
+    },
+    {
+      "providerId": "seedance",
+      "modelId": "doubao-seedance-2.0",
+      "source": "upstream-model-list",
+      "status": "limited",
+      "modelVerified": true,
+      "parametersVerified": false,
+      "reasonCode": "MODEL_LIST_ONLY",
+      "parameterSources": [
+        {
+          "key": "ratio",
+          "source": "local-adapter",
+          "adjustable": true
+        },
+        {
+          "key": "resolution",
+          "source": "local-adapter",
+          "adjustable": true
+        },
+        {
+          "key": "duration",
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "count",
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "generateAudio",
+          "source": "local-adapter",
+          "adjustable": false
+        }
+      ]
+    }
+  ],
+  "disallowedRequests": 0
+}

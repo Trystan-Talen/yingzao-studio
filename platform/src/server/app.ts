@@ -69,6 +69,7 @@ export async function createApp(
     db?: DatabaseContext;
     logging?: boolean;
     serveWeb?: boolean;
+    webRoot?: string;
     identity?: IdentityAuthOptions;
   } = {},
 ) {
@@ -150,6 +151,35 @@ export async function createApp(
   });
   app.addHook('onSend', async (req, reply, payload) => {
     reply.header('X-Content-Type-Options', 'nosniff').header('X-Frame-Options', 'DENY');
+    if (config.isProduction) {
+      if (new URL(config.publicOrigin).protocol === 'https:')
+        reply.header('Strict-Transport-Security', 'max-age=31536000');
+      // API documentation has its own script policy; the application uses only bundled scripts.
+      if (
+        !req.url.startsWith('/api/') &&
+        String(reply.getHeader('content-type')).includes('text/html')
+      ) {
+        reply.header(
+          'Content-Security-Policy',
+          [
+            "default-src 'self'",
+            "script-src 'self'",
+            "style-src 'self' 'unsafe-inline'",
+            "img-src 'self' data: blob: https:",
+            "media-src 'self' data: blob:",
+            "font-src 'self' data:",
+            "connect-src 'self'",
+            "worker-src 'self' blob:",
+            "object-src 'none'",
+            "base-uri 'none'",
+            "frame-ancestors 'none'",
+            "form-action 'self'",
+          ].join('; '),
+        );
+        // Revalidate the entry after deployment so it cannot keep referencing removed bundles.
+        reply.header('Cache-Control', 'no-cache');
+      }
+    }
     if (
       req.url.split('?')[0] === '/api/v1/auth/google/callback' ||
       req.url.split('?')[0]?.startsWith('/password/') ||
@@ -258,7 +288,7 @@ export async function createApp(
       },
     },
   });
-  const webRoot = resolve('dist/web');
+  const webRoot = resolve(options.webRoot ?? 'dist/web');
   if (options.serveWeb !== false && existsSync(webRoot)) {
     await app.register(staticFiles, { root: webRoot });
     app.setNotFoundHandler((req, reply) =>

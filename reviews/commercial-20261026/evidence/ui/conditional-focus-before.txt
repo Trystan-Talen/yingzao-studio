@@ -1,0 +1,53 @@
+
+Running 1 test using 1 worker
+
+(node:36775) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger (8.8s)
+
+
+  1) [desktop] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'AI 帮我写', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('button', { name: 'AI 帮我写', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'AI 帮我写', exact: true })
+        14 × locator resolved to <button class="button ghost ">…</button>
+           - unexpected value "inactive"
+
+
+      121 |   await page.keyboard.press('Escape');
+      122 |   await expect(dialog).toBeHidden();
+    > 123 |   await expect(assistant).toBeFocused();
+          |                           ^
+      124 |   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
+      125 | });
+      126 |
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:123:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-conditional-focus-red/results/shell-quality-a-conditiona-ad4c2-stores-its-keyboard-trigger-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-conditional-focus-red/results/shell-quality-a-conditiona-ad4c2-stores-its-keyboard-trigger-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-conditional-focus-red/results/shell-quality-a-conditiona-ad4c2-stores-its-keyboard-trigger-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-conditional-focus-red/results/shell-quality-a-conditiona-ad4c2-stores-its-keyboard-trigger-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-conditional-focus-red/results/shell-quality-a-conditiona-ad4c2-stores-its-keyboard-trigger-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger 

@@ -7,7 +7,17 @@ import { z } from 'zod';
 import type { ServerResponse } from 'node:http';
 import type { Actor, Permission } from '../../contracts/core';
 import { jobInputSchema, jobSubmitSchema, providerSettingsInputSchema } from '../../contracts/jobs';
-import { designPlanResultSchema, type DesignPlanResult } from '../../contracts/design-plan';
+import { modelCapabilityQuerySchema } from '../../contracts/model-capabilities';
+import { capabilityInputMode } from './model-capabilities';
+import {
+  jobResultDataSchema,
+  resultMatchesAssistantMode,
+  type JobResultData,
+} from '../../contracts/job-result';
+import { registerDetailPageRoutes } from './detail-page-routes';
+import { registerCreativeBriefRoutes } from './creative-brief-routes';
+import { createDetailPageServices } from './detail-pages';
+import { addDetailPageToArchive } from './detail-page-export';
 import { AppError } from '../errors';
 import type { TaskServices } from './service';
 import { checkScope } from './validation';
@@ -45,6 +55,8 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     return { actor, wid };
   }
   const response = (data: unknown) => ({ data });
+  registerDetailPageRoutes(app, s, access);
+  registerCreativeBriefRoutes(app, s, access);
   const page = (items: unknown[]) => ({
     items,
     total: items.length,
@@ -55,6 +67,20 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     const { wid } = await access(req, 'read', 'jobs:read');
     return response(s.settings.capabilities(wid));
   });
+  app.get(
+    '/api/v1/capabilities/model',
+    {
+      schema: { querystring: modelCapabilityQuerySchema },
+      config: { rateLimit: { max: 60, timeWindow: '1 minute' } },
+    },
+    async (req, reply) => {
+      const { wid } = await access(req, 'read', 'jobs:read');
+      reply.header('Cache-Control', 'private, no-store');
+      return response(
+        await s.settings.modelCapabilities.query(wid, modelCapabilityQuerySchema.parse(req.query)),
+      );
+    },
+  );
   app.get('/api/v1/providers', async (req) => {
     const { wid } = await access(req, 'manage');
     return response(page(s.settings.list(wid)));
@@ -203,14 +229,32 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       checkScope(actor, 'assets:read');
       const { jobIds } = req.body as { jobIds: string[] },
         jobs = [...new Set(jobIds)].map((id) => s.get(actor, wid, id));
+      const detailPages = new Map(
+        jobs
+          .filter((job) => job.input.options.detailPagePlan)
+          .map((job) => [job.id, createDetailPageServices(s).get(actor, wid, job.id)]),
+      );
       if (
-        jobs.reduce((sum, j) => sum + j.outputAssets.reduce((n, a) => n + a.byteSize, 0), 0) >
+        jobs.reduce(
+          (sum, j) =>
+            sum +
+            (
+              detailPages.get(j.id)?.screens.flatMap((screen) => screen.outputAssets) ??
+              j.outputAssets
+            ).reduce((n, a) => n + a.byteSize, 0),
+          0,
+        ) >
         200 * 1024 * 1024
       )
         throw new AppError(413, 'ARCHIVE_LIMIT', '单次ZIP原件合计最多200MB，请分批下载');
       const archive = new JSZip();
       let outputs = 0;
       for (const job of jobs) {
+        const detailPage = detailPages.get(job.id);
+        if (detailPage) {
+          outputs += await addDetailPageToArchive(archive, s, actor, wid, detailPage);
+          continue;
+        }
         for (const [index, a] of job.outputAssets.entries()) {
           const f = await core.assets.readOriginal(actor, wid, a.id);
           archive.file(
@@ -259,7 +303,24 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
   });
   app.post('/api/v1/jobs/:id/retry-quote', { schema: { params: idParams } }, async (req) => {
     const { actor, wid } = await access(req, 'write', 'jobs:write');
-    return response(s.retryQuote(actor, wid, idParams.parse(req.params).id));
+    const id = idParams.parse(req.params).id;
+    const original = s.get(actor, wid, id).input;
+    let revision: string | undefined;
+    if (original.capabilityRevision) {
+      const capability = await s.settings.modelCapabilities.query(wid, {
+        providerId: original.providerId,
+        operation: original.operation,
+        modelId: original.options.model || '',
+        inputMode: capabilityInputMode(original),
+        refresh: 'true',
+      });
+      revision = capability.revision;
+    }
+    return response(s.retryQuote(actor, wid, id, revision));
+  });
+  app.post('/api/v1/jobs/:id/resume-result', { schema: { params: idParams } }, async (req) => {
+    const { actor, wid } = await access(req, 'write', 'jobs:write');
+    return response(s.resumeResult(actor, wid, idParams.parse(req.params).id));
   });
   app.post(
     '/api/v1/jobs/:id/reconcile',
@@ -272,7 +333,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
           assetId: z.string().uuid().optional(),
           assetIds: z.array(z.string().uuid()).min(1).max(10).optional(),
           resultText: z.string().max(50000).optional(),
-          resultData: designPlanResultSchema.optional(),
+          resultData: jobResultDataSchema.optional(),
           evidence: z.string().min(10).max(2000),
         }),
       },
@@ -287,7 +348,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
         assetId?: string;
         assetIds?: string[];
         resultText?: string;
-        resultData?: DesignPlanResult;
+        resultData?: JobResultData;
         evidence: string;
       };
       return response(
@@ -305,7 +366,8 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
           const text = b.resultText?.trim() || null;
           if (
             b.resultData &&
-            (input.operation !== 'text.assist' || input.options.assistantMode !== 'design-plan')
+            (input.operation !== 'text.assist' ||
+              !resultMatchesAssistantMode(b.resultData, input.options.assistantMode))
           )
             throw new AppError(400, 'RESULT_KIND', '只有设计方案任务可以附带方案结构');
           if (b.outcome === 'failed' && (ids.length || text || b.resultData))

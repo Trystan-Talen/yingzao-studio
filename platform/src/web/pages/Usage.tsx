@@ -274,7 +274,6 @@ export function Usage() {
   return (
     <div className="page">
       <PageHeader
-        eyebrow="KNOW WHERE YOUR CREATIVITY GOES"
         title={t(apiAccount ? '接口额度与订单' : '用量与订单')}
         description={t(
           apiAccount
@@ -668,6 +667,9 @@ export function Usage() {
         </section>
       ) : (
         <section className="section-spaced">
+          <Notice>
+            {t('当前没有接通正式开票服务。记录仅为本地申请，不代表已发送或已开具发票。')}
+          </Notice>
           <div className="section-heading">
             <h2>{t('发票记录')}</h2>
             <div className="inline-actions">
@@ -1088,6 +1090,9 @@ export function Usage() {
         </form>
       </Modal>
       <Modal open={invoiceModal} onClose={() => setInvoiceModal(false)} title={t('申请发票')}>
+        <Notice>
+          {t('当前没有接通正式开票服务。记录仅为本地申请，不代表已发送或已开具发票。')}
+        </Notice>
         <form
           onSubmit={(e) => {
             e.preventDefault();

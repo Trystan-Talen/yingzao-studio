@@ -1,0 +1,10 @@
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  71 passed (71)
+      Tests  772 passed (772)
+   Start at  22:32:34
+   Duration  84.54s (tests 63%, import 36%, transform 1%)
+

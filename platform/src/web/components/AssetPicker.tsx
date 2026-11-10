@@ -1,6 +1,6 @@
 import { t } from '../lib/i18n';
 import { useEffect, useRef, useState } from 'react';
-import { Check, FileText, ImagePlus, Music, Play, Plus, Upload, X } from 'lucide-react';
+import { Check, FileText, ImagePlus, Music, Paperclip, Play, Plus, Upload, X } from 'lucide-react';
 import type { AssetDto } from '../../contracts/core';
 import { bytes, errorMessage, qs, uploadAsset, useApi, useRefresh, type Page } from '../lib/api';
 import { Button, Empty, ErrorState, IconButton, Loading, Modal, Pagination, useToast } from './ui';
@@ -44,6 +44,7 @@ export function AssetPicker({
   max = 20,
   projectId,
   compact = false,
+  inline = false,
   roleLabels,
   disabled = false,
   uploadScope,
@@ -56,6 +57,7 @@ export function AssetPicker({
   max?: number;
   projectId?: string;
   compact?: boolean;
+  inline?: boolean;
   roleLabels?: string[];
   disabled?: boolean;
   uploadScope?: string;
@@ -297,14 +299,19 @@ export function AssetPicker({
     </>
   );
   return (
-    <div className={`asset-picker ${compact ? 'compact' : ''}`}>
-      <div className="field-label asset-picker-heading">
+    <div
+      className={`asset-picker ${compact ? 'compact' : ''} ${inline ? 'asset-picker-inline' : ''}`}
+    >
+      <div className={inline ? 'sr-only' : 'field-label asset-picker-heading'}>
         <span>{t(label)}</span>
         <span className="muted">
           {value.length} / {max}
         </span>
       </div>
-      <div className="asset-chips">
+      <div
+        className={`asset-chips ${dragging ? 'dragging' : ''}`}
+        {...(inline ? transferEvents : {})}
+      >
         {value.map((asset, index) => (
           <div className="asset-chip" key={`${asset.id}-${index}`}>
             <AssetVisual asset={asset} />
@@ -327,7 +334,7 @@ export function AssetPicker({
             onClick={() => setOpen(true)}
             disabled={!canEdit}
           >
-            <ImagePlus size={21} />
+            {inline ? <Paperclip size={16} /> : <ImagePlus size={21} />}
             <span>{value.length ? t('添加') : t('添加素材')}</span>
           </button>
         )}

@@ -35,6 +35,7 @@ test('restores ordered marketing modules and their own real references from the 
   const headers = { 'x-workspace-id': session.activeWorkspaceId };
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   const kind = composer.getByRole('combobox', { name: '创作类型', exact: true });
   const prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
   await prompt.fill('春季上新：按物料构图与各自参考保存，不生成');
@@ -114,6 +115,7 @@ test('restores ordered marketing modules and their own real references from the 
   );
   await page.evaluate((value) => localStorage.removeItem(value), key);
   await page.reload();
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await expect(kind).toHaveValue('marketing');
   await expect(prompt).toHaveValue('春季上新：按物料构图与各自参考保存，不生成');
   await planner.locator('summary').click();
@@ -165,7 +167,7 @@ test('restores ordered marketing modules and their own real references from the 
   );
   await composer.getByRole('button', { name: '保存草稿', exact: true }).click();
   expect((await freeSave).status()).toBe(200);
-  await expect(composer.getByText('草稿已保存到项目', { exact: false })).toBeVisible();
+  await expect(page.locator('.toast').filter({ hasText: '草稿已保存' }).last()).toBeVisible();
   const savedFree = await latestDraft();
   expect(savedFree).toMatchObject({
     prompt: '自由创作：保留模块草稿但当前只创作一张自由图',
@@ -175,6 +177,7 @@ test('restores ordered marketing modules and their own real references from the 
   expect(savedFree?.options.designs).toEqual(savedMarketing?.options.designs);
   await page.evaluate((value) => localStorage.removeItem(value), key);
   await page.reload();
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await expect(kind).toHaveValue('free');
   await expect(prompt).toHaveValue('自由创作：保留模块草稿但当前只创作一张自由图');
   await expect(composer.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('3:2');

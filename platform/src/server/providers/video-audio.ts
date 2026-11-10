@@ -27,8 +27,12 @@ const isO3 = (input: VideoAudioInput) =>
   input.providerId === 'fal' &&
   input.options.model === 'kling-o3-4k-reference';
 export function validateVideoAudioInput(input: VideoAudioInput, audio?: VideoAudioAsset) {
-  if (input.options.generateAudio !== undefined && !isO3(input))
-    throw new ProviderError('仅Kling O3参考模型支持独立生成音轨开关。');
+  const supportedSeedance =
+    input.providerId === 'seedance' &&
+    input.operation === 'video.generate' &&
+    (input.options.generateAudio === false || input.options.model === 'doubao-seedance-2.0');
+  if (input.options.generateAudio !== undefined && !isO3(input) && !supportedSeedance)
+    throw new ProviderError('当前模型不支持独立生成音轨开关。');
   if (!input.backgroundAudioAssetId) return;
   if (
     input.operation !== 'video.generate' ||

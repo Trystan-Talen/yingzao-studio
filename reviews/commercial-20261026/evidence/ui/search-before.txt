@@ -1,0 +1,51 @@
+
+Running 1 test using 1 worker
+
+(node:21927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (7.7s)
+
+
+  1) [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '搜索工作空间', exact: true }).getByRole('status')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '搜索工作空间', exact: true }).getByRole('status') with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '搜索工作空间', exact: true }).getByRole('status')
+
+
+      73 |   await dialog.getByRole('textbox', { name: '搜索项目', exact: true }).fill('导航验收');
+      74 |   try {
+    > 75 |     await expect(dialog.getByRole('status')).toBeVisible();
+         |                                              ^
+      76 |   } finally {
+      77 |     mode = 'error';
+      78 |     release!();
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:75:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-search-red/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-search-red/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-ui-search-red/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-search-red/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-ui-search-red/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result 

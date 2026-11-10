@@ -1,0 +1,76 @@
+[
+  {
+    "case": "desktop-upload",
+    "errors": [],
+    "failedRequests": [
+      {
+        "path": "/api/v1/job-events",
+        "error": "net::ERR_ABORTED"
+      }
+    ],
+    "responses": []
+  },
+  {
+    "case": "desktop-delete",
+    "errors": [],
+    "failedRequests": [],
+    "responses": [
+      {
+        "path": "/api/v1/assets/<isolated-id>",
+        "status": 503
+      }
+    ]
+  },
+  {
+    "case": "desktop-projects",
+    "errors": [],
+    "failedRequests": [],
+    "responses": [
+      {
+        "path": "/api/v1/projects",
+        "status": 503
+      },
+      {
+        "path": "/api/v1/projects",
+        "status": 503
+      }
+    ]
+  },
+  {
+    "case": "mobile-upload",
+    "errors": [],
+    "failedRequests": [
+      {
+        "path": "/api/v1/job-events",
+        "error": "net::ERR_ABORTED"
+      }
+    ],
+    "responses": []
+  },
+  {
+    "case": "mobile-delete",
+    "errors": [],
+    "failedRequests": [],
+    "responses": [
+      {
+        "path": "/api/v1/assets/<isolated-id>",
+        "status": 503
+      }
+    ]
+  },
+  {
+    "case": "mobile-projects",
+    "errors": [],
+    "failedRequests": [],
+    "responses": [
+      {
+        "path": "/api/v1/projects",
+        "status": 503
+      },
+      {
+        "path": "/api/v1/projects",
+        "status": 503
+      }
+    ]
+  }
+]

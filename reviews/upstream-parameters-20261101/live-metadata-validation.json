@@ -1,0 +1,354 @@
+{
+  "startedAt": "2026-11-02T04:53:29.421Z",
+  "isolatedDatabaseCopy": true,
+  "mediaReadByApplication": false,
+  "mediaCopiedOrReadForThisCheck": false,
+  "workerConstructed": false,
+  "serverListened": false,
+  "generationCalls": 0,
+  "allTableDigestsUnchanged": true,
+  "tables": 100,
+  "liveProcessUnchanged": true,
+  "completed": true,
+  "finishedAt": "2026-11-02T04:53:34.031Z",
+  "requests": [
+    {
+      "provider": "openai",
+      "origin": "https://xingyunyinli.com",
+      "path": "/v1/models",
+      "method": "GET",
+      "httpStatus": 200,
+      "outcome": "response"
+    },
+    {
+      "provider": "openai",
+      "origin": "https://xingyunyinli.com",
+      "path": "/api/pricing",
+      "method": "GET",
+      "httpStatus": 200,
+      "outcome": "response"
+    },
+    {
+      "provider": "seedance",
+      "origin": "https://xingyunyinli.com",
+      "path": "/v1/models",
+      "method": "GET",
+      "httpStatus": 200,
+      "outcome": "response"
+    },
+    {
+      "provider": "seedance",
+      "origin": "https://xingyunyinli.com",
+      "path": "/api/pricing",
+      "method": "GET",
+      "httpStatus": 200,
+      "outcome": "response"
+    }
+  ],
+  "results": [
+    {
+      "providerId": "openai",
+      "modelId": "doubao-seedream-5.0-lite",
+      "source": "provider-documentation",
+      "status": "limited",
+      "modelVerified": true,
+      "parametersVerified": false,
+      "reasonCode": "DOCUMENTED_PARAMETERS",
+      "parameters": [
+        {
+          "key": "ratio",
+          "values": [
+            "1:1",
+            "4:3",
+            "3:4",
+            "16:9",
+            "9:16",
+            "3:2",
+            "2:3",
+            "21:9"
+          ],
+          "source": "provider-documentation",
+          "adjustable": true
+        },
+        {
+          "key": "resolution",
+          "values": [
+            "2K",
+            "3K",
+            "4K"
+          ],
+          "source": "provider-documentation",
+          "adjustable": true
+        },
+        {
+          "key": "count",
+          "values": [
+            1
+          ],
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "size",
+          "values": [
+            "2048x2048",
+            "3072x3072",
+            "4096x4096",
+            "2304x1728",
+            "3456x2592",
+            "4704x3520",
+            "1728x2304",
+            "2592x3456",
+            "3520x4704",
+            "2848x1600",
+            "4096x2304",
+            "5504x3040",
+            "1600x2848",
+            "2304x4096",
+            "3040x5504",
+            "2496x1664",
+            "3744x2496",
+            "4992x3328",
+            "1664x2496",
+            "2496x3744",
+            "3328x4992",
+            "3136x1344",
+            "4704x2016",
+            "6240x2656"
+          ],
+          "source": "provider-documentation",
+          "adjustable": false
+        },
+        {
+          "key": "format",
+          "values": [
+            "png"
+          ],
+          "source": "provider-documentation",
+          "adjustable": false
+        }
+      ],
+      "sizePresets": [
+        {
+          "ratio": "1:1",
+          "resolution": "2K",
+          "size": "2048x2048"
+        },
+        {
+          "ratio": "4:3",
+          "resolution": "2K",
+          "size": "2304x1728"
+        },
+        {
+          "ratio": "3:4",
+          "resolution": "2K",
+          "size": "1728x2304"
+        },
+        {
+          "ratio": "16:9",
+          "resolution": "2K",
+          "size": "2848x1600"
+        },
+        {
+          "ratio": "9:16",
+          "resolution": "2K",
+          "size": "1600x2848"
+        },
+        {
+          "ratio": "3:2",
+          "resolution": "2K",
+          "size": "2496x1664"
+        },
+        {
+          "ratio": "2:3",
+          "resolution": "2K",
+          "size": "1664x2496"
+        },
+        {
+          "ratio": "21:9",
+          "resolution": "2K",
+          "size": "3136x1344"
+        },
+        {
+          "ratio": "1:1",
+          "resolution": "3K",
+          "size": "3072x3072"
+        },
+        {
+          "ratio": "4:3",
+          "resolution": "3K",
+          "size": "3456x2592"
+        },
+        {
+          "ratio": "3:4",
+          "resolution": "3K",
+          "size": "2592x3456"
+        },
+        {
+          "ratio": "16:9",
+          "resolution": "3K",
+          "size": "4096x2304"
+        },
+        {
+          "ratio": "9:16",
+          "resolution": "3K",
+          "size": "2304x4096"
+        },
+        {
+          "ratio": "3:2",
+          "resolution": "3K",
+          "size": "3744x2496"
+        },
+        {
+          "ratio": "2:3",
+          "resolution": "3K",
+          "size": "2496x3744"
+        },
+        {
+          "ratio": "21:9",
+          "resolution": "3K",
+          "size": "4704x2016"
+        },
+        {
+          "ratio": "1:1",
+          "resolution": "4K",
+          "size": "4096x4096"
+        },
+        {
+          "ratio": "4:3",
+          "resolution": "4K",
+          "size": "4704x3520"
+        },
+        {
+          "ratio": "3:4",
+          "resolution": "4K",
+          "size": "3520x4704"
+        },
+        {
+          "ratio": "16:9",
+          "resolution": "4K",
+          "size": "5504x3040"
+        },
+        {
+          "ratio": "9:16",
+          "resolution": "4K",
+          "size": "3040x5504"
+        },
+        {
+          "ratio": "3:2",
+          "resolution": "4K",
+          "size": "4992x3328"
+        },
+        {
+          "ratio": "2:3",
+          "resolution": "4K",
+          "size": "3328x4992"
+        },
+        {
+          "ratio": "21:9",
+          "resolution": "4K",
+          "size": "6240x2656"
+        }
+      ],
+      "documentation": [
+        {
+          "url": "https://docs.volcengine.com/docs/ark/image-generation-api?lang=zh",
+          "reviewedAt": "2026-11-02"
+        }
+      ],
+      "catalog": {
+        "status": "available",
+        "checkedAt": "2026-11-02T04:53:33.193Z",
+        "url": "https://xingyunyinli.com/api/pricing"
+      }
+    },
+    {
+      "providerId": "seedance",
+      "modelId": "doubao-seedance-2.0",
+      "source": "provider-documentation",
+      "status": "limited",
+      "modelVerified": true,
+      "parametersVerified": false,
+      "reasonCode": "DOCUMENTED_PARAMETERS",
+      "parameters": [
+        {
+          "key": "ratio",
+          "values": [
+            "16:9",
+            "9:16",
+            "1:1",
+            "4:3",
+            "3:4",
+            "21:9",
+            "adaptive"
+          ],
+          "source": "provider-documentation",
+          "adjustable": true
+        },
+        {
+          "key": "resolution",
+          "values": [
+            "480p",
+            "720p",
+            "1080p",
+            "4K"
+          ],
+          "source": "provider-documentation",
+          "adjustable": true
+        },
+        {
+          "key": "duration",
+          "values": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "source": "provider-documentation",
+          "adjustable": true
+        },
+        {
+          "key": "count",
+          "values": [
+            1
+          ],
+          "source": "local-adapter",
+          "adjustable": false
+        },
+        {
+          "key": "generateAudio",
+          "values": [
+            false,
+            true
+          ],
+          "source": "provider-documentation",
+          "adjustable": true
+        }
+      ],
+      "documentation": [
+        {
+          "url": "https://ark.volcengine.com/region:cn-beijing/docs/create-video-generation-task-api",
+          "reviewedAt": "2026-11-02"
+        },
+        {
+          "url": "https://github.com/QuantumNous/new-api-plugins/blob/main/plugins/tasks/doubao/1.0.0/plugin.js",
+          "reviewedAt": "2026-11-02"
+        }
+      ],
+      "catalog": {
+        "status": "available",
+        "checkedAt": "2026-11-02T04:53:33.889Z",
+        "url": "https://xingyunyinli.com/api/pricing"
+      }
+    }
+  ],
+  "disallowedRequests": 0
+}

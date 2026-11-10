@@ -1,7 +1,7 @@
 import type { BillingChannel } from '../../contracts/billing-channel';
 import type { JobStatus, JobInput } from '../../contracts/jobs';
 import type { Actor } from '../../contracts/core';
-import type { DesignPlanResult } from '../../contracts/design-plan';
+import type { JobResultData } from '../../contracts/job-result';
 export interface JobRow {
   billing_channel: BillingChannel;
   id: string;
@@ -77,10 +77,14 @@ export interface ProviderOutput {
   mimeType: string;
   name: string;
   text?: string;
-  resultData?: DesignPlanResult;
+  resultData?: JobResultData;
 }
 export interface RemoteTask {
   id: string;
+  difyMode?: 'ideas' | 'detail-page';
+  detailPageScreenCount?: number;
+  detailPageRatio?: '3:4' | '2:3' | '9:16';
+  submittedAt?: string;
   statusUrl?: string;
   responseUrl?: string;
   cancelUrl?: string;
@@ -102,6 +106,7 @@ export interface ExecutionContext {
   input: JobInput;
   assetUrl?: (id: string, variant?: 'original' | 'mask-white') => string;
   readAsset: (id: string) => Promise<{ buffer: Buffer; mimeType: string; name: string }>;
+  onRemoteAccepted?: (remote: RemoteTask) => void | Promise<void>;
   textPresence?: (
     assetId: string,
     detectorId: string,

@@ -13,11 +13,18 @@ const IdentityRegistration = lazy(() =>
     default: module.IdentityRegistration,
   })),
 );
+const CreateHome = lazy(() =>
+  import('./pages/CreateHome').then((module) => ({ default: module.CreateHome })),
+);
 const Inspiration = lazy(() =>
   import('./pages/Inspiration').then((module) => ({ default: module.Inspiration })),
 );
 const Workbench = lazy(() =>
   import('./pages/Workbench').then((module) => ({ default: module.Workbench })),
+);
+const Tasks = lazy(() => import('./pages/Tasks').then((module) => ({ default: module.Tasks })));
+const DetailPageStudio = lazy(() =>
+  import('./pages/DetailPageStudio').then((module) => ({ default: module.DetailPageStudio })),
 );
 const Tools = lazy(() => import('./pages/Tools').then((module) => ({ default: module.Tools })));
 const ToolDetail = lazy(() =>
@@ -104,9 +111,13 @@ export function App() {
     <PageBoundary key={workspace?.id ?? 'no-workspace'}>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={page(<Inspiration />)} />
+          <Route index element={page(<CreateHome />)} />
+          <Route path="inspiration" element={page(<Inspiration />)} />
           <Route path="workbench" element={page(<Workbench />)} />
           <Route path="workbench/:projectId" element={page(<Workbench />)} />
+          <Route path="tasks" element={page(<Tasks />)} />
+          <Route path="detail-pages" element={page(<DetailPageStudio />)} />
+          <Route path="detail-pages/:projectId" element={page(<DetailPageStudio />)} />
           <Route path="tools" element={page(<Tools />)} />
           <Route path="tools/:toolId" element={page(<ToolDetail />)} />
           <Route path="advanced/:operationId" element={page(<AdvancedToolPage />)} />

@@ -1,0 +1,78 @@
+/* Shared project-composer layout belongs to Composer, not the landing page.
+   The new composer-studio variant intentionally does not match these rules. */
+.composer-v2 .composer-footer-tools {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.composer-v2 .composer-footer-tools .composer-toolbar {
+  margin: 0;
+  justify-content: start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.composer-v2 .composer-footer-tools .composer-bottom {
+  margin: 0;
+  order: initial;
+}
+.composer-v2 .composer-footer-tools .composer-bottom .button {
+  font-size: 13px;
+  padding: 8px;
+  min-height: 38px;
+}
+.composer-v2 .composer-footer-tools .composer-settings-toggle {
+  background: var(--field);
+  padding: 9px 12px;
+  border-radius: 9px;
+  min-height: 38px;
+  font-size: 13px;
+}
+.composer-v2 .composer-footer-tools .composer-platform-field select {
+  max-width: 190px;
+  min-height: 38px;
+  font-size: 13px;
+  padding-block: 8px;
+  background-color: var(--field);
+  border-color: transparent;
+  border-radius: 9px;
+}
+.composer-v2 .composer-footer-tools .composer-settings-toggle > span:nth-of-type(2) {
+  display: none;
+}
+.composer.composer-v2 .submit-row {
+  align-items: center;
+  gap: 12px;
+  padding-top: 10px;
+  margin-top: 6px;
+}
+@media (max-width: 1100px) {
+  .composer-v2 .composer-footer-tools .composer-bottom {
+    margin-inline-start: auto;
+  }
+}
+@media (max-width: 700px) {
+  .composer-v2 .composer-footer-tools .composer-toolbar {
+    gap: 6px;
+  }
+  .composer-v2 .composer-footer-tools .composer-platform-field select {
+    max-width: 158px;
+    font-size: 12px;
+  }
+  .composer-v2 .composer-footer-tools .composer-settings-toggle {
+    padding-inline: 9px;
+    font-size: 12px;
+  }
+  .composer-v2 .composer-footer-tools .composer-bottom .button {
+    font-size: 12px;
+    padding-inline: 4px;
+  }
+  .composer.composer-v2 .submit-row .credit-estimate {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    align-items: start;
+  }
+}

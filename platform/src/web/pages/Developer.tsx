@@ -48,7 +48,6 @@ export function Developer() {
   return (
     <div className="page">
       <PageHeader
-        eyebrow="BUILD ON YOUR CREATIVE WORKSPACE"
         title={t('开发者')}
         description={t('让你的应用，与同一个创作工作空间连接。')}
         action={

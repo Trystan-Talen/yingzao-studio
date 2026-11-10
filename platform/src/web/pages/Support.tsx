@@ -46,7 +46,7 @@ interface Ticket {
 const help = [
   {
     title: '如何开始第一次创作？',
-    body: '在灵感广场输入需求，或打开一张灵感卡片创建草稿。选择图片或视频、模型与参考素材，连接服务后查看报价并确认执行。未连接服务时仍可保存草稿、管理素材和编辑画布。',
+    body: '在首页的快速创作区选择图片、视频或商品详情页。填写需求、添加参考素材并确认费用后开始生成；也可以从灵感探索中选择画面继续创作。服务未连接时仍可保存草稿和整理素材。',
   },
   {
     title: '额度与供应商费用有什么区别？',
@@ -91,7 +91,6 @@ export function Support() {
   return (
     <div className="page">
       <PageHeader
-        eyebrow="A LITTLE HELP, A LONG WAY"
         title={t('帮助与支持')}
         description={t('让每一次创作都走得更顺畅。')}
         action={

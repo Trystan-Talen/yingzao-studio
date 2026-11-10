@@ -197,6 +197,18 @@ export class PrivateStorage {
         const stream = metadata.streams?.find((s) => s.codec_type === 'video');
         width = stream?.width ?? null;
         height = stream?.height ?? null;
+        // An MP4 signature can belong to an audio-only container. Video assets need a real frame.
+        if (
+          kind === 'video' &&
+          (!stream ||
+            width === null ||
+            height === null ||
+            !Number.isSafeInteger(width) ||
+            !Number.isSafeInteger(height) ||
+            width <= 0 ||
+            height <= 0)
+        )
+          throw new Error('video-stream');
         durationMs = Math.round(Number(metadata.format?.duration) * 1000);
         if (!Number.isFinite(durationMs) || durationMs <= 0) throw new Error('duration');
       } catch {

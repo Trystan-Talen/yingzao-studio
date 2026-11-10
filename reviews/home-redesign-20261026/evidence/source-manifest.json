@@ -1,0 +1,21 @@
+{
+  "algorithm": "SHA-256",
+  "scope": "本次首页设计相关源码与验收文件；不是完整仓库快照",
+  "files": {
+    "platform/src/web/components/Composer.tsx": "91f9e7d6681416cd0b06967da7a55fde22dda9a944a6e8a43039ca1c6ebb7d7b",
+    "platform/src/web/components/AssetPicker.tsx": "d53c942fb6d586bf95cf738a3835468758985987e7a763b16077b7417f90eae9",
+    "platform/src/web/components/JobSubmit.tsx": "23e712e64acaf4b0cdfc79f8556d7d41c054e5c083fb2409e9f3138cfed37198",
+    "platform/src/web/components/Layout.tsx": "c919cf088ef661095ea80b39fff7c2e96d23d0562b2cbc143b99ba4a95d62a6f",
+    "platform/src/web/pages/Inspiration.tsx": "61e878b46ab10d9549d9715c02b78511e826fb60d4ff3c6c2060cb7c7daa241b",
+    "platform/src/web/main.tsx": "d4ffe06a54fcff25e12771f33c289e24367452d2d64ade8ed29e116aee76fbd8",
+    "platform/src/web/lib/i18n.ts": "c08e5d3c293c7d174eb2845c61505e4190bc059b201a721d70b4feeecabfc1ab",
+    "platform/src/web/lib/home-translations.ts": "e0c68ce9b46e70fe8f5d2851ef21d881cf46959edcedf38e4fd4566776ee79ed",
+    "platform/src/web/styles/home.css": "5c694b00e3a9bf9b55a18c6e167047363b254dd9e0c8fbfabc92a4066cdb1e19",
+    "platform/src/web/styles/home-shell.css": "fd9b8377ba395c3bc5254706039a24c4ac11480419853437a0bc9c6531983551",
+    "platform/src/web/styles/home-composer.css": "3d07c9b5c778ddd63f97cac6e2f0a290b5e101e700b0cc62941f5c14601ebf02",
+    "platform/tests/e2e/home-design.spec.ts": "8b0905307057649a0586efd4b775f10c756a9b3ccd3d84b875c54e97b0c6c7ae",
+    "platform/tests/e2e/home-appearance.spec.ts": "6e847bf4d00af50c53076a65507300f2d971678feae5a93aee0d418263436c4f",
+    "platform/tests/e2e/production-security.spec.ts": "8564dfc3b486f1922e98481dca6eb6df2d7f7912dfe0de7f257d9795b0fae5dd",
+    "platform/playwright.config.ts": "944d8d08bc27db1c94dada1041b20945c36fec8aa5e468ee996eb65601b2e36c"
+  }
+}

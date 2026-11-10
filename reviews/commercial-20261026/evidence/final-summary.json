@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "05f7bcd",
+  "branch": "codex/commercial-quality-20261026",
+  "typecheck": "passed",
+  "lint": "passed",
+  "format": "passed",
+  "unit": {
+    "passed": 773,
+    "files": 71,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 64.97
+  },
+  "browser": {
+    "passed": 126,
+    "failed": 0,
+    "skipped": 0,
+    "projects": {
+      "desktop": 62,
+      "mobile": 62,
+      "notebook": 1,
+      "tablet": 1
+    },
+    "diagnosticFiles": 126,
+    "uncaughtErrors": 0,
+    "duration": "10.1 minutes",
+    "dataIsolation": "fresh SQLite and media per test",
+    "externalServices": "disabled; loopback SMTP/SMS fixtures and local media tools only",
+    "versionBoundary": "完整126项之后只补充备份/恢复脚本及其回归；影响浏览器的应用源码、依赖与构建入口均未变。"
+  },
+  "cleanInstall": {
+    "frozenLockfile": true,
+    "offline": true,
+    "matchingFiles": 344,
+    "typecheck": true,
+    "build": true,
+    "productionStartup": true,
+    "temporaryDataRemovedByProbe": true
+  },
+  "dependencyAudit": {
+    "before": {
+      "moderate": 8,
+      "low": 4
+    },
+    "after": {
+      "moderate": 0,
+      "low": 0,
+      "high": 0,
+      "critical": 0
+    }
+  },
+  "scope": "本轮当前源码验证，外部模型效果、真实支付与真实送达未联调；故障注入的网络错误有意保留。",
+  "backupFinalReview": {
+    "regression": "在途缓存缺失会阻止发布备份；只读选项默认值回归已修复",
+    "targetedPassed": 34,
+    "cleanInstallBackupTestsPassed": 21,
+    "finalFullSuitePassed": 773,
+    "sourceFilesStillMatchingCleanInstall": 344
+  }
+}

@@ -81,6 +81,11 @@ for (const locale of ['en', 'ar'] as const) {
 
     it.each([
       {
+        input: '当前模型不支持画面文字，已关闭文字选项。',
+        en: 'This model does not support text in images. The text option has been turned off.',
+        ar: 'لا يدعم هذا النموذج النص داخل الصور. تم إيقاف خيار النص.',
+      },
+      {
         input:
           '已继承参考视频；请补充主体图片、检查动作片段，再确认人物与视频使用授权及外部费用。当前仅支持人物动作参考，不支持服装、人脸或商品精准替换。',
         en: 'The reference video is retained. Add a character image, review the motion clip, and confirm permission to use both media and the external cost. Only character motion reference is supported, without precise clothing, face or product replacement.',

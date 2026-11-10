@@ -1,0 +1,185 @@
+{
+  "recordedDate": "2026-10-28",
+  "status": "passed",
+  "suite": "home-design.spec.ts home-appearance.spec.ts",
+  "passed": 15,
+  "failed": 0,
+  "skipped": 0,
+  "viewportEvidence": [
+    {
+      "case": "case-EEilID",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "bounds": {
+        "brief": {
+          "x": 295,
+          "y": 339.125,
+          "width": 1066,
+          "height": 104
+        },
+        "image": {
+          "x": 295,
+          "y": 293.875,
+          "width": 74,
+          "height": 34
+        },
+        "video": {
+          "x": 374,
+          "y": 293.875,
+          "width": 74,
+          "height": 34
+        },
+        "material": {
+          "x": 295,
+          "y": 452.5,
+          "width": 93,
+          "height": 34
+        },
+        "save": {
+          "x": 1157,
+          "y": 501.625,
+          "width": 66,
+          "height": 40
+        },
+        "generate": {
+          "x": 1235,
+          "y": 500.625,
+          "width": 126,
+          "height": 42
+        },
+        "advanced": {
+          "x": 1265,
+          "y": 452.5,
+          "width": 96,
+          "height": 34
+        }
+      },
+      "inspirationBox": {
+        "x": 268,
+        "y": 807.96875,
+        "width": 360,
+        "height": 450
+      },
+      "visibleImageHeight": 192.03125
+    },
+    {
+      "case": "case-MpKHsl",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "bounds": {
+        "brief": {
+          "x": 271,
+          "y": 281.21875,
+          "width": 954,
+          "height": 104
+        },
+        "image": {
+          "x": 271,
+          "y": 235.96875,
+          "width": 74,
+          "height": 34
+        },
+        "video": {
+          "x": 350,
+          "y": 235.96875,
+          "width": 74,
+          "height": 34
+        },
+        "material": {
+          "x": 271,
+          "y": 394.59375,
+          "width": 93,
+          "height": 34
+        },
+        "save": {
+          "x": 1021,
+          "y": 443.71875,
+          "width": 66,
+          "height": 40
+        },
+        "generate": {
+          "x": 1099,
+          "y": 442.71875,
+          "width": 126,
+          "height": 42
+        },
+        "advanced": {
+          "x": 1129,
+          "y": 394.59375,
+          "width": 96,
+          "height": 34
+        }
+      },
+      "inspirationBox": {
+        "x": 244,
+        "y": 699.5625,
+        "width": 322.65625,
+        "height": 403.3125
+      },
+      "visibleImageHeight": 100.4375
+    },
+    {
+      "case": "case-atFZEi",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bounds": {
+        "brief": {
+          "x": 33,
+          "y": 251.46875,
+          "width": 324,
+          "height": 94
+        },
+        "image": {
+          "x": 33,
+          "y": 210.46875,
+          "width": 64,
+          "height": 36
+        },
+        "video": {
+          "x": 102,
+          "y": 210.46875,
+          "width": 64,
+          "height": 36
+        },
+        "material": {
+          "x": 33,
+          "y": 345.46875,
+          "width": 93,
+          "height": 34
+        },
+        "save": {
+          "x": 107.15625,
+          "y": 470.46875,
+          "width": 62,
+          "height": 40
+        },
+        "generate": {
+          "x": 247,
+          "y": 469.46875,
+          "width": 110,
+          "height": 42
+        },
+        "advanced": {
+          "x": 261,
+          "y": 387.46875,
+          "width": 96,
+          "height": 34
+        }
+      },
+      "inspirationBox": {
+        "x": 16,
+        "y": 818.5625,
+        "width": 172.5,
+        "height": 215.625
+      },
+      "visibleImageHeight": 25.4375
+    }
+  ],
+  "note": "Direct Playwright invocation with isolated E2E_RUN_ROOT; Chromium run required escalated sandbox permission. No production database or external service used."
+}

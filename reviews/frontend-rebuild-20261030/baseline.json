@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-30",
+  "scope": "本轮重构开始阶段的自动化基线；最终交付仍需对完成版本重新验证。",
+  "typecheck": {
+    "success": true,
+    "report": "platform/var/frontend-rebuild-20261030/typecheck-baseline.log"
+  },
+  "lint": {
+    "success": true,
+    "report": "platform/var/frontend-rebuild-20261030/lint-baseline.log"
+  },
+  "testRuns": [
+    {
+      "report": "platform/var/frontend-rebuild-20261030/vitest-baseline.json",
+      "environment": "default-sandbox",
+      "note": "本机端口和进程通信受限，且媒体工具未在路径中。",
+      "startedAt": "2026-10-30T15:39:13.560Z",
+      "total": 1253,
+      "passed": 1157,
+      "failed": 61,
+      "pending": 35,
+      "success": false
+    },
+    {
+      "report": "platform/var/frontend-rebuild-20261030/vitest-baseline-local.json",
+      "environment": "local-ports-enabled",
+      "note": "本机端口已可用；12项失败与35项未执行均涉及媒体工具路径缺失。",
+      "startedAt": "2026-10-30T15:44:42.397Z",
+      "total": 1253,
+      "passed": 1206,
+      "failed": 12,
+      "pending": 35,
+      "success": false
+    },
+    {
+      "report": "platform/var/frontend-rebuild-20261030/vitest-baseline-complete.json",
+      "environment": "local-ports-and-media-tools",
+      "note": "完整单次运行，已显式使用项目现有媒体工具。",
+      "startedAt": "2026-10-30T15:46:21.432Z",
+      "total": 1253,
+      "passed": 1253,
+      "failed": 0,
+      "pending": 0,
+      "success": true
+    }
+  ],
+  "acceptedRun": "platform/var/frontend-rebuild-20261030/vitest-baseline-complete.json",
+  "aggregation": "不跨轮相加；有效结果为最后一次完整运行。",
+  "preview": {
+    "script": "platform/scripts/preview-experience.ts",
+    "origin": "http://127.0.0.1:53820",
+    "isolation": "全新数据库与媒体目录；显式配置；所有外部供应商为本机模拟；未读取正式配置或凭据。",
+    "seed": "8份公开示例素材和3条由模拟任务执行器生成的已完成任务。",
+    "databaseVerification": "SQLite 主库实际文件路径与本次创建路径相同。",
+    "readinessReport": "platform/var/frontend-rebuild-20261030/preview-readiness.json",
+    "realProviderValidation": false,
+    "externalCalls": 0,
+    "adapterSmoke": {
+      "report": "platform/var/frontend-rebuild-20261030/preview-adapter-smoke.json",
+      "planningScreens": 6,
+      "imageOutputs": 6,
+      "imageDimensions": [
+        960,
+        1280
+      ],
+      "videoDimensions": [
+        720,
+        1280
+      ],
+      "videoDurationMs": 5000,
+      "simulated": true,
+      "externalCalls": 0
+    }
+  }
+}

@@ -32,6 +32,10 @@ test('persists real background music and the generated audio choice across save,
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
   await composer.getByRole('button', { name: '视频创作', exact: true }).click();
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+  await composer
+    .getByRole('combobox', { name: '生成模型', exact: true })
+    .selectOption('video.generate|fal|wan-2.6');
   const picker = composer
     .locator('.asset-picker')
     .filter({ has: page.getByText('背景音乐（可选）', { exact: true }) });
@@ -59,10 +63,10 @@ test('persists real background music and the generated audio choice across save,
   await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
   await page.reload();
   await expect(picker.locator('.asset-chip')).toContainText('background.wav');
-  await composer.getByRole('button', { name: '模型与高级设置', exact: true }).click();
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await composer
     .getByRole('combobox', { name: '生成模型', exact: true })
-    .selectOption('kling-o3-4k-reference');
+    .selectOption('video.generate|fal|kling-o3-4k-reference');
   await expect(
     composer.getByText('当前模型不支持背景音乐。原音频已保留，请移除音频或切换支持的模型后提交。', {
       exact: true,
@@ -80,6 +84,7 @@ test('persists real background music and the generated audio choice across save,
   await composer.getByRole('button', { name: '保存草稿', exact: true }).click();
   expect((await saved).status()).toBe(200);
   await page.reload();
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await expect(sound).toBeChecked();
   const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
   const response = await page.request.get(
@@ -172,7 +177,7 @@ test('returns an actual local output to the project composer without replacing t
   expect({ width: result.width, height: result.height }).toEqual({ width: 48, height: 32 });
   await page.reload();
   await expect(prompt).toHaveValue(text);
-  await page.locator('.job-card').getByRole('button', { name: '查看详情', exact: true }).click();
+  await page.locator('.job-card').getByRole('button', { name: '参数与详情', exact: true }).click();
   await page.getByRole('button', { name: '作为参考继续创作', exact: true }).click();
   await expect(prompt).toHaveValue(text);
   const reference = composer
@@ -180,11 +185,13 @@ test('returns an actual local output to the project composer without replacing t
     .filter({ hasText: result.name });
   await expect(reference).toHaveCount(1);
   await expect(reference.locator('img')).toBeVisible();
-  expect(
-    await reference
-      .locator('img')
-      .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
-  ).toBe(true);
+  await expect
+    .poll(() =>
+      reference
+        .locator('img')
+        .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
+    )
+    .toBe(true);
   await page.reload();
   await expect(prompt).toHaveValue(text);
   await expect(reference).toHaveCount(1);

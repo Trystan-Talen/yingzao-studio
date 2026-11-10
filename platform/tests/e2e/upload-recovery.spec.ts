@@ -13,7 +13,7 @@ test('handles browser file drop and paste, recovers a lost upload response witho
   await page.getByRole('button', { name: '创建并开始创作' }).click();
   await page.getByRole('button', { name: '稍后设置', exact: true }).click();
   await page.goto(`${studio.origin}/workbench`);
-  const picker = page.locator('.composer-materials > .asset-picker');
+  const picker = page.locator('.composer-materials .asset-picker-inline');
   const zone = picker.locator('.upload-drop-zone');
   const png = await sharp({
     create: { width: 80, height: 60, channels: 4, background: '#25a17fff' },

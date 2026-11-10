@@ -1,0 +1,37 @@
+{
+  "variant": {
+    "locale": "en",
+    "theme": "light",
+    "heading": "From a spark of an idea,",
+    "brief": "Creative brief",
+    "save": "Save draft",
+    "generate": "Start creating",
+    "video": "Create a video",
+    "advanced": "Model and advanced settings",
+    "music": "Background music (optional)"
+  },
+  "bounds": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brief": {
+      "x": 441,
+      "y": 322.875,
+      "width": 774,
+      "height": 106
+    },
+    "generate": {
+      "x": 1065.765625,
+      "y": 528.875,
+      "width": 149.234375,
+      "height": 42
+    },
+    "save": {
+      "x": 547.046875,
+      "y": 529.875,
+      "width": 78.109375,
+      "height": 40
+    }
+  }
+}

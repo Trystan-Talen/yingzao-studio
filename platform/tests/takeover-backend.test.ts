@@ -369,7 +369,7 @@ describe('takeover backend regression boundaries', () => {
     expect(
       instance.services.settings
         .capabilities(wid)
-        .operations.find((op) => op.id === 'video.generate')
+        .operations.find((op) => op.id === 'video.generate' && op.providerId === 'fal')
         ?.models.find((model) => model.id === 'wan-2.6')?.textOverlay?.mode,
     ).toBe('prompt-guidance');
   });

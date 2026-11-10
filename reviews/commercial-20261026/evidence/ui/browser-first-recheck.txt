@@ -1,0 +1,103 @@
+
+Running 6 tests using 1 worker
+
+(node:23974) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (3.0s)
+  ✓  2 [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (4.1s)
+  ✘  3 [desktop] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (7.7s)
+(node:24303) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [mobile] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (3.0s)
+  ✓  5 [mobile] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (4.6s)
+  ✘  6 [mobile] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (8.1s)
+
+
+  1) [desktop] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: '全局搜索', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('button', { name: '全局搜索', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: '全局搜索', exact: true })
+        14 × locator resolved to <button title="全局搜索" type="button" aria-label="全局搜索" class="icon-button ">…</button>
+           - unexpected value "inactive"
+
+
+      104 |   await expect(page.getByRole('dialog', { name: '搜索工作空间', exact: true })).toBeVisible();
+      105 |   await page.keyboard.press('Escape');
+    > 106 |   await expect(search).toBeFocused();
+          |                        ^
+      107 | });
+      108 |
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:106:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: '全局搜索', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('button', { name: '全局搜索', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: '全局搜索', exact: true })
+        14 × locator resolved to <button title="全局搜索" type="button" aria-label="全局搜索" class="icon-button ">…</button>
+           - unexpected value "inactive"
+
+
+      104 |   await expect(page.getByRole('dialog', { name: '搜索工作空间', exact: true })).toBeVisible();
+      105 |   await page.keyboard.press('Escape');
+    > 106 |   await expect(search).toBeFocused();
+          |                        ^
+      107 | });
+      108 |
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:106:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-ui-green/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search 
+    [mobile] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search 
+  4 passed (33.1s)

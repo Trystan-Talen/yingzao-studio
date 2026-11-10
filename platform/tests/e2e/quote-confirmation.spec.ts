@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 import { test, expect } from './fixtures';
 
+test.use({ experienceProviders: true, recoveryEnabled: false, smsEnabled: false });
+
 test('shows separate music and generated sound choices in a real quote without submitting a model task', async ({
   page,
   studio,
@@ -32,6 +34,13 @@ test('shows separate music and generated sound choices in a real quote without s
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
   await composer.getByRole('button', { name: '视频创作', exact: true }).click();
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+  await composer
+    .getByRole('combobox', { name: '生成模型', exact: true })
+    .selectOption('video.generate|fal|wan-2.6');
+  await composer.getByRole('combobox', { name: '时长', exact: true }).selectOption('5');
+  // An explicit user choice must survive switching to a model that does not support it.
+  await composer.getByRole('combobox', { name: '清晰度', exact: true }).selectOption('720p');
   await composer
     .getByRole('textbox', { name: '创作需求', exact: true })
     .fill('核对文字与独立音轨，不调用外部模型');
@@ -55,9 +64,10 @@ test('shows separate music and generated sound choices in a real quote without s
   ]);
   await picker.locator('input[type=file]').setInputFiles(file);
   await expect(picker.locator('.asset-chip')).toContainText('quote-music.wav');
-  await composer.getByRole('button', { name: '开始创作', exact: true }).click();
+  await composer.getByRole('button', { name: '生成视频', exact: true }).click();
   const confirmation = page.getByRole('dialog', { name: '确认创作', exact: true });
   await expect(confirmation).toBeVisible();
+  await confirmation.getByText('查看详细配置与计费', { exact: true }).click();
   const row = (label: string) =>
     confirmation
       .locator('.detail-list > div')
@@ -73,10 +83,14 @@ test('shows separate music and generated sound choices in a real quote without s
   });
   await confirmation.getByRole('button', { name: '继续编辑', exact: true }).click();
   await picker.getByRole('button', { name: '移除quote-music.wav', exact: true }).click();
-  await composer.getByRole('button', { name: '模型与高级设置', exact: true }).click();
+  // Project drafts preserve explicit settings; quick entry deliberately adopts a new model's defaults.
+  await composer.getByRole('button', { name: '保存草稿', exact: true }).click();
+  await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
+  await expect(composer).not.toHaveAttribute('data-presentation', 'quick');
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await composer
     .getByRole('combobox', { name: '生成模型', exact: true })
-    .selectOption('kling-o3-4k-reference');
+    .selectOption('video.generate|fal|kling-o3-4k-reference');
   const sound = composer.getByRole('checkbox', { name: '生成视频音轨', exact: true });
   await sound.check();
   const visualPicker = composer.locator('.asset-picker').filter({
@@ -90,13 +104,28 @@ test('shows separate music and generated sound choices in a real quote without s
       .toBuffer(),
   });
   await expect(visualPicker.locator('.asset-chip')).toContainText('quote-video-reference.png');
-  await composer.getByRole('button', { name: '开始创作', exact: true }).click();
+  await expect(composer.getByRole('button', { name: '生成视频', exact: true })).toBeDisabled();
+  await composer.getByRole('button', { name: '采用当前模型的固定参数', exact: true }).click();
+  await expect(sound).toBeChecked();
+  const fixedQuote = page.waitForResponse(
+    (response) =>
+      response.request().method() === 'POST' &&
+      new URL(response.url()).pathname === '/api/v1/quotes',
+  );
+  await composer.getByRole('button', { name: '生成视频', exact: true }).click();
+  const fixedResponse = await fixedQuote;
+  expect(fixedResponse.status()).toBe(200);
+  expect(fixedResponse.request().postDataJSON()).toMatchObject({
+    options: { model: 'kling-o3-4k-reference', resolution: '4K', generateAudio: true },
+  });
+  await confirmation.getByText('查看详细配置与计费', { exact: true }).click();
   await expect(row('生成视频音轨').locator('dd')).toHaveText('开启');
   await expect(row('素材').locator('dd')).toHaveText('1项');
   await page.screenshot({ path: join(studio.folder, 'quote-generated-sound.png'), fullPage: true });
   await confirmation.getByRole('button', { name: '继续编辑', exact: true }).click();
   await sound.uncheck();
-  await composer.getByRole('button', { name: '开始创作', exact: true }).click();
+  await composer.getByRole('button', { name: '生成视频', exact: true }).click();
+  await confirmation.getByText('查看详细配置与计费', { exact: true }).click();
   await expect(row('生成视频音轨').locator('dd')).toHaveText('关闭');
   expect(submissions).toBe(0);
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });

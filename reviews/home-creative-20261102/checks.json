@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-11-03T03:33:49.216Z",
+  "unit": {
+    "passed": 1371,
+    "failed": 0,
+    "skipped": 0,
+    "files": 95
+  },
+  "browser": {
+    "passed": 198,
+    "total": 198,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "projects": {
+      "desktop": 96,
+      "mobile": 96,
+      "notebook": 5,
+      "tablet": 1
+    },
+    "singleFullRun": true
+  },
+  "static": {
+    "typecheck": true,
+    "lint": true,
+    "format": true
+  },
+  "build": {
+    "web": true,
+    "server": true,
+    "worker": true
+  },
+  "sourceFiles": 420,
+  "sourceAggregateSha256": "75a314a593b15ed0d2003d776bb6d3d3871a5cf94715e556b2c337eba0038e24",
+  "buildFiles": 105,
+  "sourceUnchangedDuringChecks": true,
+  "testedWebEqualsRelease": true,
+  "externalGenerationCalls": 0,
+  "realQualityValidated": false
+}

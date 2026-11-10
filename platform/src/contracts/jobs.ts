@@ -2,19 +2,33 @@ import type { BillingChannel } from './billing-channel';
 import { z } from 'zod';
 import { OPERATION_IDS } from './catalog';
 import type { AssetDto } from './core';
-import type { DesignPlanResult } from './design-plan';
+import type { JobResultData } from './job-result';
+import { detailPagePlanSchema, detailPageScreenSchema } from './detail-page';
+import { creativePlacementSchema } from './creative-intent';
 function normalizeColor(value: string): string {
   const color = value.trim().toLowerCase();
   return /^#[0-9a-f]{3}$/.test(color)
     ? `#${[...color.slice(1)].map((digit) => digit + digit).join('')}`
     : color;
 }
-export const providerIdSchema = z.enum(['local', 'openai', 'fal', 'flyelep', 'tikhub']);
+export const providerIdSchema = z.enum([
+  'local',
+  'openai',
+  'fal',
+  'flyelep',
+  'tikhub',
+  'dify',
+  'seedance',
+]);
 export const jobOptionsSchema = z
   .object({
     model: z.string().max(120).optional(),
     kind: z.string().max(40).default('free'),
-    assistantMode: z.enum(['ideas', 'design-plan']).default('ideas'),
+    assistantMode: z.enum(['ideas', 'design-plan', 'detail-page']).default('ideas'),
+    detailPageScreenCount: z.number().int().min(2).max(10).optional(),
+    detailPagePlan: detailPagePlanSchema.optional(),
+    detailPageScreenId: detailPageScreenSchema.shape.id.optional(),
+    detailPagePlanningJobId: z.string().uuid().optional(),
     designs: z
       .array(
         z
@@ -38,6 +52,8 @@ export const jobOptionsSchema = z
     languages: z.array(z.string().max(30)).max(18).optional(),
     forceTranslation: z.boolean().default(false),
     platform: z.string().max(80).default('通用电商'),
+    creativePlacement: creativePlacementSchema.optional(),
+    creativeMarket: z.string().max(20).optional(),
     channel: z.enum(['promotion', 'premium']).default('premium'),
     needText: z.boolean().default(true),
     referenceMode: z.enum(['all', 'first-last']).default('all'),
@@ -79,6 +95,8 @@ export const jobInputSchema = z
   .object({
     operation: z.enum(OPERATION_IDS),
     providerId: providerIdSchema,
+    capabilityRevision: z.string().uuid().optional(),
+    creativeBriefId: z.string().uuid().optional(),
     projectId: z.string().uuid().optional(),
     documentId: z.string().uuid().optional(),
     baseRevision: z.number().int().positive().optional(),
@@ -115,6 +133,9 @@ export const JOB_STATUSES = [
 ] as const;
 export type JobStatus = (typeof JOB_STATUSES)[number];
 export interface QuoteDto {
+  creativeSummary?: { summary: string; assumptions: string[] };
+  /** Retry quotations may refresh the model capability proof; submit this exact input. */
+  input?: JobInput;
   billingChannel?: BillingChannel;
   id: string;
   inputHash: string;
@@ -145,7 +166,8 @@ export interface JobItemDto {
   remoteId: string | null;
   errorMessage: string | null;
   resultText: string | null;
-  resultData?: DesignPlanResult | null;
+  resultData?: JobResultData | null;
+  detailPageScreenId?: string;
   sourceAssetIds?: string[];
   referenceAssetIds?: string[];
   backgroundAssetId?: string;
@@ -154,8 +176,24 @@ export interface JobItemDto {
   retryRootItemId?: string | null;
   retryable?: boolean;
   retryJobId?: string | null;
+  phase?: string;
+  recoveryAttempts?: number;
+  nextRetryAt?: string | null;
+  canResume?: boolean;
 }
 export interface JobDto {
+  creativeReview?: {
+    summary: string;
+    assumptions: string[];
+    strategyId: string;
+    strategyVersion: string;
+    artifacts: {
+      assetId: string;
+      name: string;
+      result: import('./creative-strategy').CreativeCheckResult;
+    }[];
+    visualChecks: string[];
+  };
   billingChannel?: BillingChannel;
   createdBy: string;
   isArchived: boolean;
@@ -193,6 +231,8 @@ export interface ModelCapability {
   };
 }
 export interface OperationCapability {
+  inputMode?: 'text-only';
+  maxCount?: number;
   id: string;
   name: string;
   providerId: string;
@@ -228,7 +268,7 @@ export interface ProviderSettingDto {
 }
 export const providerSettingsInputSchema = z
   .object({
-    providerId: z.enum(['openai', 'fal', 'flyelep', 'tikhub']),
+    providerId: z.enum(['openai', 'fal', 'flyelep', 'tikhub', 'dify', 'seedance']),
     secret: z.string().min(10).max(500).optional(),
     enabled: z.boolean().default(true),
     removeSecret: z.boolean().optional(),

@@ -1,0 +1,48 @@
+
+ RUN  v5.0.4 <project>/platform
+
+ ❯ tests/ui-controls.test.ts (2 tests | 2 failed) 9ms
+   ❯ shared interface controls (2)
+     × keeps the button appearance when a caller adds its own layout class 7ms
+     × localizes the shared loading status 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/ui-controls.test.ts > shared interface controls > keeps the button appearance when a caller adds its own layout class
+AssertionError: expected '<button class="full-width" disabled="…' to contain 'class="button secondary full-width"'
+
+Expected: "class="button secondary full-width""
+Received: "<button class="full-width" disabled=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle lucide-loader-2 spin" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>Save</button>"
+
+ ❯ tests/ui-controls.test.ts:12:18
+     10|       createElement(Button, { variant: 'secondary', className: 'full-w…
+     11|     );
+     12|     expect(html).toContain('class="button secondary full-width"');
+       |                  ^
+     13|     expect(html).toContain('disabled=""');
+     14|     expect(html).toContain('aria-busy="true"');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/ui-controls.test.ts > shared interface controls > localizes the shared loading status
+AssertionError: expected '<div class="loading" role="status"><s…' to contain 'Loading'
+
+Expected: "Loading"
+Received: "<div class="loading" role="status"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle lucide-loader-2 spin" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>正在加载…</div>"
+
+ ❯ tests/ui-controls.test.ts:20:60
+     18|     setLocale('en');
+     19|     try {
+     20|       expect(renderToStaticMarkup(createElement(Loading))).toContain('…
+       |                                                            ^
+     21|     } finally {
+     22|       setLocale('zh-CN');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  22:11:08
+   Duration  273ms (import 66%, transform 29%, tests 4%, worker 1%)
+

@@ -1,0 +1,215 @@
+$ tsx scripts/e2e.ts
+$ vite build && tsup src/server/main.ts src/worker/main.ts --format esm --platform node --target node22 --out-dir dist/runtime --sourcemap --clean
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2212 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-DBFCFi3c.css                 68.38 kB │ gzip:  13.23 kB
+dist/web/assets/arrow-left-CLLeGsf4.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-Cex4J34V.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-yka-SVan.js                   0.33 kB │ gzip:   0.27 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-BQ7o1NqX.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-DBSHuKz_.js                0.39 kB │ gzip:   0.28 kB │ map:     2.02 kB
+dist/web/assets/save-RfAOc8v4.js                    0.40 kB │ gzip:   0.28 kB │ map:     1.33 kB
+dist/web/assets/shield-check-Bv6jzRVC.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-2Fqx34Ik.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-DiNyIdxF.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-ZEkNiqVq.js                  0.47 kB │ gzip:   0.29 kB │ map:     1.68 kB
+dist/web/assets/palette-B6Cel7ld.js                 0.59 kB │ gzip:   0.34 kB │ map:     1.83 kB
+dist/web/assets/export-policy-Bp6nBtpd.js           1.15 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-DPHL34QI.js    2.50 kB │ gzip:   1.38 kB │ map:     7.46 kB
+dist/web/assets/Entitlements-BpAUWZB7.js            2.63 kB │ gzip:   1.36 kB │ map:     6.19 kB
+dist/web/assets/product-messages-CnkVO4iq.js        2.79 kB │ gzip:   1.03 kB │ map:     5.13 kB
+dist/web/assets/PasswordRecovery-BKg9NSew.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-CXXhK1zW.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-C5NAfmWW.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-D-0_pKNB.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-CPgfPaBL.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-CWDdXoI6.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-CzQBr-_i.js        7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+dist/web/assets/Settings-BP7Ci0rm.js               14.05 kB │ gzip:   5.54 kB │ map:    40.63 kB
+dist/web/assets/Inspiration-BMkQP3va.js            15.61 kB │ gzip:   6.89 kB │ map:    46.84 kB
+dist/web/assets/Developer-6TEF_C5p.js              15.64 kB │ gzip:   5.32 kB │ map:    47.85 kB
+dist/web/assets/Team-1wZg3Y_0.js                   15.80 kB │ gzip:   5.39 kB │ map:    51.87 kB
+dist/web/assets/Identities-B0jbIpLZ.js             17.63 kB │ gzip:   6.41 kB │ map:    57.51 kB
+dist/web/assets/Support-BrY_4-XF.js                17.68 kB │ gzip:   6.75 kB │ map:    51.55 kB
+dist/web/assets/Workbench-adgC6ncV.js              18.95 kB │ gzip:   7.17 kB │ map:    63.64 kB
+dist/web/assets/AdvancedTools-CtLiD9us.js          20.43 kB │ gzip:   8.01 kB │ map:    70.21 kB
+dist/web/assets/Library-3W46eEQ6.js                22.74 kB │ gzip:   7.98 kB │ map:    71.16 kB
+dist/web/assets/Usage-BIL9U0qX.js                  28.20 kB │ gzip:   9.38 kB │ map:    85.73 kB
+dist/web/assets/Tools-hUYFwGJ-.js                  29.38 kB │ gzip:  11.35 kB │ map:    93.79 kB
+dist/web/assets/Composer-DgO8ozFj.js               30.85 kB │ gzip:  11.73 kB │ map:   104.07 kB
+dist/web/assets/react-Czy9g9O-.js                 106.07 kB │ gzip:  35.89 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor-p14Vw8Hr.js          151.25 kB │ gzip:  49.25 kB │ map:   415.94 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-BmFuVDiK.js                 748.67 kB │ gzip: 242.42 kB │ map: 2,567.91 kB
+✓ built in 2.80s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM dist/runtime/server/main.js        397.00 B
+ESM dist/runtime/worker/main.js        71.27 KB
+ESM dist/runtime/chunk-VLISSBTI.js     666.23 KB
+ESM dist/runtime/worker/main.js.map    110.92 KB
+ESM dist/runtime/server/main.js.map    751.00 B
+ESM dist/runtime/chunk-VLISSBTI.js.map 1.13 MB
+ESM ⚡️ Build success in 79ms
+
+Running 126 tests using 1 worker
+
+(node:39893) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    1 [desktop] › tests/e2e/account.spec.ts:6:1 › new user recovers through a real local email, loses old sessions and logs in with the new password (8.2s)
+  ✓    2 [desktop] › tests/e2e/account.spec.ts:62:1 › Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser (6.1s)
+  ✓    3 [desktop] › tests/e2e/account.spec.ts:139:3 › explicitly disabled recovery › is readable without a session and sends no fabricated messages (2.9s)
+  ✓    4 [desktop] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment (7.6s)
+  ✓    5 [desktop] › tests/e2e/brand-quota.spec.ts:195:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting (4.0s)
+  ✓    6 [desktop] › tests/e2e/canvas-focus-review.spec.ts:4:1 › switches narrow-screen editor tabs with arrow keys without moving the selected layer (11.7s)
+  ✓    7 [desktop] › tests/e2e/canvas.spec.ts:19:1 › creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project (12.4s)
+  ✓    8 [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (7.8s)
+  ✓    9 [desktop] › tests/e2e/character-video.spec.ts:266:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (5.7s)
+  ✓   10 [desktop] › tests/e2e/composer-media.spec.ts:27:1 › persists real background music and the generated audio choice across save, model changes and refresh (5.7s)
+  ✓   11 [desktop] › tests/e2e/composer-media.spec.ts:115:1 › returns an actual local output to the project composer without replacing the current prompt or submitting a second job (6.3s)
+  ✓   12 [desktop] › tests/e2e/creation-locale.spec.ts:55:3 › uses en creation and local tool controls while retaining the original Chinese user content (7.2s)
+  ✓   13 [desktop] › tests/e2e/creation-locale.spec.ts:55:3 › uses ar creation and local tool controls while retaining the original Chinese user content (6.8s)
+  ✓   14 [desktop] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the project save response is delayed (5.9s)
+  ✓   15 [desktop] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the message save response is delayed (6.0s)
+  ✓   16 [desktop] › tests/e2e/credits-locale.spec.ts:77:3 › translates en credit copy while keeping real values and user fields without starting payment (6.3s)
+  ✓   17 [desktop] › tests/e2e/credits-locale.spec.ts:222:3 › distinguishes en historical zero-archive and three-month renewal contract copy (3.2s)
+  ✓   18 [desktop] › tests/e2e/credits-locale.spec.ts:292:3 › translates en referral membership configuration without enabling rewards (2.1s)
+  ✓   19 [desktop] › tests/e2e/credits-locale.spec.ts:77:3 › translates ar credit copy while keeping real values and user fields without starting payment (5.2s)
+  ✓   20 [desktop] › tests/e2e/credits-locale.spec.ts:222:3 › distinguishes ar historical zero-archive and three-month renewal contract copy (2.7s)
+  ✓   21 [desktop] › tests/e2e/credits-locale.spec.ts:292:3 › translates ar referral membership configuration without enabling rewards (2.0s)
+  ✓   22 [desktop] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (4.4s)
+  ✓   23 [desktop] › tests/e2e/identities.spec.ts:56:1 › shows unavailable external identity methods without fake codes or QR images (1.9s)
+  ✓   24 [desktop] › tests/e2e/identities.spec.ts:72:1 › can detach existing identity fixtures with a password after both providers are disabled (2.2s)
+  ✓   25 [desktop] › tests/e2e/inspiration-categories.spec.ts:6:1 › creates and reclassifies a real video inspiration, preserves filters on refresh and keeps legacy videos unclassified (5.7s)
+  ✓   26 [desktop] › tests/e2e/inspiration-categories.spec.ts:145:1 › a delayed category response cannot reopen a closed detail or replace another inspiration (2.3s)
+  ✓   27 [desktop] › tests/e2e/inspiration-replica.spec.ts:6:1 › recovers a video inspiration action-reference draft after a lost reuse response and refresh (5.3s)
+  ✓   28 [desktop] › tests/e2e/library-batch-recovery.spec.ts:33:1 › keeps every upload in its original workspace when switching spaces during a delayed batch (3.1s)
+  ✓   29 [desktop] › tests/e2e/library-batch-recovery.spec.ts:119:1 › refreshes successful batch deletions and retries only remaining assets after a partial failure (2.3s)
+  ✓   30 [desktop] › tests/e2e/library-batch-recovery.spec.ts:172:1 › reports an unavailable recent-project list and restores saved work through an explicit retry (3.1s)
+  ✓   31 [desktop] › tests/e2e/library-canvas-review.spec.ts:113:1 › manages a named collection through rename, membership removal and deletion while preserving both originals (4.6s)
+  ✓   32 [desktop] › tests/e2e/library-canvas-review.spec.ts:215:1 › groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock (16.4s)
+  ✓   33 [desktop] › tests/e2e/library-canvas-review.spec.ts:288:1 › applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice (8.0s)
+  ✓   34 [desktop] › tests/e2e/library-canvas-review.spec.ts:377:1 › combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin (2.5s)
+  ✓   35 [desktop] › tests/e2e/library-canvas-review.spec.ts:424:1 › uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics (2.6s)
+  ✓   36 [desktop] › tests/e2e/locale.spec.ts:28:3 › persists en interface language while keeping creation language separate and translating account and help pages (5.5s)
+  ✓   37 [desktop] › tests/e2e/locale.spec.ts:28:3 › persists ar interface language while keeping creation language separate and translating account and help pages (5.5s)
+  ✓   38 [desktop] › tests/e2e/material-designs.spec.ts:24:1 › restores ordered marketing modules and their own real references from the server, then preserves them while saving free creation (5.5s)
+  ✓   39 [desktop] › tests/e2e/media.spec.ts:27:1 › uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart (7.0s)
+  ✓   40 [desktop] › tests/e2e/media.spec.ts:101:1 › reuses an inspiration with its actual reference image and restores the persisted draft after refresh (4.2s)
+  ✓   41 [desktop] › tests/e2e/notifications-team.spec.ts:64:1 › shows a loading state until the actual isolated notification response arrives (1.3s)
+  ✓   42 [desktop] › tests/e2e/notifications-team.spec.ts:123:1 › shows one injected notification failure and retries against the real API without an empty-state claim (1.3s)
+  ✓   43 [desktop] › tests/e2e/notifications-team.spec.ts:161:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries (1.6s)
+  ✓   44 [desktop] › tests/e2e/notifications-team.spec.ts:202:1 › filters actual review events and keeps unread counts synchronized across category pages and spaces (1.8s)
+  ✓   45 [desktop] › tests/e2e/notifications-team.spec.ts:305:3 › translates en team role labels while retaining the actual owner role (1.4s)
+  ✓   46 [desktop] › tests/e2e/notifications-team.spec.ts:305:3 › translates ar team role labels while retaining the actual owner role (1.5s)
+  ✓   47 [desktop] › tests/e2e/onboarding-defaults.spec.ts:17:1 › completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change (6.0s)
+  ✓   48 [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (7.3s)
+  ✓   49 [desktop] › tests/e2e/quote-confirmation.spec.ts:7:1 › shows separate music and generated sound choices in a real quote without submitting a model task (4.8s)
+  ✓   50 [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (1.7s)
+  ✓   51 [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (3.5s)
+  ✓   52 [desktop] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (2.5s)
+  ✓   53 [desktop] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger (2.3s)
+  ✓   54 [desktop] › tests/e2e/support-channels.spec.ts:5:1 › shows truthful contact availability, retries the configured QR image and opens a separate survey (4.5s)
+  ✓   55 [desktop] › tests/e2e/team-creation.spec.ts:64:1 › shows missing team contract and payment configuration without creating a usable team (2.1s)
+  ✓   56 [desktop] › tests/e2e/team-creation.spec.ts:87:1 › recovers the same unpaid team order after refresh and lets its creator close the draft (4.2s)
+  ✓   57 [desktop] › tests/e2e/team-creation.spec.ts:144:1 › guides a legacy team owner into the existing team instead of offering another creation (2.1s)
+  ✓   58 [desktop] › tests/e2e/team-creation.spec.ts:163:1 › translates the team gate in English and Arabic while preserving user team names (3.9s)
+  ✓   59 [desktop] › tests/e2e/tool-draft-loading.spec.ts:3:1 › blocks tool draft writes until project messages recover and offers a safe retry after a read failure (4.4s)
+  ✓   60 [desktop] › tests/e2e/upload-context-review.spec.ts:4:1 › does not attach a delayed image-mode upload to the video draft after switching creation kind (4.1s)
+  ✓   61 [desktop] › tests/e2e/upload-context-review.spec.ts:73:1 › preserves same-kind prompt edits while an accepted upload response is delayed (4.0s)
+  ✓   62 [desktop] › tests/e2e/upload-recovery.spec.ts:5:1 › handles browser file drop and paste, recovers a lost upload response without duplicate assets, and rejects disguised files (4.1s)
+(node:42801) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   63 [mobile] › tests/e2e/account.spec.ts:6:1 › new user recovers through a real local email, loses old sessions and logs in with the new password (5.9s)
+  ✓   64 [mobile] › tests/e2e/account.spec.ts:62:1 › Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser (5.6s)
+  ✓   65 [mobile] › tests/e2e/account.spec.ts:139:3 › explicitly disabled recovery › is readable without a session and sends no fabricated messages (2.0s)
+  ✓   66 [mobile] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment (6.4s)
+  ✓   67 [mobile] › tests/e2e/brand-quota.spec.ts:195:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting (2.9s)
+  ✓   68 [mobile] › tests/e2e/canvas-focus-review.spec.ts:4:1 › switches narrow-screen editor tabs with arrow keys without moving the selected layer (10.6s)
+  ✓   69 [mobile] › tests/e2e/canvas.spec.ts:19:1 › creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project (11.3s)
+  ✓   70 [mobile] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (8.0s)
+  ✓   71 [mobile] › tests/e2e/character-video.spec.ts:266:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (4.7s)
+  ✓   72 [mobile] › tests/e2e/composer-media.spec.ts:27:1 › persists real background music and the generated audio choice across save, model changes and refresh (5.1s)
+  ✓   73 [mobile] › tests/e2e/composer-media.spec.ts:115:1 › returns an actual local output to the project composer without replacing the current prompt or submitting a second job (5.1s)
+  ✓   74 [mobile] › tests/e2e/creation-locale.spec.ts:55:3 › uses en creation and local tool controls while retaining the original Chinese user content (6.4s)
+  ✓   75 [mobile] › tests/e2e/creation-locale.spec.ts:55:3 › uses ar creation and local tool controls while retaining the original Chinese user content (6.0s)
+  ✓   76 [mobile] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the project save response is delayed (5.2s)
+  ✓   77 [mobile] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the message save response is delayed (6.3s)
+  ✓   78 [mobile] › tests/e2e/credits-locale.spec.ts:77:3 › translates en credit copy while keeping real values and user fields without starting payment (5.8s)
+  ✓   79 [mobile] › tests/e2e/credits-locale.spec.ts:222:3 › distinguishes en historical zero-archive and three-month renewal contract copy (3.7s)
+  ✓   80 [mobile] › tests/e2e/credits-locale.spec.ts:292:3 › translates en referral membership configuration without enabling rewards (2.1s)
+  ✓   81 [mobile] › tests/e2e/credits-locale.spec.ts:77:3 › translates ar credit copy while keeping real values and user fields without starting payment (6.9s)
+  ✓   82 [mobile] › tests/e2e/credits-locale.spec.ts:222:3 › distinguishes ar historical zero-archive and three-month renewal contract copy (3.1s)
+  ✓   83 [mobile] › tests/e2e/credits-locale.spec.ts:292:3 › translates ar referral membership configuration without enabling rewards (1.7s)
+  ✓   84 [mobile] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (4.6s)
+  ✓   85 [mobile] › tests/e2e/identities.spec.ts:56:1 › shows unavailable external identity methods without fake codes or QR images (2.9s)
+  ✓   86 [mobile] › tests/e2e/identities.spec.ts:72:1 › can detach existing identity fixtures with a password after both providers are disabled (3.3s)
+  ✓   87 [mobile] › tests/e2e/inspiration-categories.spec.ts:6:1 › creates and reclassifies a real video inspiration, preserves filters on refresh and keeps legacy videos unclassified (5.8s)
+  ✓   88 [mobile] › tests/e2e/inspiration-categories.spec.ts:145:1 › a delayed category response cannot reopen a closed detail or replace another inspiration (3.6s)
+  ✓   89 [mobile] › tests/e2e/inspiration-replica.spec.ts:6:1 › recovers a video inspiration action-reference draft after a lost reuse response and refresh (5.1s)
+  ✓   90 [mobile] › tests/e2e/library-batch-recovery.spec.ts:33:1 › keeps every upload in its original workspace when switching spaces during a delayed batch (3.2s)
+  ✓   91 [mobile] › tests/e2e/library-batch-recovery.spec.ts:119:1 › refreshes successful batch deletions and retries only remaining assets after a partial failure (2.3s)
+  ✓   92 [mobile] › tests/e2e/library-batch-recovery.spec.ts:172:1 › reports an unavailable recent-project list and restores saved work through an explicit retry (3.1s)
+  ✓   93 [mobile] › tests/e2e/library-canvas-review.spec.ts:113:1 › manages a named collection through rename, membership removal and deletion while preserving both originals (3.5s)
+  ✓   94 [mobile] › tests/e2e/library-canvas-review.spec.ts:215:1 › groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock (17.4s)
+  ✓   95 [mobile] › tests/e2e/library-canvas-review.spec.ts:288:1 › applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice (9.2s)
+  ✓   96 [mobile] › tests/e2e/library-canvas-review.spec.ts:377:1 › combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin (3.6s)
+  ✓   97 [mobile] › tests/e2e/library-canvas-review.spec.ts:424:1 › uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics (2.8s)
+  ✓   98 [mobile] › tests/e2e/locale.spec.ts:28:3 › persists en interface language while keeping creation language separate and translating account and help pages (5.6s)
+  ✓   99 [mobile] › tests/e2e/locale.spec.ts:28:3 › persists ar interface language while keeping creation language separate and translating account and help pages (5.6s)
+  ✓  100 [mobile] › tests/e2e/material-designs.spec.ts:24:1 › restores ordered marketing modules and their own real references from the server, then preserves them while saving free creation (5.6s)
+  ✓  101 [mobile] › tests/e2e/media.spec.ts:27:1 › uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart (8.3s)
+  ✓  102 [mobile] › tests/e2e/media.spec.ts:101:1 › reuses an inspiration with its actual reference image and restores the persisted draft after refresh (5.3s)
+  ✓  103 [mobile] › tests/e2e/notifications-team.spec.ts:64:1 › shows a loading state until the actual isolated notification response arrives (1.4s)
+  ✓  104 [mobile] › tests/e2e/notifications-team.spec.ts:123:1 › shows one injected notification failure and retries against the real API without an empty-state claim (1.4s)
+  ✓  105 [mobile] › tests/e2e/notifications-team.spec.ts:161:1 › reaches notification 25 through real pagination and preserves read and workspace boundaries (1.7s)
+  ✓  106 [mobile] › tests/e2e/notifications-team.spec.ts:202:1 › filters actual review events and keeps unread counts synchronized across category pages and spaces (2.0s)
+  ✓  107 [mobile] › tests/e2e/notifications-team.spec.ts:305:3 › translates en team role labels while retaining the actual owner role (1.5s)
+  ✓  108 [mobile] › tests/e2e/notifications-team.spec.ts:305:3 › translates ar team role labels while retaining the actual owner role (1.5s)
+  ✓  109 [mobile] › tests/e2e/onboarding-defaults.spec.ts:17:1 › completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change (6.1s)
+  ✓  110 [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (7.5s)
+  ✓  111 [mobile] › tests/e2e/quote-confirmation.spec.ts:7:1 › shows separate music and generated sound choices in a real quote without submitting a model task (4.3s)
+  ✓  112 [mobile] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (3.3s)
+  ✓  113 [mobile] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (3.6s)
+  ✓  114 [mobile] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (2.0s)
+  ✓  115 [mobile] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger (2.9s)
+  ✓  116 [mobile] › tests/e2e/support-channels.spec.ts:5:1 › shows truthful contact availability, retries the configured QR image and opens a separate survey (4.7s)
+  ✓  117 [mobile] › tests/e2e/team-creation.spec.ts:64:1 › shows missing team contract and payment configuration without creating a usable team (3.4s)
+  ✓  118 [mobile] › tests/e2e/team-creation.spec.ts:87:1 › recovers the same unpaid team order after refresh and lets its creator close the draft (3.3s)
+  ✓  119 [mobile] › tests/e2e/team-creation.spec.ts:144:1 › guides a legacy team owner into the existing team instead of offering another creation (2.1s)
+  ✓  120 [mobile] › tests/e2e/team-creation.spec.ts:163:1 › translates the team gate in English and Arabic while preserving user team names (4.3s)
+  ✓  121 [mobile] › tests/e2e/tool-draft-loading.spec.ts:3:1 › blocks tool draft writes until project messages recover and offers a safe retry after a read failure (4.4s)
+  ✓  122 [mobile] › tests/e2e/upload-context-review.spec.ts:4:1 › does not attach a delayed image-mode upload to the video draft after switching creation kind (4.1s)
+  ✓  123 [mobile] › tests/e2e/upload-context-review.spec.ts:73:1 › preserves same-kind prompt edits while an accepted upload response is delayed (3.9s)
+  ✓  124 [mobile] › tests/e2e/upload-recovery.spec.ts:5:1 › handles browser file drop and paste, recovers a lost upload response without duplicate assets, and rejects disguised files (4.1s)
+(node:44927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  125 [notebook] › tests/e2e/canvas.spec.ts:19:1 › creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project (12.2s)
+(node:45020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  126 [tablet] › tests/e2e/canvas.spec.ts:19:1 › creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project (12.3s)
+
+  126 passed (10.1m)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/生图生视频/platform/var/e2e/run-VHBeHp

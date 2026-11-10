@@ -1,0 +1,36 @@
+{
+  "recordedDate": "2026-10-26",
+  "runs": [
+    {
+      "source": "/private/tmp/yingzao-home-acceptance.2TmD2M",
+      "passed": 0,
+      "failed": 6,
+      "classification": "environment",
+      "reason": "Chromium was blocked by sandbox MachPort system communication; no test entered its body."
+    },
+    {
+      "source": "/private/tmp/yingzao-home-acceptance.fIykiX",
+      "passed": 4,
+      "failed": 2,
+      "classification": "test-locator",
+      "reason": "New test used exact label matching on an existing nested textarea label. Restored the existing regression pattern /^创作提示词/."
+    },
+    {
+      "source": "/private/tmp/yingzao-home-acceptance.dlQTb2",
+      "passed": 14,
+      "failed": 1,
+      "classification": "layout",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "firstArtworkTop": 837.15625,
+      "visibleArtworkHeight": 6.84375,
+      "requiredVisibleArtworkHeight": 25,
+      "reason": "Initial mobile screen exposed too little actual inspiration artwork; preserved threshold and screenshot for corrective CSS work."
+    }
+  ],
+  "privacy": "Only fixture screenshots and explicit non-sensitive result metadata archived. No database, authentication state, raw trace, or config copied.",
+  "resolvedBy": "summary.json",
+  "finalMobileVisibleArtworkHeight": 37.4375
+}

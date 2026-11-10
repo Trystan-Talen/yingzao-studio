@@ -1,0 +1,16 @@
+{
+  "completedAt": "2026-11-02",
+  "mode": "local-only",
+  "originalEntryUpdated": false,
+  "reason": "用户要求放弃传输和使用密钥，本轮不切换真实入口。",
+  "externalGenerationCalls": 0,
+  "externalProviderRequests": 0,
+  "backupRestoreVerified": true,
+  "tables": 100,
+  "mediaFiles": 52,
+  "creditsUnchanged": true,
+  "newGenerationTasks": 0,
+  "safeRuntimeUsed": true,
+  "safeRuntimeStopped": true,
+  "originalEntryListeningAfterChecks": false
+}

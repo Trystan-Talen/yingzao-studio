@@ -1,0 +1,15 @@
+
+Running 6 tests using 1 worker
+
+(node:26943) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (3.2s)
+  ✓  2 [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (4.0s)
+  ✓  3 [desktop] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (2.5s)
+(node:27005) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [mobile] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (3.5s)
+  ✓  5 [mobile] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (4.1s)
+  ✓  6 [mobile] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (3.0s)
+
+  6 passed (23.0s)

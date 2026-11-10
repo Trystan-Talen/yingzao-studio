@@ -2,15 +2,47 @@
  * Unknown strings remain unchanged; no substring replacement or external translation is performed.
  * Generated from the actual UI inventory and reviewed translations, not an online runtime service.
  */
+import { CREATIVE_STUDIO_TRANSLATIONS } from './creative-studio-translations';
+import { WORKFLOW_STUDIO_TRANSLATIONS } from './workflow-studio-translations';
+import { RESULT_STUDIO_TRANSLATIONS } from './result-studio-translations';
+import { STUDIO_NAVIGATION_TRANSLATIONS } from './studio-navigation-translations';
+import { inspirationStudioTranslations } from './inspiration-studio-translations';
 import { ACCOUNT_TRANSLATIONS } from './account-translations';
 import { CREATION_TRANSLATIONS } from './creation-translations';
 import { CREDIT_TRANSLATIONS } from './credit-translations';
 import { WORKFLOW_TRANSLATIONS } from './workflow-translations';
 import { SUPPORT_TRANSLATIONS } from './support-translations';
 import { TEAM_CREATION_TRANSLATIONS } from './team-creation-translations';
+import { HOME_TRANSLATIONS } from './home-translations';
+import { EXPERIENCE_TRANSLATIONS } from './experience-translations';
+import { MODEL_CAPABILITY_TRANSLATIONS } from './model-capability-translations';
+import { CREATIVE_TRANSLATIONS } from './creative-translations';
+import { CREATIVE_BRIEF_TRANSLATIONS } from './creative-brief-translations';
+import { CREATION_REFRESH_TRANSLATIONS } from './creation-refresh-translations';
 export type Locale = 'zh-CN' | 'en' | 'ar';
 export const SUPPORTED_LOCALES: readonly Locale[] = ['zh-CN', 'en', 'ar'];
 export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: string }>>> = {
+  ...HOME_TRANSLATIONS,
+  ...CREATIVE_BRIEF_TRANSLATIONS,
+  ...CREATION_REFRESH_TRANSLATIONS,
+  ...CREATIVE_STUDIO_TRANSLATIONS,
+  ...WORKFLOW_STUDIO_TRANSLATIONS,
+  ...RESULT_STUDIO_TRANSLATIONS,
+  ...STUDIO_NAVIGATION_TRANSLATIONS,
+  ...inspirationStudioTranslations,
+  跳到主要内容: { en: 'Skip to main content', ar: 'انتقل إلى المحتوى الرئيسي' },
+  '输入项目名称开始搜索。': {
+    en: 'Enter a project name to start searching.',
+    ar: 'أدخل اسم مشروع لبدء البحث.',
+  },
+  '已上传 {count} 个文件至「{workspace}」。': {
+    en: 'Uploaded {count} files to “{workspace}”.',
+    ar: 'تم رفع {count} ملفات إلى «{workspace}».',
+  },
+  '已移入回收站 {completed} 项，{failed} 项未完成；请重试剩余项。': {
+    en: 'Moved {completed} items to trash. {failed} items could not be moved; retry the remaining items.',
+    ar: 'تم نقل {completed} عناصر إلى سلة المحذوفات. تعذّر نقل {failed} عناصر؛ أعد محاولة العناصر المتبقية.',
+  },
   魔法消除: { en: 'Object eraser', ar: 'إزالة العناصر' },
   模特替换: { en: 'Model replacement', ar: 'استبدال العارض' },
   '涂画移除物体，补全背景并保留未编辑区域': {
@@ -3058,6 +3090,12 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
     en: 'Keys are used only on the server. Configuration and live verification are shown separately; a connected status does not mean paid generation has been tested.',
     ar: 'تُستخدم المفاتيح على الخادم فقط. يُعرض الإعداد والتحقق الفعلي منفصلين؛ الاتصال لا يعني اختبار توليد مدفوع.',
   },
+  '密钥仅在服务端使用。已配置不代表已验证连通性或生成效果，实际可用性以提交结果为准。': {
+    en: 'Keys are used only on the server. Configuration does not verify connectivity or output quality; availability is determined by submitted task results.',
+    ar: 'تُستخدم المفاتيح على الخادم فقط. الإعداد لا يؤكد الاتصال أو جودة النتائج؛ ويُحدَّد التوفر من نتائج المهام المُرسلة.',
+  },
+  已配置: { en: 'Configured', ar: 'تم الإعداد' },
+  已停用: { en: 'Disabled', ar: 'معطّل' },
   已连接: {
     en: 'Connected',
     ar: 'متصل',
@@ -4704,6 +4742,10 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
     en: 'Product detail page',
     ar: 'صفحة تفاصيل المنتج',
   },
+  屏详情页: {
+    en: 'detail-page panels',
+    ar: 'لوحات تفاصيل المنتج',
+  },
   商品套图: {
     en: 'Product image set',
     ar: 'مجموعة صور المنتج',
@@ -6083,6 +6125,15 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
   ...WORKFLOW_TRANSLATIONS,
   ...SUPPORT_TRANSLATIONS,
   ...TEAM_CREATION_TRANSLATIONS,
+  ...EXPERIENCE_TRANSLATIONS,
+  ...MODEL_CAPABILITY_TRANSLATIONS,
+  ...CREATIVE_TRANSLATIONS,
+  '演示空间 · 测试数据': { en: 'Demo workspace · Test data', ar: 'مساحة تجريبية · بيانات اختبار' },
+  '在首页的快速创作区选择图片、视频或商品详情页。填写需求、添加参考素材并确认费用后开始生成；也可以从灵感探索中选择画面继续创作。服务未连接时仍可保存草稿和整理素材。':
+    {
+      en: 'Choose image, video or product pages from Home. Describe your idea, add references and confirm the cost to generate. You can also start from an image in Explore. Save drafts and organize assets even when a service is not connected.',
+      ar: 'اختر الصور أو الفيديو أو صفحات المنتجات من الصفحة الرئيسية. اكتب فكرتك وأضف المراجع وأكّد التكلفة لبدء التوليد. يمكنك أيضاً البدء من صورة في الاستكشاف. احفظ المسودات ونظّم الملفات حتى دون اتصال الخدمة.',
+    },
 };
 let activeLocale: Locale = 'zh-CN';
 /** The application calls this before rendering a new account or preference state. */

@@ -1,0 +1,57 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "bounds": {
+    "brief": {
+      "x": 33,
+      "y": 246.46875,
+      "width": 324,
+      "height": 90
+    },
+    "image": {
+      "x": 33,
+      "y": 210.46875,
+      "width": 64,
+      "height": 36
+    },
+    "video": {
+      "x": 102,
+      "y": 210.46875,
+      "width": 64,
+      "height": 36
+    },
+    "material": {
+      "x": 33,
+      "y": 336.46875,
+      "width": 93,
+      "height": 34
+    },
+    "save": {
+      "x": 107.15625,
+      "y": 479.46875,
+      "width": 62,
+      "height": 40
+    },
+    "generate": {
+      "x": 247,
+      "y": 478.46875,
+      "width": 110,
+      "height": 42
+    },
+    "advanced": {
+      "x": 261,
+      "y": 378.46875,
+      "width": 96,
+      "height": 34
+    }
+  },
+  "inspirationBox": {
+    "x": 18,
+    "y": 806.5625,
+    "width": 170.5,
+    "height": 213.125
+  },
+  "visibleImageHeight": 37.4375
+}

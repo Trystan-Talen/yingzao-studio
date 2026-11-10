@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-02T02:49:04.131Z",
+  "unitPassed": true,
+  "unitTests": {
+    "passed": 1353,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browserPassed": true,
+  "browserTests": {
+    "passed": 190,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "workers": 2,
+    "projectCounts": {
+      "desktop": 92,
+      "mobile": 92,
+      "notebook": 5,
+      "tablet": 1
+    }
+  },
+  "browserRun": "platform/var/e2e/run-TIJ3DO",
+  "staticPassed": true,
+  "staticChecks": [
+    "typecheck",
+    "lint",
+    "format:check",
+    "git diff --check"
+  ],
+  "buildPassed": true,
+  "sourceAggregateSha256": "7a654207ddb29fc9e01b6a9bcef6d2e1d3e16a8cd51b3e15ec59832d464616e3",
+  "sourceFiles": 377,
+  "buildFiles": 103
+}

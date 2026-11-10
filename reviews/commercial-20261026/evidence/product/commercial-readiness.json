@@ -1,0 +1,69 @@
+{
+  "recordedDate": "2026-10-26",
+  "scope": "产品上线范围与承诺只读复核；不将旧台账的历史通过结论当作当前全量验收",
+  "releaseAssessment": {
+    "localCandidate": "可交付本地或受控团队候选：素材/项目/草稿/基础画布/本机媒体处理；最终放行取决于根代理当前版本全量验证及部署恢复检查。",
+    "conditional": [
+      "外部图片/视频生成：必须确定实际可用的供应商、模型权限、授权预算、代表素材质量与费用验收；协议夹具不能证明效果。",
+      "公开收费：须批准自有套餐、兑换/退款/期限合同，配置真实商户并完成付款、回调、退款/争议与对账联调。",
+      "外部登录与送达：须配置实际域名、已审核应用、邮件/短信服务并验证真实登录与送达；本地密码登录可独立使用。",
+      "对外运营：须补齐运营主体、服务条款、素材发往第三方的说明、数据保留/删除与支持责任入口。当前前端未发现这些产品入口，支持渠道配置默认空。",
+      "部署容量：明确单实例与实际并发/文件规模，建立监控、备份恢复和故障处理责任；不从测试通过推导任意规模可用。"
+    ],
+    "notPromised": [
+      "正式税务开票、正式人物身份认证、视频逐像素复刻或精确换脸/换装/商品替换、小红书视频解析。",
+      "外部模型输出质量保证、真实支付及邮件短信已经验收。",
+      "原站完整等价、历史模板订阅/抽奖当前存在性、未知跨档权益换算与完整原站角色矩阵。"
+    ],
+    "originalSiteUnknownsAreNotAutomaticLaunchBlockers": "原站旧模板、抽奖、详细团队规则等未知，只阻止完整复刻承诺。采用明确自有功能与商业合同即可独立定义上线范围；跨档混购当前明确阻止，不应为了原站未知细则无限延后基础产品。"
+  },
+  "copyReview": [
+    {
+      "area": "首次上手",
+      "assessment": "引导解释灵感、画布、资产组织，并可跳过；免费/本机/付费模型边界应以产品发布范围说明补齐。",
+      "sources": [
+        "platform/src/web/components/Onboarding.tsx:35",
+        "platform/src/web/pages/Support.tsx:46"
+      ]
+    },
+    {
+      "area": "模型不可用",
+      "assessment": "提交区域提供连接入口、禁用执行并允许编辑保存；设置页明确真实调用尚未验证。当前绿色已连接仅反映密钥已配置和开关开启，建议后续命名为已配置以减少对连通性验证的误解。",
+      "sources": [
+        "platform/src/web/components/JobSubmit.tsx:220",
+        "platform/src/web/pages/Settings.tsx:229",
+        "platform/src/server/tasks/settings.ts:118"
+      ]
+    },
+    {
+      "area": "套餐与付款",
+      "assessment": "额度明确不是现金；未连接支付仅保存订单草稿；无已发布套餐时不展示虚构商品；返回成功页仍等待订单状态确认。未发现把草稿/浏览器返回当付款完成的产品承诺。",
+      "sources": [
+        "platform/src/web/pages/Usage.tsx:308",
+        "platform/src/web/pages/Usage.tsx:311",
+        "platform/src/web/pages/Usage.tsx:533",
+        "platform/src/web/pages/Usage.tsx:540",
+        "platform/src/web/pages/Usage.tsx:1002"
+      ]
+    },
+    {
+      "area": "发票",
+      "assessment": "仅保存抬头和申请；空态、详情、登记反馈均明确未发送或未开具，支付服务商账单单独说明不代表正式税务发票。未发现已开具的虚假承诺；后续可将未接通提示也固定放到申请表前，减少先录入税号再发现限制。",
+      "sources": [
+        "platform/src/web/pages/Usage.tsx:726",
+        "platform/src/web/pages/Usage.tsx:743",
+        "platform/src/web/pages/Usage.tsx:807",
+        "platform/src/web/pages/Usage.tsx:877"
+      ]
+    }
+  ],
+  "externalVerification": "本轮只读代码和台账，未访问或消费真实模型、支付、邮件、短信服务，也未提供法律合规结论。",
+  "followUpApplied": {
+    "date": "2026-10-26",
+    "changes": [
+      "模型密钥状态已改为已配置/未配置/已停用，并增加真实可用性提示。",
+      "发票页及申请表前已持续展示未接通正式开票服务的限制。"
+    ],
+    "verification": "纳入最后全量126项浏览器与773项自动化版本。上面的初审建议保留原始时间边界。"
+  }
+}

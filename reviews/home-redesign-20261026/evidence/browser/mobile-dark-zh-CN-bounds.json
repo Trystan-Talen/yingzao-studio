@@ -1,0 +1,37 @@
+{
+  "variant": {
+    "locale": "zh-CN",
+    "theme": "dark",
+    "heading": "从一个想法，",
+    "brief": "创作需求",
+    "save": "保存草稿",
+    "generate": "开始创作",
+    "video": "视频创作",
+    "advanced": "模型与高级设置",
+    "music": "背景音乐（可选）"
+  },
+  "bounds": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brief": {
+      "x": 33,
+      "y": 246.46875,
+      "width": 324,
+      "height": 90
+    },
+    "generate": {
+      "x": 247,
+      "y": 478.46875,
+      "width": 110,
+      "height": 42
+    },
+    "save": {
+      "x": 107.15625,
+      "y": 479.46875,
+      "width": 62,
+      "height": 40
+    }
+  }
+}

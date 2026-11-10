@@ -34,6 +34,8 @@ import {
 import { AssetPicker } from './AssetPicker';
 import { JobSubmit } from './JobSubmit';
 import { JobCard } from './TaskCenter';
+import { useModelCapability } from '../lib/use-model-capability';
+import { ModelCapabilityStatus } from './ModelCapabilityStatus';
 import {
   Badge,
   Confirm,
@@ -104,7 +106,12 @@ export const advancedTools = [
     kind: 'video',
   },
 ] as const;
-export function AdvancedToolCards() {
+export function AdvancedToolCards({
+  tools = advancedTools,
+}: {
+  tools?: readonly (typeof advancedTools)[number][];
+}) {
+  if (!tools.length) return null;
   return (
     <section className="section-spaced">
       <div className="section-heading">
@@ -115,7 +122,7 @@ export function AdvancedToolCards() {
         <Badge>{t('图片与视频')}</Badge>
       </div>
       <div className="tools-grid">
-        {advancedTools.map((tool) => (
+        {tools.map((tool) => (
           <Link to={`/advanced/${tool.id}`} className="tool-card" key={tool.id}>
             <span className="tool-icon" style={{ background: '#eaf1ec' }}>
               <tool.icon size={24} />
@@ -222,6 +229,7 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
   const [language, setLanguage] = useState('en');
   const [duration, setDuration] = useState(5);
   const [resolution, setResolution] = useState(tool.kind === 'image' ? '1K' : '1080p');
+  const [ratio, setRatio] = useState('1:1');
   const [scale, setScale] = useState(2);
   const [replacements, setReplacements] = useState<TextReplacement[]>([
     { originalText: '', replaceText: '', rect: [0, 0, 100, 40] },
@@ -236,6 +244,7 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
     setLanguage(draft.options.language);
     setDuration(draft.options.duration);
     setResolution(draft.options.resolution);
+    setRatio(draft.options.ratio);
     setScale(draft.options.scale);
     setReplacements(draft.options.textReplacements ?? []);
     setAssetIds(draft.assetIds);
@@ -349,11 +358,19 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
     { operation: tool.id, providerId, modelId, duration, resolution, language, scale },
     operations,
   );
-  const { operation, model } = selection;
+  const { operation, model: selectedModel } = selection;
+  const capability = useModelCapability({
+    operation,
+    model: selectedModel,
+    inputMode: assetIds.length || referenceIds.length ? 'image' : 'text',
+    enabled: restored,
+  });
+  const model = capability.model;
   const history = useApi<Page<Job>>(`/jobs${qs({ operation: tool.id, pageSize: 30 })}`, true, 5000);
   const input = jobInput({
     operation: tool.id,
     providerId: selection.providerId || 'flyelep',
+    capabilityRevision: capability.revision,
     prompt,
     ...(createdProject.current ? { projectId: createdProject.current } : {}),
     assetIds,
@@ -363,10 +380,12 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
       language,
       duration,
       resolution,
+      ratio,
       scale,
       ...(tool.id === 'image.text-edit' ? { textReplacements: replacements } : {}),
     },
   });
+  const capabilityIssue = capability.selectionIssue(input.options);
   const snapshot = JSON.stringify(input);
   useEffect(() => {
     if (!restored || caps.isLoading || storageBlocked) return;
@@ -378,6 +397,8 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
     }
   }, [snapshot, restored, caps.isLoading, storageKey, storageBlocked]);
   const valid =
+    capability.canGenerate &&
+    !capabilityIssue &&
     restored &&
     !selection.warnings.length &&
     referencesReady &&
@@ -684,7 +705,7 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
                 )}
               </Notice>
             )}
-            {(tool.id === 'video.extend' || !!model?.durations.length) && (
+            {!!model?.durations.length && capability.adjustable('duration') && (
               <Field label={tool.id === 'video.extend' ? t('延长时长（秒）') : t('时长（秒）')}>
                 <select
                   disabled={!restored || saving}
@@ -697,13 +718,28 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
                       {t('（当前不支持，原值保留）')}
                     </option>
                   ) : null}
-                  {(model?.durations.length ? model.durations : [5, 10]).map((value) => (
+                  {model.durations.map((value) => (
                     <option key={value}>{value}</option>
                   ))}
                 </select>
               </Field>
             )}
-            {!!model?.resolutions.length && (
+            {!!model?.ratios.length && capability.adjustable('ratio') && (
+              <Field label={t('画幅比例')}>
+                <select value={ratio} onChange={(event) => setRatio(event.target.value)}>
+                  {!model.ratios.includes(ratio) && (
+                    <option value={ratio}>
+                      {ratio}
+                      {t('（当前不支持，原值保留）')}
+                    </option>
+                  )}
+                  {model.ratios.map((value) => (
+                    <option key={value}>{value}</option>
+                  ))}
+                </select>
+              </Field>
+            )}
+            {!!model?.resolutions.length && capability.adjustable('resolution') && (
               <Field label={t('清晰度')}>
                 <select value={resolution} onChange={(e) => setResolution(e.target.value)}>
                   {!model.resolutions.includes(resolution) && (
@@ -862,6 +898,16 @@ function AdvancedToolForm({ tool }: { tool: (typeof advancedTools)[number] }) {
               </Notice>
             )}
           </fieldset>
+          <ModelCapabilityStatus
+            capability={capability}
+            selectionIssue={capabilityIssue}
+            onUseFixed={() => {
+              const fixed = capability.fixedOptions;
+              if (typeof fixed.ratio === 'string') setRatio(fixed.ratio);
+              if (typeof fixed.resolution === 'string') setResolution(fixed.resolution);
+              if (typeof fixed.duration === 'number') setDuration(fixed.duration);
+            }}
+          />
           <JobSubmit
             recoveryScope={`advanced:${tool.id}:${projectId ?? 'new'}`}
             input={input}

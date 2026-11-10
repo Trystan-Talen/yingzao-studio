@@ -333,12 +333,16 @@ export class AssetService {
     return this.get(actor, wid, aid);
   }
   remove(actor: Actor, wid: string, aid: string) {
-    this.c.requireAccess(actor, wid, 'write');
-    this.get(actor, wid, aid);
-    const date = now();
-    this.c.run('UPDATE assets SET deleted_at=?,updated_at=? WHERE id=?', date, date, aid);
-    this.c.audit(actor, wid, 'asset.delete', 'asset', aid);
-    return { id: aid, deletedAt: date };
+    return this.c.transaction(() => {
+      this.c.requireAccess(actor, wid, 'write');
+      const asset = this.c.resource('assets', wid, aid, true);
+      const deletedAt = nullable(asset, 'deleted_at');
+      if (deletedAt) return { id: aid, deletedAt };
+      const date = now();
+      this.c.run('UPDATE assets SET deleted_at=?,updated_at=? WHERE id=?', date, date, aid);
+      this.c.audit(actor, wid, 'asset.delete', 'asset', aid);
+      return { id: aid, deletedAt: date };
+    });
   }
   restore(actor: Actor, wid: string, aid: string): AssetDto {
     this.c.requireAccess(actor, wid, 'write');

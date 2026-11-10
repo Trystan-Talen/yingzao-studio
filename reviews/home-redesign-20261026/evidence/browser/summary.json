@@ -1,0 +1,236 @@
+{
+  "recordedDate": "2026-10-26",
+  "status": "passed",
+  "sourceRun": "/private/tmp/yingzao-home-final.J2qiRv",
+  "passed": 75,
+  "failed": 0,
+  "skipped": 0,
+  "duration": "5.3m",
+  "projects": {
+    "desktop": 36,
+    "mobile": 36,
+    "notebook": 3
+  },
+  "specifications": {
+    "composer-media.spec.ts": 4,
+    "creation-locale.spec.ts": 4,
+    "creation-race.spec.ts": 4,
+    "credits-locale.spec.ts": 12,
+    "home-appearance.spec.ts": 6,
+    "home-design.spec.ts": 9,
+    "inspiration-categories.spec.ts": 4,
+    "inspiration-replica.spec.ts": 2,
+    "locale.spec.ts": 4,
+    "material-designs.spec.ts": 2,
+    "media.spec.ts": 4,
+    "onboarding-defaults.spec.ts": 2,
+    "production-security.spec.ts": 2,
+    "quote-confirmation.spec.ts": 2,
+    "shell-quality.spec.ts": 8,
+    "upload-context-review.spec.ts": 4,
+    "upload-recovery.spec.ts": 2
+  },
+  "newHomeTests": 15,
+  "fixtureDiagnostics": 75,
+  "uncaughtBrowserExceptions": 0,
+  "command": "E2E_RUN_ROOT=/private/tmp/yingzao-home-final.J2qiRv PLAYWRIGHT_BROWSERS_PATH=\"$PWD/var/tools/playwright\" PATH=\"$PWD/var/tools/ffmpeg-9.0.2-macos-arm64/bin:$PATH\" pnpm exec playwright test home-design.spec.ts home-appearance.spec.ts composer-media.spec.ts creation-locale.spec.ts creation-race.spec.ts inspiration-categories.spec.ts inspiration-replica.spec.ts locale.spec.ts material-designs.spec.ts media.spec.ts onboarding-defaults.spec.ts production-security.spec.ts shell-quality.spec.ts upload-context-review.spec.ts upload-recovery.spec.ts quote-confirmation.spec.ts",
+  "note": "Playwright file filters are regular expressions; locale.spec.ts also includes credits-locale.spec.ts. Counts above reflect the actual executed cases.",
+  "build": "Used the parent-provided final dist without rebuilding during the batch.",
+  "layouts": [
+    {
+      "name": "notebook-light-zh-CN",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-NrkhLc",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "firstArtworkTop": 691.5625,
+      "visibleArtworkHeight": 108.4375,
+      "minimumVisibleArtworkHeight": 100,
+      "primaryActionBottom": 493.96875,
+      "briefHeight": 86,
+      "firstScreen": "notebook.png",
+      "fullPage": "notebook-light-zh-CN-full-page.png",
+      "bounds": "notebook-light-zh-CN-bounds.json"
+    },
+    {
+      "name": "desktop-light-zh-CN",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-ZRSmep",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "firstArtworkTop": 818.96875,
+      "visibleArtworkHeight": 181.03125,
+      "minimumVisibleArtworkHeight": 100,
+      "primaryActionBottom": 570.875,
+      "briefHeight": 106,
+      "firstScreen": "desktop.png",
+      "fullPage": "desktop-light-zh-CN-full-page.png",
+      "bounds": "desktop-light-zh-CN-bounds.json"
+    },
+    {
+      "name": "mobile-light-zh-CN",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-l7T9ai",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "firstArtworkTop": 806.5625,
+      "visibleArtworkHeight": 37.4375,
+      "minimumVisibleArtworkHeight": 25,
+      "primaryActionBottom": 520.46875,
+      "briefHeight": 90,
+      "firstScreen": "mobile.png",
+      "fullPage": "mobile-light-zh-CN-full-page.png",
+      "bounds": "mobile-light-zh-CN-bounds.json"
+    },
+    {
+      "name": "desktop-dark-zh-CN",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-1y9ozT",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "locale": "zh-CN",
+      "theme": "dark",
+      "primaryActionBottom": 570.875,
+      "firstScreen": "desktop-dark-zh-CN-first-screen.png",
+      "fullPage": "desktop-dark-zh-CN-full-page.png",
+      "bounds": "desktop-dark-zh-CN-bounds.json",
+      "advanced": "desktop-dark-zh-CN-advanced.png",
+      "video": "desktop-dark-zh-CN-video.png"
+    },
+    {
+      "name": "desktop-light-ar",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-HAlwui",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "locale": "ar",
+      "theme": "light",
+      "primaryActionBottom": 570.875,
+      "firstScreen": "desktop-light-ar-first-screen.png",
+      "fullPage": "desktop-light-ar-full-page.png",
+      "bounds": "desktop-light-ar-bounds.json",
+      "advanced": "desktop-light-ar-advanced.png",
+      "video": "desktop-light-ar-video.png"
+    },
+    {
+      "name": "mobile-light-ar",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-IGxgGL",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "ar",
+      "theme": "light",
+      "primaryActionBottom": 560.46875,
+      "firstScreen": "mobile-light-ar-first-screen.png",
+      "fullPage": "mobile-light-ar-full-page.png",
+      "bounds": "mobile-light-ar-bounds.json",
+      "advanced": "mobile-light-ar-advanced.png",
+      "video": "mobile-light-ar-video.png"
+    },
+    {
+      "name": "mobile-light-en",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-TUqhkn",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "en",
+      "theme": "light",
+      "primaryActionBottom": 560.46875,
+      "firstScreen": "mobile-light-en-first-screen.png",
+      "fullPage": "mobile-light-en-full-page.png",
+      "bounds": "mobile-light-en-bounds.json",
+      "advanced": "mobile-light-en-advanced.png",
+      "video": "mobile-light-en-video.png"
+    },
+    {
+      "name": "mobile-dark-zh-CN",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-UNHTcs",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "locale": "zh-CN",
+      "theme": "dark",
+      "primaryActionBottom": 520.46875,
+      "firstScreen": "mobile-dark-zh-CN-first-screen.png",
+      "fullPage": "mobile-dark-zh-CN-full-page.png",
+      "bounds": "mobile-dark-zh-CN-bounds.json",
+      "advanced": "mobile-dark-zh-CN-advanced.png",
+      "video": "mobile-dark-zh-CN-video.png"
+    },
+    {
+      "name": "desktop-light-en",
+      "source": "/private/tmp/yingzao-home-final.J2qiRv/case-jy38iR",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "locale": "en",
+      "theme": "light",
+      "primaryActionBottom": 570.875,
+      "firstScreen": "desktop-light-en-first-screen.png",
+      "fullPage": "desktop-light-en-full-page.png",
+      "bounds": "desktop-light-en-bounds.json",
+      "advanced": "desktop-light-en-advanced.png",
+      "video": "desktop-light-en-video.png"
+    }
+  ],
+  "testedWebBuildSha256": {
+    "dist/web/assets/AdvancedTools-eCzsE260.js": "38146962be6bd888e0290f4dc348aa15aee89cdc11b5c2e6e040a69f944f142b",
+    "dist/web/assets/CanvasEditor--XOSTC8V.js": "38ed4e8c2d0442c75c0cd5ebb5987fdf1f6ed3975c57fca2f16432ada40b6809",
+    "dist/web/assets/CanvasEditor-BcQQlAIU.css": "c1ab7ce1f07b7b93d6afe4e89a47405eaf0f95fec7caaa4d7e2ee18aa51ec9a7",
+    "dist/web/assets/Composer-CuqA8yUH.js": "e05f67da309ec97e3fdd37bd4339503098aa28d57b5dcfc1e8aa2567ade95716",
+    "dist/web/assets/Developer-Dj5qOadQ.js": "24920f15100f27b71b1e109ce601de0c01fc0bdb2c4b796f9ae3936936bd0e95",
+    "dist/web/assets/Entitlements-h1BNfck2.js": "b31336d01ed75e6cf3db5c317cd753744d5188a18306f9698f5f21fc285067b7",
+    "dist/web/assets/GoogleAccount-RDc_vAyD.js": "b36b2de32afc43871ed90f336d56350f5eb40b5b4077966cd295eb56f09aee0b",
+    "dist/web/assets/Identities-DMWuzV7a.js": "1ecf7824760a74eaf2c83221457143e80958331cc59472e865d5a17d61a9802e",
+    "dist/web/assets/IdentityAccounts-tgWQd5gH.js": "930f42e4a73f3e83cf945711e3e432ac4c30a19931d7388ccd3e394a48a82b31",
+    "dist/web/assets/IdentityRegistration-DEaqLIUE.js": "c6c2a8d2640dfd9298db348c2dc247e6b00ff387ff186e93f3e113ac189253ed",
+    "dist/web/assets/Inspiration-C8Cbd-ga.js": "580cee97cd8cf6edd02367d49baf68265e76e4b861371faa85a518c9a53154ec",
+    "dist/web/assets/Library-Du6gZ7b2.js": "eb079fb0d8194959e218cf7f97b78651c0d2434036b04cc7831e16daa1474cea",
+    "dist/web/assets/Login-89_dNtDn.js": "30c640a24b1958df6bd9517278aa8092937564bb879b84642200232f27d805c7",
+    "dist/web/assets/PasswordRecovery-V_gjgkRs.js": "6aa6f6595461bc3497459a8578202e950b45be2d6bd6ee9433744a8bb651ea69",
+    "dist/web/assets/Public-BL8H8v1M.js": "b36f5359209ca50edc8aa6f2e3aa47b51ab5a9762eb54a5102de3b1989512fd4",
+    "dist/web/assets/Settings-DBbXsjoF.js": "ee7131640d335a76d552cb7f6f470544a1a81f27ef3cfab167d7a56b2a997628",
+    "dist/web/assets/Support-CKL9tgx5.js": "6b5039a1151fda684aa5bade92c26a8d57338012d1b04ce7fb873b8f24577e6b",
+    "dist/web/assets/Team-DxwXt367.js": "a17507c2b177336fd2a41d5759a4a6ccd404abeb8842318d2a3ee097e3a37845",
+    "dist/web/assets/Tools-D2tPvGyf.js": "980ea74f3417ecfad471ec0eaf570dd6697c553a96df05bd04a1ff2de2da1722",
+    "dist/web/assets/Usage-BcVnagUm.js": "245d597a8264279049dfb7cec4b0e8bf33bc10713ac0eac7546d9cf4df3bfe74",
+    "dist/web/assets/UsageStatistics-Da7iThHB.js": "45a84a75d0a80fe2f1cb6a8291202ff62eb269715faeb9fd5c465ac895229959",
+    "dist/web/assets/Workbench-DJxtOhrf.js": "a2ccc22e5eadd8ef4179d388a8581cab98589e9dc732be18d36160f5081ce57c",
+    "dist/web/assets/arrow-left-BttrivYi.js": "7bae7b45af7d5549a31ef1ba04c9a5b041181e23437792481f183c80416df443",
+    "dist/web/assets/arrow-up-CvTW3nd2.js": "e0c007cc2c8b4bd53074c01507fca390b5dbb49ec233539c873117486c21d398",
+    "dist/web/assets/editor-DERvKPwF.js": "49ca114b8c240e204cc69874abe8ef6fa912069a26c658972f373445cbdc958a",
+    "dist/web/assets/expand-Bb3MRAd8.js": "03c12af4c835aa2d0b691f09bb7c05da309d4f644c37f9fde1500fd508636331",
+    "dist/web/assets/export-policy-MMdXZBLQ.js": "0eb1a155a2dff2ef8889ea121fb405e3cb38d92b700f7c57f231ba34eff3de65",
+    "dist/web/assets/index-8OSL-lXY.css": "edc916e361ab53aa5986a21e0f83ee777bd2d0386f0627a082c8c408f32e9130",
+    "dist/web/assets/index-duMyq2qO.js": "f16797ff873b850353490d4b1ed3c109e9d671efcc6eec30aad996eba9a9a058",
+    "dist/web/assets/key-round-DjjGmQuA.js": "bca5fd273cebcbd24230b2aad1b467da1a8eba2aa384fd3bdd8f26cf54ae8dcd",
+    "dist/web/assets/lock-keyhole-D7KXL4RY.js": "cd9fe566381e69986e29ecc60aa7066b0b689a46e289cfcf32c5cf0b37ff9c51",
+    "dist/web/assets/mentions-DOj5GYvu.js": "c16ccee2f698178985bcc49784ab048c8555cd32b7bfabca3c9395d937b19efc",
+    "dist/web/assets/palette-Gl04Qy8d.js": "af5abef62ccfac57a1cda020e917beaac08871a73b4892404b8978aacf789955",
+    "dist/web/assets/product-messages-jlk5kd21.js": "2430edd36d4ab823254a1484943518964ecc93044a57060a1c5c0dc323a156a0",
+    "dist/web/assets/react-Czy9g9O-.js": "1002494f63b290192fd776c03473dd8190d54cbd0193493cf95e77f2362924dc",
+    "dist/web/assets/rotate-ccw-sYk84P_N.js": "8dcb6407518ed9525c8525f14529ad54833bd6cc53d7070dcff58e3e7cea0367",
+    "dist/web/assets/save-YrmpFb8c.js": "dc87caf5e32b6b3fde49de679af1a48c59a2f1f31729453d4c7f7dfb8ffaba57",
+    "dist/web/assets/scene-D-xJ7GBM.js": "1f50979919881427554a708b494e74b6528b029b40dd534f41863e799700cd87",
+    "dist/web/assets/shield-check-BE0HCXYi.js": "080ae38e0d677ff9cc38b9dea3a8d8aa15e317f125eead82b868ef9edfa6a258",
+    "dist/web/assets/trash-DxOw9wCZ.js": "1e04b3cc0776c5c636dd1aa7cfb83358312f09f94aa36065eda83f99e3ac8a8c",
+    "dist/web/assets/video-kJ5x1IT_.js": "602df0acc8efbdde4eec31b289641afecd6677ed1d49b7e878d695d39f56bdc5",
+    "dist/web/index.html": "c818f0056ee1518b6968e7f8e5d23df846432a2df71b7dec46e65b04cd537674"
+  },
+  "boundaries": {
+    "realDatabaseTouched": false,
+    "externalModelCalls": false,
+    "outboundEmailOrSms": false,
+    "livePayments": false
+  },
+  "archived": "Fixture screenshots, explicit layout metadata and test stdout only; no database, config, cookies, raw trace, or private media."
+}

@@ -1,0 +1,65 @@
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2216 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                                 0.61 kB │ gzip:   0.44 kB
+dist/web/assets/CanvasEditor-BcQQlAIU.css          12.37 kB │ gzip:   3.11 kB
+dist/web/assets/index-8OSL-lXY.css                 88.33 kB │ gzip:  16.65 kB
+dist/web/assets/arrow-left-BttrivYi.js              0.25 kB │ gzip:   0.22 kB │ map:     1.09 kB
+dist/web/assets/rotate-ccw-sYk84P_N.js              0.28 kB │ gzip:   0.24 kB │ map:     1.13 kB
+dist/web/assets/video-kJ5x1IT_.js                   0.33 kB │ gzip:   0.28 kB │ map:     1.25 kB
+dist/web/assets/lock-keyhole-D7KXL4RY.js            0.33 kB │ gzip:   0.28 kB │ map:     1.34 kB
+dist/web/assets/mentions-DOj5GYvu.js                0.38 kB │ gzip:   0.31 kB │ map:     1.07 kB
+dist/web/assets/arrow-up-CvTW3nd2.js                0.39 kB │ gzip:   0.27 kB │ map:     2.02 kB
+dist/web/assets/save-YrmpFb8c.js                    0.40 kB │ gzip:   0.28 kB │ map:     1.33 kB
+dist/web/assets/shield-check-BE0HCXYi.js            0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+dist/web/assets/trash-DxOw9wCZ.js                   0.42 kB │ gzip:   0.28 kB │ map:     1.47 kB
+dist/web/assets/key-round-DjjGmQuA.js               0.44 kB │ gzip:   0.31 kB │ map:     1.36 kB
+dist/web/assets/expand-Bb3MRAd8.js                  0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+dist/web/assets/palette-Gl04Qy8d.js                 0.59 kB │ gzip:   0.33 kB │ map:     1.83 kB
+dist/web/assets/export-policy-MMdXZBLQ.js           1.14 kB │ gzip:   0.62 kB │ map:     4.74 kB
+dist/web/assets/IdentityRegistration-DEaqLIUE.js    2.50 kB │ gzip:   1.37 kB │ map:     7.46 kB
+dist/web/assets/Entitlements-h1BNfck2.js            2.63 kB │ gzip:   1.36 kB │ map:     6.19 kB
+dist/web/assets/product-messages-jlk5kd21.js        2.79 kB │ gzip:   1.02 kB │ map:     5.13 kB
+dist/web/assets/PasswordRecovery-V_gjgkRs.js        3.08 kB │ gzip:   1.63 kB │ map:     9.39 kB
+dist/web/assets/scene-D-xJ7GBM.js                   3.09 kB │ gzip:   1.43 kB │ map:    12.44 kB
+dist/web/assets/Public-BL8H8v1M.js                  4.02 kB │ gzip:   2.11 kB │ map:    11.65 kB
+dist/web/assets/UsageStatistics-Da7iThHB.js         4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+dist/web/assets/Login-89_dNtDn.js                   4.16 kB │ gzip:   2.12 kB │ map:    11.24 kB
+dist/web/assets/GoogleAccount-RDc_vAyD.js           5.02 kB │ gzip:   2.32 kB │ map:    14.65 kB
+dist/web/assets/IdentityAccounts-tgWQd5gH.js        7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+dist/web/assets/Settings-DBbXsjoF.js               14.05 kB │ gzip:   5.54 kB │ map:    40.63 kB
+dist/web/assets/Developer-Dj5qOadQ.js              15.64 kB │ gzip:   5.32 kB │ map:    47.85 kB
+dist/web/assets/Team-DxwXt367.js                   15.80 kB │ gzip:   5.39 kB │ map:    51.87 kB
+dist/web/assets/Inspiration-C8Cbd-ga.js            16.31 kB │ gzip:   7.05 kB │ map:    48.40 kB
+dist/web/assets/Identities-DMWuzV7a.js             17.63 kB │ gzip:   6.41 kB │ map:    57.51 kB
+dist/web/assets/Support-CKL9tgx5.js                17.68 kB │ gzip:   6.75 kB │ map:    51.55 kB
+dist/web/assets/Workbench-DJxtOhrf.js              18.95 kB │ gzip:   7.18 kB │ map:    63.64 kB
+dist/web/assets/AdvancedTools-eCzsE260.js          20.43 kB │ gzip:   8.01 kB │ map:    70.21 kB
+dist/web/assets/Library-Du6gZ7b2.js                22.74 kB │ gzip:   7.98 kB │ map:    71.16 kB
+dist/web/assets/Usage-BcVnagUm.js                  28.20 kB │ gzip:   9.38 kB │ map:    85.73 kB
+dist/web/assets/Tools-D2tPvGyf.js                  29.38 kB │ gzip:  11.35 kB │ map:    93.79 kB
+dist/web/assets/Composer-CuqA8yUH.js               32.28 kB │ gzip:  12.40 kB │ map:   108.41 kB
+dist/web/assets/react-Czy9g9O-.js                 106.07 kB │ gzip:  35.89 kB │ map:   615.11 kB
+dist/web/assets/CanvasEditor--XOSTC8V.js          151.25 kB │ gzip:  49.25 kB │ map:   415.94 kB
+dist/web/assets/editor-DERvKPwF.js                282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+dist/web/assets/index-duMyq2qO.js                 753.99 kB │ gzip: 244.83 kB │ map: 2,577.00 kB
+
+(!) Some chunks are larger than 750 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.80s

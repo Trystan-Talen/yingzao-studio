@@ -1,0 +1,82 @@
+
+Running 2 tests using 1 worker
+
+(node:34212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (3.5s)
+(node:34252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (13.8s)
+
+
+  1) [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      52 |   await page.getByRole('button', { name: '登录工作空间', exact: true }).click();
+      53 |   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    > 54 |   expect((await page.request.get(`${studio.origin}/api/v1/auth/me`)).status()).toBe(200);
+         |                                                                                ^
+      55 |   const cookie = (await page.context().cookies()).find((item) => item.name === 'studio_session');
+      56 |   expect(cookie).toMatchObject({ httpOnly: true, secure: true, sameSite: 'Lax' });
+      57 |
+        at <project>/platform/tests/e2e/production-security.spec.ts:54:80
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '退出登录', exact: true })
+
+
+      47 |   const mobileMenu = page.getByRole('button', { name: '展开导航', exact: true });
+      48 |   if (await mobileMenu.isVisible()) await mobileMenu.click();
+    > 49 |   await page.getByRole('button', { name: '退出登录', exact: true }).click();
+         |                                                                 ^
+      50 |   await page.getByLabel('邮箱', { exact: true }).fill('<isolated-test-account>');
+      51 |   await page.getByLabel('密码', { exact: true }).fill('<isolated-test-password>');
+      52 |   await page.getByRole('button', { name: '登录工作空间', exact: true }).click();
+        at <project>/platform/tests/e2e/production-security.spec.ts:49:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-production-security/results/production-security-produc-2fa6e--exports-without-violations-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 
+    [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 

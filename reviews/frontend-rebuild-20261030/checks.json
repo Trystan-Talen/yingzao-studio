@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-31T02:26:37.315Z",
+  "unit": {
+    "total": 1309,
+    "passed": 1309,
+    "failed": 0,
+    "skipped": 0,
+    "success": true,
+    "source": "platform/var/frontend-rebuild-20261030/final-unit-tests.json"
+  },
+  "static": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "diffWhitespace": "passed",
+    "source": "platform/var/frontend-rebuild-20261030/final-static-checks.log"
+  },
+  "build": {
+    "web": "passed",
+    "server": "passed",
+    "worker": "passed",
+    "warning": "Existing chunks exceed 750 kB; build succeeds.",
+    "source": "platform/var/frontend-rebuild-20261030/final-build.log"
+  },
+  "scope": "Local isolated tests; no claim of real provider output quality."
+}

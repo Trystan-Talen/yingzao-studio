@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-11-03T03:09:37.608Z",
+  "finishedAt": "2026-11-03T03:24:29.145Z",
+  "passed": 198,
+  "total": 198,
+  "failed": 0,
+  "skipped": 0,
+  "retries": 0,
+  "projects": {
+    "desktop": 96,
+    "mobile": 96,
+    "notebook": 5,
+    "tablet": 1
+  },
+  "singleFullRun": true,
+  "evidence": "platform/var/home-creative-20261102/browser-final",
+  "simulation": true,
+  "sourceAggregateSha256": "75a314a593b15ed0d2003d776bb6d3d3871a5cf94715e556b2c337eba0038e24"
+}

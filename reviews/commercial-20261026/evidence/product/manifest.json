@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "browser-diagnostics.json",
+      "bytes": 1302,
+      "sha256": "6d7fe1c29c3c8ec1fe6feb0bb4b47e157078c30d37971a93350c87071b1a3a72"
+    },
+    {
+      "path": "commercial-readiness.json",
+      "bytes": 4503,
+      "sha256": "949d9e8016e1c9b641b30b1dc96226bf6e7ff7300c5c7e7c562f67e273a899f6"
+    },
+    {
+      "path": "green-mobile-delete-recovered.png",
+      "bytes": 182266,
+      "sha256": "ef19525b19f38c3ab12434ea6b262962bdb416bdb87accb773a08308e50255e5"
+    },
+    {
+      "path": "green-mobile-projects-recovered.png",
+      "bytes": 252315,
+      "sha256": "c12e48f91dd3db600aaacda00b0275fa1ca2ccb0ff19cd88d9004d6ed2f8c31c"
+    },
+    {
+      "path": "green-mobile-workspace-isolation.png",
+      "bytes": 144002,
+      "sha256": "8a41b6be001c02bbe2d6f62f51d8b499af304ba18c8a0508bbf6f7dcbefe6c47"
+    },
+    {
+      "path": "red-batch-delete.txt",
+      "bytes": 699,
+      "sha256": "a3fff7c3a8583202654af5014a0c57d7babbfdd7013c3f349c2ca638125c431e"
+    },
+    {
+      "path": "red-batch-workspace.txt",
+      "bytes": 706,
+      "sha256": "d6c306ef0922b1a6cd278e505bdef022cdbfee59d4f67ba448a8b8b938a6e8c0"
+    },
+    {
+      "path": "red-recent-projects.txt",
+      "bytes": 1143,
+      "sha256": "268d589fdd4ff2ca4b04882b1766ebd4df6d31f5061474d97b5da9ac5621e1cd"
+    },
+    {
+      "path": "test-summary.json",
+      "bytes": 2655,
+      "sha256": "528d49e075caec374d6128e64728196f78e0af4356330cd68e9964a5fd957455"
+    }
+  ]
+}

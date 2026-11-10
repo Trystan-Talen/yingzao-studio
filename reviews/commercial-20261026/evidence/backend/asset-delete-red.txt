@@ -1,0 +1,29 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/commercial-assets.test.ts (2 tests | 1 failed) 125ms
+   × recovers a lost delete response without changing the deletion time or duplicating the audit 67ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/commercial-assets.test.ts > recovers a lost delete response without changing the deletion time or duplicating the audit
+AppError: 内容不存在或已删除
+ ❯ CoreContext.resource src/server/core/shared.ts:161:21
+    159|       workspaceId,
+    160|     );
+    161|     if (!row) throw new AppError(404, 'NOT_FOUND', '内容不存在或已删除');
+       |                     ^
+    162|     return row;
+    163|   }
+ ❯ AssetService.get src/server/core/assets.ts:57:35
+ ❯ AssetService.remove src/server/core/assets.ts:337:10
+ ❯ tests/commercial-assets.test.ts:52:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  22:14:26
+   Duration  698ms (import 73%, tests 20%, transform 7%)
+

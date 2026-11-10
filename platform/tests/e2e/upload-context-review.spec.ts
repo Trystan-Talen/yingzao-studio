@@ -13,7 +13,7 @@ test('does not attach a delayed image-mode upload to the video draft after switc
   await page.getByRole('button', { name: '稍后设置', exact: true }).click();
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer'),
-    picker = composer.locator('.composer-materials > .asset-picker');
+    picker = composer.locator('.composer-materials .asset-picker-inline');
   const prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
   const imagePrompt = '图片模式的原需求，晚回上传只能回到这一份草稿。';
   const videoPrompt = '视频模式独立需求，不接收图片模式的晚回素材。';
@@ -40,6 +40,10 @@ test('does not attach a delayed image-mode upload to the video draft after switc
       .setInputFiles({ name: 'image-mode.png', mimeType: 'image/png', buffer });
     await expect.poll(() => ready).toBe(true);
     await composer.getByRole('button', { name: '视频创作', exact: true }).click();
+    await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+    await composer
+      .getByRole('combobox', { name: '生成模型', exact: true })
+      .selectOption('video.generate|fal|wan-2.6');
     await prompt.fill(videoPrompt);
     release();
     await expect(picker.first().locator('.upload-drop-zone')).toHaveAttribute('aria-busy', 'false');
@@ -82,7 +86,7 @@ test('preserves same-kind prompt edits while an accepted upload response is dela
   await page.getByRole('button', { name: '稍后设置', exact: true }).click();
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer'),
-    picker = composer.locator('.composer-materials > .asset-picker'),
+    picker = composer.locator('.composer-materials .asset-picker-inline'),
     prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
   await prompt.fill('上传发起时的旧文字');
   const buffer = await sharp({

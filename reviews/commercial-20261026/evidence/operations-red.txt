@@ -1,0 +1,223 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/backup-integrity.test.ts (7 tests | 7 failed) 643ms
+   ❯ recoverable backups (7)
+     × rejects equal-length corrupted originals and leaves no restored directory 158ms
+     × detects modified encryption keys before publishing a restored copy 85ms
+     × rejects corrupted source media instead of declaring a successful backup 79ms
+     × never creates a missing source database as a side effect of backing up 77ms
+     × writes a checksum manifest and restores the same source bytes 77ms
+     × still restores legacy backups and verifies their original asset digest 87ms
+     × refuses symlinks in source media 81ms
+ ❯ tests/production-config.test.ts (11 tests | 10 failed) 12ms
+   ❯ production configuration boundaries (11)
+     × rejects weak signing and encryption secrets 5ms
+     × rejects weak signing and encryption secrets 1ms
+     × rejects weak signing and encryption secrets 0ms
+     × requires independent secrets 0ms
+     × requires a bare HTTP(S) public origin 0ms
+     × requires a bare HTTP(S) public origin 0ms
+     × requires a bare HTTP(S) public origin 1ms
+     × requires a bare HTTP(S) public origin 0ms
+     × requires a bare HTTP(S) public origin 2ms
+     × keeps IPv6 loopback available for an isolated production verification 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > rejects equal-length corrupted originals and leaves no restored directory
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-backup-integrity-drwlyQ/restored"
+
+ ❯ tests/backup-integrity.test.ts:43:59
+     41|     bytes[0] = bytes[0]! ^ 1;
+     42|     await writeFile(file, bytes);
+     43|     await expect(restore(source, join(folder, 'restored'))).rejects.to…
+       |                                                           ^
+     44|     await expect(access(join(folder, 'restored'))).rejects.toThrow();
+     45|     expect((await readdir(folder)).some((name) => name.includes('.stag…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > detects modified encryption keys before publishing a restored copy
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-backup-integrity-zwi09y/restored"
+
+ ❯ tests/backup-integrity.test.ts:50:59
+     48|     const source = await backup(config, join(folder, 'backup'));
+     49|     await writeFile(join(source, 'keys.json'), JSON.stringify({ sessio…
+     50|     await expect(restore(source, join(folder, 'restored'))).rejects.to…
+       |                                                           ^
+     51|   });
+     52|   it('rejects corrupted source media instead of declaring a successful…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > rejects corrupted source media instead of declaring a successful backup
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-backup-integrity-tVZqpK/backup"
+
+ ❯ tests/backup-integrity.test.ts:57:56
+     55|     bytes[0] = bytes[0]! ^ 1;
+     56|     await writeFile(file, bytes);
+     57|     await expect(backup(config, join(folder, 'backup'))).rejects.toThr…
+       |                                                        ^
+     58|     await expect(access(join(folder, 'backup'))).rejects.toThrow();
+     59|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > never creates a missing source database as a side effect of backing up
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-backup-integrity-BcH5kr/backup"
+
+ ❯ tests/backup-integrity.test.ts:62:86
+     60|   it('never creates a missing source database as a side effect of back…
+     61|     const missing = join(folder, 'missing.sqlite');
+     62|     await expect(backup({ ...config, databasePath: missing }, join(fol…
+       |                                                                                      ^
+     63|     await expect(access(missing)).rejects.toThrow();
+     64|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > writes a checksum manifest and restores the same source bytes
+AssertionError: expected 1 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 1
+
+ ❯ tests/backup-integrity.test.ts:68:36
+     66|     const source = await backup(config, join(folder, 'backup'));
+     67|     const manifest = JSON.parse(await readFile(join(source, 'manifest.…
+     68|     expect(manifest.formatVersion).toBe(2);
+       |                                    ^
+     69|     expect(manifest.files).toEqual(expect.arrayContaining([
+     70|       expect.objectContaining({ path: 'database.sqlite', sha256: expec…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > still restores legacy backups and verifies their original asset digest
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-backup-integrity-CyPVXN/legacy-corrupt"
+
+ ❯ tests/backup-integrity.test.ts:86:65
+     84|     bytes[0] = bytes[0]! ^ 1;
+     85|     await writeFile(file, bytes);
+     86|     await expect(restore(source, join(folder, 'legacy-corrupt'))).reje…
+       |                                                                 ^
+     87|   });
+     88|   it('refuses symlinks in source media', async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > refuses symlinks in source media
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-backup-integrity-rQBCLg/backup"
+
+ ❯ tests/backup-integrity.test.ts:90:56
+     88|   it('refuses symlinks in source media', async () => {
+     89|     await symlink(join(folder, 'live.sqlite'), join(config.storageDir,…
+     90|     await expect(backup(config, join(folder, 'backup'))).rejects.toThr…
+       |                                                        ^
+     91|   });
+     92| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/17]⎯
+
+ FAIL  tests/production-config.test.ts > production configuration boundaries > rejects weak signing and encryption secrets
+ FAIL  tests/production-config.test.ts > production configuration boundaries > rejects weak signing and encryption secrets
+ FAIL  tests/production-config.test.ts > production configuration boundaries > rejects weak signing and encryption secrets
+AssertionError: expected [Function] to throw an error
+ ❯ tests/production-config.test.ts:10:75
+      8| describe('production configuration boundaries', () => {
+      9|   it.each(['x', ' '.repeat(64), 'example-secret'])('rejects weak signi…
+     10|     expect(() => loadConfig({ ...production(), SESSION_SECRET: secret …
+       |                                                                           ^
+     11|     expect(() => loadConfig({ ...production(), ENCRYPTION_KEY: secret …
+     12|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/17]⎯
+
+ FAIL  tests/production-config.test.ts > production configuration boundaries > requires independent secrets
+AssertionError: expected [Function] to throw an error
+ ❯ tests/production-config.test.ts:15:78
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/17]⎯
+
+ FAIL  tests/production-config.test.ts > production configuration boundaries > requires a bare HTTP(S) public origin
+ FAIL  tests/production-config.test.ts > production configuration boundaries > requires a bare HTTP(S) public origin
+ FAIL  tests/production-config.test.ts > production configuration boundaries > requires a bare HTTP(S) public origin
+ FAIL  tests/production-config.test.ts > production configuration boundaries > requires a bare HTTP(S) public origin
+ FAIL  tests/production-config.test.ts > production configuration boundaries > requires a bare HTTP(S) public origin
+AssertionError: expected [Function] to throw an error
+ ❯ tests/production-config.test.ts:18:66
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/17]⎯
+
+ FAIL  tests/production-config.test.ts > production configuration boundaries > keeps IPv6 loopback available for an isolated production verification
+Error: Public production origin must use HTTPS.
+ ❯ loadConfig src/server/config.ts:83:11
+     81|     !['127.0.0.1', 'localhost', '::1'].includes(new URL(c.PUBLIC_ORIGI…
+     82|   )
+     83|     throw new Error('Public production origin must use HTTPS.');
+       |           ^
+     84|   mkdirSync('var', { recursive: true, mode: 0o700 });
+     85|   const localKey = join('var', '.installation-key');
+ ❯ tests/production-config.test.ts:24:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/17]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  17 failed | 1 passed (18)
+   Start at  22:13:39
+   Duration  1.57s (tests 47%, import 46%, transform 7%)
+

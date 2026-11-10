@@ -1,6 +1,7 @@
 node_modules/
 dist/
 var/
+playwright-report/
 .env
 .env.*
 !.env.example

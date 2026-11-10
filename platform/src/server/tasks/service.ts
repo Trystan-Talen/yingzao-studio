@@ -12,7 +12,10 @@ import {
   type PendingApplyDto,
 } from '../../contracts/jobs';
 import type { SceneLayer, LayerBase } from '../../contracts/scene';
-import { designPlanResultSchema } from '../../contracts/design-plan';
+import { jobResultDataSchema } from '../../contracts/job-result';
+import { validateDetailPageInput } from './detail-pages';
+import { approvedCreativePrompt, frozenCreativeContext } from './creative-briefs';
+import { creativeQuality } from './creative-quality';
 import type { DatabaseContext } from '../db/connection';
 import type { CoreServices } from '../core';
 import type { AppConfig } from '../config';
@@ -24,6 +27,7 @@ import { createCreditService } from './credits';
 import { createSettingsService } from './settings';
 import { validateInput, splitItems, inputHash, checkScope } from './validation';
 import { now, type JobRow, type ItemRow, type QuoteRow } from './types';
+import { currentJobStage, recoverablePhase } from './progress';
 const PRICING = 'local-budget-v1';
 export function createTaskServices(db: DatabaseContext, core: CoreServices, config: AppConfig) {
   const sql = db.sqlite,
@@ -47,15 +51,25 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
   function liveRetry(item: ItemRow): { job_id: string } | undefined {
     return sql
       .prepare(
-        "SELECT job_id FROM job_items WHERE retry_root_item_id=? AND status IN('queued','running','reconciliation_required','succeeded') ORDER BY created_at DESC LIMIT 1",
+        "SELECT job_id FROM job_items WHERE retry_root_item_id=? AND id<>? AND status IN('queued','running','reconciliation_required','succeeded') ORDER BY created_at DESC LIMIT 1",
       )
-      .get(item.retry_root_item_id || item.id) as { job_id: string } | undefined;
+      .get(item.retry_root_item_id || item.id, item.id) as { job_id: string } | undefined;
   }
   function dto(actor: Actor, row: JobRow): JobDto {
     const items = sql
       .prepare('SELECT * FROM job_items WHERE job_id=? ORDER BY item_index')
       .all(row.id) as ItemRow[];
+    const input = jobInputSchema.parse(JSON.parse(row.input_json));
+    const outputAssets = [...new Set(items.flatMap(itemAssetIds))].flatMap((id) => {
+      try {
+        return [core.assets.get(actor, row.workspace_id, id)];
+      } catch (error) {
+        if (error instanceof AppError && error.statusCode === 404) return [];
+        throw error;
+      }
+    });
     return {
+      creativeReview: creativeQuality(db, row.workspace_id, input, outputAssets),
       id: row.id,
       workspaceId: row.workspace_id,
       billingChannel: row.billing_channel,
@@ -65,12 +79,12 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       providerId: row.provider_id,
       prompt: row.prompt,
       status: row.status,
-      stage: row.stage,
+      stage: currentJobStage(items, row.stage),
       requestedCredits: row.requested_credits,
       settledCredits: row.settled_credits,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
-      errorMessage: row.error_message,
+      errorMessage: items.find((item) => item.error_message)?.error_message || null,
       isArchived: !!sql
         .prepare('SELECT 1 FROM job_history_archives WHERE user_id=? AND job_id=?')
         .get(actor.userId, row.id),
@@ -80,7 +94,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
             .prepare('SELECT downloaded_at FROM job_downloads WHERE user_id=? AND job_id=?')
             .get(actor.userId, row.id) as { downloaded_at: string } | undefined
         )?.downloaded_at ?? null,
-      input: jobInputSchema.parse(JSON.parse(row.input_json)),
+      input,
       items: items.map((i) => {
         const input = jobInputSchema.parse(JSON.parse(i.input_json));
         const retry = liveRetry(i);
@@ -95,8 +109,9 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           errorMessage: i.error_message,
           resultText: i.result_text,
           resultData: i.result_data_json
-            ? designPlanResultSchema.parse(JSON.parse(i.result_data_json))
+            ? jobResultDataSchema.parse(JSON.parse(i.result_data_json))
             : null,
+          detailPageScreenId: input.options.detailPageScreenId,
           sourceAssetIds: input.assetIds,
           referenceAssetIds: input.referenceAssetIds,
           backgroundAssetId: input.backgroundAssetId,
@@ -105,16 +120,16 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           retryRootItemId: i.retry_root_item_id,
           retryable: ['failed', 'cancelled'].includes(i.status) && !retry,
           retryJobId: retry?.job_id ?? null,
+          phase: i.phase === 'uncertain' ? recoverablePhase(i) || i.phase : i.phase,
+          recoveryAttempts: i.recovery_failures,
+          nextRetryAt:
+            i.status === 'running' && i.recovery_failures > 0 && !i.lease_owner
+              ? i.next_attempt_at
+              : null,
+          canResume: i.status === 'reconciliation_required' && !!recoverablePhase(i) && !retry,
         };
       }),
-      outputAssets: [...new Set(items.flatMap(itemAssetIds))].flatMap((id) => {
-        try {
-          return [core.assets.get(actor, row.workspace_id, id)];
-        } catch (e) {
-          if (e instanceof AppError && e.statusCode === 404) return [];
-          throw e;
-        }
-      }),
+      outputAssets,
     };
   }
   function event(wid: string, jobId: string, type: string, payload: unknown) {
@@ -126,6 +141,13 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
   }
   function validate(actor: Actor, wid: string, raw: unknown) {
     const i = validateInput(core, settings, actor, wid, raw);
+    approvedCreativePrompt(db, actor, wid, i);
+    validateDetailPageInput(
+      i,
+      i.options.detailPagePlan
+        ? i.referenceAssetIds.map((id) => core.assets.get(actor, wid, id))
+        : [],
+    );
     if (i.characterId) {
       const character = core.identity.assertCanReference(actor, wid, i.characterId);
       if (i.characterRevision && i.characterRevision !== character.referenceRevision)
@@ -144,6 +166,15 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       (i.operation !== 'text.assist' || i.providerId !== 'openai')
     )
       throw new AppError(400, 'PLAN_UNSUPPORTED', '结构化设计方案目前需要OpenAI文字服务');
+    if (
+      i.options.assistantMode === 'detail-page' &&
+      (i.operation !== 'text.assist' || i.providerId !== 'dify')
+    )
+      throw new AppError(
+        400,
+        'DETAIL_PLAN_UNSUPPORTED',
+        '详情页策划需要 Dify（工作流编排平台）文字服务',
+      );
     if (
       i.providerId === 'openai' &&
       i.prompt.length + (i.referenceText?.length || 0) + (i.conversationContext?.length || 0) >
@@ -192,9 +223,38 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
   }
   function snapshot(actor: Actor, wid: string, input: JobInput): JobInput[] {
     const frozen = structuredClone(input);
+    const creativePrompt = approvedCreativePrompt(db, actor, wid, input);
+    if (creativePrompt) frozen.prompt = creativePrompt;
+    const creativeContext = frozenCreativeContext(db, actor, wid, input);
+    if (creativeContext) {
+      frozen.referenceAssetIds = [
+        ...new Set([
+          ...frozen.referenceAssetIds,
+          ...creativeContext.materials
+            .filter((m) => m.role === 'reference' && m.kind === 'image')
+            .map((m) => m.id),
+        ]),
+      ];
+      // All raw prose remains in the auditable request. Only the resolved plan executes,
+      // so rejected or corrected claims cannot reappear via a secondary prompt field.
+      delete frozen.referenceText;
+      delete frozen.brandId;
+      delete frozen.characterId;
+      delete frozen.characterRevision;
+      // These fields were already presented to the planner as explicit user sources.
+      // Re-appending stale values after an answer corrected them bypasses the frozen plan.
+      delete frozen.options.sellingPoints;
+      delete frozen.options.price;
+      delete frozen.options.colors;
+      delete frozen.options.textReplacements;
+    }
+    // The item is an immutable compiled snapshot. Retrying it must not re-plan or recompile.
+    delete frozen.creativeBriefId;
     delete frozen.conversationContext;
     if (
       input.projectId &&
+      !creativePrompt &&
+      !input.options.detailPagePlan &&
       input.providerId === 'openai' &&
       ['image.generate', 'text.assist'].includes(input.operation)
     ) {
@@ -213,7 +273,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       }
       if (context.length) frozen.conversationContext = context.join('\n\n');
     }
-    if (input.characterId) {
+    if (input.characterId && !creativePrompt) {
       const character = core.identity.assertCanReference(actor, wid, input.characterId);
       frozen.characterRevision = character.referenceRevision;
       frozen.referenceAssetIds = [
@@ -250,22 +310,24 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
             ...d,
             prompt: labelDocuments(d.prompt),
           }));
-        const context = documents
-          .map((id) => {
-            const asset = core.assets.get(actor, wid, id),
-              content = core.assets.text(actor, wid, id);
-            if (!content.extractedText || content.extractionStatus !== 'ready')
-              throw new AppError(409, 'DOCUMENT_NOT_READY', '文档文字尚未就绪');
-            return `文档「${asset.name}」：\n${content.extractedText}`;
-          })
-          .join('\n\n');
-        if (context.length > 20000)
-          throw new AppError(
-            400,
-            'DOCUMENT_TOO_LONG',
-            '本次引用文档超过20000字符，请上传精简内容后重试',
-          );
-        frozen.referenceText = context;
+        if (!creativePrompt) {
+          const context = documents
+            .map((id) => {
+              const asset = core.assets.get(actor, wid, id),
+                content = core.assets.text(actor, wid, id);
+              if (!content.extractedText || content.extractionStatus !== 'ready')
+                throw new AppError(409, 'DOCUMENT_NOT_READY', '文档文字尚未就绪');
+              return `文档「${asset.name}」：\n${content.extractedText}`;
+            })
+            .join('\n\n');
+          if (context.length > 20000)
+            throw new AppError(
+              400,
+              'DOCUMENT_TOO_LONG',
+              '本次引用文档超过20000字符，请上传精简内容后重试',
+            );
+          frozen.referenceText = context;
+        }
         const imageOnly = (id: string) => !documents.includes(id);
         frozen.assetIds = frozen.assetIds.filter(imageOnly);
         frozen.referenceAssetIds = frozen.referenceAssetIds.filter(imageOnly);
@@ -276,7 +338,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           }));
       }
     }
-    if (input.brandId) {
+    if (input.brandId && !creativePrompt) {
       const brand = core.brands.get(actor, wid, input.brandId);
       frozen.referenceAssetIds = [
         ...new Set([...frozen.referenceAssetIds, ...brand.referenceAssetIds]),
@@ -349,6 +411,12 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     retryItemIds: string[] | null = null,
   ): QuoteDto {
     const cap = settings.validateCapability(wid, input);
+    for (const item of items) {
+      // Validate the exact execution snapshot, including provider prompt budgets and reference
+      // limits, before writing a payable quote. The short original request is insufficient.
+      if (input.creativeBriefId) validate(actor, wid, item);
+      else if (input.capabilityRevision) settings.validateCapability(wid, item);
+    }
     const units = items.reduce(
       (total, item) => total + billableUnits(actor, wid, item, cap.unit),
       0,
@@ -358,9 +426,15 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       input.operation === 'text.assist' &&
       core.entitlements.get(actor, wid).freeTextAssist.remaining >= units;
     const maxCredits = freeText ? 0 : units * cap.priceCredits;
+    const capabilityProof = settings.modelCapabilities.validate(wid, input);
     const time = now(),
       id = randomUUID(),
-      expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+      expiresAt = new Date(
+        Math.min(
+          Date.now() + 10 * 60 * 1000,
+          capabilityProof ? Date.parse(capabilityProof.expiresAt) : Infinity,
+        ),
+      ).toISOString();
     const hash = inputHash(input);
     sql
       .prepare(
@@ -382,7 +456,16 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         retryItemIds ? JSON.stringify(retryItemIds) : null,
         channelForActor(actor),
       );
+    const creativeReview = creativeQuality(db, wid, input, []);
     return {
+      ...(creativeReview
+        ? {
+            creativeSummary: {
+              summary: creativeReview.summary,
+              assumptions: creativeReview.assumptions,
+            },
+          }
+        : {}),
       id,
       inputHash: hash,
       pricingVersion: PRICING,
@@ -407,11 +490,19 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     const input = validate(actor, wid, raw);
     return writeQuote(actor, wid, input, snapshot(actor, wid, input));
   }
-  function retryQuote(actor: Actor, wid: string, id: string): QuoteDto {
+  function retryQuote(
+    actor: Actor,
+    wid: string,
+    id: string,
+    capabilityRevision?: string,
+  ): QuoteDto {
     const job = getRow(actor, wid, id);
     if (job.billing_channel !== channelForActor(actor))
       throw new AppError(409, 'BILLING_CHANNEL_CONFLICT', '重试必须使用原任务的计费渠道');
-    const input = validate(actor, wid, JSON.parse(job.input_json));
+    const input = validate(actor, wid, {
+      ...JSON.parse(job.input_json),
+      ...(capabilityRevision ? { capabilityRevision } : {}),
+    });
     const rows = sql
       .prepare(
         "SELECT * FROM job_items WHERE job_id=? AND status IN('failed','cancelled') ORDER BY item_index",
@@ -424,14 +515,65 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         'NO_RETRYABLE_ITEMS',
         '没有可重试项；已在重试中、已成功重试或待核对的条目不能重复提交',
       );
-    return writeQuote(
+    const quote = writeQuote(
       actor,
       wid,
       input,
-      retryable.map((r) => jobInputSchema.parse(JSON.parse(r.input_json))),
+      retryable.map((r) =>
+        jobInputSchema.parse({
+          ...JSON.parse(r.input_json),
+          ...(capabilityRevision ? { capabilityRevision } : {}),
+        }),
+      ),
       id,
       retryable.map((r) => r.id),
     );
+    return capabilityRevision ? { ...quote, input } : quote;
+  }
+  function resumeResult(actor: Actor, wid: string, id: string): JobDto {
+    const job = getRow(actor, wid, id);
+    core.requireAccess(actor, wid, 'write');
+    checkScope(actor, 'jobs:write');
+    if (job.billing_channel !== channelForActor(actor))
+      throw new AppError(409, 'BILLING_CHANNEL_CONFLICT', '恢复结果必须使用原任务的计费渠道');
+    return transaction(() => {
+      const items = sql.prepare('SELECT * FROM job_items WHERE job_id=?').all(id) as ItemRow[];
+      let resumed = false;
+      for (const item of items) {
+        const phase = recoverablePhase(item);
+        if (item.status !== 'reconciliation_required' || !phase || liveRetry(item)) continue;
+        sql
+          .prepare(
+            "UPDATE job_items SET status='running',phase=?,recovery_failures=0,error_message=NULL,lease_owner=NULL,lease_until=NULL,next_attempt_at=?,updated_at=? WHERE id=? AND status='reconciliation_required'",
+          )
+          .run(phase, now(), now(), item.id);
+        resumed = true;
+      }
+      // Duplicate recovery clicks neither create a job nor reset an active attempt's allowance.
+      // Terminal failed/cancelled siblings remain unchanged in a partially recovered batch.
+      const recoveryInProgress = (item: ItemRow) =>
+        item.status === 'running' &&
+        ['polling', 'downloading'].includes(item.phase) &&
+        !!recoverablePhase(item);
+      if (
+        !resumed &&
+        !(
+          items.some((item) => item.status === 'succeeded' || recoveryInProgress(item)) &&
+          items.every(
+            (item) =>
+              ['succeeded', 'failed', 'cancelled'].includes(item.status) ||
+              recoveryInProgress(item),
+          )
+        )
+      )
+        throw new AppError(
+          409,
+          'NO_RECOVERABLE_RESULT',
+          '没有可安全恢复的结果或远程任务编号，请先核对服务商记录',
+        );
+      if (resumed) refresh(id);
+      return dto(actor, getRow(actor, wid, id));
+    });
   }
   function submit(
     actor: Actor,
@@ -509,8 +651,12 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
             source.billing_channel !== q.billing_channel ||
             !['failed', 'cancelled'].includes(source.status) ||
             liveRetry(source) ||
-            inputHash(jobInputSchema.parse(JSON.parse(source.input_json))) !==
-              inputHash(parts[index])
+            // Capability proofs expire and are refreshed for a retry. Compare the actual
+            // frozen generation inputs, while writeQuote/submit validate the new proof.
+            inputHash({
+              ...jobInputSchema.parse(JSON.parse(source.input_json)),
+              capabilityRevision: undefined,
+            }) !== inputHash({ ...parts[index], capabilityRevision: undefined })
           )
             throw new AppError(
               409,
@@ -637,8 +783,11 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       .prepare(
         'UPDATE jobs SET status=?,stage=?,settled_credits=?,error_message=?,updated_at=? WHERE id=?',
       )
-      .run(status, stages[status], settled, error, now(), jobId);
-    event(rows[0]!.workspace_id, jobId, 'updated', { status, stage: stages[status] });
+      .run(status, currentJobStage(rows, stages[status]), settled, error, now(), jobId);
+    event(rows[0]!.workspace_id, jobId, 'updated', {
+      status,
+      stage: currentJobStage(rows, stages[status]),
+    });
   }
   function cancel(actor: Actor, wid: string, id: string) {
     getRow(actor, wid, id);
@@ -647,9 +796,13 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     return transaction(() => {
       const items = sql.prepare('SELECT * FROM job_items WHERE job_id=?').all(id) as ItemRow[];
       for (const item of items) {
-        if (item.status === 'queued') {
+        // A worker lease does not mean a paid request has been sent. This transaction
+        // races atomically with the worker's transition from claimed to submitting.
+        if (item.status === 'queued' || (item.status === 'running' && item.phase === 'claimed')) {
           sql
-            .prepare("UPDATE job_items SET status='cancelled',phase='done',updated_at=? WHERE id=?")
+            .prepare(
+              "UPDATE job_items SET status='cancelled',phase='done',lease_owner=NULL,lease_until=NULL,cancel_requested=0,updated_at=? WHERE id=?",
+            )
             .run(now(), item.id);
           credits
             .forChannel(item.billing_channel)
@@ -1020,6 +1173,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     event,
     quote,
     retryQuote,
+    resumeResult,
     submit,
     getByRequest: (a: Actor, w: string, requestId: string) => {
       core.requireAccess(a, w, 'read');

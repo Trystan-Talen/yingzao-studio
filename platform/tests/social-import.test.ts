@@ -245,6 +245,8 @@ describe('persistent import workflow', () => {
     expect(downloadPublicMedia).toHaveBeenLastCalledWith(
       'https://cdn.example.com/video.mp4',
       100 * 1024 * 1024,
+      0,
+      { dnsMode: undefined },
     );
   });
 });

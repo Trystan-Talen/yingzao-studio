@@ -1,0 +1,299 @@
+$ vitest run
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/app.test.ts (13 tests | 1 failed) 1929ms
+   ❯ assembled HTTP application (12)
+     × backs up and restores database, original assets, and encryption keys without overwriting 126ms
+ ❯ tests/restored-cache.test.ts (11 tests | 10 failed) 1079ms
+   × restores a complete online backup into a new installation and completes cached work without touching its source 114ms
+   × reproduces a stalled restored cache, then recovers its copied bytes without any new provider submission 95ms
+   × rebases legacy array manifests to the final destination while preserving status and source metadata 90ms
+   × never falls back to an existing original-installation file if the copied cache is missing 90ms
+   × rejects invalid ownership before updating any cache references 86ms
+   × rejects invalid symlink before updating any cache references 84ms
+   × rejects invalid bytes before updating any cache references 86ms
+   × rejects invalid state before updating any cache references 91ms
+   × rejects invalid format before updating any cache references 90ms
+   × leaves cleared successful tasks and pathless text results unchanged 84ms
+ ❯ tests/backup-integrity.test.ts (10 tests | 3 failed) 1036ms
+   ❯ recoverable backups (10)
+     × publishes only one of two simultaneous restores to the same destination 110ms
+     × writes a checksum manifest and restores the same source bytes 104ms
+     × still restores legacy backups and verifies their original asset digest 103ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/app.test.ts > assembled HTTP application > backs up and restores database, original assets, and encryption keys without overwriting
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ restore scripts/restore.ts:41:5
+ ❯ tests/app.test.ts:518:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > publishes only one of two simultaneous restores to the same destination
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ tests/backup-integrity.test.ts:89:71
+     87|       restore(source, destination),
+     88|     ]);
+     89|     expect(results.filter((result) => result.status === 'fulfilled')).…
+       |                                                                       ^
+     90|     expect(results.filter((result) => result.status === 'rejected')).t…
+     91|     expect(await readFile(join(destination, 'media', original))).toEqu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > writes a checksum manifest and restores the same source bytes
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ restore scripts/restore.ts:41:5
+ ❯ tests/backup-integrity.test.ts:142:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  tests/backup-integrity.test.ts > recoverable backups > still restores legacy backups and verifies their original asset digest
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ restore scripts/restore.ts:41:5
+ ❯ tests/backup-integrity.test.ts:151:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > restores a complete online backup into a new installation and completes cached work without touching its source
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ restore scripts/restore.ts:41:5
+ ❯ tests/restored-cache.test.ts:135:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > reproduces a stalled restored cache, then recovers its copied bytes without any new provider submission
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ tests/restored-cache.test.ts:183:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > rebases legacy array manifests to the final destination while preserving status and source metadata
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ tests/restored-cache.test.ts:206:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > never falls back to an existing original-installation file if the copied cache is missing
+AssertionError: expected TypeError: Expected the "readonly" option… to match object { code: 'RESTORE_CACHE_MISSING', …(1) }
+
+- Expected
++ Received
+
+- {
+-   "code": "RESTORE_CACHE_MISSING",
+-   "itemId": "eb5fbedc-09ce-49bc-b176-b295659c7ce9",
++ TypeError {
++   "message": "Expected the \"readonly\" option to be a boolean",
+  }
+
+ ❯ tests/restored-cache.test.ts:223:63
+    221|   await writeFile(item.oldPath, png);
+    222|   await rm(item.localPath);
+    223|   await expect(rebaseRestoredCaches(root, join(root, 'media'))).reject…
+       |                                                               ^
+    224|     code: 'RESTORE_CACHE_MISSING',
+    225|     itemId: item.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > rejects invalid ownership before updating any cache references
+AssertionError: expected TypeError: Expected the "readonly" option… to match object { …(2) }
+
+- Expected
++ Received
+
+- {
+-   "code": "RESTORE_CACHE_OWNERSHIP",
+-   "itemId": "f737f4bc-b8d1-44a8-b535-174c074ffaa4",
++ TypeError {
++   "message": "Expected the \"readonly\" option to be a boolean",
+  }
+
+ ❯ tests/restored-cache.test.ts:261:65
+    259|       format: 'RESTORE_CACHE_MANIFEST',
+    260|     }[problem];
+    261|     await expect(rebaseRestoredCaches(root, join(root, 'media'))).reje…
+       |                                                                 ^
+    262|       code: expectedCode,
+    263|       itemId: second.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > rejects invalid symlink before updating any cache references
+AssertionError: expected TypeError: Expected the "readonly" option… to match object { code: 'RESTORE_CACHE_MISSING', …(1) }
+
+- Expected
++ Received
+
+- {
+-   "code": "RESTORE_CACHE_MISSING",
+-   "itemId": "63f24898-2ca4-469e-892f-a8c6debf3306",
++ TypeError {
++   "message": "Expected the \"readonly\" option to be a boolean",
+  }
+
+ ❯ tests/restored-cache.test.ts:261:65
+    259|       format: 'RESTORE_CACHE_MANIFEST',
+    260|     }[problem];
+    261|     await expect(rebaseRestoredCaches(root, join(root, 'media'))).reje…
+       |                                                                 ^
+    262|       code: expectedCode,
+    263|       itemId: second.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > rejects invalid bytes before updating any cache references
+AssertionError: expected TypeError: Expected the "readonly" option… to match object { code: 'RESTORE_CACHE_CONTENT', …(1) }
+
+- Expected
++ Received
+
+- {
+-   "code": "RESTORE_CACHE_CONTENT",
+-   "itemId": "9e263581-2ac9-4f33-8c80-5ee3486a6639",
++ TypeError {
++   "message": "Expected the \"readonly\" option to be a boolean",
+  }
+
+ ❯ tests/restored-cache.test.ts:261:65
+    259|       format: 'RESTORE_CACHE_MANIFEST',
+    260|     }[problem];
+    261|     await expect(rebaseRestoredCaches(root, join(root, 'media'))).reje…
+       |                                                                 ^
+    262|       code: expectedCode,
+    263|       itemId: second.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > rejects invalid state before updating any cache references
+AssertionError: expected TypeError: Expected the "readonly" option… to match object { code: 'RESTORE_CACHE_STATE', …(1) }
+
+- Expected
++ Received
+
+- {
+-   "code": "RESTORE_CACHE_STATE",
+-   "itemId": "e03aaaa4-f7c2-4f76-85a9-d819e4e154af",
++ TypeError {
++   "message": "Expected the \"readonly\" option to be a boolean",
+  }
+
+ ❯ tests/restored-cache.test.ts:261:65
+    259|       format: 'RESTORE_CACHE_MANIFEST',
+    260|     }[problem];
+    261|     await expect(rebaseRestoredCaches(root, join(root, 'media'))).reje…
+       |                                                                 ^
+    262|       code: expectedCode,
+    263|       itemId: second.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > rejects invalid format before updating any cache references
+AssertionError: expected TypeError: Expected the "readonly" option… to match object { Object (code, itemId) }
+
+- Expected
++ Received
+
+- {
+-   "code": "RESTORE_CACHE_MANIFEST",
+-   "itemId": "0f68ade3-8859-49ee-a9e8-6276a5f459c2",
++ TypeError {
++   "message": "Expected the \"readonly\" option to be a boolean",
+  }
+
+ ❯ tests/restored-cache.test.ts:261:65
+    259|       format: 'RESTORE_CACHE_MANIFEST',
+    260|     }[problem];
+    261|     await expect(rebaseRestoredCaches(root, join(root, 'media'))).reje…
+       |                                                                 ^
+    262|       code: expectedCode,
+    263|       itemId: second.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/14]⎯
+
+ FAIL  tests/restored-cache.test.ts > leaves cleared successful tasks and pathless text results unchanged
+TypeError: Expected the "readonly" option to be a boolean
+ ❯ Object.exports.getBooleanOption node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/util.js:6:9
+ ❯ new Database node_modules/.pnpm/better-sqlite3@13.0.3/node_modules/better-sqlite3/lib/database.js:31:25
+ ❯ rebaseRestoredCaches scripts/restored-cache.ts:63:14
+     61|   const database = join(snapshotRoot, 'database.sqlite');
+     62|   await regularFile(database);
+     63|   const db = new Database(database, { fileMustExist: true, readonly: o…
+       |              ^
+     64|   try {
+     65|     if (!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AN…
+ ❯ tests/restored-cache.test.ts:274:10
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/14]⎯
+
+
+ Test Files  3 failed | 68 passed (71)
+      Tests  14 failed | 759 passed (773)
+   Start at  22:47:56
+   Duration  73.64s (tests 63%, import 36%)
+
+[ELIFECYCLE] Test failed. See above for more details.

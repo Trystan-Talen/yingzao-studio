@@ -1,0 +1,151 @@
+{
+  "reviewedAtUtc": "2026-10-31",
+  "scope": "选择模型时读取上游只读元数据；不提交生成，不启动或修改真实运行实例",
+  "primarySources": [
+    {
+      "url": "https://developers.openai.com/api/reference/resources/models/methods/list",
+      "finding": "模型列表包含标识、所有者、创建与下线信息；不是比例、尺寸或画质的动态参数模式"
+    },
+    {
+      "url": "https://docs.newapi.pro/en/docs/guide/feature-guide/user/api",
+      "finding": "New API 的 /v1/models 为兼容模型列表；未据此假定参数结构"
+    },
+    {
+      "url": "https://fal.ai/llms.txt",
+      "finding": "官方说明每模型页面由实时元数据生成，并提供机器可读 OpenAPI 模式链接"
+    },
+    {
+      "url": "https://api.fal.ai/v1/models?endpoint_id=wan%2Fv2.6%2Ftext-to-video&expand=openapi-3.0",
+      "finding": "实际无凭据 GET 成功：返回 models[].openapi；POST 请求体以本地 $ref 指向输入结构；aspect_ratio、resolution、duration 有枚举"
+    }
+  ],
+  "actualGatewayReadOnlyObservation": {
+    "endpoint": "https://xingyunyinli.com/v1/models",
+    "credentialSource": "已有运行配置的 seedance 凭据，仅在内存中用于授权头",
+    "method": "GET",
+    "httpStatus": 200,
+    "modelCount": 4,
+    "configuredVideoModelPresent": true,
+    "returnedModelFieldNames": [
+      "id",
+      "object",
+      "created",
+      "owned_by",
+      "supported_endpoint_types"
+    ],
+    "parameterSchemaPresent": false,
+    "openaiEnvironmentCredentialConfigured": false,
+    "privateDatabaseOpened": false,
+    "rawResponseOrCredentialsSaved": false
+  },
+  "falAdapterMappingReadOnlyVerification": [
+    {
+      "endpoint": "fal-ai/image-apps-v2/virtual-try-on",
+      "httpStatus": 200,
+      "mapping": "aspect_ratio 的本地引用 AspectRatio.properties.ratio 为 1:1、16:9、9:16、4:3、3:4"
+    },
+    {
+      "endpoint": "fal-ai/kling-video/o1/reference-to-video",
+      "httpStatus": 200,
+      "mapping": "aspect_ratio 为三个既有画幅；duration 为字符串 3–10 枚举"
+    },
+    {
+      "endpoint": "fal-ai/kling-video/o3/4k/reference-to-video",
+      "httpStatus": 200,
+      "mapping": "aspect_ratio 为三个既有画幅；duration 为字符串 3–15 枚举；generate_audio 为布尔；4K 是端点语义，不伪装为返回的分辨率参数"
+    },
+    {
+      "endpoint": "fal-ai/ltx-2.3-22b/extend-video",
+      "httpStatus": 200,
+      "mapping": "num_frames 为整数 9–481；本地 duration*24+1 映射后取交集"
+    },
+    {
+      "endpoint": "wan/v2.6/image-to-video",
+      "httpStatus": 200,
+      "mapping": "resolution 为 720p、1080p；duration 为字符串 5、10、15；当前输入模式没有独立比例字段，后端不返回可独立设置的比例选项。"
+    }
+  ],
+  "implementedBoundary": {
+    "endpoint": "GET /api/v1/capabilities/model",
+    "query": [
+      "providerId",
+      "operation",
+      "modelId",
+      "inputMode=text|image",
+      "refresh=true|false"
+    ],
+    "inputModeRule": "请求按assetIds/referenceAssetIds非空回显image，否则text；MODE_ENDPOINTS集中声明只有当前Wan文字/图片元数据端点不同。其他当前模型共享同一模式无关能力版本，允许冻结转换；精确版本、空间、凭据、操作、模型与参数交集校验仍全部执行。",
+    "upstreamMethods": [
+      "GET"
+    ],
+    "redirects": "禁止",
+    "timeoutMs": 8000,
+    "maximumBodyBytes": 2097152,
+    "cache": "内存，按空间、凭据摘要、配置、操作、模型隔离；模式敏感的 Wan 再按输入模式隔离。非敏感模型单一缓存防止在另一模式刷新失败后借旧成功版本；上限 512 条；并发上限 32",
+    "cacheTtlMs": 300000,
+    "failureTtlMs": 5000,
+    "refreshCooldownMs": 2000,
+    "revision": "JobInput.capabilityRevision 可选；新流程报价和提交校验当前交集、来源空间、凭据、模型、操作、输入模式和有效期。旧合同仍兼容。",
+    "idempotency": "已接受请求先按请求标识和输入摘要返回已有任务，再考虑新任务能力校验；不会因版本过期重扣额度",
+    "retry": "带能力版本的历史任务重试先重新读取元数据；报价返回 input 包含新版本，真实生成参数冻结不变",
+    "schemaPolicy": "只解析输入请求结构；仅本地 JSON 指针；深度 12、每候选 512 节点预算；不获取外部引用、不执行正则表达式；已存在但无法解析的模式拒绝，缺失已传输字段拒绝；候选值与当前适配器可序列化值取交集",
+    "provenance": "模型目录成功标 limited（有限确认）；各参数区分上游模式与本地适配；固定画质和派生尺寸不可伪装可选项",
+    "unverifiedProviders": "Dify 应用表单参数不等于模型推理参数；Flyelep、TikHub 没有已核实生成参数查询端点，明确返回本地合同且不猜测调用",
+    "quoteExpiry": "带能力版本的报价有效期取10分钟与该能力版本到期时间的较早者；历史任务重试返回新能力版本与精确冻结input。"
+  },
+  "validation": {
+    "metadataAndApiTests": "tests/model-capabilities.test.ts 与 tests/model-capabilities-api.test.ts",
+    "coverage": [
+      "请求字段交集",
+      "缺失或错误模式",
+      "模型下线",
+      "敏感错误脱敏",
+      "只读请求与大小边界",
+      "缓存与并发去重",
+      "凭据轮换与在途响应",
+      "工作空间隔离",
+      "失败后旧版本失效",
+      "报价过期无预留",
+      "已接受请求幂等",
+      "历史重试新版本",
+      "详情页策划透传",
+      "旧静态接口无联网",
+      "Seedance 显式采用固定静音 false 可报价，true 仍拒绝",
+      "普通嵌套与恶意分支循环模式节点预算",
+      "品牌补图、文档正文与模块子项冻结后真实报价/提交",
+      "非敏感模式并发回显和共享失败失效",
+      "O3省略音频时按实际false默认校验",
+      "报价有效期不得超过能力版本有效期"
+    ],
+    "existingRegression": "最终冻结版本：94个测试文件、1353项单元测试全过，0失败、0跳过；类型、规范与格式检查全部通过。前后409个源码/测试/迁移/配置文件指纹一致。",
+    "actualPaidGenerationRequests": 0,
+    "realInstanceRestarted": false,
+    "realDataWritten": false,
+    "targetedBackendTests": 32,
+    "finalUnitAndStatic": {
+      "classification": "final-unit-and-static",
+      "startedAt": "2026-10-31T04:28:29.319Z",
+      "finishedAt": "2026-10-31T04:30:35.643Z",
+      "unitSuccess": true,
+      "passedTests": 1353,
+      "failedTests": 0,
+      "skippedTests": 0,
+      "passedTestFiles": 94,
+      "typecheckExitCode": 0,
+      "lintExitCode": 0,
+      "formatExitCode": 0,
+      "sourceFileCount": 409,
+      "sourceAggregateSha256": "75dde7a1901a8322fcde1b67ddd57cda7fccafed105cca5e80db707bfc064dcc",
+      "sourceFingerprintUnchanged": true,
+      "changedFiles": [],
+      "externalGenerationRequests": 0,
+      "realInstanceChanged": false
+    }
+  },
+  "limitations": [
+    "实时元数据与合同测试不证明付费推理成功或产物质量。",
+    "当前已核实的网关 /v1/models 接口未返回参数模式，未核实其他参数查询协议；画质与尺寸限制来自已实现适配器，不冒充上游实时参数。",
+    "内存缓存重启后需要重新读取能力版本；不增加数据库迁移或持久缓存凭据。",
+    "新增上游字段不会自动变成界面可选项；需实现序列化、校验与计费合同后再开放。"
+  ]
+}

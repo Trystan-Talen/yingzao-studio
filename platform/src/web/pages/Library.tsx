@@ -1,9 +1,10 @@
 import { ProjectExport } from '../components/ProjectExport';
 import { t } from '../lib/i18n';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Download,
+  ArrowUpRight,
   Edit3,
   FileText,
   FolderOpen,
@@ -11,6 +12,7 @@ import {
   Image,
   Plus,
   RotateCcw,
+  Search,
   Trash2,
   Upload,
 } from 'lucide-react';
@@ -51,6 +53,8 @@ import {
   useToast,
 } from '../components/ui';
 import { useStudio } from '../context';
+import { projectDestination } from '../lib/project-navigation';
+import '../styles/library-tasks.css';
 export function Projects() {
   const { canEdit } = useStudio();
   const [q, setQ] = useState('');
@@ -70,11 +74,20 @@ export function Projects() {
   const query = useApi<Page<ProjectDto>>(
     `/projects${qs({ q, kind, favorite: favorite || undefined, deleted: deleted || undefined, page })}`,
   );
-  const assets = useApi<Page<AssetDto>>('/assets?pageSize=100');
   const refresh = useRefresh();
   const action = useAction();
   const navigate = useNavigate();
   const toast = useToast();
+  const hasFilters = !!(q || kind || favorite);
+  function clearFilters() {
+    setQ('');
+    setKind('');
+    setFavorite(false);
+    setPage(1);
+  }
+  useEffect(() => {
+    setSelectedProjects([]);
+  }, [q, kind, favorite, deleted, page]);
   function open(project: ProjectDto | 'new') {
     setEdit(project);
     setName(project === 'new' ? '' : project.name);
@@ -93,7 +106,7 @@ export function Projects() {
         });
         setEdit(null);
         await refresh();
-        navigate(`/workbench/${project.id}`);
+        navigate(projectDestination(project));
       } else if (edit) {
         await patch(`/projects/${edit.id}`, {
           name,
@@ -109,11 +122,11 @@ export function Projects() {
     }, '项目已保存');
   }
   return (
-    <div className="page">
+    <div className="page library-page projects-page">
       <PageHeader
-        eyebrow="YOUR WORK, ALL TOGETHER"
+        eyebrow={t('你的创作空间')}
         title={t('项目')}
-        description={t('让每个想法都有自己的位置，随时回来继续创作。')}
+        description={t('把同一个想法的草稿、作品和画布放在一起，随时回来接着做。')}
         action={
           canEdit && (
             <Button onClick={() => open('new')}>
@@ -123,17 +136,20 @@ export function Projects() {
           )
         }
       />
-      <div className="toolbar">
+      <div className="toolbar library-toolbar">
         <div className="filter-group">
-          <input
-            aria-label={t('搜索项目')}
-            placeholder={t('搜索项目名称…')}
-            value={q}
-            onChange={(e) => {
-              setQ(e.target.value);
-              setPage(1);
-            }}
-          />
+          <label className="library-search">
+            <Search size={17} aria-hidden="true" />
+            <input
+              aria-label={t('搜索项目')}
+              placeholder={t('搜索项目名称…')}
+              value={q}
+              onChange={(e) => {
+                setQ(e.target.value);
+                setPage(1);
+              }}
+            />
+          </label>
           <select
             aria-label={t('项目类型')}
             value={kind}
@@ -149,6 +165,7 @@ export function Projects() {
           </select>
           <Button
             variant={favorite ? 'primary' : 'secondary'}
+            aria-pressed={favorite}
             onClick={() => {
               setFavorite(!favorite);
               setPage(1);
@@ -159,6 +176,7 @@ export function Projects() {
           </Button>
           <Button
             variant={deleted ? 'primary' : 'ghost'}
+            aria-pressed={deleted}
             onClick={() => {
               setDeleted(!deleted);
               setPage(1);
@@ -177,6 +195,17 @@ export function Projects() {
             { value: 'list', label: '列表' },
           ]}
         />
+      </div>
+      <div className="library-result-heading">
+        <h2>
+          {t(deleted ? '回收站' : favorite ? '收藏的项目' : '所有项目')}{' '}
+          <span>{query.data?.total ?? '—'}</span>
+        </h2>
+        {hasFilters && (
+          <Button variant="ghost" onClick={clearFilters}>
+            {t('清空筛选')}
+          </Button>
+        )}
       </div>
       {selectedProjects.length > 0 && (
         <div className="selection-bar">
@@ -205,27 +234,41 @@ export function Projects() {
           title={
             deleted
               ? t('回收站是空的')
-              : q
+              : hasFilters
                 ? t('没有找到相关项目')
                 : t('给下一个好想法，建一个项目')
           }
-          description={t('项目会保存你的画布、版本和关联素材。')}
+          description={t(
+            deleted
+              ? '移入回收站的项目会保留在这里，可以随时恢复。'
+              : hasFilters
+                ? '换一个关键词，或清空筛选查看全部项目。'
+                : '创建一个项目，或从首页直接开始图片、视频与商品详情页创作。',
+          )}
           action={
-            canEdit &&
-            !deleted && (
-              <Button onClick={() => open('new')}>
-                <Plus size={16} />
-                {t('新建项目')}
+            hasFilters ? (
+              <Button variant="secondary" onClick={clearFilters}>
+                {t('清空筛选')}
               </Button>
+            ) : (
+              canEdit &&
+              !deleted && (
+                <Button onClick={() => open('new')}>
+                  <Plus size={16} />
+                  {t('新建项目')}
+                </Button>
+              )
             )
           }
         />
       ) : (
         <div className={view === 'grid' ? 'project-grid' : 'project-list'}>
           {query.data.items.map((project) => {
-            const cover = assets.data?.items.find((a) => a.id === project.coverAssetId);
             return (
-              <article key={project.id} className="project-card">
+              <article
+                key={project.id}
+                className={`project-card${selectedProjects.some((item) => item.id === project.id) ? ' is-selected' : ''}`}
+              >
                 {!deleted && (
                   <label className="project-select-control">
                     <input
@@ -247,24 +290,41 @@ export function Projects() {
                     <span>{t('选择')}</span>
                   </label>
                 )}
-                <Link
-                  to={`/workbench/${project.id}`}
-                  className="project-cover"
-                  aria-label={`打开${project.name}`}
-                >
-                  {cover ? (
-                    <AssetVisual asset={cover} />
-                  ) : (
-                    <div className="project-placeholder">
-                      <LayersMini />
-                      <span>{project.kind === 'video' ? t('视频创作') : t('创作画布')}</span>
-                    </div>
-                  )}
-                </Link>
-                <div className="project-info">
-                  <Link to={`/workbench/${project.id}`}>
-                    <h3>{project.name}</h3>
+                {deleted ? (
+                  <div className="project-cover">
+                    <ProjectCover project={project} />
+                  </div>
+                ) : (
+                  <Link
+                    to={projectDestination(project)}
+                    className="project-cover"
+                    aria-label={`打开${project.name}`}
+                  >
+                    <ProjectCover project={project} />
                   </Link>
+                )}
+                <div className="project-info">
+                  <div className="project-kind-label">
+                    {t(
+                      project.workflow === 'detail-page'
+                        ? '商品详情页'
+                        : project.kind === 'video'
+                          ? '视频项目'
+                          : project.kind === 'mixed'
+                            ? '混合创作'
+                            : '图片项目',
+                    )}
+                  </div>
+                  {deleted ? (
+                    <h3>{project.name}</h3>
+                  ) : (
+                    <Link to={projectDestination(project)}>
+                      <h3>{project.name}</h3>
+                    </Link>
+                  )}
+                  {project.description && (
+                    <p className="project-description">{project.description}</p>
+                  )}
                   <p>
                     {dateTime(project.updatedAt)}
                     {t('更新')}
@@ -294,6 +354,12 @@ export function Projects() {
                     </Button>
                   ) : (
                     <>
+                      <Link
+                        className="button secondary library-card-primary"
+                        to={projectDestination(project)}
+                      >
+                        {t('继续创作')} <ArrowUpRight size={14} />
+                      </Link>
                       <IconButton
                         label={project.isFavorite ? t('取消收藏') : t('收藏项目')}
                         onClick={() =>
@@ -404,6 +470,26 @@ export function Projects() {
     </div>
   );
 }
+function ProjectCover({ project }: { project: ProjectDto }) {
+  // Load the referenced cover directly; it may be older than the first asset-library page.
+  const cover = useApi<AssetDto>(`/assets/${project.coverAssetId ?? ''}`, !!project.coverAssetId);
+  return cover.data && !cover.error ? (
+    <AssetVisual asset={cover.data} />
+  ) : (
+    <div className="project-placeholder">
+      <LayersMini />
+      <span>
+        {t(
+          project.workflow === 'detail-page'
+            ? '商品详情页'
+            : project.kind === 'video'
+              ? '视频创作'
+              : '创作画布',
+        )}
+      </span>
+    </div>
+  );
+}
 function LayersMini() {
   return (
     <svg width="58" height="58" viewBox="0 0 58 58" fill="none" aria-hidden="true">
@@ -419,7 +505,7 @@ interface Collection {
   name: string;
 }
 export function Assets() {
-  const { canEdit } = useStudio();
+  const { canEdit, workspace } = useStudio();
   const [q, setQ] = useState('');
   const [kind, setKind] = useState('');
   const [tag, setTag] = useState('');
@@ -451,6 +537,19 @@ export function Assets() {
   const refresh = useRefresh();
   const action = useAction();
   const toast = useToast();
+  const hasFilters = !!(q || kind || tag || favorite || collection);
+  const activeCollection = collections.data?.items.find((item) => item.id === collection);
+  function clearFilters() {
+    setQ('');
+    setKind('');
+    setTag('');
+    setFavorite(false);
+    setCollection('');
+    setPage(1);
+  }
+  useEffect(() => {
+    setSelected([]);
+  }, [q, kind, tag, favorite, deleted, collection, page]);
   async function collectionIds(id: string) {
     const first = await api<Page<AssetDto>>(`/assets?collectionId=${id}&pageSize=100`);
     const items = [...first.items];
@@ -464,19 +563,27 @@ export function Assets() {
     return items.map((item) => item.id);
   }
   async function upload(files: FileList | null) {
-    if (!files) return;
+    if (!files || !workspace) return;
+    // Keep the whole batch in the space chosen when the files were selected.
+    // Switching spaces unmounts this page but does not cancel an accepted upload.
+    const targetWorkspace = workspace;
     setUploading(true);
     let count = 0;
     for (const file of Array.from(files)) {
       try {
-        await uploadAsset(file);
+        await uploadAsset(file, undefined, { workspaceId: targetWorkspace.id });
         count++;
       } catch (error) {
-        toast(`${file.name}：${errorMessage(error)}`, 'error');
+        toast(`${targetWorkspace.name} · ${file.name}：${errorMessage(error)}`, 'error');
       }
     }
     await refresh();
-    if (count) toast(`已上传 ${count} 个真实文件`);
+    if (count)
+      toast(
+        t('已上传 {count} 个文件至「{workspace}」。')
+          .replace('{count}', String(count))
+          .replace('{workspace}', targetWorkspace.name),
+      );
     setUploading(false);
     if (input.current) input.current.value = '';
   }
@@ -486,11 +593,28 @@ export function Assets() {
     setTags(asset.tags.join(', '));
   }
   async function batchDelete() {
+    if (!workspace) return;
+    const targetWorkspaceId = workspace.id;
     await action.run(async () => {
-      for (const id of selected) await remove(`/assets/${id}`);
-      setSelected([]);
-      setDeleting(false);
+      const completed = new Set<string>();
+      const failures: unknown[] = [];
+      for (const id of selected) {
+        try {
+          await api(`/assets/${id}`, { method: 'DELETE' }, targetWorkspaceId);
+          completed.add(id);
+        } catch (error) {
+          failures.push(error);
+        }
+      }
+      setSelected((current) => current.filter((id) => !completed.has(id)));
+      if (!failures.length) setDeleting(false);
       await refresh();
+      if (failures.length)
+        throw new Error(
+          `${t('已移入回收站 {completed} 项，{failed} 项未完成；请重试剩余项。')
+            .replace('{completed}', String(completed.size))
+            .replace('{failed}', String(failures.length))} ${errorMessage(failures[0])}`,
+        );
     }, '所选素材已移入回收站');
   }
   async function downloadSelected() {
@@ -499,11 +623,11 @@ export function Assets() {
     }, '原始文件压缩包已下载');
   }
   return (
-    <div className="page">
+    <div className="page library-page assets-page">
       <PageHeader
-        eyebrow="THE BUILDING BLOCKS OF GREAT WORK"
+        eyebrow={t('上传与生成的作品，都在这里')}
         title={t('素材库')}
-        description={t('收集、整理、复用。让好的素材，成为下一次创作的起点。')}
+        description={t('预览原件、按集合整理，或选一张图片作为下一次创作的参考。')}
         action={
           canEdit && (
             <>
@@ -526,17 +650,20 @@ export function Assets() {
         hidden
         onChange={(e) => void upload(e.target.files)}
       />
-      <div className="toolbar">
+      <div className="toolbar library-toolbar">
         <div className="filter-group">
-          <input
-            placeholder={t('搜索素材…')}
-            aria-label={t('搜索素材')}
-            value={q}
-            onChange={(e) => {
-              setQ(e.target.value);
-              setPage(1);
-            }}
-          />
+          <label className="library-search">
+            <Search size={17} aria-hidden="true" />
+            <input
+              placeholder={t('搜索素材…')}
+              aria-label={t('搜索素材')}
+              value={q}
+              onChange={(e) => {
+                setQ(e.target.value);
+                setPage(1);
+              }}
+            />
+          </label>
           <select
             aria-label={t('素材类型')}
             value={kind}
@@ -581,6 +708,7 @@ export function Assets() {
           )}
           <Button
             variant={favorite ? 'primary' : 'ghost'}
+            aria-pressed={favorite}
             onClick={() => {
               setFavorite(!favorite);
               setPage(1);
@@ -591,6 +719,7 @@ export function Assets() {
           </Button>
           <Button
             variant={deleted ? 'primary' : 'ghost'}
+            aria-pressed={deleted}
             onClick={() => {
               setDeleted(!deleted);
               setPage(1);
@@ -609,6 +738,32 @@ export function Assets() {
             { value: 'list', label: '列表' },
           ]}
         />
+      </div>
+      <div className="library-result-heading">
+        <h2>
+          {deleted
+            ? t('回收站')
+            : (activeCollection?.name ?? t(favorite ? '收藏的素材' : '所有素材'))}{' '}
+          <span>{query.data?.total ?? '—'}</span>
+        </h2>
+        <div className="inline-actions">
+          {tag && (
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setTag('');
+                setPage(1);
+              }}
+            >
+              {t('标签')}：{tag} ×
+            </Button>
+          )}
+          {hasFilters && (
+            <Button variant="ghost" onClick={clearFilters}>
+              {t('清空筛选')}
+            </Button>
+          )}
+        </div>
       </div>
       {selected.length > 0 && (
         <div className="selection-bar">
@@ -662,15 +817,33 @@ export function Assets() {
       ) : !query.data?.items.length ? (
         <Empty
           icon={<Image size={34} />}
-          title={deleted ? t('回收站暂无素材') : t('好素材，是好创作的开始')}
-          description={t('上传图片、视频、音频或参考文档，所有原件均保留。')}
+          title={
+            deleted
+              ? t('回收站暂无素材')
+              : hasFilters
+                ? t('没有找到符合条件的素材')
+                : t('添加第一份创作素材')
+          }
+          description={t(
+            deleted
+              ? '删除的素材可以在这里恢复，原项目中的引用也会恢复显示。'
+              : hasFilters
+                ? '尝试其他关键词或清空筛选，查看全部上传与生成的作品。'
+                : '上传商品图、参考视频或文档；生成的作品也会自动保存在这里。',
+          )}
           action={
-            canEdit &&
-            !deleted && (
-              <Button onClick={() => input.current?.click()} busy={uploading}>
-                <Upload size={16} />
-                {t('上传第一份素材')}
+            hasFilters ? (
+              <Button variant="secondary" onClick={clearFilters}>
+                {t('清空筛选')}
               </Button>
+            ) : (
+              canEdit &&
+              !deleted && (
+                <Button onClick={() => input.current?.click()} busy={uploading}>
+                  <Upload size={16} />
+                  {t('上传第一份素材')}
+                </Button>
+              )
             )
           }
         />
@@ -709,9 +882,16 @@ export function Assets() {
                   {bytes(asset.byteSize)}
                 </p>
                 <div className="tag-list">
-                  {asset.tags.map((t) => (
-                    <button key={t} onClick={() => setTag(tag === t ? '' : t)}>
-                      <Badge>{t}</Badge>
+                  {asset.tags.map((value) => (
+                    <button
+                      key={value}
+                      aria-pressed={tag === value}
+                      onClick={() => {
+                        setTag(tag === value ? '' : value);
+                        setPage(1);
+                      }}
+                    >
+                      <Badge>{value}</Badge>
                     </button>
                   ))}
                 </div>
@@ -733,6 +913,22 @@ export function Assets() {
                   </Button>
                 ) : (
                   <>
+                    {canEdit && asset.kind === 'image' ? (
+                      <Link
+                        className="button secondary library-card-primary"
+                        to={`/workbench?kind=image&asset=${encodeURIComponent(asset.id)}`}
+                      >
+                        {t('作为参考')} <ArrowUpRight size={14} />
+                      </Link>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        className="library-card-primary"
+                        onClick={() => show(asset)}
+                      >
+                        {t('查看详情')}
+                      </Button>
+                    )}
                     <IconButton
                       label={asset.isFavorite ? t('取消收藏') : t('收藏素材')}
                       onClick={() =>
@@ -864,6 +1060,27 @@ export function Assets() {
                   <dd>{dateTime(detail.createdAt)}</dd>
                 </div>
               </dl>
+              {!detail.deletedAt &&
+                (detail.sourceJobId || (canEdit && detail.kind === 'image')) && (
+                  <div className="asset-next-actions">
+                    {canEdit && detail.kind === 'image' && (
+                      <Link
+                        className="button primary"
+                        to={`/workbench?kind=image&asset=${encodeURIComponent(detail.id)}`}
+                      >
+                        {t('作为参考继续创作')} <ArrowUpRight size={15} />
+                      </Link>
+                    )}
+                    {detail.sourceJobId && (
+                      <Link
+                        className="button secondary"
+                        to={`/tasks?job=${encodeURIComponent(detail.sourceJobId)}`}
+                      >
+                        {t('查看生成任务')} <ArrowUpRight size={15} />
+                      </Link>
+                    )}
+                  </div>
+                )}
               <div className="inline-actions">
                 <Button
                   type="button"

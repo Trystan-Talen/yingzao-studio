@@ -1,0 +1,6 @@
+{
+  "completed": true,
+  "generationCalls": 0,
+  "disallowedRequests": 0,
+  "note": "This round validates the existing capability metadata contract without making external generation calls."
+}

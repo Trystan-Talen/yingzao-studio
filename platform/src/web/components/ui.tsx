@@ -2,6 +2,9 @@ import { t } from '../lib/i18n';
 import {
   createContext,
   useContext,
+  useId,
+  useLayoutEffect,
+  useRef,
   useState,
   type ButtonHTMLAttributes,
   type ReactNode,
@@ -29,9 +32,10 @@ export function Button({
 }) {
   return (
     <button
-      className={`button ${variant} ${props.className ?? ''}`}
       {...props}
+      className={`button ${variant} ${props.className ?? ''}`}
       disabled={busy || props.disabled}
+      aria-busy={busy || undefined}
     >
       {busy && <LoaderCircle size={16} className="spin" />}
       {children}
@@ -65,18 +69,20 @@ export function Badge({
   return <span className={`badge ${tone}`}>{children}</span>;
 }
 export function Field({
+  className,
   label,
   hint,
   error,
   children,
 }: {
   label: string;
+  className?: string;
   hint?: string;
   error?: string;
   children: ReactNode;
 }) {
   return (
-    <label className="field">
+    <label className={`field${className ? ` ${className}` : ''}`}>
       <span className="field-label">{label}</span>
       {children}
       {hint && <span className="field-hint">{hint}</span>}
@@ -84,9 +90,23 @@ export function Field({
     </label>
   );
 }
+function useDialogReturnFocus(open: boolean) {
+  const returnFocus = useRef<HTMLElement | null>(null);
+  useLayoutEffect(() => {
+    if (open) return;
+    // Capture before the next open commits. A child's native autoFocus can run
+    // before Radix's focus event, by which time the opener is already lost.
+    return () => {
+      returnFocus.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    };
+  }, [open]);
+  return returnFocus;
+}
 export function Modal({
   open,
   onClose,
+  onCloseAutoFocus,
   title,
   description,
   children,
@@ -94,11 +114,14 @@ export function Modal({
 }: {
   open: boolean;
   onClose: () => void;
+  onCloseAutoFocus?: (event: Event) => void;
   title: string;
   description?: string;
   children: ReactNode;
   wide?: boolean;
 }) {
+  const descriptionId = useId();
+  const returnFocus = useDialogReturnFocus(open);
   return (
     <Dialog.Root
       open={open}
@@ -111,13 +134,25 @@ export function Modal({
         <Dialog.Content
           className={`modal ${wide ? 'wide' : ''}`}
           aria-label={title}
-          aria-describedby={description ? 'dialog-desc' : undefined}
+          aria-describedby={description ? descriptionId : undefined}
+          onOpenAutoFocus={() => {
+            if (!returnFocus.current && document.activeElement instanceof HTMLElement)
+              returnFocus.current = document.activeElement;
+          }}
+          onCloseAutoFocus={(event) => {
+            onCloseAutoFocus?.(event);
+            if (event.defaultPrevented) return;
+            if (returnFocus.current?.isConnected) {
+              event.preventDefault();
+              returnFocus.current.focus();
+            }
+          }}
         >
           <div className="modal-heading">
             <div>
               <Dialog.Title>{title}</Dialog.Title>
               {description && (
-                <Dialog.Description id="dialog-desc">{description}</Dialog.Description>
+                <Dialog.Description id={descriptionId}>{description}</Dialog.Description>
               )}
             </div>
             <Dialog.Close asChild>
@@ -143,6 +178,7 @@ export function Drawer({
   title: string;
   children: ReactNode;
 }) {
+  const returnFocus = useDialogReturnFocus(open);
   return (
     <Dialog.Root
       open={open}
@@ -152,7 +188,20 @@ export function Drawer({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="modal-overlay" />
-        <Dialog.Content className="drawer" aria-describedby={undefined}>
+        <Dialog.Content
+          className="drawer"
+          aria-describedby={undefined}
+          onOpenAutoFocus={() => {
+            if (!returnFocus.current && document.activeElement instanceof HTMLElement)
+              returnFocus.current = document.activeElement;
+          }}
+          onCloseAutoFocus={(event) => {
+            if (returnFocus.current?.isConnected) {
+              event.preventDefault();
+              returnFocus.current.focus();
+            }
+          }}
+        >
           <div className="modal-heading">
             <Dialog.Title>{title}</Dialog.Title>
             <Dialog.Close asChild>
@@ -187,7 +236,7 @@ export function Empty({
     </div>
   );
 }
-export function Loading({ label = '正在加载…' }: { label?: string }) {
+export function Loading({ label = t('正在加载…') }: { label?: string }) {
   return (
     <div className="loading" role="status">
       <LoaderCircle className="spin" size={22} />

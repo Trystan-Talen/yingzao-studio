@@ -1,0 +1,83 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/commercial-worker-safety.test.ts (2 tests | 1 failed) 148ms
+   × cancels a claimed but unsubmitted item without calling the provider or retaining its reservation 87ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/commercial-worker-safety.test.ts > cancels a claimed but unsubmitted item without calling the provider or retaining its reservation
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      Object {
+        "actor": Object {
+          "apiKeyId": null,
+          "authType": "session",
+          "scopes": Array [],
+          "userId": "8dc817c3-4a1b-4362-b972-09ddde28448b",
+          "workspaceId": null,
+        },
+        "assetUrl": [Function assetUrl],
+        "input": Object {
+          "assetIds": Array [],
+          "operation": "image.generate",
+          "options": Object {
+            "assistantMode": "ideas",
+            "background": "#ffffff",
+            "channel": "premium",
+            "count": 1,
+            "duration": 5,
+            "externalCostAccepted": false,
+            "forceTranslation": false,
+            "format": "png",
+            "keepMusicRhythm": true,
+            "kind": "free",
+            "language": "zh-CN",
+            "mode": "creative",
+            "motionOrientation": "video",
+            "needText": true,
+            "platform": "通用电商",
+            "ratio": "1:1",
+            "referenceAuthorized": false,
+            "referenceMode": "all",
+            "replacementType": "product",
+            "resolution": "1K",
+            "scale": 2,
+            "strength": "standard",
+            "trimStart": 0,
+          },
+          "prompt": "Product fixture",
+          "providerId": "openai",
+          "referenceAssetIds": Array [],
+        },
+        "readAsset": [Function readAsset],
+        "textPresence": [Function textPresence],
+        "workspaceId": "8f61f995-075a-4ea0-ad5c-18b700d7095d",
+      },
+      "fixture-NOT-A-REAL-API-KEY",
+    ]
+
+
+Number of calls: 1
+
+ ❯ tests/commercial-worker-safety.test.ts:94:23
+     92|   tasks.cancel(actor, wid, job.id);
+     93|   await runner.runItem(claimed);
+     94|   expect(execute).not.toHaveBeenCalled();
+       |                       ^
+     95|   expect(tasks.get(actor, wid, job.id).status).toBe('cancelled');
+     96|   expect(tasks.balance(actor, wid)).toMatchObject({ balance: 500, rese…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  22:11:05
+   Duration  798ms (import 71%, tests 20%, transform 9%)
+

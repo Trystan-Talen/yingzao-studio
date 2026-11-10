@@ -63,6 +63,7 @@ const templates: readonly { pattern: RegExp; text: string; parameters: readonly 
 ];
 
 const fixedWarnings = new Set([
+  '当前模型不支持画面文字，已关闭文字选项。',
   '已继承参考视频；请补充主体图片、检查动作片段，再确认人物与视频使用授权及外部费用。当前仅支持人物动作参考，不支持服装、人脸或商品精准替换。',
   '参考视频超过30秒，当前预选前30秒；请在提交前检查并调整动作片段。',
 ]);

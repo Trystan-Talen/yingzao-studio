@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { createServer } from 'node:net';
@@ -10,8 +10,31 @@ import { createApp } from '../../src/server/app';
 import { localSmtp, mailText } from '../helpers/local-smtp';
 import { localSms } from '../helpers/local-sms';
 import { identityCrypto } from '../../src/server/auth/identity/crypto';
+import {
+  createExperienceFetch,
+  createLoopbackFetch,
+  type ExperienceMetadataTransform,
+} from '../helpers/experience-provider';
 
-async function harness(recovery: boolean, smsEnabled: boolean) {
+// The API server runs in this process, independently of the background worker.
+// Metadata reads introduced by capability refreshes need the same network guard.
+const loopbackFetch = createLoopbackFetch();
+globalThis.fetch = loopbackFetch;
+
+async function harness(
+  recovery: boolean,
+  smsEnabled: boolean,
+  productionMode: boolean,
+  experienceProviders: boolean,
+  experienceImageGateway: boolean,
+) {
+  const metadataRequests: string[] = [];
+  let metadataTransform: ExperienceMetadataTransform | undefined;
+  globalThis.fetch = createExperienceFetch(
+    loopbackFetch,
+    (url) => metadataRequests.push(url),
+    (url, body) => (metadataTransform ? metadataTransform(url, body) : body),
+  );
   if (!process.env.E2E_RUN_ROOT) throw new Error('Missing isolated run root');
   const folder = await mkdtemp(join(process.env.E2E_RUN_ROOT, 'case-'));
   const probe = createServer();
@@ -34,9 +57,20 @@ async function harness(recovery: boolean, smsEnabled: boolean) {
     storageDir: join(folder, 'media'),
     sessionSecret: randomBytes(32).toString('hex'),
     encryptionKey: randomBytes(32).toString('hex'),
-    isProduction: false,
-    demoMode: false,
-    environmentSecrets: {},
+    isProduction: productionMode,
+    demoMode: experienceProviders,
+    environmentSecrets: experienceProviders
+      ? Object.fromEntries(
+          ['openai', 'dify', 'seedance', 'fal', 'flyelep', 'tikhub'].map((id) => [
+            id,
+            'local-experience-fixture',
+          ]),
+        )
+      : {},
+    imageGateway:
+      experienceProviders && experienceImageGateway
+        ? { baseUrl: 'https://preview.invalid/v1', model: 'doubao-seedream-5.0-lite' }
+        : undefined,
     passwordRecoveryEnabled: recovery,
     google: { enabled: false },
     sms: sms
@@ -48,22 +82,28 @@ async function harness(recovery: boolean, smsEnabled: boolean) {
           templateCode: 'SMS_fixture',
         }
       : { enabled: false },
-    smtp: {
-      enabled: true,
-      host: '127.0.0.1',
-      port: smtp.port,
-      tlsMode: 'local-test',
-      from: 'studio@example.test',
-      fromName: 'Isolated test',
-    },
+    smtp: productionMode
+      ? { enabled: false }
+      : {
+          enabled: true,
+          host: '127.0.0.1',
+          port: smtp.port,
+          tlsMode: 'local-test',
+          from: 'studio@example.test',
+          fromName: 'Isolated test',
+        },
   };
-  const application = await createApp(config, { identity: { now: () => new Date(identityTime) } });
+  const application = await createApp(config, {
+    webRoot: join(process.env.E2E_RUN_ROOT, 'web'),
+    identity: { now: () => new Date(identityTime) },
+  });
   await application.app.listen({ host: '127.0.0.1', port });
   const configFile = join(folder, 'config.json');
   await writeFile(
     configFile,
     JSON.stringify({
       ...config,
+      experienceProviders,
       clockFile,
       localSms: sms ? { port: sms.port, secret: sms.secret } : undefined,
     }),
@@ -74,6 +114,7 @@ async function harness(recovery: boolean, smsEnabled: boolean) {
     TMPDIR: process.env.TMPDIR,
     E2E_RUN_ROOT: process.env.E2E_RUN_ROOT,
     NODE_ENV: 'test',
+    DOTENV_CONFIG_PATH: '/dev/null',
     NO_COLOR: '1',
   };
   let child = spawn(
@@ -120,6 +161,36 @@ async function harness(recovery: boolean, smsEnabled: boolean) {
     folder,
     smtp,
     sms,
+    metadataRequests,
+    setMetadataTransform(transform?: ExperienceMetadataTransform) {
+      metadataTransform = transform;
+    },
+    async experienceSession() {
+      if (!experienceProviders) throw new Error('Local experience providers are not enabled.');
+      const result = await application.services.core.auth.register({
+        email: 'experience@example.test',
+        password: 'ExperienceFixture2026!',
+        displayName: '本机模拟体验',
+      });
+      const actor = {
+        userId: result.user.id,
+        authType: 'session' as const,
+        apiKeyId: null,
+        workspaceId: null,
+        scopes: [],
+      };
+      application.services.core.auth.update(actor, {
+        preferences: { onboardingCompleted: true, theme: 'light', confirmGeneration: true },
+      });
+      const reference = await application.services.core.assets.ingest(actor, result.workspace.id, {
+        buffer: await readFile(resolve('public/gallery/botanical-serum.webp')),
+        name: '示例植物精华.webp',
+        mimeType: 'image/webp',
+        source: 'import',
+        tags: ['本机模拟体验'],
+      });
+      return { ...result, reference };
+    },
     async advanceIdentityClock(milliseconds: number) {
       identityTime += milliseconds;
       await writeFile(clockFile, JSON.stringify(identityTime));
@@ -231,6 +302,9 @@ export type Studio = Awaited<ReturnType<typeof harness>>;
 type Fixtures = {
   recoveryEnabled: boolean;
   smsEnabled: boolean;
+  productionMode: boolean;
+  experienceProviders: boolean;
+  experienceImageGateway: boolean;
   studio: Studio;
   networkIsolation: void;
   browserDiagnostics: void;
@@ -238,8 +312,20 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   recoveryEnabled: [true, { option: true }],
   smsEnabled: [false, { option: true }],
-  studio: async ({ recoveryEnabled, smsEnabled }, use) => {
-    const studio = await harness(recoveryEnabled, smsEnabled);
+  productionMode: [false, { option: true }],
+  experienceProviders: [false, { option: true }],
+  experienceImageGateway: [true, { option: true }],
+  studio: async (
+    { recoveryEnabled, smsEnabled, productionMode, experienceProviders, experienceImageGateway },
+    use,
+  ) => {
+    const studio = await harness(
+      recoveryEnabled,
+      smsEnabled,
+      productionMode,
+      experienceProviders,
+      experienceImageGateway,
+    );
     try {
       await use(studio);
     } finally {

@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-26",
+  "scope": "共享布局、导航、搜索、对话框焦点与通用控件；不代表全部页面视觉或外部生成服务验收。",
+  "unit": {
+    "before": {
+      "failed": 2,
+      "passed": 0
+    },
+    "after": {
+      "passed": 2,
+      "failed": 0
+    }
+  },
+  "browser": {
+    "before": "移动端菜单跳转后遮挡页面、缺少跳过导航入口均真实失败。搜索初次夹具缺少工作空间/来源头而在项目创建失败；补齐合法请求后独立复跑，真实复现加载状态缺失。",
+    "firstRecheck": {
+      "passed": 4,
+      "failed": 2,
+      "cause": "原生自动聚焦早于对话框焦点事件，关闭搜索后未返回开启按钮；随后改为打开提交前捕获焦点。"
+    },
+    "final": {
+      "passed": 10,
+      "failed": 0,
+      "shellCases": 8,
+      "productionPolicyCases": 2,
+      "projects": [
+        "desktop（桌面）",
+        "mobile（手机）"
+      ],
+      "durationSeconds": 47.2,
+      "uncaughtErrors": 0,
+      "log": "browser-production-final.txt"
+    },
+    "checks": [
+      "移动端设置/帮助/额度/开发者导航关闭抽屉且无横向溢出",
+      "搜索慢请求加载提示、503故障提示与重试、跳转真实项目及读取保存内容",
+      "键盘跳过主导航、进入主区后隐藏跳转链接、关闭搜索后返回按钮焦点",
+      "条件挂载的创作助手关闭后返回键盘触发按钮；未产生模型任务"
+    ],
+    "expectedFailureResponses": "搜索恢复测试主动注入 503 响应；其余请求诊断见最终汇总。",
+    "earlierFinal": {
+      "passed": 6,
+      "failed": 0,
+      "projects": [
+        "desktop（桌面）",
+        "mobile（手机）"
+      ],
+      "uncaughtErrors": 0
+    }
+  },
+  "visualReview": "已查看最终桌面搜索错误、手机搜索错误与手机导航截图。布局无遮挡/裁切；小屏顶栏显示当前页面。中途全页截图发现隐藏跳转链接因位移被截入，已改为仅键盘可见焦点时显示并补透明度断言。 最新生产策略桌面画布、手机素材截图已目视检查，无重大遮挡或裁切。",
+  "checks": {
+    "typecheck": "通过",
+    "scopedEslint": "通过",
+    "format": "通过",
+    "build": "通过",
+    "diffWhitespace": "通过"
+  },
+  "isolation": "每个浏览器用例全新数据库与媒体，仅回环服务；浏览器夹具阻断外部请求。无真实发送、模型调用或费用。",
+  "archivePolicy": "仅允许名单中的日志、截图和此摘要；未复制数据库、配置、密钥、会话、跟踪包或网页报告。",
+  "diagnostics": [
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/entitlements",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/projects",
+          "status": 503
+        },
+        {
+          "path": "/api/v1/projects",
+          "status": 503
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/entitlements",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": [
+        {
+          "path": "/api/v1/projects",
+          "status": 503
+        },
+        {
+          "path": "/api/v1/projects",
+          "status": 503
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    },
+    {
+      "errors": [],
+      "failedRequests": [
+        {
+          "path": "/api/v1/job-events",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "responses": [
+        {
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "failedRequests": [],
+      "responses": []
+    }
+  ],
+  "productionSecurity": {
+    "before": "首轮新夹具的关闭引导等待与非浏览器请求安全凭据问题已单独记录；修正夹具后的第二轮确实捕获桌面/手机各 4 次动态执行策略违规。",
+    "cause": "校验库在对象合同构造时探测动态执行，虽然异常被捕获并继续运行，仍触发浏览器策略违规。",
+    "fix": "浏览器首个初始化模块关闭动态编译，早于共享合同构造；服务端不导入此模块，未放宽生产脚本策略。",
+    "final": "桌面和手机完整注册、退出、登录、真实图片上传与展示、画布保存、下载实际160×120图片并核对中心像素、刷新恢复全部通过，安全策略违规均为0。",
+    "boundary": "启用生产模式的隔离回环浏览器环境；不证明公网证书、外部身份/支付/模型服务或全部浏览器兼容。"
+  },
+  "conditionalDialogFocus": {
+    "before": "实际创作助手条件挂载后关闭未返回触发控件，新增桌面用例真实失败。",
+    "after": "补初次打开捕获与无有效目标的默认回退，桌面手机均通过。"
+  }
+}

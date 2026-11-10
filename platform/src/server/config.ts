@@ -7,6 +7,7 @@ import { readSmtpConfig, type SmtpConfig } from './notifications/config';
 import { readSupportConfig } from './support-config';
 import type { SupportChannelsDto } from '../contracts/support';
 import type { SmsConfig, WechatConfig } from './auth/identity/types';
+import type { OpenAiImageGatewayConfig } from './providers/openai';
 import {
   ExportWatermarkConfigSchema,
   type ExportWatermarkConfig,
@@ -17,11 +18,23 @@ const schema = z.object({
   PUBLIC_ORIGIN: z.string().url().default('http://127.0.0.1:5174'),
   DATABASE_PATH: z.string().optional(),
   STORAGE_DIR: z.string().optional(),
+  MEDIA_DNS_MODE: z.enum(['system', 'public-doh']).default('system'),
+  MEDIA_DOWNLOAD_TIMEOUT_MS: z.coerce.number().int().min(1000).max(600000).default(120000),
   DEMO_MODE: z.enum(['true', 'false']).default('false'),
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   SESSION_SECRET: z.string().optional(),
   ENCRYPTION_KEY: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
+  IMAGE_API_BASE_URL: z.string().url().optional(),
+  IMAGE_MODEL: z.enum(['gpt-image-2', 'doubao-seedream-5.0-lite']).default('gpt-image-2'),
+  DIFY_API_KEY: z.string().optional(),
+  DIFY_API_BASE_URL: z.string().url().default('https://api.dify.ai/v1'),
+  SEEDANCE_API_KEY: z.string().optional(),
+  SEEDANCE_TASK_BASE_URL: z
+    .string()
+    .url()
+    .default('https://xingyunyinli.com/doubao/api/v3/contents/generations/tasks'),
+  SEEDANCE_MODEL: z.string().min(1).default('doubao-seedance-2.0'),
   FAL_KEY: z.string().optional(),
   FLYELEP_SECRET_KEY: z.string().optional(),
   TIKHUB_API_KEY: z.string().optional(),
@@ -54,11 +67,18 @@ export interface AppConfig {
   publicOrigin: string;
   databasePath: string;
   storageDir: string;
+  mediaDnsMode?: 'system' | 'public-doh';
+  mediaDownloadTimeoutMs?: number;
   sessionSecret: string;
   encryptionKey: string;
   isProduction: boolean;
   demoMode: boolean;
-  environmentSecrets: Partial<Record<'openai' | 'fal' | 'flyelep' | 'tikhub', string>>;
+  environmentSecrets: Partial<
+    Record<'openai' | 'fal' | 'flyelep' | 'tikhub' | 'dify' | 'seedance', string>
+  >;
+  imageGateway?: OpenAiImageGatewayConfig;
+  dify?: { baseUrl: string };
+  seedance?: { taskBaseUrl: string; model: string };
   billing?: { stripeSecretKey?: string; stripeWebhookSecret?: string };
   exportWatermark?: ExportWatermarkConfig;
   google?: { enabled: boolean; clientId?: string; clientSecret?: string };
@@ -75,22 +95,46 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   if (production && demo) throw new Error('Production cannot run DEMO_MODE.');
   if (production && (!c.SESSION_SECRET || !c.ENCRYPTION_KEY))
     throw new Error('Production requires SESSION_SECRET and ENCRYPTION_KEY.');
+  if (production) {
+    for (const value of [c.SESSION_SECRET!, c.ENCRYPTION_KEY!])
+      if (Buffer.byteLength(value.trim(), 'utf8') < 32 || value !== value.trim())
+        throw new Error(
+          'Production secrets require at least 32 bytes with no surrounding whitespace; generate independent random values.',
+        );
+    if (c.SESSION_SECRET === c.ENCRYPTION_KEY)
+      throw new Error('Production requires independent SESSION_SECRET and ENCRYPTION_KEY values.');
+  }
+  const origin = new URL(c.PUBLIC_ORIGIN);
+  if (
+    !['http:', 'https:'].includes(origin.protocol) ||
+    origin.username ||
+    origin.password ||
+    origin.pathname !== '/' ||
+    origin.search ||
+    origin.hash
+  )
+    throw new Error(
+      'PUBLIC_ORIGIN must be an HTTP(S) origin without credentials, path, query, or fragment.',
+    );
   if (
     production &&
     !c.PUBLIC_ORIGIN.startsWith('https://') &&
-    !['127.0.0.1', 'localhost', '::1'].includes(new URL(c.PUBLIC_ORIGIN).hostname)
+    !['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname)
   )
     throw new Error('Public production origin must use HTTPS.');
-  mkdirSync('var', { recursive: true, mode: 0o700 });
-  const localKey = join('var', '.installation-key');
-  if (!existsSync(localKey)) {
-    try {
-      writeFileSync(localKey, randomBytes(32).toString('hex'), { mode: 0o600, flag: 'wx' });
-    } catch (error) {
-      if (!(error instanceof Error && 'code' in error && error.code === 'EEXIST')) throw error;
+  let fallback = '';
+  if (!c.SESSION_SECRET || !c.ENCRYPTION_KEY) {
+    mkdirSync('var', { recursive: true, mode: 0o700 });
+    const localKey = join('var', '.installation-key');
+    if (!existsSync(localKey)) {
+      try {
+        writeFileSync(localKey, randomBytes(32).toString('hex'), { mode: 0o600, flag: 'wx' });
+      } catch (error) {
+        if (!(error instanceof Error && 'code' in error && error.code === 'EEXIST')) throw error;
+      }
     }
+    fallback = readFileSync(localKey, 'utf8').trim();
   }
-  const fallback = readFileSync(localKey, 'utf8').trim();
   return {
     host: c.HOST,
     support: readSupportConfig(env),
@@ -112,16 +156,27 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     publicOrigin: c.PUBLIC_ORIGIN,
     databasePath: resolve(c.DATABASE_PATH || (demo ? 'var/demo.sqlite' : 'var/app.sqlite')),
     storageDir: resolve(c.STORAGE_DIR || (demo ? 'var/demo-media' : 'var/media')),
+    mediaDnsMode: c.MEDIA_DNS_MODE,
+    mediaDownloadTimeoutMs: c.MEDIA_DOWNLOAD_TIMEOUT_MS,
     sessionSecret: c.SESSION_SECRET || fallback,
     encryptionKey: c.ENCRYPTION_KEY || fallback,
     isProduction: production,
     demoMode: demo,
     environmentSecrets: {
       openai: c.OPENAI_API_KEY,
+      dify: c.DIFY_API_KEY,
+      seedance: c.SEEDANCE_API_KEY,
       fal: c.FAL_KEY,
       flyelep: c.FLYELEP_SECRET_KEY,
       tikhub: c.TIKHUB_API_KEY,
     },
+    imageGateway: c.IMAGE_API_BASE_URL
+      ? c.IMAGE_MODEL === 'doubao-seedream-5.0-lite'
+        ? { baseUrl: c.IMAGE_API_BASE_URL, model: c.IMAGE_MODEL, size: '2048x2048' }
+        : { baseUrl: c.IMAGE_API_BASE_URL, model: c.IMAGE_MODEL, quality: 'low', size: '1024x1024' }
+      : undefined,
+    dify: { baseUrl: c.DIFY_API_BASE_URL },
+    seedance: { taskBaseUrl: c.SEEDANCE_TASK_BASE_URL, model: c.SEEDANCE_MODEL },
     billing: { stripeSecretKey: c.STRIPE_SECRET_KEY, stripeWebhookSecret: c.STRIPE_WEBHOOK_SECRET },
     google: {
       enabled: c.GOOGLE_OIDC_ENABLED === 'true',

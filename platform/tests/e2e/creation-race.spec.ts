@@ -99,7 +99,7 @@ for (const heldStep of ['project', 'message'] as const) {
         })
         .toBe(true);
       expect(responseStatus).toBe(heldStep === 'project' ? 201 : 200);
-      await expect(page).toHaveURL(`${studio.origin}/workbench`);
+      await expect(page).toHaveURL(`${studio.origin}/workbench?kind=image`);
 
       const imagePrompt = '保存等待期间更新的图片需求：保留绿色包装与参考图片。';
       const videoPrompt = '保存等待期间切换到视频后的最新需求：镜头缓缓推进，保持产品外观。';
@@ -109,6 +109,10 @@ for (const heldStep of ['project', 'message'] as const) {
       await uploadReference(page, imageName, '#167c44');
       await composer.getByRole('button', { name: '视频创作', exact: true }).click();
       await expect(prompt).toHaveValue('');
+      await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+      await composer
+        .getByRole('combobox', { name: '生成模型', exact: true })
+        .selectOption('video.generate|fal|kling-o3-4k-reference');
       await prompt.fill(videoPrompt);
       await uploadReference(page, videoName, '#264f9d');
       await expect(composer.getByRole('button', { name: '视频创作', exact: true })).toHaveAttribute(

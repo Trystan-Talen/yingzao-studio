@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-10-31T02:38:28.771Z",
+  "origin": "http://127.0.0.1:53810",
+  "publishedAt": "2026-10-31T02:38:04.034Z",
+  "build": "release-2026-10-31T02-13-34.238Z",
+  "healthStatus": 200,
+  "htmlMatchesBuild": true,
+  "entryAssetsVerified": 3,
+  "backupFiles": 53,
+  "mediaFiles": 51,
+  "restoreVerified": true,
+  "rollbackSourceVerified": true,
+  "databaseTablesUnchanged": 100,
+  "jobsUnchanged": 15,
+  "jobItemsUnchanged": 25,
+  "creditsUnchanged": true,
+  "newGenerationTasks": 0,
+  "forcedStop": false,
+  "previousChunksRetained": true,
+  "previewOrigin": "http://127.0.0.1:53826",
+  "scope": "Local application update only; real model quality is not revalidated."
+}

@@ -12,44 +12,81 @@ export class ApiError extends Error {
   }
 }
 let activeWorkspace: string | null = null;
+export const CONFIRMATION_TIMEOUT_MS = 15_000;
+export type ApiRequestInit = RequestInit & { timeoutMs?: number };
 export function setApiWorkspace(id: string | null) {
   activeWorkspace = id;
 }
 export async function api<T>(
   path: string,
-  init: RequestInit = {},
+  init: ApiRequestInit = {},
   workspaceOverride: string | null = activeWorkspace,
 ): Promise<T> {
-  const headers = new Headers(init.headers);
-  if (workspaceOverride && !headers.has('x-workspace-id'))
-    headers.set('x-workspace-id', workspaceOverride);
-  if (init.body && !(init.body instanceof FormData))
-    headers.set('content-type', 'application/json');
-  let response: Response;
+  const { timeoutMs, ...requestInit } = init;
+  const controller = timeoutMs ? new AbortController() : null;
+  const signal = controller
+    ? requestInit.signal
+      ? AbortSignal.any([requestInit.signal, controller.signal])
+      : controller.signal
+    : requestInit.signal;
+  let deadline: ReturnType<typeof setTimeout> | undefined;
+  const read = async () => {
+    const headers = new Headers(requestInit.headers);
+    if (workspaceOverride && !headers.has('x-workspace-id'))
+      headers.set('x-workspace-id', workspaceOverride);
+    if (init.body && !(init.body instanceof FormData))
+      headers.set('content-type', 'application/json');
+    let response: Response;
+    try {
+      response = await fetch(`/api/v1${path}`, {
+        ...requestInit,
+        signal,
+        headers,
+        credentials: 'same-origin',
+      });
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') throw error;
+      throw new ApiError(
+        'NETWORK_ERROR',
+        '网络连接中断，请恢复网络；已确认的任务请先核对提交结果。',
+        0,
+      );
+    }
+    const payload = (await response.json().catch(() => null)) as {
+      data?: T;
+      error?: { code?: string; message?: string; details?: Record<string, unknown> };
+    } | null;
+    if (!response.ok)
+      throw new ApiError(
+        payload?.error?.code ?? 'REQUEST_FAILED',
+        payload?.error?.message ?? `请求未完成（${response.status}），请稍后重试。`,
+        response.status,
+        payload?.error?.details,
+      );
+    if (!payload || !('data' in payload))
+      throw new ApiError('INVALID_RESPONSE', '服务返回了无法识别的内容。', response.status);
+    return payload.data as T;
+  };
+  if (!controller || !timeoutMs) return read();
   try {
-    response = await fetch(`/api/v1${path}`, { ...init, headers, credentials: 'same-origin' });
-  } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') throw error;
-    throw new ApiError(
-      'NETWORK_ERROR',
-      '网络连接中断，请恢复网络；已确认的任务请先核对提交结果。',
-      0,
-    );
+    return await Promise.race([
+      read(),
+      new Promise<never>((_, reject) => {
+        deadline = setTimeout(() => {
+          reject(
+            new ApiError(
+              'REQUEST_TIMEOUT',
+              '等待服务器确认超时。已确认的任务请先核对提交结果，请勿重新创建。',
+              0,
+            ),
+          );
+          controller.abort();
+        }, timeoutMs);
+      }),
+    ]);
+  } finally {
+    clearTimeout(deadline);
   }
-  const payload = (await response.json().catch(() => null)) as {
-    data?: T;
-    error?: { code?: string; message?: string; details?: Record<string, unknown> };
-  } | null;
-  if (!response.ok)
-    throw new ApiError(
-      payload?.error?.code ?? 'REQUEST_FAILED',
-      payload?.error?.message ?? `请求未完成（${response.status}），请稍后重试。`,
-      response.status,
-      payload?.error?.details,
-    );
-  if (!payload || !('data' in payload))
-    throw new ApiError('INVALID_RESPONSE', '服务返回了无法识别的内容。', response.status);
-  return payload.data as T;
 }
 export function post<T>(path: string, body?: unknown) {
   return api<T>(path, {

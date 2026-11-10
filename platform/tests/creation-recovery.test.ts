@@ -39,6 +39,25 @@ const input = jobInputSchema.parse({
 });
 
 describe('creation recovery boundaries', () => {
+  it('retains unfinished model defaults separately from the typed brief and each media draft', () => {
+    const storage = memory();
+    const key = draftStorageKey(user, workspace);
+    writeDraft(storage, key, {
+      input,
+      drafts: { image: input },
+      modelDefaultsPending: { image: true, video: false },
+    });
+    expect(readDraft(storage, key).value).toMatchObject({
+      input,
+      modelDefaultsPending: { image: true, video: false },
+    });
+    writeDraft(storage, key, {
+      input,
+      drafts: { image: input },
+      modelDefaultsPending: { image: false, video: false },
+    });
+    expect(readDraft(storage, key).value?.modelDefaultsPending?.image).toBe(false);
+  });
   it('recovers unacknowledged warnings after a legacy task message and respects explicit acknowledgement', () => {
     const messages = [
       {
@@ -184,6 +203,7 @@ describe('confirmed submission journal', () => {
       expect(submissionWasRejected(error)).toBe(true);
     for (const error of [
       { status: 0, code: 'NETWORK_ERROR' },
+      { status: 0, code: 'REQUEST_TIMEOUT' },
       { status: 202, code: 'INVALID_RESPONSE' },
       { status: 401, code: 'UNAUTHORIZED' },
       { status: 403, code: 'FORBIDDEN' },

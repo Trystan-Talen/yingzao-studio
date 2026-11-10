@@ -1,0 +1,21 @@
+日期：2026-10-26
+类型：真实浏览器失败日志摘录；非完整日志
+环境：本机隔离数据库、合成账号与素材；外部服务关闭
+问题：上传第一项响应延迟期间切换空间，第二项进入新空间；数据库归属断言失败。
+净化：仅提取断言失败内容，移除页面快照，随机标识符改为稳定占位符。
+
+Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 1
+
+@@ -3,8 +3,8 @@
+      "name": "批次素材1.png",
+      "workspace_id": "<isolated-id-1>",
+    },
+    Object {
+      "name": "批次素材2.png",
+-     "workspace_id": "<isolated-id-1>",
++     "workspace_id": "<isolated-id-2>",
+    },
+  ]

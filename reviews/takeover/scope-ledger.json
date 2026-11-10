@@ -1,7 +1,105 @@
 {
   "schemaVersion": 1,
   "recordedDate": "2026-10-16",
-  "phase": "当前实现与隔离合同验证；原站只读观察和外部效果分开记录",
+  "phase": "商品质量改进工程修复通过；4图3视频保存成功但严格视觉验收均拒收，高质量成品目标未完成。",
+  "latestFrontendExperience": {
+    "recordedAt": "2026-11-02T04:10:27.181Z",
+    "scope": "首页横向快速创作、全站创意视觉、导航简化、模型主动核查与另一会话有效修改整合。",
+    "unitTests": {
+      "passed": 1353,
+      "failed": 0,
+      "skipped": 0,
+      "files": 94
+    },
+    "browserTests": {
+      "passed": 190,
+      "total": 190,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "projects": {
+        "desktop": 92,
+        "mobile": 92,
+        "notebook": 5,
+        "tablet": 1
+      },
+      "singleFullRun": true
+    },
+    "browserScope": "Chromium（浏览器内核）；桌面、手机和笔记本、平板模拟视口；未做实机或其他内核。",
+    "sourceFilesVerifiedUnchanged": 417,
+    "staticChecksAndBuild": "类型、规范、格式、差异空白及前后端构建通过。",
+    "verifiedJourneys": [
+      "首页输入、报价、确认、进入项目，图片保存与下载。",
+      "视频播放、刷新恢复及下载。",
+      "六屏详情页策划修改、逐屏确认、生成、原图压缩包与长图。",
+      "草稿回访、全目录搜索、模型切换迟到响应、失效参数和报价过期。"
+    ],
+    "modelCapabilities": {
+      "activeRefreshOnSelection": true,
+      "liveMetadataRequests": 2,
+      "currentGateway": "模型列表已核实；未取得完整参数结构，可选范围来自接入配置。",
+      "parameterProvenanceVisible": true
+    },
+    "runtime": {
+      "origin": "http://127.0.0.1:53810",
+      "previewOrigin": "http://localhost:53850",
+      "backupAndRestoreVerified": true,
+      "databaseTablesUnchanged": 100,
+      "mediaFilesUnchanged": 52,
+      "creditsUnchanged": true,
+      "newGenerationTasks": 0,
+      "externalModelCalls": 0
+    },
+    "qualityBoundary": "本轮生成服务使用本机模拟，未提升真实模型质量结论；完整实时参数受上游接口限制。",
+    "evidence": [
+      "reviews/creative-integration-20261101/DELIVERY.md",
+      "reviews/creative-integration-20261101/checks.json",
+      "reviews/creative-integration-20261101/REVIEW.md",
+      "reviews/creative-integration-20261101/live-metadata-validation.json",
+      "reviews/creative-integration-20261101/runtime-validation.json"
+    ]
+  },
+  "latestHomeCreative": {
+    "recordedAt": "2026-11-02",
+    "scope": "首页快速创作区渐变首屏、输入优先布局、模型默认参数与本地模拟回归。",
+    "unitTests": {
+      "passed": 1371,
+      "failed": 0,
+      "skipped": 0,
+      "files": 95
+    },
+    "browserTests": {
+      "passed": 198,
+      "total": 198,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "projects": {
+        "desktop": 96,
+        "mobile": 96,
+        "notebook": 5,
+        "tablet": 1
+      },
+      "singleFullRun": true
+    },
+    "staticChecksAndBuild": "类型、规范、格式及网页/服务端/任务执行器构建通过。",
+    "sourceFilesVerified": 420,
+    "buildFilesVerified": 105,
+    "backupAndRestore": {
+      "tables": 100,
+      "mediaFiles": 52,
+      "creditsUnchanged": true
+    },
+    "externalModelCalls": 0,
+    "originalEntryUpdated": false,
+    "qualityBoundary": "只使用本地模拟和隔离数据库；真实模型质量未验证。按用户要求没有传输或使用外部密钥。",
+    "evidence": [
+      "reviews/home-creative-20261102/DELIVERY.md",
+      "reviews/home-creative-20261102/checks.json",
+      "reviews/home-creative-20261102/browser-validation.json",
+      "reviews/home-creative-20261102/runtime-validation.json"
+    ]
+  },
   "fieldLabels": {
     "implementationStatus": "实现状态",
     "verificationStatus": "本轮验证状态",
@@ -15,7 +113,12 @@
     "currentOriginalEvidence": "当前原站证据",
     "children": "原子子项",
     "scopeStatus": "原站范围状态",
-    "currentOriginalAssessment": "当前原站证据缺口说明"
+    "currentOriginalAssessment": "当前原站证据缺口说明",
+    "latestQualityReview": "最新商业质量复核；不覆盖历史逐项范围边界",
+    "latestFrontendExperience": "2026年10月30日前端体验重构与隔离主链验收；不提升真实模型商业质量结论",
+    "latestGenerationIntegration": "2026年10月29日生成接入最新事实；只提升明确验收的窄范围",
+    "latestDetailPageRepair": "2026年10月30日节点修复、云端第5版发布与测试额度记录；日期按UTC（协调世界时）",
+    "latestProductQuality": "最新商品质量与交互稳定性改进"
   },
   "rules": [
     "保留F01–F52，数量不代表完成比例。",
@@ -224,9 +327,9 @@
       "name": "电商图片",
       "implementationStatus": "部分实现",
       "verificationStatus": "真实浏览器验证",
-      "blocker": "配置缺失",
+      "blocker": "外部服务限制",
       "semanticEquivalent": null,
-      "assessmentBasis": "本轮读取相关源码；特定内存复现与待验范围分别记录，完整业务效果仍待验收。",
+      "assessmentBasis": "保留旧电商模块范围；第6版单参考商品、6屏3:4的真实策划、编辑确认、生图、刷新恢复及整套导出通过。第6屏文字错误、第5屏标签裁切、构图重复，商业质量未通过；其他比例和多参考图仍仅合同验证。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -250,6 +353,31 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "creation-race 4项、upload-context 4项等覆盖双模式草稿/素材恢复；不代表所有图片模块成图质量。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-10-29详情页升级",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "15节点第4版已发布，云端最终校验以原始输入重放成功且0令牌；原收费策划仍保留失败，免费恢复草稿后编辑确认并生成6张1728×2304图片。真实刷新、保存和750×6000长图压缩包下载通过。第2屏瓶口结构和标题错字不合格，不能称整套商业质量通过；未再收费重试。"
+        },
+        {
+          "kind": "2026-10-30详情页节点修复",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第5版15节点已发布，云端导出与最新覆盖包语义一致；原14条未知项超过12条上限的失败已修为合并最多24条。需求传递、字段边界和成品占位校验已修，1229/1229全量通过；本轮无新增模型调用，完整真实复验待授权。旧失败任务与第2屏结构/错字缺陷保留。"
+        },
+        {
+          "kind": "2026-10-30授权真实复验失败及错误分类修复",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第5版真实复验前两次文字成功，第三逐屏请求因上游处理器过载返回503，未提交图片；第6版阶段/状态错误分类已真实发布并核对15节点云端导出，本机1250/1250通过。第6版尚无真实运行，完整流程未通过，旧图片结构与错字缺陷保留。"
+        },
+        {
+          "kind": "2026-10-30第6版最终真实技术验收",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第6版单参考商品、6屏3:4真实策划、界面编辑确认、生图、刷新恢复和整套导出已通过技术验收；商业质量未通过：第6屏错字、第5屏标签裁切、第1/2/3/6屏构图重复。1250项全量在最后回执摘要修复前通过，修复后49项定向单独记录。"
+        },
+        {
+          "kind": "2026-11-03需求理解与平台策略当前证据",
+          "path": "reviews/creative-intent-20261103/DELIVERY.md",
+          "note": "五平台与通用策略、关键追问、草稿恢复；本轮真实图片和视频各一例技术验收，严格商品保真与全面商业质量未通过。"
         }
       ],
       "historicalEvidence": [
@@ -272,7 +400,8 @@
         }
       ],
       "remaining": [
-        "当前保存、刷新和素材缺失处理已有本地与浏览器验证；真实主体一致性、画面文字和各电商模块成图质量仍待外部验收。"
+        "当前保存、刷新和素材缺失处理已有本地与浏览器验证；真实主体一致性、画面文字和各电商模块成图质量仍待外部验收。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
       ]
     },
     {
@@ -306,6 +435,11 @@
           "kind": "2026-10-19补充真实浏览器验证",
           "path": "reviews/takeover/scope-local-validation.md",
           "note": "同构建8项全部通过，含桌面/手机完整引导2项、营销/自由2项及品牌复验4项；后续营销视觉截图2项单独通过，未调用外部服务。"
+        },
+        {
+          "kind": "2026-11-03需求理解与平台策略当前证据",
+          "path": "reviews/creative-intent-20261103/DELIVERY.md",
+          "note": "五平台与通用策略、关键追问、草稿恢复；本轮真实图片和视频各一例技术验收，严格商品保真与全面商业质量未通过。"
         }
       ],
       "historicalEvidence": [
@@ -366,6 +500,11 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "composer-media 2项配乐/生成音轨保存及 quote-confirmation 2项报价确认；未提交外部模型。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-03需求理解与平台策略当前证据",
+          "path": "reviews/creative-intent-20261103/DELIVERY.md",
+          "note": "五平台与通用策略、关键追问、草稿恢复；本轮真实图片和视频各一例技术验收，严格商品保真与全面商业质量未通过。"
         }
       ],
       "historicalEvidence": [
@@ -655,9 +794,9 @@
       "name": "AI帮写/报价",
       "implementationStatus": "部分实现",
       "verificationStatus": "真实浏览器验证",
-      "blocker": "预算授权",
+      "blocker": "外部服务限制",
       "semanticEquivalent": null,
-      "assessmentBasis": "报价确认真实浏览器通过；帮写独立草稿/请求恢复和免费次数约束为自动合同，真实正文质量与免费运营等价未验。",
+      "assessmentBasis": "报价确认及草稿/请求恢复保留原验证范围；第6版新增真实完整6屏策划、逐屏编辑确认与冻结报价生图通过，原失败保留。真实商用内容质量及原站免费运营等价未因此通过。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -679,6 +818,26 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "quote-confirmation 2项：真实报价区分一项视频任务与按秒计费、配乐与生成音轨；未执行帮写正文生成。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-10-29详情页升级",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "15节点第4版已发布，云端最终校验以原始输入重放成功且0令牌；原收费策划仍保留失败，免费恢复草稿后编辑确认并生成6张1728×2304图片。真实刷新、保存和750×6000长图压缩包下载通过。第2屏瓶口结构和标题错字不合格，不能称整套商业质量通过；未再收费重试。"
+        },
+        {
+          "kind": "2026-10-30详情页节点修复",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第5版15节点已发布，云端导出与最新覆盖包语义一致；原14条未知项超过12条上限的失败已修为合并最多24条。需求传递、字段边界和成品占位校验已修，1229/1229全量通过；本轮无新增模型调用，完整真实复验待授权。旧失败任务与第2屏结构/错字缺陷保留。"
+        },
+        {
+          "kind": "2026-10-30授权真实复验失败及错误分类修复",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第5版真实复验前两次文字成功，第三逐屏请求因上游处理器过载返回503，未提交图片；第6版阶段/状态错误分类已真实发布并核对15节点云端导出，本机1250/1250通过。第6版尚无真实运行，完整流程未通过，旧图片结构与错字缺陷保留。"
+        },
+        {
+          "kind": "2026-10-30第6版最终真实技术验收",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第6版单参考商品、6屏3:4真实策划、界面编辑确认、生图、刷新恢复和整套导出已通过技术验收；商业质量未通过：第6屏错字、第5屏标签裁切、第1/2/3/6屏构图重复。1250项全量在最后回执摘要修复前通过，修复后49项定向单独记录。"
         }
       ],
       "historicalEvidence": [
@@ -702,7 +861,8 @@
       ],
       "remaining": [
         "帮写任务不污染媒体草稿；免费次数原子约束和请求身份持久恢复有回归。",
-        "真实帮写质量、供应商价格与原站免费运营规则等价性仍未验证。"
+        "真实帮写质量、供应商价格与原站免费运营规则等价性仍未验证。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
       ]
     },
     {
@@ -710,9 +870,9 @@
       "name": "会话/方案",
       "implementationStatus": "部分实现",
       "verificationStatus": "真实浏览器验证",
-      "blocker": "预算授权",
+      "blocker": "外部服务限制",
       "semanticEquivalent": null,
-      "assessmentBasis": "当前原站既有项目七段长文本与复制已实见；3方向结构化编辑/采用是明确本地合同与体验改进，非原站编辑能力证明。",
+      "assessmentBasis": "当前原站既有项目七段长文本与复制已实见；3方向结构化编辑/采用是明确本地合同与体验改进，非原站编辑能力证明。 2026-10-29新增独立的2–10屏结构化详情页方案，不以旧3方向替代；隔离6屏编辑确认及刷新恢复已验。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -739,6 +899,26 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "本轮结构采用/长会话另有分片证据；本次完整报告复验创作草稿恢复，不将未列用例称为统一重跑。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-10-29详情页升级",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "15节点第4版已发布，云端最终校验以原始输入重放成功且0令牌；原收费策划仍保留失败，免费恢复草稿后编辑确认并生成6张1728×2304图片。真实刷新、保存和750×6000长图压缩包下载通过。第2屏瓶口结构和标题错字不合格，不能称整套商业质量通过；未再收费重试。"
+        },
+        {
+          "kind": "2026-10-30详情页节点修复",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第5版15节点已发布，云端导出与最新覆盖包语义一致；原14条未知项超过12条上限的失败已修为合并最多24条。需求传递、字段边界和成品占位校验已修，1229/1229全量通过；本轮无新增模型调用，完整真实复验待授权。旧失败任务与第2屏结构/错字缺陷保留。"
+        },
+        {
+          "kind": "2026-10-30授权真实复验失败及错误分类修复",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第5版真实复验前两次文字成功，第三逐屏请求因上游处理器过载返回503，未提交图片；第6版阶段/状态错误分类已真实发布并核对15节点云端导出，本机1250/1250通过。第6版尚无真实运行，完整流程未通过，旧图片结构与错字缺陷保留。"
+        },
+        {
+          "kind": "2026-10-30第6版最终真实技术验收",
+          "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+          "note": "第6版单参考商品、6屏3:4真实策划、界面编辑确认、生图、刷新恢复和整套导出已通过技术验收；商业质量未通过：第6屏错字、第5屏标签裁切、第1/2/3/6屏构图重复。1250项全量在最后回执摘要修复前通过，修复后49项定向单独记录。"
         }
       ],
       "historicalEvidence": [
@@ -767,7 +947,8 @@
       ],
       "remaining": [
         "原站已存在项目显示七段长文和复制；本地结构化编辑/应用是体验改进，不能反推原站具备该操作。",
-        "真实图像分析、多轮质量与新方案生成效果仍未验证。"
+        "真实图像分析、多轮质量与新方案生成效果仍未验证。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
       ],
       "children": [
         {
@@ -978,6 +1159,11 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "media真实本机任务、工作进程重启与历史恢复；提交响应丢失证据另见既有独立记录。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-03需求理解与平台策略当前证据",
+          "path": "reviews/creative-intent-20261103/DELIVERY.md",
+          "note": "五平台与通用策略、关键追问、草稿恢复；本轮真实图片和视频各一例技术验收，严格商品保真与全面商业质量未通过。"
         }
       ],
       "historicalEvidence": [
@@ -4296,9 +4482,1738 @@
     {
       "path": "reviews/takeover/scope-local-validation.md",
       "kind": "10月19日完整引导及营销/自由创作真实浏览器与视觉补验"
+    },
+    {
+      "path": "reviews/takeover/detail-page-upgrade-20261029.md",
+      "kind": "详情页升级：云端发布、隔离6屏浏览器验收及真实效果边界"
+    },
+    {
+      "path": "reviews/creative-intent-20261103/DELIVERY.md",
+      "kind": "本轮需求理解与平台策略、原入口真实媒体样本验收"
+    },
+    {
+      "path": "reviews/product-quality-20261103/DELIVERY.md",
+      "kind": "商品质量工程修复通过、4图3视频严格拒收与最终费用浏览器范围"
     }
   ],
   "historicalFeatureCount": 52,
   "totalFeatureCount": 54,
-  "evidenceReconciledDate": "2026-10-19"
+  "evidenceReconciledDate": "2026-11-03",
+  "latestQualityReview": {
+    "recordedDate": "2026-10-26",
+    "report": "reviews/commercial-20261026/DELIVERY.md",
+    "evidence": "reviews/commercial-20261026/evidence/final-summary.json",
+    "assessment": "受控部署候选；17组问题修复；自动化773项、浏览器126项全通过。真实外部效果和公开运营条件另列未完成。",
+    "featureStatusPolicy": "以下54项的原站语义、原子范围和外部状态保留历史判定；本次质量回归不将其批量提升为完整通过。"
+  },
+  "latestDesignReview": {
+    "recordedDate": "2026-10-26",
+    "report": "reviews/home-redesign-20261026/DESIGN.md",
+    "evidence": "reviews/home-redesign-20261026/evidence/summary.json",
+    "assessment": "首页品牌与创作输入改版完成；受影响浏览器75项及定向自动化14项通过。外部能力与商业运营未验收项保持。",
+    "featureStatusPolicy": "只记录首页及受影响回归，不批量提升54项历史功能的外部状态。"
+  },
+  "latestGenerationIntegration": {
+    "recordedDate": "2026-10-29",
+    "statusDocument": "reviews/takeover/STATUS.md",
+    "assessment": "文字策划、单张纯文字豆包图片与受限视频生成、保存和浏览器呈现已真实验证；仅覆盖本次产物。",
+    "featureStatusPolicy": "原有54项及子项不批量提升；真实生成、云端发布、合同与隔离浏览器分别记录。六屏实际产物已检查，第2屏结构与错字不合格。",
+    "scopeMapping": [
+      {
+        "featureIds": [
+          "F04",
+          "F05"
+        ],
+        "currentResult": "doubao-seedream-5.0-lite（豆包生图模型）一次真实提交，单张2048×2048原图保存、解码、预览和下载通过；光向及严格居中有偏差，旧模型两次429保留为历史。"
+      },
+      {
+        "featureIds": [
+          "F06"
+        ],
+        "currentResult": "单条5秒纯文字无声视频的远端生成、本机文件保存和实际播放已通过；仅限这一条真实产物，其余视频参考、音轨和精确字幕边界保持。"
+      },
+      {
+        "featureIds": [
+          "F08",
+          "F09"
+        ],
+        "currentResult": "Dify（工作流编排平台）文字策划真实返回待确认计划；不是旧三方向结构化方案卡片，不支持自动执行媒体计划。"
+      }
+    ],
+    "runtime": {
+      "previewUrl": "http://127.0.0.1:53810",
+      "isolation": "本机独立真实生成验收实例",
+      "historicalPreviewUrls": [
+        "http://127.0.0.1:5174",
+        "http://127.0.0.1:53775"
+      ],
+      "historicalPreviewPolicy": "历史端口不能称为本轮真实接入入口。",
+      "privateEvidenceDirectory": "platform/var/live-generation-20261029/",
+      "privateEvidencePolicy": "私密配置、响应、账单和媒体仅本机保存，不提交；不将签名媒体地址或密钥写入台账。"
+    },
+    "planning": {
+      "provider": "Dify（工作流编排平台）",
+      "published": true,
+      "nodeCount": 15,
+      "standaloneWebAppEnabled": false,
+      "applicationKeyCount": 1,
+      "credentialStorage": "一把应用API key（接口密钥）加密保存在本机后端，不写入代码或公开证据。",
+      "operation": "text.assist",
+      "applicationJobId": "85a665e4-f185-4890-94b8-3784f66c2d70",
+      "realResult": "旧文字策划分支曾真实成功；新详情页3次Kimi（文本模型）请求真实成功并计费，但末端结构校验失败。3次文字模型请求均成功，但云端末端因14条未知项超过12条上限失败；最终上限已修为24并稳定去重。原任务保留failed（失败），只从原始上游响应免费校验并保存用户草稿，未重发模型，也不宣称云端整套成功。",
+      "limitations": [
+        "仅文字输入。",
+        "不伪装为旧版三方向设计方案。",
+        "不自动提交生图、生视频或配音任务。"
+      ],
+      "applicationName": "映造·商品创作策划",
+      "lastPublish": "原应用第4版已发布；检查清单0项，修复后的最终校验原始输入重放成功，0令牌；没有新增收费文字调用。",
+      "historicalFiveNodeRelease": {
+        "nodeCount": 5,
+        "realResult": "映造界面真实调用成功，返回待确认文字计划。",
+        "lastPublish": "只更新应用描述，没有新增模型调用。"
+      },
+      "publishedVersion": 4,
+      "detailPageMode": {
+        "mode": "detail-page",
+        "defaultScreenCount": 6,
+        "screenCountRange": [
+          2,
+          10
+        ],
+        "modelRequestCount": 3,
+        "output": "plan_json（计划字符串）",
+        "structuredResultType": "detail-page-plan",
+        "legacyBriefOnlyCompatible": true,
+        "singleOutputNode": true,
+        "realModelEffectVerified": false,
+        "paidVerificationBlocker": "本轮3次文字调用已用完；修订后完整策划未再收费重跑，原始末端输入免费重放通过。"
+      }
+    },
+    "image": {
+      "model": "doubao-seedream-5.0-lite",
+      "baseUrl": "https://xingyunyinli.com/v1",
+      "limits": {
+        "input": "纯文字或最多4张商品参考图；真实测试覆盖1张共同参考图与6张3:4竖图，多参考图仅合同验证。",
+        "ratios": [
+          "1:1",
+          "3:4",
+          "2:3",
+          "9:16"
+        ],
+        "resolution": "2K",
+        "sizeByRatio": {
+          "1:1": "2048x2048",
+          "3:4": "1728x2304",
+          "2:3": "1664x2496",
+          "9:16": "1600x2848"
+        },
+        "countPerProviderRequest": 1,
+        "automaticImageSets": false,
+        "detailPageExecution": "确认整套方案后由本机按屏提交，不启用供应商自动组图。"
+      },
+      "credentialStorage": "当前空间加密保存；当前配置已移除旧图片环境凭据。",
+      "readonlyVerification": {
+        "httpStatus": 200,
+        "modelListed": true,
+        "endpoint": "/v1/models"
+      },
+      "realRequestCount": 1,
+      "artifactVerified": true,
+      "billedCny": 0.22,
+      "historicalGptImage2": {
+        "limits": {
+          "input": "纯文字",
+          "ratio": "1:1",
+          "resolution": "1K",
+          "count": 1,
+          "quality": "low（低质量）"
+        },
+        "realRequestCount": 2,
+        "attemptResults": [
+          "第一轮一次：HTTP 429（上游饱和），无图片。",
+          "第二轮一次：HTTP 429（上游饱和），无图片。"
+        ],
+        "artifactVerified": false,
+        "billedUsd": 0,
+        "blocker": "外部服务限制"
+      },
+      "validation": {
+        "adapterGroupPassed": 77,
+        "integrationGroupPassed": 12,
+        "typecheck": true,
+        "build": true,
+        "policy": "合同测试不等同真实模型出图；不同测试组不合并冒充全量。"
+      },
+      "applicationJobId": "cdfddd72-f2ed-4cc7-a356-8a5f85460b25",
+      "applicationState": "succeeded（映造任务成功）",
+      "finalArtifactVerification": {
+        "assetId": "dc1f0b46-507c-427f-b4a2-6ebfa4778889",
+        "format": "PNG（图片格式）",
+        "width": 2048,
+        "height": 2048,
+        "byteSize": 3807966,
+        "sha256Verified": true,
+        "fullDecode": true,
+        "browserPreview": {
+          "complete": true,
+          "width": 1600,
+          "height": 1600,
+          "variant": "preview（预览衍生图）"
+        },
+        "originalDownload": {
+          "verified": true,
+          "byteSize": 3807966,
+          "sha256MatchesOriginal": true,
+          "evidence": "点击原件下载后，本机下载文件摘要与任务原件一致；浏览器工具下载事件捕捉超时，不冒充事件捕捉成功。"
+        },
+        "visualAssessment": "主体符合白杯、浅木桌、米白背景且无可见文字标志水印；光源更像右侧，主体偏下，不是提示词逐项完全通过。",
+        "browserRefreshVerified": true
+      },
+      "recovery": "120秒内原图传输不完整；隔离实例下载总时限改为300秒，固定加密解析服务有限回退，保留安全校验。仅恢复既有结果下载，没有再次提交模型。",
+      "billingEvidence": {
+        "actualModel": "doubao-seedream-5-0-260128",
+        "requestId": "202610291134278714179668268d9d6JjtDIcs9",
+        "chargedCny": 0.22,
+        "quantity": 1,
+        "billingSource": "服务商账户使用日志，按实际1.0倍率结算；不以公开0.8折扣估算替代账单。"
+      },
+      "historicalVerifiedLimits": {
+        "input": "纯文字",
+        "ratio": "1:1",
+        "resolution": "2K",
+        "size": "2048x2048",
+        "count": 1,
+        "automaticImageSets": false
+      },
+      "extendedCapabilityVerification": {
+        "portraitRequests": "合同测试通过，真实效果未验",
+        "referenceImages": "合同测试通过，真实效果未验",
+        "realSingleSquareArtifactEvidenceUnchanged": true
+      }
+    },
+    "video": {
+      "limits": {
+        "input": "纯文字",
+        "durationSeconds": 5,
+        "count": 1,
+        "resolutions": [
+          "480p",
+          "720p"
+        ],
+        "ratios": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "audioEnabled": false,
+        "subtitlesEnabled": false
+      },
+      "initialSubmission": "原生任务地址POST（提交请求）返回HTTP 400（请求被拒绝），没有任务编号。",
+      "correctedSubmissionPath": "/v1/videos",
+      "correctedProtocol": "同源宿主POST（提交请求）接受模型别名；以原生任务地址GET（查询请求）读取同一任务，不再次提交。",
+      "successfulSubmissionCount": 1,
+      "providerTaskId": "task_SeQUarKW32PGcxaBmmtpf0Hk3H5KAHqr",
+      "providerState": "succeeded（服务商报告成功）",
+      "providerElapsedSeconds": 169,
+      "localDownloadState": "已保存。显式public-doh（公共加密域名解析）通过固定Google（谷歌）加密解析取得公网地址，保留私网地址拒绝、TLS（传输层安全协议）验证和连接地址固定。后端重启后仅保存既有结果，没有再次生成。",
+      "artifactVerified": true,
+      "finalArtifactVerification": {
+        "assetId": "7eb43f00-d315-4eb9-ac9c-db170fd5cb59",
+        "byteSize": 656676,
+        "videoCodec": "H.264（视频编码）",
+        "width": 864,
+        "height": 496,
+        "framesPerSecond": 24,
+        "durationSeconds": 5.041667,
+        "audioStreamCount": 0,
+        "sha256Verified": true,
+        "browserPlayback": {
+          "readyState": 4,
+          "error": null,
+          "pausedAfterPlay": false
+        },
+        "boundary": "仅这一个真实产物的保存、完整性与播放通过；请求选项不冒充实际像素尺寸，也不推出其他规格及生成质量均合格。"
+      },
+      "nextVerification": "本轮已有视频产物验收已完成；不再提交新任务。",
+      "applicationState": "succeeded（映造任务成功）"
+    },
+    "budget": {
+      "currency": "CNY（人民币）",
+      "authorizedLimit": 20,
+      "historicalAgentTestCharges": {
+        "textCharges": [
+          0.065088,
+          0.11028
+        ],
+        "imageCharge": 0.22,
+        "videoPrecharge": 2.2097,
+        "videoAdjustment": 0.119622,
+        "videoTotal": 2.329322,
+        "total": 2.72469
+      },
+      "userSubsequentCharges": {
+        "image": 0.22,
+        "video": 4.968,
+        "videoAdjustment": 0.0414,
+        "total": 5.2294,
+        "source": "用户随后自行提交任务的服务商账单核对，不属于新增代理代测。"
+      },
+      "totalRecordedCharge": 12.452666,
+      "remainingWithinRecordedLimit": 7.547334,
+      "currentDetailPageUpgradeCharge": 2.304468,
+      "authorizedAdditionalPaidSubmissionsRemaining": 0,
+      "policy": "初始授权1套策划最多3次文字和6张图，随后另准1套最多3次文字；保持本轮≤5元、累计≤20元。实际2套/6次文字（1次503）、6张图全部用完；本轮2.304468元、累计12.452666元，不再追加调用。",
+      "previousUnreconciledNote": "2.72469元仅为此前代测历史账单。用户随后自行提交的两条任务已恢复产物，但账单未补核；本次恢复0次新增收费生成。",
+      "recordedPhase": "第6版完整策划与六屏生图、刷新恢复和下载完成；最终按实际账单核对，技术用例通过而商业质量未通过。",
+      "currentDetailPageAuthorization": {
+        "initialMaxTextRequests": 3,
+        "supplementalMaxTextRequests": 3,
+        "maxTextRequests": 6,
+        "maxImageRequests": 6,
+        "roundLimit": 5,
+        "cumulativeLimit": 20,
+        "attemptedTextRequests": 6,
+        "textRequestsCharged": 5,
+        "textCharge": 0.984468,
+        "imageRequestsAtRecordedPhase": 6,
+        "imageChargeAtRecordedPhase": 1.32,
+        "remainingTextRequests": 0,
+        "remainingImageRequests": 0,
+        "noFurtherSubmissions": true
+      },
+      "historicalDetailPageAuthorization": {
+        "maxTextRequests": 3,
+        "maxImageRequests": 6,
+        "roundLimit": 5,
+        "cumulativeLimit": 20,
+        "textRequestsCharged": 3,
+        "textCharge": 0.874108,
+        "imageRequestsAtRecordedPhase": 6,
+        "imageChargeAtRecordedPhase": 1.32
+      },
+      "historicalDetailPageUpgradeCharge": 2.194108,
+      "detailPageRevalidation": {
+        "status": "第6版技术用例通过，商业质量不通过",
+        "authorization": {
+          "initialMaxTextRequests": 3,
+          "supplementalMaxTextRequests": 3,
+          "maxImages": 6,
+          "roundLimitCny": 5,
+          "cumulativeLimitCny": 20
+        },
+        "cloudVersion": 6,
+        "planningJobId": "1aa3fe87-e923-423c-9ad8-f655d1a3de45",
+        "cloudRunId": "0c17cb37-65c9-4270-bbb2-8b39807ba91b",
+        "imageJobId": "0cc0e70d-1521-4209-88c6-d5442a7d4a3d",
+        "cloudElapsedSeconds": 137.327,
+        "imageElapsedSeconds": 228.989,
+        "workflowSubmissions": 2,
+        "attemptedTextHttpCalls": 6,
+        "successfulTextHttpCalls": 5,
+        "failedTextHttpCalls": 1,
+        "imageCalls": 6,
+        "automaticRetries": 0,
+        "failedTextChargeCny": 0.15302,
+        "successfulTextChargeCny": 0.831448,
+        "imageChargeCny": 1.32,
+        "roundChargeCny": 2.304468,
+        "priorCumulativeChargeCny": 10.148198,
+        "cumulativeChargeCny": 12.452666,
+        "fullRealFlowRevalidated": true,
+        "technicalFlowPassed": true,
+        "commercialQualityPassed": false,
+        "scope": "单参考商品、6屏3:4、编辑确认、真实生图、刷新恢复、整套导出；不代表所有输入与商用品质",
+        "remainingTextRequests": 0,
+        "remainingImageRequests": 0,
+        "noFurtherSubmissions": true,
+        "workspaceAvailableCredits": 10000,
+        "workspaceReservedCredits": 0,
+        "privateReport": "platform/var/dify-detail-page-v1/repair-20261030-v6/real-result/acceptance-receipt.json",
+        "privateBillingReport": "platform/var/dify-detail-page-v1/repair-20261030/paid-acceptance.json"
+      },
+      "failedRevalidationCheckpoint": {
+        "status": "已获授权并执行；逐屏请求上游503，整套失败，未生图",
+        "authorizedAt": "2026-10-30T06:05:59.909515+00:00",
+        "authorization": {
+          "maxTextRequests": 3,
+          "maxImages": 6,
+          "roundLimitCny": 5,
+          "cumulativeLimitCny": 20
+        },
+        "cloudVersion": 5,
+        "planningJobId": "1430e40e-3856-4cb5-be4b-4549c411d670",
+        "projectId": "76cfbb92-c1fd-4eb8-b61d-d77872024285",
+        "cloudRunId": "cbccec2b-7c40-45cf-b2a0-c31ec1c42935",
+        "workflowSubmissions": 1,
+        "attemptedTextHttpCalls": 3,
+        "successfulTextCalls": 2,
+        "failedStage": "screens（逐屏策划）",
+        "failedHttpStatus": 503,
+        "failedRequestDurationMs": 235,
+        "upstreamCode": "system_cpu_overloaded",
+        "upstreamCpuPercent": 99.7,
+        "imageCalls": 0,
+        "automaticRetries": 0,
+        "chargesCny": [
+          0.07236,
+          0.08066
+        ],
+        "roundChargeCny": 0.15302,
+        "priorCumulativeChargeCny": 10.148198,
+        "cumulativeChargeCny": 10.301218,
+        "fullRealFlowRevalidated": false,
+        "remainingTextRequests": 0,
+        "remainingImageRequests": 6,
+        "imageSubmissionBlockedByFailedPlan": true,
+        "workspaceAvailableCredits": 10000,
+        "workspaceReservedCredits": 0,
+        "privateReport": "platform/var/dify-detail-page-v1/repair-20261030/paid-acceptance.json",
+        "nextTextAuthorization": "再次完整策划需追加最多3次文字调用授权；尚未执行"
+      }
+    },
+    "validation": {
+      "fullRun": {
+        "total": 943,
+        "passed": 942,
+        "failed": 1,
+        "failure": "旧Wan（万相）默认模型选择断言失败，随后已修。",
+        "allPassedRerunConfirmed": false
+      },
+      "targetedAfterFix": {
+        "passed": 94,
+        "total": 94
+      },
+      "mediaKindRegression": {
+        "fix": "修复音频伪装视频的媒体类型漏洞，新增一项回归。",
+        "mediaGroup": {
+          "passed": 21,
+          "total": 21
+        },
+        "compatibilityGroup": {
+          "passed": 18,
+          "total": 18
+        }
+      },
+      "countPolicy": "各轮、各组单独记录，不相加冒充当前全量通过；网络与存储组精确修正后46/46通过，不能替代全量重跑。",
+      "networkStorageGroup": {
+        "firstRun": {
+          "total": 46,
+          "passed": 45,
+          "failed": 1,
+          "failure": "旧下载调用参数预期未更新域名解析选项。"
+        },
+        "fix": "已精确更新预期，包含域名解析选项。",
+        "rerunResult": {
+          "total": 46,
+          "passed": 46,
+          "failed": 0,
+          "privateReport": "platform/var/live-generation-20261029/recovery-regression-fixed-results.json",
+          "reportPolicy": "私密验收报告不提交。"
+        }
+      },
+      "imageDownloadRecovery": {
+        "downloadDnsTimeoutGroup": {
+          "total": 49,
+          "passed": 49
+        },
+        "gatewayIntegration": {
+          "initialPassed": 11,
+          "initialTotal": 12,
+          "failure": "视频测试缺少既有ffmpeg（媒体工具）路径。",
+          "rerunPassed": 12,
+          "rerunTotal": 12
+        },
+        "runnerLintAndFormat": true,
+        "defaultTimeoutMs": 120000,
+        "isolatedRuntimeTimeoutMs": 300000,
+        "newGenerationSubmissionsDuringRecovery": 0
+      }
+    },
+    "codeEvidence": [
+      "platform/src/server/providers/dify.ts",
+      "platform/src/server/providers/openai.ts",
+      "platform/src/server/providers/seedance.ts",
+      "platform/tests/dify-provider.test.ts",
+      "platform/tests/openai-gateway.test.ts",
+      "platform/tests/seedance-provider.test.ts",
+      "platform/tests/gateway-integration.test.ts",
+      "platform/tests/generation-media-kind.test.ts",
+      "platform/tests/media-download-public-doh.test.ts",
+      "platform/tests/media-download.test.ts"
+    ],
+    "remaining": [
+      "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。",
+      "人物或品牌专用语义、其他自动串联能力以及其余供应商、原站语义、支付、身份和消息送达的原有未验范围保持。"
+    ]
+  },
+  "latestWorkbenchRepair": {
+    "recordedDate": "2026-10-29",
+    "assessment": "两条用户任务因查询或保存网络中断而暂停；现已安全恢复既有结果，工作台状态与作品展示已改进。",
+    "originalJobs": [
+      "36026af8-8e5c-404c-a9f8-88bf06f9e9dd",
+      "cb995f50-da84-4097-a6c8-1a1ef0597668"
+    ],
+    "applicationStates": [
+      "succeeded",
+      "succeeded"
+    ],
+    "assets": [
+      "40848c3b-ed2e-4a1b-84e7-507ecd10f469",
+      "7b385bec-bcaf-4fb8-a9d3-8d50e05b350a"
+    ],
+    "repairGenerationSubmissions": 0,
+    "fullMediaDecodeAndHashVerified": true,
+    "videoPlaybackVerified": true,
+    "statusRecovery": {
+      "existingResultOnly": true,
+      "duplicateSafe": true,
+      "unknownSubmissionNotResubmitted": true,
+      "missingMetadataNotResubmitted": true,
+      "pollingPauseAfterMinutes": 30
+    },
+    "browserVerified": [
+      "暂停结果恢复",
+      "提交立即显示任务",
+      "真实阶段与耗时",
+      "等待动画",
+      "自动成功呈现",
+      "失败原因与操作",
+      "跨项目任务入口",
+      "手机结果跳转和无横向溢出",
+      "真实视频播放"
+    ],
+    "verificationLimits": [
+      "未单独在浏览器注入无关读取接口延迟。",
+      "外部网络可再次中断，未声称永久稳定。",
+      "单条产物恢复不等于所有模型能力或商业功能验收。"
+    ],
+    "validation": {
+      "backendPassed": 68,
+      "backendTotal": 68,
+      "presentationPassed": 27,
+      "presentationTotal": 27,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "build": true,
+      "fullSuiteRerun": false
+    },
+    "privateEvidence": "platform/var/live-generation-20261029/workbench-repair-evidence.json",
+    "runtime": "http://127.0.0.1:53810/workbench",
+    "bootAutostartConfigured": false
+  },
+  "latestDetailPageUpgrade": {
+    "recordedDate": "2026-10-29",
+    "report": "reviews/takeover/detail-page-upgrade-20261029.md",
+    "assessment": "第6版单参考商品、6屏3:4真实策划、界面编辑确认、生图、刷新恢复和整套导出已通过技术验收；商业质量未通过：第6屏错字、第5屏标签裁切、第1/2/3/6屏构图重复。1250项全量在最后回执摘要修复前通过，修复后49项定向单独记录。",
+    "scope": {
+      "defaultScreenCount": 6,
+      "screenCountRange": [
+        2,
+        10
+      ],
+      "ratios": [
+        "3:4",
+        "2:3",
+        "9:16"
+      ],
+      "userConfirmationBeforeImageQuote": true,
+      "structuredPlanPersisted": true,
+      "planningReceivesImages": false,
+      "providerAutomaticImageSets": false
+    },
+    "dify": {
+      "published": true,
+      "publishedVersion": 6,
+      "nodeCount": 15,
+      "checklistErrors": 0,
+      "detailPageModelRequests": 3,
+      "legacyModelRequests": 1,
+      "branchesMutuallyExclusive": true,
+      "singleOutput": "plan_json",
+      "startAndNormalizeSingleNodePassed": true,
+      "singleNodeModelTokens": 0,
+      "cacheIssue": "导入后旧brief调试缓存使单步表单缺项；编辑原字段原值保存即恢复，未改paragraph类型。",
+      "historicalImportFailure": "首版双结束节点重复plan_json；改变量聚合器和唯一结束节点后清单0。",
+      "runRecovery": "收到工作流编号即持租围栏事务保存；继续消费事件流，断线或重启只查询原编号，未获编号不自动重发。",
+      "realTextRequestsSucceeded": 3,
+      "cloudWorkflowSucceeded": true,
+      "terminalValidationFailure": {
+        "mergedUnknownCount": 14,
+        "previousLimit": 12,
+        "repairedLimit": 24,
+        "perStageLimit": 12,
+        "stableExactDeduplication": true,
+        "requestTokenBudgetsChanged": false
+      },
+      "localRecovery": {
+        "originalJobStatus": "failed",
+        "usesOriginalProviderResponses": true,
+        "newModelRequests": 0,
+        "savedAsUserDraft": true,
+        "requiresExplicitAdoptionAndScreenConfirmation": true,
+        "cloudSuccessNotClaimed": true
+      },
+      "finishedOutputPromptBoundary": "第6版真实6屏方案已通过结构与成品边界；界面确认时第3屏玻璃质感改为透明瓶壁质感，第5屏改为完整标签取景。真实成图仍有错字、裁切和构图重复，不能将提示词通过等同于商用效果通过。",
+      "repairedFinalNodeReplay": {
+        "succeeded": true,
+        "usesOriginalInput": true,
+        "modelTokens": 0,
+        "durationSeconds": 0.098,
+        "fullPaidWorkflowRerun": false,
+        "laterFullPaidWorkflowEvidence": "fullWorkflowSuccess（后续完整运行成功）"
+      },
+      "historicalPublishedVersions": [
+        4,
+        5
+      ],
+      "cloudExportVerification": "platform/var/dify-detail-page-v1/repair-20261030-v6/cloud-package-verified.json",
+      "fullWorkflowSuccess": {
+        "cloudVersion": 6,
+        "jobId": "1aa3fe87-e923-423c-9ad8-f655d1a3de45",
+        "cloudRunId": "0c17cb37-65c9-4270-bbb2-8b39807ba91b",
+        "elapsedSeconds": 137.327,
+        "modelRequestsSucceeded": 3,
+        "attempts": 1,
+        "historicalFailuresRetained": true
+      }
+    },
+    "browserAcceptance": {
+      "environment": "独立SQLite与媒体目录、本机模拟供应商",
+      "screenCount": 6,
+      "verified": [
+        "方案编辑确认",
+        "逐屏进度",
+        "6张图片保存",
+        "刷新恢复",
+        "整套ZIP导出"
+      ],
+      "archive": {
+        "originalImageCount": 6,
+        "longImageWidth": 750,
+        "longImageHeight": 4500,
+        "manifestIncluded": true
+      },
+      "realModelGeneration": false,
+      "paidCharge": 0
+    },
+    "contractOnlyCapabilities": [
+      "Seedream的2:3与9:16竖图比例",
+      "Seedream的2–4张共同参考图",
+      "远程运行编号持久化及断线后同编号查询恢复"
+    ],
+    "runtime": {
+      "url": "http://127.0.0.1:53810/detail-pages",
+      "pidAtVerification": 96420,
+      "onlineBackupVerified": true,
+      "mediaAndRestoreVerified": true,
+      "pidIsHistoricalObservation": true,
+      "latestRestartEvidence": "platform/var/detail-page-ui-acceptance/repair-final-runtime.json"
+    },
+    "validation": {
+      "fullSuiteStatus": "通过",
+      "total": 1250,
+      "passed": 1250,
+      "failed": 0,
+      "skipped": 0,
+      "typecheck": "passed",
+      "eslint": "passed",
+      "projectFormatCheck": "passed",
+      "report": "platform/var/detail-page-ui-acceptance/repair-final-tests.json",
+      "previousCountsNotInherited": true,
+      "historicalValidationRetainedIn": [
+        "previousValidation",
+        "validationBeforeV6"
+      ],
+      "build": "passed",
+      "scope": "1250项完整运行发生在最终前端回执摘要修复前；修复后仅下列定向检查，不声称已再次全量。",
+      "postFullSuiteReceiptSummaryFix": {
+        "total": 49,
+        "passed": 49,
+        "failed": 0,
+        "typecheck": true,
+        "lint": true,
+        "build": true,
+        "fullSuiteRerun": false,
+        "privateReport": "platform/var/detail-page-ui-acceptance/receipt-summary-green.json",
+        "privateBuildLog": "platform/var/detail-page-ui-acceptance/receipt-summary-build.log"
+      }
+    },
+    "remaining": [
+      "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。",
+      "原站其他能力与多商品质量不能由单个用例推出通过"
+    ],
+    "codeEvidence": [
+      "platform/src/contracts/detail-page.ts",
+      "platform/src/server/providers/dify.ts",
+      "platform/src/server/providers/openai.ts",
+      "platform/src/server/tasks/detail-pages.ts",
+      "platform/src/server/tasks/detail-page-export.ts",
+      "platform/src/web/pages/DetailPageStudio.tsx",
+      "platform/workflows/dify/detail-page-v1/detail-page-v1.yaml",
+      "platform/tests/detail-pages.test.ts",
+      "platform/tests/dify-detail-page.test.ts",
+      "platform/tests/dify-workflow-nodes.test.ts",
+      "platform/tests/detail-page-ui-state.test.ts"
+    ],
+    "costAtTextOnlyCheckpoint": {
+      "authorization": {
+        "maxTextRequests": 3,
+        "maxImageRequests": 6,
+        "roundLimit": 5,
+        "cumulativeLimit": 20,
+        "textRequestsCharged": 3,
+        "textCharge": 0.874108,
+        "imageRequestsAtRecordedPhase": 0,
+        "imageChargeAtRecordedPhase": 0
+      },
+      "roundCharge": 0.874108,
+      "cumulativeCharge": 8.828198,
+      "imagesSubmitted": false,
+      "phaseBoundary": "仅文字阶段核账，后续图片单独核对"
+    },
+    "realImageAcceptance": {
+      "projectId": "76cfbb92-c1fd-4eb8-b61d-d77872024285",
+      "jobId": "0cc0e70d-1521-4209-88c6-d5442a7d4a3d",
+      "referenceImageCount": 1,
+      "referenceSha256": "2e4bae6dfd130aaa72342f7b99be32a906bb5ee6ea0688ac21842609dabcbfb9",
+      "referenceMatchesOriginal": true,
+      "screenCount": 6,
+      "allSaved": true,
+      "width": 1728,
+      "height": 2304,
+      "durationSeconds": 228.989,
+      "attemptsPerScreen": 1,
+      "refreshVerified": true,
+      "downloadedArchiveVerified": true,
+      "exportedOriginalHashesMatched": 6,
+      "manifestIncluded": true,
+      "longImage": {
+        "width": 750,
+        "height": 6000
+      },
+      "technicalFlowPassed": true,
+      "qualityAccepted": false,
+      "qualityFindings": [
+        "第6屏留白处生成成留白外",
+        "第5屏完整标签下缘被裁切",
+        "第1、2、3、6屏构图重复，第3屏近景变化不足"
+      ],
+      "privateEvidenceDirectory": "platform/var/dify-detail-page-v1/repair-20261030-v6/real-result/"
+    },
+    "finalCost": {
+      "failedTextRound": 0.15302,
+      "successfulTextCharges": [
+        0.094708,
+        0.21124,
+        0.5255
+      ],
+      "successfulTextTotal": 0.831448,
+      "textHttpAttempts": 6,
+      "textWorkflowSubmissions": 2,
+      "textHttp503Count": 1,
+      "imageRequestCount": 6,
+      "imageChargeEach": 0.22,
+      "imageTotal": 1.32,
+      "roundTotal": 2.304468,
+      "cumulativeTotal": 12.452666,
+      "roundLimit": 5,
+      "cumulativeLimit": 20,
+      "additionalPaidSubmissionsRemaining": 0,
+      "verifiedFromProviderBillingUi": true
+    },
+    "previousValidation": {
+      "fullSuiteStatus": "通过",
+      "total": 1164,
+      "passed": 1164,
+      "failed": 0,
+      "skipped": 0,
+      "testFiles": 83,
+      "uiDraftTests": 10,
+      "workflowNodeTests": 26,
+      "typecheck": "passed",
+      "eslint": "passed",
+      "projectFormatCheck": "passed",
+      "diffWhitespaceCheck": "passed",
+      "report": "platform/var/detail-page-ui-acceptance/full-test-results-handoff.json",
+      "previousCountsNotInherited": true,
+      "postFullSuiteUiStatusRegression": {
+        "tests": 15,
+        "passed": 15,
+        "newRegressionCount": 5,
+        "report": "platform/var/detail-page-ui-acceptance/final-ui-status-tests.json",
+        "separateFromFullSuite": true
+      }
+    },
+    "validationBeforeV6": {
+      "fullSuiteStatus": "通过",
+      "total": 1229,
+      "passed": 1229,
+      "failed": 0,
+      "skipped": 0,
+      "typecheck": "passed",
+      "eslint": "passed",
+      "projectFormatCheck": "passed",
+      "report": "platform/var/detail-page-ui-acceptance/repair-before-v6-2026-10-30T06-16-45.086Z/repair-final-tests.json",
+      "previousCountsNotInherited": true,
+      "historicalValidationRetainedIn": "previousValidation"
+    },
+    "previousRealImageAcceptance": {
+      "projectId": "6362c342-2831-43f5-9c57-a325533f476d",
+      "jobId": "2f6fa71d-e640-4c61-80ab-40bda14a010b",
+      "referenceImageCount": 1,
+      "screenCount": 6,
+      "allSaved": true,
+      "width": 1728,
+      "height": 2304,
+      "durationSeconds": 176.206,
+      "attemptsPerScreen": 1,
+      "recoveryFailures": 0,
+      "refreshVerified": true,
+      "downloadedArchiveVerified": true,
+      "longImage": {
+        "width": 750,
+        "height": 6000
+      },
+      "qualityAccepted": false,
+      "qualityFindings": [
+        "第2屏商品结构改变：按压泵变敞口螺纹瓶",
+        "第2屏标题错字：质地特导",
+        "第1屏标题字体与其余屏不一致"
+      ],
+      "privateEvidenceDirectory": "platform/var/detail-page-ui-acceptance/real-result/"
+    },
+    "previousFinalCost": {
+      "textCharges": [
+        0.052608,
+        0.08648,
+        0.73502
+      ],
+      "imageRequestCount": 6,
+      "imageChargeEach": 0.22,
+      "imageTotal": 1.32,
+      "roundTotal": 2.194108,
+      "cumulativeTotal": 10.148198,
+      "roundLimit": 5,
+      "cumulativeLimit": 20,
+      "additionalPaidSubmissionsRemaining": 0,
+      "verifiedFromProviderBillingUi": true
+    }
+  },
+  "latestTaskJourneyReview": {
+    "date": "2026-10-29",
+    "entry": "http://127.0.0.1:53810/tasks",
+    "statusDocument": "reviews/takeover/STATUS.md",
+    "privateEvidence": "platform/var/detail-page-ui-acceptance/journey-acceptance.json",
+    "newExternalCalls": 0,
+    "newExternalCostCny": 0,
+    "browserValidated": [
+      "home-submit-navigation",
+      "focused-task-refresh",
+      "explicit-failure",
+      "confirmed-retry",
+      "retry-success-original-failure-retained",
+      "drawer-close-on-navigation",
+      "detail-page-six-screen-destination",
+      "filter-summary-and-reset",
+      "live-history-read"
+    ],
+    "limits": [
+      "storage-fault-and-response-loss-not-injected-in-browser",
+      "no-new-model-quality-claim"
+    ],
+    "automation": {
+      "passed": 1191,
+      "failed": 0,
+      "report": "platform/var/detail-page-ui-acceptance/journey-full-tests-unrestricted.json",
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "build": true
+    },
+    "screenshot": "platform/var/detail-page-ui-acceptance/task-center-final.jpg"
+  },
+  "latestDetailPageRepair": {
+    "recordedDate": "2026-10-30",
+    "dateTimezone": "UTC（协调世界时）",
+    "report": "reviews/takeover/detail-page-upgrade-20261029.md",
+    "assessment": "第6版单参考商品、6屏3:4真实策划、界面编辑确认、生图、刷新恢复和整套导出已通过技术验收；商业质量未通过：第6屏错字、第5屏标签裁切、第1/2/3/6屏构图重复。1250项全量在最后回执摘要修复前通过，修复后49项定向单独记录。",
+    "originalFailure": {
+      "modelRequestsSucceeded": 3,
+      "mergedUnknownCount": 14,
+      "previousFinalLimit": 12,
+      "finalLimit": 24,
+      "perStageLimit": 12,
+      "originalFailedJobPreserved": true
+    },
+    "fixes": [
+      "原始brief（文字简报）传入视觉与逐屏阶段；商品事实仍须逐字溯源",
+      "用途300、最多4条各150文案、提示词1000与后端字段边界统一",
+      "UTF-16（字符串编码）计数、首尾空白与编号规范化一致",
+      "节点及后端拒绝明确内部占位文字；不修改历史计划读取合同",
+      "短中文文案与商品瓶口、泵头、瓶盖、标签、比例一致性提示加强"
+    ],
+    "cloudPublication": {
+      "version": 6,
+      "nodeCount": 15,
+      "checklistErrors": 0,
+      "publishedViaUi": true,
+      "freshExportMatched": true,
+      "comparedNodeFields": [
+        "code",
+        "variables",
+        "outputs",
+        "url",
+        "body",
+        "headers",
+        "timeout",
+        "retry_config"
+      ],
+      "environmentIdsRetained": true,
+      "privateReport": "platform/var/dify-detail-page-v1/repair-20261030-v6/cloud-package-verified.json",
+      "secretValuesExcluded": true,
+      "secretExportRepresentation": "empty strings（空字符串）",
+      "privateEvidenceDirectory": "platform/var/dify-detail-page-v1/repair-20261030-v6/",
+      "screenshots": [
+        "dify-published-v6-20261030.jpg",
+        "dify-round-bill-20261030.jpg",
+        "yingzao-10000-failed-receipt-20261030.jpg"
+      ]
+    },
+    "regression": {
+      "oldPackageNewCases": {
+        "total": 39,
+        "failed": 10
+      },
+      "targetedAfterFix": {
+        "total": 104,
+        "passed": 104
+      },
+      "fullSuite": {
+        "total": 1250,
+        "passed": 1250,
+        "failed": 0,
+        "skipped": 0,
+        "privateReport": "platform/var/detail-page-ui-acceptance/repair-final-tests.json",
+        "scope": "最终前端回执摘要修复之前的全量；修复后49项定向另记"
+      },
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "originalResponseReplay": {
+        "screenCount": 6,
+        "unknownCount": 14,
+        "nodeAndBackendContractPassed": true,
+        "newModelCalls": 0
+      },
+      "fullSuiteBeforeV6": {
+        "total": 1229,
+        "passed": 1229,
+        "failed": 0,
+        "skipped": 0,
+        "privateReport": "platform/var/detail-page-ui-acceptance/repair-before-v6-2026-10-30T06-16-45.086Z/repair-final-tests.json"
+      },
+      "httpStageTargetedAfterFix": {
+        "total": 136,
+        "passed": 136,
+        "privateReport": "platform/var/dify-detail-page-v1/http-stage-after-fix.json"
+      },
+      "build": true,
+      "postFullSuiteReceiptSummaryFix": {
+        "total": 49,
+        "passed": 49,
+        "failed": 0,
+        "typecheck": true,
+        "lint": true,
+        "build": true,
+        "fullSuiteRerun": false,
+        "privateReport": "platform/var/detail-page-ui-acceptance/receipt-summary-green.json",
+        "privateBuildLog": "platform/var/detail-page-ui-acceptance/receipt-summary-build.log"
+      }
+    },
+    "runtime": {
+      "onlineBackupVerified": true,
+      "mediaReferencesVerified": 26,
+      "restoreVerified": true,
+      "actualDatabasePathVerified": true,
+      "jobCountBeforeAndAfter": 10,
+      "activeJobsBeforeAndAfter": 0,
+      "modelCallsOnStartup": 0,
+      "privateReport": "platform/var/detail-page-ui-acceptance/repair-final-runtime.json",
+      "taskStateDigestUnchanged": true,
+      "pidAtVerification": 96420,
+      "snapshotPhase": "第二轮策划和图片提交之前的重启快照，10条任务是当时计数，不是最终任务总数"
+    },
+    "testCredits": {
+      "before": 4,
+      "after": 10000,
+      "available": 10000,
+      "reserved": 0,
+      "ledgerKind": "grant（赠送）",
+      "ledgerAmount": 9996,
+      "ledgerEntriesAdded": 1,
+      "onlineBackupAndMediaRestoreVerified": true,
+      "providerCalls": 0,
+      "paymentsCreated": 0,
+      "isProviderCurrency": false,
+      "privateReceipt": "platform/var/live-generation-20261029/test-credit-10000-receipt.json",
+      "postAcceptanceTopUp": {
+        "before": 9950,
+        "granted": 50,
+        "after": 10000,
+        "reserved": 0,
+        "ledgerKind": "grant（赠送）",
+        "ledgerEntriesAdded": 1,
+        "backupFiles": 46,
+        "mediaFiles": 44,
+        "onlineBackupAndRestoreVerified": true,
+        "providerCalls": 0,
+        "paymentsCreated": 0,
+        "privateReceipt": "platform/var/live-generation-20261029/test-credit-10000-post-acceptance-receipt.json"
+      }
+    },
+    "paidRevalidation": {
+      "status": "第6版技术用例通过，商业质量不通过",
+      "authorization": {
+        "initialMaxTextRequests": 3,
+        "supplementalMaxTextRequests": 3,
+        "maxImages": 6,
+        "roundLimitCny": 5,
+        "cumulativeLimitCny": 20
+      },
+      "cloudVersion": 6,
+      "planningJobId": "1aa3fe87-e923-423c-9ad8-f655d1a3de45",
+      "cloudRunId": "0c17cb37-65c9-4270-bbb2-8b39807ba91b",
+      "imageJobId": "0cc0e70d-1521-4209-88c6-d5442a7d4a3d",
+      "cloudElapsedSeconds": 137.327,
+      "imageElapsedSeconds": 228.989,
+      "workflowSubmissions": 2,
+      "attemptedTextHttpCalls": 6,
+      "successfulTextHttpCalls": 5,
+      "failedTextHttpCalls": 1,
+      "imageCalls": 6,
+      "automaticRetries": 0,
+      "failedTextChargeCny": 0.15302,
+      "successfulTextChargeCny": 0.831448,
+      "imageChargeCny": 1.32,
+      "roundChargeCny": 2.304468,
+      "priorCumulativeChargeCny": 10.148198,
+      "cumulativeChargeCny": 12.452666,
+      "fullRealFlowRevalidated": true,
+      "technicalFlowPassed": true,
+      "commercialQualityPassed": false,
+      "scope": "单参考商品、6屏3:4、编辑确认、真实生图、刷新恢复、整套导出；不代表所有输入与商用品质",
+      "remainingTextRequests": 0,
+      "remainingImageRequests": 0,
+      "noFurtherSubmissions": true,
+      "workspaceAvailableCredits": 10000,
+      "workspaceReservedCredits": 0,
+      "privateReport": "platform/var/dify-detail-page-v1/repair-20261030-v6/real-result/acceptance-receipt.json",
+      "privateBillingReport": "platform/var/dify-detail-page-v1/repair-20261030/paid-acceptance.json"
+    },
+    "remaining": [
+      "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+    ],
+    "runtimeBeforeV6": {
+      "onlineBackupVerified": true,
+      "mediaReferencesVerified": 26,
+      "restoreVerified": true,
+      "actualDatabasePathVerified": true,
+      "jobCountBeforeAndAfter": 9,
+      "activeJobsBeforeAndAfter": 0,
+      "modelCallsOnStartup": 0,
+      "privateReport": "platform/var/detail-page-ui-acceptance/repair-before-v6-2026-10-30T06-16-45.086Z/repair-final-runtime.json"
+    },
+    "cloudPublicationBeforeV6": {
+      "version": 5,
+      "nodeCount": 15,
+      "checklistErrors": 0,
+      "publishedViaUi": true,
+      "freshExportMatched": true,
+      "comparedNodeFields": [
+        "code",
+        "variables",
+        "outputs",
+        "url",
+        "body",
+        "headers",
+        "timeout",
+        "retry_config"
+      ],
+      "environmentIdsRetained": true,
+      "secretsMasked": true,
+      "privateReport": "platform/var/dify-detail-page-v1/repair-20261030/cloud-package-verified.json"
+    },
+    "httpStageErrorClassification": {
+      "implemented": true,
+      "publishedVersion": 6,
+      "fix": "三阶段有限HTTP（网络请求）状态白名单；逐屏503映射为模型服务繁忙，不透传响应体，保留旧通用码，无自动重试",
+      "fullRealRunAfterPublication": true
+    },
+    "failedPaidRevalidation": {
+      "status": "已获授权并执行；逐屏请求上游503，整套失败，未生图",
+      "authorizedAt": "2026-10-30T06:05:59.909515+00:00",
+      "authorization": {
+        "maxTextRequests": 3,
+        "maxImages": 6,
+        "roundLimitCny": 5,
+        "cumulativeLimitCny": 20
+      },
+      "cloudVersion": 5,
+      "planningJobId": "1430e40e-3856-4cb5-be4b-4549c411d670",
+      "projectId": "76cfbb92-c1fd-4eb8-b61d-d77872024285",
+      "cloudRunId": "cbccec2b-7c40-45cf-b2a0-c31ec1c42935",
+      "workflowSubmissions": 1,
+      "attemptedTextHttpCalls": 3,
+      "successfulTextCalls": 2,
+      "failedStage": "screens（逐屏策划）",
+      "failedHttpStatus": 503,
+      "failedRequestDurationMs": 235,
+      "upstreamCode": "system_cpu_overloaded",
+      "upstreamCpuPercent": 99.7,
+      "imageCalls": 0,
+      "automaticRetries": 0,
+      "chargesCny": [
+        0.07236,
+        0.08066
+      ],
+      "roundChargeCny": 0.15302,
+      "priorCumulativeChargeCny": 10.148198,
+      "cumulativeChargeCny": 10.301218,
+      "fullRealFlowRevalidated": false,
+      "remainingTextRequests": 0,
+      "remainingImageRequests": 6,
+      "imageSubmissionBlockedByFailedPlan": true,
+      "workspaceAvailableCredits": 10000,
+      "workspaceReservedCredits": 0,
+      "privateReport": "platform/var/dify-detail-page-v1/repair-20261030/paid-acceptance.json",
+      "nextTextAuthorization": "再次完整策划需追加最多3次文字调用授权；尚未执行"
+    },
+    "finalAcceptance": {
+      "confirmedPlanUiEdits": [
+        "第3屏玻璃质感改为透明瓶壁质感",
+        "第5屏取景包含瓶肩与完整米白标签"
+      ],
+      "imageVerification": {
+        "projectId": "76cfbb92-c1fd-4eb8-b61d-d77872024285",
+        "jobId": "0cc0e70d-1521-4209-88c6-d5442a7d4a3d",
+        "referenceImageCount": 1,
+        "referenceSha256": "2e4bae6dfd130aaa72342f7b99be32a906bb5ee6ea0688ac21842609dabcbfb9",
+        "referenceMatchesOriginal": true,
+        "screenCount": 6,
+        "allSaved": true,
+        "width": 1728,
+        "height": 2304,
+        "durationSeconds": 228.989,
+        "attemptsPerScreen": 1,
+        "refreshVerified": true,
+        "downloadedArchiveVerified": true,
+        "exportedOriginalHashesMatched": 6,
+        "manifestIncluded": true,
+        "longImage": {
+          "width": 750,
+          "height": 6000
+        },
+        "technicalFlowPassed": true,
+        "qualityAccepted": false,
+        "qualityFindings": [
+          "第6屏留白处生成成留白外",
+          "第5屏完整标签下缘被裁切",
+          "第1、2、3、6屏构图重复，第3屏近景变化不足"
+        ],
+        "privateEvidenceDirectory": "platform/var/dify-detail-page-v1/repair-20261030-v6/real-result/"
+      },
+      "planningResult": "platform/var/dify-detail-page-v1/repair-20261030-v6/real-plan-result.json",
+      "confirmedImageInput": "platform/var/dify-detail-page-v1/repair-20261030-v6/confirmed-image-input.json",
+      "receipt": "platform/var/dify-detail-page-v1/repair-20261030-v6/real-result/acceptance-receipt.json",
+      "browserScreenshots": [
+        "yingzao-six-screen-result.jpg",
+        "dify-v6-real-success-final.jpg",
+        "six-images-bill-final.jpg"
+      ]
+    }
+  },
+  "latestUpstreamParameters": {
+    "recordedAt": "2026-11-02T05:13:58.861879+00:00",
+    "scope": "当前配置的豆包图片及视频模型参数研究与接入补齐。",
+    "researchFinding": "服务商模型列表及公开目录均能实时读取；未取得完整生成参数结构，输入范围采用已核对的原厂文档。",
+    "image": {
+      "model": "doubao-seedream-5.0-lite",
+      "aspectRatios": [
+        "1:1",
+        "4:3",
+        "3:4",
+        "16:9",
+        "9:16",
+        "3:2",
+        "2:3",
+        "21:9"
+      ],
+      "resolutions": [
+        "2K",
+        "3K",
+        "4K"
+      ],
+      "sizePresetCount": 24,
+      "quality": "没有单独低、中、高质量字段；按像素尺寸控制清晰度。",
+      "count": 1,
+      "format": "png"
+    },
+    "video": {
+      "model": "doubao-seedance-2.0",
+      "aspectRatios": [
+        "16:9",
+        "9:16",
+        "1:1",
+        "4:3",
+        "3:4",
+        "21:9",
+        "adaptive（智能比例）"
+      ],
+      "resolutions": [
+        "480p",
+        "720p",
+        "1080p",
+        "4K"
+      ],
+      "seconds": "4至15的整数秒",
+      "audio": [
+        false,
+        true
+      ]
+    },
+    "integration": [
+      "首页和图片视频工作台",
+      "详情页清晰度选择",
+      "草稿刷新恢复",
+      "参数版本与报价校验",
+      "生成执行字段映射"
+    ],
+    "unitTests": {
+      "passed": 1370,
+      "failed": 0,
+      "skipped": 0,
+      "files": 95
+    },
+    "browserTests": {
+      "passed": 194,
+      "total": 194,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "projects": {
+        "desktop": 94,
+        "mobile": 94,
+        "notebook": 5,
+        "tablet": 1
+      },
+      "singleFullRun": true
+    },
+    "staticChecksAndBuild": {
+      "typecheck": true,
+      "lint": true,
+      "format": true
+    },
+    "sourceFilesVerifiedUnchanged": 419,
+    "liveMetadataRequests": 4,
+    "runtime": {
+      "completedAt": "2026-11-02T05:13:52.071Z",
+      "origin": "http://127.0.0.1:53810",
+      "pid": 84978,
+      "listenerAndDatabaseVerified": true,
+      "healthStatus": 200,
+      "indexMatchesCheckedBuild": true,
+      "entryFiles": [
+        {
+          "path": "/assets/index-DlgKO93i.js",
+          "sha256": "f0ad3b341fdfa14b866ca185f5a8b7e0260cd4540300afa96d048e44a9dc17d6",
+          "httpStatus": 200
+        },
+        {
+          "path": "/assets/react-ZAcFXL9B.js",
+          "sha256": "db27e059f37db7a7cd18ae430f5056a0d82ab43c69e2aad9dc1700f1178b3df0",
+          "httpStatus": 200
+        },
+        {
+          "path": "/assets/index-Cv2Y2Cnw.css",
+          "sha256": "f929c260aa9820675aab8c3eaeeb8999a0ae75e30925d41dd4cd0b2a8fc7f64d",
+          "httpStatus": 200
+        }
+      ],
+      "installedBuildFilesVerified": 105,
+      "sourceFilesVerified": 419,
+      "sourceAggregateSha256": "1db8777a055d42431a8b1e0f1c63799d89bcb109cb32bfcdc04309e3d2f84c1f",
+      "backupAndRestoreVerified": true,
+      "backupFiles": 54,
+      "backupMedia": 52,
+      "mediaFilesUnchanged": 52,
+      "allTableDigestsUnchanged": true,
+      "tables": 100,
+      "jobs": 16,
+      "items": 26,
+      "assets": 20,
+      "creditsUnchanged": true,
+      "newGenerationTasks": 0,
+      "externalGenerationRequests": 0,
+      "forcedStop": false,
+      "retainedPreviousChunks": true,
+      "rollbackSourceVerified": true
+    },
+    "preview": {
+      "origin": "http://localhost:53860",
+      "simulated": true,
+      "externalGenerationCalls": 0
+    },
+    "limits": [
+      "未发现面向当前普通模型密钥的完整生成参数查询接口；实时核查模型与目录，具体范围由版本化原厂文档配置提供。",
+      "本次提供常用像素预设；原厂允许的任意自定义宽高尚未开放。",
+      "视频自动时长会影响费用和结算，暂只提供明确的整数秒；参考媒体仍保留原接入限制。",
+      "未提交任何真实付费生成请求，不能据此宣称高分辨率输出质量或服务商每个档位实测通过。"
+    ],
+    "evidence": [
+      "reviews/upstream-parameters-20261101/research.json",
+      "reviews/upstream-parameters-20261101/review.json",
+      "reviews/upstream-parameters-20261101/checks.json",
+      "reviews/upstream-parameters-20261101/browser-validation.json",
+      "reviews/upstream-parameters-20261101/live-metadata-validation.json",
+      "reviews/upstream-parameters-20261101/runtime-validation.json",
+      "reviews/upstream-parameters-20261101/parameters-desktop.png"
+    ],
+    "noCommitPushMerge": true
+  },
+  "latestBrowserGenerationDemo": {
+    "recordedDate": "2026-11-03",
+    "mode": "real-api-on-isolated-local-app",
+    "budgetRmb": 20,
+    "actualRmb": 4.43399,
+    "imageCount": 1,
+    "videoCount": 1,
+    "imageSize": "2048x2048",
+    "videoSize": "1280x720",
+    "videoDurationSeconds": 5.041667,
+    "browserPreviewPlaybackDownloadAndRefreshPassed": true,
+    "sourceDatabaseUnmodified": true,
+    "targetedRegressionTestsPassed": 5,
+    "fullSuiteRerun": false,
+    "statusEvidence": "reviews/takeover/STATUS.md",
+    "privateEvidence": "platform/var/browser-demo-20261103/demo-result.json",
+    "scopeLimit": "仅本次纯文字图片与视频用例，不提升其他功能或商业质量结论。"
+  },
+  "latestOriginalEntrySync": {
+    "recordedDate": "2026-11-03",
+    "origin": "http://127.0.0.1:53810",
+    "backupRestoreVerified": true,
+    "tables": 100,
+    "mediaFiles": 52,
+    "sourceFiles": 422,
+    "targetedTestsPassed": 173,
+    "fullSuiteRerun": false,
+    "servedBuildVerified": true,
+    "existingImageVideoPreviewPlaybackDownloadRefreshPassed": true,
+    "creditsUnchanged": true,
+    "newGenerationTasks": 0,
+    "newGenerationFeesRmb": 0,
+    "privateEvidence": "platform/var/work-entry-sync-20261103/deployment-result.json",
+    "scopeLimit": "原入口既有真实产物回归；不扩大当天隔离实例1图1视频真实生成的质量结论。"
+  },
+  "latestOriginalEntryRealGeneration": {
+    "recordedDate": "2026-11-03",
+    "origin": "http://127.0.0.1:53810",
+    "mode": "real",
+    "newImageTask": "36f5f608-7d2e-4781-835a-17014f127347",
+    "newVideoTask": "598e10f7-13ab-48b4-a2d1-4c1000337a72",
+    "newGenerationJobs": 2,
+    "bothSucceeded": true,
+    "taskListReloadVerified": true,
+    "previewPlaybackDownloadVerified": true,
+    "budgetRmb": 20,
+    "actualRmb": 4.43399,
+    "privateEvidence": "platform/var/original-live-test-20261103/acceptance.json",
+    "remaining": "多标签同源长连接并发限制单独留证；本次未修改连接策略。"
+  },
+  "latestCreativeIntentIteration": {
+    "recordedDate": "2026-11-03",
+    "status": "delivered_with_quality_limits",
+    "origin": "http://127.0.0.1:53810",
+    "sameDifyApp": true,
+    "publishedVersion": 9,
+    "nodeCount": 18,
+    "originalNodeIdsPreserved": 15,
+    "maxQuestionsPerRound": 2,
+    "platforms": [
+      "Amazon（亚马逊）",
+      "TikTok（海外短视频平台）",
+      "抖音",
+      "小红书",
+      "淘宝",
+      "通用"
+    ],
+    "strategyVersion": "2026-11-03.2",
+    "newImageTask": "981706d7-3315-4539-b981-1dc9ff191432",
+    "newVideoTask": "7cfe3c30-8714-4e64-aa57-59e3775a2e71",
+    "realMediaCalls": 2,
+    "bothSucceeded": true,
+    "technicalArtifactChecksPassed": true,
+    "strictProductAppearancePassed": false,
+    "labelPreservationVerified": false,
+    "commercialQualityFullyAccepted": false,
+    "unit": {
+      "passed": 1575,
+      "total": 1575,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "platform/var/creative-intent-20261103/full-unit-delivery-runtime.json",
+      "review": "platform/var/creative-intent-20261103/full-unit-delivery-runtime-review.json",
+      "durationSeconds": 83.22,
+      "sourceFileCount": 457,
+      "sourceManifestUnchanged": true,
+      "scopeNote": "仅纠正测试环境后全量通过，前轮1479通过/61失败/35跳过报告保留；未改代码、断言或超时。"
+    },
+    "targetedBrowser": {
+      "passed": 58,
+      "total": 58,
+      "skipped": 0,
+      "retries": 0,
+      "evidence": "platform/var/e2e/run-fcBYMn/run.json"
+    },
+    "verifiedAmountRmb": 6.714296,
+    "budgetRmb": 20,
+    "unmatchedTimedOutTextCalls": 1,
+    "originalJobsBefore": 18,
+    "originalJobsAfter": 20,
+    "originalAssetsBefore": 22,
+    "originalAssetsAfter": 24,
+    "evidence": [
+      "reviews/creative-intent-20261103/DELIVERY.md",
+      "reviews/creative-intent-20261103/iteration.json",
+      "platform/var/creative-intent-20261103/acceptance.json",
+      "platform/var/creative-intent-20261103/deployment-delivery.json"
+    ],
+    "remaining": [
+      "图片轻微比例偏差，严格实物外观未通过；标签未验",
+      "视频仅概念样本，反射及结尾构图有改进空间",
+      "跨平台多场景和商业质量未全面验证",
+      "文字工作流未知结果仍需云端人工核对",
+      "修复特定跨标签刷新覆盖，不保证任意并发编辑"
+    ]
+  },
+  "latestProductQuality": {
+    "记录日期": "2026-11-03（用户当地时间）",
+    "结论": "工程修复通过；视觉验收未通过；高质量成品目标未完成。",
+    "交付记录": "reviews/product-quality-20261103/DELIVERY.md",
+    "工作流": "原Dify（工作流平台）第10版，18节点；capture-v1（拍摄执行约束第一版）。平台策略仍为2026-11-03.2。",
+    "真实生成": {
+      "图片": 4,
+      "视频": 3,
+      "文字规划": 7,
+      "全部保存成功": true,
+      "视觉全部拒收": true
+    },
+    "视觉结论": [
+      "图1瓶形最接近参考但有紫绿彩边；图2、3、4均未修复彩边，图4略拉长。",
+      "视频1、2反射或收尾未达标；视频3固定构图和全瓶入画通过，但盖面暗竖带与约33%主体占比未达到约55%的展示要求。",
+      "图片参考是概念瓶图，视频是纯文字概念样例，不证明实物商品保真；标签保真未验证。"
+    ],
+    "技术与运行": {
+      "任务数": [
+        20,
+        27
+      ],
+      "素材数": [
+        24,
+        32
+      ],
+      "生成产物": 7,
+      "上传定位参考": 1,
+      "在途任务": 0,
+      "媒体版本长度核对": 78,
+      "原件摘要核对": 32,
+      "静态构建匹配": true,
+      "源码配置摘要一致数量": 412,
+      "最终前端构建重启后端": false,
+      "两个工作台已重新加载": true
+    },
+    "浏览器范围": "任务列表7个链接、图1原图对照、视频3完整播放已验；仅图1和视频3两个下载原件摘要匹配，未声称其余5个下载已验。",
+    "费用": {
+      "本轮预算元": 17,
+      "累计预算上限元": 25,
+      "本轮核对元": 14.68005,
+      "累计核对元": 21.394346,
+      "上一轮未匹配超时文字调用": 1,
+      "自动追加调用": false
+    },
+    "验证": {
+      "拍摄约束初版定向": "237/237",
+      "最终文字选项编译定向": "67/67",
+      "事件刷新定向": "15/15",
+      "工作台桌面手机端到端": "24/24",
+      "静态检查与构建": "通过",
+      "本轮重跑全量": false,
+      "边界": "隔离本地测试；分别记录，不相加冒充全量或模型质量证明。"
+    },
+    "事件刷新": "四标签等价测试请求每分钟1144降至484，非任务查询540降至0；非生产流量采样，不放宽限流。后台错误保留已有编辑器及错误重试。",
+    "未解决": "当前网关拒绝mask（遮罩），不能锁定非编辑像素；受控前景编辑与可控视频构图、反射后处理尚未实现，同类随机重试不能视为修复。",
+    "私密证据索引": [
+      "final-acceptance.json",
+      "final-download-verification.json",
+      "final-media-audit.json",
+      "image4-visual-review.json",
+      "video3-visual-review.json",
+      "cost-ledger.json",
+      "build-delivery-receipt.json"
+    ],
+    "证据位置说明": "platform/var/product-quality-20261103/，本地保留不提交；不公开媒体原件或凭据。",
+    "历史结论更正": "上一轮视频7cfe3c30-8714-4e64-aa57-59e3775a2e71末尾实际裁掉瓶底，旧文结尾偏紧低估问题；历史原文保留。本轮完整入画仅该单项改善，依据为creative-intent-20261103/video-review-original（原视频逐帧审查）。"
+  },
+  "latestCreationExperience": {
+    "记录日期": "2026-11-03（用户当地时间；证据为UTC（协调世界时）11月4日）",
+    "结论": "创作入口改版已同步原入口并浏览器核验；本轮没有新增付费生成，不改变真实商品成品质量未通过的结论。",
+    "交付记录": "reviews/creation-redesign-20261104/DELIVERY.md",
+    "变化": [
+      "服务端费率驱动的生成前积分预估，未知不显示零，最终以服务端报价为准",
+      "单输入卡、默认收起高级设置、图片化灵感入口",
+      "醒目追问卡、短选项与可选手写、漏答聚焦、折叠原因和详情",
+      "原Dify（工作流平台）第11版，仅调整需求理解节点的追问文风指引"
+    ],
+    "验证": {
+      "完整单元": "1622/1622",
+      "积分和生成及报价浏览器组": "22/22",
+      "追问浏览器组": "30/30",
+      "恢复浏览器组": "24/24",
+      "首页模型多语言浏览器组": "40/40",
+      "浏览器全仓重跑": false,
+      "静态检查与构建": "通过",
+      "说明": "独立分组零跳过、零重试，全部本机模拟。最后首页圆角样式追加仅重验格式、构建和原入口静态匹配。"
+    },
+    "原入口": {
+      "地址": "http://127.0.0.1:53810/workbench",
+      "静态资源匹配": true,
+      "源码配置摘要一致数量": 425,
+      "后端重启": false,
+      "任务数": 28,
+      "素材数": 33,
+      "媒体版本": 79,
+      "需求记录": 14,
+      "余额": 9736,
+      "预留": 0,
+      "本轮付费生成": 0
+    },
+    "备份恢复": {
+      "表数": 101,
+      "媒体文件": 79,
+      "完整性通过": true
+    },
+    "限制": [
+      "真实用户广泛输入和真实模型问法仍需持续验证，离线与模拟测试不保证全部输出简洁正确",
+      "商品保真、视频反射和结尾构图仍按上一轮未通过结论记录"
+    ],
+    "私密证据目录": "platform/var/creation-redesign-20261104/；platform/var/creation-ease-20261103/，不提交"
+  },
+  "latestReferenceLayoutIteration": {
+    "记录日期": "2026-11-03（当地；证据为UTC（协调世界时）11月4日）",
+    "结论": "参考指定平台重构后的创作与灵感界面已更新原入口，已浏览器核验；本轮没有新付费生成，真实成品质量仍未通过。",
+    "参考平台": "https://www.flyelep.cn/agent/inspiration",
+    "交付记录": "reviews/flyelep-study-20261104/DELIVERY.md",
+    "变化": [
+      "统一创作入口及草稿、紧凑导航与参数、邻近生成按钮的动态积分预估",
+      "图片画廊与最近创作切换、灵感明确采用和安全撤销",
+      "灵感提示词默认折叠，筛选及页码恢复，快速连续更新不丢条件",
+      "单张网关入口与能力一致，历史分组保留，超长追加及焦点保护"
+    ],
+    "验证": {
+      "主回归唯一用例": 134,
+      "主回归逐项通过": 134,
+      "单次全仓浏览器重跑": false,
+      "导航专项": "18/18；另4/4为子集",
+      "灵感最终筛选": "12/12，包含原视频分类4项；不与旧专项相加",
+      "完整单元阶段": "1622/1622",
+      "最终共享控件单元": "2/2",
+      "最终增量": "弹窗焦点与灵感筛选由专项浏览器验证；未声称完整单元覆盖全部最终源码",
+      "最终静态与前端构建": "通过",
+      "源码配置摘要数量": 264,
+      "候选静态文件": 103
+    },
+    "原入口": {
+      "地址": "http://127.0.0.1:53810/?kind=image",
+      "静态资源匹配": true,
+      "浏览器已打开": true,
+      "后端重启": false,
+      "任务数": 28,
+      "素材数": 33,
+      "媒体版本": 79,
+      "需求记录": 16,
+      "待核对需求": 1,
+      "余额": 9736,
+      "预留": 0,
+      "新付费生成": 0
+    },
+    "备份恢复": {
+      "表数": 101,
+      "关联媒体": 79,
+      "原件散列": 33,
+      "快照恢复副本一致": true,
+      "含密钥完整灾备": false
+    },
+    "限制": [
+      "没有验证真实图片商品保真与视频反射等问题已解决",
+      "手机为浏览器模拟视口，不是实机测试",
+      "原有1条结果待核对规划保留，未自动重试"
+    ],
+    "私密证据目录": "platform/var/flyelep-study-20261104/；导航、灵感和隔离浏览器专项证据均不提交"
+  },
+  "latestConsumerCreativeIteration": {
+    "date": "2026-11-04",
+    "delivery": "reviews/consumer-creative-20261104/DELIVERY.md",
+    "status": "implemented-deployed-browser-reviewed",
+    "previousVisualDesignAcceptedByUser": false,
+    "references": [
+      "https://www.krea.ai/image",
+      "https://higgsfield.ai/zh/generate",
+      "https://www.flyelep.cn/agent/inspiration"
+    ],
+    "scope": [
+      "horizontal-navigation",
+      "artwork-first-home",
+      "compact-composer",
+      "responsive-inspiration",
+      "theme-consistency"
+    ],
+    "validation": {
+      "desktopCore": 12,
+      "mobileCore": 4,
+      "visualAndKeyboard": 2,
+      "uniqueCases": 18,
+      "wholeSuiteRerun": false,
+      "visualStatesReviewed": 8,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "build": true,
+      "sourceManifestFiles": 264,
+      "candidateFiles": 103
+    },
+    "deployment": {
+      "origin": "http://127.0.0.1:53810",
+      "sourceSha256": "ff24488fdda633e692d74ccbb16d106c68f6a1f47dee7afc970bd958abfd2969",
+      "resourcesMatch": true,
+      "runtimeRestarted": false,
+      "businessDataUnchanged": true
+    },
+    "realGenerationQualityAccepted": false,
+    "newPaidGeneration": false,
+    "difyChanged": false,
+    "privateEvidenceRoot": "platform/var/consumer-creative-20261104",
+    "visualDesignAcceptedByUser": false,
+    "supersededBy": "latestDarkCreativeIteration"
+  },
+  "latestDarkCreativeIteration": {
+    "date": "2026-11-04",
+    "delivery": "reviews/design-reference-20261104-r2/DELIVERY.md",
+    "status": "implemented-deployed-browser-reviewed",
+    "userSelectedDirection": "flyelep-inspired-dark-concentrated-composer",
+    "userVisualAcceptance": "pending",
+    "references": [
+      "https://www.flyelep.cn/agent/inspiration",
+      "https://www.lovart.ai/"
+    ],
+    "scope": [
+      "compact-navigation-rail",
+      "normal-flow-centered-composer",
+      "visible-credit-estimate",
+      "natural-ratio-inspiration",
+      "mobile-result-layout-repair"
+    ],
+    "validation": {
+      "uniqueCases": 18,
+      "initialMobileFailures": 2,
+      "failuresReproducedAndFixed": true,
+      "wholeSuiteRerun": false,
+      "typecheck": true,
+      "lint": true,
+      "formatProjectScope": true,
+      "build": true,
+      "sourceManifestFiles": 265,
+      "candidateFiles": 103
+    },
+    "deployment": {
+      "origin": "http://127.0.0.1:53810",
+      "sourceSha256": "15fdee09cf5aa61a67d0d0238345e0ad92d62e43693024c3505e041abc1c62fa",
+      "resourcesMatch": true,
+      "runtimeRestarted": false,
+      "businessDataUnchanged": true,
+      "profileChange": "theme-only-system-to-dark",
+      "otherProfilePreferencesUnchanged": true
+    },
+    "realGenerationQualityAccepted": false,
+    "newPaidGeneration": false,
+    "difyChanged": false,
+    "privateEvidenceRoot": "platform/var/design-reference-20261104-r2"
+  },
+  "latestFullCreationFlow": {
+    "recordedDate": "2026-11-04",
+    "scope": "完整图片和视频深色创作流程；首页及项目参数浮层；必要补充、费用确认、进度与作品展示。",
+    "userChosenMode": "isolated-local-simulation",
+    "browserTests": {
+      "uniquePassed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "automaticRetries": 0,
+      "fullRepositoryRun": false,
+      "duplicateRunsNotAdded": true
+    },
+    "unitGroups": {
+      "core": 31,
+      "results": 60,
+      "simulationIntent": 9,
+      "fullRepositoryRun": false
+    },
+    "strictChecks": [
+      "types",
+      "lint",
+      "format",
+      "frontend-build"
+    ],
+    "sourceFilesVerified": 272,
+    "installedStaticFiles": 104,
+    "manualDemo": {
+      "newImageJobs": 1,
+      "newVideoJobs": 1,
+      "simulationCredits": 33,
+      "realPaidCalls": 0,
+      "originalDownloadHashesMatch": true,
+      "videoPlayedToEnd": true,
+      "videoDurationSeconds": 5,
+      "videoDimensions": [
+        720,
+        1280
+      ],
+      "audioStreams": 0
+    },
+    "deployment": {
+      "origin": "http://127.0.0.1:53810",
+      "previewOrigin": "http://localhost:53892",
+      "frontendOnly": true,
+      "backendRestarted": false,
+      "backupTables": 101,
+      "mediaVerified": 79,
+      "originalJobs": 28,
+      "originalAssets": 33,
+      "originalBriefs": 16,
+      "originalCredits": 9736,
+      "originalReserved": 0,
+      "originalUncertainBriefs": 1,
+      "demoIdsAbsentFromOriginal": true
+    },
+    "boundaries": [
+      "模拟图视频不验证真实生成质量。",
+      "需求理解是确定性模拟场景，不代表真实工作流任意输入理解已验收。",
+      "保存暂停与待核对专项只验证展示。",
+      "手机为模拟视口，未验证实机、虚拟键盘和全部缩放。",
+      "保留原真实商品质量拒收结论。"
+    ],
+    "evidence": [
+      "reviews/creation-flow-20261104/DELIVERY.md"
+    ]
+  }
 }

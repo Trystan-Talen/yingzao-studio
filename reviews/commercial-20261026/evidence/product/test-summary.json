@@ -1,0 +1,50 @@
+{
+  "recordedDate": "2026-10-26",
+  "testFile": "platform/tests/e2e/library-batch-recovery.spec.ts",
+  "result": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 26.7,
+    "projects": [
+      "desktop",
+      "mobile"
+    ]
+  },
+  "redEvidence": [
+    "red-batch-workspace.txt",
+    "red-batch-delete.txt",
+    "red-recent-projects.txt"
+  ],
+  "verification": [
+    "两文件上传第一项响应延迟时切换空间；数据库中的两个空间归属均为发起空间，目标空间素材为零，两个原图尺寸为96×64且下载字节与上传字节完全一致。",
+    "批量删除第二项返回503时，成功项退出列表和选择；仅失败项重试，记录的删除请求顺序为第一项、第二项、第二项；两条原始记录软删除保留。",
+    "最近项目请求返回503时明确显示错误并提供重试；重试成功显示原项目及正确工作台链接。"
+  ],
+  "browserErrors": 0,
+  "injectedErrors": "503响应均为本轮显式故障注入；不是外部服务失败。",
+  "evidenceBoundary": "三个真实失败摘录来自修复前构建；六项绿测来自本轮最新界面构建。该切片不是全量验收，不证明真实模型、付款、送达或正式开票。",
+  "privacy": {
+    "data": "全部账号、工作空间、项目、素材为隔离夹具生成；截图已逐一目视核对，未含私人媒体、真实账户、密钥或登录令牌。",
+    "text": "仅复制错误断言摘录和自行生成的结果摘要；浏览器诊断只保留错误、路径和状态码，随机标识符替换为占位符。",
+    "excluded": [
+      "数据库及其附属文件",
+      "config.json",
+      "身份时钟文件",
+      "密钥",
+      "登录状态",
+      "完整网页报告",
+      "跟踪压缩包",
+      "视频",
+      "原始媒体文件"
+    ],
+    "screenshots": "保留三个手机视图用于展示恢复状态；业务结论由桌面/手机六项数据断言支撑。",
+    "knownCaptureDetail": "删除恢复截图中同时保留故障提示与随后成功提示，反映一次失败后重试的连续操作。"
+  },
+  "sourceSha256": {
+    "platform/src/web/pages/Library.tsx": "74afc1f967c287653b3b0bd6183d59ebd89b29c2368b3048a812939d9ab24877",
+    "platform/src/web/pages/Workbench.tsx": "beda79dd39e02058e253abf9cc02747bd6ef5c1b0d5fa8b413c8c2bb985354da",
+    "platform/tests/e2e/library-batch-recovery.spec.ts": "0d65489adec20d480356d977cd8ac4aced95ac0aa74330455819bc2619cdf8e7"
+  },
+  "expectedCancelledRequests": "两个上传用例在切换空间时终止旧空间任务事件流，记录请求取消；无未捕获浏览器异常。"
+}

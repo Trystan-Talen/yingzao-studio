@@ -1,0 +1,430 @@
+{
+  "objective": "在原Dify工作流和现有图片视频入口迭代，减少不必要追问，提高电商作品可用性",
+  "budgetRmb": 20,
+  "stages": [
+    {
+      "stage": "需求与设计",
+      "status": "reviewed",
+      "decisions": [
+        "通用创意不强加电商表单",
+        "每轮最多两个阻断问题",
+        "原话与结构化补充分离",
+        "平台×用途×市场规则",
+        "保留原15节点，新增3节点意图分支"
+      ]
+    },
+    {
+      "stage": "本地实现与独立复审",
+      "status": "reviewed",
+      "resolved": [
+        "背景图不能冒充商品参考",
+        "多轮答案不能重复提交",
+        "已有项目不能跨项目复用上下文",
+        "默认建议纳入原报价面板",
+        "编译快照不重新注入助手旧声明",
+        "通用参考不强加商品保真",
+        "已确认失败与结果未知分别恢复",
+        "已有输出用途纳入意图合同",
+        "真实69秒理解与界面等待上限对齐",
+        "多参考素材不强制当作同一商品",
+        "不新增图文同时保留实物已有标识",
+        "事实引文只留溯源，不能把截断否定或未证实功效重新注入执行提示词",
+        "已整理执行快照不重复追加品牌、文档、参考正文及旧卖点价格等字段",
+        "最终编译提示词在报价前完成适配器检查，超限明确拒绝而不静默截断",
+        "实际模型与合法引用槽位决定参考图能力；可支持但尚未上传时仍允许补图",
+        "缺失元数据、未知规则及人工检查不会被误报为成品质量通过",
+        "就绪结果仅缺问题列表时可补空列表，其他错误字段仍严格拒绝",
+        "明确失败或停止的工作流与结果未知分别记录，不自动付费重试",
+        "外层需求理解等待160秒、前端175秒，覆盖上游连接10秒/读取120秒/写入10秒并留处理余量",
+        "上游明确成功但输出格式或语义非法记为failed（失败），真实断网仍保留结果未知且不自动重试",
+        "策略2026-11-03.2为仅选平台且用途通用的入口增加按图片/视频区分的两条本应用建议；不套版位硬规则，不增加营销目标或追问",
+        "仅模型能力版本变化不触发旧标签页整份草稿保存",
+        "能力变化拒绝后只免费刷新，当前页面强制重新确认报价，不自动重跑需求整理或生成",
+        "继续项目草稿保留原话、平台、规格与已整理方案"
+      ],
+      "independentReview": "后端、适配器、平台策略和四文件草稿恢复修复均经独立只读复审，最终修复无严重或中等阻断问题。保留精确质量与运行边界。",
+      "remainingLimitation": "结果未知时，工作流运行编号的持久化与自动恢复尚未实现；当前需要核对云端记录后人工处理，不能假定失败后直接重发。"
+    },
+    {
+      "stage": "云端同应用发布与语义验收",
+      "status": "published_semantic_reviewed",
+      "sameAppId": "c0ed438f-e7e1-4b95-a170-eb25e28d1f3b",
+      "publishedVersion": 9,
+      "nodeCount": 18,
+      "originalNodeIdsPreserved": 15,
+      "realSemanticV1": {
+        "cases": 9,
+        "contractPassed": 9,
+        "semanticPassed": 4,
+        "needsRevision": 5,
+        "costRmb": 0.944548
+      },
+      "remaining": "真实图片和视频各一例已完成技术验收与抽样视觉审查；不能证明跨场景稳定性。严格商品外观一致与带字标签保真尚未通过。",
+      "statusLabel": "同应用第9版已发布；语义针对性复测完成，保留条件项",
+      "publication": {
+        "directlyEditedNodes": 3,
+        "originalSitePreserved": true,
+        "environmentVariablesUnchanged": true,
+        "nodeCodeMatches": true,
+        "evidence": "platform/var/creative-intent-20261103/published-v9-proof.json"
+      },
+      "realSemanticV2": {
+        "cases": 6,
+        "passed": 5,
+        "conditional": 1,
+        "costRmb": 0.734344,
+        "evidence": "platform/var/creative-intent-20261103/semantic-review.json",
+        "conditionalNote": "一例禁止参数信息的子提示词存在措辞歧义；最终编译已明确保留原印字，须在成片中核对。",
+        "latestVersionAllCasesRerun": false
+      }
+    },
+    {
+      "stage": "完整回归、真实图视频、备份部署与浏览器交付",
+      "status": "delivered_with_quality_limits",
+      "unitBaseline": {
+        "passed": 1495,
+        "total": 1495,
+        "skipped": 0
+      },
+      "browserDiagnostic": {
+        "passed": 203,
+        "total": 214,
+        "skipped": 0,
+        "failures": 11
+      },
+      "backupRestore": {
+        "passed": true,
+        "oldTables": 100,
+        "mediaFiles": 56
+      },
+      "remaining": "无本轮功能交付阻断；严格商品保真、带标签实物、各平台多场景效果及未知文字请求的自动恢复仍保留限制。",
+      "statusLabel": "功能迭代、原入口同步、完整回归及两例真实链路验收完成；严格商品保真与全面商业质量未通过",
+      "unitRelease": {
+        "passed": 1575,
+        "total": 1575,
+        "failed": 0,
+        "skipped": 0,
+        "evidence": "platform/var/creative-intent-20261103/full-unit-delivery-runtime.json",
+        "review": "platform/var/creative-intent-20261103/full-unit-delivery-runtime-review.json",
+        "durationSeconds": 83.22,
+        "sourceFileCount": 457,
+        "sourceManifestUnchanged": true,
+        "scopeNote": "仅纠正测试环境后全量通过，前轮1479通过/61失败/35跳过报告保留；未改代码、断言或超时。"
+      },
+      "staticRelease": {
+        "finalChangedFilesReceipt": "platform/var/creative-intent-20261103/capability-draft-final-static-receipt.json",
+        "receiptIsOriginalStdout": false,
+        "typecheckPassed": true,
+        "lintPassed": true,
+        "formatAndDiffPassed": true,
+        "buildPassed": true,
+        "buildEvidence": "platform/var/creative-intent-20261103/build-delivery.log"
+      },
+      "browserRelease": {
+        "total": 218,
+        "passed": 216,
+        "failures": 2,
+        "failureReason": "旧文档断言仍预期原正文保留在执行快照，已调整为整理结果执行与原文审计。",
+        "targetedRetest": {
+          "passed": 6,
+          "total": 6,
+          "evidence": "platform/var/e2e/run-bp7Ioh/run.json"
+        },
+        "fullSuiteRerunAfterAssertionFix": false,
+        "creativeBriefFinal": {
+          "passed": 24,
+          "total": 24,
+          "skipped": 0,
+          "retries": 0,
+          "evidence": "platform/var/e2e/run-m6WLvH/run.json",
+          "addedCoverage": [
+            "121.487秒及141秒响应不会提前失败",
+            "175秒超时不自动重发，刷新保留相同请求编号"
+          ]
+        },
+        "dataIsolation": "浏览器测试使用独立数据库与媒体，外部服务禁用；不能作为真实模型质量验收。",
+        "evidence": "platform/var/e2e/run-Etu5CT/run.json",
+        "recoveryFinal": {
+          "passed": 58,
+          "total": 58,
+          "skipped": 0,
+          "retries": 0,
+          "evidence": "platform/var/e2e/run-fcBYMn/run.json",
+          "includes": [
+            "需求理解24项",
+            "模型能力18项",
+            "保存竞态4项",
+            "报价确认与过期4项",
+            "新恢复8项"
+          ],
+          "failureEvidence": "platform/var/e2e/run-ZGAHP5/case-t1WpFb/stale-tab-draft.json",
+          "scope": "旧标签只刷新能力而覆盖草稿已复现并修复，不等于任意并发编辑均已解决。"
+        }
+      },
+      "deployment": {
+        "status": "verified",
+        "port": 53810,
+        "sameDatabase": true,
+        "jobsAtDeployment": 20,
+        "assetsAtDeployment": 24,
+        "integrity": "ok",
+        "priorMediaAndJobsPreserved": true,
+        "evidence": "platform/var/creative-intent-20261103/deployment-delivery.json",
+        "backupEvidence": "platform/var/creative-intent-20261103/deployment/preflight.json",
+        "plannerFailureReconciliation": "两条规划故障均在在线备份及恢复验证后，按云端同应用、同请求记录人工核实为失败；均未提交媒体生成。",
+        "pid": 76391,
+        "initialHealthCheck": {
+          "statusCode": 200,
+          "evidence": "platform/var/creative-intent-20261103/deployment-release.json"
+        },
+        "reconciliationEvidence": [
+          "platform/var/creative-intent-20261103/confirmed-failure-backup/reconciliation.json",
+          "platform/var/creative-intent-20261103/video-timeout-backup/reconciliation.json"
+        ],
+        "health": 200,
+        "frontendHttpBytesMatch": true,
+        "frontendOnlyFinalFixDidNotRestartBackend": true
+      },
+      "realMediaAcceptance": {
+        "status": "technical_pass_with_visual_limits",
+        "accepted": true,
+        "acceptanceScope": "流程和两例技术链路；非严格商品保真或全部商业质量通过",
+        "image": {
+          "jobId": "981706d7-3315-4539-b981-1dc9ff191432",
+          "assetId": "7e231dbb-9037-436a-8c5a-3dfac645be29",
+          "technicalChecksPassed": true,
+          "basicAtmosphereRequestFit": true,
+          "strictProductAppearanceAcceptance": false,
+          "observedLimitations": [
+            "瓶身显得略细长，瓶盖与瓶身比例有轻微变化",
+            "瓶盖下缘有轻微彩边",
+            "原参考无印字，未验证商品标签保真"
+          ],
+          "strategyVersion": "2026-11-03.1",
+          "downloadEvidence": "image-original-validation.json"
+        },
+        "video": {
+          "jobId": "7cfe3c30-8714-4e64-aa57-59e3775a2e71",
+          "assetId": "7078c1fd-d195-4f45-b793-ad96ad75919c",
+          "technicalChecksPassed": true,
+          "basicConceptRequestFit": true,
+          "fullBrowserPlaybackCompleted": true,
+          "playbackError": null,
+          "durationSeconds": 5.041667,
+          "audioStreams": 0,
+          "sampledFrames": 5,
+          "motionQualityScope": "播放到结尾及抽样画面通过；未据静帧宣称全程无闪烁或精细运动质量已通过",
+          "observedLimitations": [
+            "瓶盖存在较明显暗色矩形反射",
+            "结尾瓶底接近画面下缘，构图偏紧"
+          ],
+          "referenceProductIdentityVerified": false,
+          "strategyVersion": "2026-11-03.2",
+          "downloadEvidence": "video-original-validation.json"
+        },
+        "browser": {
+          "taskListReloaded": true,
+          "showsExactlyTwoCurrentIterationTasks": true,
+          "imageComparisonOpened": true,
+          "videoPlayStartAndEndVerified": true,
+          "capabilityRefreshKeptPromptPlatformRatioAndReadyBrief": true,
+          "reloadKeptDraft": true,
+          "noNewJobFromFreeRefresh": true,
+          "evidence": [
+            "final-task-list.png",
+            "final-image-comparison.png",
+            "final-video-result.png",
+            "final-video-playback.json",
+            "final-dify-workflow.png"
+          ]
+        },
+        "evidence": "platform/var/creative-intent-20261103/acceptance.json"
+      },
+      "unitPlatformV2": {
+        "total": 1575,
+        "passed": 1574,
+        "failed": 1,
+        "skipped": 0,
+        "evidence": "platform/var/creative-intent-20261103/full-unit-platform-v2.json",
+        "isolatedRetest": {
+          "passed": 57,
+          "total": 57,
+          "evidence": "platform/var/creative-intent-20261103/workflow-nodes-isolated-v2.json"
+        },
+        "note": "Python子进程超时原失败保留；隔离通过不推定确切环境根因。"
+      },
+      "unitDeliveryEnvironmentFailure": {
+        "total": 1575,
+        "passed": 1479,
+        "failed": 61,
+        "skipped": 35,
+        "evidence": "platform/var/creative-intent-20261103/full-unit-delivery.json",
+        "reason": "测试环境缺少已安装视频工具的搜索路径，沙箱拒绝本机监听和进程通信，导致相关前置超时；原报告保留。"
+      }
+    }
+  ],
+  "productionGenerationCallsThisIteration": 2,
+  "status": "delivered_with_quality_limits",
+  "statusLabel": "功能迭代、原入口同步、完整回归及两例真实链路验收完成；严格商品保真与全面商业质量未通过",
+  "updatedAt": "2026-11-03T12:52:00.954264+00:00",
+  "history": [
+    {
+      "note": "保留更新前的阶段记录，不能视为本轮最终结论",
+      "publishedVersion": 7,
+      "localReviewStatus": "review_fixes_in_progress",
+      "cloudReviewStatus": "revision_testing",
+      "productionGenerationCallsThisIteration": 0
+    },
+    {
+      "note": "超时修复前已核实批次，保留历史证据，不作为最新测试结论",
+      "unitRelease": {
+        "passed": 1554,
+        "total": 1554,
+        "skipped": 0,
+        "evidence": "platform/var/creative-intent-20261103/full-unit-release.json"
+      },
+      "staticRelease": {
+        "typecheck": {
+          "passed": true,
+          "evidence": "platform/var/creative-intent-20261103/typecheck-release.log"
+        },
+        "lint": {
+          "passed": true,
+          "evidence": "platform/var/creative-intent-20261103/lint-release.log"
+        },
+        "format": {
+          "passed": true,
+          "evidence": "platform/var/creative-intent-20261103/format-release.log"
+        },
+        "build": {
+          "passed": true,
+          "evidence": "platform/var/creative-intent-20261103/build-release.log"
+        }
+      },
+      "creativeBriefFinal": {
+        "passed": 20,
+        "total": 20,
+        "evidence": "platform/var/e2e/run-tWFTV8/run.json"
+      },
+      "deployment": {
+        "status": "verified",
+        "port": 53810,
+        "runtimeSessionId": 59668,
+        "sameDatabase": true,
+        "health": 200,
+        "jobsAtDeployment": 18,
+        "assetsAtDeployment": 22,
+        "integrity": "ok",
+        "priorMediaAndJobsPreserved": true,
+        "evidence": "platform/var/creative-intent-20261103/deployment-release.json",
+        "backupEvidence": "platform/var/creative-intent-20261103/deployment/preflight.json",
+        "plannerFailureReconciliation": "一条失败规划在备份后经主代理人工核实为failed（失败），未生成媒体。"
+      },
+      "costCheckpoint": {
+        "budgetRmb": 20,
+        "verifiedTextCalls": 16,
+        "verifiedTextAmountRmb": 1.818396,
+        "includesFailedPlannerCalls": 1,
+        "evidence": "platform/var/creative-intent-20261103/cost-ledger.json",
+        "final": false,
+        "note": "仅为已核实的文字调用账本截点；进行中的新规划与媒体验收尚未计入，不据此声明最终余额。"
+      }
+    },
+    {
+      "note": "保留最终草稿恢复修复前的检查阶段，不能视为最终批次",
+      "unitRelease": {
+        "passed": 1564,
+        "total": 1564,
+        "skipped": 0,
+        "evidence": "platform/var/creative-intent-20261103/full-unit-timeout.json",
+        "scopeNote": "此完整批次在策略.2补充前通过；.2另有118项定向回归，最终完整批次待主代理补充。"
+      },
+      "deployment": {
+        "status": "verified",
+        "port": 53810,
+        "sameDatabase": true,
+        "jobsAtDeployment": 20,
+        "assetsAtDeployment": 24,
+        "integrity": "ok",
+        "priorMediaAndJobsPreserved": true,
+        "evidence": "platform/var/creative-intent-20261103/deployment-delivery.json",
+        "backupEvidence": "platform/var/creative-intent-20261103/deployment/preflight.json",
+        "plannerFailureReconciliation": "两条规划故障均在在线备份及恢复验证后，按云端同应用、同请求记录人工核实为失败；均未提交媒体生成。",
+        "pid": 76391,
+        "initialHealthCheck": {
+          "statusCode": 200,
+          "evidence": "platform/var/creative-intent-20261103/deployment-release.json"
+        },
+        "reconciliationEvidence": [
+          "platform/var/creative-intent-20261103/confirmed-failure-backup/reconciliation.json",
+          "platform/var/creative-intent-20261103/video-timeout-backup/reconciliation.json"
+        ],
+        "health": 200,
+        "frontendHttpBytesMatch": true,
+        "frontendOnlyFinalFixDidNotRestartBackend": true
+      },
+      "costCheckpoint": {
+        "budgetRmb": 20,
+        "verifiedTextCalls": 17,
+        "verifiedTextAmountRmb": 2.001314,
+        "verifiedImageAmountRmb": 0.176,
+        "unmatchedTextCalls": 1,
+        "unmatchedTextCallNote": "第18次文字调用在121.487秒后上游读取超时，尚无匹配账单；不能保证没有延迟结算。",
+        "evidence": "platform/var/creative-intent-20261103/cost-ledger.json",
+        "final": false,
+        "note": "策略.2仅本地修改和回归，未调用外部服务；后续新规划与视频总费用待主代理补齐，不声明最终余额。"
+      }
+    }
+  ],
+  "costCheckpoint": {
+    "budgetRmb": 20,
+    "textCallsAttempted": 20,
+    "textCallsWithMatchedBills": 19,
+    "textAmountRmb": 2.280306,
+    "imageCalls": 1,
+    "imageAmountRmb": 0.176,
+    "videoCalls": 1,
+    "videoAmountRmb": 4.25799,
+    "verifiedTotalRmb": 6.714296,
+    "unmatchedTimedOutTextCalls": 1,
+    "additionalPaidCallsPlanned": 0,
+    "note": "已核对金额低于20元预算；一条读取超时文字调用暂无匹配账单，不保证无延迟结算；不含其他会话费用。",
+    "evidence": "platform/var/creative-intent-20261103/cost-ledger.json",
+    "finalMatchedBills": true,
+    "allAttemptedCallsSettled": false
+  },
+  "productionGenerationCallsNote": "本轮真实媒体各提交一次；20次文字调用另记，任务轮询不重复计作生成调用。",
+  "qualityBoundary": "本轮流程改进和两个样本的技术链路通过；氛围图与概念片基本符合要求，严格商品保真及可直接商用的整体质量未通过完整验收。",
+  "strategyFollowup": {
+    "version": "2026-11-03.2",
+    "priorVersion": "2026-11-03.1",
+    "platformMediaCases": 10,
+    "baseRecommendationCountPerPlatformMedia": 2,
+    "recommendationOrigin": "本应用可调整建议，不是官方要求或平台流量承诺；用户明确风格、主体和限制优先。",
+    "frozenRecordsUnchanged": true,
+    "targetedValidation": {
+      "testFiles": 4,
+      "passed": 118,
+      "total": 118,
+      "command": "pnpm exec vitest run tests/creative-strategy.test.ts tests/creative-briefs.test.ts tests/creative-quality.test.ts tests/creative-intent-simulation.test.ts",
+      "lintPassed": true,
+      "formatPassed": true,
+      "typecheckPassed": true
+    },
+    "fullRegressionAfterChange": "最终完整1575/1575通过，零失败零跳过；修复后58/58定向浏览器通过。",
+    "realMediaValidation": "最终视频方案实际使用.2基础建议，媒体已生成与原件核对；图片在.1完成，不作为.2图片基础建议的真实效果证据。"
+  },
+  "finalIndependentReview": {
+    "passedWithinDocumentedScope": true,
+    "findings": "无新增阻断；待定测试句已替换为1575/1575，改写措辞已避免暗示需求理解免费。",
+    "remainingQualityLimitsUnchanged": true,
+    "reviewedEvidence": [
+      "DELIVERY.md",
+      "acceptance.json",
+      "media-audit.json",
+      "video-original-validation.json",
+      "cost-ledger.json",
+      "full-unit-delivery-runtime-review.json"
+    ]
+  }
+}

@@ -45,7 +45,8 @@ it('preserves specific white-background intent and frozen product facts in image
   const request = call.mock.calls[0]![1]!.body as { prompt: string; model: string };
   expect(request.prompt).toContain('pure white (#FFFFFF)');
   expect(request.prompt).toContain('净含量30ml');
-  expect(request.prompt).toContain('No text or lettering');
+  expect(request.prompt).toContain('Do not add text or lettering');
+  expect(request.prompt).toContain('Preserve text and markings already on a referenced subject');
 });
 it.each([
   { name: 'opaque', width: 32, height: 32, alpha: 1, message: '没有透明' },

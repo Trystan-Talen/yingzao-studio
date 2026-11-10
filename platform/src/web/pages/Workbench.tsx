@@ -1,7 +1,10 @@
 import { t } from '../lib/i18n';
+import { CreationLanding } from '../components/CreationLanding';
+import '../styles/creative-studio.css';
+import '../styles/workflow-studio.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams, useBlocker } from 'react-router-dom';
-import { ArrowLeft, History, Layers, Save, Share2, Sparkles } from 'lucide-react';
+import { Link, useNavigate, useParams, useBlocker, useLocation } from 'react-router-dom';
+import { ArrowDown, ArrowLeft, Check, History, Layers, Save, Share2, Sparkles } from 'lucide-react';
 import type { AssetDto, ProjectDto } from '../../contracts/core';
 import type { PendingApplyDto, JobInput } from '../../contracts/jobs';
 import { getSceneAssetIds, type SceneDocumentV1 } from '../../contracts/scene';
@@ -26,7 +29,6 @@ import {
   Loading,
   Modal,
   Notice,
-  PageHeader,
   Pagination,
   Segments,
   useAction,
@@ -34,10 +36,13 @@ import {
 import { Composer, type ComposerController } from '../components/Composer';
 import { JobCard } from '../components/TaskCenter';
 import type { Job } from '../lib/tasks';
+import { mergeJobSnapshots } from '../lib/job-presentation';
 import { CanvasEditor } from '../editor/CanvasEditor';
 import type { ExportPolicy } from '../../contracts/export-policy';
 import { useStudio } from '../context';
-import { latestMediaDraftRecord } from '../lib/creation-recovery';
+import { latestMediaDraftRecord, type CreationDraft } from '../lib/creation-recovery';
+import { jobDestination } from '../lib/job-navigation';
+import { selectMatchingJobSnapshot } from '../lib/job-snapshot';
 interface DocumentDto {
   id: string;
   projectId: string;
@@ -62,50 +67,31 @@ interface Message {
 }
 export function Workbench() {
   const { projectId } = useParams();
-  if (!projectId) return <WorkbenchStart />;
+  if (!projectId) return <CreationLanding />;
   return <ProjectWorkbench key={projectId} projectId={projectId} />;
-}
-function WorkbenchStart() {
-  const projects = useApi<Page<ProjectDto>>('/projects?pageSize=6');
-  return (
-    <div className="page">
-      <PageHeader
-        eyebrow="MAKE SPACE FOR YOUR IDEAS"
-        title={t('创作工作台')}
-        description={t('从一个新想法开始，或继续上一次未完成的作品。')}
-      />
-      <Composer />
-      <section className="section-spaced">
-        <div className="section-heading">
-          <h2>{t('最近的项目')}</h2>
-          <Link className="text-button" to="/projects">
-            {t('全部项目 ↗')}
-          </Link>
-        </div>
-        {projects.data?.items.length ? (
-          <div className="recent-projects">
-            {projects.data.items.map((project) => (
-              <Link to={`/workbench/${project.id}`} key={project.id}>
-                <Layers size={24} />
-                <div>
-                  <strong>{project.name}</strong>
-                  <span>{dateTime(project.updatedAt)}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <Empty
-            title={t('从一个想法开始')}
-            description={t('写下创作需求并保存草稿，或在项目页创建空白画布。')}
-          />
-        )}
-      </section>
-    </div>
-  );
 }
 function ProjectWorkbench({ projectId }: { projectId: string }) {
   const { canEdit, workspace, registerWorkspaceGuard } = useStudio();
+  const location = useLocation();
+  const routeState = location.state as {
+    submittedJob?: Job;
+    recoveryDraft?: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>;
+    notice?: string;
+  } | null;
+  const focusedJobId = new URLSearchParams(location.search).get('job');
+  const focusedQuery = useApi<Job>(
+    `/jobs/${encodeURIComponent(focusedJobId ?? '')}`,
+    !!focusedJobId,
+    3000,
+  );
+  const [submittedJob, setSubmittedJob] = useState<Job | null>(() => {
+    const candidate = (location.state as { submittedJob?: Job } | null)?.submittedJob;
+    return candidate?.projectId === projectId && candidate.workspaceId === workspace?.id
+      ? candidate
+      : null;
+  });
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const focusedRef = useRef<HTMLDivElement>(null);
   const query = useApi<ProjectDto>(`/projects/${projectId}`);
   const documentQuery = useApi<DocumentDto>(`/projects/${projectId}/document`);
   const exportPolicy = useApi<ExportPolicy>('/export-policy');
@@ -114,8 +100,55 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
   const jobs = useApi<Page<Job>>(
     `/jobs?projectId=${projectId}&pageSize=12&page=${jobPage}`,
     true,
-    5000,
+    3000,
   );
+  const projectJobs = (jobs.data?.items ?? []).filter((job) => job.projectId === projectId);
+  const focusedJob = selectMatchingJobSnapshot(
+    { id: focusedJobId, projectId, workspaceId: workspace?.id },
+    focusedQuery.data,
+    submittedJob,
+  );
+  const visibleJobs = mergeJobSnapshots(
+    projectJobs.filter((job) => job.id !== focusedJob?.id),
+    jobPage === 1 && submittedJob ? [submittedJob] : [],
+  )
+    .filter((job) => job.id !== focusedJob?.id)
+    .sort((a, b) => {
+      const active = (job: Job) =>
+        ['queued', 'running', 'reconciliation_required'].includes(job.status) ? 1 : 0;
+      return active(b) - active(a) || b.createdAt.localeCompare(a.createdAt);
+    });
+  useEffect(() => {
+    if (
+      submittedJob &&
+      jobs.data?.items.some(
+        (job) =>
+          job.id === submittedJob.id &&
+          job.updatedAt >= submittedJob.updatedAt &&
+          job.status === submittedJob.status,
+      )
+    )
+      setSubmittedJob(null);
+    else if (
+      submittedJob &&
+      jobs.data?.items.some(
+        (job) => job.id === submittedJob.id && job.updatedAt > submittedJob.updatedAt,
+      )
+    )
+      setSubmittedJob(null);
+  }, [jobs.data, submittedJob]);
+  useEffect(() => {
+    if (!focusedJob || query.isLoading || documentQuery.isLoading) return;
+    const frame = requestAnimationFrame(() =>
+      focusedRef.current?.scrollIntoView({
+        block: 'start',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'instant'
+          : 'smooth',
+      }),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [focusedJob?.id, query.isLoading, documentQuery.isLoading]);
   const [conversationPage, setConversationPage] = useState(1);
   const historyMessages = useApi<Page<Message>>(
     `/projects/${projectId}/messages?pageSize=100&page=${conversationPage}`,
@@ -130,6 +163,10 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
     error?: string;
   }>({ status: 'loading', nextPage: 2 });
   const composerRef = useRef<ComposerController>(null);
+  function focusCreation() {
+    setSidebarTab('create');
+    requestAnimationFrame(() => composerRef.current?.focusPrompt());
+  }
   const [draftSearchRound, setDraftSearchRound] = useState(0);
   const [scene, setScene] = useState<SceneDocumentV1 | null>(null);
   const [workspaceChangePending, setWorkspaceChangePending] = useState(false);
@@ -165,6 +202,9 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
   const [error, setError] = useState<string | null>(null);
   const [sidebarTab, setSidebarTab] = useState<'create' | 'history'>('create');
   const [mainView, setMainView] = useState<'results' | 'canvas'>('results');
+  useEffect(() => {
+    if (focusedJobId) setMainView('results');
+  }, [focusedJobId]);
   const [canvasOpened, setCanvasOpened] = useState(false);
   const [canvasFocus, setCanvasFocus] = useState(true);
   function showCanvas() {
@@ -189,6 +229,19 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
   const action = useAction();
   const refresh = useRefresh();
   const navigate = useNavigate();
+  useEffect(() => {
+    const routeState = location.state as {
+      submittedJob?: Job;
+      recoveryDraft?: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>;
+    } | null;
+    // Let the composer persist a recovery handoff first. Two replace navigations
+    // in the same effect flush could otherwise restore its already-cleared draft.
+    if (routeState?.submittedJob && !routeState.recoveryDraft)
+      navigate(`${location.pathname}${location.search}`, {
+        replace: true,
+        state: { ...routeState, submittedJob: undefined },
+      });
+  }, [navigate, location.pathname, location.search, location.state]);
   const documentId = documentQuery.data?.id;
   const pending = useApi<Page<PendingApplyDto>>(
     `/pending-applies?documentId=${documentId ?? ''}`,
@@ -363,11 +416,19 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
       navigate(`/workbench/${created.id}`);
     }, '草稿已另存');
   }
-  if (query.isLoading || documentQuery.isLoading) return <Loading label={t('正在打开项目…')} />;
-  if (query.error || documentQuery.error)
+  if (query.isLoading || documentQuery.isLoading)
+    return (
+      <div className="workbench creation-experience">
+        <Loading label={t('正在打开项目…')} />
+        {submittedJob && <JobCard job={submittedJob} />}
+      </div>
+    );
+  const initialError =
+    (!query.data ? query.error : null) ?? (!documentQuery.data ? documentQuery.error : null);
+  if (initialError)
     return (
       <ErrorState
-        error={query.error ?? documentQuery.error}
+        error={initialError}
         retry={() => {
           void query.refetch();
           void documentQuery.refetch();
@@ -375,46 +436,89 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
       />
     );
   return (
-    <div className="workbench">
+    <div className="workbench workflow-studio">
       <header className="workbench-heading">
         <div>
           <Link to="/projects" className="icon-button" aria-label={t('返回项目')}>
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1>{query.data?.name}</h1>
+            <h1 title={query.data?.name}>{query.data?.name}</h1>
             <span className={error ? 'field-error' : 'muted'}>
               {saving
                 ? t('正在保存…')
                 : (error ??
                   (dirty
                     ? t('画布有未保存的修改')
-                    : t('画布已保存 · 版本 {revision}').replace('{revision}', String(revision))))}
+                    : mainView === 'canvas'
+                      ? t('画布已保存 · 版本 {revision}').replace('{revision}', String(revision))
+                      : t('创作记录与结果保存在此项目')))}
             </span>
           </div>
         </div>
         <div className="inline-actions">
-          <Button variant="ghost" onClick={() => setVersionsOpen(true)}>
-            <History size={16} />
-            <span>{t('版本')}</span>
-          </Button>
-          <Button variant="ghost" onClick={() => setShareOpen(true)}>
-            <Share2 size={16} />
-            <span>{t('分享')}</span>
-          </Button>
-          {canEdit && (
-            <Button
-              variant="secondary"
-              onClick={() => void save()}
-              busy={saving}
-              disabled={!dirty || conflict}
-            >
-              <Save size={16} />
-              {t('保存')}
-            </Button>
+          <Link className="button secondary" to="/tasks">
+            {t('全部任务')}
+          </Link>
+          {mainView === 'canvas' && (
+            <>
+              <Button variant="ghost" onClick={() => setVersionsOpen(true)}>
+                <History size={16} />
+                <span>{t('版本')}</span>
+              </Button>
+              <Button variant="ghost" onClick={() => setShareOpen(true)}>
+                <Share2 size={16} />
+                <span>{t('分享')}</span>
+              </Button>
+              {canEdit && (
+                <Button
+                  variant="secondary"
+                  onClick={() => void save()}
+                  busy={saving}
+                  disabled={!dirty || conflict}
+                >
+                  <Save size={16} />
+                  {t('保存')}
+                </Button>
+              )}
+            </>
           )}
         </div>
       </header>
+      {(query.error || documentQuery.error) && (
+        <ErrorState
+          error={query.error ?? documentQuery.error}
+          retry={() => {
+            void query.refetch();
+            void documentQuery.refetch();
+          }}
+        />
+      )}
+      {routeState?.notice && <Notice tone="warning">{routeState.notice}</Notice>}
+      {focusedJob && (
+        <div className="workflow-receipt" role="status">
+          <Check size={15} aria-hidden="true" />
+          <span>{t('创作已记录，离开后也能在任务中找回。')}</span>
+        </div>
+      )}
+      <Button
+        className="workbench-results-shortcut"
+        variant="secondary"
+        onClick={() => {
+          setMainView('results');
+          requestAnimationFrame(() =>
+            resultsRef.current?.scrollIntoView({
+              block: 'start',
+              behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                ? 'instant'
+                : 'smooth',
+            }),
+          );
+        }}
+      >
+        <ArrowDown size={15} />
+        {t('查看作品与进度')}
+      </Button>
       {conflict && (
         <Notice tone="warning">
           {t('画布已有新版本。当前草稿完整保留，请另存副本，或确认放弃当前修改后重新加载。')}
@@ -441,14 +545,18 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
           id="project-creation-sidebar"
           hidden={mainView === 'canvas' && canvasFocus}
         >
-          <Segments
-            value={sidebarTab}
-            onChange={setSidebarTab}
-            options={[
-              { value: 'create', label: '创作' },
-              { value: 'history', label: '创作会话' },
-            ]}
-          />
+          <div className="workflow-editor-heading">
+            <h2>{t('继续创作')}</h2>
+            <Button
+              variant="ghost"
+              aria-expanded={sidebarTab === 'history'}
+              aria-controls="project-conversation"
+              onClick={() => setSidebarTab(sidebarTab === 'history' ? 'create' : 'history')}
+            >
+              <History size={14} />
+              {t(sidebarTab === 'history' ? '返回创作' : '创作会话')}
+            </Button>
+          </div>
           <div hidden={sidebarTab !== 'create'}>
             <>
               {newestDraft &&
@@ -465,7 +573,10 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
                     </Link>
                   </Notice>
                 )}
-              {messages.error ? (
+              {messages.error && messages.data && (
+                <ErrorState error={messages.error} retry={messages.refetch} />
+              )}
+              {messages.error && !messages.data ? (
                 <ErrorState error={messages.error} retry={messages.refetch} />
               ) : messages.isLoading || draftSearch.status === 'loading' ? (
                 <Loading label={t('正在恢复创作草稿…')} />
@@ -494,16 +605,26 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
                   initialPrompt={mediaDraft?.prompt ?? query.data?.description ?? ''}
                   initialKind={query.data?.kind === 'video' ? 'video' : 'image'}
                   initialDraft={mediaDraft}
+                  initialRecovery={routeState?.recoveryDraft}
+                  onRecoveryPersisted={() => {
+                    navigate(`${location.pathname}${location.search}`, {
+                      replace: true,
+                      state: { ...routeState, recoveryDraft: undefined, notice: undefined },
+                    });
+                  }}
                   initialWarnings={draftSearch.warnings}
                   controllerRef={composerRef}
                   projectId={projectId}
                   documentId={documentId}
                   revision={revision}
                   compact
-                  onCreated={() => {
+                  visualVariant="studio"
+                  onCreated={(created) => {
+                    setSubmittedJob(created);
                     setJobPage(1);
                     setMainView('results');
-                    void refresh();
+                    navigate(jobDestination(created), { replace: true });
+                    void refresh().catch(() => undefined);
                   }}
                 />
               )}
@@ -511,6 +632,7 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
           </div>
           <div
             className="conversation-list"
+            id="project-conversation"
             hidden={sidebarTab !== 'history'}
             style={sidebarTab !== 'history' ? { display: 'none' } : undefined}
           >
@@ -548,8 +670,7 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
         <section className="project-stage" aria-label={t('项目作品与编辑')}>
           <div className="project-stage-heading">
             <div>
-              <h2>{t('项目作品')}</h2>
-              <p className="muted">{t('任务、产物与编辑都保存在当前项目中。')}</p>
+              <h2>{t('作品与进度')}</h2>
             </div>
             <div className="project-stage-actions">
               {mainView === 'canvas' && (
@@ -573,42 +694,114 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
             </div>
           </div>
           {sceneAssetError && <Notice tone="warning">{sceneAssetError}</Notice>}
-          {pending.data?.items
-            .filter((item) => item.status === 'pending')
-            .map((item) => (
-              <div className="pending-result" key={item.id}>
-                <span>
-                  <Sparkles size={16} />
-                  {item.outputKind === 'layers'
-                    ? `${item.assetIds.length} 个图层等待应用`
-                    : t('有一个新结果等待应用')}
-                </span>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setApplyItem(item);
-                    setApplyMode('new-layer');
-                  }}
-                >
-                  {t('预览并应用')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() =>
-                    void action.run(async () => {
-                      await post(`/pending-applies/${item.id}/dismiss`);
-                      await refresh();
-                    }, '已放弃应用，结果仍保留在素材库')
-                  }
-                >
-                  {t('放弃')}
-                </Button>
+          {mainView === 'canvas' &&
+            pending.data?.items
+              .filter((item) => item.status === 'pending')
+              .map((item) => (
+                <div className="pending-result" key={item.id}>
+                  <span>
+                    <Sparkles size={16} />
+                    {item.outputKind === 'layers'
+                      ? `${item.assetIds.length} 个图层等待应用`
+                      : t('有一个新结果等待应用')}
+                  </span>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setApplyItem(item);
+                      setApplyMode('new-layer');
+                    }}
+                  >
+                    {t('预览并添加到画布')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() =>
+                      void action.run(async () => {
+                        await post(`/pending-applies/${item.id}/dismiss`);
+                        await refresh();
+                      }, '已放弃应用，结果仍保留在素材库')
+                    }
+                  >
+                    {t('放弃')}
+                  </Button>
+                </div>
+              ))}
+          <div className="project-results" ref={resultsRef} hidden={mainView !== 'results'}>
+            {projectJobs.some(
+              (job) =>
+                job.input.options.detailPagePlan ||
+                job.input.options.assistantMode === 'detail-page',
+            ) && (
+              <Link
+                className="detail-studio-entry"
+                to={jobDestination(
+                  projectJobs.find((job) => !!job.input.options.detailPagePlan) ??
+                    projectJobs.find((job) => job.input.options.assistantMode === 'detail-page')!,
+                )}
+              >
+                <Layers size={22} />
+                <div>
+                  <strong>{t('查看整套商品详情页')}</strong>
+                  <p>{t('进入专用工作室查看分屏结果、历史版本与整套下载。')}</p>
+                </div>
+                <span>↗</span>
+              </Link>
+            )}
+            {focusedJobId && (
+              <div className="focused-task" ref={focusedRef} aria-label={t('当前查看的任务')}>
+                <div className="focused-task-heading">
+                  <span>{t('本次创作')}</span>
+                  <Link to={`/workbench/${projectId}`} className="text-button">
+                    {t('查看项目全部任务')}
+                  </Link>
+                </div>
+                {focusedQuery.isLoading && !focusedJob && (
+                  <Loading label={t('正在读取指定任务…')} />
+                )}
+                {focusedQuery.error && !focusedJob && (
+                  <ErrorState error={focusedQuery.error} retry={focusedQuery.refetch} />
+                )}
+                {focusedQuery.data && focusedQuery.data.projectId !== projectId && (
+                  <Notice tone="warning">
+                    {t('该任务不属于当前项目。')}{' '}
+                    <Link to={jobDestination(focusedQuery.data)}>{t('打开对应任务')}</Link>
+                  </Notice>
+                )}
+                {focusedJob && (
+                  <JobCard
+                    job={focusedJob}
+                    onJobCreated={(created) => {
+                      setSubmittedJob(created);
+                      navigate(jobDestination(created), { replace: true });
+                    }}
+                    onAcceptAsset={
+                      canEdit
+                        ? (asset) => {
+                            if (!composerRef.current)
+                              throw new Error(t('创作草稿尚未恢复，请先完成恢复。'));
+                            composerRef.current.addReference(asset);
+                            focusCreation();
+                          }
+                        : undefined
+                    }
+                    onAcceptPlan={
+                      canEdit
+                        ? (plan, index) => {
+                            if (!composerRef.current)
+                              throw new Error(t('创作草稿尚未恢复，请先完成恢复。'));
+                            composerRef.current.applyPlan(plan, index);
+                            focusCreation();
+                          }
+                        : undefined
+                    }
+                  />
+                )}
               </div>
-            ))}
-          <div className="project-results" hidden={mainView !== 'results'}>
-            {jobs.isLoading && <Loading label={t('正在读取项目任务…')} />}
+            )}
+            {jobs.isLoading && !submittedJob && <Loading label={t('正在读取项目任务…')} />}
             {jobs.error && <ErrorState error={jobs.error} retry={jobs.refetch} />}
-            {jobs.data?.items.length === 0 && (
+            {!visibleJobs.length && !focusedJobId && !jobs.isLoading && (
               <Empty
                 title={t('第一件作品，从这里开始')}
                 description={t(
@@ -622,34 +815,37 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
               />
             )}
             <div className="project-result-grid">
-              {jobs.data?.items
-                .filter((job) => job.projectId === projectId)
-                .map((job) => (
-                  <JobCard
-                    key={job.id}
-                    job={job}
-                    onAcceptAsset={
-                      canEdit
-                        ? (asset) => {
-                            if (!composerRef.current)
-                              throw new Error(t('创作草稿尚未恢复，请先完成恢复。'));
-                            setSidebarTab('create');
-                            composerRef.current.addReference(asset);
-                          }
-                        : undefined
-                    }
-                    onAcceptPlan={
-                      canEdit
-                        ? (plan, index) => {
-                            if (!composerRef.current)
-                              throw new Error(t('创作草稿尚未恢复，请先在创作区完成恢复。'));
-                            setSidebarTab('create');
-                            composerRef.current.applyPlan(plan, index);
-                          }
-                        : undefined
-                    }
-                  />
-                ))}
+              {visibleJobs.map((job) => (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  onJobCreated={(created) => {
+                    setSubmittedJob(created);
+                    setJobPage(1);
+                    navigate(jobDestination(created), { replace: true });
+                  }}
+                  onAcceptAsset={
+                    canEdit
+                      ? (asset) => {
+                          if (!composerRef.current)
+                            throw new Error(t('创作草稿尚未恢复，请先完成恢复。'));
+                          composerRef.current.addReference(asset);
+                          focusCreation();
+                        }
+                      : undefined
+                  }
+                  onAcceptPlan={
+                    canEdit
+                      ? (plan, index) => {
+                          if (!composerRef.current)
+                            throw new Error(t('创作草稿尚未恢复，请先在创作区完成恢复。'));
+                          composerRef.current.applyPlan(plan, index);
+                          focusCreation();
+                        }
+                      : undefined
+                  }
+                />
+              ))}
             </div>
             {jobs.data && (
               <Pagination

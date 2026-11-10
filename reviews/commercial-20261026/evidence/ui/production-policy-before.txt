@@ -1,0 +1,122 @@
+
+Running 2 tests using 1 worker
+
+(node:35357) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (8.9s)
+(node:35434) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (8.9s)
+
+
+  1) [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 18
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    + ]
+
+      135 |   expect(readScene().layers).toHaveLength(1);
+      136 |   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
+    > 137 |   expect(violations).toEqual([]);
+          |                      ^
+      138 |   await writeFile(
+      139 |     join(studio.folder, 'production-security-summary.json'),
+      140 |     JSON.stringify(
+        at <project>/platform/tests/e2e/production-security.spec.ts:137:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 18
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    +   Object {
+    +     "blockedURI": "eval",
+    +     "directive": "script-src",
+    +   },
+    + ]
+
+      135 |   expect(readScene().layers).toHaveLength(1);
+      136 |   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
+    > 137 |   expect(violations).toEqual([]);
+          |                      ^
+      138 |   await writeFile(
+      139 |     join(studio.folder, 'production-security-summary.json'),
+      140 |     JSON.stringify(
+        at <project>/platform/tests/e2e/production-security.spec.ts:137:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-mobile/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-production-security-final/results/production-security-produc-2fa6e--exports-without-violations-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 
+    [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations 

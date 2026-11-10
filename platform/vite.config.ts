@@ -9,6 +9,8 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist/web',
+    // Open sessions may still request chunks from the previous frontend build.
+    emptyOutDir: false,
     sourcemap: true,
     chunkSizeWarningLimit: 750,
     rollupOptions: {

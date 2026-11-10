@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import sharp from 'sharp';
-import type { Locator, Page } from '@playwright/test';
+import type { Locator, Page, Route } from '@playwright/test';
 import type { SceneDocumentV1 } from '../../src/contracts/scene';
 import { test, expect, type Studio } from './fixtures';
 
@@ -313,21 +313,42 @@ test('applies a real pending local result after a canvas revision conflict witho
   await expect(applying.getByRole('combobox', { name: '应用方式', exact: true })).toHaveValue(
     'new-layer',
   );
-  // A second client's actual API save advances the document while this preview remains open.
+  // Hold the real apply request before the second client saves. SSE may otherwise
+  // update the browser revision before the click, making HTTP 200 correct.
   const newerScene = { ...edited.scene, canvas: { ...edited.scene.canvas, background: '#f1e3cd' } };
-  const competingSave = await page.request.patch(`${studio.origin}/api/v1/documents/${edited.id}`, {
-    headers,
-    data: { expectedRevision: edited.revision, scene: newerScene },
+  let release!: () => void;
+  let sentRevision: number | null = null;
+  const barrier = new Promise<void>((done) => {
+    release = done;
   });
-  expect(competingSave.status()).toBe(200);
-  const conflictResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes('/pending-applies/') &&
-      response.url().endsWith('/apply') &&
-      response.request().method() === 'POST',
-  );
-  await applying.getByRole('button', { name: '确认应用', exact: true }).click();
-  expect((await conflictResponse).status()).toBe(409);
+  const pattern = `${studio.origin}/api/v1/pending-applies/*/apply`;
+  const holdApply = async (route: Route) => {
+    sentRevision = (route.request().postDataJSON() as { expectedRevision: number })
+      .expectedRevision;
+    await barrier;
+    await route.continue();
+  };
+  await page.route(pattern, holdApply);
+  try {
+    const conflictResponse = page.waitForResponse(
+      (response) =>
+        response.url().includes('/pending-applies/') &&
+        response.url().endsWith('/apply') &&
+        response.request().method() === 'POST',
+    );
+    await applying.getByRole('button', { name: '确认应用', exact: true }).click();
+    await expect.poll(() => sentRevision).toBe(edited.revision);
+    const competingSave = await page.request.patch(
+      `${studio.origin}/api/v1/documents/${edited.id}`,
+      { headers, data: { expectedRevision: edited.revision, scene: newerScene } },
+    );
+    expect(competingSave.status()).toBe(200);
+    release();
+    expect((await conflictResponse).status()).toBe(409);
+  } finally {
+    release();
+    await page.unroute(pattern, holdApply);
+  }
   expect(document(studio, p.id).scene).toEqual(newerScene);
   expect(
     studio.services.db.sqlite

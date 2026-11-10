@@ -147,7 +147,6 @@ export function Team() {
   return (
     <div className="page">
       <PageHeader
-        eyebrow="BETTER WORK, TOGETHER"
         title={t('团队')}
         description={t('共享创作空间，让成员、素材和用量井然有序。')}
         action={

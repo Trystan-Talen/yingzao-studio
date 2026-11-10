@@ -50,7 +50,7 @@ test('uploads a real image, confirms local resize, downloads actual pixels and r
   const card = page.locator('.job-card');
   await expect(card).toHaveCount(1);
   await expect(card.getByText('已完成', { exact: true })).toBeVisible();
-  await card.getByRole('button', { name: '查看详情', exact: true }).click();
+  await card.getByRole('button', { name: '参数与详情', exact: true }).click();
   await page.getByRole('button', { name: '查看原图对比', exact: true }).click();
   const comparison = page.getByRole('region', { name: '原图与结果对比' });
   await expect(comparison.getByText('输入原图 · 120 × 80', { exact: true })).toBeVisible();
@@ -103,7 +103,7 @@ test('reuses an inspiration with its actual reference image and restores the per
   studio,
 }) => {
   const headers = await register(page, studio);
-  await page.goto(studio.origin);
+  await page.goto(`${studio.origin}/inspiration`);
   await page.getByRole('button', { name: '把清晨，装进一滴精华 · 以此创作', exact: true }).click();
   const prompt = '为隔离验收保留植物精华参考图和竖向构图，不调用外部模型。';
   const detail = page.getByRole('dialog', { name: '把清晨，装进一滴精华', exact: true });

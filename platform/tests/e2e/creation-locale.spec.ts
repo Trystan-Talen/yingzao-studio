@@ -1,6 +1,8 @@
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { test, expect } from './fixtures';
+import { t } from '../../src/web/lib/i18n';
+import type { JobInput } from '../../src/contracts/jobs';
 
 test.use({ recoveryEnabled: false, smsEnabled: false });
 
@@ -11,22 +13,19 @@ for (const language of [
     brief: 'Creative brief',
     save: 'Save draft',
     music: 'Background music (optional)',
-    advanced: 'Model and advanced settings',
     generated: 'Generate video audio',
-    notConnected: 'Service not connected',
+    notConnected: 'Connect a service in Settings',
     resize: 'Resize image',
     width: 'Output width (pixels)',
     height: 'Output height (pixels)',
     start: 'Start processing',
     confirm: 'Confirm and submit',
     complete: 'Completed',
-    detail: 'View details',
     compare: 'Compare with original',
     region: 'Original and result comparison',
     original: 'Input original · 120 × 80',
     result: 'Processed result · 48 × 32',
-    warning: 'This model does not support resolution 720p; changed to 4K.',
-    saved: 'Canvas saved · Version 1',
+    saved: 'Draft saved locally',
   },
   {
     id: 'ar',
@@ -34,28 +33,32 @@ for (const language of [
     brief: 'وصف العمل',
     save: 'حفظ المسودة',
     music: 'موسيقى خلفية (اختياري)',
-    advanced: 'النموذج والإعدادات المتقدمة',
     generated: 'توليد صوت الفيديو',
-    notConnected: 'الخدمة غير متصلة',
+    notConnected: 'اربط خدمة من الإعدادات',
     resize: 'تغيير حجم الصورة',
     width: 'عرض النتيجة (بكسل)',
     height: 'ارتفاع النتيجة (بكسل)',
     start: 'بدء المعالجة',
     confirm: 'تأكيد وإرسال',
     complete: 'مكتمل',
-    detail: 'عرض التفاصيل',
     compare: 'مقارنة بالأصل',
     region: 'مقارنة الأصل والنتيجة',
     original: 'الصورة الأصلية المدخلة · 120 × 80',
     result: 'نتيجة المعالجة · 48 × 32',
-    warning: 'هذا النموذج لا يدعم دقة 720p؛ جرى التعديل إلى 4K.',
-    saved: 'حُفظت اللوحة · الإصدار 1',
+    saved: 'حُفظت المسودة محليًا',
   },
 ] as const) {
   test(`uses ${language.id} creation and local tool controls while retaining the original Chinese user content`, async ({
     page,
     studio,
   }) => {
+    const translatedControl = (source: string) => {
+      const label = t(source, language.id);
+      expect(label, `The ${language.id} control must have a translated label`).not.toMatch(
+        /[\u4e00-\u9fff]/,
+      );
+      return label;
+    };
     const account = await studio.existingIdentitySession();
     studio.services.db.sqlite.prepare('UPDATE users SET preferences_json=? WHERE id=?').run(
       JSON.stringify({
@@ -77,19 +80,38 @@ for (const language of [
     await page.goto(`${studio.origin}/workbench`);
     const composer = page.locator('.composer');
     await composer.getByRole('button', { name: language.video, exact: true }).click();
+    await composer
+      .getByRole('button', { name: translatedControl('更多创作设置'), exact: true })
+      .click();
+    await composer
+      .getByRole('combobox', { name: translatedControl('生成模型'), exact: true })
+      .selectOption('video.generate|fal|wan-2.6');
     await expect(composer.getByText(language.music, { exact: true })).toBeVisible();
-    await expect(composer.getByText(language.notConnected, { exact: false })).toBeVisible();
+    await composer
+      .getByRole('combobox', { name: translatedControl('清晰度'), exact: true })
+      .selectOption('720p');
+    await expect(
+      composer.locator('.submit-block').getByText(language.notConnected, { exact: false }),
+    ).toBeVisible();
+    await expect(
+      composer.getByRole('button', { name: translatedControl('生成视频'), exact: true }),
+    ).toBeDisabled();
     const audioNote = composer.locator('.notice').filter({ hasText: 'MP3/WAV' });
     await expect(audioNote).toHaveCount(1);
     expect(await audioNote.innerText()).not.toMatch(/[\u4e00-\u9fff]/);
+    expect((await composer.locator('.notice').allTextContents()).join('\n')).not.toMatch(
+      /[\u4e00-\u9fff]/,
+    );
     const text = '用户输入保持中文，不因界面语言被改写。';
     const prompt = composer.getByRole('textbox', { name: language.brief, exact: true });
     await prompt.fill(text);
-    await composer.getByRole('button', { name: language.advanced, exact: true }).click();
+    await expect(
+      composer.getByRole('region', { name: translatedControl('创作设置'), exact: true }),
+    ).toBeVisible();
     await composer
       .locator('select')
-      .filter({ has: page.locator('option[value="kling-o3-4k-reference"]') })
-      .selectOption('kling-o3-4k-reference');
+      .filter({ has: page.locator('option[value="video.generate|fal|kling-o3-4k-reference"]') })
+      .selectOption('video.generate|fal|kling-o3-4k-reference');
     await composer.getByRole('checkbox', { name: language.generated, exact: true }).check();
     await composer.getByRole('button', { name: language.save, exact: true }).click();
     await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
@@ -98,20 +120,77 @@ for (const language of [
     await expect(
       composer.getByRole('checkbox', { name: language.generated, exact: true }),
     ).toBeChecked();
-    await expect(composer.getByText(language.warning, { exact: true })).toBeVisible();
-    await expect(page.getByText(language.saved, { exact: true })).toBeVisible();
-    const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
-    const messages = await page.request.get(
-      `${studio.origin}/api/v1/projects/${projectId}/messages?pageSize=100`,
-      { headers: { 'x-workspace-id': account.workspace.id } },
+    const retainedValueWarning = translatedControl(
+      '“{parameter}”的当前值不受此模型支持。原值已保留，请重新选择。',
+    ).replace('{parameter}', translatedControl('清晰度'));
+    await expect(composer.getByText(retainedValueWarning, { exact: false })).toBeVisible();
+    await expect(composer.getByRole('status', { includeHidden: true })).toContainText(
+      language.saved,
     );
-    expect(messages.status()).toBe(200);
+    const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
+    const readDrafts = async () => {
+      const messages = await page.request.get(
+        `${studio.origin}/api/v1/projects/${projectId}/messages?pageSize=100`,
+        { headers: { 'x-workspace-id': account.workspace.id } },
+      );
+      expect(messages.status()).toBe(200);
+      return (await messages.json()).data.items
+        .map((message: { metadata?: { draft?: JobInput } }) => message.metadata?.draft)
+        .filter((draft: JobInput | undefined): draft is JobInput => !!draft) as JobInput[];
+    };
+    const originalDrafts = await readDrafts();
     expect(
-      (await messages.json()).data.items.some(
-        (message: { metadata?: { creationWarnings?: string[] } }) =>
-          message.metadata?.creationWarnings?.includes('当前模型不支持清晰度 720p，已调整为 4K。'),
+      originalDrafts.some(
+        (draft) =>
+          draft.prompt === text &&
+          draft.options.model === 'kling-o3-4k-reference' &&
+          draft.options.resolution === '720p' &&
+          draft.options.generateAudio === true,
       ),
     ).toBe(true);
+    expect(originalDrafts.some((draft) => draft.options.resolution === '4K')).toBe(false);
+    await expect(
+      composer.getByRole('button', { name: translatedControl('生成视频'), exact: true }),
+    ).toBeDisabled();
+    await composer
+      .getByRole('button', { name: translatedControl('采用当前模型的固定参数'), exact: true })
+      .click();
+    await expect(composer.getByText(retainedValueWarning, { exact: false })).toHaveCount(0);
+    await expect(prompt).toHaveValue(text);
+    await expect(
+      composer.getByRole('checkbox', { name: language.generated, exact: true }),
+    ).toBeChecked();
+    const fixedSaved = page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' &&
+        new URL(response.url()).pathname === `/api/v1/projects/${projectId}/messages`,
+    );
+    await composer.getByRole('button', { name: language.save, exact: true }).click();
+    expect((await fixedSaved).status()).toBe(200);
+    await page.reload();
+    await expect(prompt).toHaveValue(text);
+    await expect(
+      composer.getByRole('checkbox', { name: language.generated, exact: true }),
+    ).toBeChecked();
+    await expect(composer.getByText(retainedValueWarning, { exact: false })).toHaveCount(0);
+    const fixedDrafts = await readDrafts();
+    expect(
+      fixedDrafts.some(
+        (draft) =>
+          draft.prompt === text &&
+          draft.options.model === 'kling-o3-4k-reference' &&
+          draft.options.resolution === '4K' &&
+          draft.options.generateAudio === true,
+      ),
+    ).toBe(true);
+    // Adopting valid settings must not rewrite the earlier saved user draft.
+    expect(fixedDrafts.some((draft) => draft.options.resolution === '720p')).toBe(true);
+    await expect(
+      composer.locator('.submit-block').getByText(language.notConnected, { exact: false }),
+    ).toBeVisible();
+    await expect(
+      composer.getByRole('button', { name: translatedControl('生成视频'), exact: true }),
+    ).toBeDisabled();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(
       true,
     );
@@ -137,7 +216,7 @@ for (const language of [
     await page.getByRole('button', { name: language.confirm, exact: true }).click();
     const card = page.locator('.job-card');
     await expect(card.getByText(language.complete, { exact: true })).toBeVisible();
-    await card.getByRole('button', { name: language.detail, exact: true }).click();
+    await card.getByRole('button', { name: translatedControl('参数与详情'), exact: true }).click();
     await page.getByRole('button', { name: language.compare, exact: true }).click();
     const comparison = page.getByRole('region', { name: language.region, exact: true });
     await expect(comparison.getByText(language.original, { exact: true })).toBeVisible();

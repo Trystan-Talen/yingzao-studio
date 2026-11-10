@@ -1,8 +1,7 @@
 import { t } from '../lib/i18n';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Bookmark, Sparkles } from 'lucide-react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Composer } from '../components/Composer';
+import { ArrowUpRight, Bookmark, Play, Search, Sparkles } from 'lucide-react';
+import { useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -12,12 +11,21 @@ import {
   IconButton,
   Loading,
   Modal,
-  PageHeader,
   Pagination,
   Notice,
   useAction,
 } from '../components/ui';
-import { api, post, put, patch, qs, useApi, useRefresh, type Page } from '../lib/api';
+import {
+  api,
+  CONFIRMATION_TIMEOUT_MS,
+  post,
+  put,
+  patch,
+  qs,
+  useApi,
+  useRefresh,
+  type Page,
+} from '../lib/api';
 import type { AssetDto } from '../../contracts/core';
 import {
   reuseInspirationSchema,
@@ -28,6 +36,7 @@ import {
 } from '../../contracts/inspirations';
 import { useStudio } from '../context';
 import { AssetPicker } from '../components/AssetPicker';
+import '../styles/inspiration-studio.css';
 export function Inspiration() {
   const { isAdmin, session, workspace } = useStudio();
   const reuseKey = `yingzao:inspiration-reuse:v1:${session?.user.id}:${workspace?.id}`;
@@ -68,8 +77,36 @@ export function Inspiration() {
     };
   }, [reuseKey]);
   const pending = pendingReuse?.key === reuseKey ? pendingReuse : null;
-  const [category, setCategory] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigationType = useNavigationType();
+  const filterUpdates = useRef({
+    locationKey: location.key,
+    scope: reuseKey,
+    latest: searchParams,
+    targets: new Set<string>(),
+  });
+  function syncFilterUpdates() {
+    const updates = filterUpdates.current;
+    // History may commit before Router's transition renders. An input event must
+    // use that actual address, not revive the previous page's filter snapshot.
+    const browserKey = typeof window === 'undefined' ? undefined : window.history.state?.key;
+    const key = typeof browserKey === 'string' ? browserKey : location.key;
+    if (updates.locationKey === key && updates.scope === reuseKey) return;
+    const actual =
+      typeof window === 'undefined' ? searchParams : new URLSearchParams(window.location.search);
+    const observed = actual.toString();
+    const external =
+      updates.scope !== reuseKey ||
+      (location.key === key && navigationType === 'POP') ||
+      !updates.targets.has(observed);
+    updates.locationKey = key;
+    updates.scope = reuseKey;
+    if (external) updates.latest = actual;
+    if (external || observed === updates.latest.toString()) updates.targets.clear();
+    else updates.targets.delete(observed);
+  }
+  syncFilterUpdates();
   const kind = ['image', 'video'].includes(searchParams.get('kind') ?? '')
     ? searchParams.get('kind')!
     : '';
@@ -79,9 +116,30 @@ export function Inspiration() {
   const videoCategory =
     kind === 'video' && parsedVideoCategory.success ? parsedVideoCategory.data : '';
   const [newVideoCategory, setNewVideoCategory] = useState('');
-  const [platform, setPlatform] = useState('');
-  const [page, setPage] = useState(1);
-  const [showArchived, setShowArchived] = useState(false);
+  const category = (searchParams.get('category') ?? '').slice(0, 60);
+  const platform = (searchParams.get('platform') ?? '').slice(0, 80);
+  const q = (searchParams.get('q') ?? '').slice(0, 120);
+  const requestedPage = Number(searchParams.get('page') ?? 1);
+  const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  const showArchived = isAdmin && searchParams.get('archived') === 'true';
+  const onlyFavorites = searchParams.get('favorite') === 'true';
+  function updateFilters(values: Record<string, string>, resetPage = true) {
+    // Router search setters do not queue functional updates like React state.
+    // Keep consecutive control changes until their latest navigation commits.
+    syncFilterUpdates();
+    const updates = filterUpdates.current;
+    const next = new URLSearchParams(updates.latest);
+    if (resetPage) next.delete('page');
+    for (const [key, value] of Object.entries(values)) {
+      if (value) next.set(key, value);
+      else next.delete(key);
+    }
+    updates.latest = next;
+    updates.targets.add(next.toString());
+    setSearchParams(next, { replace: true });
+  }
+  const setPage = (value: number) =>
+    updateFilters({ page: value === 1 ? '' : String(value) }, false);
   const [manage, setManage] = useState(false);
   const [newAssets, setNewAssets] = useState<AssetDto[]>([]);
   const [form, setForm] = useState({
@@ -95,10 +153,8 @@ export function Inspiration() {
   });
   const [selected, setSelected] = useState<InspirationDto | null>(null);
   const [prompt, setPrompt] = useState('');
-  const [q, setQ] = useState('');
-  const [onlyFavorites, setOnlyFavorites] = useState(false);
   const catalog = useApi<Page<InspirationDto>>(
-    `/inspirations${qs({ page, pageSize: 12, q, category, kind, videoCategory, platform, favorite: onlyFavorites || undefined, archived: showArchived || undefined })}`,
+    `/inspirations${qs({ page, pageSize: 20, q, category, kind, videoCategory, platform, favorite: onlyFavorites || undefined, archived: showArchived || undefined })}`,
   );
   const facets = useApi<{ categories: string[]; platforms: string[] }>('/inspirations/facets');
   const favoriteSet = new Set(catalog.data?.items.filter((i) => i.isFavorite).map((i) => i.id));
@@ -163,40 +219,39 @@ export function Inspiration() {
         `/inspirations/${encodeURIComponent(request.id)}/reuse`,
         {
           method: 'POST',
+          timeoutMs: CONFIRMATION_TIMEOUT_MS,
           body: JSON.stringify(payload),
         },
         targetWorkspace,
       );
-      localStorage.removeItem(targetKey);
+      let notice: string | undefined;
+      try {
+        localStorage.removeItem(targetKey);
+      } catch {
+        notice = '灵感已保存为项目。本机复用记录未能清理，再次找回会打开同一个项目。';
+      }
       if (currentScope.current !== targetKey) return;
       setPendingReuse(null);
       navigate(
         result.draft.operation === 'video.motion-replica'
           ? `/tools/video-replica?projectId=${result.project.id}`
           : `/workbench/${result.project.id}`,
+        { state: { notice } },
       );
     });
   }
   return (
-    <div className="page inspiration-page">
-      <PageHeader
-        eyebrow="CREATIVE WORKSPACE"
-        title={t('让好想法，有好作品。')}
-        description={t('从一份灵感出发，把脑海里的画面变成你的下一件作品。')}
-        action={
-          <span className="hero-stamp">
-            <Sparkles size={15} />
-            {t('为创作者而造')}
-          </span>
-        }
-      />
+    <div className="page inspiration-studio">
       {(pending || reuseError) && (
         <Notice tone="warning">
-          <p>{reuseError || `上次灵感复用结果待确认：${pending?.prompt.slice(0, 80)}`}</p>
-          <p>继续会使用原请求编号找回同一个项目，不会调用模型。</p>
+          <p>
+            {reuseError ||
+              `${t(action.busy ? '正在创建灵感项目' : '上次灵感复用结果待确认')}：${pending?.prompt.slice(0, 80)}`}
+          </p>
+          <p>{t('继续会使用原请求编号找回同一个项目，不会调用模型。')}</p>
           {pending && (
             <Button busy={action.busy} variant="secondary" onClick={() => void create(true)}>
-              继续上次灵感复用
+              {t('继续上次灵感复用')}
             </Button>
           )}
           <Button
@@ -210,149 +265,117 @@ export function Inspiration() {
               })
             }
           >
-            已检查项目，清除复用记录
+            {t('已检查项目，清除复用记录')}
           </Button>
         </Notice>
       )}
-      <Composer />
-      <section className="inspiration-section">
-        <div className="section-heading">
-          <div>
-            <h2>
-              {t('探索灵感')}
-              <span className="count-dot">{catalog.data?.total ?? 0}</span>
-            </h2>
-            <p className="muted">{t('不同风格，同样值得开始。')}</p>
+      <section className="inspiration-studio-section" aria-labelledby="inspiration-heading">
+        <div className="inspiration-studio-toolbar">
+          <div className="inspiration-studio-heading">
+            <div className="inspiration-studio-title">
+              <h1 id="inspiration-heading" aria-label={t('灵感探索')}>
+                {t('灵感广场')}
+              </h1>
+              <span className="inspiration-studio-count">{catalog.data?.total ?? 0}</span>
+            </div>
+            <p className="inspiration-studio-subtitle">{t('发现产品图、营销海报与短片灵感。')}</p>
           </div>
-          <div className="inline-actions">
+          <div className="inspiration-studio-actions">
+            <div className="inspiration-studio-search">
+              <Search size={17} aria-hidden="true" />
+              <input
+                aria-label={t('搜索灵感')}
+                placeholder={t('寻找灵感…')}
+                value={q}
+                maxLength={120}
+                onChange={(event) => updateFilters({ q: event.target.value })}
+              />
+            </div>
+            <IconButton
+              label={onlyFavorites ? t('显示全部灵感') : t('仅显示已收藏')}
+              className={onlyFavorites ? 'is-active' : ''}
+              onClick={() => updateFilters({ favorite: onlyFavorites ? '' : 'true' })}
+            >
+              <Bookmark size={18} fill={onlyFavorites ? 'currentColor' : 'none'} />
+            </IconButton>
             {isAdmin && (
               <Button variant="secondary" onClick={() => setManage(true)}>
                 {t('新增灵感')}
               </Button>
             )}
-            <IconButton
-              label={onlyFavorites ? t('显示全部灵感') : t('仅显示已收藏')}
-              className={onlyFavorites ? 'is-active' : ''}
-              onClick={() => {
-                setOnlyFavorites(!onlyFavorites);
-                setPage(1);
-              }}
-            >
-              <Bookmark size={18} />
-            </IconButton>
-            <input
-              className="small-search"
-              aria-label={t('搜索灵感')}
-              placeholder={t('寻找灵感…')}
-              value={q}
-              onChange={(e) => {
-                setQ(e.target.value);
-                setPage(1);
-              }}
-            />
           </div>
         </div>
-        <div className="category-tabs">
-          {['', ...(facets.data?.categories ?? [])].map((item) => (
-            <button
-              key={item}
-              className={category === item ? 'active' : ''}
-              onClick={() => {
-                setCategory(item);
-                setPage(1);
-              }}
-            >
-              {t(item || '全部')}
-            </button>
-          ))}
-        </div>
-        <div className="inline-actions inspiration-filters">
-          <select
-            aria-label={t('灵感类型')}
-            value={kind}
-            onChange={(e) => {
-              const value = e.target.value;
-              setSearchParams(
-                (previous) => {
-                  const next = new URLSearchParams(previous);
-                  if (value) next.set('kind', value);
-                  else next.delete('kind');
-                  next.delete('videoCategory');
-                  return next;
-                },
-                { replace: true },
-              );
-              setPage(1);
-            }}
-          >
-            <option value="">{t('所有类型')}</option>
-            <option value="image">{t('图片')}</option>
-            <option value="video">{t('视频')}</option>
-          </select>
-          {kind === 'video' && (
+        <div className="inspiration-studio-filters" role="group" aria-label={t('灵感筛选')}>
+          <div className="inspiration-studio-categories">
+            {['', ...(facets.data?.categories ?? [])].map((item) => (
+              <button
+                key={item}
+                className={category === item ? 'active' : ''}
+                aria-pressed={category === item}
+                onClick={() => updateFilters({ category: item })}
+              >
+                {t(item || '全部')}
+              </button>
+            ))}
+          </div>
+          <div className="inspiration-studio-selects">
             <select
-              aria-label={t('视频内容分类')}
-              value={videoCategory}
-              onChange={(event) => {
-                const value = event.target.value;
-                setSearchParams(
-                  (previous) => {
-                    const next = new URLSearchParams(previous);
-                    if (value) next.set('videoCategory', value);
-                    else next.delete('videoCategory');
-                    return next;
-                  },
-                  { replace: true },
-                );
-                setPage(1);
-              }}
+              aria-label={t('灵感类型')}
+              value={kind}
+              onChange={(event) => updateFilters({ kind: event.target.value, videoCategory: '' })}
             >
-              <option value="">{t('全部视频内容')}</option>
-              {videoInspirationCategorySchema.options.map((value) => (
+              <option value="">{t('所有类型')}</option>
+              <option value="image">{t('图片')}</option>
+              <option value="video">{t('视频')}</option>
+            </select>
+            {kind === 'video' && (
+              <select
+                aria-label={t('视频内容分类')}
+                value={videoCategory}
+                onChange={(event) => updateFilters({ videoCategory: event.target.value })}
+              >
+                <option value="">{t('全部视频内容')}</option>
+                {videoInspirationCategorySchema.options.map((value) => (
+                  <option key={value} value={value}>
+                    {t(VIDEO_INSPIRATION_LABELS[value])}
+                  </option>
+                ))}
+              </select>
+            )}
+            <select
+              aria-label={t('发布平台')}
+              value={platform}
+              onChange={(event) => updateFilters({ platform: event.target.value })}
+            >
+              <option value="">{t('所有平台')}</option>
+              {facets.data?.platforms.map((value) => (
                 <option key={value} value={value}>
-                  {t(VIDEO_INSPIRATION_LABELS[value])}
+                  {t(value)}
                 </option>
               ))}
             </select>
-          )}
-          <select
-            aria-label={t('发布平台')}
-            value={platform}
-            onChange={(e) => {
-              setPlatform(e.target.value);
-              setPage(1);
-            }}
-          >
-            <option value="">{t('所有平台')}</option>
-            {facets.data?.platforms.map((p) => (
-              <option key={p} value={p}>
-                {t(p)}
-              </option>
-            ))}
-          </select>
-          {isAdmin && (
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={showArchived}
-                onChange={(e) => {
-                  setShowArchived(e.target.checked);
-                  setPage(1);
-                }}
-              />
-              {t('包含已下架')}
-            </label>
-          )}
+            {isAdmin && (
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={showArchived}
+                  onChange={(event) =>
+                    updateFilters({ archived: event.target.checked ? 'true' : '' })
+                  }
+                />
+                {t('包含已下架')}
+              </label>
+            )}
+          </div>
         </div>
         {catalog.isLoading && <Loading />}
         {catalog.error && <ErrorState error={catalog.error} retry={() => void catalog.refetch()} />}
-        <div className="masonry">
+        <div className="inspiration-studio-grid">
           {filtered.map((item) => (
-            <article className="inspiration-card" key={item.id}>
+            <article className="inspiration-studio-card" key={item.id}>
               <button
-                className="inspiration-image"
-                aria-label={`${item.title} · ${t('以此创作')}`}
-                style={{ background: item.color }}
+                className="inspiration-studio-image"
+                aria-label={`${item.title} · ${t('预览灵感')}`}
                 onClick={() => {
                   setSelected(item);
                   setPrompt(item.prompt);
@@ -361,25 +384,26 @@ export function Inspiration() {
                 {item.thumbnailUrl ? (
                   <img src={item.thumbnailUrl} alt={item.title} loading="lazy" />
                 ) : (
-                  <div className="media-placeholder" style={{ minHeight: 240 }}>
+                  <div className="inspiration-studio-placeholder">
                     {t(item.mediaUnavailable ? '素材已不可用' : '视频灵感')}
                   </div>
                 )}
                 {item.kind === 'video' && (
-                  <span className="sample-label">
+                  <span className="inspiration-studio-video-label">
+                    <Play size={11} fill="currentColor" aria-hidden="true" />
                     {t('视频')}
                     {item.videoCategory
                       ? ` · ${t(VIDEO_INSPIRATION_LABELS[item.videoCategory])}`
                       : ''}
                   </span>
                 )}
-                <span className="image-overlay">
-                  <span>{t('以此创作')}</span>
+                <span className="inspiration-studio-overlay">
+                  <span>{t('预览灵感')}</span>
                   <ArrowUpRight size={20} />
                 </span>
               </button>
               <button
-                className={`save-inspiration ${favoriteSet.has(item.id) ? 'saved' : ''}`}
+                className={`inspiration-studio-save ${favoriteSet.has(item.id) ? 'saved' : ''}`}
                 aria-label={`${t(favoriteSet.has(item.id) ? '取消收藏' : '收藏')} ${item.title}`}
                 onClick={() =>
                   void action.run(async () => {
@@ -392,12 +416,14 @@ export function Inspiration() {
               >
                 <Bookmark size={16} fill={favoriteSet.has(item.id) ? 'currentColor' : 'none'} />
               </button>
-              <div className="inspiration-caption">
+              <div className="inspiration-studio-caption">
                 <div>
                   <h3>{item.title}</h3>
                   <span>{item.tag}</span>
                 </div>
-                <span className="sample-label">{t(item.archived ? '已下架' : '灵感示例')}</span>
+                {item.archived && (
+                  <span className="inspiration-studio-archived">{t('已下架')}</span>
+                )}
               </div>
             </article>
           ))}
@@ -405,51 +431,82 @@ export function Inspiration() {
         {!catalog.isLoading && !catalog.error && !filtered.length && (
           <Empty title={t('暂时没有匹配的灵感')} description={t('试试其他关键词或分类。')} />
         )}
-        <Pagination page={page} pageSize={12} total={catalog.data?.total ?? 0} onPage={setPage} />
-        <p className="gallery-footnote">{t('原创灵感素材 · 仅用于风格参考，非实时生成结果')}</p>
+        <Pagination page={page} pageSize={20} total={catalog.data?.total ?? 0} onPage={setPage} />
+        <p className="inspiration-studio-footnote">
+          {t('原创灵感素材 · 仅用于风格参考，非实时生成结果')}
+        </p>
       </section>
       <Modal
         open={!!selected}
         onClose={() => setSelected(null)}
         title={selected?.title ?? '灵感详情'}
-        description={t('以这份灵感为起点，写出属于你的新想法。')}
         wide
       >
         {selected && (
-          <div className="inspiration-detail">
-            {selected.mediaUrl ? (
-              selected.kind === 'video' ? (
-                <video
-                  key={selected.id}
-                  src={selected.mediaUrl}
-                  controls
-                  playsInline
-                  preload="metadata"
-                  style={{ width: '100%', maxHeight: 500 }}
-                />
+          <div className="inspiration-studio-detail" key={selected.id}>
+            <div className="inspiration-studio-media">
+              {selected.mediaUrl ? (
+                selected.kind === 'video' ? (
+                  <video
+                    key={selected.id}
+                    src={selected.mediaUrl}
+                    controls
+                    playsInline
+                    preload="metadata"
+                  />
+                ) : (
+                  <img src={selected.mediaUrl} alt={selected.title} />
+                )
               ) : (
-                <img src={selected.mediaUrl} alt={selected.title} />
-              )
-            ) : (
-              <Empty
-                title={t('素材已不可用')}
-                description={t('原素材已删除，请联系空间管理员。')}
-              />
-            )}
-            <div>
+                <Empty
+                  title={t('素材已不可用')}
+                  description={t('原素材已删除，请联系空间管理员。')}
+                />
+              )}
+            </div>
+            <div className="inspiration-studio-info">
               <Badge tone="green">
                 {t('灵感示例 ·')}
                 {selected.category}
               </Badge>
-              <label className="field">
-                <span className="field-label">{t('创作提示词')}</span>
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={8}
-                  maxLength={12000}
-                />
-              </label>
+              <p className="inspiration-studio-intro">
+                {t('带着参考开始创作，细节可在工作台继续调整。')}
+              </p>
+              <Button
+                className="inspiration-studio-use"
+                onClick={() => void create()}
+                busy={action.busy}
+                disabled={
+                  selected.archived ||
+                  selected.mediaUnavailable ||
+                  !prompt.trim() ||
+                  !!pending ||
+                  !!reuseError
+                }
+              >
+                <Sparkles size={16} />
+                {t('使用此灵感')}
+                <ArrowUpRight size={16} />
+              </Button>
+              <p className="inspiration-studio-draft-note">
+                {t('先保存为草稿，生成前再确认费用。')}
+              </p>
+              <details className="inspiration-studio-prompt">
+                <summary>{t('查看或调整提示词')}</summary>
+                <Field label={t('创作提示词')}>
+                  <textarea
+                    value={prompt}
+                    onChange={(event) => setPrompt(event.target.value)}
+                    rows={5}
+                    maxLength={12000}
+                  />
+                </Field>
+                {!prompt.trim() && (
+                  <p className="field-error" role="alert">
+                    {t('请填写创作提示词后再使用此灵感。')}
+                  </p>
+                )}
+              </details>
               <dl className="detail-list">
                 <div>
                   <dt>{t('建议比例')}</dt>
@@ -500,20 +557,6 @@ export function Inspiration() {
                   )}
                 </Field>
               )}
-              <Button
-                onClick={() => void create()}
-                busy={action.busy}
-                disabled={
-                  selected.archived ||
-                  selected.mediaUnavailable ||
-                  !prompt.trim() ||
-                  !!pending ||
-                  !!reuseError
-                }
-              >
-                <Sparkles size={16} />
-                {t('以此创作')}
-              </Button>
               {selected.kind === 'video' && (
                 <Button
                   variant="secondary"
@@ -537,12 +580,15 @@ export function Inspiration() {
                   )}
                 </p>
               )}
-              <p className="muted small">
-                {t(
-                  '将继承参考素材、需求、类型与已有参数。模型不支持的设置会在创作页说明；此操作只保存草稿，不调用模型。',
-                )}
-              </p>
-              <p className="muted small">{selected.source}</p>
+              <details className="inspiration-studio-source">
+                <summary>{t('素材来源与使用说明')}</summary>
+                <p className="muted small">
+                  {t(
+                    '将继承参考素材、需求、类型与已有参数。模型不支持的设置会在创作页说明；此操作只保存草稿，不调用模型。',
+                  )}
+                </p>
+                <p className="muted small">{selected.source}</p>
+              </details>
               {isAdmin && selected.workspaceId && (
                 <Button
                   variant="ghost"

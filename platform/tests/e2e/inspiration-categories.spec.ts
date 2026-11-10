@@ -34,7 +34,7 @@ test('creates and reclassifies a real video inspiration, preserves filters on re
     '-y',
     file,
   ]);
-  await page.goto(studio.origin);
+  await page.goto(`${studio.origin}/inspiration`);
   await page.getByRole('button', { name: '新增灵感', exact: true }).click();
   const form = page.getByRole('dialog', { name: '新增灵感', exact: true });
   await form.getByRole('textbox', { name: '灵感标题', exact: true }).fill('口播分类本机样本');
@@ -74,12 +74,12 @@ test('creates and reclassifies a real video inspiration, preserves filters on re
   await page.getByRole('combobox', { name: '灵感类型', exact: true }).selectOption('video');
   const filter = page.getByRole('combobox', { name: '视频内容分类', exact: true });
   await filter.selectOption('talking-head');
-  await expect(page.locator('.inspiration-card')).toHaveCount(1);
+  await expect(page.locator('.inspiration-studio-card')).toHaveCount(1);
   await expect(page).toHaveURL(/kind=video&videoCategory=talking-head$/);
   await page.reload();
   await expect(filter).toHaveValue('talking-head');
-  await expect(page.locator('.inspiration-card')).toHaveCount(1);
-  await page.getByRole('button', { name: '口播分类本机样本 · 以此创作', exact: true }).click();
+  await expect(page.locator('.inspiration-studio-card')).toHaveCount(1);
+  await page.getByRole('button', { name: '口播分类本机样本 · 预览灵感', exact: true }).click();
   const detail = page.getByRole('dialog', { name: '口播分类本机样本', exact: true });
   await expect
     .poll(() => detail.locator('video').evaluate((el) => (el as HTMLVideoElement).videoWidth))
@@ -89,17 +89,23 @@ test('creates and reclassifies a real video inspiration, preserves filters on re
     'story',
   );
   await detail.getByRole('button', { name: '关闭', exact: true }).click();
-  await expect(page.locator('.inspiration-card')).toHaveCount(0);
+  await expect(page.locator('.inspiration-studio-card')).toHaveCount(0);
   await filter.selectOption('story');
-  await expect(page.locator('.inspiration-card')).toHaveCount(1);
+  await expect(page.locator('.inspiration-studio-card')).toHaveCount(1);
   await page.getByRole('button', { name: '收藏 口播分类本机样本', exact: true }).click();
   await page.getByRole('button', { name: '仅显示已收藏', exact: true }).click();
   await page.getByRole('textbox', { name: '搜索灵感', exact: true }).fill('口播分类');
-  await expect(page.locator('.inspiration-card')).toHaveCount(1);
+  await expect(page.locator('.inspiration-studio-card')).toHaveCount(1);
   await page.screenshot({ path: `${studio.folder}/video-category-filter.png`, fullPage: true });
   await page.reload();
+  await expect(page.getByRole('textbox', { name: '搜索灵感', exact: true })).toHaveValue(
+    '口播分类',
+  );
+  await expect(page.getByRole('button', { name: '显示全部灵感', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '显示全部灵感', exact: true }).click();
+  await page.getByRole('textbox', { name: '搜索灵感', exact: true }).clear();
   await filter.selectOption('');
-  await expect(page.locator('.inspiration-card')).toHaveCount(2);
+  await expect(page.locator('.inspiration-studio-card')).toHaveCount(2);
   const persisted = JSON.parse(
     (
       studio.services.db.sqlite
@@ -127,10 +133,12 @@ test('creates and reclassifies a real video inspiration, preserves filters on re
     await expect(page.getByRole('combobox', { name: language.label, exact: true })).toBeVisible();
     for (const select of await page.locator('.inspiration-filters select').all())
       expect((await select.boundingBox())!.width).toBeGreaterThan(120);
-    expect(await page.locator('.submit-block').innerText()).not.toMatch(/[\u4e00-\u9fff]/);
+    expect(await page.locator('.inspiration-studio-toolbar').innerText()).not.toMatch(
+      /[\u4e00-\u9fff]/,
+    );
     expect(await page.locator('.inspiration-filters').innerText()).not.toMatch(/[\u4e00-\u9fff]/);
     await expect(
-      page.locator('.inspiration-card').filter({ hasText: '口播分类本机样本' }),
+      page.locator('.inspiration-studio-card').filter({ hasText: '口播分类本机样本' }),
     ).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(
       true,
@@ -196,7 +204,7 @@ test('a delayed category response cannot reopen a closed detail or replace anoth
     expect(response.status()).toBe(201);
     ids.push((await response.json()).data.id);
   }
-  await page.goto(`${studio.origin}/?kind=video`);
+  await page.goto(`${studio.origin}/inspiration?kind=video`);
   let respond!: () => void;
   const gate = new Promise<void>((resolve) => {
     respond = resolve;
@@ -210,12 +218,12 @@ test('a delayed category response cannot reopen a closed detail or replace anoth
     await route.fulfill({ response });
   });
   try {
-    await page.getByRole('button', { name: '样本甲 · 以此创作', exact: true }).click();
+    await page.getByRole('button', { name: '样本甲 · 预览灵感', exact: true }).click();
     const first = page.getByRole('dialog', { name: '样本甲', exact: true });
     await first.getByRole('combobox', { name: '视频内容分类', exact: true }).selectOption('brand');
     await expect.poll(() => written).toBe(true);
     await first.getByRole('button', { name: '关闭', exact: true }).click();
-    await page.getByRole('button', { name: '样本乙 · 以此创作', exact: true }).click();
+    await page.getByRole('button', { name: '样本乙 · 预览灵感', exact: true }).click();
     const received = page.waitForResponse(
       (response) =>
         response.url().endsWith(`/inspirations/${ids[0]}`) &&
@@ -223,6 +231,11 @@ test('a delayed category response cannot reopen a closed detail or replace anoth
     );
     respond();
     await received;
+    await page
+      .getByRole('dialog', { name: '样本乙', exact: true })
+      .locator('summary')
+      .filter({ hasText: '查看或调整提示词' })
+      .click();
     await expect(
       page
         .getByRole('dialog', { name: '样本乙', exact: true })

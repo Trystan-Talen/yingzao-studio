@@ -1,0 +1,464 @@
+/* Component-owned result presentation. Only job-card/creation-media remain as compatibility
+   anchors; legacy creation-card, compact-job-card and progress layout classes are not used. */
+.job-card.result-job-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin: 0;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: none;
+}
+.result-card-heading,
+.result-card-label,
+.result-card-footer,
+.result-footer-actions,
+.result-artwork-actions,
+.result-inspector-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-width: 0;
+}
+.result-card-heading,
+.result-card-footer {
+  justify-content: space-between;
+}
+.result-card-heading {
+  margin-bottom: 16px;
+}
+.result-card-label {
+  flex: 1;
+  color: var(--muted);
+  font-size: 12px;
+}
+.result-card-label strong {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
+.result-type-icon {
+  display: inline-flex;
+  color: var(--muted);
+}
+.result-card-date {
+  font-size: 11px;
+}
+.result-job-card .creation-prompt {
+  margin: 10px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  color: var(--muted);
+}
+.result-media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.result-media-grid[data-single='true'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.creation-media.result-artwork {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  overflow: hidden;
+}
+.result-image-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--page);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.creation-media.result-artwork img,
+.creation-media.result-artwork video,
+.result-inspector-artwork > img,
+.result-inspector-artwork > video {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: min(62dvh, 640px);
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--page);
+}
+.creation-media.result-artwork figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 0 8px;
+  border: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.creation-media.result-artwork figcaption .button,
+.result-inspector .button,
+.result-card-footer .button {
+  min-height: 38px;
+  padding: 9px 13px;
+  font-size: 13px;
+}
+.result-description,
+.result-record,
+.result-specs,
+.result-job-card .creative-quality {
+  margin: 0;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.result-description > summary,
+.result-record > summary,
+.result-specs > summary,
+.result-job-card .creative-quality > summary,
+.result-progress-details > summary {
+  color: var(--muted);
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 24px;
+  padding-block: 2px;
+}
+.result-description > summary:hover,
+.result-record > summary:hover,
+.result-specs > summary:hover,
+.result-progress-details > summary:hover {
+  color: var(--text);
+}
+.result-job-card .creative-quality:has([role='alert']) > summary {
+  color: var(--warning);
+}
+.result-card-footer {
+  padding-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.result-credit {
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+.result-footer-actions {
+  margin-inline-start: auto;
+}
+.result-errors {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-inline-start: 2px solid var(--warning);
+  border-radius: 0 8px 8px 0;
+  background: color-mix(in srgb, var(--warning) 8%, var(--panel));
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.result-errors strong {
+  color: var(--warning);
+  font-size: 12px;
+}
+.result-errors p {
+  margin: 5px 0 0;
+}
+.result-recovery-action {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.result-progress {
+  padding: 4px 0 16px;
+  color: var(--text);
+}
+.result-progress-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.result-progress-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.result-progress.tone-warning .result-progress-icon {
+  color: var(--warning);
+}
+.result-progress.tone-error .result-progress-icon {
+  color: var(--danger);
+}
+.result-progress-copy {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.result-progress-copy strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.7;
+}
+.result-progress-copy p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.result-elapsed {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.result-elapsed b {
+  display: block;
+  color: var(--text);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.result-progress-details {
+  margin: 10px 0 0;
+  margin-inline-start: 31px;
+  font-size: 12px;
+}
+.result-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 10px 0;
+  margin: 0;
+  list-style: none;
+  color: var(--muted);
+}
+.result-steps li {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+.result-steps li > span {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--field);
+  font-size: 10px;
+}
+.result-steps .is-current {
+  color: var(--primary);
+}
+.result-server-stage {
+  margin: 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.result-placeholder {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--page);
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+.result-placeholder-frame {
+  opacity: 0.5;
+}
+.result-progress-icon.is-working {
+  animation: result-working 1.8s linear infinite;
+}
+@keyframes result-working {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.result-compact-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text);
+  text-decoration: none;
+}
+.result-compact-thumbnail {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--page);
+}
+.result-compact-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.result-compact-link > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.result-compact-link strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+}
+.result-compact-link small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 5px;
+}
+.result-compact-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+}
+.result-text-preview details {
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--field);
+  margin-bottom: 12px;
+}
+.result-text-preview summary {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 13px;
+}
+.result-text-preview summary span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.result-text-preview pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.result-inspector {
+  min-width: 0;
+  color: var(--text);
+}
+.result-detail.result-inspector-artwork {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.result-inspector-artwork > .result-artwork-actions {
+  justify-content: flex-end;
+}
+.result-inspector .detail-list {
+  margin-block: 14px;
+}
+.result-inspector .detail-list dd {
+  overflow-wrap: anywhere;
+}
+.result-task-items {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+.result-task-items > div {
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--field);
+  font-size: 13px;
+}
+.result-task-items > div > span:first-child {
+  margin-inline-end: 10px;
+}
+.result-inspector-actions {
+  margin-block: 16px 6px;
+}
+@media (max-width: 700px) {
+  .job-card.result-job-card {
+    padding: 14px;
+    border-radius: 12px;
+  }
+  .result-card-date {
+    flex-basis: 100%;
+    margin-inline-start: 25px;
+  }
+  .result-card-heading {
+    align-items: flex-start;
+  }
+  .result-media-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .result-artwork-actions {
+    gap: 8px;
+  }
+  .result-artwork figcaption > span {
+    display: none;
+  }
+  .result-artwork figcaption > .result-artwork-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .result-artwork-actions .button {
+    flex: 1;
+  }
+  .result-progress-heading {
+    flex-wrap: wrap;
+  }
+  .result-progress-copy {
+    flex-basis: calc(100% - 32px);
+  }
+  .result-elapsed {
+    margin-inline-start: 31px;
+  }
+  .result-elapsed b {
+    display: inline;
+    margin-inline-start: 6px;
+  }
+  .result-compact-thumbnail {
+    width: 84px;
+    height: 100px;
+  }
+  .result-compact-link {
+    gap: 12px;
+  }
+  .result-compact-link > svg {
+    display: none;
+  }
+  .result-card-footer {
+    align-items: flex-start;
+  }
+  .result-footer-actions {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .result-progress-icon.is-working {
+    animation: none;
+  }
+}

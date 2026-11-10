@@ -1,0 +1,19 @@
+日期：2026-10-26
+类型：真实浏览器失败日志摘录；非完整日志
+环境：本机隔离数据库、合成账号与素材；外部服务关闭
+问题：最近项目请求失败被显示为无项目，缺少错误和重试入口。
+净化：仅提取断言失败内容，移除页面快照，随机标识符改为稳定占位符。
+
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('.section-spaced').filter({ hasText: '最近的项目' })
+Expected substring: "最近项目暂时无法读取，请重试。"
+Received string:    "最近的项目全部项目 ↗从一个想法开始写下创作需求并保存草稿，或在项目页创建空白画布。"
+Timeout: 5000ms
+
+Call log:
+  - Expect "toContainText" locator('.section-spaced').filter({ hasText: '最近的项目' }) with timeout 5000ms
+  - waiting for locator('.section-spaced').filter({ hasText: '最近的项目' })
+    10 × locator resolved to <section class="section-spaced">…</section>
+       - unexpected value "最近的项目全部项目 ↗从一个想法开始写下创作需求并保存草稿，或在项目页创建空白画布。"
+

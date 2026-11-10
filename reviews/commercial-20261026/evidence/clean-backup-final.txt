@@ -1,0 +1,10 @@
+$ tsc --noEmit
+
+ RUN  v5.0.4 /private/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-commercial-clean-qciyzucu
+
+
+ Test Files  2 passed (2)
+      Tests  21 passed (21)
+   Start at  22:50:21
+   Duration  4.41s (tests 63%, import 29%, transform 8%)
+

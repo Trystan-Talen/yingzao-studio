@@ -7,6 +7,9 @@ const draftSchema = z.object({
   updatedAt: z.string(),
   input: jobInputSchema,
   drafts: z.object({ image: jobInputSchema.optional(), video: jobInputSchema.optional() }),
+  modelDefaultsPending: z
+    .object({ image: z.boolean().optional(), video: z.boolean().optional() })
+    .optional(),
   warnings: z
     .object({
       image: z.array(z.string().max(1000)).max(30).optional(),
@@ -29,7 +32,7 @@ export function readDraft(storage: RecoveryStorage, key: string) {
 export function writeDraft(
   storage: RecoveryStorage,
   key: string,
-  draft: Pick<CreationDraft, 'input' | 'drafts' | 'warnings'>,
+  draft: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>,
 ) {
   const record = draftSchema.parse({ ...draft, version: 1, updatedAt: new Date().toISOString() });
   storage.setItem(key, JSON.stringify(record));

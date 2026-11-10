@@ -1,0 +1,14 @@
+{
+  "previewUrl": "http://127.0.0.1:53775",
+  "isolated": true,
+  "databaseRelativePath": "platform/var/commercial-preview-20261026-k20mf76m/preview.sqlite",
+  "users": 1,
+  "assets": 1,
+  "jobs": 0,
+  "providersWithStoredCredentials": 0,
+  "servicesBoundToLoopback": true,
+  "serverPid": 43756,
+  "workerPid": 43757,
+  "externalServices": "disabled",
+  "actualOpenDatabaseVerifiedWithLsof": true
+}

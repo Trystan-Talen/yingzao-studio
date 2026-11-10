@@ -205,6 +205,24 @@ export class ProjectService {
       description: str(r, 'description'),
       kind: str(r, 'kind') as ProjectDto['kind'],
       coverAssetId: nullable(r, 'cover_asset_id'),
+      workflow:
+        this.c.get(
+          `SELECT 1 AS found FROM messages WHERE workspace_id=? AND project_id=?
+           AND role='system' AND job_id IS NULL
+           AND json_extract(metadata_json,'$.event')='project.created'
+           AND json_extract(metadata_json,'$.workflow')='detail-page' LIMIT 1`,
+          str(r, 'workspace_id'),
+          str(r, 'id'),
+        ) ||
+        this.c.get(
+          `SELECT 1 AS found FROM jobs WHERE workspace_id=? AND project_id=? AND
+          (json_extract(input_json,'$.options.assistantMode')='detail-page' OR
+           json_type(input_json,'$.options.detailPagePlan')='object') LIMIT 1`,
+          str(r, 'workspace_id'),
+          str(r, 'id'),
+        )
+          ? 'detail-page'
+          : 'media',
       documentId: str(r, 'document_id'),
       tags: json<string[]>(r.tags_json, []),
       isFavorite: this.c.isFavorite(actor, 'project', str(r, 'id')),
@@ -299,6 +317,19 @@ export class ProjectService {
         null,
         date,
       );
+      if (input.workflow === 'detail-page')
+        this.c.run(
+          'INSERT INTO messages(id,workspace_id,project_id,user_id,role,content,job_id,metadata_json,created_at) VALUES (?,?,?,?,?,?,?,?,?)',
+          id(),
+          wid,
+          pid,
+          actor.userId,
+          'system',
+          '商品详情页项目已创建。',
+          null,
+          JSON.stringify({ event: 'project.created', workflow: input.workflow }),
+          date,
+        );
       this.c.audit(actor, wid, 'project.create', 'project', pid);
       return this.get(actor, wid, pid);
     });

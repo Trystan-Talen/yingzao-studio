@@ -7,12 +7,14 @@ import { createWorker } from '../../src/worker/runner';
 import { createMailWorker } from '../../src/server/notifications';
 import { closeDatabase } from '../../src/server/db/connection';
 import type { SmsGateway } from '../../src/server/auth/identity/types';
+import { createExperienceProviders, createExperienceFetch } from '../helpers/experience-provider';
 
 const runRoot = process.env.E2E_RUN_ROOT;
 if (!runRoot || !process.argv[2]) throw new Error('Isolated browser test configuration required.');
 const config = JSON.parse(await readFile(process.argv[2], 'utf8')) as AppConfig & {
   clockFile?: string;
   localSms?: { port: number; secret: string };
+  experienceProviders?: boolean;
 };
 const inside = (file: string) => {
   const path = relative(resolve(runRoot), resolve(file));
@@ -25,7 +27,9 @@ if (
   new URL(config.publicOrigin).hostname !== '127.0.0.1' ||
   (config.smtp?.enabled &&
     (config.smtp.host !== '127.0.0.1' || config.smtp.tlsMode !== 'local-test')) ||
-  Object.values(config.environmentSecrets).some(Boolean) ||
+  Object.values(config.environmentSecrets).some(
+    (value) => value && (!config.experienceProviders || value !== 'local-experience-fixture'),
+  ) ||
   config.billing?.stripeSecretKey ||
   config.google?.enabled ||
   !inside(config.storageDir) ||
@@ -63,8 +67,12 @@ const services = createServices(config, undefined, {
     : undefined,
   smsGateway,
 });
+globalThis.fetch = createExperienceFetch();
+const overrides = config.experienceProviders
+  ? await createExperienceProviders({ folder: resolve(config.storageDir, '..'), delayMs: 700 })
+  : {};
 const workers = [
-  createWorker(services),
+  createWorker(services, overrides),
   createMailWorker(services.mail),
   createMailWorker(services.passwordRecovery.mail),
   services.identities.sms,

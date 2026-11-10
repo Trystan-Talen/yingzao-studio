@@ -3,29 +3,23 @@ import { t } from '../lib/i18n';
 import { productWarning } from '../lib/product-messages';
 import { DesignPlanner, createDesign, type MaterialDesign } from './DesignPlanner';
 import { AIWriter } from './AIWriter';
-import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
-import { ChevronDown, ChevronUp, Save, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useId, useImperativeHandle, useRef, useState, type Ref } from 'react';
+import { ChevronDown, ChevronUp, Save, SlidersHorizontal, Sparkles, Undo2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import type { AssetDto, BrandDto, ProjectDto } from '../../contracts/core';
-import {
-  IMAGE_KINDS,
-  VIDEO_KINDS,
-  IMAGE_RATIOS,
-  LANGUAGES,
-  PLATFORMS,
-} from '../../contracts/catalog';
-import { api, useApi, useRefresh, type Page } from '../lib/api';
-import {
-  jobInput,
-  modelName,
-  modelValue,
-  type Capabilities,
-  type Job,
-  type JobInput,
-} from '../lib/tasks';
+import { IMAGE_KINDS, VIDEO_KINDS, LANGUAGES } from '../../contracts/catalog';
+import { api, CONFIRMATION_TIMEOUT_MS, useApi, useRefresh, type Page } from '../lib/api';
+import { jobDestination } from '../lib/job-navigation';
+import { jobInput, modelName, type Capabilities, type Job, type JobInput } from '../lib/tasks';
 import { AssetPicker } from './AssetPicker';
 import { JobSubmit } from './JobSubmit';
-import { Button, Confirm, Field, Notice, Segments, useAction } from './ui';
+import { CreativeBrief } from './CreativeBrief';
+import { ComposerSettingsPopover } from './ComposerSettingsPopover';
+import { useCreativeBrief } from '../lib/use-creative-brief';
+import { ModelCapabilityStatus } from './ModelCapabilityStatus';
+import { useModelCapability } from '../lib/use-model-capability';
+import { newModelDefaults, resolveModelSelection } from '../lib/model-selection';
+import { Button, Confirm, Field, Modal, Notice, Segments, useAction } from './ui';
 import { useStudio } from '../context';
 import {
   draftStorageKey,
@@ -36,51 +30,80 @@ import {
 } from '../lib/creation-recovery';
 import type { DesignPlan } from '../../contracts/design-plan';
 import { buildPlanApplication } from '../lib/design-plan';
+import { resolveCreativePlacement } from '../../contracts/creative-intent';
+import '../styles/composer-layout.css';
 export interface ComposerController {
   applyPlan: (plan: DesignPlan, index: number) => void;
   addReference: (asset: AssetDto) => void;
+  setIdea: (prompt: string, mode?: 'replace' | 'append') => void;
+  getPrompt: () => string;
+  focusPrompt: () => void;
 }
 interface Props {
   controllerRef?: Ref<ComposerController>;
   initialWarnings?: string[];
   initialDraft?: JobInput;
+  initialRecovery?: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>;
+  onRecoveryPersisted?: () => void;
   initialPrompt?: string;
   initialKind?: 'image' | 'video';
+  requestedKind?: 'image' | 'video';
+  onKindChange?: (kind: 'image' | 'video') => void;
   projectId?: string;
   documentId?: string;
   revision?: number;
   compact?: boolean;
+  presentation?: 'default' | 'home' | 'quick';
+  visualVariant?: 'studio';
   onCreated?: (job: Job) => void;
   onSaved?: (project: ProjectDto) => void;
 }
 export function Composer({
   initialDraft: serverDraft,
+  initialRecovery,
+  onRecoveryPersisted,
   initialWarnings = [],
   controllerRef,
   initialPrompt = '',
   initialKind = 'image',
+  requestedKind,
+  onKindChange,
   projectId,
   documentId,
   revision,
   compact = false,
+  presentation = 'default',
+  visualVariant,
   onCreated,
   onSaved,
 }: Props) {
+  const isQuick = presentation === 'quick';
+  const isHome = presentation === 'home' || isQuick;
   const { canEdit, session, workspace } = useStudio();
   const storageKey = draftStorageKey(session!.user.id, workspace!.id, projectId);
   const [localDraft] = useState(() => {
+    if (initialRecovery)
+      return {
+        value: { ...initialRecovery, version: 1 as const, updatedAt: new Date().toISOString() },
+        error: null,
+      };
     try {
       return readDraft(localStorage, storageKey);
     } catch {
       return { value: null, error: '浏览器存储不可用，当前修改仅保留在此页面。' };
     }
   });
-  const initialDraft = localDraft.value?.input ?? serverDraft;
+  const savedInput = localDraft.value?.input ?? serverDraft;
+  const savedKind = savedInput?.operation === 'video.generate' ? 'video' : 'image';
+  const initialDraft = requestedKind
+    ? (localDraft.value?.drafts?.[requestedKind] ??
+      (savedKind === requestedKind ? savedInput : undefined))
+    : savedInput;
   const draftKind = initialDraft
     ? initialDraft.operation === 'video.generate'
       ? 'video'
       : 'image'
-    : initialKind;
+    : (requestedKind ?? initialKind);
   const typeDrafts = useRef<CreationDraft['drafts']>(localDraft.value?.drafts ?? {});
   const [draftError, setDraftError] = useState(localDraft.error);
   const [draftBlocked, setDraftBlocked] = useState(!!localDraft.error);
@@ -92,6 +115,7 @@ export function Composer({
     warningDrafts.current[draftKind] ?? initialDraft?.creationWarnings ?? initialWarnings,
   );
   const finalized = useRef(false);
+  const recoveryPersisted = useRef(false);
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -103,6 +127,8 @@ export function Composer({
   const projectRef = useRef(boundProjectId);
   const projectCreation = useRef<Promise<ProjectDto> | null>(null);
   const promptRef = useRef<HTMLTextAreaElement>(null);
+  const promptHintId = useId();
+  const [promptRequested, setPromptRequested] = useState(false);
   const [mention, setMention] = useState<{ start: number; end: number; query: string } | null>(
     null,
   );
@@ -114,8 +140,24 @@ export function Composer({
   const [missingToRemove, setMissingToRemove] = useState<string | null>(null);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [kind, setKind] = useState<'image' | 'video'>(draftKind);
+  const kindChangeListener = useRef(onKindChange);
+  kindChangeListener.current = onKindChange;
+  useEffect(() => {
+    kindChangeListener.current?.(kind);
+  }, [kind]);
   const [prompt, setPrompt] = useState(initialDraft?.prompt ?? initialPrompt);
   const [expanded, setExpanded] = useState(false);
+  const [pendingIdea, setPendingIdea] = useState<string | null>(null);
+  const [ideaError, setIdeaError] = useState('');
+  const [ideaUndo, setIdeaUndo] = useState<{
+    before: string;
+    after: string;
+    kind: 'image' | 'video';
+  } | null>(null);
+  const settingsId = useId();
+  const settingsTrigger = useRef<HTMLButtonElement>(null);
+  const [settingsFocusRequest, setSettingsFocusRequest] = useState(0);
+  const composerRef = useRef<HTMLDivElement>(null);
   const [extraReferences, setExtraReferences] = useState<AssetDto[]>([]);
   const [backgroundAudioId, setBackgroundAudioId] = useState(initialDraft?.backgroundAudioAssetId);
   const [backgroundAudio, setBackgroundAudio] = useState<AssetDto | undefined>();
@@ -135,11 +177,13 @@ export function Composer({
   const [count, setCount] = useState(initialDraft?.options.count ?? 1);
   const [duration, setDuration] = useState(initialDraft?.options.duration ?? 5);
   const [resolution, setResolution] = useState(initialDraft?.options.resolution ?? '1K');
+  const pendingModelDefaults = useRef(localDraft.value?.modelDefaultsPending ?? {});
+  const initialDefaultsPending = !initialDraft || pendingModelDefaults.current[draftKind] === true;
+  const defaultsPending = useRef(initialDefaultsPending);
+  const needTextTouched = useRef(initialDraft?.options.needText !== undefined);
+  const [defaultsReady, setDefaultsReady] = useState(!initialDefaultsPending);
   const [outputKind, setOutputKind] = useState(initialDraft?.options.kind ?? 'free');
   const [designs, setDesigns] = useState<MaterialDesign[]>(initialDraft?.options.designs ?? []);
-  const multiple =
-    kind === 'image' &&
-    ['detail', 'product-set', 'main-secondary', 'marketing'].includes(outputKind);
   const [brandId, setBrandId] = useState(initialDraft?.brandId ?? '');
   const [language, setLanguage] = useState(
     initialDraft?.options.language ?? session?.user.preferences.defaultCreationLanguage ?? 'zh-CN',
@@ -147,6 +191,18 @@ export function Composer({
   const [platform, setPlatform] = useState(
     initialDraft?.options.platform ?? session?.user.preferences.defaultPlatform ?? '通用电商',
   );
+  const [creativePlacement, setCreativePlacement] = useState(() => {
+    const placement = resolveCreativePlacement({
+      mediaType: draftKind,
+      kind: initialDraft?.options.kind,
+      placement: initialDraft?.options.creativePlacement,
+    });
+    return placement === 'general' && !initialDraft?.options.creativePlacement
+      ? undefined
+      : placement;
+  });
+  const [creativeMarket, setCreativeMarket] = useState(initialDraft?.options.creativeMarket);
+  const [creativeRecoveryInput, setCreativeRecoveryInput] = useState(initialDraft);
   const [needText, setNeedText] = useState(initialDraft?.options.needText ?? true);
   const [referenceMode, setReferenceMode] = useState<string>(
     initialDraft?.options.referenceMode ?? 'all',
@@ -158,16 +214,39 @@ export function Composer({
   const brands = useApi<Page<BrandDto>>('/brands?pageSize=100');
   const operations =
     capabilities.data?.operations.filter((op) => op.id === `${kind}.generate`) ?? [];
-  const operation =
-    operations.find((op) => `${op.id}:${op.providerId}` === operationKey) ??
-    operations.find((op) => op.available) ??
-    operations[0];
-  const currentModel = operation?.models.find((m) => m.id === model) ?? operation?.models[0];
+  const { operation, model: selectedModel } = resolveModelSelection(
+    operations,
+    operationKey,
+    model,
+  );
+  const modelCapability = useModelCapability({
+    operation,
+    model: selectedModel,
+    inputMode:
+      referenceIds.length ||
+      (referenceMode === 'first-last' &&
+        selectedModel?.id === 'kling-o3-4k-reference' &&
+        extraReferenceIds.length)
+        ? 'image'
+        : 'text',
+  });
+  const currentModel = modelCapability.model;
   const firstLast = kind === 'video' && referenceMode === 'first-last';
   const isO3 = currentModel?.id === 'kling-o3-4k-reference';
   const isKling = kind === 'video' && currentModel?.id.startsWith('kling-');
+  // These gateways reject ordinary design batches before splitting items. The
+  // dedicated, confirmed detail-page flow has its own server-side exception.
+  const supportsOrdinaryDesigns = !(
+    operation?.providerId === 'openai' &&
+    ['gpt-image-2', 'doubao-seedream-5.0-lite'].includes(currentModel?.id ?? model)
+  );
+  const multiple =
+    kind === 'image' &&
+    (['detail', 'product-set', 'main-secondary'].includes(outputKind) ||
+      (outputKind === 'marketing' && (supportsOrdinaryDesigns || designs.length > 0)));
   const acceptsFirstLast = kind === 'video' && (currentModel?.id === 'kling-o1-first-last' || isO3);
-  const sourceMax = kind === 'image' ? 20 : firstLast ? 2 : isKling ? 7 : 1;
+  const textOnly = operation?.inputMode === 'text-only';
+  const sourceMax = textOnly ? 0 : kind === 'image' ? 20 : firstLast ? 2 : isKling ? 7 : 1;
   const invalidVideoReferences =
     kind === 'video' &&
     (references.length > sourceMax ||
@@ -219,41 +298,34 @@ export function Composer({
     };
   }, [referenceKey, assetRetry, workspace?.id]);
   useEffect(() => {
-    if (currentModel) {
-      const warnings: string[] = [];
-      if (model && model !== currentModel.id) {
-        warnings.push(`原模型当前不可选，已切换为 ${currentModel.name}，请确认参数。`);
-        setModel(currentModel.id);
-      }
-      if (kind === 'video') {
-        if (currentModel.id === 'kling-o1-first-last') setReferenceMode('first-last');
-        else if (currentModel.id !== 'kling-o3-4k-reference') setReferenceMode('all');
-      }
-      if (!currentModel.ratios.includes(ratio)) {
-        warnings.push(`当前模型不支持比例 ${ratio}，已调整为 ${currentModel.ratios[0] ?? '1:1'}。`);
-        setRatio(currentModel.ratios[0] ?? '1:1');
-      }
-      if (!currentModel.resolutions.includes(resolution)) {
-        warnings.push(
-          `当前模型不支持清晰度 ${resolution}，已调整为 ${currentModel.resolutions[0] ?? '1K'}。`,
-        );
-        setResolution(currentModel.resolutions[0] ?? '1K');
-      }
-      if (currentModel.durations.length && !currentModel.durations.includes(duration)) {
-        warnings.push(
-          `当前模型不支持 ${duration} 秒，已调整为 ${currentModel.durations[0] ?? 5} 秒。`,
-        );
-        setDuration(currentModel.durations[0] ?? 5);
-      }
-      if (warnings.length)
-        setPlanWarnings((previous) => [...new Set([...previous, ...warnings])].slice(-30));
+    if (!modelCapability.data?.canGenerate || !currentModel) return;
+    if (defaultsPending.current) {
+      defaultsPending.current = false;
+      setDefaultsReady(true);
+      const defaults = newModelDefaults(currentModel, modelCapability.maxCount, kind);
+      if (defaults.ratio) setRatio(defaults.ratio);
+      if (defaults.resolution) setResolution(defaults.resolution);
+      if (defaults.duration !== undefined) setDuration(defaults.duration);
+      setCount(defaults.count);
+      setReferenceMode(defaults.referenceMode);
+      if (!needTextTouched.current) setNeedText(defaults.needText);
+      setGenerateAudio(false);
+      return;
     }
-  }, [currentModel?.id]);
+    // Other controls can be changed before the capability request finishes.
+    // Keep those explicit values, while still correcting an untouched toggle
+    // that the selected model cannot serialize (for example Seedance subtitles).
+    if (!needTextTouched.current) {
+      const supported = currentModel.textOverlay?.mode !== 'unsupported';
+      setNeedText((previous) => (previous === supported ? previous : supported));
+    }
+  }, [modelCapability.data?.revision, currentModel?.id, kind]);
   const input = jobInput({
+    capabilityRevision: modelCapability.revision,
     creationWarnings: planWarnings,
     backgroundAudioAssetId: backgroundAudioId,
     operation: `${kind}.generate`,
-    providerId: operation?.providerId ?? 'openai',
+    providerId: operation?.providerId ?? operationKey.split(':')[1] ?? 'openai',
     prompt,
     assetIds: referenceIds,
     referenceAssetIds: firstLast && isO3 ? extraReferenceIds : [],
@@ -267,7 +339,7 @@ export function Composer({
       ...(multiple && designs.length
         ? { designs: designs.map((d) => ({ ...d, name: d.name.trim() || '未命名模块' })) }
         : {}),
-      model: currentModel?.id,
+      model: model || currentModel?.id,
       ...(currentModel?.audio?.mode === 'generated' || generateAudio ? { generateAudio } : {}),
       kind: outputKind,
       ratio,
@@ -276,12 +348,50 @@ export function Composer({
       duration,
       language,
       platform,
+      creativePlacement,
+      creativeMarket,
       needText,
       referenceMode,
     },
   });
+  const creativeBrief = useCreativeBrief({
+    input,
+    recoveryInput: creativeRecoveryInput,
+    userId: session!.user.id,
+    workspaceId: workspace!.id,
+  });
+  const referenceModeIssue =
+    kind === 'video' &&
+    currentModel &&
+    ((currentModel.id === 'kling-o1-first-last' && referenceMode !== 'first-last') ||
+      (!acceptsFirstLast && referenceMode === 'first-last'));
+  const textModeIssue = currentModel?.textOverlay?.mode === 'unsupported' && needText;
+  const selectionIssue =
+    (multiple && !supportsOrdinaryDesigns
+      ? t('当前模型仅支持单张创作。分组草稿已保留，请切换支持分组的模型，或改用单张类型。')
+      : null) ??
+    modelCapability.selectionIssue(input.options) ??
+    (referenceModeIssue ? t('当前参考方式不受此模型支持，请在更多创作设置中重新选择。') : null) ??
+    (textModeIssue ? t('当前模型不支持画面文字，请在更多创作设置中关闭该选项。') : null);
+  const ratios = currentModel?.ratios ?? [];
+  const resolutions = currentModel?.resolutions ?? [];
+  const durations = currentModel?.durations ?? [];
+  const counts = Array.from({ length: modelCapability.maxCount }, (_, index) => index + 1);
+  const outputSize = modelCapability.data?.sizePresets?.find(
+    (preset) =>
+      preset.ratio === ratio && preset.resolution.toLowerCase() === resolution.toLowerCase(),
+  )?.size;
+  function useFixedParameters() {
+    const fixed = modelCapability.fixedOptions;
+    if (typeof fixed.ratio === 'string') setRatio(fixed.ratio);
+    if (typeof fixed.resolution === 'string') setResolution(fixed.resolution);
+    if (typeof fixed.duration === 'number') setDuration(fixed.duration);
+    if (typeof fixed.count === 'number') setCount(fixed.count);
+    if (typeof fixed.generateAudio === 'boolean') setGenerateAudio(fixed.generateAudio);
+  }
   const localInput: JobInput = {
     ...input,
+    creativeBriefId: creativeBrief.briefId,
     creationWarnings: planWarnings,
     referenceAssetIds: extraReferenceIds,
     options: {
@@ -321,8 +431,8 @@ export function Composer({
     }
     const updated: JobInput =
       slot === 'audio'
-        ? { ...original, backgroundAudioAssetId: asset.id }
-        : { ...original, [field]: [...selected, asset.id] };
+        ? { ...original, creativeBriefId: undefined, backgroundAudioAssetId: asset.id }
+        : { ...original, creativeBriefId: undefined, [field]: [...selected, asset.id] };
     typeDrafts.current[sourceKind] = updated;
     if (active) {
       latestDraft.current = { ...latest, input: updated };
@@ -343,6 +453,7 @@ export function Composer({
         input: current,
         drafts: { ...typeDrafts.current, [latest.kind]: current },
         warnings: { ...warningDrafts.current, [latest.kind]: latest.warnings },
+        modelDefaultsPending: pendingModelDefaults.current,
       });
       setDraftError(null);
     } catch {
@@ -355,25 +466,56 @@ export function Composer({
       input: { ...latest.input, projectId: project },
       drafts: { ...typeDrafts.current, [latest.kind]: { ...latest.input, projectId: project } },
       warnings: { ...warningDrafts.current, [latest.kind]: latest.warnings },
+      modelDefaultsPending: pendingModelDefaults.current,
     };
   }
-  const draftSnapshot = JSON.stringify([localInput, planWarnings]);
+  function transferDraft(project: string) {
+    const recoveryDraft = currentRecovery(project);
+    try {
+      writeDraft(
+        localStorage,
+        draftStorageKey(session!.user.id, workspace!.id, project),
+        recoveryDraft,
+      );
+      localStorage.removeItem(storageKey);
+      return {};
+    } catch {
+      return {
+        recoveryDraft,
+        notice: '最新编辑内容已随页面保留；浏览器草稿存储异常，请保存草稿到项目。',
+      };
+    }
+  }
+  // A refreshed proof is not a creative edit. In particular, an untouched older
+  // tab must not overwrite a newer draft merely because model metadata changed.
+  const draftSnapshot = JSON.stringify([
+    { ...localInput, capabilityRevision: undefined },
+    planWarnings,
+  ]);
   useEffect(() => {
     if (finalized.current || draftBlocked) return;
+    pendingModelDefaults.current[kind] = !defaultsReady;
     typeDrafts.current[kind] = localInput;
     warningDrafts.current[kind] = planWarnings;
+    let saved = false;
     try {
       writeDraft(localStorage, storageKey, {
         input: localInput,
         drafts: typeDrafts.current,
         warnings: warningDrafts.current,
+        modelDefaultsPending: pendingModelDefaults.current,
       });
       setDraftError(null);
       setDraftStatus('草稿已保存在本机');
+      saved = true;
     } catch {
       setDraftError('当前修改仅保留在此页面。浏览器无法保存草稿，请使用“保存草稿”保存到项目。');
     }
-  }, [draftSnapshot, storageKey, draftBlocked]);
+    if (saved && initialRecovery && !recoveryPersisted.current) {
+      recoveryPersisted.current = true;
+      onRecoveryPersisted?.();
+    }
+  }, [draftSnapshot, storageKey, draftBlocked, defaultsReady]);
   function switchKind(next: 'image' | 'video') {
     typeDrafts.current[kind] = localInput;
     warningDrafts.current[kind] = planWarnings;
@@ -386,6 +528,9 @@ export function Composer({
     setRatio(draft?.options.ratio ?? (next === 'video' ? '16:9' : '1:1'));
     setCount(draft?.options.count ?? 1);
     setDuration(draft?.options.duration ?? 5);
+    defaultsPending.current = !draft || pendingModelDefaults.current[next] === true;
+    setDefaultsReady(!defaultsPending.current);
+    setPromptRequested(false);
     setResolution(draft?.options.resolution ?? (next === 'video' ? '720p' : '1K'));
     setOutputKind(draft?.options.kind ?? 'free');
     setDesigns(draft?.options.designs ?? []);
@@ -394,6 +539,17 @@ export function Composer({
       draft?.options.language ?? session?.user.preferences.defaultCreationLanguage ?? 'zh-CN',
     );
     setPlatform(draft?.options.platform ?? session?.user.preferences.defaultPlatform ?? '通用电商');
+    const placement = resolveCreativePlacement({
+      mediaType: next,
+      kind: draft?.options.kind,
+      placement: draft?.options.creativePlacement,
+    });
+    setCreativePlacement(
+      placement === 'general' && !draft?.options.creativePlacement ? undefined : placement,
+    );
+    setCreativeMarket(draft?.options.creativeMarket);
+    setCreativeRecoveryInput(draft);
+    needTextTouched.current = draft?.options.needText !== undefined;
     setNeedText(draft?.options.needText ?? true);
     setReferenceMode(draft?.options.referenceMode ?? 'all');
     setReferenceIds(draft?.assetIds ?? []);
@@ -408,6 +564,7 @@ export function Composer({
     ...new Map([...references, ...extraReferences].map((asset) => [asset.id, asset])).values(),
   ];
   function editPrompt(value: string, caret: number) {
+    setIdeaError('');
     setPrompt(value);
     const before = value.slice(0, caret);
     const match = before.match(/(?:^|\s)@([^\s@\[\]]*)$/);
@@ -450,7 +607,11 @@ export function Composer({
   }
   async function ensureProject(): Promise<ProjectDto> {
     if (projectRef.current)
-      return api<ProjectDto>(`/projects/${projectRef.current}`, {}, workspace!.id);
+      return api<ProjectDto>(
+        `/projects/${projectRef.current}`,
+        { timeoutMs: CONFIRMATION_TIMEOUT_MS },
+        workspace!.id,
+      );
     if (!projectCreation.current) {
       projectCreation.current = api<ProjectDto>(
         '/projects',
@@ -471,6 +632,7 @@ export function Composer({
         .then((project) => {
           projectRef.current = project.id;
           if (mounted.current) setBoundProjectId(project.id);
+          creativeBrief.bindProject(project.id);
           try {
             writeDraft(localStorage, storageKey, currentRecovery(project.id));
           } catch {
@@ -505,7 +667,7 @@ export function Composer({
         ? { id: payload.documentId, revision: payload.baseRevision }
         : await api<{ id: string; revision: number }>(
             `/projects/${project.id}/document`,
-            {},
+            { timeoutMs: CONFIRMATION_TIMEOUT_MS },
             workspace!.id,
           );
     const prepared = {
@@ -523,26 +685,13 @@ export function Composer({
       await saveProjectDraft({ ...localInput, projectId: project.id });
       if (!mounted.current) return;
       setDraftStatus('草稿已保存到项目');
-      await refresh();
-      if (!mounted.current) return;
       onSaved?.(project);
       if (!projectId) {
-        try {
-          writeDraft(
-            localStorage,
-            draftStorageKey(session!.user.id, workspace!.id, project.id),
-            currentRecovery(project.id),
-          );
-          localStorage.removeItem(storageKey);
-        } catch {
-          setDraftError(
-            '项目已保存，但保存期间的最新修改未能转存。当前页面保留全部修改，请恢复浏览器存储后再次保存。',
-          );
-          return;
-        }
+        const state = transferDraft(project.id);
         finalized.current = true;
-        navigate(`/workbench/${project.id}`);
+        navigate(`/workbench/${project.id}`, { state });
       }
+      void refresh().catch(() => undefined);
     }, '草稿已保存');
   }
   function applyPlan(plan: DesignPlan, index: number) {
@@ -556,10 +705,15 @@ export function Composer({
       languages: LANGUAGES.map((language) => language.id),
       maxPromptLength: isKling ? 2100 : 12000,
     });
+    defaultsPending.current = false;
+    setDefaultsReady(true);
     setPrompt(application.prompt);
     if (application.ratio) setRatio(application.ratio);
-    if (application.resolution) setResolution(application.resolution);
+    if (application.resolution) {
+      setResolution(application.resolution);
+    }
     if (application.language) setLanguage(application.language);
+    needTextTouched.current = true;
     setNeedText(application.needText);
     setPlanWarnings(application.warnings);
 
@@ -567,6 +721,9 @@ export function Composer({
   }
   function addReference(asset: AssetDto) {
     if (!canEdit) throw new Error(t('当前角色不能编辑创作草稿。'));
+    if (textOnly) throw new Error(t('当前模型仅支持文字生成，请先选择支持参考图的模型。'));
+    if (capabilities.isLoading || !operation)
+      throw new Error(t('模型能力尚未读取完成，请稍后添加。'));
     if (referenceIds.includes(asset.id)) {
       promptRef.current?.focus();
       return;
@@ -580,70 +737,67 @@ export function Composer({
     setReferences((assets) => [...assets, asset]);
     promptRef.current?.focus();
   }
-  useImperativeHandle(controllerRef, () => ({ applyPlan, addReference }));
-  return (
-    <div className={`composer ${compact ? 'composer-compact' : ''}`}>
-      <div className="composer-top">
-        <Segments
-          value={kind}
-          onChange={switchKind}
-          options={[
-            { value: 'image', label: '图片创作' },
-            { value: 'video', label: '视频创作' },
-          ]}
-        />
-        <span className="composer-note">
-          <Sparkles size={14} />
-          {t('让灵感更进一步')}
-        </span>
-      </div>
-      <p className="field-hint" role="status">
-        {t(draftStatus)} · {t('与画布保存分别记录')}
-      </p>
-      {draftError && (
-        <Notice tone="warning">
-          {draftError}
-          {draftBlocked && (
-            <Button variant="ghost" onClick={() => setDraftBlocked(false)}>
-              {t('已核对项目草稿，用当前内容替换本机记录')}
-            </Button>
-          )}
-        </Notice>
-      )}
-      {!!planWarnings.length && (
-        <Notice tone="warning">
-          {planWarnings.map((warning) => (
-            <p key={warning}>{productWarning(warning)}</p>
-          ))}
-          <Button variant="ghost" onClick={() => setPlanWarnings([])}>
-            {t('已核对当前参数')}
-          </Button>
-        </Notice>
-      )}
-      {!referencesReady && (
-        <Notice tone="warning">
-          {restoringAssets || resolvedAssetKey !== referenceKey
-            ? t('正在恢复参考素材，完成前暂不能提交。')
-            : t('部分参考素材未恢复。请重试，或明确移除失效引用后继续。')}
-          {assetFailures.map((failure) => (
-            <div key={failure.id}>
-              <p>
-                {failure.id.slice(-8)} · {failure.message}
-              </p>
-              <Button variant="ghost" onClick={() => setMissingToRemove(failure.id)}>
-                {t('移除失效引用')}
-              </Button>
-            </div>
-          ))}
-          {!!assetFailures.length && (
-            <Button variant="secondary" onClick={() => setAssetRetry((value) => value + 1)}>
-              {t('重试恢复素材')}
-            </Button>
-          )}
-        </Notice>
-      )}
-      <div className="composer-materials">
+  function applyIdea(idea: string, mode?: 'replace' | 'append') {
+    if (!canEdit) return;
+    setIdeaError('');
+    if (prompt.trim() && !mode) {
+      setPendingIdea(idea);
+      return;
+    }
+    const next = mode === 'append' && prompt.trim() ? `${prompt}\n\n${idea}` : idea;
+    if (next.length > (isKling ? 2100 : 12000)) {
+      setIdeaError(t('文字已超出当前模型上限，原需求已保留。请先精简需求，或选择替换。'));
+      if (!pendingIdea)
+        requestAnimationFrame(() => {
+          promptRef.current?.focus();
+          promptRef.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
+        });
+      return;
+    }
+    setIdeaUndo({ before: prompt, after: next, kind });
+    setPrompt(next);
+    setPendingIdea(null);
+    requestAnimationFrame(() => {
+      promptRef.current?.focus();
+      promptRef.current?.scrollIntoView({
+        block: 'center',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'instant'
+          : 'smooth',
+      });
+    });
+  }
+  useImperativeHandle(controllerRef, () => ({
+    applyPlan,
+    addReference,
+    setIdea: applyIdea,
+    getPrompt: () => prompt,
+    focusPrompt: () => {
+      promptRef.current?.focus();
+      promptRef.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
+    },
+  }));
+  const materials = (
+    <div className="composer-materials">
+      {textOnly &&
+        (referenceIds.length > 0 ||
+        extraReferenceIds.length > 0 ||
+        brandId ||
+        initialDraft?.characterId ||
+        designs.length > 0 ||
+        backgroundAudioId ? (
+          <Notice tone="warning">
+            {t('当前服务仅接受文字描述。请移除参考素材、品牌、人物或多图方案后再生成。')}
+          </Notice>
+        ) : (
+          <p className="composer-input-mode">
+            <span>{t('文字生成')}</span>
+            {t('用文字描述画面与细节')}
+          </p>
+        ))}
+      <div hidden={textOnly && references.length === 0}>
         <AssetPicker
+          inline
           value={references}
           onChange={(items) => changeAssets(items, 'main')}
           uploadScope={`${kind}:main`}
@@ -660,94 +814,162 @@ export function Composer({
                 : t('视频创作参考素材')
           }
         />
-        <div hidden={!(currentModel?.audio?.mode === 'background-music' || backgroundAudioId)}>
-          <AssetPicker
-            value={backgroundAudio ? [backgroundAudio] : []}
-            uploadScope={`${kind}:audio`}
-            onUploaded={(asset) => acceptUploaded(asset, kind, 'audio', 1)}
-            onChange={(assets) => {
-              setBackgroundAudio(assets[0]);
-              setBackgroundAudioId(assets[0]?.id);
-            }}
-            kind="audio"
-            max={1}
-            projectId={boundProjectId}
-            label={t('背景音乐（可选）')}
-          />
-          <Notice>
-            {currentModel?.audio?.mode === 'background-music'
-              ? t(currentModel.audio.note)
-              : t('当前模型不支持背景音乐。原音频已保留，请移除音频或切换支持的模型后提交。')}
-          </Notice>
-        </div>
-        {(currentModel?.audio?.mode === 'generated' || generateAudio) && (
-          <>
-            <label className="check-row">
-              <input
-                type="checkbox"
-                checked={generateAudio}
-                onChange={(event) => setGenerateAudio(event.target.checked)}
-              />
-              {t('生成视频音轨')}
-            </label>
+      </div>
+      <div hidden={!(currentModel?.audio?.mode === 'background-music' || backgroundAudioId)}>
+        <AssetPicker
+          value={backgroundAudio ? [backgroundAudio] : []}
+          uploadScope={`${kind}:audio`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, 'audio', 1)}
+          onChange={(assets) => {
+            setBackgroundAudio(assets[0]);
+            setBackgroundAudioId(assets[0]?.id);
+          }}
+          kind="audio"
+          max={1}
+          projectId={boundProjectId}
+          label={t('背景音乐（可选）')}
+        />
+        <Notice>
+          {currentModel?.audio?.mode === 'background-music'
+            ? t(currentModel.audio.note)
+            : t('当前模型不支持背景音乐。原音频已保留，请移除音频或切换支持的模型后提交。')}
+        </Notice>
+      </div>
+      {(currentModel?.audio?.mode === 'generated' || generateAudio) && (
+        <>
+          <label className="check-row composer-audio-toggle">
+            <input
+              type="checkbox"
+              checked={generateAudio}
+              onChange={(event) => setGenerateAudio(event.target.checked)}
+            />
+            {t('生成视频音轨')}
+          </label>
+          {(!isQuick || currentModel?.audio?.mode !== 'generated') && (
             <Notice>
               {currentModel?.audio?.mode === 'generated'
                 ? t(currentModel.audio.note)
                 : t('当前模型不支持生成音轨。请关闭此选项或切换支持的模型。')}
             </Notice>
-          </>
-        )}
-        {firstLast && references.length === 1 && (
-          <Button
-            variant="ghost"
-            onClick={() => applyAssets([references[0]!, references[0]!], 'main')}
-          >
-            {t('使用同一图片作为首尾帧')}
-          </Button>
-        )}
-        {firstLast && references.length === 2 && (
-          <Button variant="ghost" onClick={() => applyAssets([...references].reverse(), 'main')}>
-            {t('交换首尾帧')}
-          </Button>
-        )}
-        {firstLast && isO3 && (
-          <AssetPicker
-            value={extraReferences}
-            onChange={(items) => changeAssets(items, 'extra')}
-            uploadScope={`${kind}:extra`}
-            onUploaded={(asset) => acceptUploaded(asset, kind, 'extra', 7)}
-            kind="visual"
-            max={7}
-            projectId={boundProjectId}
-            label={t('额外参考素材（可选）')}
-          />
-        )}
-        {isKling && (
-          <Notice>
-            {firstLast
-              ? t('首帧与尾帧必须是两张图片，并按先后顺序排列。')
-              : t('参考模式需要 1–7 份素材。')}{' '}
-            {t('图片宽高至少 300px，比例 0.4–2.5。提示词最多 2100 字符。')}
-            {isO3 && t('最多参考一个视频，3–10 秒、720–2160px、24–60fps。')}
-          </Notice>
-        )}
-        {invalidVideoReferences && (
-          <Notice tone="warning">
-            {t('请按当前视频模型要求调整参考素材数量、类型或提示词长度。')}
-          </Notice>
-        )}
-      </div>
-      <p className="composer-section-label">{t('创作需求')}</p>
+          )}
+        </>
+      )}
+      {firstLast && references.length === 1 && (
+        <Button
+          variant="ghost"
+          onClick={() => applyAssets([references[0]!, references[0]!], 'main')}
+        >
+          {t('使用同一图片作为首尾帧')}
+        </Button>
+      )}
+      {firstLast && references.length === 2 && (
+        <Button variant="ghost" onClick={() => applyAssets([...references].reverse(), 'main')}>
+          {t('交换首尾帧')}
+        </Button>
+      )}
+      {firstLast && isO3 && (
+        <AssetPicker
+          value={extraReferences}
+          onChange={(items) => changeAssets(items, 'extra')}
+          uploadScope={`${kind}:extra`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, 'extra', 7)}
+          kind="visual"
+          max={7}
+          projectId={boundProjectId}
+          label={t('额外参考素材（可选）')}
+        />
+      )}
+      {isKling && (
+        <Notice>
+          {firstLast
+            ? t('首帧与尾帧必须是两张图片，并按先后顺序排列。')
+            : t('参考模式需要 1–7 份素材。')}{' '}
+          {t('图片宽高至少 300px，比例 0.4–2.5。提示词最多 2100 字符。')}
+          {isO3 && t('最多参考一个视频，3–10 秒、720–2160px、24–60fps。')}
+        </Notice>
+      )}
+      {invalidVideoReferences && (
+        <Notice tone="warning">
+          {t('请按当前视频模型要求调整参考素材数量、类型或提示词长度。')}
+        </Notice>
+      )}
+    </div>
+  );
+  function chooseOutputKind(value: string) {
+    setOutputKind(value);
+    const placement = resolveCreativePlacement({ mediaType: kind, kind: value });
+    setCreativePlacement(placement === 'general' ? undefined : placement);
+    if (
+      !designs.length &&
+      supportsOrdinaryDesigns &&
+      ['detail', 'product-set', 'main-secondary', 'marketing'].includes(value)
+    ) {
+      setDesigns([createDesign('hero'), createDesign('benefits'), createDesign('lifestyle')]);
+    }
+  }
+  const basics = (
+    <div className="composer-basics">
+      <Field label={t('创作类型')}>
+        <select value={outputKind} onChange={(e) => chooseOutputKind(e.target.value)}>
+          {(kind === 'image'
+            ? IMAGE_KINDS.filter(
+                (option) =>
+                  (option.id !== 'detail' || outputKind === 'detail') &&
+                  (supportsOrdinaryDesigns ||
+                    !['detail', 'product-set', 'main-secondary'].includes(option.id) ||
+                    option.id === outputKind),
+              )
+            : VIDEO_KINDS
+          ).map((option) => (
+            <option key={option.id} value={option.id}>
+              {t(option.id === 'detail' ? '旧版分组物料' : option.name)}
+            </option>
+          ))}
+        </select>
+      </Field>
+    </div>
+  );
+  const secondaryActions = (
+    <div className="composer-bottom">
+      <Button variant="ghost" onClick={() => void save()} busy={action.busy} disabled={!canEdit}>
+        <Save size={15} />
+        {t('保存草稿')}
+      </Button>
+      <span className="muted" hidden={isHome}>
+        {prompt.length} / {isKling ? 2100 : 12000}
+      </span>
+    </div>
+  );
+  const generationReady =
+    defaultsReady &&
+    modelCapability.canGenerate &&
+    !selectionIssue &&
+    referencesReady &&
+    (!textOnly ||
+      (!referenceIds.length &&
+        !extraReferenceIds.length &&
+        !brandId &&
+        !initialDraft?.characterId &&
+        !designs.length)) &&
+    (!backgroundAudioId || currentModel?.audio?.mode === 'background-music') &&
+    (!generateAudio || currentModel?.audio?.mode === 'generated') &&
+    !invalidVideoReferences &&
+    (!multiple || (designs.length > 0 && designs.every((d) => !!d.name.trim())));
+  const promptEditor = (
+    <>
+      <p className="composer-section-label">{t('你想创作什么？')}</p>
       <textarea
         ref={promptRef}
         className="prompt-input"
         aria-label={t('创作需求')}
+        aria-invalid={promptRequested && !prompt.trim() ? true : undefined}
+        aria-describedby={promptRequested && !prompt.trim() ? promptHintId : undefined}
         value={prompt}
         onChange={(e) => editPrompt(e.target.value, e.target.selectionStart)}
         placeholder={
           kind === 'image'
-            ? t('描述你的下一件作品，比如：为一款植物精华设计自然、清新的商品主图…')
-            : t('描述画面、主体动作与镜头，比如：一束晨光缓缓掠过产品，镜头轻轻推进…')
+            ? t('比如：给这款精华瓶做一张小红书氛围图，清晨窗边，干净自然。')
+            : t('比如：做一条 5 秒香水短片，晨光掠过瓶身，镜头缓缓推进。')
         }
         maxLength={isKling ? 2100 : 12000}
       />
@@ -789,310 +1011,721 @@ export function Composer({
           ))}
         </div>
       )}
-      <div className="composer-basics">
-        <Field label={t('创作类型')}>
+      {materials}
+      {promptRequested && !prompt.trim() && (
+        <p className="quick-prompt-guidance" id={promptHintId} role="status">
+          {t('写一句想法，或选择下方灵感，就可以开始。')}
+        </p>
+      )}
+    </>
+  );
+  const platformControl = (
+    <Field label={t('发布平台')} className="composer-platform-field">
+      <select
+        aria-label={t('发布平台')}
+        value={platform}
+        onChange={(event) => setPlatform(event.target.value)}
+      >
+        {[
+          ['通用电商', '通用电商'],
+          ['Amazon', 'Amazon（亚马逊）'],
+          ['TikTok', 'TikTok（海外短视频平台）'],
+          ['抖音', '抖音'],
+          ['小红书', '小红书'],
+          ['淘宝', '淘宝'],
+          ...(!['通用电商', 'Amazon', 'TikTok', '抖音', '小红书', '淘宝'].includes(platform)
+            ? [[platform, `${platform}（原草稿平台）`]]
+            : []),
+        ].map(([value, label]) => (
+          <option key={value} value={value}>
+            {t(label!)}
+          </option>
+        ))}
+      </select>
+    </Field>
+  );
+  const composerToolbar = (
+    <div className="composer-toolbar">
+      {platformControl}
+      <button
+        type="button"
+        ref={settingsTrigger}
+        className="composer-settings-toggle"
+        aria-haspopup={visualVariant === 'studio' ? 'dialog' : undefined}
+        aria-label={t(expanded ? '收起高级设置' : '更多创作设置')}
+        aria-expanded={expanded}
+        aria-controls={settingsId}
+        onClick={() => setExpanded(!expanded)}
+      >
+        <SlidersHorizontal size={15} />
+        <span>
+          {ratio} · {resolution} ·{' '}
+          {kind === 'video' ? `${duration}${t('秒')}` : `${count}${t('张')}`}
+        </span>
+        <span>{t('设置')}</span>
+        {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+      </button>
+    </div>
+  );
+  const generationControls = (
+    <>
+      <div className="composer-selection-controls">
+        <Field label={t('生成模型')} className="composer-model-field">
           <select
-            value={outputKind}
-            onChange={(e) => {
-              setOutputKind(e.target.value);
+            value={
+              operation && currentModel
+                ? `${operation.id}|${operation.providerId}|${currentModel.id}`
+                : operationKey && model
+                  ? `${operationKey.replace(':', '|')}|${model}`
+                  : ''
+            }
+            onChange={(event) => {
+              const [operationId, providerId, modelId] = event.target.value.split('|');
               if (
-                !designs.length &&
-                ['detail', 'product-set', 'main-secondary', 'marketing'].includes(e.target.value)
+                operation?.id === operationId &&
+                operation?.providerId === providerId &&
+                selectedModel?.id === modelId
               )
-                setDesigns([
-                  createDesign('hero'),
-                  createDesign('benefits'),
-                  createDesign('lifestyle'),
-                ]);
+                return;
+              defaultsPending.current = isQuick;
+              setDefaultsReady(!isQuick);
+              setOperationKey(`${operationId}:${providerId}`);
+              setModel(modelId ?? '');
             }}
           >
-            {(kind === 'image' ? IMAGE_KINDS : VIDEO_KINDS).map((option) => (
-              <option key={option.id} value={option.id}>
-                {t(option.name)}
+            {(operationKey || model) && (!operation || !selectedModel) && (
+              <option
+                value={operationKey && model ? `${operationKey.replace(':', '|')}|${model}` : ''}
+              >
+                {model || operationKey}
+                {t('（当前不可用，原值保留）')}
               </option>
-            ))}
-          </select>
-        </Field>
-        <Field label={t('清晰度')}>
-          <select value={resolution} onChange={(e) => setResolution(e.target.value)}>
-            {(currentModel?.resolutions.length ? currentModel.resolutions : ['1K', '2K']).map(
-              (value) => (
-                <option key={value}>{value}</option>
-              ),
+            )}
+            {!operations.length && <option value="">{t('正在读取模型…')}</option>}
+            {operations.map((op) =>
+              op.models.map((item) => (
+                <option
+                  key={`${op.id}|${op.providerId}|${item.id}`}
+                  value={`${op.id}|${op.providerId}|${item.id}`}
+                >
+                  {t(modelName(item))}
+                  {op.available ? '' : t(' · 未连接')}
+                </option>
+              )),
             )}
           </select>
         </Field>
       </div>
-      <div className="composer-options">
-        <label className="compact-select">
-          <span className="sr-only">{t('比例')}</span>
-          <select value={ratio} onChange={(e) => setRatio(e.target.value)}>
-            {(currentModel?.ratios.length ? currentModel.ratios : IMAGE_RATIOS).map((item) => (
-              <option key={item} value={item}>
-                {item === 'auto' ? t('智能比例') : item}
-              </option>
-            ))}
-          </select>
-        </label>
-        {kind === 'image' ? (
-          <label className="compact-select">
-            <span className="sr-only">{t(multiple ? '每模块生成数量' : '生成数量')}</span>
-            <select value={count} onChange={(e) => setCount(Number(e.target.value))}>
-              {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                  {t('张')}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : (
-          <label className="compact-select">
-            <span className="sr-only">{t('时长')}</span>
-            <select value={duration} onChange={(e) => setDuration(Number(e.target.value))}>
-              {(currentModel?.durations.length ? currentModel.durations : [5, 10]).map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                  {t('秒')}
-                </option>
-              ))}
-            </select>
-          </label>
+      <div className="composer-specs">
+        {!!ratios.length && !modelCapability.adjustable('ratio') && (
+          <Field label={t('比例')}>
+            <span className="capability-fixed-value">
+              {ratios.map((value) => (value === 'auto' ? t('智能比例') : value)).join(' / ')} ·{' '}
+              {t('固定')}
+            </span>
+          </Field>
         )}
-        <button className="text-button" type="button" onClick={() => setExpanded(!expanded)}>
-          {expanded ? t('收起高级设置') : t('模型与高级设置')}
-          {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
-      </div>
-      <p className="composer-model-summary">
-        {currentModel ? t(currentModel.name) : t('正在读取模型')} ·{' '}
-        {operation?.available ? t('服务已连接') : t('服务未连接')}
-      </p>
-      {multiple && (
-        <details className="composer-materials">
-          <summary>
-            {t('物料规划 ·')}
-            {designs.length}
-            {t('个模块 · 共')}
-            {designs.length * count}
-            {t('张，展开编辑')}
-          </summary>
-          <DesignPlanner
-            value={designs}
-            onChange={setDesigns}
-            ratios={currentModel?.ratios}
-            projectId={boundProjectId}
-            count={count}
-          />
-        </details>
-      )}
-      {expanded && (
-        <div className="composer-advanced">
-          <div className="composer-options">
-            <label className="compact-select">
-              <span className="sr-only">{t('模型与服务')}</span>
-              <select
-                value={operation ? `${operation.id}:${operation.providerId}` : ''}
-                onChange={(e) => {
-                  setOperationKey(e.target.value);
-                  setModel('');
-                }}
-              >
-                {!operations.length && <option value="">{t('加载模型…')}</option>}
-                {operations.map((op) => (
-                  <option key={`${op.id}:${op.providerId}`} value={`${op.id}:${op.providerId}`}>
-                    {
-                      { openai: 'OpenAI', fal: 'fal.ai', flyelep: 'Flyelep', local: 'Local' }[
-                        op.providerId
-                      ]
-                    }{' '}
-                    · {t(op.name)}
-                    {op.available ? '' : t(' · 未连接')}
-                  </option>
-                ))}
-              </select>
-            </label>
-            {operation && operation.models.length > 0 && (
-              <label className="compact-select">
-                <span className="sr-only">{t('生成模型')}</span>
-                <select value={currentModel?.id ?? ''} onChange={(e) => setModel(e.target.value)}>
-                  {operation.models.map((m) => (
-                    <option key={modelValue(m)} value={modelValue(m)}>
-                      {t(modelName(m))}
+        {!!resolutions.length && !modelCapability.adjustable('resolution') && (
+          <Field label={t('清晰度')}>
+            <span className="capability-fixed-value">
+              {resolutions.join(' / ')} · {t('固定')}
+            </span>
+          </Field>
+        )}
+        {kind === 'image' && !modelCapability.adjustable('count') && !isQuick && (
+          <Field label={t(multiple ? '每模块生成数量' : '生成数量')}>
+            <span className="capability-fixed-value">
+              {modelCapability.fixedOptions.count} {t('张')} · {t('固定')}
+            </span>
+          </Field>
+        )}
+        {kind === 'video' && !!durations.length && !modelCapability.adjustable('duration') && (
+          <Field label={t('时长')}>
+            <span className="capability-fixed-value">
+              {durations.join(' / ')} {t('秒')} · {t('固定')}
+            </span>
+          </Field>
+        )}
+        {!!ratios.length && modelCapability.adjustable('ratio') && (
+          <Field label={t('比例')}>
+            <select
+              value={ratio}
+              disabled={!modelCapability.adjustable('ratio')}
+              onChange={(event) => {
+                defaultsPending.current = false;
+                setDefaultsReady(true);
+                setRatio(event.target.value);
+              }}
+            >
+              {!ratios.includes(ratio) && (
+                <option value={ratio}>
+                  {ratio} · {t('请重新选择')}
+                </option>
+              )}
+              {ratios.map((value) => (
+                <option key={value} value={value}>
+                  {value === 'auto' || value === 'adaptive' ? t('智能比例') : value}
+                </option>
+              ))}
+            </select>
+          </Field>
+        )}
+        {!!resolutions.length && modelCapability.adjustable('resolution') && (
+          <Field label={t('清晰度')}>
+            <select
+              value={resolution}
+              disabled={!modelCapability.adjustable('resolution')}
+              onChange={(event) => {
+                defaultsPending.current = false;
+                setDefaultsReady(true);
+                setResolution(event.target.value);
+              }}
+            >
+              {!resolutions.includes(resolution) && (
+                <option value={resolution}>
+                  {resolution} · {t('请重新选择')}
+                </option>
+              )}
+              {resolutions.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </Field>
+        )}
+        {kind === 'image'
+          ? modelCapability.adjustable('count') && (
+              <Field label={t(multiple ? '每模块生成数量' : '生成数量')}>
+                <select
+                  value={count}
+                  disabled={!modelCapability.adjustable('count')}
+                  onChange={(event) => {
+                    defaultsPending.current = false;
+                    setDefaultsReady(true);
+                    setCount(Number(event.target.value));
+                  }}
+                >
+                  {!counts.includes(count) && (
+                    <option value={count}>
+                      {count} · {t('请重新选择')}
+                    </option>
+                  )}
+                  {counts.map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                      {t('张')}
                     </option>
                   ))}
                 </select>
-              </label>
-            )}
-          </div>
-          <div className="form-grid">
-            <Field label={t('参考品牌')}>
-              <select
-                disabled={firstLast && !isO3}
-                value={firstLast && !isO3 ? '' : brandId}
-                onChange={(e) => setBrandId(e.target.value)}
-              >
-                <option value="">{t('不使用品牌')}</option>
-                {brands.data?.items.map((brand) => (
-                  <option key={brand.id} value={brand.id}>
-                    {brand.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label={t('发布平台')}>
-              <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
-                {PLATFORMS.map((value) => (
-                  <option key={value}>{value}</option>
-                ))}
-              </select>
-            </Field>
-            <Field label={t('画面文字语言')}>
-              <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-                {LANGUAGES.map((value) => (
-                  <option key={value.id} value={value.id}>
-                    {t(value.name)}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            {kind === 'video' && (
-              <Field label={t('参考方式')}>
+              </Field>
+            )
+          : !!durations.length &&
+            modelCapability.adjustable('duration') && (
+              <Field label={t('时长')}>
                 <select
-                  disabled={!acceptsFirstLast || currentModel?.id === 'kling-o1-first-last'}
-                  value={referenceMode}
-                  onChange={(e) => setReferenceMode(e.target.value)}
+                  value={duration}
+                  disabled={!modelCapability.adjustable('duration')}
+                  onChange={(event) => {
+                    defaultsPending.current = false;
+                    setDefaultsReady(true);
+                    setDuration(Number(event.target.value));
+                  }}
                 >
-                  {currentModel?.id !== 'kling-o1-first-last' && (
-                    <option value="all">{t('全能参考')}</option>
+                  {!durations.includes(duration) && (
+                    <option value={duration}>
+                      {duration} · {t('请重新选择')}
+                    </option>
                   )}
-                  {acceptsFirstLast && <option value="first-last">{t('首尾帧')}</option>}
+                  {durations.map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                      {t('秒')}
+                    </option>
+                  ))}
                 </select>
               </Field>
             )}
-          </div>
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={needText}
-              onChange={(e) => setNeedText(e.target.checked)}
-            />
-            {t('生成画面文案 / 字幕')}
-          </label>
-          {currentModel?.textOverlay && <Notice>{t(currentModel.textOverlay.note)}</Notice>}
-        </div>
-      )}
-      <div className="composer-bottom">
-        <Button
-          variant="ghost"
-          onClick={() => setAssistantOpen(true)}
-          disabled={!canEdit || !referencesReady}
-        >
-          <Sparkles size={15} />
-          {t('AI 帮我写')}
-        </Button>
-        <Button variant="ghost" onClick={() => void save()} busy={action.busy} disabled={!canEdit}>
-          <Save size={15} />
-          {t('保存草稿')}
-        </Button>
-        <span className="muted">
-          {prompt.length} / {isKling ? 2100 : 12000}
-        </span>
       </div>
-      {assistantOpen && (
-        <AIWriter
-          technical={{ ratio, resolution, language }}
-          open={assistantOpen}
-          onClose={() => setAssistantOpen(false)}
-          prompt={prompt}
-          assets={references}
-          projectId={boundProjectId}
-          onAccept={setPrompt}
-          onAcceptPlan={applyPlan}
-        />
+    </>
+  );
+  const modelInformation = (
+    <>
+      {outputSize && (
+        <p className="field-hint quick-output-meta" data-testid="generation-output-size">
+          {t('输出尺寸')}：{outputSize.replace('x', ' × ')} {t('像素')}
+        </p>
       )}
-      <Confirm
-        open={!!pendingAssets}
-        onClose={() => setPendingAssets(null)}
-        title={t('移除素材与引用？')}
-        description={t(
-          '创作需求正在引用这些素材。确认后将同时移除素材和对应的 @ 引用，其他文案保持不变。',
+      <ModelCapabilityStatus
+        capability={modelCapability}
+        selectionIssue={selectionIssue}
+        onUseFixed={useFixedParameters}
+      />
+      <div className="composer-settings-toolbar">
+        <p className={`composer-model-summary${operation?.available ? ' is-connected' : ''}`}>
+          {currentModel ? t(currentModel.name) : t('正在读取模型')} ·{' '}
+          {operation?.available ? t('服务已连接') : t('服务未连接')}
+        </p>
+      </div>
+    </>
+  );
+  const optionalPreferences = (
+    <>
+      <div className="form-grid">
+        <Field label={t('参考品牌')}>
+          <select
+            disabled={firstLast && !isO3}
+            value={firstLast && !isO3 ? '' : brandId}
+            onChange={(e) => setBrandId(e.target.value)}
+          >
+            <option value="">{t('不使用品牌')}</option>
+            {brands.data?.items.map((brand) => (
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label={t('画面文字语言')}>
+          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+            {LANGUAGES.map((value) => (
+              <option key={value.id} value={value.id}>
+                {t(value.name)}
+              </option>
+            ))}
+          </select>
+        </Field>
+        {kind === 'video' && (
+          <Field label={t('参考方式')}>
+            <select
+              disabled={
+                !referenceModeIssue &&
+                (!acceptsFirstLast || currentModel?.id === 'kling-o1-first-last')
+              }
+              value={referenceMode}
+              onChange={(e) => {
+                defaultsPending.current = false;
+                setDefaultsReady(true);
+                setReferenceMode(e.target.value);
+              }}
+            >
+              {referenceModeIssue && (
+                <option value={referenceMode}>
+                  {t(referenceMode === 'first-last' ? '首尾帧' : '全能参考')}
+                  {t('（当前不支持，原值保留）')}
+                </option>
+              )}
+              {currentModel?.id !== 'kling-o1-first-last' && (
+                <option value="all">{t('全能参考')}</option>
+              )}
+              {acceptsFirstLast && <option value="first-last">{t('首尾帧')}</option>}
+            </select>
+          </Field>
         )}
-        onConfirm={() => {
-          if (!pendingAssets) return;
-          let next = prompt;
-          for (const item of extractAssetMentions(prompt))
-            if (pendingAssets.removed.includes(item.assetId))
-              next = next.replaceAll(item.token, '');
-          setPrompt(next);
-          applyAssets(pendingAssets.assets, pendingAssets.kind);
-          setPendingAssets(null);
+      </div>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={needText}
+          disabled={currentModel?.textOverlay?.mode === 'unsupported' && !needText}
+          onChange={(e) => {
+            defaultsPending.current = false;
+            setDefaultsReady(true);
+            needTextTouched.current = true;
+            setNeedText(e.target.checked);
+          }}
+        />
+        {t('生成画面文案 / 字幕')}
+      </label>
+      {currentModel?.textOverlay && <Notice>{t(currentModel.textOverlay.note)}</Notice>}
+      <Button
+        variant="ghost"
+        onClick={() => {
+          if (visualVariant === 'studio') setExpanded(false);
+          setAssistantOpen(true);
         }}
-      />
-      <Confirm
-        open={!!missingToRemove}
-        onClose={() => setMissingToRemove(null)}
-        title={t('移除失效素材及引用？')}
-        description={t('将从当前草稿及物料模块移除此素材的引用，其他素材和文案保持不变。')}
-        onConfirm={() => {
-          if (!missingToRemove) return;
-          setReferenceIds((ids) => ids.filter((id) => id !== missingToRemove));
-          setExtraReferenceIds((ids) => ids.filter((id) => id !== missingToRemove));
-          if (backgroundAudioId === missingToRemove) {
-            setBackgroundAudioId(undefined);
-            setBackgroundAudio(undefined);
-          }
-          setDesigns((items) =>
-            items.map((item) => ({
-              ...item,
-              assetIds: item.assetIds.filter((id) => id !== missingToRemove),
-            })),
-          );
-          setPrompt((text) =>
-            extractAssetMentions(text).reduce(
-              (value, mention) =>
-                mention.assetId === missingToRemove ? value.replaceAll(mention.token, '') : value,
-              text,
-            ),
-          );
-          setMissingToRemove(null);
-        }}
-      />
-      <JobSubmit
-        input={input}
-        operation={operation}
-        recoveryScope={`composer:${projectId ?? 'new'}`}
-        prepareInput={prepareSubmission}
-        valid={
-          !!prompt.trim() &&
-          referencesReady &&
-          (!backgroundAudioId || currentModel?.audio?.mode === 'background-music') &&
-          (!generateAudio || currentModel?.audio?.mode === 'generated') &&
-          !invalidVideoReferences &&
-          (!multiple || (designs.length > 0 && designs.every((d) => !!d.name.trim())))
+        disabled={!canEdit || !referencesReady}
+      >
+        <Sparkles size={15} />
+        {t('AI 帮我写')}
+      </Button>
+    </>
+  );
+  const advancedControls = (
+    <>
+      {generationControls}
+      {basics}
+      {modelInformation}
+      {visualVariant === 'studio' ? (
+        <details className="composer-settings-preferences">
+          <summary>{t('更多偏好')}</summary>
+          <div>{optionalPreferences}</div>
+        </details>
+      ) : (
+        optionalPreferences
+      )}
+    </>
+  );
+  return (
+    <>
+      <div
+        ref={composerRef}
+        data-presentation={presentation}
+        data-media-kind={kind}
+        className={
+          visualVariant === 'studio'
+            ? 'composer composer-studio'
+            : `composer composer-v2 ${compact ? 'composer-compact' : ''} ${isHome ? 'composer-home' : ''} ${isQuick ? 'composer-quick' : ''}`
         }
-        onCreated={(job) => {
-          if (!projectId && job.projectId) {
-            try {
-              writeDraft(
-                localStorage,
-                draftStorageKey(session!.user.id, workspace!.id, job.projectId),
-                currentRecovery(job.projectId),
-              );
-              localStorage.removeItem(storageKey);
-            } catch {
-              setDraftError(
-                '任务已提交，但最新修改未能转存到项目。当前页面保留修改，请先保存草稿；可在任务中心查看已提交任务。',
-              );
-              onCreated?.(job);
-              return;
+      >
+        <div className="composer-top">
+          <Segments
+            value={kind}
+            onChange={switchKind}
+            options={[
+              { value: 'image', label: '图片创作' },
+              { value: 'video', label: '视频创作' },
+            ]}
+          />
+          {isHome && (
+            <div className="composer-directions" role="group" aria-label={t('创作方向')}>
+              {(kind === 'image'
+                ? [
+                    { id: 'free', name: '自由创作' },
+                    ...IMAGE_KINDS.filter((option) =>
+                      (supportsOrdinaryDesigns
+                        ? ['single', 'white-background', 'main-secondary', 'marketing']
+                        : ['single', 'white-background', 'marketing']
+                      ).includes(option.id),
+                    ),
+                  ]
+                : [
+                    { id: 'free', name: '自由创作' },
+                    ...VIDEO_KINDS.filter((option) => option.id !== 'free'),
+                  ]
+              ).map((option) => (
+                <button
+                  type="button"
+                  key={option.id}
+                  aria-pressed={outputKind === option.id}
+                  disabled={!canEdit}
+                  onClick={() => chooseOutputKind(option.id)}
+                >
+                  {t(option.name)}
+                </button>
+              ))}
+              {kind === 'image' && <Link to="/detail-pages">{t('商品详情页')} ↗</Link>}
+            </div>
+          )}
+          <span
+            className="composer-note"
+            role={isHome || visualVariant === 'studio' ? 'status' : undefined}
+          >
+            {isHome || visualVariant === 'studio' ? (
+              t(draftStatus)
+            ) : (
+              <>
+                <Sparkles size={14} />
+                {t('草稿自动保存')}
+              </>
+            )}
+          </span>
+        </div>
+        <p className="field-hint" role="status" hidden={isHome || visualVariant === 'studio'}>
+          {t(draftStatus)}
+        </p>
+        {!projectId && boundProjectId && (
+          <Link
+            className="text-button"
+            to={`/workbench/${boundProjectId}`}
+            state={{ recoveryDraft: currentRecovery(boundProjectId) }}
+          >
+            {t('继续此项目草稿')}
+          </Link>
+        )}
+        {draftError && (
+          <Notice tone="warning">
+            {draftError}
+            {draftBlocked && (
+              <Button variant="ghost" onClick={() => setDraftBlocked(false)}>
+                {t('已核对项目草稿，用当前内容替换本机记录')}
+              </Button>
+            )}
+          </Notice>
+        )}
+        {!!planWarnings.length && (
+          <Notice tone="warning">
+            {planWarnings.map((warning) => (
+              <p key={warning}>{productWarning(warning)}</p>
+            ))}
+            <Button variant="ghost" onClick={() => setPlanWarnings([])}>
+              {t('已核对当前参数')}
+            </Button>
+          </Notice>
+        )}
+        {!referencesReady && (
+          <Notice tone="warning">
+            {restoringAssets || resolvedAssetKey !== referenceKey
+              ? t('正在恢复参考素材，完成前暂不能提交。')
+              : t('部分参考素材未恢复。请重试，或明确移除失效引用后继续。')}
+            {assetFailures.map((failure) => (
+              <div key={failure.id}>
+                <p>
+                  {failure.id.slice(-8)} · {failure.message}
+                </p>
+                <Button variant="ghost" onClick={() => setMissingToRemove(failure.id)}>
+                  {t('移除失效引用')}
+                </Button>
+              </div>
+            ))}
+            {!!assetFailures.length && (
+              <Button variant="secondary" onClick={() => setAssetRetry((value) => value + 1)}>
+                {t('重试恢复素材')}
+              </Button>
+            )}
+          </Notice>
+        )}
+        <div className="creative-prompt-surface">{promptEditor}</div>
+        {ideaError && !pendingIdea && (
+          <p className="field-error" role="alert">
+            {ideaError}
+          </p>
+        )}
+        {ideaUndo && ideaUndo.kind === kind && prompt === ideaUndo.after && (
+          <div className="composer-idea-undo" role="status">
+            <span>{t('已填入灵感，可继续修改')}</span>
+            <Button
+              variant="ghost"
+              disabled={!canEdit}
+              onClick={() => {
+                setPrompt(ideaUndo.before);
+                setIdeaUndo(null);
+                promptRef.current?.focus();
+              }}
+            >
+              <Undo2 size={14} />
+              {t('撤销填入')}
+            </Button>
+          </div>
+        )}
+        <Modal
+          open={pendingIdea !== null}
+          onClose={() => setPendingIdea(null)}
+          title={t('如何使用这个想法？')}
+        >
+          <p>{t('当前需求会保留，选择补充或明确替换后再应用。')}</p>
+          <p className="studio-pending-idea">{pendingIdea}</p>
+          {ideaError && (
+            <p className="field-error" role="alert">
+              {ideaError}
+            </p>
+          )}
+          <div className="modal-actions">
+            <Button
+              variant="secondary"
+              onClick={() => pendingIdea && applyIdea(pendingIdea, 'append')}
+            >
+              {t('补充到当前需求')}
+            </Button>
+            <Button onClick={() => pendingIdea && applyIdea(pendingIdea, 'replace')}>
+              {t('替换当前需求')}
+            </Button>
+          </div>
+        </Modal>
+
+        {!expanded && (!modelCapability.canGenerate || selectionIssue) && (
+          <ModelCapabilityStatus
+            capability={modelCapability}
+            selectionIssue={selectionIssue}
+            onUseFixed={useFixedParameters}
+          />
+        )}
+        {outputKind === 'detail' && (
+          <Notice>
+            {t('这是旧版分组物料草稿。新的整套详情页请使用专用流程。')}{' '}
+            <Link className="text-button" to="/detail-pages">
+              {t('前往商品详情页')}
+            </Link>
+          </Notice>
+        )}
+        {multiple && (
+          <details className="composer-materials">
+            <summary>
+              {t('物料规划 ·')}
+              {designs.length}
+              {t('个模块 · 共')}
+              {designs.length * count}
+              {t('张，展开编辑')}
+            </summary>
+            <DesignPlanner
+              value={designs}
+              onChange={setDesigns}
+              ratios={currentModel?.ratios}
+              projectId={boundProjectId}
+              count={count}
+            />
+          </details>
+        )}
+        {visualVariant === 'studio' ? (
+          <ComposerSettingsPopover
+            id={settingsId}
+            open={expanded}
+            onOpenChange={setExpanded}
+            anchorRef={settingsTrigger}
+            focusRequest={settingsFocusRequest}
+            restoreFocus={!assistantOpen}
+          >
+            {advancedControls}
+          </ComposerSettingsPopover>
+        ) : expanded ? (
+          <section className="composer-advanced" id={settingsId} aria-label={t('创作设置')}>
+            {advancedControls}
+          </section>
+        ) : null}
+        {assistantOpen && (
+          <AIWriter
+            technical={{ ratio, resolution, language }}
+            open={assistantOpen}
+            onClose={() => setAssistantOpen(false)}
+            onCloseAutoFocus={
+              visualVariant === 'studio'
+                ? (event) => {
+                    event.preventDefault();
+                    settingsTrigger.current?.focus();
+                  }
+                : undefined
             }
-            finalized.current = true;
-            navigate(`/workbench/${job.projectId}`);
+            prompt={prompt}
+            assets={references}
+            projectId={boundProjectId}
+            onAccept={setPrompt}
+            onAcceptPlan={applyPlan}
+          />
+        )}
+        <Confirm
+          open={!!pendingAssets}
+          onClose={() => setPendingAssets(null)}
+          title={t('移除素材与引用？')}
+          description={t(
+            '创作需求正在引用这些素材。确认后将同时移除素材和对应的 @ 引用，其他文案保持不变。',
+          )}
+          onConfirm={() => {
+            if (!pendingAssets) return;
+            let next = prompt;
+            for (const item of extractAssetMentions(prompt))
+              if (pendingAssets.removed.includes(item.assetId))
+                next = next.replaceAll(item.token, '');
+            setPrompt(next);
+            applyAssets(pendingAssets.assets, pendingAssets.kind);
+            setPendingAssets(null);
+          }}
+        />
+        <Confirm
+          open={!!missingToRemove}
+          onClose={() => setMissingToRemove(null)}
+          title={t('移除失效素材及引用？')}
+          description={t('将从当前草稿及物料模块移除此素材的引用，其他素材和文案保持不变。')}
+          onConfirm={() => {
+            if (!missingToRemove) return;
+            setReferenceIds((ids) => ids.filter((id) => id !== missingToRemove));
+            setExtraReferenceIds((ids) => ids.filter((id) => id !== missingToRemove));
+            if (backgroundAudioId === missingToRemove) {
+              setBackgroundAudioId(undefined);
+              setBackgroundAudio(undefined);
+            }
+            setDesigns((items) =>
+              items.map((item) => ({
+                ...item,
+                assetIds: item.assetIds.filter((id) => id !== missingToRemove),
+              })),
+            );
+            setPrompt((text) =>
+              extractAssetMentions(text).reduce(
+                (value, mention) =>
+                  mention.assetId === missingToRemove ? value.replaceAll(mention.token, '') : value,
+                text,
+              ),
+            );
+            setMissingToRemove(null);
+          }}
+        />
+        <CreativeBrief
+          preparation={creativeBrief.preparation}
+          answers={creativeBrief.answers}
+          busy={creativeBrief.busy}
+          locked={creativeBrief.locked || !canEdit}
+          error={creativeBrief.error}
+          canRestart={creativeBrief.canRestart && canEdit}
+          onRestart={creativeBrief.restart}
+          onAnswer={creativeBrief.answer}
+          mediaType={kind}
+          missingQuestionId={creativeBrief.missingQuestionId}
+          focusRequest={creativeBrief.focusRequest}
+          onEditSettings={() => {
+            setExpanded(true);
+            if (visualVariant === 'studio') {
+              setSettingsFocusRequest((value) => value + 1);
+            } else {
+              requestAnimationFrame(() => {
+                const settings = document.getElementById(settingsId);
+                settings
+                  ?.querySelector<HTMLElement>('select:not(:disabled), input:not(:disabled)')
+                  ?.focus();
+              });
+            }
+          }}
+          onAddReference={
+            !textOnly && references.length < sourceMax && canEdit
+              ? () => {
+                  composerRef.current
+                    ?.querySelector<HTMLButtonElement>('.asset-picker-inline .asset-add')
+                    ?.click();
+                }
+              : undefined
           }
-          onCreated?.(job);
-        }}
-      />
-    </div>
+        />
+        <JobSubmit
+          label={
+            creativeBrief.preparation?.status === 'needs_clarification'
+              ? '补充完成，继续'
+              : kind === 'image'
+                ? '生成图片'
+                : '生成视频'
+          }
+          busyLabel={creativeBrief.busy ? '正在理解你的想法…' : '正在准备…'}
+          estimateReady={defaultsReady && modelCapability.canGenerate && !selectionIssue}
+          input={input}
+          operation={operation}
+          secondaryActions={
+            <div className="composer-footer-tools">
+              {composerToolbar}
+              {secondaryActions}
+            </div>
+          }
+          recoveryScope={`composer:${projectId ?? 'new'}`}
+          beforePrepareInput={creativeBrief.prepare}
+          prepareInput={prepareSubmission}
+          onCapabilityChanged={async () => {
+            const result = await modelCapability.refresh();
+            return !!result?.data?.canGenerate && !result.error;
+          }}
+          valid={!!prompt.trim() && generationReady}
+          onRequestPrompt={
+            generationReady
+              ? () => {
+                  setPromptRequested(true);
+                  promptRef.current?.focus();
+                }
+              : undefined
+          }
+          onCreated={(job) => {
+            if (!projectId && job.projectId) {
+              const state = transferDraft(job.projectId);
+              finalized.current = true;
+              navigate(jobDestination(job), { state: { ...state, submittedJob: job } });
+            }
+            onCreated?.(job);
+          }}
+        />
+      </div>
+    </>
   );
 }

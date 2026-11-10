@@ -1,0 +1,37 @@
+{
+  "scope": "首页快速创作区：渐变视觉、紧凑输入与参数布局、可操作的生成入口和默认配置。",
+  "steps": [
+    {"step": 1, "title": "核对当前界面、提交条件与官方产品参考", "state": "完成"},
+    {"step": 2, "title": "重构渐变创意首屏和一体式输入卡片", "state": "完成"},
+    {"step": 3, "title": "默认配置与按钮行为回归", "state": "完成"},
+    {"step": 4, "title": "桌面、手机、深色及多语言视觉复审", "state": "完成"},
+    {"step": 5, "title": "完整验证与原入口更新", "state": "完成（本地验证；未启用密钥或切换真实入口）"}
+  ],
+  "findings": ["多层表单与状态说明抢占输入空间，空输入让主按钮置灰。", "新草稿会在默认模型参数就绪前写入占位参数。"],
+  "references": [
+    {"url": "https://www.krea.ai/models", "takeaway": "输入优先，模型作为轻量控制。"},
+    {"url": "https://helpx.adobe.com/firefly/web/get-started/access-the-app/firefly-workspace-overview.html", "takeaway": "首页直接从创意输入开始，不同创作方式清晰分层。"}
+  ],
+  "design": "浅紫、柔粉、冰蓝渐变；深紫主按钮；输入留白优先，参数采用带标签的紧凑胶囊；辅助信息按需展开。",
+  "behavior": "新创作自动选择可用模型和合法默认参数；空输入点击生成聚焦输入并提示，正常输入进入报价；无权限、处理中和待核对提交仍拦截。",
+  "externalGenerationCalls": 0,
+  "completedAt": "2026-11-02",
+  "validation": {
+    "unitPassed": 1371,
+    "browserPassed": 198,
+    "browserFailed": 0,
+    "browserSkipped": 0,
+    "browserRetries": 0,
+    "projects": {"desktop": 96, "mobile": 96, "notebook": 5, "tablet": 1},
+    "typecheck": true,
+    "lint": true,
+    "format": true,
+    "build": {"web": true, "server": true, "worker": true},
+    "sourceFiles": 420,
+    "buildFiles": 105,
+    "backupRestore": {"verified": true, "tables": 100, "mediaFiles": 52},
+    "externalGenerationCalls": 0,
+    "realQualityValidated": false
+  },
+  "releaseBoundary": "仅完成本地代码与隔离验收；按用户要求没有传输或使用外部密钥，没有读取密钥明文，也没有切换原工作入口。"
+}

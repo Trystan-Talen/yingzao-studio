@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-30",
+  "updatedAt": "2026-10-31T02:38:30.343416+00:00",
+  "scope": "本轮前端重构完成版本的单次完整浏览器回归；采用真实本机应用与数据库，外部服务使用明确标记的本机模拟。",
+  "status": "passed",
+  "acceptedRun": {
+    "directory": "platform/var/e2e/run-LXPASH",
+    "total": 162,
+    "passed": 162,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retriesConfigured": 0,
+    "testFiles": 32,
+    "startedAt": "2026-10-31T02:24:51.242Z",
+    "finishedAt": "2026-10-31T02:36:56.818Z",
+    "browserDurationSeconds": 722.734,
+    "commandIncludingBuildDurationSeconds": 725.576,
+    "exitCode": 0
+  },
+  "aggregation": "结果来自同一次完整运行，不跨轮或跨分组相加。此前失败证据保留，不计入最终通过数。",
+  "viewports": [
+    {
+      "project": "desktop",
+      "label": "桌面",
+      "width": 1440,
+      "height": 1000,
+      "passed": 78
+    },
+    {
+      "project": "mobile",
+      "label": "手机模拟视口",
+      "width": 390,
+      "height": 844,
+      "passed": 78
+    },
+    {
+      "project": "notebook",
+      "label": "笔记本",
+      "width": 1280,
+      "height": 800,
+      "passed": 5
+    },
+    {
+      "project": "tablet",
+      "label": "平板触控模拟视口",
+      "width": 768,
+      "height": 1024,
+      "passed": 1
+    }
+  ],
+  "coverage": [
+    "首页图片、视频、商品详情页三个入口；三种语言、亮暗主题、首屏主控件与键盘可达性。",
+    "图片：输入与报价确认、真实任务执行、结果刷新恢复、原件下载及文件哈希与尺寸核对。",
+    "视频：报价、生成、实际播放、刷新后保留同一结果、原件下载及尺寸和时长核对。",
+    "商品详情页：六屏策划、逐屏编辑和确认、六张唯一结果逐张加载、刷新恢复、压缩包逐张原件哈希与长图尺寸核对。",
+    "失败后明确重新确认才创建一次重试；策划采用不自动生成图片；8001字符保留全文并明确解释错误，8000字符可打开报价。",
+    "取消或失败报价后无任务的详情页项目仍回正确编辑入口；本机草稿保存失败阻止继续并可显式恢复。",
+    "图片与视频草稿独立持久化，上传晚回保留原模式归属，跨空间批次上传与部分失败仅重试剩余项。",
+    "真实画布编辑与导出、旧版本冲突、新稿保留、幂等应用和单次结算；原有账号、导航、搜索、统计与恢复流程。"
+  ],
+  "sourceFreeze": {
+    "filesCompared": 252,
+    "unchanged": true,
+    "note": "源文件、浏览器测试、共享模拟适配器及运行配置逐文件校验。"
+  },
+  "isolation": {
+    "database": "每条测试新建私有数据库及媒体目录；预览数据库实际打开路径已再次核验。",
+    "build": "独立网页产物目录及环境文件目录；子进程仅接收白名单环境变量。",
+    "services": "本机模拟生成标记图片和可播放视频；外部模型请求被环回地址限制和禁止重定向保护；邮箱与短信使用本机协议夹具。",
+    "formalDataModifiedByThisValidation": false,
+    "realModelQualityValidated": false,
+    "externalModelCalls": 0
+  },
+  "preview": {
+    "origin": "http://127.0.0.1:53826",
+    "apiOrigin": "http://127.0.0.1:53827",
+    "pid": 69250,
+    "database": "platform/var/frontend-rebuild-20261030/preview-2Eag4q/preview.sqlite",
+    "databaseOpenPathVerified": true,
+    "oldPreviewPortsClosed": [
+      53820,
+      53821,
+      53824,
+      53825
+    ],
+    "note": "最终预览保留运行；旧预览进程已退出且数据保留。"
+  },
+  "evidence": {
+    "browserReport": "platform/var/e2e/run-LXPASH/report/index.html",
+    "runManifest": "platform/var/e2e/run-LXPASH/run.json",
+    "log": "platform/var/frontend-rebuild-20261030/e2e-final-full-round2.log",
+    "machineSummary": "platform/var/frontend-rebuild-20261030/e2e-final-summary.json",
+    "sourceVerification": "platform/var/frontend-rebuild-20261030/e2e-final-source-round2-verified.json",
+    "previewVerification": "platform/var/frontend-rebuild-20261030/preview-final-process-verified.json",
+    "networkGuardProof": "platform/var/frontend-rebuild-20261030/fetch-guard-smoke.json",
+    "priorUnacceptedFullRun": "platform/var/e2e/run-Tw8LSK",
+    "regressionHistory": "platform/var/frontend-rebuild-20261030/regression-status.json"
+  },
+  "limits": [
+    "浏览器使用Chromium（浏览器内核）；手机和平板为模拟视口，不代表实机或其他浏览器已经验收。",
+    "本轮确认界面、交互、数据持久化及产物链路；未调用真实模型服务，未评价真实生成质量或提示词效果。",
+    "本机协议和合同夹具的通过不代表外部邮件、短信、支付及供应商已真实联调。"
+  ]
+}

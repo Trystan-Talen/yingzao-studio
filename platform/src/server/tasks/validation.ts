@@ -384,12 +384,20 @@ export function splitItems(input: JobInput): JobInput[] {
   }
   if (input.operation === 'image.generate' && input.options.designs?.length) {
     const { designs, ...options } = input.options;
-    return designs.flatMap((design) =>
+    return designs.flatMap((design, index) =>
       Array.from({ length: input.options.count }, () => ({
         ...input,
         prompt: `${input.prompt}\n本张物料：${design.name}。${design.prompt}`,
         assetIds: design.assetIds.length ? design.assetIds : input.assetIds,
-        options: { ...options, kind: design.kind, ratio: design.ratio, count: 1 },
+        options: {
+          ...options,
+          kind: design.kind,
+          ratio: design.ratio,
+          count: 1,
+          ...(input.options.detailPagePlan
+            ? { detailPageScreenId: input.options.detailPagePlan.screens[index]?.id }
+            : {}),
+        },
       })),
     );
   }

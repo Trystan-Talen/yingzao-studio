@@ -1,0 +1,48 @@
+{
+  "recordedDate": "2026-10-26",
+  "scope": "首页品牌与交互改版；既有工作台、上传、草稿和任务确认的受影响回归",
+  "validation": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "frontendBuild": "passed",
+    "unit": {
+      "files": 3,
+      "passed": 14
+    },
+    "browser": {
+      "passed": 75,
+      "failed": 0,
+      "desktop": 36,
+      "mobile": 36,
+      "notebook": 3,
+      "newHomeCases": 15,
+      "details": "browser/summary.json"
+    }
+  },
+  "visualChecks": {
+    "desktop1440x1000FirstArtworkVisiblePx": 181.03,
+    "notebook1280x800FirstArtworkVisiblePx": 108.44,
+    "mobile390x844FirstArtworkVisiblePx": 37.44,
+    "appearance": [
+      "深色中文",
+      "浅色英语",
+      "浅色阿拉伯语"
+    ],
+    "referencePages": [
+      "https://www.lovart.ai/",
+      "https://www.krea.ai/",
+      "https://flora.ai/",
+      "https://higgsfield.ai/zh"
+    ]
+  },
+  "buildNotes": [
+    "前端构建保留依赖注释处理提示和主包超过750kB的非阻断提示；本次未声称完成性能专项验收。"
+  ],
+  "limits": [
+    "外部模型未调用，演示环境生成服务关闭。",
+    "不是本次重跑旧全量773项自动化和126项浏览器的声明。",
+    "未修改既有运行数据库、媒体、迁移或推送代码。"
+  ],
+  "sourceManifest": "source-manifest.json"
+}

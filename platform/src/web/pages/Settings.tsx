@@ -34,11 +34,7 @@ export function Settings() {
         : 'profile';
   return (
     <div className="page settings-page">
-      <PageHeader
-        eyebrow="A STUDIO THAT FEELS LIKE YOU"
-        title={t('设置')}
-        description={t('管理个人偏好与工作空间的生成服务。')}
-      />
+      <PageHeader title={t('设置')} description={t('管理个人偏好与工作空间的生成服务。')} />
       <Segments
         value={tab}
         onChange={(value) => setSearch(value === 'profile' ? {} : { tab: value })}
@@ -226,7 +222,7 @@ function ProviderSettings() {
   return (
     <div className="section-spaced">
       <Notice>
-        {t('密钥仅在服务端使用。配置与真实调用验证分别显示；连接状态不代表已进行过付费生成。')}
+        {t('密钥仅在服务端使用。已配置不代表已验证连通性或生成效果，实际可用性以提交结果为准。')}
       </Notice>
       {settings.isLoading ? (
         <Loading />
@@ -241,16 +237,24 @@ function ProviderSettings() {
                   <PlugZap size={25} />
                 </span>
                 <Badge tone={provider.configured && provider.enabled ? 'green' : 'neutral'}>
-                  {provider.configured && provider.enabled ? t('已连接') : t('未连接')}
+                  {!provider.enabled
+                    ? t('已停用')
+                    : provider.configured
+                      ? t('已配置')
+                      : t('未配置')}
                 </Badge>
               </div>
               <h2>{provider.name}</h2>
               <p>
-                {provider.providerId === 'openai'
-                  ? t('图片生成与文案辅助')
-                  : provider.providerId === 'fal'
-                    ? t('视频生成与素材参考')
-                    : t('电商图片创作与处理工具')}
+                {provider.providerId === 'dify'
+                  ? '文字需求分析与待确认创作计划'
+                  : provider.providerId === 'seedance'
+                    ? '5秒纯文字视频生成与任务进度查询'
+                    : provider.providerId === 'openai'
+                      ? t('图片生成与文案辅助')
+                      : provider.providerId === 'fal'
+                        ? t('视频生成与素材参考')
+                        : t('电商图片创作与处理工具')}
               </p>
               <dl className="detail-list">
                 <div>

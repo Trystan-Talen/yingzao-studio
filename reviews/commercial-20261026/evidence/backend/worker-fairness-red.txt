@@ -1,0 +1,33 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/commercial-worker-safety.test.ts (3 tests | 1 failed) 347ms
+   × does not starve another workspace behind a full page of concurrency-blocked jobs 204ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/commercial-worker-safety.test.ts > does not starve another workspace behind a full page of concurrency-blocked jobs
+AssertionError: expected undefined to be '5dbde40c-d24c-4b6f-b7d4-8e76c69f44c4' // Object.is equality
+
+- Expected:
+"5dbde40c-d24c-4b6f-b7d4-8e76c69f44c4"
+
++ Received:
+undefined
+
+ ❯ tests/commercial-worker-safety.test.ts:166:34
+    164|   const quote = tasks.quote(actor, availableWorkspace.id, input);
+    165|   const runnable = tasks.submit(actor, availableWorkspace.id, input, q…
+    166|   expect(runner.claim()?.job_id).toBe(runnable.id);
+       |                                  ^
+    167|   expect(tasks.get(actor, availableWorkspace.id, runnable.id).status).…
+    168|   expect(tasks.balance(actor, wid).reserved).toBe(808);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  22:12:42
+   Duration  973ms (import 53%, tests 38%, transform 8%)
+

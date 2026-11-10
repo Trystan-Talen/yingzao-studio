@@ -1,0 +1,43 @@
+{
+  "completedAt": "2026-11-02T02:49:21.029Z",
+  "origin": "http://127.0.0.1:53810",
+  "pid": 46659,
+  "listenerAndDatabaseVerified": true,
+  "healthStatus": 200,
+  "indexMatchesCheckedBuild": true,
+  "entryFiles": [
+    {
+      "path": "/assets/index-4ibCBFQO.js",
+      "sha256": "731ea88c0e5ac091aa140972a8aaaa47297dbdfaf1fa9c299c4d63eb1b902923",
+      "httpStatus": 200
+    },
+    {
+      "path": "/assets/react-ZAcFXL9B.js",
+      "sha256": "db27e059f37db7a7cd18ae430f5056a0d82ab43c69e2aad9dc1700f1178b3df0",
+      "httpStatus": 200
+    },
+    {
+      "path": "/assets/index-BO4DJ53C.css",
+      "sha256": "c51925865f7d9cf624353962c9f92eed3e4a7910aa7f29fd30b16b8fec08e7f2",
+      "httpStatus": 200
+    }
+  ],
+  "installedBuildFilesVerified": 103,
+  "sourceFilesVerified": 377,
+  "sourceAggregateSha256": "7a654207ddb29fc9e01b6a9bcef6d2e1d3e16a8cd51b3e15ec59832d464616e3",
+  "backupAndRestoreVerified": true,
+  "backupFiles": 54,
+  "backupMedia": 52,
+  "mediaFilesUnchanged": 52,
+  "allTableDigestsUnchanged": true,
+  "tables": 100,
+  "jobs": 16,
+  "items": 26,
+  "assets": 20,
+  "creditsUnchanged": true,
+  "newGenerationTasks": 0,
+  "externalGenerationRequests": 0,
+  "forcedStop": false,
+  "retainedPreviousChunks": true,
+  "rollbackSourceVerified": true
+}

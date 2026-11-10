@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-11-02T04:57:52.554Z",
+  "finishedAt": "2026-11-02T05:13:18.756Z",
+  "passed": 194,
+  "total": 194,
+  "failed": 0,
+  "skipped": 0,
+  "retries": 0,
+  "projects": {
+    "desktop": 94,
+    "mobile": 94,
+    "notebook": 5,
+    "tablet": 1
+  },
+  "singleFullRun": true,
+  "evidence": "platform/var/upstream-parameters-20261101/browser-final",
+  "simulation": true,
+  "sourceAggregateSha256": "1db8777a055d42431a8b1e0f1c63799d89bcb109cb32bfcdc04309e3d2f84c1f"
+}

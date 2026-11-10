@@ -77,6 +77,7 @@ export const ProjectSchema = z.object({
   description: z.string(),
   kind: z.enum(['image', 'video', 'mixed']),
   coverAssetId: IdSchema.nullable(),
+  workflow: z.enum(['media', 'detail-page']).optional(),
   documentId: IdSchema,
   tags: z.array(z.string()),
   isFavorite: z.boolean(),
@@ -419,6 +420,7 @@ export const ErrorEnvelopeSchema = z.object({
 
 export const CreateProjectInputSchema = ProjectInputSchema.extend({
   scene: sceneDocumentSchema.optional(),
+  workflow: z.literal('detail-page').optional(),
 });
 export const UpdateDocumentInputSchema = z
   .object({

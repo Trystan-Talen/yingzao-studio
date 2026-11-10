@@ -1,0 +1,35 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/restored-cache.test.ts (11 tests | 1 failed | 10 skipped) 167ms
+   × does not publish a backup whose copied in-flight cache has disappeared 167ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/restored-cache.test.ts > does not publish a backup whose copied in-flight cache has disappeared
+AssertionError: promise resolved "'/var/folders/lt/701jz3295z19vn2m25937…'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-restored-cache-ru7DM4/incomplete-backup"
+
+ ❯ tests/restored-cache.test.ts:102:76
+    100|   const item = await cache();
+    101|   await rm(item.localPath);
+    102|   await expect(backup(app.services.config, join(root, 'incomplete-back…
+       |                                                                            ^
+    103|     code: 'RESTORE_CACHE_MISSING',
+    104|     itemId: item.itemId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 skipped (11)
+   Start at  22:46:37
+   Duration  1.14s (import 74%, tests 16%, transform 10%)
+

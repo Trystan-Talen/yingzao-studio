@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-11-02T03:55:08.263Z",
+  "finishedAt": "2026-11-02T04:09:51.931Z",
+  "passed": 190,
+  "total": 190,
+  "failed": 0,
+  "skipped": 0,
+  "retries": 0,
+  "projects": {
+    "desktop": 92,
+    "mobile": 92,
+    "notebook": 5,
+    "tablet": 1
+  },
+  "singleFullRun": true,
+  "evidence": "platform/var/creative-integration-20261101/browser-final",
+  "simulation": true,
+  "sourceAggregateSha256": "b844704096b50bd3ab5c4beaaeadf0dfdd877e945b94a3cb5be57af357d108ea"
+}

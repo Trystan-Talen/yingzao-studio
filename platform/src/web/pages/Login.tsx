@@ -48,11 +48,11 @@ export function Login() {
           <span className="brand-mark">{t('映')}</span>
           <strong>
             {t('映造')}
-            <span>Studio</span>
+            <span>{t('创意工作室')}</span>
           </strong>
         </a>
         <div>
-          <p className="eyebrow">A SPACE FOR YOUR NEXT IDEA</p>
+          <p className="eyebrow">{t('你的创作工作室')}</p>
           <h1>
             {t('把想象，')}
             <br />

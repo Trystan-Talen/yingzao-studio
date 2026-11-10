@@ -1,0 +1,19 @@
+日期：2026-10-26
+类型：真实浏览器失败日志摘录；非完整日志
+环境：本机隔离数据库、合成账号与素材；外部服务关闭
+问题：第二项删除返回临时错误后，已成功删除项仍显示且保留选择；预期一项、实际两项。
+净化：仅提取断言失败内容，移除页面快照，随机标识符改为稳定占位符。
+
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('.asset-card')
+Expected: 1
+Received: 2
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" locator('.asset-card') with timeout 5000ms
+  - waiting for locator('.asset-card')
+    14 × locator resolved to 2 elements
+       - unexpected value "2"
+

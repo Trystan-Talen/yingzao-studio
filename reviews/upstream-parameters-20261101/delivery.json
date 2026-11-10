@@ -1,0 +1,148 @@
+{
+  "recordedAt": "2026-11-02T05:13:58.861879+00:00",
+  "scope": "当前配置的豆包图片及视频模型参数研究与接入补齐。",
+  "researchFinding": "服务商模型列表及公开目录均能实时读取；未取得完整生成参数结构，输入范围采用已核对的原厂文档。",
+  "image": {
+    "model": "doubao-seedream-5.0-lite",
+    "aspectRatios": [
+      "1:1",
+      "4:3",
+      "3:4",
+      "16:9",
+      "9:16",
+      "3:2",
+      "2:3",
+      "21:9"
+    ],
+    "resolutions": [
+      "2K",
+      "3K",
+      "4K"
+    ],
+    "sizePresetCount": 24,
+    "quality": "没有单独低、中、高质量字段；按像素尺寸控制清晰度。",
+    "count": 1,
+    "format": "png"
+  },
+  "video": {
+    "model": "doubao-seedance-2.0",
+    "aspectRatios": [
+      "16:9",
+      "9:16",
+      "1:1",
+      "4:3",
+      "3:4",
+      "21:9",
+      "adaptive（智能比例）"
+    ],
+    "resolutions": [
+      "480p",
+      "720p",
+      "1080p",
+      "4K"
+    ],
+    "seconds": "4至15的整数秒",
+    "audio": [
+      false,
+      true
+    ]
+  },
+  "integration": [
+    "首页和图片视频工作台",
+    "详情页清晰度选择",
+    "草稿刷新恢复",
+    "参数版本与报价校验",
+    "生成执行字段映射"
+  ],
+  "unitTests": {
+    "passed": 1370,
+    "failed": 0,
+    "skipped": 0,
+    "files": 95
+  },
+  "browserTests": {
+    "passed": 194,
+    "total": 194,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "projects": {
+      "desktop": 94,
+      "mobile": 94,
+      "notebook": 5,
+      "tablet": 1
+    },
+    "singleFullRun": true
+  },
+  "staticChecksAndBuild": {
+    "typecheck": true,
+    "lint": true,
+    "format": true
+  },
+  "sourceFilesVerifiedUnchanged": 419,
+  "liveMetadataRequests": 4,
+  "runtime": {
+    "completedAt": "2026-11-02T05:13:52.071Z",
+    "origin": "http://127.0.0.1:53810",
+    "pid": 84978,
+    "listenerAndDatabaseVerified": true,
+    "healthStatus": 200,
+    "indexMatchesCheckedBuild": true,
+    "entryFiles": [
+      {
+        "path": "/assets/index-DlgKO93i.js",
+        "sha256": "f0ad3b341fdfa14b866ca185f5a8b7e0260cd4540300afa96d048e44a9dc17d6",
+        "httpStatus": 200
+      },
+      {
+        "path": "/assets/react-ZAcFXL9B.js",
+        "sha256": "db27e059f37db7a7cd18ae430f5056a0d82ab43c69e2aad9dc1700f1178b3df0",
+        "httpStatus": 200
+      },
+      {
+        "path": "/assets/index-Cv2Y2Cnw.css",
+        "sha256": "f929c260aa9820675aab8c3eaeeb8999a0ae75e30925d41dd4cd0b2a8fc7f64d",
+        "httpStatus": 200
+      }
+    ],
+    "installedBuildFilesVerified": 105,
+    "sourceFilesVerified": 419,
+    "sourceAggregateSha256": "1db8777a055d42431a8b1e0f1c63799d89bcb109cb32bfcdc04309e3d2f84c1f",
+    "backupAndRestoreVerified": true,
+    "backupFiles": 54,
+    "backupMedia": 52,
+    "mediaFilesUnchanged": 52,
+    "allTableDigestsUnchanged": true,
+    "tables": 100,
+    "jobs": 16,
+    "items": 26,
+    "assets": 20,
+    "creditsUnchanged": true,
+    "newGenerationTasks": 0,
+    "externalGenerationRequests": 0,
+    "forcedStop": false,
+    "retainedPreviousChunks": true,
+    "rollbackSourceVerified": true
+  },
+  "preview": {
+    "origin": "http://localhost:53860",
+    "simulated": true,
+    "externalGenerationCalls": 0
+  },
+  "limits": [
+    "未发现面向当前普通模型密钥的完整生成参数查询接口；实时核查模型与目录，具体范围由版本化原厂文档配置提供。",
+    "本次提供常用像素预设；原厂允许的任意自定义宽高尚未开放。",
+    "视频自动时长会影响费用和结算，暂只提供明确的整数秒；参考媒体仍保留原接入限制。",
+    "未提交任何真实付费生成请求，不能据此宣称高分辨率输出质量或服务商每个档位实测通过。"
+  ],
+  "evidence": [
+    "reviews/upstream-parameters-20261101/research.json",
+    "reviews/upstream-parameters-20261101/review.json",
+    "reviews/upstream-parameters-20261101/checks.json",
+    "reviews/upstream-parameters-20261101/browser-validation.json",
+    "reviews/upstream-parameters-20261101/live-metadata-validation.json",
+    "reviews/upstream-parameters-20261101/runtime-validation.json",
+    "reviews/upstream-parameters-20261101/parameters-desktop.png"
+  ],
+  "noCommitPushMerge": true
+}

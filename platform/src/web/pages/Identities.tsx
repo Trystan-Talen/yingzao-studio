@@ -123,7 +123,6 @@ export function Brands() {
   return (
     <div className="page">
       <PageHeader
-        eyebrow="CONSISTENCY, BEAUTIFULLY KEPT"
         title={t('品牌')}
         description={t('把色彩、字体与参考风格放在一起，让每件作品都带着你的辨识度。')}
         action={
@@ -453,7 +452,6 @@ export function Characters() {
   return (
     <div className="page">
       <PageHeader
-        eyebrow="FAMILIAR FACES, NEW STORIES"
         title={t('人物')}
         description={t('整理人物参考素材，让不同场景中的角色表达保持连贯。')}
         action={

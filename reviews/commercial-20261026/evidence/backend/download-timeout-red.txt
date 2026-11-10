@@ -1,0 +1,53 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+ ❯ tests/commercial-download-timeout.test.ts (2 tests | 2 failed) 8ms
+   × bounds a DNS lookup that never completes and never issues its eventual stale request 6ms
+   × aborts a continuously active response at the total deadline instead of renewing an idle timeout 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/commercial-download-timeout.test.ts > bounds a DNS lookup that never completes and never issues its eventual stale request
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/commercial-download-timeout.test.ts:36:19
+     34|   );
+     35|   await vi.advanceTimersByTimeAsync(120_001);
+     36|   expect(settled).toBe(true);
+       |                   ^
+     37|   expect(await downloading).toMatchObject({ message: expect.stringCont…
+     38|   resolveDns([{ address: '8.8.8.8', family: 4 }] as never);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/commercial-download-timeout.test.ts > aborts a continuously active response at the total deadline instead of renewing an idle timeout
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/commercial-download-timeout.test.ts:80:19
+     78|     await vi.advanceTimersByTimeAsync(30_000);
+     79|   }
+     80|   expect(settled).toBe(true);
+       |                   ^
+     81|   expect(await downloading).toMatchObject({ message: expect.stringCont…
+     82|   expect(destroy).toHaveBeenCalledOnce();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  22:17:44
+   Duration  131ms (transform 53%, import 26%, tests 17%, worker 4%)
+

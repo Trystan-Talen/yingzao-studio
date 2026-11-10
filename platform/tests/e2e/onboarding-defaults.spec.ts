@@ -6,11 +6,12 @@ test.use({ recoveryEnabled: false });
 
 async function advanced(composer: Locator) {
   const platform = composer.getByRole('combobox', { name: '发布平台', exact: true });
-  if (!(await platform.isVisible()))
-    await composer.getByRole('button', { name: '模型与高级设置', exact: true }).click();
+  const language = composer.getByRole('combobox', { name: '画面文字语言', exact: true });
+  if (!(await language.isVisible()))
+    await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   return {
     platform,
-    language: composer.getByRole('combobox', { name: '画面文字语言', exact: true }),
+    language,
   };
 }
 

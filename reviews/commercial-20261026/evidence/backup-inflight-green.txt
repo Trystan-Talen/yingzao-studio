@@ -1,0 +1,9 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/生图生视频/platform
+
+
+ Test Files  3 passed (3)
+      Tests  34 passed (34)
+   Start at  22:49:33
+   Duration  6.14s (tests 72%, import 26%, transform 1%)
+

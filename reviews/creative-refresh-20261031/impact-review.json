@@ -1,0 +1,94 @@
+{
+  "reviewedAt": "2026-10-31T03:50:57.890330+00:00",
+  "status": "in-progress",
+  "scope": "本轮仅完成只读影响审查；上一轮162条通过不继承为本轮结论。",
+  "knownInterface": {
+    "homeTitle": "放开想象，开始创作。",
+    "navigationTitle": "首页",
+    "removed": "侧栏新建创作按钮与全局N快捷键",
+    "quickComposer": "共享创作组件新增横向quick模式；直接从首页填写并提交",
+    "secondaryEntries": "保留三个媒体入口，下移为灵感与创作方式区"
+  },
+  "existingSuite": {
+    "specFiles": 32,
+    "previousCaseInventory": 162,
+    "note": "历史清单规模，仅作待重验范围；本轮尚未执行。"
+  },
+  "directlyAffected": [
+    {
+      "tests": [
+        "home-design.spec.ts",
+        "home-appearance.spec.ts"
+      ],
+      "reason": "首页原来没有表单，旧无表单断言需替换成可提交的快速创作链；标题、首屏位置与中英阿边界均改变。"
+    },
+    {
+      "tests": [
+        "experience-journeys.spec.ts"
+      ],
+      "reason": "图片、视频主链改从首页填写提交，继续核对任务、真实文件、刷新恢复与下载。"
+    },
+    {
+      "tests": [
+        "shell-quality.spec.ts",
+        "locale.spec.ts",
+        "onboarding-defaults.spec.ts"
+      ],
+      "reason": "导航改名、删除独立新建与N快捷键、焦点和移动抽屉、帮助文案与新手默认值。"
+    },
+    {
+      "tests": [
+        "composer-media.spec.ts",
+        "creation-locale.spec.ts",
+        "creation-race.spec.ts",
+        "material-designs.spec.ts",
+        "quote-confirmation.spec.ts",
+        "upload-context-review.spec.ts",
+        "upload-recovery.spec.ts"
+      ],
+      "reason": "共享创作组件和实时能力加载可能影响模型选择、规格、上传、模式草稿、报价与异步返回。"
+    },
+    {
+      "tests": [
+        "detail-page-experience.spec.ts",
+        "detail-page-project-entry.spec.ts",
+        "character-video.spec.ts",
+        "canvas.spec.ts",
+        "canvas-focus-review.spec.ts",
+        "library-canvas-review.spec.ts"
+      ],
+      "reason": "全站样式和能力消费链的间接回归；保留真实编辑、数据与媒体断言。"
+    }
+  ],
+  "requiredRegression": [
+    "首页输入及生成按钮在桌面、笔记本和手机首屏可用；横向输入桌面布局与手机堆叠无溢出；亮暗及英阿语言完整。",
+    "侧栏仅显示首页名称；已移除按钮和全局快捷键不会隐藏触发路由；输入普通字母n不丢文本或跳转。",
+    "首页直接生成图片/视频，报价确认前任务数为0，确认后只创建1个任务，项目跳转、刷新恢复、原件哈希和视频真实播放成立。",
+    "首页与工作台复用草稿时不相互覆盖，图片/视频草稿分离，参考素材原件不变，上传晚回归属原草稿与空间。",
+    "选择模型触发指定服务和模型的后端实时能力查询；界面说明能力来源、检查时间及限制，不冒称本地合同为远端实时参数。",
+    "能力读取中和失败时阻止旧规格直接生成，明确加载/错误/重试；重试成功后恢复而不清空用户文本和引用。",
+    "快速A→B切换、切换模式或空间、组件卸载后的迟到响应不得覆盖当前模型；规格交集变更不得静默沿用失效值。",
+    "已保存草稿的模型不可用或参数收缩时给出明确修正说明；打开报价后更改模型或能力变化不会提交旧报价。",
+    "能力接口鉴权和空间归属正确，只读查询不创建任务或扣积分；模拟元数据完全本地，非环回请求被禁止。",
+    "全量回归仍从一次完整运行统计，记录失败证据、修复复验、源码冻结比对；不把分组通过数相加。"
+  ],
+  "isolationWork": [
+    "保留原正式实例53810不动；新预览53830/53831使用新数据库和媒体目录，显式配置、不读取正式环境。",
+    "现53826前端与53827后端同属进程69250且自动热更新，静态冻结需独立服务入口或受控服务调整。",
+    "目前环回请求保护安装于模拟工作进程；实时能力查询进入接口进程后，接口夹具也必须安装相同保护。",
+    "隔离预览脚本增加本轮证据根目录参数，防止覆盖上一轮latest-preview记录。"
+  ],
+  "pending": "等待单元/静态检查顺序结束，再复验文档与报价到期边界，最后冻结源码和测试运行182条完整套件。",
+  "updatedAt": "2026-10-31T04:23:49.371311+00:00",
+  "infrastructure": {
+    "previewOrigin": "http://127.0.0.1:53830",
+    "apiOrigin": "http://127.0.0.1:53832",
+    "pid": 97943,
+    "readinessEvidence": "platform/var/creative-refresh-20261031/preview-capabilities-readiness.json",
+    "actualDatabaseVerified": true,
+    "metadataFixtureEvidence": "platform/var/creative-refresh-20261031/metadata-fixture-smoke.json",
+    "apiAndWorkerNetworkGuardInstalled": true,
+    "metadataFixtureRuntimeRestartPending": false,
+    "oldPreviewDecision": "按主代理确认保留69250进程与原数据，不冻结旧开发界面，不增加53828服务。"
+  }
+}

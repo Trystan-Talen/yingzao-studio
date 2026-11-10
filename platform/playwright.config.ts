@@ -2,7 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 import { resolve } from 'node:path';
 const root = process.env.E2E_RUN_ROOT;
 if (!root)
-  throw new Error('Run browser tests through pnpm test:e2e to isolate data and artifacts.');
+  throw new Error(
+    'Run browser tests through node --import tsx scripts/e2e.ts to isolate data and artifacts.',
+  );
 export default defineConfig({
   testDir: './tests/e2e',
   testMatch: '**/*.spec.ts',
@@ -33,7 +35,7 @@ export default defineConfig({
     },
     {
       name: 'notebook',
-      testMatch: '**/canvas.spec.ts',
+      testMatch: '**/{canvas,home-design}.spec.ts',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
     {

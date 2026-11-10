@@ -52,8 +52,8 @@ test('recovers a video inspiration action-reference draft after a lost reuse res
   });
   expect(created.status()).toBe(201);
   const inspiration = (await created.json()).data;
-  await page.goto(studio.origin);
-  await page.getByRole('button', { name: `${inspiration.title} · 以此创作`, exact: true }).click();
+  await page.goto(`${studio.origin}/inspiration`);
+  await page.getByRole('button', { name: `${inspiration.title} · 预览灵感`, exact: true }).click();
   const detail = page.getByRole('dialog', { name: inspiration.title, exact: true });
   await expect(detail.locator('video')).toHaveAttribute('src', /\/assets\//);
   let lost = false;

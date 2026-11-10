@@ -1,0 +1,19 @@
+
+Running 10 tests using 1 worker
+
+(node:37593) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (8.6s)
+  ✓   2 [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (2.9s)
+  ✓   3 [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (4.1s)
+  ✓   4 [desktop] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (2.5s)
+  ✓   5 [desktop] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger (3.4s)
+(node:37837) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 [mobile] › tests/e2e/production-security.spec.ts:17:1 › production security policy permits sign-in, real media and saved canvas exports without violations (8.7s)
+  ✓   7 [mobile] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (2.9s)
+  ✓   8 [mobile] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (4.6s)
+  ✓   9 [mobile] › tests/e2e/shell-quality.spec.ts:93:1 › keyboard users can skip navigation and recover focus after closing search (3.0s)
+  ✓  10 [mobile] › tests/e2e/shell-quality.spec.ts:111:1 › a conditionally mounted creation assistant restores its keyboard trigger (3.8s)
+
+  10 passed (47.2s)

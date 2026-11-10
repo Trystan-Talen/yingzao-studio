@@ -2,7 +2,7 @@ import { useStudio } from '../context';
 import { restoreToolAssets, type MissingToolAsset } from '../lib/tool-recovery';
 import { t } from '../lib/i18n';
 import { productWarning } from '../lib/product-messages';
-import { AdvancedToolCards } from '../components/AdvancedTools';
+import { AdvancedToolCards, advancedTools } from '../components/AdvancedTools';
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -23,7 +23,7 @@ import {
   Sparkles,
   Tag,
 } from 'lucide-react';
-import { TOOLS, LANGUAGES, IMAGE_RATIOS } from '../../contracts/catalog';
+import { TOOLS, LANGUAGES } from '../../contracts/catalog';
 import { extractAssetMentions } from '../../contracts/mentions';
 import type { AssetDto, ProjectDto } from '../../contracts/core';
 import { api, post, qs, useApi, useRefresh, type Page } from '../lib/api';
@@ -31,6 +31,8 @@ import { jobInput, type Capabilities, type Job, type JobInput } from '../lib/tas
 import { AssetPicker } from '../components/AssetPicker';
 import { JobSubmit } from '../components/JobSubmit';
 import { JobCard } from '../components/TaskCenter';
+import { useModelCapability } from '../lib/use-model-capability';
+import { ModelCapabilityStatus } from '../components/ModelCapabilityStatus';
 import { MaskEditor } from '../components/MaskEditor';
 import {
   Badge,
@@ -65,41 +67,49 @@ export function Tools() {
   const [category, setCategory] = useState('全部');
   const [q, setQ] = useState('');
   const capabilities = useApi<Capabilities>('/capabilities');
+  const localTools = [
+    { id: 'local.resize', name: '图片缩放', description: '调整尺寸，适配发布场景', icon: Scissors },
+    { id: 'local.convert', name: '格式转换', description: '转换图片格式', icon: Image },
+    {
+      id: 'local.stitch',
+      name: '长图拼接',
+      description: '把多张图片拼成一张长图',
+      icon: GalleryVerticalEnd,
+    },
+    {
+      id: 'local.video-trim',
+      name: '视频裁剪',
+      description: '截取需要的视频片段',
+      icon: Clapperboard,
+    },
+  ];
+  const matches = (tool: { name: string; description: string }) =>
+    `${t(tool.name)} ${t(tool.description)}`
+      .toLocaleLowerCase()
+      .includes(q.trim().toLocaleLowerCase());
+  const regular = TOOLS.filter(
+    (tool) => (category === '全部' || tool.category === category) && matches(tool),
+  );
+  const advanced = advancedTools.filter(
+    (tool) => ['全部', '进阶工作流'].includes(category) && matches(tool),
+  );
+  const local = localTools.filter(
+    (tool) => ['全部', '本机处理'].includes(category) && matches(tool),
+  );
+  const total = regular.length + advanced.length + local.length;
   return (
-    <div className="page">
+    <div className="page tools-page">
       <PageHeader
-        eyebrow="YOUR CREATIVE TOOLKIT"
-        title={t('好工具，让创作更从容。')}
+        title={t('创作工具')}
         description={t('从细节调整到画面重构，为每一步创作提供独立工具。')}
       />
-      <div className="tools-feature">
-        <div>
-          <span className="eyebrow">WORK SMARTER, CREATE MORE</span>
-          <h2>
-            {t('让每张图片，')}
-            <br />
-            {t('拥有更多可能。')}
-          </h2>
-          <p>{t('编辑、增强、复刻，从你的原始素材出发。')}</p>
-          <Link className="button secondary" to="/tools/image-inpaint">
-            {t('试试局部重绘')}
-            <ArrowUpRight size={16} />
-          </Link>
-        </div>
-        <div className="tools-feature-art">
-          <img src="/gallery/amber-perfume.webp" alt={t('商品图片编辑灵感')} />
-          <div className="tool-floating">
-            <Sparkles size={18} />
-            {t('为细节注入新想法')}
-          </div>
-        </div>
-      </div>
       <div className="toolbar">
         <div className="category-tabs">
-          {['全部', '编辑', '增强', '复刻'].map((value) => (
+          {['全部', '编辑', '增强', '复刻', '进阶工作流', '本机处理'].map((value) => (
             <button
               key={value}
               className={category === value ? 'active' : ''}
+              aria-pressed={category === value}
               onClick={() => setCategory(value)}
             >
               {t(value)}
@@ -115,11 +125,7 @@ export function Tools() {
         />
       </div>
       <div className="tools-grid">
-        {TOOLS.filter(
-          (tool) =>
-            (category === '全部' || tool.category === category) &&
-            `${t(tool.name)}${t(tool.description)}`.includes(q),
-        ).map((tool) => {
+        {regular.map((tool) => {
           const Icon = icons[tool.icon];
           const op = capabilities.data?.operations.find(
             (item) => item.id === tool.id && item.available && item.providerId !== 'local',
@@ -144,18 +150,49 @@ export function Tools() {
           );
         })}
       </div>
-      <AdvancedToolCards />
-      <section className="local-tools-banner">
-        <div>
-          <Badge tone="green">{t('本机处理')}</Badge>
-          <h3>{t('无需模型，也能完成基础处理。')}</h3>
-          <p className="muted">{t('图片缩放、格式转换、长图拼接与视频裁剪。')}</p>
-        </div>
-        <Link className="button secondary" to="/tools/local.resize">
-          {t('打开本机工具')}
-          <ArrowUpRight size={16} />
-        </Link>
-      </section>
+      <AdvancedToolCards tools={advanced} />
+      {!!local.length && (
+        <section className="section-spaced" aria-label={t('本机工具')}>
+          <div className="section-heading">
+            <div>
+              <h2>{t('本机处理')}</h2>
+              <p className="muted">{t('无需模型，也能完成基础处理。')}</p>
+            </div>
+          </div>
+          <div className="tools-grid">
+            {local.map((tool) => (
+              <Link className="tool-card" to={`/tools/${tool.id}`} key={tool.id}>
+                <span className="tool-icon">
+                  <tool.icon size={24} />
+                </span>
+                <div className="tool-title">
+                  <h3>{t(tool.name)}</h3>
+                  <ArrowUpRight size={16} />
+                </div>
+                <p>{t(tool.description)}</p>
+                <Badge tone="green">{t('本机处理')}</Badge>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+      {!total && (
+        <Empty
+          title={t('没有找到相关工具')}
+          description={t('换一个关键词，或清空筛选查看全部工具。')}
+          action={
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setQ('');
+                setCategory('全部');
+              }}
+            >
+              {t('清空筛选')}
+            </Button>
+          }
+        />
+      )}
     </div>
   );
 }
@@ -209,7 +246,7 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
   const [strength, setStrength] = useState('standard');
   const [languages, setLanguages] = useState<string[]>(['en']);
   const [colorInput, setColorInput] = useState('#426856');
-  const [resolution, setResolution] = useState('720p');
+  const [resolution, setResolution] = useState(id === 'video-replica' ? '720p' : '1K');
   const [duration, setDuration] = useState(5);
   const [replacementType, setReplacementType] = useState('product');
   const [keepMusicRhythm, setKeepMusicRhythm] = useState(true);
@@ -338,11 +375,18 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
         item.id === actualOperation &&
         (id !== 'image-fusion' || mode === 'stitch' || item.providerId !== 'local'),
     ) ?? [];
-  const operation =
-    operations.find((item) => item.providerId === provider) ??
-    operations.find((item) => item.available) ??
-    operations[0];
-  const currentModel = operation?.models.find((item) => item.id === model) ?? operation?.models[0];
+  const operation = provider
+    ? operations.find((item) => item.providerId === provider)
+    : (operations.find((item) => item.available) ?? operations[0]);
+  const selectedModel = model
+    ? operation?.models.find((item) => item.id === model)
+    : operation?.models[0];
+  const capability = useModelCapability({
+    operation,
+    model: selectedModel,
+    inputMode: assets.length || references.length ? 'image' : 'text',
+  });
+  const currentModel = capability.model;
   const history = useApi<Page<Job>>(
     `/jobs${qs({ operation: actualOperation, pageSize: 30 })}`,
     true,
@@ -360,15 +404,14 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
     '本机工具';
   const has = (value: string) => (tool?.options as readonly string[] | undefined)?.includes(value);
   const colors = colorInput.split(/[，,\s]+/).filter(Boolean);
-  const effectiveRatio =
-    currentModel?.ratios.includes(ratio) || !currentModel?.ratios.length
-      ? ratio
-      : (currentModel.ratios[0] ?? '1:1');
   const isKling = id === 'video-replica' && operation?.providerId === 'fal' && !isMotion;
   const input = jobInput({
     operation: actualOperation,
     providerId:
-      operation?.providerId ?? (actualOperation.startsWith('local.') ? 'local' : 'flyelep'),
+      provider ||
+      operation?.providerId ||
+      (actualOperation.startsWith('local.') ? 'local' : 'flyelep'),
+    capabilityRevision: capability.revision,
     prompt,
     creationWarnings: draftWarnings,
     ...(projectId ? { projectId } : {}),
@@ -377,8 +420,8 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
     ...(mask ? { maskAssetId: mask.id } : {}),
     ...(background ? { backgroundAssetId: background.id } : {}),
     options: {
-      model: currentModel?.id,
-      ratio: isMotion || isKling ? 'auto' : effectiveRatio,
+      model: model || currentModel?.id,
+      ratio: isMotion || isKling ? 'auto' : ratio,
       motionOrientation,
       referenceAuthorized,
       mode: isKling ? 'creative' : mode,
@@ -394,19 +437,12 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
       format,
       trimStart: isKling ? 0 : trimStart,
       ...(!isKling ? { trimEnd } : {}),
-      resolution:
-        isMotion || isKling
-          ? 'auto'
-          : currentModel?.resolutions.includes(resolution) || !currentModel?.resolutions.length
-            ? resolution
-            : currentModel.resolutions[0],
+      resolution: isMotion || isKling ? 'auto' : resolution,
       duration: isMotion
         ? Math.max(2, Math.ceil((trimEnd || (references[0]?.durationMs ?? 0) / 1000) - trimStart))
         : isKling
           ? Math.max(2, Math.ceil((assets[0]?.durationMs ?? 5000) / 1000))
-          : currentModel?.durations.includes(duration) || !currentModel?.durations.length
-            ? duration
-            : currentModel.durations[0],
+          : duration,
       replacementType: isMotion ? 'model' : replacementType,
       keepMusicRhythm,
       sellingPoints,
@@ -417,9 +453,12 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
     },
   });
   const projectRecoveryReady = !projectId || restored;
+  const capabilityIssue = capability.selectionIssue(input.options);
   const assetsReady =
     projectRecoveryReady && !restoringAssets && missingAssets.length === 0 && !restoreError;
   const valid =
+    capability.canGenerate &&
+    !capabilityIssue &&
     assetsReady &&
     draftWarnings.length === 0 &&
     (!isMotion ||
@@ -736,15 +775,21 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
               placeholder={t('写下你的想法…')}
             />
           </Field>
-          {operations.length > 0 && (
+          {(operations.length > 0 || provider) && (
             <Field label={t('处理服务')}>
               <select
-                value={operation?.providerId ?? ''}
+                value={provider || operation?.providerId || ''}
                 onChange={(e) => {
                   setProvider(e.target.value);
                   setModel('');
                 }}
               >
+                {provider && !operation && (
+                  <option value={provider}>
+                    {provider}
+                    {t('（当前不可用，原值保留）')}
+                  </option>
+                )}
                 {operations.map((item) => (
                   <option value={item.providerId} key={item.providerId}>
                     {
@@ -759,9 +804,18 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
               </select>
             </Field>
           )}
-          {currentModel && (
+          {(currentModel || model) && (
             <Field label={t('模型')}>
-              <select value={currentModel.id} onChange={(e) => setModel(e.target.value)}>
+              <select
+                value={model || currentModel?.id || ''}
+                onChange={(e) => setModel(e.target.value)}
+              >
+                {model && !selectedModel && (
+                  <option value={model}>
+                    {model}
+                    {t('（当前不支持，原值保留）')}
+                  </option>
+                )}
                 {operation?.models.map((item) => (
                   <option key={item.id} value={item.id}>
                     {t(item.name)}
@@ -771,17 +825,24 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
             </Field>
           )}
           <div className="form-grid">
-            {has('ratio') && !isMotion && !isKling && (
-              <Field label={t('画幅比例')}>
-                <select value={effectiveRatio} onChange={(e) => setRatio(e.target.value)}>
-                  {(currentModel?.ratios.length ? currentModel.ratios : IMAGE_RATIOS).map(
-                    (value) => (
+            {!isMotion &&
+              !isKling &&
+              !!currentModel?.ratios.length &&
+              capability.adjustable('ratio') && (
+                <Field label={t('画幅比例')}>
+                  <select value={ratio} onChange={(e) => setRatio(e.target.value)}>
+                    {!currentModel.ratios.includes(ratio) && (
+                      <option value={ratio}>
+                        {ratio}
+                        {t('（当前不支持，原值保留）')}
+                      </option>
+                    )}
+                    {currentModel.ratios.map((value) => (
                       <option key={value}>{value}</option>
-                    ),
-                  )}
-                </select>
-              </Field>
-            )}
+                    ))}
+                  </select>
+                </Field>
+              )}
             {has('scale') && (
               <Field label={t('放大倍数')}>
                 <select value={scale} onChange={(e) => setScale(Number(e.target.value))}>
@@ -846,29 +907,61 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
                 </select>
               </Field>
             )}
-            {isVideo && !isKling && !isMotion && (
-              <>
+            {!isVideo &&
+              !!currentModel?.resolutions.length &&
+              capability.adjustable('resolution') && (
                 <Field label={t('输出清晰度')}>
                   <select value={resolution} onChange={(e) => setResolution(e.target.value)}>
-                    {(currentModel?.resolutions.length
-                      ? currentModel.resolutions
-                      : ['720p', '1080p']
-                    ).map((value) => (
+                    {!currentModel.resolutions.includes(resolution) && (
+                      <option value={resolution}>
+                        {resolution}
+                        {t('（当前不支持，原值保留）')}
+                      </option>
+                    )}
+                    {currentModel.resolutions.map((value) => (
                       <option key={value}>{value}</option>
                     ))}
                   </select>
                 </Field>
-                {mode !== 'exact' && id !== 'local.video-trim' && (
-                  <Field label={t('时长（秒）')}>
-                    <select value={duration} onChange={(e) => setDuration(Number(e.target.value))}>
-                      {(currentModel?.durations.length ? currentModel.durations : [5, 10, 15]).map(
-                        (value) => (
-                          <option key={value}>{value}</option>
-                        ),
+              )}
+            {isVideo && !isKling && !isMotion && (
+              <>
+                {!!currentModel?.resolutions.length && capability.adjustable('resolution') && (
+                  <Field label={t('输出清晰度')}>
+                    <select value={resolution} onChange={(e) => setResolution(e.target.value)}>
+                      {!currentModel.resolutions.includes(resolution) && (
+                        <option value={resolution}>
+                          {resolution}
+                          {t('（当前不支持，原值保留）')}
+                        </option>
                       )}
+                      {currentModel.resolutions.map((value) => (
+                        <option key={value}>{value}</option>
+                      ))}
                     </select>
                   </Field>
                 )}
+                {mode !== 'exact' &&
+                  id !== 'local.video-trim' &&
+                  !!currentModel?.durations.length &&
+                  capability.adjustable('duration') && (
+                    <Field label={t('时长（秒）')}>
+                      <select
+                        value={duration}
+                        onChange={(e) => setDuration(Number(e.target.value))}
+                      >
+                        {!currentModel.durations.includes(duration) && (
+                          <option value={duration}>
+                            {duration}
+                            {t('（当前不支持，原值保留）')}
+                          </option>
+                        )}
+                        {currentModel.durations.map((value) => (
+                          <option key={value}>{value}</option>
+                        ))}
+                      </select>
+                    </Field>
+                  )}
                 {mode === 'exact' && (
                   <Field label={t('替换对象')}>
                     <select
@@ -1061,6 +1154,17 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
                 : t('分享链接解析与人物认证需要相应外部服务。目前请上传有权使用的本地视频与素材。')}
             </Notice>
           )}
+          <ModelCapabilityStatus
+            capability={capability}
+            selectionIssue={capabilityIssue}
+            onUseFixed={() => {
+              const fixed = capability.fixedOptions;
+              if (typeof fixed.ratio === 'string') setRatio(fixed.ratio);
+              if (typeof fixed.resolution === 'string') setResolution(fixed.resolution);
+              if (typeof fixed.duration === 'number') setDuration(fixed.duration);
+              if (typeof fixed.format === 'string') setFormat(fixed.format);
+            }}
+          />
           <JobSubmit
             input={input}
             operation={operation}

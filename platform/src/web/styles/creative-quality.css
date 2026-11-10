@@ -1,0 +1,22 @@
+.creative-quality {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border, #e7e5df);
+  border-radius: 12px;
+  background: var(--surface, #fafaf7);
+  font-size: 13px;
+}
+.creative-quality summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.creative-quality p,
+.creative-quality ul {
+  margin: 10px 0;
+}
+.creative-quality li {
+  margin: 4px 0;
+}
+.creative-quality small {
+  opacity: 0.7;
+}

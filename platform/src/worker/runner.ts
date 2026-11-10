@@ -3,7 +3,11 @@ import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileTypeFromBuffer } from 'file-type';
 import { jobInputSchema } from '../contracts/jobs';
-import { designPlanResultSchema, type DesignPlanResult } from '../contracts/design-plan';
+import {
+  jobResultDataSchema,
+  resultMatchesAssistantMode,
+  type JobResultData,
+} from '../contracts/job-result';
 import type { ProviderId } from '../contracts/catalog';
 import type { TaskServices } from '../server/tasks/service';
 import type { PreparedAsset } from '../server/core';
@@ -17,7 +21,9 @@ import {
   type ProviderResult,
   type RemoteTask,
 } from '../server/tasks/types';
-import { openaiProvider } from '../server/providers/openai';
+import { createOpenaiProvider } from '../server/providers/openai';
+import { createDifyProvider } from '../server/providers/dify';
+import { createSeedanceProvider } from '../server/providers/seedance';
 import { falProvider } from '../server/providers/fal';
 import { flyelepProvider } from '../server/providers/flyelep';
 import { localProvider } from '../server/providers/local';
@@ -26,6 +32,21 @@ import { downloadPublicMedia } from '../server/providers/http';
 import { composeErasureResult } from '../server/providers/erasure';
 import { AppError } from '../server/errors';
 import { cleanupSucceededResults } from './result-cleanup';
+import { currentJobStage, taskStage } from '../server/tasks/progress';
+
+function recoveryError(phase: string, error: unknown): string {
+  const saving = phase === 'downloading';
+  const prefix = saving ? '结果已生成，但本机保存中断。' : '远程任务已保留，但查询暂时中断。';
+  let reason = '连接或处理异常。';
+  if (error instanceof ProviderError) {
+    if (error.message.includes('DNS')) reason = '公共域名解析失败。';
+    else if (error.message.includes('受保护网络')) reason = '下载地址未通过公网安全校验。';
+    else if (error.message.includes('超时')) reason = '连接或传输超时。';
+    else if (['PROVIDER_HTTP_401', 'PROVIDER_HTTP_403'].includes(error.code))
+      reason = '服务凭据或权限需要检查。';
+  }
+  return `${prefix}${reason}恢复只会${saving ? '保存已有结果' : '查询同一任务'}，不会重新生成。`;
+}
 interface StoredResult {
   outputKind: 'single' | 'layers';
   outputs: StoredOutput[];
@@ -41,7 +62,7 @@ interface StoredOutput {
   mimeType: string;
   name: string;
   text?: string;
-  resultData?: DesignPlanResult;
+  resultData?: JobResultData;
 }
 export function createWorker(
   services: TaskServices,
@@ -52,7 +73,9 @@ export function createWorker(
   const owner = randomUUID();
   const adapters: Record<ProviderId, ProviderAdapter> = {
     tikhub: tikhubProvider,
-    openai: openaiProvider,
+    openai: createOpenaiProvider(config.imageGateway),
+    dify: createDifyProvider(config.dify),
+    seedance: createSeedanceProvider(config.seedance),
     fal: falProvider,
     flyelep: flyelepProvider,
     local: localProvider,
@@ -128,14 +151,25 @@ export function createWorker(
       core.requireScope(actor, 'jobs:write');
     } else core.requireAccess(actorForJob(i), i.workspace_id, 'write');
   }
+  function* candidates(): Generator<ItemRow> {
+    // Scan beyond a blocked first page without loading the entire queue. A stable
+    // keyset also survives cancelling unauthorized items while this scan runs.
+    let cursor: [number, string, number, string] = [-1, '', -1, ''];
+    const time = now();
+    const query = sql.prepare(
+      "SELECT * FROM job_items WHERE (status='queued' OR (status='running' AND phase IN('polling','downloading'))) AND next_attempt_at<=? AND (lease_until IS NULL OR lease_until<?) AND (CASE WHEN status='running' THEN 0 ELSE 1 END,created_at,item_index,id)>(?,?,?,?) ORDER BY CASE WHEN status='running' THEN 0 ELSE 1 END,created_at,item_index,id LIMIT 100",
+    );
+    for (;;) {
+      const batch = query.all(time, time, ...cursor) as ItemRow[];
+      if (!batch.length) return;
+      yield* batch;
+      const last = batch[batch.length - 1]!;
+      cursor = [last.status === 'running' ? 0 : 1, last.created_at, last.item_index, last.id];
+    }
+  }
   function claim(): ItemRow | undefined {
     return services.transaction(() => {
-      const candidates = sql
-        .prepare(
-          "SELECT * FROM job_items WHERE (status='queued' OR (status='running' AND phase IN('polling','downloading'))) AND next_attempt_at<=? AND (lease_until IS NULL OR lease_until<?) ORDER BY CASE WHEN status='running' THEN 0 ELSE 1 END,created_at,item_index LIMIT 100",
-        )
-        .all(now(), now()) as ItemRow[];
-      for (const i of candidates) {
+      for (const i of candidates()) {
         const input = jobInputSchema.parse(JSON.parse(i.input_json));
         if (i.status === 'queued') {
           try {
@@ -186,9 +220,16 @@ export function createWorker(
           )
           .run(owner, until, now(), i.id, i.fence, now());
         if (changed.changes) {
+          const previous = sql.prepare('SELECT stage FROM jobs WHERE id=?').get(i.job_id) as {
+            stage: string;
+          };
           sql
-            .prepare("UPDATE jobs SET status='running',stage='准备素材',updated_at=? WHERE id=?")
-            .run(now(), i.job_id);
+            .prepare("UPDATE jobs SET status='running',stage=?,updated_at=? WHERE id=?")
+            .run(
+              currentJobStage([{ ...i, status: 'running', lease_owner: owner }], previous.stage),
+              now(),
+              i.job_id,
+            );
           services.event(i.workspace_id, i.job_id, 'started', { itemId: i.id });
           return sql.prepare('SELECT * FROM job_items WHERE id=?').get(i.id) as ItemRow;
         }
@@ -206,19 +247,31 @@ export function createWorker(
     );
   }
   function stage(i: ItemRow, value: string) {
-    if (owns(i))
-      sql.prepare('UPDATE jobs SET stage=?,updated_at=? WHERE id=?').run(value, now(), i.job_id);
+    if (owns(i)) {
+      const changed = sql
+        .prepare('UPDATE jobs SET stage=?,updated_at=? WHERE id=? AND stage<>?')
+        .run(value, now(), i.job_id, value);
+      if (changed.changes)
+        services.event(i.workspace_id, i.job_id, 'updated', { status: 'running', stage: value });
+    }
   }
   function fail(i: ItemRow, message: string, uncertain: boolean) {
     services.transaction(() => {
       if (!owns(i)) return;
+      const live = sql.prepare('SELECT phase FROM job_items WHERE id=?').get(i.id) as {
+        phase: string;
+      };
       sql
         .prepare(
           'UPDATE job_items SET status=?,phase=?,error_message=?,lease_owner=NULL,lease_until=NULL,updated_at=? WHERE id=? AND fence=?',
         )
         .run(
           uncertain ? 'reconciliation_required' : 'failed',
-          uncertain ? 'uncertain' : 'done',
+          uncertain
+            ? ['polling', 'downloading'].includes(live.phase)
+              ? live.phase
+              : 'uncertain'
+            : 'done',
           message,
           now(),
           i.id,
@@ -239,7 +292,7 @@ export function createWorker(
     try {
       for (const [n, o] of outputs.entries()) {
         const resultData =
-          o.resultData === undefined ? undefined : designPlanResultSchema.parse(o.resultData);
+          o.resultData === undefined ? undefined : jobResultDataSchema.parse(o.resultData);
         if (o.buffer) {
           const path = join(dir, `${i.id}-${i.fence}-${n}.bin`);
           written.push(path);
@@ -260,13 +313,13 @@ export function createWorker(
     const outputs = result.outputs;
     const input = jobInputSchema.parse(JSON.parse(i.input_json));
     const structured = outputs.find((output) => output.resultData !== undefined)?.resultData;
-    let resultData: DesignPlanResult | undefined;
+    let resultData: JobResultData | undefined;
     if (structured !== undefined) {
-      const parsed = designPlanResultSchema.safeParse(structured);
+      const parsed = jobResultDataSchema.safeParse(structured);
       if (
         !parsed.success ||
         input.operation !== 'text.assist' ||
-        input.options.assistantMode !== 'design-plan'
+        !resultMatchesAssistantMode(parsed.data, input.options.assistantMode)
       )
         throw new ProviderError('服务返回了不完整或不属于当前任务的方案结构，请核对结果。', true);
       resultData = parsed.data;
@@ -299,12 +352,27 @@ export function createWorker(
             : await downloadPublicMedia(
                 output.url!,
                 input.operation === 'media.import' ? 100 * 1024 * 1024 : undefined,
+                0,
+                {
+                  dnsMode: config.mediaDnsMode,
+                  ...(config.mediaDownloadTimeoutMs
+                    ? { timeoutMs: config.mediaDownloadTimeoutMs }
+                    : {}),
+                },
               );
           if (
             input.operation === 'media.import' &&
             !(await fileTypeFromBuffer(buffer))?.mime.startsWith('video/')
           )
             throw new ProviderError('解析返回的内容不是可验证的视频文件，请核对服务商结果。', true);
+          const expectedMedia =
+            input.operation === 'image.generate'
+              ? 'image/'
+              : input.operation === 'video.generate'
+                ? 'video/'
+                : null;
+          if (expectedMedia && !(await fileTypeFromBuffer(buffer))?.mime.startsWith(expectedMedia))
+            throw new ProviderError('服务返回的文件类型与生成任务不符，请核对服务商结果。', true);
           if (input.operation === 'image-erase') {
             const [source, mask] = await Promise.all([
               core.assets.readOriginalForJob(context, input.assetIds[0]!),
@@ -339,6 +407,8 @@ export function createWorker(
         prepared.some((a) => a.width !== prepared[0]!.width || a.height !== prepared[0]!.height)
       )
         throw new ProviderError('分层图片画幅不一致，需核对供应商产物。', true);
+      if (['image.generate', 'video.generate'].includes(input.operation) && prepared.length !== 1)
+        throw new ProviderError('生成任务没有返回可验证的媒体产物，请核对服务商结果。', true);
       const resultText =
         outputs
           .map((o) => o.text ?? '')
@@ -459,14 +529,21 @@ export function createWorker(
     }, 20000);
     timer.unref();
     try {
+      // Missing recovery metadata must never fall through to a new paid execute call.
+      if (
+        (i.phase === 'downloading' && !i.result_json) ||
+        (i.phase === 'polling' && !i.remote_json)
+      )
+        throw new ProviderError('恢复所需的结果或远程任务记录缺失，请核对服务商记录。', true);
       const secret = services.settings.secret(i.workspace_id, input.providerId);
       if (i.phase === 'downloading' && i.result_json) {
-        stage(i, '保存原始产物');
+        stage(i, taskStage(i));
         await finish(i, readStoredResult(i.result_json));
         return;
       }
       let result: ProviderResult;
       if (i.phase === 'polling' && i.remote_json) {
+        if (i.recovery_failures > 0) stage(i, taskStage(i));
         if (!adapter.poll || !secret)
           throw new ProviderError('无法恢复任务，请检查服务配置。', true);
         const remote = JSON.parse(i.remote_json) as RemoteTask;
@@ -526,6 +603,40 @@ export function createWorker(
             actor: actorForJob(i),
             workspaceId: i.workspace_id,
             input,
+            onRemoteAccepted: (remote) => {
+              services.transaction(() => {
+                if (!owns(i))
+                  throw new ProviderError('任务执行权已转移，不能覆盖远程任务记录。', true);
+                const live = sql
+                  .prepare('SELECT remote_id,remote_json FROM job_items WHERE id=?')
+                  .get(i.id) as { remote_id: string | null; remote_json: string | null };
+                if (
+                  !remote.id ||
+                  remote.id.length > 240 ||
+                  (live.remote_id && live.remote_id !== remote.id)
+                )
+                  throw new ProviderError(
+                    '服务返回的任务编号与已记录任务不一致，请核对服务商结果。',
+                    true,
+                  );
+                const previous = live.remote_json
+                  ? (JSON.parse(live.remote_json) as RemoteTask)
+                  : null;
+                sql
+                  .prepare(
+                    "UPDATE job_items SET phase='polling',remote_id=?,remote_json=?,error_message=NULL,updated_at=? WHERE id=? AND lease_owner=? AND fence=?",
+                  )
+                  .run(
+                    remote.id,
+                    JSON.stringify({ ...remote, submittedAt: previous?.submittedAt || now() }),
+                    now(),
+                    i.id,
+                    owner,
+                    i.fence,
+                  );
+                stage(i, '任务已受理，正在等待结果');
+              });
+            },
             assetUrl: (id, variant = 'original') => {
               if (!allowedIds.has(id))
                 throw new AppError(403, 'ASSET_REFERENCE', '素材未包含在本次任务中');
@@ -571,14 +682,22 @@ export function createWorker(
       }
       if (!owns(i)) return;
       if (result.state === 'submitted') {
+        const accepted = sql
+          .prepare('SELECT remote_id,remote_json FROM job_items WHERE id=?')
+          .get(i.id) as { remote_id: string | null; remote_json: string | null };
+        if (accepted.remote_id && accepted.remote_id !== result.remote.id)
+          throw new ProviderError('服务返回的任务编号与已记录任务不一致，请核对服务商结果。', true);
+        const previous = accepted.remote_json
+          ? (JSON.parse(accepted.remote_json) as RemoteTask)
+          : null;
         stage(i, '模型已接受，等待结果');
         sql
           .prepare(
-            "UPDATE job_items SET phase='polling',recovery_failures=0,remote_id=?,remote_json=?,next_attempt_at=?,lease_owner=NULL,lease_until=NULL,updated_at=? WHERE id=? AND fence=?",
+            "UPDATE job_items SET phase='polling',recovery_failures=0,error_message=NULL,remote_id=?,remote_json=?,next_attempt_at=?,lease_owner=NULL,lease_until=NULL,updated_at=? WHERE id=? AND fence=?",
           )
           .run(
             result.remote.id,
-            JSON.stringify(result.remote),
+            JSON.stringify({ ...result.remote, submittedAt: previous?.submittedAt || now() }),
             new Date(Date.now() + 5000).toISOString(),
             now(),
             i.id,
@@ -587,14 +706,24 @@ export function createWorker(
         return;
       }
       if (result.state === 'running') {
+        const remote = i.remote_json ? (JSON.parse(i.remote_json) as RemoteTask) : null;
+        const acceptedAt = Date.parse(remote?.submittedAt || i.created_at);
+        if (Number.isFinite(acceptedAt) && Date.now() - acceptedAt >= 30 * 60_000) {
+          fail(i, '远程处理超过30分钟，自动查询已暂停；可恢复查询同一任务，不会重新生成。', true);
+          return;
+        }
         sql
           .prepare(
-            "UPDATE job_items SET phase='polling',recovery_failures=0,next_attempt_at=?,lease_owner=NULL,lease_until=NULL,updated_at=? WHERE id=? AND fence=?",
+            "UPDATE job_items SET phase='polling',recovery_failures=0,error_message=NULL,next_attempt_at=?,lease_owner=NULL,lease_until=NULL,updated_at=? WHERE id=? AND fence=?",
           )
           .run(new Date(Date.now() + 5000).toISOString(), now(), i.id, i.fence);
         sql
           .prepare('UPDATE jobs SET stage=?,updated_at=? WHERE id=?')
           .run(result.stage, now(), i.job_id);
+        services.event(i.workspace_id, i.job_id, 'updated', {
+          status: 'running',
+          stage: result.stage,
+        });
         return;
       }
       if (result.state === 'failed') {
@@ -608,10 +737,10 @@ export function createWorker(
       };
       sql
         .prepare(
-          "UPDATE job_items SET phase='downloading',recovery_failures=0,result_json=?,updated_at=? WHERE id=? AND lease_owner=? AND fence=?",
+          "UPDATE job_items SET phase='downloading',recovery_failures=0,error_message=NULL,result_json=?,updated_at=? WHERE id=? AND lease_owner=? AND fence=?",
         )
         .run(JSON.stringify(stored), now(), i.id, owner, i.fence);
-      stage(i, '保存原始产物');
+      stage(i, '结果已生成，正在下载并保存');
       await finish(i, stored);
     } catch (error) {
       const live = sql.prepare('SELECT * FROM job_items WHERE id=?').get(i.id) as
@@ -629,11 +758,12 @@ export function createWorker(
             new Date(
               Date.now() + Math.min(60000, 5000 * (live.recovery_failures + 1)),
             ).toISOString(),
-            '暂时无法获取结果，稍后自动恢复',
+            recoveryError(live.phase, error),
             now(),
             i.id,
             i.fence,
           );
+        services.refresh(i.job_id);
         return;
       }
       const uncertain =
@@ -642,9 +772,11 @@ export function createWorker(
           : input.providerId !== 'local' && live.phase === 'submitting';
       fail(
         i,
-        error instanceof ProviderError || error instanceof AppError
-          ? error.message
-          : '处理失败，请检查素材或服务配置。',
+        ['polling', 'downloading'].includes(live.phase)
+          ? recoveryError(live.phase, error)
+          : error instanceof ProviderError || error instanceof AppError
+            ? error.message
+            : '处理失败，请检查素材或服务配置。',
         uncertain ||
           (input.providerId !== 'local' && ['polling', 'downloading'].includes(live.phase)),
       );

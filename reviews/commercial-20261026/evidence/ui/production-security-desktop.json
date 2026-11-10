@@ -1,0 +1,11 @@
+{
+  "environment": "启用生产模式的隔离回环环境；未验证公网证书或外部服务。",
+  "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+  "violations": [],
+  "output": {
+    "width": 160,
+    "height": 120,
+    "format": "png"
+  },
+  "savedLayers": 1
+}

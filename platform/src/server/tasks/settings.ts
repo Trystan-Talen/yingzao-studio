@@ -1,3 +1,4 @@
+import { SEEDREAM_SIZE_PRESETS, seedanceModel } from '../providers/documented-models';
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import { PROVIDERS, TOOLS, IMAGE_RATIOS, type ProviderId } from '../../contracts/catalog';
 import type {
@@ -12,6 +13,10 @@ import { AppError } from '../errors';
 import { hasFfmpeg } from '../providers/local';
 import { FAL_REFERENCE_MODELS } from '../providers/fal-reference';
 import { FAL_MOTION_MODELS } from '../providers/fal-motion';
+import { validateSeedanceInput } from '../providers/seedance';
+import { validateImageGatewayInput } from '../providers/openai';
+import { ProviderError } from './types';
+import { createModelCapabilityService } from './model-capabilities';
 interface Setting {
   provider_id: ProviderId;
   encrypted_secret: string | null;
@@ -118,7 +123,10 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       const value = secret(wid, p.id);
       return {
         providerId: p.id,
-        name: p.name,
+        name:
+          p.id === 'openai' && config.imageGateway?.model === 'doubao-seedream-5.0-lite'
+            ? 'Seedream（豆包生图）'
+            : p.name,
         configured: Boolean(value),
         enabled: row?.enabled !== 0,
         keyHint: row?.key_hint || (value ? `…${value.slice(-4)}` : null),
@@ -163,11 +171,16 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
         input.enabled ? 1 : 0,
         new Date().toISOString(),
       );
+    modelCapabilities.invalidate(wid, input.providerId);
     return list(wid).find((p) => p.providerId === input.providerId)!;
   }
   function capabilities(wid: string): CapabilitiesDto {
     const providers = PROVIDERS.map((p) => ({
       ...p,
+      name:
+        p.id === 'openai' && config.imageGateway?.model === 'doubao-seedream-5.0-lite'
+          ? 'Seedream（豆包生图）'
+          : p.name,
       configured: p.id === 'local' || Boolean(secret(wid, p.id)),
     }));
     const operations: OperationCapability[] = [];
@@ -210,6 +223,14 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
         priceCredits: price,
         unit,
         liveVerified: providerId === 'local',
+        ...(providerId === 'openai' && config.imageGateway?.model === 'doubao-seedream-5.0-lite'
+          ? { maxCount: 1 }
+          : {}),
+        ...(providerId === 'dify' ||
+        providerId === 'seedance' ||
+        (providerId === 'openai' && config.imageGateway?.model === 'gpt-image-2')
+          ? { inputMode: 'text-only' as const, maxCount: 1 }
+          : {}),
       });
     };
     add(
@@ -220,7 +241,15 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       'request',
       ffmpeg ? null : '本机未检测到 FFmpeg（媒体处理工具）',
     );
-    for (const id of OPENAI_OPERATIONS)
+    add(
+      'text.assist',
+      'dify',
+      [{ id: 'kimi-k3', name: 'Kimi · 创作策划', ratios: [], resolutions: [], durations: [] }],
+      2,
+      'request',
+    );
+    add('video.generate', 'seedance', [seedanceModel(config.seedance?.model)], 5, 'second');
+    for (const id of config.imageGateway ? ['image.generate'] : OPENAI_OPERATIONS)
       add(
         id,
         'openai',
@@ -234,7 +263,26 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
                 durations: [],
               },
             ]
-          : imageModels,
+          : config.imageGateway
+            ? [
+                {
+                  id: config.imageGateway.model,
+                  name:
+                    config.imageGateway.model === 'doubao-seedream-5.0-lite'
+                      ? 'Seedream 5.0 Lite（豆包生图）'
+                      : 'GPT Image 2',
+                  ratios:
+                    config.imageGateway.model === 'doubao-seedream-5.0-lite'
+                      ? Object.keys(SEEDREAM_SIZE_PRESETS['2K']!)
+                      : ['1:1'],
+                  resolutions:
+                    config.imageGateway.model === 'doubao-seedream-5.0-lite'
+                      ? Object.keys(SEEDREAM_SIZE_PRESETS)
+                      : ['1K'],
+                  durations: [],
+                },
+              ]
+            : imageModels,
         id === 'text.assist' ? 2 : 8,
         id === 'text.assist' ? 'request' : 'image',
       );
@@ -424,6 +472,34 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
     );
     if (!c || !c.available)
       throw new AppError(503, 'CAPABILITY_UNAVAILABLE', c?.reason || '此服务不支持所选操作');
+    try {
+      if (input.providerId === 'seedance') validateSeedanceInput(input);
+      if (input.providerId === 'openai' && config.imageGateway)
+        validateImageGatewayInput(input, config.imageGateway);
+      if (
+        input.providerId === 'dify' &&
+        (!['ideas', 'detail-page'].includes(input.options.assistantMode) ||
+          input.assetIds.length ||
+          input.referenceAssetIds.length ||
+          input.maskAssetId ||
+          input.backgroundAssetId ||
+          input.backgroundAudioAssetId ||
+          input.brandId ||
+          input.characterId ||
+          input.referenceText ||
+          input.conversationContext ||
+          input.linkUrl ||
+          input.options.designs?.length ||
+          input.options.count !== 1 ||
+          !input.prompt.trim() ||
+          input.prompt.length > 8000)
+      )
+        throw new ProviderError('当前创作策划只接受文字需求，请移除附件并选择创作建议模式。');
+    } catch (error) {
+      if (error instanceof ProviderError)
+        throw new AppError(400, 'MODEL_INPUT_INVALID', error.message);
+      throw error;
+    }
     if (input.options.model && !c.models.some((m) => m.id === input.options.model))
       throw new AppError(400, 'MODEL_UNSUPPORTED', '所选模型不支持此操作');
     const model = c.models.find((m) => m.id === input.options.model) || c.models[0];
@@ -436,8 +512,10 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       throw new AppError(400, 'RESOLUTION_UNSUPPORTED', '所选模型不支持此清晰度');
     if (model?.durations.length && !model.durations.includes(input.options.duration))
       throw new AppError(400, 'DURATION_UNSUPPORTED', '所选模型不支持此时长');
+    modelCapabilities.validate(wid, input);
     return c;
   }
-  return { secret, list, update, capabilities, validateCapability, ffmpeg };
+  const modelCapabilities = createModelCapabilityService(config, { secret, capabilities });
+  return { secret, list, update, capabilities, validateCapability, modelCapabilities, ffmpeg };
 }
 export type SettingsService = ReturnType<typeof createSettingsService>;

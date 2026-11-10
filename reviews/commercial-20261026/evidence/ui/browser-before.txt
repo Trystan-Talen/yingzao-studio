@@ -1,0 +1,136 @@
+
+Running 3 tests using 1 worker
+
+(node:21456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations (7.9s)
+(node:21563) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result (2.6s)
+(node:21600) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [desktop] › tests/e2e/shell-quality.spec.ts:88:1 › keyboard users can skip navigation and recover focus after closing search (7.8s)
+
+
+  1) [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations 
+
+    Error: expect(locator).toBeHidden() failed
+
+    Locator:  getByRole('dialog', { name: '映造 Studio', exact: true })
+    Expected: hidden
+    Received: visible
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeHidden" getByRole('dialog', { name: '映造 Studio', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '映造 Studio', exact: true })
+        14 × locator resolved to <div role="dialog" tabindex="-1" class="drawer" id="radix-_r_6_" data-state="open" aria-labelledby="radix-_r_7_">…</div>
+           - unexpected value "visible"
+
+
+      32 |     await drawer.getByRole('link', { name: destination.label, exact: true }).click();
+      33 |     await expect(page).toHaveURL(`${studio.origin}${destination.path}`);
+    > 34 |     await expect(drawer).toBeHidden();
+         |                          ^
+      35 |     await expect(page.getByRole('main')).toBeVisible();
+      36 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      37 |       true,
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:34:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-navigation-c-9c895-nt-and-support-destinations-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-navigation-c-9c895-nt-and-support-destinations-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-navigation-c-9c895-nt-and-support-destinations-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-navigation-c-9c895-nt-and-support-destinations-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-navigation-c-9c895-nt-and-support-destinations-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      48 |     data: { name: '导航验收项目' },
+      49 |   });
+    > 50 |   expect(create.ok()).toBe(true);
+         |                       ^
+      51 |   const project = (await create.json()).data;
+      52 |   let mode: 'slow' | 'error' | 'real' = 'slow';
+      53 |   let release: (() => void) | undefined;
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:50:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-global-searc-026b2-e-and-a-real-project-result-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › tests/e2e/shell-quality.spec.ts:88:1 › keyboard users can skip navigation and recover focus after closing search 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator: getByRole('link', { name: '跳到主要内容', exact: true })
+    Expected: focused
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeFocused" getByRole('link', { name: '跳到主要内容', exact: true }) with timeout 5000ms
+      - waiting for getByRole('link', { name: '跳到主要内容', exact: true })
+
+
+      91 |   await page.keyboard.press('Tab');
+      92 |   const skip = page.getByRole('link', { name: '跳到主要内容', exact: true });
+    > 93 |   await expect(skip).toBeFocused();
+         |                      ^
+      94 |   await page.keyboard.press('Enter');
+      95 |   await expect(page.getByRole('main')).toBeFocused();
+      96 |   const search = page.getByRole('button', { name: '全局搜索', exact: true });
+        at <project>/platform/tests/e2e/shell-quality.spec.ts:93:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../../../..<temporary>/yingzao-ui-red-local/results/shell-quality-keyboard-use-6d980--focus-after-closing-search-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [desktop] › tests/e2e/shell-quality.spec.ts:19:1 › navigation closes the mobile drawer for account and support destinations 
+    [desktop] › tests/e2e/shell-quality.spec.ts:43:1 › global search exposes loading, a recoverable failure and a real project result 
+    [desktop] › tests/e2e/shell-quality.spec.ts:88:1 › keyboard users can skip navigation and recover focus after closing search 

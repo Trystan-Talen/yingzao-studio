@@ -12,6 +12,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import type { UserDto, WorkspaceDto } from '../contracts/core';
 import { api, post, setApiWorkspace } from './lib/api';
+import { createWorkspaceJobRefresh } from './lib/job-event-refresh';
 import { Loading, ErrorState } from './components/ui';
 interface Session {
   user: UserDto;
@@ -69,12 +70,12 @@ export function StudioProvider({ children }: { children: ReactNode }) {
     const stream = new EventSource(
       `/api/v1/job-events?workspaceId=${encodeURIComponent(workspace.id)}&after=0`,
     );
-    const update = () => {
-      void query.invalidateQueries({ queryKey: ['api', workspace.id] });
-    };
-    stream.addEventListener('job', update);
+    const refresh = createWorkspaceJobRefresh(query, workspace.id);
+    const onJob = (event: MessageEvent) => refresh.schedule(event.data);
+    stream.addEventListener('job', onJob);
     return () => {
-      stream.removeEventListener('job', update);
+      stream.removeEventListener('job', onJob);
+      refresh.dispose();
       stream.close();
     };
   }, [workspace?.id, query]);

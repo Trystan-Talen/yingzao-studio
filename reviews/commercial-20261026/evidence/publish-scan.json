@@ -1,0 +1,8 @@
+{
+  "scope": "仅本轮修改和未跟踪且非忽略的交付文件；非全仓历史审计",
+  "textFilesScanned": 101,
+  "imagesExcludedFromTextScan": 13,
+  "privateRuntimePathsIncluded": [],
+  "credentialPatternFindings": [],
+  "limitation": "正则扫描不能识别全部敏感内容；归档截图另由各负责代理及主代理复核。运行配置/数据库/完整浏览器报告保留在忽略目录或临时目录。"
+}

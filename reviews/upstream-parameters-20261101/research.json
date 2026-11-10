@@ -1,0 +1,118 @@
+{
+  "reviewedAt": "2026-11-02T04:55:24.309Z",
+  "provider": "星引聚合",
+  "steps": [
+    {
+      "step": 1,
+      "title": "核查服务商公开文档与元数据",
+      "state": "完成"
+    },
+    {
+      "step": 2,
+      "title": "按原厂请求合同补齐已接入选项",
+      "state": "完成"
+    },
+    {
+      "step": 3,
+      "title": "报价、执行、草稿和详情页联动",
+      "state": "完成"
+    },
+    {
+      "step": 4,
+      "title": "全量验收及原入口更新",
+      "state": "完成"
+    }
+  ],
+  "findings": [
+    {
+      "url": "https://xingyunyinli.com/api/pricing",
+      "status": 200,
+      "meaning": "返回公开模型目录、支持的路由和计费字段。billing_usage_schema（计费用量结构）不是生成请求结构；不能把其中枚举直接当作模型能力。",
+      "sha256": "df65fd01d3b43cfae1758d40ed82712c6f47f96001af75f774190075a48fa641"
+    },
+    {
+      "url": "https://xingyunyinli.com/api/task_plugin_options",
+      "status": 401,
+      "meaning": "公开页面引用的插件配置路由在未登录时返回401；未取得可核实的普通模型密钥访问方式，未尝试使用额外后台权限。"
+    },
+    {
+      "url": "https://flowus.cn/share/fbb08c00-763c-4b63-ba29-519c9d0afd9a",
+      "meaning": "服务商首页文档链接，主要说明兼容服务接入。常见代码示例没有完整图像或视频参数结构。"
+    },
+    {
+      "url": "https://xingyunyinli.com/pricing",
+      "meaning": "视频模型详情中的接口页仍显示通用聊天参数，不能作为视频能力依据。"
+    },
+    {
+      "url": "https://docs.volcengine.com/docs/ark/image-generation-api?lang=zh",
+      "meaning": "采用当前火山方舟接口文档中的5.0 Lite（轻量版）尺寸与输出字段；不同产品线旧文档中的2K、3K限制不自动覆盖该接口。",
+      "sha256": "d66406337b0734ef9a8edc5c1a4793d556a43f032f8a40d334666f4faa88fd7b"
+    },
+    {
+      "url": "https://ark.volcengine.com/region:cn-beijing/docs/create-video-generation-task-api",
+      "meaning": "核对2.0准确版本的比例、分辨率、时长和音频，不向快速版、迷你版或未知别名套用。"
+    },
+    {
+      "url": "https://github.com/QuantumNous/new-api-plugins/blob/main/plugins/tasks/doubao/1.0.0/plugin.js",
+      "meaning": "确认统一视频提交的seconds（秒数）和metadata（附加参数）如何转入原生任务请求。",
+      "sha256": "89ec7e5b593c9a4e9b7807c6ed14aa8a011ce0afae420d4112e88bf5e4cb8ad6"
+    }
+  ],
+  "implementation": {
+    "image": {
+      "model": "doubao-seedream-5.0-lite",
+      "aspectRatios": [
+        "1:1",
+        "4:3",
+        "3:4",
+        "16:9",
+        "9:16",
+        "3:2",
+        "2:3",
+        "21:9"
+      ],
+      "resolutions": [
+        "2K",
+        "3K",
+        "4K"
+      ],
+      "sizePresetCount": 24,
+      "quality": "没有单独低、中、高质量字段；按像素尺寸控制清晰度。",
+      "count": 1,
+      "format": "png"
+    },
+    "video": {
+      "model": "doubao-seedance-2.0",
+      "aspectRatios": [
+        "16:9",
+        "9:16",
+        "1:1",
+        "4:3",
+        "3:4",
+        "21:9",
+        "adaptive（智能比例）"
+      ],
+      "resolutions": [
+        "480p",
+        "720p",
+        "1080p",
+        "4K"
+      ],
+      "seconds": "4至15的整数秒",
+      "audio": [
+        false,
+        true
+      ]
+    },
+    "scope": "当前已配置的两个生成模型；已有Fal（模型服务）的结构查询保留。其他未核实的提供商不虚构范围。"
+  },
+  "limits": [
+    "未发现面向当前普通模型密钥的完整生成参数查询接口；实时核查模型与目录，具体范围由版本化原厂文档配置提供。",
+    "本次提供常用像素预设；原厂允许的任意自定义宽高尚未开放。",
+    "视频自动时长会影响费用和结算，暂只提供明确的整数秒；参考媒体仍保留原接入限制。",
+    "未提交任何真实付费生成请求，不能据此宣称高分辨率输出质量或服务商每个档位实测通过。"
+  ],
+  "privateEvidenceDirectory": "platform/var/upstream-parameters-20261101",
+  "externalGenerationCalls": 0,
+  "completedAt": "2026-11-02T05:13:58.861879+00:00"
+}
