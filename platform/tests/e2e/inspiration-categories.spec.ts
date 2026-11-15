@@ -131,12 +131,23 @@ test('creates and reclassifies a real video inspiration, preserves filters on re
     );
     await page.reload();
     await expect(page.getByRole('combobox', { name: language.label, exact: true })).toBeVisible();
-    for (const select of await page.locator('.inspiration-filters select').all())
+    for (const select of await page.locator('.inspiration-studio-filters select').all())
       expect((await select.boundingBox())!.width).toBeGreaterThan(120);
     expect(await page.locator('.inspiration-studio-toolbar').innerText()).not.toMatch(
       /[\u4e00-\u9fff]/,
     );
-    expect(await page.locator('.inspiration-filters').innerText()).not.toMatch(/[\u4e00-\u9fff]/);
+    // User-created category names remain verbatim when the interface locale changes.
+    await expect(
+      page
+        .locator('.inspiration-studio-filters')
+        .getByRole('button', { name: '本机视频行业', exact: true }),
+    ).toHaveText('本机视频行业');
+    expect(
+      (await page.locator('.inspiration-studio-filters').innerText()).replaceAll(
+        '本机视频行业',
+        '',
+      ),
+    ).not.toMatch(/[\u4e00-\u9fff]/);
     await expect(
       page.locator('.inspiration-studio-card').filter({ hasText: '口播分类本机样本' }),
     ).toHaveCount(1);

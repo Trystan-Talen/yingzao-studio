@@ -10,7 +10,17 @@ import {
   type SceneLayer,
 } from '../../contracts/scene';
 import { AppError } from '../errors';
-import { CoreContext, type Row, type ListQuery, str, nullable, json, num, id, now } from './shared';
+import {
+  type CoreContext,
+  type Row,
+  type ListQuery,
+  str,
+  nullable,
+  json,
+  num,
+  id,
+  now,
+} from './shared';
 export interface DocumentDto {
   id: string;
   workspaceId: string;

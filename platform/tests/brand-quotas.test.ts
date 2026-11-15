@@ -200,6 +200,72 @@ it('does not apply schema defaults when renaming a private brand', async () => {
   });
   expect(() => core.references.getBrand(member, wid, brand.id)).toThrow();
 });
+it('keeps brand revision timestamps monotonic and rejects stale writes without changing saved data', () => {
+  const first = create(owner, 'Original');
+  const second = core.references.updateBrand(owner, wid, first.id, {
+    expectedUpdatedAt: first.updatedAt,
+    description: 'Latest description',
+  });
+  expect(Date.parse(second.updatedAt)).toBe(Date.parse(first.updatedAt) + 1);
+  expect(() =>
+    core.references.updateBrand(owner, wid, first.id, {
+      expectedUpdatedAt: first.updatedAt,
+      name: 'Stale editor',
+      description: 'Old description',
+    }),
+  ).toThrow(
+    expect.objectContaining({
+      statusCode: 409,
+      code: 'BRAND_VERSION_CONFLICT',
+      details: { current: second },
+    }),
+  );
+  expect(core.references.getBrand(owner, wid, first.id)).toEqual(second);
+  const third = core.references.updateBrand(owner, wid, first.id, {
+    name: 'Legacy API still works',
+  });
+  expect(Date.parse(third.updatedAt)).toBe(Date.parse(second.updatedAt) + 1);
+  expect(third.description).toBe(second.description);
+});
+it('does not reuse brand revision tokens after delete/restore or a backward clock change', () => {
+  const first = create(owner, 'Restored brand');
+  const updated = core.references.updateBrand(owner, wid, first.id, {
+    expectedUpdatedAt: first.updatedAt,
+    description: 'Preserved through delete and restore',
+  });
+  vi.setSystemTime(new Date(Date.parse(date) - 60_000));
+  const deleted = core.references.removeBrand(owner, wid, first.id);
+  const restored = core.references.restoreBrand(owner, wid, first.id);
+  expect(Date.parse(updated.updatedAt)).toBe(Date.parse(first.updatedAt) + 1);
+  expect(Date.parse(deleted.deletedAt)).toBe(Date.parse(updated.updatedAt) + 1);
+  expect(Date.parse(restored.updatedAt)).toBe(Date.parse(deleted.deletedAt) + 1);
+  expect(restored.description).toBe(updated.description);
+  expect(() =>
+    core.references.updateBrand(owner, wid, first.id, {
+      expectedUpdatedAt: updated.updatedAt,
+      name: 'Stale pre-delete form',
+    }),
+  ).toThrow(expect.objectContaining({ code: 'BRAND_VERSION_CONFLICT' }));
+});
+it('checks brand access before returning the latest record on a version conflict', () => {
+  const brand = core.references.createBrand(owner, wid, {
+    name: 'Private latest',
+    visibility: 'private',
+  });
+  expect(() =>
+    core.references.updateBrand(member, wid, brand.id, {
+      expectedUpdatedAt: '2000-01-01T00:00:00.000Z',
+      name: 'Unauthorized',
+    }),
+  ).toThrow(expect.objectContaining({ statusCode: 404, code: 'NOT_FOUND', details: undefined }));
+  const other = core.auth.createWorkspace(owner.userId, 'Other workspace', 'personal', false);
+  expect(() =>
+    core.references.updateBrand(owner, other.id, brand.id, {
+      expectedUpdatedAt: brand.updatedAt,
+      name: 'Wrong workspace',
+    }),
+  ).toThrow(expect.objectContaining({ statusCode: 404, code: 'NOT_FOUND', details: undefined }));
+});
 it('only imports member scope with an explicit approved team membership contract and validates preserved terms', () => {
   const admin = createBillingAdmin(db),
     id = randomUUID();

@@ -1,0 +1,92 @@
+{
+  "checkedAt": "2026-11-14T16:58:13.514688+00:00",
+  "scope": "Brand delayed-save draft preservation and optimistic concurrency; shared conflict UI reused without redesign",
+  "red": {
+    "run": "platform/var/e2e/run-O8jJm4",
+    "failed": 2,
+    "details": "brand-editor-red.json"
+  },
+  "browser": [
+    {
+      "run": "platform/var/e2e/run-Z4vpTn",
+      "passed": 12,
+      "projects": [
+        "desktop",
+        "mobile"
+      ],
+      "files": [
+        "tests/e2e/brand-editor-recovery.spec.ts",
+        "tests/e2e/brand-quota.spec.ts",
+        "tests/e2e/knowledge-editor-recovery.spec.ts"
+      ]
+    },
+    {
+      "run": "platform/var/e2e/run-Q3rI1L",
+      "passed": 6,
+      "projects": [
+        "desktop",
+        "mobile"
+      ],
+      "files": [
+        "tests/e2e/knowledge-recheck.spec.ts"
+      ]
+    }
+  ],
+  "unit": {
+    "passed": 35,
+    "files": [
+      "tests/brand-quotas.test.ts",
+      "tests/knowledge-edit.test.ts",
+      "tests/knowledge.test.ts"
+    ]
+  },
+  "checks": {
+    "typecheck": "all-project tsc --noEmit exit 0",
+    "lint": "8 changed files under strict type-import rule exit 0",
+    "format": "8 changed files Prettier check exit 0"
+  },
+  "contract": [
+    "BrandPatch.expectedUpdatedAt is optional for legacy clients, sent by the web editor",
+    "Authorized current record is returned only after workspace/visibility checks",
+    "Brand update/delete/restore timestamps are strictly monotonic; no schema migration",
+    "Later edits remain unsaved in the modal and reuse the successful create/update response as the next baseline",
+    "Conflict merge/reload is explicit and never submits automatically"
+  ],
+  "knownUnchanged": "Non-creator shared-to-private brand change still rolls back with 404; parent explicitly kept it outside this fix.",
+  "independentReview": "memory_audit: no new blockers in timestamp/auth/late-response/conflict handling",
+  "isolation": "fresh SQLite/media per browser case; no formal database or external model calls",
+  "files": [
+    {
+      "path": "platform/src/contracts/core.ts",
+      "sha256": "3d88a7d1338a29bb79855a8c7ee8a8252653e0b7ba435271fc2b7879339f1b9b"
+    },
+    {
+      "path": "platform/src/server/core/references.ts",
+      "sha256": "12ba6f2187ba793f4f7ee967bc65e12d25a7005d7cade936887f52f7613ddfe9"
+    },
+    {
+      "path": "platform/src/web/components/KnowledgeConflict.tsx",
+      "sha256": "82c4989fc892651157c4d366f2a9356e7bd685446b26bedab818566d0a3906a1"
+    },
+    {
+      "path": "platform/src/web/lib/api.ts",
+      "sha256": "01193a1cbff4193140adfb355479d41eb89ba4d2a650d0e6a791486a21b172e9"
+    },
+    {
+      "path": "platform/src/web/lib/knowledge-translations.ts",
+      "sha256": "71e08a4efac34745d8c197ea8c64c61756502b7e0e86e009e03e1d0849bbee46"
+    },
+    {
+      "path": "platform/src/web/pages/Identities.tsx",
+      "sha256": "f09cdbcf68e6e525fe848ac0d718a242d11a74d232c6dd0a2a81055eebabf554"
+    },
+    {
+      "path": "platform/tests/brand-quotas.test.ts",
+      "sha256": "61457c51c9fe4f2af1a2c4e55bbcd2ec255c75e52a81331419ea626bc9012a4b"
+    },
+    {
+      "path": "platform/tests/e2e/brand-editor-recovery.spec.ts",
+      "sha256": "fd776774b1da9d485accef77a90f45163d199e24a531e3595bacb13cf0b2c3ba"
+    }
+  ]
+}

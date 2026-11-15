@@ -1,0 +1,243 @@
+{
+  "scope": "Final homepage translation, keyboard access, layout and dark-theme follow-up after full 446-case browser baseline",
+  "sourceManifestSha256": "e02795b2ee62433f1f8b246fce3b4b9619f009caef7c46d8af056844c2f5c418",
+  "run": "platform/var/e2e/run-HIwjqM",
+  "runSummary": {
+    "started": "2026-11-14T05:14:45.714Z",
+    "finished": "2026-11-14T05:15:52.807Z",
+    "exitCode": 0,
+    "dataIsolation": "fresh SQLite and media per test",
+    "webRoot": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/yingzao-studio-main1112/platform/var/e2e/run-HIwjqM/web",
+    "environmentIsolation": "fresh Vite envDir; subprocess environment allowlist",
+    "externalServices": "disabled; loopback SMTP/SMS, marked synthetic providers, local media tools only"
+  },
+  "stats": {
+    "total": 26,
+    "expected": 26,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true
+  },
+  "startTime": 1794633288264,
+  "durationMs": 64495.477000000006,
+  "projectNames": [
+    "desktop",
+    "mobile",
+    "notebook"
+  ],
+  "errors": [],
+  "retries": 0,
+  "cases": [
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders zh-CN home in dark mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6772
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders en home in light mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6422
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders ar home in light mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5254
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders zh-CN home in dark mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7220
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders en home in light mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8441
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders ar home in light mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7017
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3519
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4059
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5156
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4254
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3976
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4571
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5652
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3218
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2288
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3988
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4521
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3135
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "new accounts explicitly default to dark while the operating system uses light",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2600
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3767
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "explicit light and dark choices are not overridden by operating-system changes",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4092
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "a legacy account without a theme keeps dark appearance without rewriting stored preferences",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1555
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "new accounts explicitly default to dark while the operating system uses light",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2606
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3145
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "explicit light and dark choices are not overridden by operating-system changes",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4078
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "a legacy account without a theme keeps dark appearance without rewriting stored preferences",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2580
+    }
+  ],
+  "frozenFiles": 649,
+  "changedDuringRun": []
+}

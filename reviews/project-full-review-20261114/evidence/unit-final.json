@@ -1,0 +1,792 @@
+{
+  "files": 156,
+  "passed": 2394,
+  "failed": 0,
+  "skipped": 0,
+  "unitCommand": "node --import tsx scripts/quality.ts --release",
+  "phaseRecord": "quality-release.json",
+  "checks": [
+    {
+      "file": "tests/native-integration.test.ts",
+      "passed": 27,
+      "durationMs": 15153
+    },
+    {
+      "file": "tests/background-review.test.ts",
+      "passed": 14,
+      "durationMs": 10974
+    },
+    {
+      "file": "tests/native-planning-recovery.test.ts",
+      "passed": 37,
+      "durationMs": 10109
+    },
+    {
+      "file": "tests/operations-scripts.test.ts",
+      "passed": 13,
+      "durationMs": 10509
+    },
+    {
+      "file": "tests/native-artifacts.test.ts",
+      "passed": 29,
+      "durationMs": 8606
+    },
+    {
+      "file": "tests/creative-briefs.test.ts",
+      "passed": 86,
+      "durationMs": 6831
+    },
+    {
+      "file": "tests/job-events-auth.test.ts",
+      "passed": 2,
+      "durationMs": 5274
+    },
+    {
+      "file": "tests/dify-workflow-nodes.test.ts",
+      "passed": 57,
+      "durationMs": 3323
+    },
+    {
+      "file": "tests/tasks.test.ts",
+      "passed": 40,
+      "durationMs": 3020
+    },
+    {
+      "file": "tests/script-test-environment.test.ts",
+      "passed": 4,
+      "durationMs": 2803
+    },
+    {
+      "file": "tests/persistence-upgrade.test.ts",
+      "passed": 1,
+      "durationMs": 2177
+    },
+    {
+      "file": "tests/google-oidc.test.ts",
+      "passed": 30,
+      "durationMs": 2675
+    },
+    {
+      "file": "tests/billing.test.ts",
+      "passed": 32,
+      "durationMs": 1845
+    },
+    {
+      "file": "tests/identity-auth.test.ts",
+      "passed": 27,
+      "durationMs": 2274
+    },
+    {
+      "file": "tests/restored-cache.test.ts",
+      "passed": 11,
+      "durationMs": 2106
+    },
+    {
+      "file": "tests/native-replica.test.ts",
+      "passed": 10,
+      "durationMs": 2115
+    },
+    {
+      "file": "tests/native-plan-freeze.test.ts",
+      "passed": 11,
+      "durationMs": 1827
+    },
+    {
+      "file": "tests/native-configuration-boundaries.test.ts",
+      "passed": 23,
+      "durationMs": 1792
+    },
+    {
+      "file": "tests/detail-pages.test.ts",
+      "passed": 16,
+      "durationMs": 1538
+    },
+    {
+      "file": "tests/quality-policy.test.ts",
+      "passed": 4,
+      "durationMs": 1832
+    },
+    {
+      "file": "tests/dify-intent.test.ts",
+      "passed": 70,
+      "durationMs": 1734
+    },
+    {
+      "file": "tests/native-background-calibration-holdout.test.ts",
+      "passed": 6,
+      "durationMs": 1776
+    },
+    {
+      "file": "tests/app.test.ts",
+      "passed": 13,
+      "durationMs": 1640
+    },
+    {
+      "file": "tests/credit-lots.test.ts",
+      "passed": 20,
+      "durationMs": 1397
+    },
+    {
+      "file": "tests/password-recovery.test.ts",
+      "passed": 17,
+      "durationMs": 1595
+    },
+    {
+      "file": "tests/core.test.ts",
+      "passed": 17,
+      "durationMs": 1354
+    },
+    {
+      "file": "tests/knowledge.test.ts",
+      "passed": 21,
+      "durationMs": 1613
+    },
+    {
+      "file": "tests/model-connections.test.ts",
+      "passed": 20,
+      "durationMs": 1476
+    },
+    {
+      "file": "tests/task-result-recovery.test.ts",
+      "passed": 16,
+      "durationMs": 1322
+    },
+    {
+      "file": "tests/mail-outbox.test.ts",
+      "passed": 23,
+      "durationMs": 1437
+    },
+    {
+      "file": "tests/gateway-integration.test.ts",
+      "passed": 12,
+      "durationMs": 1315
+    },
+    {
+      "file": "tests/referral-policy.test.ts",
+      "passed": 17,
+      "durationMs": 1275
+    },
+    {
+      "file": "tests/inspiration-replica.test.ts",
+      "passed": 10,
+      "durationMs": 1155
+    },
+    {
+      "file": "tests/quality-workflows.test.ts",
+      "passed": 13,
+      "durationMs": 872
+    },
+    {
+      "file": "tests/test-launcher.test.ts",
+      "passed": 5,
+      "durationMs": 1111
+    },
+    {
+      "file": "tests/local-test-credits.test.ts",
+      "passed": 15,
+      "durationMs": 1147
+    },
+    {
+      "file": "tests/takeover-backend.test.ts",
+      "passed": 12,
+      "durationMs": 1097
+    },
+    {
+      "file": "tests/backup-integrity.test.ts",
+      "passed": 10,
+      "durationMs": 907
+    },
+    {
+      "file": "tests/native-video-tail-hold.test.ts",
+      "passed": 5,
+      "durationMs": 958
+    },
+    {
+      "file": "tests/model-capabilities-api.test.ts",
+      "passed": 10,
+      "durationMs": 918
+    },
+    {
+      "file": "tests/native-background-calibration.test.ts",
+      "passed": 7,
+      "durationMs": 835
+    },
+    {
+      "file": "tests/installation-owner.test.ts",
+      "passed": 5,
+      "durationMs": 823
+    },
+    {
+      "file": "tests/collection-membership.test.ts",
+      "passed": 8,
+      "durationMs": 681
+    },
+    {
+      "file": "tests/delivery-regressions.test.ts",
+      "passed": 6,
+      "durationMs": 699
+    },
+    {
+      "file": "tests/generation-media-kind.test.ts",
+      "passed": 9,
+      "durationMs": 689
+    },
+    {
+      "file": "tests/takeover-tools.test.ts",
+      "passed": 5,
+      "durationMs": 506
+    },
+    {
+      "file": "tests/project-creation-workflow.test.ts",
+      "passed": 6,
+      "durationMs": 571
+    },
+    {
+      "file": "tests/native-exact-pan.test.ts",
+      "passed": 9,
+      "durationMs": 464
+    },
+    {
+      "file": "tests/production-http.test.ts",
+      "passed": 4,
+      "durationMs": 420
+    },
+    {
+      "file": "tests/api-billing.test.ts",
+      "passed": 8,
+      "durationMs": 468
+    },
+    {
+      "file": "tests/billing-channel.test.ts",
+      "passed": 6,
+      "durationMs": 535
+    },
+    {
+      "file": "tests/character-video.test.ts",
+      "passed": 7,
+      "durationMs": 572
+    },
+    {
+      "file": "tests/brand-quotas.test.ts",
+      "passed": 11,
+      "durationMs": 566
+    },
+    {
+      "file": "tests/project-workflow-navigation.test.ts",
+      "passed": 8,
+      "durationMs": 445
+    },
+    {
+      "file": "tests/background-mask-stroke.test.ts",
+      "passed": 18,
+      "durationMs": 455
+    },
+    {
+      "file": "tests/team-creation.test.ts",
+      "passed": 8,
+      "durationMs": 468
+    },
+    {
+      "file": "tests/member-promotions-review.test.ts",
+      "passed": 10,
+      "durationMs": 471
+    },
+    {
+      "file": "tests/team-creation-review.test.ts",
+      "passed": 10,
+      "durationMs": 472
+    },
+    {
+      "file": "tests/brand-quota.test.ts",
+      "passed": 18,
+      "durationMs": 496
+    },
+    {
+      "file": "tests/entitlements-appeals.test.ts",
+      "passed": 7,
+      "durationMs": 450
+    },
+    {
+      "file": "tests/concurrency-limit.test.ts",
+      "passed": 3,
+      "durationMs": 425
+    },
+    {
+      "file": "tests/commercial-worker-safety.test.ts",
+      "passed": 3,
+      "durationMs": 364
+    },
+    {
+      "file": "tests/billing-periods.test.ts",
+      "passed": 8,
+      "durationMs": 356
+    },
+    {
+      "file": "tests/provider-reference.test.ts",
+      "passed": 16,
+      "durationMs": 358
+    },
+    {
+      "file": "tests/naturalize-contract.test.ts",
+      "passed": 2,
+      "durationMs": 308
+    },
+    {
+      "file": "tests/native-generation.test.ts",
+      "passed": 32,
+      "durationMs": 270
+    },
+    {
+      "file": "tests/vitest-environment.test.ts",
+      "passed": 1,
+      "durationMs": 290
+    },
+    {
+      "file": "tests/takeover-motion.test.ts",
+      "passed": 1,
+      "durationMs": 274
+    },
+    {
+      "file": "tests/native-reference-frame.test.ts",
+      "passed": 17,
+      "durationMs": 239
+    },
+    {
+      "file": "tests/notifications.test.ts",
+      "passed": 9,
+      "durationMs": 234
+    },
+    {
+      "file": "tests/member-promotions.test.ts",
+      "passed": 5,
+      "durationMs": 237
+    },
+    {
+      "file": "tests/image-orientation.test.ts",
+      "passed": 1,
+      "durationMs": 246
+    },
+    {
+      "file": "tests/native-reference-media.test.ts",
+      "passed": 11,
+      "durationMs": 237
+    },
+    {
+      "file": "tests/fal-motion.test.ts",
+      "passed": 19,
+      "durationMs": 242
+    },
+    {
+      "file": "tests/social-import.test.ts",
+      "passed": 5,
+      "durationMs": 230
+    },
+    {
+      "file": "tests/migrations.test.ts",
+      "passed": 1,
+      "durationMs": 235
+    },
+    {
+      "file": "tests/support-channels.test.ts",
+      "passed": 2,
+      "durationMs": 210
+    },
+    {
+      "file": "tests/billing-environment.test.ts",
+      "passed": 4,
+      "durationMs": 232
+    },
+    {
+      "file": "tests/native-background.test.ts",
+      "passed": 34,
+      "durationMs": 179
+    },
+    {
+      "file": "tests/credit-grant-reversal.test.ts",
+      "passed": 3,
+      "durationMs": 148
+    },
+    {
+      "file": "tests/session-cache-isolation.test.ts",
+      "passed": 4,
+      "durationMs": 154
+    },
+    {
+      "file": "tests/worker-lifecycle.test.ts",
+      "passed": 3,
+      "durationMs": 134
+    },
+    {
+      "file": "tests/flyelep-provider.test.ts",
+      "passed": 34,
+      "durationMs": 121
+    },
+    {
+      "file": "tests/notifications-http.test.ts",
+      "passed": 1,
+      "durationMs": 136
+    },
+    {
+      "file": "tests/prepaid-credit-validity.test.ts",
+      "passed": 2,
+      "durationMs": 111
+    },
+    {
+      "file": "tests/commercial-assets.test.ts",
+      "passed": 2,
+      "durationMs": 126
+    },
+    {
+      "file": "tests/dify-clarification-style.test.ts",
+      "passed": 4,
+      "durationMs": 120
+    },
+    {
+      "file": "tests/billing-channel-migration.test.ts",
+      "passed": 1,
+      "durationMs": 95
+    },
+    {
+      "file": "tests/takeover-migration.test.ts",
+      "passed": 1,
+      "durationMs": 91
+    },
+    {
+      "file": "tests/native-semantic-mask.test.ts",
+      "passed": 16,
+      "durationMs": 84
+    },
+    {
+      "file": "tests/model-capability-ui.test.ts",
+      "passed": 12,
+      "durationMs": 75
+    },
+    {
+      "file": "tests/dify-detail-page.test.ts",
+      "passed": 79,
+      "durationMs": 46
+    },
+    {
+      "file": "tests/native-background-study.test.ts",
+      "passed": 22,
+      "durationMs": 56
+    },
+    {
+      "file": "tests/library-task-experience.test.ts",
+      "passed": 15,
+      "durationMs": 59
+    },
+    {
+      "file": "tests/native-local-matting.test.ts",
+      "passed": 14,
+      "durationMs": 103
+    },
+    {
+      "file": "tests/referral-admin-policy.test.ts",
+      "passed": 1,
+      "durationMs": 56
+    },
+    {
+      "file": "tests/concurrency-migration.test.ts",
+      "passed": 1,
+      "durationMs": 44
+    },
+    {
+      "file": "tests/native-motion-frame.test.ts",
+      "passed": 9,
+      "durationMs": 43
+    },
+    {
+      "file": "tests/job-navigation.test.ts",
+      "passed": 11,
+      "durationMs": 44
+    },
+    {
+      "file": "tests/openai-provider.test.ts",
+      "passed": 11,
+      "durationMs": 37
+    },
+    {
+      "file": "tests/video-audio-options.test.ts",
+      "passed": 5,
+      "durationMs": 37
+    },
+    {
+      "file": "tests/local-matting-output.test.ts",
+      "passed": 5,
+      "durationMs": 34
+    },
+    {
+      "file": "tests/local-matting-build.test.ts",
+      "passed": 1,
+      "durationMs": 37
+    },
+    {
+      "file": "tests/job-event-refresh.test.ts",
+      "passed": 15,
+      "durationMs": 32
+    },
+    {
+      "file": "tests/wechat-gateway.test.ts",
+      "passed": 52,
+      "durationMs": 27
+    },
+    {
+      "file": "tests/ai-writer-capabilities.test.ts",
+      "passed": 13,
+      "durationMs": 25
+    },
+    {
+      "file": "tests/result-studio.test.ts",
+      "passed": 5,
+      "durationMs": 26
+    },
+    {
+      "file": "tests/media-download-public-doh.test.ts",
+      "passed": 36,
+      "durationMs": 25
+    },
+    {
+      "file": "tests/provider-extra.test.ts",
+      "passed": 22,
+      "durationMs": 28
+    },
+    {
+      "file": "tests/local-provider.test.ts",
+      "passed": 7,
+      "durationMs": 25
+    },
+    {
+      "file": "tests/model-capabilities.test.ts",
+      "passed": 22,
+      "durationMs": 28
+    },
+    {
+      "file": "tests/creative-brief-ui.test.ts",
+      "passed": 15,
+      "durationMs": 26
+    },
+    {
+      "file": "tests/real-launch-lifecycle.test.ts",
+      "passed": 6,
+      "durationMs": 24
+    },
+    {
+      "file": "tests/quality-runner.test.ts",
+      "passed": 2,
+      "durationMs": 25
+    },
+    {
+      "file": "tests/openai-gateway.test.ts",
+      "passed": 75,
+      "durationMs": 20
+    },
+    {
+      "file": "tests/api-billing-ui.test.ts",
+      "passed": 3,
+      "durationMs": 22
+    },
+    {
+      "file": "tests/native-capture.test.ts",
+      "passed": 80,
+      "durationMs": 21
+    },
+    {
+      "file": "tests/native-reference-study.test.ts",
+      "passed": 6,
+      "durationMs": 20
+    },
+    {
+      "file": "tests/native-http.test.ts",
+      "passed": 18,
+      "durationMs": 20
+    },
+    {
+      "file": "tests/local-matting-installation.test.ts",
+      "passed": 5,
+      "durationMs": 21
+    },
+    {
+      "file": "tests/native-plan-quality.test.ts",
+      "passed": 46,
+      "durationMs": 19
+    },
+    {
+      "file": "tests/dify-provider.test.ts",
+      "passed": 50,
+      "durationMs": 17
+    },
+    {
+      "file": "tests/seedance-provider.test.ts",
+      "passed": 69,
+      "durationMs": 15
+    },
+    {
+      "file": "tests/job-presentation.test.ts",
+      "passed": 29,
+      "durationMs": 17
+    },
+    {
+      "file": "tests/documented-model-capabilities.test.ts",
+      "passed": 6,
+      "durationMs": 15
+    },
+    {
+      "file": "tests/aliyun-sms.test.ts",
+      "passed": 42,
+      "durationMs": 15
+    },
+    {
+      "file": "src/web/editor/scene.test.ts",
+      "passed": 11,
+      "durationMs": 13
+    },
+    {
+      "file": "tests/dify-intent-timeout.test.ts",
+      "passed": 3,
+      "durationMs": 15
+    },
+    {
+      "file": "tests/detail-page-ui-state.test.ts",
+      "passed": 15,
+      "durationMs": 13
+    },
+    {
+      "file": "tests/provider-http.test.ts",
+      "passed": 7,
+      "durationMs": 15
+    },
+    {
+      "file": "src/web/editor/export-bundle.test.ts",
+      "passed": 6,
+      "durationMs": 13
+    },
+    {
+      "file": "tests/creation-recovery.test.ts",
+      "passed": 10,
+      "durationMs": 12
+    },
+    {
+      "file": "tests/api-request-timeout.test.ts",
+      "passed": 4,
+      "durationMs": 12
+    },
+    {
+      "file": "tests/commercial-download-timeout.test.ts",
+      "passed": 9,
+      "durationMs": 10
+    },
+    {
+      "file": "tests/creative-strategy.test.ts",
+      "passed": 47,
+      "durationMs": 14
+    },
+    {
+      "file": "tests/creative-intent-simulation.test.ts",
+      "passed": 9,
+      "durationMs": 8
+    },
+    {
+      "file": "tests/media-download.test.ts",
+      "passed": 4,
+      "durationMs": 7
+    },
+    {
+      "file": "tests/native-image-spec.test.ts",
+      "passed": 36,
+      "durationMs": 7
+    },
+    {
+      "file": "tests/native-video-artifact.test.ts",
+      "passed": 31,
+      "durationMs": 8
+    },
+    {
+      "file": "tests/credit-estimate.test.ts",
+      "passed": 23,
+      "durationMs": 7
+    },
+    {
+      "file": "tests/real-launch-environment.test.ts",
+      "passed": 5,
+      "durationMs": 9
+    },
+    {
+      "file": "tests/production-config.test.ts",
+      "passed": 11,
+      "durationMs": 7
+    },
+    {
+      "file": "tests/creative-quality.test.ts",
+      "passed": 3,
+      "durationMs": 6
+    },
+    {
+      "file": "tests/detail-page-workflow.test.ts",
+      "passed": 12,
+      "durationMs": 5
+    },
+    {
+      "file": "tests/creative-capture.test.ts",
+      "passed": 4,
+      "durationMs": 5
+    },
+    {
+      "file": "tests/job-snapshot.test.ts",
+      "passed": 8,
+      "durationMs": 5
+    },
+    {
+      "file": "tests/design-plan.test.ts",
+      "passed": 3,
+      "durationMs": 4
+    },
+    {
+      "file": "tests/export-policy.test.ts",
+      "passed": 3,
+      "durationMs": 5
+    },
+    {
+      "file": "tests/ui-controls.test.ts",
+      "passed": 2,
+      "durationMs": 5
+    },
+    {
+      "file": "tests/advanced-recovery.test.ts",
+      "passed": 6,
+      "durationMs": 4
+    },
+    {
+      "file": "tests/product-messages.test.ts",
+      "passed": 52,
+      "durationMs": 4
+    },
+    {
+      "file": "tests/product-errors.test.ts",
+      "passed": 13,
+      "durationMs": 3
+    },
+    {
+      "file": "tests/native-frame-contract.test.ts",
+      "passed": 11,
+      "durationMs": 2
+    },
+    {
+      "file": "tests/creative-placement.test.ts",
+      "passed": 10,
+      "durationMs": 2
+    },
+    {
+      "file": "tests/tool-recovery.test.ts",
+      "passed": 2,
+      "durationMs": 2
+    },
+    {
+      "file": "tests/knowledge-edit.test.ts",
+      "passed": 3,
+      "durationMs": 2
+    }
+  ],
+  "rawLog": "platform/var/full-acceptance-20261114/quality-final.log",
+  "rawLogSha256": "82b526cf9c6350e059d6e0e0b1531ed09bc5e70bf84dba6c23407e29cc24db1d"
+}

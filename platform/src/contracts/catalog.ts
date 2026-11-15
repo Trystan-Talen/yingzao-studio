@@ -276,6 +276,7 @@ export const OPERATION_IDS = [
 ] as const;
 export type OperationId = (typeof OPERATION_IDS)[number];
 export const PROVIDERS = [
+  { id: 'native', name: '原生创作编排' },
   { id: 'dify', name: 'Dify（创作策划）' },
   { id: 'seedance', name: 'Seedance（视频生成）' },
   { id: 'tikhub', name: 'TikHub（视频链接解析）' },

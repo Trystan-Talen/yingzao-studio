@@ -1,0 +1,18 @@
+{
+  "priorSha256": "66578ba8fb86b6dad44d392ff120846657ce82f956f43bddc1e67a93ee5c9b5f",
+  "finalSha256": "1c5eab6693aa93f641b6b2b26a44b8308b44fb177e900a004f9ab37c5dd8695e",
+  "changed": [
+    "platform/migrations/0041-creative-planner-revision.sql",
+    "platform/src/contracts/knowledge.ts",
+    "platform/src/server/core/knowledge.ts",
+    "platform/src/server/tasks/creative-briefs.ts",
+    "platform/src/server/tasks/settings.ts",
+    "platform/src/web/components/Composer.tsx",
+    "platform/src/web/components/KnowledgeConflict.tsx",
+    "platform/src/web/components/MemorySettings.tsx",
+    "platform/src/web/lib/api.ts",
+    "platform/src/web/lib/knowledge-translations.ts",
+    "platform/src/web/pages/Products.tsx"
+  ],
+  "removed": []
+}

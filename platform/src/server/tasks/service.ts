@@ -14,7 +14,13 @@ import {
 import type { SceneLayer, LayerBase } from '../../contracts/scene';
 import { jobResultDataSchema } from '../../contracts/job-result';
 import { validateDetailPageInput } from './detail-pages';
-import { approvedCreativePrompt, frozenCreativeContext } from './creative-briefs';
+import {
+  approvedCreativePrompt,
+  frozenCreativeContext,
+  frozenNativePlan,
+  frozenNativeImageEdit,
+  frozenNativeReplica,
+} from './creative-briefs';
 import { creativeQuality } from './creative-quality';
 import type { DatabaseContext } from '../db/connection';
 import type { CoreServices } from '../core';
@@ -26,9 +32,12 @@ import { canonicalImage } from '../providers/image-input';
 import { createCreditService } from './credits';
 import { createSettingsService } from './settings';
 import { validateInput, splitItems, inputHash, checkScope } from './validation';
+import { assertCreativeKnowledgeFresh } from './creative-knowledge';
 import { now, type JobRow, type ItemRow, type QuoteRow } from './types';
 import { currentJobStage, recoverablePhase } from './progress';
-const PRICING = 'local-budget-v1';
+import { hasNativeProcessingCheckpoint } from './native-artifacts';
+import { backgroundReviewForItem } from './background-review';
+const PRICING = 'local-budget-v2-exact-processing';
 export function createTaskServices(db: DatabaseContext, core: CoreServices, config: AppConfig) {
   const sql = db.sqlite,
     credits = createCreditService(db),
@@ -55,6 +64,16 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       )
       .get(item.retry_root_item_id || item.id, item.id) as { job_id: string } | undefined;
   }
+  function recoverableItemPhase(item: ItemRow) {
+    const phase = recoverablePhase(item);
+    if (phase && phase !== 'processing') return phase;
+    try {
+      const input = jobInputSchema.parse(JSON.parse(item.input_json));
+      return hasNativeProcessingCheckpoint(db, item, input) ? ('processing' as const) : null;
+    } catch {
+      return null;
+    }
+  }
   function dto(actor: Actor, row: JobRow): JobDto {
     const items = sql
       .prepare('SELECT * FROM job_items WHERE job_id=? ORDER BY item_index')
@@ -69,6 +88,10 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       }
     });
     return {
+      backgroundReview: items.flatMap((item) => {
+        const review = backgroundReviewForItem(db, actor, row.workspace_id, item);
+        return review ? [review] : [];
+      }),
       creativeReview: creativeQuality(db, row.workspace_id, input, outputAssets),
       id: row.id,
       workspaceId: row.workspace_id,
@@ -120,13 +143,13 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           retryRootItemId: i.retry_root_item_id,
           retryable: ['failed', 'cancelled'].includes(i.status) && !retry,
           retryJobId: retry?.job_id ?? null,
-          phase: i.phase === 'uncertain' ? recoverablePhase(i) || i.phase : i.phase,
+          phase: i.phase === 'uncertain' ? recoverableItemPhase(i) || i.phase : i.phase,
           recoveryAttempts: i.recovery_failures,
           nextRetryAt:
             i.status === 'running' && i.recovery_failures > 0 && !i.lease_owner
               ? i.next_attempt_at
               : null,
-          canResume: i.status === 'reconciliation_required' && !!recoverablePhase(i) && !retry,
+          canResume: i.status === 'reconciliation_required' && !!recoverableItemPhase(i) && !retry,
         };
       }),
       outputAssets,
@@ -139,8 +162,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       )
       .run(wid, jobId, type, JSON.stringify(payload), now());
   }
-  function validate(actor: Actor, wid: string, raw: unknown) {
-    const i = validateInput(core, settings, actor, wid, raw);
+  function validate(actor: Actor, wid: string, raw: unknown, trustedSnapshot = false) {
+    const i = validateInput(core, settings, actor, wid, raw, trustedSnapshot);
     approvedCreativePrompt(db, actor, wid, i);
     validateDetailPageInput(
       i,
@@ -191,7 +214,11 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       ...(i.options.designs?.flatMap((d) => d.assetIds) || []),
       ...(i.backgroundAssetId ? [i.backgroundAssetId] : []),
       ...(i.backgroundAudioAssetId ? [i.backgroundAudioAssetId] : []),
-      ...(i.brandId ? core.brands.get(actor, wid, i.brandId).referenceAssetIds : []),
+      ...(i.creativeBriefId
+        ? (frozenCreativeContext(db, actor, wid, i)?.materials.map((material) => material.id) ?? [])
+        : i.brandId
+          ? core.brands.get(actor, wid, i.brandId).referenceAssetIds
+          : []),
     ]);
     for (const mention of extractAssetMentions(
       [i.prompt, ...(i.options.designs?.map((d) => d.prompt) || [])].join('\n'),
@@ -225,7 +252,23 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     const frozen = structuredClone(input);
     const creativePrompt = approvedCreativePrompt(db, actor, wid, input);
     if (creativePrompt) frozen.prompt = creativePrompt;
+    // Native execution uses only server-stored, confirmed planning output.
+    if (input.providerId === 'native') {
+      frozen.nativePlan = frozenNativePlan(db, actor, wid, input);
+      frozen.imageEdit = frozenNativeImageEdit(db, actor, wid, input);
+      frozen.nativeReplica = frozenNativeReplica(db, actor, wid, input);
+    } else {
+      delete frozen.nativePlan;
+      delete frozen.imageEdit;
+      delete frozen.nativeReplica;
+    }
     const creativeContext = frozenCreativeContext(db, actor, wid, input);
+    if ((input.productId || input.useMemory || input.includeProductImages) && !creativeContext)
+      throw new AppError(
+        409,
+        'KNOWLEDGE_PLAN_REQUIRED',
+        '关联产品或个人记忆后，请先整理并确认创作方案。',
+      );
     if (creativeContext) {
       frozen.referenceAssetIds = [
         ...new Set([
@@ -239,6 +282,9 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       // so rejected or corrected claims cannot reappear via a secondary prompt field.
       delete frozen.referenceText;
       delete frozen.brandId;
+      delete frozen.productId;
+      delete frozen.useMemory;
+      delete frozen.includeProductImages;
       delete frozen.characterId;
       delete frozen.characterRevision;
       // These fields were already presented to the planner as explicit user sources.
@@ -249,6 +295,9 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       delete frozen.options.textReplacements;
     }
     // The item is an immutable compiled snapshot. Retrying it must not re-plan or recompile.
+    delete frozen.productId;
+    delete frozen.useMemory;
+    delete frozen.includeProductImages;
     delete frozen.creativeBriefId;
     delete frozen.conversationContext;
     if (
@@ -353,7 +402,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     )
       throw new AppError(400, 'INPUT_COUNT', '品牌与参考图片合计不能超过16张');
     // Brand references and generated style instructions must satisfy the same provider limits.
-    validate(actor, wid, frozen);
+    validate(actor, wid, frozen, true);
     return splitItems(frozen).map((part) => {
       for (const mention of extractAssetMentions(part.prompt)) {
         if (
@@ -374,7 +423,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
               : `【参考素材：${asset.name}；输入序号 ${references.indexOf(mention.assetId) + 1}】`,
         );
       }
-      validate(actor, wid, part);
+      validate(actor, wid, part, true);
       return part;
     });
   }
@@ -410,12 +459,19 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     retryJobId: string | null = null,
     retryItemIds: string[] | null = null,
   ): QuoteDto {
-    const cap = settings.validateCapability(wid, input);
+    if (input.providerId === 'native') {
+      const nativeRevision = settings.connections.revision(wid, input.operation);
+      items = items.map((item) => ({
+        ...item,
+        nativeRevision: item.nativeRevision || nativeRevision,
+      }));
+    }
+    const cap = settings.validateCapability(wid, input, actor);
     for (const item of items) {
       // Validate the exact execution snapshot, including provider prompt budgets and reference
       // limits, before writing a payable quote. The short original request is insufficient.
-      if (input.creativeBriefId) validate(actor, wid, item);
-      else if (input.capabilityRevision) settings.validateCapability(wid, item);
+      if (input.creativeBriefId) validate(actor, wid, item, true);
+      else if (input.capabilityRevision) settings.validateCapability(wid, item, actor, true);
     }
     const units = items.reduce(
       (total, item) => total + billableUnits(actor, wid, item, cap.unit),
@@ -425,7 +481,58 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       channelForActor(actor) === 'web' &&
       input.operation === 'text.assist' &&
       core.entitlements.get(actor, wid).freeTextAssist.remaining >= units;
-    const maxCredits = freeText ? 0 : units * cap.priceCredits;
+    const fixedCredits = cap.fixedCredits ?? 0;
+    if (!Number.isSafeInteger(fixedCredits) || fixedCredits < 0)
+      throw new AppError(500, 'PRICING_INVALID', '当前固定积分配置无效。');
+    const fixedChargeItems = items.filter((item, index) => {
+      if (item.providerId !== 'native' || item.operation !== 'video.generate') return true;
+      // These items are server-frozen plans (or persisted retry snapshots), never client plans.
+      // An approved original reference does not incur an image-generation submission.
+      if (item.nativePlan?.firstFrame?.mode === 'reference') return false;
+      if (!retryItemIds?.[index]) return true;
+      const source = sql
+        .prepare(
+          'SELECT id,retry_root_item_id FROM job_items WHERE id=? AND workspace_id=? AND job_id=?',
+        )
+        .get(retryItemIds[index], wid, retryJobId) as
+        { id: string; retry_root_item_id: string | null } | undefined;
+      if (!source) return true;
+      const root = source.retry_root_item_id || source.id;
+      // Only server-owned, input-bound frames from this retry lineage waive the first-frame charge.
+      const frame = sql
+        .prepare(
+          `SELECT f.asset_id FROM native_generation_frames f
+        JOIN job_items j ON j.id=f.item_id
+        JOIN assets a ON a.id=f.asset_id AND a.workspace_id=j.workspace_id AND a.kind='image'
+        JOIN asset_variants v ON v.asset_id=a.id AND v.variant='original'
+        WHERE j.workspace_id=? AND f.input_fingerprint=? AND (j.id=? OR j.id=? OR j.retry_root_item_id=?) LIMIT 1`,
+        )
+        .get(wid, inputHash({ ...item, capabilityRevision: undefined }), source.id, root, root);
+      return !frame;
+    }).length;
+    // Only server-frozen plans (including persisted retries) can waive generation cost.
+    // An uploaded mask or exact photo pan performs no image/video model submission.
+    const chargedUnits = items.reduce((total, item, index) => {
+      const retrySource =
+        retryItemIds?.[index] && retryJobId
+          ? (sql
+              .prepare('SELECT * FROM job_items WHERE id=? AND workspace_id=? AND job_id=?')
+              .get(retryItemIds[index], wid, retryJobId) as ItemRow | undefined)
+          : undefined;
+      const localOnly =
+        item.providerId === 'native' &&
+        ((item.operation === 'video.generate' &&
+          item.nativePlan?.motionRenderer === 'exact-pan-v1') ||
+          (item.operation === 'image.generate' &&
+            (item.imageEdit?.mask.mode === 'asset' ||
+              (item.imageEdit &&
+                retrySource &&
+                hasNativeProcessingCheckpoint(db, retrySource, item)))));
+      return total + (localOnly ? 0 : billableUnits(actor, wid, item, cap.unit));
+    }, 0);
+    const maxCredits = freeText
+      ? 0
+      : chargedUnits * cap.priceCredits + fixedCredits * fixedChargeItems;
     const capabilityProof = settings.modelCapabilities.validate(wid, input);
     const time = now(),
       id = randomUUID(),
@@ -488,6 +595,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
   }
   function quote(actor: Actor, wid: string, raw: unknown): QuoteDto {
     const input = validate(actor, wid, raw);
+    const context = frozenCreativeContext(db, actor, wid, input);
+    if (context) assertCreativeKnowledgeFresh(context);
     return writeQuote(actor, wid, input, snapshot(actor, wid, input));
   }
   function retryQuote(
@@ -499,6 +608,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     const job = getRow(actor, wid, id);
     if (job.billing_channel !== channelForActor(actor))
       throw new AppError(409, 'BILLING_CHANNEL_CONFLICT', '重试必须使用原任务的计费渠道');
+    // jobs.input_json preserves the original request, including ignored client fields.
+    // Only job_items.input_json contains the server-compiled execution snapshot.
     const input = validate(actor, wid, {
       ...JSON.parse(job.input_json),
       ...(capabilityRevision ? { capabilityRevision } : {}),
@@ -515,6 +626,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         'NO_RETRYABLE_ITEMS',
         '没有可重试项；已在重试中、已成功重试或待核对的条目不能重复提交',
       );
+    const context = frozenCreativeContext(db, actor, wid, input);
+    if (context) assertCreativeKnowledgeFresh(context);
     const quote = writeQuote(
       actor,
       wid,
@@ -540,7 +653,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       const items = sql.prepare('SELECT * FROM job_items WHERE job_id=?').all(id) as ItemRow[];
       let resumed = false;
       for (const item of items) {
-        const phase = recoverablePhase(item);
+        const phase = recoverableItemPhase(item);
         if (item.status !== 'reconciliation_required' || !phase || liveRetry(item)) continue;
         sql
           .prepare(
@@ -553,8 +666,8 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
       // Terminal failed/cancelled siblings remain unchanged in a partially recovered batch.
       const recoveryInProgress = (item: ItemRow) =>
         item.status === 'running' &&
-        ['polling', 'downloading'].includes(item.phase) &&
-        !!recoverablePhase(item);
+        ['polling', 'downloading', 'processing'].includes(item.phase) &&
+        !!recoverableItemPhase(item);
       if (
         !resumed &&
         !(
@@ -603,7 +716,6 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           throw new AppError(409, 'IDEMPOTENCY_CONFLICT', '同一请求标识不能用于不同参数');
         return dto(actor, previous);
       }
-      validate(actor, wid, input);
       const q = sql
         .prepare('SELECT * FROM quotes WHERE id=? AND workspace_id=? AND user_id=?')
         .get(quoteId, wid, actor.userId) as QuoteRow | undefined;
@@ -616,6 +728,9 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
         q.pricing_version !== PRICING
       )
         throw new AppError(409, 'QUOTE_EXPIRED', '参数已变更或报价已过期，请重新确认');
+      // The base input remains an original client request, including on retries.
+      // Only the quote's server-compiled parts may use snapshot validation below.
+      validate(actor, wid, input);
       if (actor.apiKeyId) {
         const key = sql
           .prepare('SELECT credit_limit FROM api_keys WHERE id=?')
@@ -666,7 +781,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           return source;
         });
       }
-      for (const part of parts) validate(actor, wid, part);
+      for (const part of parts) validate(actor, wid, part, true);
       sql
         .prepare(
           'INSERT INTO jobs(id,workspace_id,user_id,project_id,api_key_id,operation,provider_id,prompt,input_json,input_hash,request_id,pricing_version,status,stage,requested_credits,created_at,updated_at,billing_channel) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
@@ -692,7 +807,7 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
           q.billing_channel,
         );
       sql.prepare('UPDATE quotes SET used_job_id=? WHERE id=?').run(id, q.id);
-      const unit = settings.validateCapability(wid, input).unit;
+      const unit = settings.validateCapability(wid, input, actor).unit;
       const partUnits = parts.map((part) => billableUnits(actor, wid, part, unit));
       if (partUnits.reduce((sum, value) => sum + value, 0) !== q.units)
         throw new AppError(409, 'QUOTE_EXPIRED', '素材计费参数发生变化，请重新获取报价');

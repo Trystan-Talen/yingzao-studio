@@ -1,12 +1,25 @@
 import { t } from '../lib/i18n';
 import { useState } from 'react';
-import { ArrowUpRight, LockKeyhole, Sparkles } from 'lucide-react';
+import { ArrowUpRight, LockKeyhole } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { post, useApi } from '../lib/api';
 import { Button, Field, Loading, Notice, useAction } from '../components/ui';
 import { useStudio } from '../context';
 import { GoogleCallbackNotice, GoogleLoginButton } from '../components/GoogleAccount';
 import { IdentityLoginButtons } from '../components/IdentityAccounts';
+import { BrandMark } from '../components/BrandMark';
+import '../styles/brand/login.css';
+
+const loginGallery = [
+  'amber-perfume',
+  'botanical-serum',
+  'studio-headphones',
+  'citrus-drink',
+  'leather-bag',
+  'sculptural-lamp',
+  'trail-sneaker',
+  'matcha-ritual',
+];
 export function Login() {
   const { refreshSession } = useStudio();
   const [search] = useSearchParams();
@@ -43,33 +56,39 @@ export function Login() {
   }
   return (
     <div className="login-page">
-      <section className="login-story">
-        <a className="wordmark" href="/">
-          <span className="brand-mark">{t('映')}</span>
-          <strong>
+      <section className="login-story yz-login-story">
+        <div className="yz-login-wall" aria-hidden="true">
+          {[0, 1, 2].map((column) => (
+            <div key={column} className={`yz-login-column is-${column}`}>
+              {[...loginGallery, ...loginGallery].map((id, index) => (
+                <img key={`${id}-${index}`} src={`/gallery/${id}.webp`} alt="" />
+              ))}
+            </div>
+          ))}
+        </div>
+        <a className="yz-login-brand" href="/">
+          <BrandMark size={40} />
+          <span className="yz-wordmark">
             {t('映造')}
-            <span>{t('创意工作室')}</span>
-          </strong>
+            <small>STUDIO</small>
+          </span>
         </a>
-        <div>
-          <p className="eyebrow">{t('你的创作工作室')}</p>
+        <div className="yz-login-copy">
+          <p className="eyebrow">{t('创意智能体')} · CREATIVE AGENT</p>
           <h1>
             {t('把想象，')}
             <br />
-            {t('变成看得见的作品。')}
+            <em>{t('映造')}</em>
+            {t('成作品。')}
           </h1>
-          <p>{t('图片、视频与品牌资产，在一个安静、专注的创作空间里发生。')}</p>
+          <p>{t('商品图、海报与短视频，从一句话开始，由智能体规划、生成并持续迭代。')}</p>
         </div>
-        <div className="login-art">
-          <img src="/gallery/botanical-serum.webp" alt={t('自然风格产品摄影灵感')} />
-          <img src="/gallery/amber-perfume.webp" alt={t('琥珀香水摄影灵感')} />
-        </div>
-        <span className="small muted">{t('原创灵感示例 · 映造 Studio')}</span>
+        <span className="yz-login-foot">{t('原创灵感示例 · 映造 Studio')}</span>
       </section>
       <section className="login-form-area">
         <div className="login-form">
-          <span className="login-symbol">
-            <Sparkles size={28} />
+          <span className="login-symbol yz-login-symbol">
+            <BrandMark size={44} />
           </span>
           <h2>{registration ? t('创建你的工作空间') : t('欢迎回到映造')}</h2>
           <p className="muted">

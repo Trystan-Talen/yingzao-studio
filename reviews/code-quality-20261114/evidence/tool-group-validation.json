@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-11-14T17:07:09.436760+00:00",
+  "scope": "Interrupted Unix tool process groups: clean surviving descendants after the leader exits",
+  "red": {
+    "failed": 1,
+    "filteredOut": 4,
+    "observed": "wrapper exits 143 while descendant ignoring SIGTERM remains alive; test cleanup kills the fixture"
+  },
+  "green": {
+    "passed": 12,
+    "files": [
+      "tests/test-launcher.test.ts",
+      "tests/quality-runner.test.ts",
+      "tests/script-test-environment.test.ts",
+      "tests/vitest-environment.test.ts"
+    ]
+  },
+  "checks": {
+    "typecheck": "all-project exit 0",
+    "lint": "two changed files exit 0",
+    "format": "two changed files exit 0"
+  },
+  "platform": "Verified on local macOS; Unix process-group regression skips Windows. Windows retains direct-child termination; no descendant cleanup claim.",
+  "unchanged": [
+    "environment allowlist and explicit options",
+    "nonzero status propagation and interruption codes",
+    "normal success path",
+    "fail-fast quality steps"
+  ],
+  "files": [
+    {
+      "path": "platform/scripts/isolated-tool.ts",
+      "sha256": "4be05488136bfa816f9afa9ce11a94ac610b656b1c873906215d3f05c7c08aca"
+    },
+    {
+      "path": "platform/tests/test-launcher.test.ts",
+      "sha256": "619372394141ef8404c1c069801eebf040ffaaccea0f29a59dd417613451af5c"
+    }
+  ],
+  "independentReview": "memory_audit read-only review: no new blockers; Unix group signalling, interrupted-only cleanup, ESRCH handling, regression fixture readiness and cleanup, and Windows limit confirmed."
+}

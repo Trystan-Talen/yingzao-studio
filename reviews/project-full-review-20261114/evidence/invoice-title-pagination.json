@@ -1,0 +1,45 @@
+{
+  "reviewDate": "2026-11-14",
+  "finding": "Invoice-title UI requested only the default first 24 records without navigation; older saved titles could not be edited or selected for a new local invoice.",
+  "severity": "P2",
+  "productOwner": "root agent; Usage.tsx modified by root",
+  "test": "platform/tests/e2e/invoice-title-pagination.spec.ts",
+  "red": {
+    "run": "platform/var/e2e/run-zIVFSa",
+    "desktop": {
+      "total": 2,
+      "failed": 2,
+      "passed": 0
+    },
+    "method": "Reran current assertions against the preserved pre-fix built web; every test creates a fresh isolated SQLite.",
+    "actualFailure": "101 synthetic titles existed, oldest was absent from visible list/options, and no next-page action existed in either management or application dialog.",
+    "notCounted": "Initial assertion used the missing semantic region; final red rerun instead fails on the missing user next-page action."
+  },
+  "green": {
+    "run": "platform/var/e2e/run-QBh9Vw",
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "projects": [
+      "desktop",
+      "mobile"
+    ],
+    "assertions": [
+      "Oldest of 101 titles reached on second page and edited in the same DB record",
+      "Selected old title remains selected after paging back to page one",
+      "Actual invoice snapshots the correct title id/name and exact order amount",
+      "Deleting only record on final page returns to a populated legal page",
+      "Deleting selected title clears form selection and does not mutate prior invoice snapshot"
+    ]
+  },
+  "checks": {
+    "typecheck": "passed",
+    "lint": "new test passed --max-warnings 0",
+    "format": "passed"
+  },
+  "testSha256": "c864b26f19c6d0211cc82ec8aa0bc3e3729e391d6d0290e5a4cc6d80b83b7c64",
+  "isolation": "Temporary SQLite, synthetic title/order data, local-only services; no payment, no external tax invoice service.",
+  "validationScope": "本报告仅记录所列阶段局部验证；不得与其它阶段或最终全量数量相加，不代表最终冻结源码的完整浏览器验收已完成。",
+  "pathBase": "所有证据路径均相对仓库根目录。"
+}

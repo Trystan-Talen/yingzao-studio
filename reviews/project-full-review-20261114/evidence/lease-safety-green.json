@@ -1,0 +1,878 @@
+{
+  "numTotalTestSuites": 10,
+  "numPassedTestSuites": 10,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 69,
+  "numPassedTests": 9,
+  "numFailedTests": 0,
+  "numPendingTests": 60,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1794678177704,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "local matting worker controls"
+          ],
+          "fullName": "local matting worker controls stops local work on cancel-request and preserves its paid raw checkpoint for explicit local-only recovery",
+          "status": "passed",
+          "title": "stops local work on cancel-request and preserves its paid raw checkpoint for explicit local-only recovery",
+          "duration": 431.48249999999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "local matting worker controls"
+          ],
+          "fullName": "local matting worker controls stops local work on database-error and preserves its paid raw checkpoint for explicit local-only recovery",
+          "status": "passed",
+          "title": "stops local work on database-error and preserves its paid raw checkpoint for explicit local-only recovery",
+          "duration": 163.08279200000015,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "local matting worker controls"
+          ],
+          "fullName": "local matting worker controls returns reserved credits on installation failure before any paid raw result exists",
+          "status": "skipped",
+          "title": "returns reserved credits on installation failure before any paid raw result exists",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "local matting worker controls"
+          ],
+          "fullName": "local matting worker controls aborts local processing when ownership changes without overwriting the new lease",
+          "status": "passed",
+          "title": "aborts local processing when ownership changes without overwriting the new lease",
+          "duration": 362.6874580000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "local matting worker controls"
+          ],
+          "fullName": "local matting worker controls honors cancellation inside asynchronous pair asset preparation before any success or settlement",
+          "status": "skipped",
+          "title": "honors cancellation inside asynchronous pair asset preparation before any success or settlement",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "local matting worker controls"
+          ],
+          "fullName": "local matting worker controls honors cancellation inside asynchronous final asset preparation before any success or settlement",
+          "status": "skipped",
+          "title": "honors cancellation inside asynchronous final asset preparation before any success or settlement",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence preserves raw bytes, separates roles/source, and saves idempotently without a video frame",
+          "status": "skipped",
+          "title": "preserves raw bytes, separates roles/source, and saves idempotently without a video frame",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence downloads an original URL once and subsequently reads its durable asset",
+          "status": "skipped",
+          "title": "downloads an original URL once and subsequently reads its durable asset",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence does not overwrite an existing role with different bytes",
+          "status": "skipped",
+          "title": "does not overwrite an existing role with different bytes",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence discards uncommitted media when the lease is lost",
+          "status": "passed",
+          "title": "discards uncommitted media when the lease is lost",
+          "duration": 146.635041,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence reuses only the real ancestor chain and exact input, never unrelated or sibling tasks",
+          "status": "skipped",
+          "title": "reuses only the real ancestor chain and exact input, never unrelated or sibling tasks",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence rejects cross-workspace and cyclic retry ancestry",
+          "status": "skipped",
+          "title": "rejects cross-workspace and cyclic retry ancestry",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence rejects checkpoint input tampering and missing/corrupt originals instead of returning a miss",
+          "status": "skipped",
+          "title": "rejects checkpoint input tampering and missing/corrupt originals instead of returning a miss",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "native intermediate persistence"
+          ],
+          "fullName": "native intermediate persistence enforces checkpoint workspace relationships in the database",
+          "status": "skipped",
+          "title": "enforces checkpoint workspace relationships in the database",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "supports a provided mask without inventing a raw model artifact",
+          "status": "skipped",
+          "title": "supports a provided mask without inventing a raw model artifact",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance composes an approved asset mask at original size after all model credentials are removed",
+          "status": "skipped",
+          "title": "composes an approved asset mask at original size after all model credentials are removed",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance retains the exact model video and records the separately processed result without a duplicate first frame",
+          "status": "skipped",
+          "title": "retains the exact model video and records the separately processed result without a duplicate first frame",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance recovers only local processing after interruption, without credentials or another model submission",
+          "status": "skipped",
+          "title": "recovers only local processing after interruption, without credentials or another model submission",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance rejects a malformed model video once, retaining its original and the reserved charge",
+          "status": "skipped",
+          "title": "rejects a malformed model video once, retaining its original and the reserved charge",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance keeps a legacy frozen video untouched, without inventing local provenance or a raw checkpoint",
+          "status": "skipped",
+          "title": "keeps a legacy frozen video untouched, without inventing local provenance or a raw checkpoint",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance preserves existing masks when the video checkpoint migration is appended",
+          "status": "skipped",
+          "title": "preserves existing masks when the video checkpoint migration is appended",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance resumes from raw after a local interruption with one model invocation, retaining reservation until success",
+          "status": "skipped",
+          "title": "resumes from raw after a local interruption with one model invocation, retaining reservation until success",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance does not execute a forged processing phase without its raw checkpoint",
+          "status": "skipped",
+          "title": "does not execute a forged processing phase without its raw checkpoint",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance keeps an ambiguous submission without a durable raw mask in reconciliation",
+          "status": "skipped",
+          "title": "keeps an ambiguous submission without a durable raw mask in reconciliation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance treats raw URL download failure as paid-response uncertainty, never a safe re-generation",
+          "status": "skipped",
+          "title": "treats raw URL download failure as paid-response uncertainty, never a safe re-generation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance retains invalid model mask evidence without ten retries or another model call",
+          "status": "skipped",
+          "title": "retains invalid model mask evidence without ten retries or another model call",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance recovers an expired processing lease and forbids any further model submission",
+          "status": "skipped",
+          "title": "recovers an expired processing lease and forbids any further model submission",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance records exact pan as local processing without creating a duplicate reference first frame",
+          "status": "skipped",
+          "title": "records exact pan as local processing without creating a duplicate reference first frame",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "worker local recovery and durable provenance"
+          ],
+          "fullName": "worker local recovery and durable provenance rejects local provenance without matching frozen operation and bound mask roles",
+          "status": "skipped",
+          "title": "rejects local provenance without matching frozen operation and bound mask roles",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794678179788,
+      "endTime": 1794678180891.635,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/native-artifacts.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration contains a transient lease heartbeat database error while a provider request is pending",
+          "status": "passed",
+          "title": "contains a transient lease heartbeat database error while a provider request is pending",
+          "duration": 131.34354199999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration contains a expired lease heartbeat database error while a provider request is pending",
+          "status": "passed",
+          "title": "contains a expired lease heartbeat database error while a provider request is pending",
+          "duration": 89.19975000000011,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration contains an item failure when durable error recording also fails, without an unhandled rejection",
+          "status": "skipped",
+          "title": "contains an item failure when durable error recording also fails, without an unhandled rejection",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration refuses missing capability before reserving or creating a job",
+          "status": "skipped",
+          "title": "refuses missing capability before reserving or creating a job",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration binds quote to payload and idempotency key, reserving only once",
+          "status": "skipped",
+          "title": "binds quote to payload and idempotency key, reserving only once",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration rolls back jobs and quotes if the available balance is insufficient",
+          "status": "skipped",
+          "title": "rolls back jobs and quotes if the available balance is insufficient",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration settles a real stored output once, preserving original bytes and immutable ledger events",
+          "status": "skipped",
+          "title": "settles a real stored output once, preserving original bytes and immutable ledger events",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration cleans a completed result after restart without rerunning the provider or changing durable assets",
+          "status": "skipped",
+          "title": "cleans a completed result after restart without rerunning the provider or changing durable assets",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration removes only newly written cache files when a later provider output is invalid before manifest persistence",
+          "status": "skipped",
+          "title": "removes only newly written cache files when a later provider output is invalid before manifest persistence",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration retains pending recovery files and rejects an entire completed manifest with an unowned path",
+          "status": "skipped",
+          "title": "retains pending recovery files and rejects an entire completed manifest with an unowned path",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration releases definitive failure and preserves uncertain submissions for reconciliation",
+          "status": "skipped",
+          "title": "releases definitive failure and preserves uncertain submissions for reconciliation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration handles partial success and retries only failed items",
+          "status": "skipped",
+          "title": "handles partial success and retries only failed items",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration cancels queued jobs with release but does not pretend a running request is cancelled",
+          "status": "skipped",
+          "title": "cancels queued jobs with release but does not pretend a running request is cancelled",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration recovers expired submitting conservatively and resumes polling without resubmitting",
+          "status": "skipped",
+          "title": "recovers expired submitting conservatively and resumes polling without resubmitting",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration guards stale lease holders before remote side effects",
+          "status": "passed",
+          "title": "guards stale lease holders before remote side effects",
+          "duration": 85.21520899999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration enforces workspace concurrency across worker instances",
+          "status": "skipped",
+          "title": "enforces workspace concurrency across worker instances",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration keeps pending results separate when users edit the canvas while work is running",
+          "status": "skipped",
+          "title": "keeps pending results separate when users edit the canvas while work is running",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration rejects foreign resources and applies API-key scope and budget limits",
+          "status": "skipped",
+          "title": "rejects foreign resources and applies API-key scope and budget limits",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "durable tasks, credits and worker integration"
+          ],
+          "fullName": "durable tasks, credits and worker integration cancels removed members queued jobs but lets already submitted results finish in the original space",
+          "status": "skipped",
+          "title": "cancels removed members queued jobs but lets already submitted results finish in the original space",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "security and recovery regressions"
+          ],
+          "fullName": "security and recovery regressions rejects mismatched finalization and never permits negative or duplicate allocation",
+          "status": "skipped",
+          "title": "rejects mismatched finalization and never permits negative or duplicate allocation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "security and recovery regressions"
+          ],
+          "fullName": "security and recovery regressions guards allocated pools and collects unused limits without discarding in-flight reservations",
+          "status": "skipped",
+          "title": "guards allocated pools and collects unused limits without discarding in-flight reservations",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "security and recovery regressions"
+          ],
+          "fullName": "security and recovery regressions cancels revoked keys before claim and immediately before transmission",
+          "status": "skipped",
+          "title": "cancels revoked keys before claim and immediately before transmission",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "security and recovery regressions"
+          ],
+          "fullName": "security and recovery regressions allows already submitted results to settle after key revocation",
+          "status": "skipped",
+          "title": "allows already submitted results to settle after key revocation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "security and recovery regressions"
+          ],
+          "fullName": "security and recovery regressions does not count successful polling against transient recovery retry allowance",
+          "status": "skipped",
+          "title": "does not count successful polling against transient recovery retry allowance",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "security and recovery regressions"
+          ],
+          "fullName": "security and recovery regressions will not transmit a claim whose lease has expired even before another worker recovers it",
+          "status": "passed",
+          "title": "will not transmit a claim whose lease has expired even before another worker recovers it",
+          "duration": 87.47800000000007,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "explicit layer output transactions and media-based estimates"
+          ],
+          "fullName": "explicit layer output transactions and media-based estimates stores every layer once, charges once, and applies a complete pending group after revision checks",
+          "status": "skipped",
+          "title": "stores every layer once, charges once, and applies a complete pending group after revision checks",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "explicit layer output transactions and media-based estimates"
+          ],
+          "fullName": "explicit layer output transactions and media-based estimates never persists a partial layer set or settles when one layer is invalid",
+          "status": "skipped",
+          "title": "never persists a partial layer set or settles when one layer is invalid",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "explicit layer output transactions and media-based estimates"
+          ],
+          "fullName": "explicit layer output transactions and media-based estimates removes newly prepared files after rolled-back commits and recovers the same result without calling the provider again",
+          "status": "skipped",
+          "title": "removes newly prepared files after rolled-back commits and recovers the same result without calling the provider again",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "explicit layer output transactions and media-based estimates"
+          ],
+          "fullName": "explicit layer output transactions and media-based estimates discards a stale workers prepared variants when its lease is lost before commit",
+          "status": "passed",
+          "title": "discards a stale workers prepared variants when its lease is lost before commit",
+          "duration": 128.46183399999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "explicit layer output transactions and media-based estimates"
+          ],
+          "fullName": "explicit layer output transactions and media-based estimates does not widen multi-output permission to unrelated providers and operations",
+          "status": "skipped",
+          "title": "does not widen multi-output permission to unrelated providers and operations",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "explicit layer output transactions and media-based estimates"
+          ],
+          "fullName": "explicit layer output transactions and media-based estimates quotes source-video operations using actual duration and extension using newly requested seconds",
+          "status": "skipped",
+          "title": "quotes source-video operations using actual duration and extension using newly requested seconds",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "immutable provider references"
+          ],
+          "fullName": "immutable provider references binds signed media to job snapshots and rejects unrelated images and signature tampering",
+          "status": "skipped",
+          "title": "binds signed media to job snapshots and rejects unrelated images and signature tampering",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "immutable provider references"
+          ],
+          "fullName": "immutable provider references freezes brand references and style at quote time",
+          "status": "skipped",
+          "title": "freezes brand references and style at quote time",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "immutable provider references"
+          ],
+          "fullName": "immutable provider references quotes and executes ordered design modules with their own aspect ratio and references",
+          "status": "skipped",
+          "title": "quotes and executes ordered design modules with their own aspect ratio and references",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "immutable provider references"
+          ],
+          "fullName": "immutable provider references freezes extracted reference document facts and never passes a document as an image",
+          "status": "skipped",
+          "title": "freezes extracted reference document facts and never passes a document as an image",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "conversation snapshots and stable asset references"
+          ],
+          "fullName": "conversation snapshots and stable asset references freezes authorized project history and resolves each asset mention per generated item",
+          "status": "skipped",
+          "title": "freezes authorized project history and resolves each asset mention per generated item",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "conversation snapshots and stable asset references"
+          ],
+          "fullName": "conversation snapshots and stable asset references cancels an unsubmitted character job after authorization is withdrawn without calling the provider",
+          "status": "skipped",
+          "title": "cancels an unsubmitted character job after authorization is withdrawn without calling the provider",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "signs the mask representation and converts transparent edit regions to the official Flyelep white-mask convention",
+          "status": "skipped",
+          "title": "signs the mask representation and converts transparent edit regions to the official Flyelep white-mask convention",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "releases no-text translation reservations once and reuses the original detection across languages and worker restarts",
+          "status": "skipped",
+          "title": "releases no-text translation reservations once and reuses the original detection across languages and worker restarts",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "recovers a persisted no-text result without repeating detection or charging after worker loss",
+          "status": "skipped",
+          "title": "recovers a persisted no-text result without repeating detection or charging after worker loss",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794678178537,
+      "endTime": 1794678179058.462,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/tasks.test.ts"
+    }
+  ]
+}

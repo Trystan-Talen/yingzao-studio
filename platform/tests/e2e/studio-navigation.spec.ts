@@ -42,10 +42,10 @@ test('keeps five primary destinations and every secondary destination reachable 
   ] as const)
     await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href);
   if (!mobile) {
-    const bounds = await page.locator('.studio-navigation-rail').boundingBox();
+    const bounds = await page.locator('.yz-rail').boundingBox();
     expect(bounds!.width).toBeGreaterThanOrEqual(84);
     expect(bounds!.width).toBeLessThanOrEqual(88);
-    const mainBounds = await page.locator('.main-shell').boundingBox();
+    const mainBounds = await page.locator('.yz-main').boundingBox();
     expect(mainBounds!.x).toBeCloseTo(bounds!.x + bounds!.width, 0);
     await page.getByRole('button', { name: '更多', exact: true }).click();
   }
@@ -77,11 +77,17 @@ test('keeps five primary destinations and every secondary destination reachable 
       .getByRole('link', { name: '创作', exact: true }),
   ).toHaveAttribute('aria-current', 'page');
   if (mobile) await page.keyboard.press('Escape');
-  const progress = page.getByRole('button', { name: '当前进度', exact: true });
-  await progress.click();
-  await expect(page.getByRole('dialog', { name: '当前进度', exact: true })).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(progress).toBeFocused();
+  if (mobile) {
+    await page.getByRole('link', { name: '任务', exact: true }).filter({ visible: true }).click();
+    await expect(page).toHaveURL(studio.origin + '/tasks');
+    await expect(page.getByRole('heading', { name: '任务中心', exact: true })).toBeVisible();
+  } else {
+    const progress = page.getByRole('button', { name: '当前进度', exact: true });
+    await progress.click();
+    await expect(page.getByRole('dialog', { name: '当前进度', exact: true })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(progress).toBeFocused();
+  }
   expect(mediaWrites).toEqual([]);
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
 });
@@ -100,6 +106,7 @@ for (const locale of [
     signOut: 'Sign out',
     back: 'Back to navigation',
     current: 'Current activity',
+    tasks: 'Task',
   },
   {
     id: 'ar',
@@ -114,6 +121,7 @@ for (const locale of [
     signOut: 'تسجيل الخروج',
     back: 'العودة إلى التنقل',
     current: 'النشاط الحالي',
+    tasks: 'المهمة',
   },
 ] as const) {
   test(
@@ -141,11 +149,11 @@ for (const locale of [
       await page.goto(studio.origin + '/projects');
       await expect(page.locator('html')).toHaveAttribute('dir', locale.dir);
       await expect(page.locator('html')).toHaveAttribute('data-theme', locale.theme);
-      const mobileToggle = page.locator('.topbar .mobile-menu');
+      const mobileToggle = page.locator('.yz-mobile-menu');
       const mobile = await mobileToggle.isVisible();
       if (!mobile) {
-        const rail = await page.locator('.studio-navigation-rail').boundingBox();
-        const main = await page.locator('.main-shell').boundingBox();
+        const rail = await page.locator('.yz-rail').boundingBox();
+        const main = await page.locator('.yz-main').boundingBox();
         if (locale.dir === 'rtl') expect(main!.x + main!.width).toBeCloseTo(rail!.x, 0);
         else expect(main!.x).toBeCloseTo(rail!.x + rail!.width, 0);
       }
@@ -200,7 +208,14 @@ for (const locale of [
       expect(preferences.locale).toBe(locale.id);
       expect(preferences.theme).toBe(locale.theme);
       expect(preferences.defaultCreationLanguage).toBe('zh-CN');
-      await expect(page.getByRole('button', { name: locale.current, exact: true })).toBeVisible();
+      if (mobile) {
+        const tasks = page
+          .getByRole('link', { name: locale.tasks, exact: true })
+          .filter({ visible: true });
+        await expect(tasks).toBeVisible();
+        await expect(tasks).toHaveAttribute('href', '/tasks');
+      } else
+        await expect(page.getByRole('button', { name: locale.current, exact: true })).toBeVisible();
       expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({
         n: 0,
       });

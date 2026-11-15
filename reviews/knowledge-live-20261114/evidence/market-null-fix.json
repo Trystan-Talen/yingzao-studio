@@ -1,0 +1,16 @@
+{
+  "change": "Only native response parsing treats brief.market:null as absent when request.context.market is undefined; the shared schema and all matching/evidence/completion checks remain strict.",
+  "checks": {
+    "typecheck": "passed",
+    "eslint": "passed",
+    "prettier": "passed"
+  },
+  "sourceSha256": {
+    "platform/src/server/providers/native-planner.ts": "1e5fec670162b662943f6211000eaa10eca22deb9a24405cc27d45f56e1670de",
+    "platform/tests/native-generation.test.ts": "01419cdb111f6108b21220e9e057e4a3c8e58110fe840d7c15c55b57c8b2e08f"
+  },
+  "limits": [
+    "No external model calls or database changes by this agent.",
+    "Actual supplied response passes an offline schema replay after removing only the null market; no saved failed plan was rewritten."
+  ]
+}

@@ -6,7 +6,7 @@ import {
 } from '../../contracts/brand-quota';
 import { AppError } from '../errors';
 import { prepaidTermsSchema } from '../../contracts/promotions';
-import { CoreContext, now } from './shared';
+import { type CoreContext, now } from './shared';
 
 const brandLimit = z.number().int().nonnegative().max(10000);
 const savedQuotaSchema = z

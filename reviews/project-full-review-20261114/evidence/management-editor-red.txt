@@ -1,0 +1,141 @@
+Running 3 tests using 1 worker
+
+(node:60592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/management-editor-recovery.spec.ts:53:1 › a delayed project update preserves fields typed after submission (9.0s)
+(node:60743) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › tests/e2e/management-editor-recovery.spec.ts:89:1 › a delayed project creation does not navigate away from a newly opened project draft (8.6s)
+(node:60875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [desktop] › tests/e2e/management-editor-recovery.spec.ts:125:1 › a delayed asset update does not close another asset or clear its draft (9.1s)
+
+
+  1) [desktop] › tests/e2e/management-editor-recovery.spec.ts:53:1 › a delayed project update preserves fields typed after submission 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '编辑项目', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '编辑项目', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '编辑项目', exact: true })
+
+
+      70 |     held.release();
+      71 |     await expect(page.getByText('项目已保存', { exact: true })).toBeVisible();
+    > 72 |     await expect(editor).toBeVisible();
+         |                          ^
+      73 |     await expect(editor.getByRole('textbox', { name: '项目说明', exact: true })).toHaveValue(
+      74 |       '后续说明B不能丢失',
+      75 |     );
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-editor-recovery.spec.ts:72:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-a36f8-elds-typed-after-submission-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-a36f8-elds-typed-after-submission-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-gsSNLd/results/management-editor-recovery-a36f8-elds-typed-after-submission-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-a36f8-elds-typed-after-submission-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-gsSNLd/results/management-editor-recovery-a36f8-elds-typed-after-submission-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/management-editor-recovery.spec.ts:89:1 › a delayed project creation does not navigate away from a newly opened project draft 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected: "http://127.0.0.1:64142/projects"
+    Received: "http://127.0.0.1:64142/workbench/a53f6625-4c39-4c90-9c36-d2bce8a6fd08"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html dir="ltr" lang="zh-CN" data-theme="dark">…</html>
+           - unexpected value "http://127.0.0.1:64142/workbench/a53f6625-4c39-4c90-9c36-d2bce8a6fd08"
+
+
+      105 |     held.release();
+      106 |     await expect(page.getByText('项目已保存', { exact: true })).toBeVisible();
+    > 107 |     await expect(page).toHaveURL(`${studio.origin}/projects`);
+          |                        ^
+      108 |     await expect(editor.getByRole('textbox', { name: '项目名称', exact: true })).toHaveValue(
+      109 |       '后续新项目B草稿',
+      110 |     );
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-editor-recovery.spec.ts:107:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-71385--newly-opened-project-draft-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-71385--newly-opened-project-draft-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-gsSNLd/results/management-editor-recovery-71385--newly-opened-project-draft-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-71385--newly-opened-project-draft-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-gsSNLd/results/management-editor-recovery-71385--newly-opened-project-draft-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › tests/e2e/management-editor-recovery.spec.ts:125:1 › a delayed asset update does not close another asset or clear its draft 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: '素材详情', exact: true }).getByRole('textbox', { name: '名称', exact: true })
+    Expected: "素材B后续草稿.png"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: '素材详情', exact: true }).getByRole('textbox', { name: '名称', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '素材详情', exact: true }).getByRole('textbox', { name: '名称', exact: true })
+
+
+      157 |     held.release();
+      158 |     await expect(page.getByText('素材信息已保存', { exact: true })).toBeVisible();
+    > 159 |     await expect(editor.getByRole('textbox', { name: '名称', exact: true })).toHaveValue(
+          |                                                                            ^
+      160 |       '素材B后续草稿.png',
+      161 |     );
+      162 |     expect(core.assets.get(owner.actor, owner.workspace.id, a.id).name).toBe('素材A已保存.png');
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-editor-recovery.spec.ts:159:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-56e0d-er-asset-or-clear-its-draft-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-56e0d-er-asset-or-clear-its-draft-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-gsSNLd/results/management-editor-recovery-56e0d-er-asset-or-clear-its-draft-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-gsSNLd/results/management-editor-recovery-56e0d-er-asset-or-clear-its-draft-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-gsSNLd/results/management-editor-recovery-56e0d-er-asset-or-clear-its-draft-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [desktop] › tests/e2e/management-editor-recovery.spec.ts:53:1 › a delayed project update preserves fields typed after submission 
+    [desktop] › tests/e2e/management-editor-recovery.spec.ts:89:1 › a delayed project creation does not navigate away from a newly opened project draft 
+    [desktop] › tests/e2e/management-editor-recovery.spec.ts:125:1 › a delayed asset update does not close another asset or clear its draft 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-gsSNLd

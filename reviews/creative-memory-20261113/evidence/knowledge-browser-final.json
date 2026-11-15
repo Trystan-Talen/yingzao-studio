@@ -1,0 +1,39 @@
+{
+  "scope": "隔离本地模拟服务，不代表真实模型效果验收",
+  "behaviorRun": {
+    "path": "platform/var/e2e/run-4753jX",
+    "passed": 10,
+    "failed": 0,
+    "seconds": 42.2,
+    "projects": [
+      "desktop",
+      "mobile"
+    ],
+    "group": 4,
+    "locale": 4,
+    "sessionIsolation": 2
+  },
+  "translationDeltaRun": {
+    "path": "platform/var/e2e/run-XcfWgP",
+    "passed": 4,
+    "failed": 0,
+    "seconds": 16.5,
+    "projects": [
+      "desktop",
+      "mobile"
+    ],
+    "locales": [
+      "en",
+      "ar"
+    ]
+  },
+  "validated": [
+    "分组三张实际产物成功且图片内容可解码",
+    "关联产品分组阻止提交；主动取消后可报价",
+    "切回单张保留记忆和产品图勾选",
+    "真实会话过期后同页以同团队另一账户登录；延迟加载时及DOM变动均不显示旧账户私有资料",
+    "英文和阿文控件、RTL、默认深色、无横向溢出、用户原文不翻译",
+    "记忆启用和停用两项缺失翻译经截图发现并修复"
+  ],
+  "sourceFrozen": true
+}

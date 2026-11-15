@@ -1,0 +1,28 @@
+{
+  "reviewDate": "2026-11-14",
+  "scope": "10 isolated suites: core, identity-auth, backup-integrity, persistence-upgrade, production-http, operations-scripts, migrations, concurrency-migration, production-config, restored-cache",
+  "firstRun": {
+    "total": 96,
+    "passed": 85,
+    "failed": 11,
+    "pending": 0,
+    "failureCategory": "Sandbox EPERM on loopback or tsx IPC, not product failures"
+  },
+  "loopbackRerun": {
+    "files": 3,
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "pending": 0
+  },
+  "combinedUniqueTests": 96,
+  "combinedResult": "96 unique tests passed after scoped sandbox-permitted rerun",
+  "isolation": "Synthetic data in temporary directories; no formal DB; no external paid calls",
+  "evidence": [
+    "platform/var/full-project-review-20261114/persistence-api.json",
+    "platform/var/full-project-review-20261114/persistence-loopback.json"
+  ],
+  "validationScope": "本报告仅记录所列阶段局部验证；不得与其它阶段或最终全量数量相加，不代表最终冻结源码的完整浏览器验收已完成。",
+  "pathBase": "所有证据路径均相对仓库根目录。",
+  "countingMethod": "以测试文件及展开后的参数化用例计数：首跑10文件96例；仅以重跑的同3文件15例替换首跑对应结果，非85+15。96含不同参数但报告显示名相同的用例。"
+}

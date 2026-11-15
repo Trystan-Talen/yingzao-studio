@@ -5,6 +5,8 @@ export default defineConfig({
   server: {
     port: 5174,
     strictPort: true,
+    // Runtime media and browser evidence must not reload an in-progress creation form.
+    watch: { ignored: ['**/var/**', '**/dist/**', '**/research/**'] },
     proxy: { '/api': { target: 'http://127.0.0.1:4310', changeOrigin: false } },
   },
   build: {

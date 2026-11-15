@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "referencesChecked": 65,
+  "brokenReferences": [],
+  "featureCount": 56,
+  "sourceFiles": 649,
+  "sourceChangedAfterTesting": [],
+  "sourceManifestSha256": "e02795b2ee62433f1f8b246fce3b4b9619f009caef7c46d8af056844c2f5c418",
+  "unitPassed": 2341,
+  "fullBrowserBaselinePassed": 446,
+  "finalBrowserFollowupPassed": 26,
+  "notes": "Browser baseline and follow-up counts are not summed; external effect and unimplemented scope boundaries remain explicit."
+}

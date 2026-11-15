@@ -75,7 +75,10 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
   const location = useLocation();
   const routeState = location.state as {
     submittedJob?: Job;
-    recoveryDraft?: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>;
+    recoveryDraft?: Pick<
+      CreationDraft,
+      'input' | 'drafts' | 'warnings' | 'modelDefaultsPending' | 'modeDrafts' | 'activeModes'
+    >;
     notice?: string;
   } | null;
   const focusedJobId = new URLSearchParams(location.search).get('job');
@@ -232,7 +235,10 @@ function ProjectWorkbench({ projectId }: { projectId: string }) {
   useEffect(() => {
     const routeState = location.state as {
       submittedJob?: Job;
-      recoveryDraft?: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>;
+      recoveryDraft?: Pick<
+        CreationDraft,
+        'input' | 'drafts' | 'warnings' | 'modelDefaultsPending' | 'modeDrafts' | 'activeModes'
+      >;
     } | null;
     // Let the composer persist a recovery handoff first. Two replace navigations
     // in the same effect flush could otherwise restore its already-cleared draft.

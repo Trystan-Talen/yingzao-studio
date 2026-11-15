@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   Check,
   Code2,
+  Command,
   FolderOpen,
   HelpCircle,
   Image,
@@ -14,42 +15,43 @@ import {
   LogOut,
   Menu,
   MoreHorizontal,
+  Palette,
+  Package,
   Search,
   Settings2,
   Sparkles,
   Users,
   UserRound,
   Wallet,
+  Wand2,
   Workflow,
+  Zap,
 } from 'lucide-react';
 import { useStudio } from '../context';
 import type { ProjectDto } from '../../contracts/core';
 import { useApi, type Page } from '../lib/api';
 import type { CreditDto } from '../../contracts/jobs';
-import {
-  Badge,
-  Button,
-  Drawer,
-  Empty,
-  ErrorState,
-  IconButton,
-  Loading,
-  Modal,
-  useAction,
-} from './ui';
+import { Badge, Button, Drawer, Empty, ErrorState, Loading, Modal, useAction } from './ui';
 import { TaskCenter } from './TaskCenter';
 import { projectDestination } from '../lib/project-navigation';
 import { useJobActivity } from '../lib/use-job-activity';
 import { NotificationCenter } from './NotificationCenter';
 import { TeamCreation } from './TeamCreation';
-import '../styles/studio-navigation.css';
+import { BrandMark } from './BrandMark';
+import '../styles/brand/shell.css';
 
 const primaryNavigation = [
   { to: '/', label: '创作', icon: Sparkles },
   { to: '/inspiration', label: '灵感', icon: LayoutGrid },
   { to: '/tasks', label: '任务', icon: Workflow },
   { to: '/assets', label: '素材', icon: Image },
-  { to: '/tools', label: '工具', icon: Settings2 },
+  { to: '/tools', label: '工具', icon: Wand2 },
+];
+const studioNavigation = [
+  { to: '/projects', label: '项目', icon: FolderOpen },
+  { to: '/detail-pages', label: '详情页', icon: LayoutTemplate },
+  { to: '/brands', label: '品牌', icon: Palette },
+  { to: '/products', label: '产品库', icon: Package },
 ];
 const moreNavigation = [
   {
@@ -62,7 +64,8 @@ const moreNavigation = [
   {
     label: '空间管理',
     items: [
-      { to: '/brands', label: '品牌', icon: Workflow },
+      { to: '/brands', label: '品牌', icon: Palette },
+      { to: '/products', label: '产品库', icon: Package },
       { to: '/characters', label: '人物', icon: UserRound },
       { to: '/team', label: '团队', icon: Users },
       { to: '/usage', label: '用量与订单', icon: Wallet },
@@ -78,12 +81,14 @@ const moreNavigation = [
   },
 ];
 type NavigationPanel = 'navigation' | 'more' | 'workspace' | 'account';
+
 function matchesNavigation(path: string, destination: string) {
   if (destination === '/')
     return path === '/' || path === '/workbench' || path.startsWith('/workbench/');
   if (destination === '/tools' && path.startsWith('/advanced/')) return true;
   return path === destination || path.startsWith(destination + '/');
 }
+
 export function Layout() {
   const routeLocation = useLocation();
   const { session, workspace, switchWorkspace, signOut } = useStudio();
@@ -104,17 +109,38 @@ export function Layout() {
   const navigate = useNavigate();
   const action = useAction();
   const locale = session?.user.preferences.locale;
+  const allItems = [...primaryNavigation, ...moreNavigation.flatMap((group) => group.items)];
   const currentPage =
-    [...primaryNavigation, ...moreNavigation.flatMap((group) => group.items)].find((item) =>
-      matchesNavigation(routeLocation.pathname, item.to),
-    )?.label ?? '工作空间';
+    allItems.find((item) => matchesNavigation(routeLocation.pathname, item.to))?.label ??
+    '工作空间';
+  const isHome = routeLocation.pathname === '/';
+  // Management pages get a compact header; content pages keep the large editorial one.
+  const isManagement = [
+    '/settings',
+    '/usage',
+    '/team',
+    '/developer',
+    '/support',
+    '/brands',
+    '/products',
+    '/characters',
+  ].some((path) => routeLocation.pathname.startsWith(path));
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [routeLocation.pathname]);
   useEffect(() => {
     setTasks(false);
     setPanel(null);
-  }, [routeLocation.key]);
+    // A delayed child may normalize query parameters without leaving the page.
+    // Keep an already opened drawer usable through that background URL update.
+  }, [routeLocation.pathname]);
   useEffect(() => {
     document.title = t(currentPage) + ' · ' + t('映造 Studio');
   }, [currentPage, locale]);
@@ -122,6 +148,16 @@ export function Layout() {
     if (panel === 'workspace' || panel === 'account')
       panelContent.current?.querySelector<HTMLButtonElement>('button')?.focus();
   }, [panel]);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setSearch(true);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   const closeNavigation = () => setPanel(null);
   const openPanel = (view: NavigationPanel, origin: 'desktop' | 'mobile' = 'desktop') => {
     setPanelOrigin(origin);
@@ -134,60 +170,41 @@ export function Layout() {
         ? '只读成员'
         : '空间成员';
   const moreActive = moreNavigation.some((group) =>
-    group.items.some((item) => matchesNavigation(routeLocation.pathname, item.to)),
+    group.items.some(
+      (item) =>
+        !studioNavigation.some((studio) => studio.to === item.to) &&
+        matchesNavigation(routeLocation.pathname, item.to),
+    ),
   );
-  const navigationLinks = (rail: boolean) => (
-    <nav
-      className={rail ? 'studio-primary-navigation' : 'studio-panel-primary'}
-      aria-label={t('主导航')}
-    >
-      {primaryNavigation.map((item) => {
-        const active = matchesNavigation(routeLocation.pathname, item.to);
-        return (
-          <Link
-            key={item.to}
-            to={item.to}
-            className={active ? 'is-active' : undefined}
-            aria-current={active ? 'page' : undefined}
-            onClick={closeNavigation}
-          >
-            <item.icon size={20} strokeWidth={1.75} aria-hidden="true" />
-            <span>{t(item.label)}</span>
-            {item.to === '/tasks' && !!taskActivity.total && (
-              <span className="studio-navigation-count" aria-label={t('项进行中或需要处理')}>
-                {taskActivity.total}
-              </span>
-            )}
-          </Link>
-        );
-      })}
-    </nav>
-  );
-  const brand = (className: string, wordmark = false) => (
-    <Link
-      className={className + ' studio-brand'}
-      to="/"
-      aria-label={t('映造 · 创作')}
-      title={t('映造 · 创作')}
-      onClick={closeNavigation}
-    >
-      <svg className="studio-brand-glyph" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <path
-          d="M5 21V7h14M13 25h14V11"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path d="m11 21 10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      </svg>
-      {wordmark && <span>{t('映造')}</span>}
-    </Link>
-  );
+  const creditLabel = credit.data?.available.toLocaleString() ?? '—';
+
+  const railLink = (item: (typeof primaryNavigation)[number], compact = false) => {
+    const active = matchesNavigation(routeLocation.pathname, item.to);
+    return (
+      <Link
+        key={item.to}
+        to={item.to}
+        className={'yz-rail-link' + (active ? ' is-active' : '') + (compact ? ' is-compact' : '')}
+        aria-current={active ? 'page' : undefined}
+        onClick={closeNavigation}
+      >
+        <span className="yz-rail-icon">
+          <item.icon size={compact ? 18 : 20} strokeWidth={1.75} aria-hidden="true" />
+          {item.to === '/tasks' && !!taskActivity.total && (
+            <span className="yz-rail-count" aria-label={t('项进行中或需要处理')}>
+              {taskActivity.total}
+            </span>
+          )}
+        </span>
+        <span className="yz-rail-label">{t(item.label)}</span>
+      </Link>
+    );
+  };
+
   const accountLinks = (
-    <div className="studio-panel-account-links">
+    <div className="yz-panel-account">
       <button type="button" onClick={() => setPanel('workspace')}>
-        <span className="workspace-avatar" aria-hidden="true">
+        <span className="yz-avatar is-space" aria-hidden="true">
           {workspace?.name.slice(0, 1) ?? t('我')}
         </span>
         <span>
@@ -196,7 +213,7 @@ export function Layout() {
         </span>
       </button>
       <button type="button" onClick={() => setPanel('account')}>
-        <span className="user-avatar" aria-hidden="true">
+        <span className="yz-avatar" aria-hidden="true">
           {session?.user.displayName.slice(0, 1)}
         </span>
         <span>
@@ -206,8 +223,9 @@ export function Layout() {
       </button>
     </div>
   );
+
   return (
-    <div className="app-shell studio-shell studio-navigation-shell">
+    <div className={'yz-shell' + (isHome ? ' is-home' : '') + (scrolled ? ' is-scrolled' : '')}>
       <a
         className="skip-link"
         href="#main-content"
@@ -219,105 +237,172 @@ export function Layout() {
         {t('跳到主要内容')}
       </a>
       <Onboarding />
-      <aside className="studio-navigation-rail" aria-label={t('工作空间导航')}>
-        {brand('studio-rail-brand')}
-        {navigationLinks(true)}
-        <div className="studio-rail-controls">
+
+      {/* ---------------- Desktop rail ---------------- */}
+      <aside className="yz-rail" aria-label={t('工作空间导航')}>
+        <Link
+          className="yz-rail-brand"
+          to="/"
+          aria-label={t('映造 · 创作')}
+          title={t('映造 · 创作')}
+        >
+          <BrandMark size={38} />
+        </Link>
+        <nav className="yz-rail-nav" aria-label={t('主导航')}>
+          {primaryNavigation.map((item) => railLink(item))}
+        </nav>
+        <span className="yz-rail-divider" aria-hidden="true" />
+        <nav className="yz-rail-nav is-secondary" aria-label={t('创作与项目')}>
+          {studioNavigation.map((item) => railLink(item, true))}
           <button
             type="button"
+            className={'yz-rail-link is-compact' + (moreActive ? ' is-active' : '')}
+            aria-haspopup="dialog"
+            aria-expanded={panel === 'more'}
+            onClick={() => openPanel('more')}
+          >
+            <span className="yz-rail-icon">
+              <MoreHorizontal size={18} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <span className="yz-rail-label">{t('更多')}</span>
+          </button>
+        </nav>
+        <div className="yz-rail-foot">
+          <button
+            type="button"
+            className="yz-rail-avatar"
             aria-label={t('切换工作空间') + ' · ' + (workspace?.name ?? '')}
             title={workspace?.name}
             aria-haspopup="dialog"
             aria-expanded={panel === 'workspace'}
             onClick={() => openPanel('workspace')}
           >
-            <span className="workspace-avatar" aria-hidden="true">
+            <span className="yz-avatar is-space" aria-hidden="true">
               {workspace?.name.slice(0, 1) ?? t('我')}
             </span>
-            <span>{t('空间')}</span>
           </button>
           <button
             type="button"
+            className="yz-rail-avatar"
             aria-label={t('账户与退出') + ' · ' + (session?.user.displayName ?? '')}
             title={session?.user.displayName}
             aria-haspopup="dialog"
             aria-expanded={panel === 'account'}
             onClick={() => openPanel('account')}
           >
-            <span className="user-avatar" aria-hidden="true">
+            <span className="yz-avatar" aria-hidden="true">
               {session?.user.displayName.slice(0, 1)}
             </span>
-            <span>{t('账户')}</span>
           </button>
         </div>
       </aside>
-      <div className="studio-main">
-        <header className="studio-header">
-          {brand('studio-mobile-brand', true)}
-          {workspace?.isDemo && (
-            <span className="studio-demo-label" title={t('演示空间 · 测试数据')}>
-              {t('演示')}
+
+      <div className="yz-main">
+        {/* ---------------- Top bar ---------------- */}
+        <header className="yz-topbar">
+          <Link className="yz-topbar-brand" to="/" aria-label={t('映造 · 创作')}>
+            <BrandMark size={30} />
+            <span className="yz-wordmark">
+              {t('映造')}
+              <small>STUDIO</small>
             </span>
-          )}
-          <div className="studio-header-actions">
+          </Link>
+          <div className="yz-crumb" aria-hidden={isHome}>
+            <span className="yz-crumb-space">{workspace?.name ?? t('工作空间')}</span>
+            <span className="yz-crumb-sep">/</span>
+            <span className="yz-crumb-page">{t(currentPage)}</span>
+            {workspace?.isDemo && (
+              <span className="yz-demo-tag" title={t('演示空间 · 测试数据')}>
+                {t('演示')}
+              </span>
+            )}
+          </div>
+          <button type="button" className="yz-search-trigger" onClick={() => setSearch(true)}>
+            <Search size={16} aria-hidden="true" />
+            <span>{t('搜索项目')}</span>
+            <kbd>
+              <Command size={11} aria-hidden="true" />K
+            </kbd>
+          </button>
+          <div className="yz-topbar-actions">
+            <button
+              type="button"
+              className="yz-icon-only yz-search-mobile"
+              aria-label={t('搜索项目')}
+              onClick={() => setSearch(true)}
+            >
+              <Search size={19} />
+            </button>
             <Link
               to="/usage"
-              className="studio-header-credit"
+              className="yz-credit"
               aria-label={t('查看额度明细')}
               title={workspace?.isDemo ? t('本机测试额度') : t('可用额度')}
             >
-              <Wallet size={16} aria-hidden="true" />
-              <strong>{credit.data?.available.toLocaleString() ?? '—'}</strong>
+              <Zap size={14} aria-hidden="true" />
+              <strong>{creditLabel}</strong>
               <span>{t('积分')}</span>
             </Link>
-            <IconButton label={t('搜索项目')} onClick={() => setSearch(true)}>
-              <Search size={19} />
-            </IconButton>
             <button
+              type="button"
               aria-label={
                 t('当前进度') +
                 (taskActivity.total
                   ? ' · ' + taskActivity.total + ' ' + t('项进行中或需要处理')
                   : '')
               }
-              className={'studio-task-button' + (taskActivity.total ? ' has-activity' : '')}
+              className={'yz-progress' + (taskActivity.total ? ' has-activity' : '')}
               onClick={() => setTasks(true)}
             >
-              <Workflow size={18} aria-hidden="true" />
-              <span>{t('当前进度')}</span>
-              {!!taskActivity.total && (
-                <b className="studio-activity-count">{taskActivity.total}</b>
-              )}
+              <span className="yz-progress-dot" aria-hidden="true" />
+              <span className="yz-progress-label">{t('当前进度')}</span>
+              {!!taskActivity.total && <b>{taskActivity.total}</b>}
             </button>
             <NotificationCenter />
-            <IconButton
-              label={t('更多')}
-              className={'studio-header-more' + (moreActive ? ' is-active' : '')}
-              aria-haspopup="dialog"
-              aria-expanded={panel === 'more'}
-              onClick={() => openPanel('more')}
-            >
-              <MoreHorizontal size={21} />
-            </IconButton>
-            <IconButton
-              label={t('展开导航')}
-              className="studio-mobile-menu"
+            <button
+              type="button"
+              className="yz-icon-only yz-mobile-menu"
+              aria-label={t('展开导航')}
               aria-haspopup="dialog"
               aria-expanded={panel !== null && panelOrigin === 'mobile'}
               onClick={() => openPanel('navigation', 'mobile')}
             >
               <Menu size={21} />
-            </IconButton>
+            </button>
           </div>
         </header>
-        <main id="main-content" tabIndex={-1}>
+
+        <main
+          id="main-content"
+          className={'yz-content' + (isManagement ? ' is-management' : '')}
+          tabIndex={-1}
+        >
           <Outlet />
         </main>
-        <footer className="app-footer">
-          <span>{t('映造 · 创意工作室')}</span>
-          <span>{t('想法有迹可循，作品随时继续。')}</span>
-        </footer>
       </div>
+
+      {/* ---------------- Mobile dock ---------------- */}
+      <nav className="yz-dock" aria-label={t('主导航')}>
+        {primaryNavigation.map((item) => {
+          const active = matchesNavigation(routeLocation.pathname, item.to);
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={active ? 'is-active' : undefined}
+              aria-current={active ? 'page' : undefined}
+            >
+              <item.icon size={20} strokeWidth={1.75} aria-hidden="true" />
+              <span>{t(item.label)}</span>
+              {item.to === '/tasks' && !!taskActivity.total && (
+                <i aria-hidden="true">{taskActivity.total}</i>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* ---------------- Panels ---------------- */}
       <Drawer
         open={panel !== null}
         onClose={closeNavigation}
@@ -331,62 +416,78 @@ export function Layout() {
                 : '导航',
         )}
       >
-        <div className="studio-navigation-panel" ref={panelContent}>
+        <div className="yz-panel" ref={panelContent}>
           {(panel === 'workspace' || panel === 'account') && (
             <Button
               variant="ghost"
-              className="studio-panel-back"
+              className="yz-panel-back"
               onClick={() => setPanel(panelOrigin === 'mobile' ? 'navigation' : 'more')}
             >
               <ArrowLeft size={16} />
               {t('返回导航')}
             </Button>
           )}
-          {panel === 'navigation' && navigationLinks(false)}
+          {panel === 'navigation' && (
+            <nav className="yz-panel-primary" aria-label={t('主导航')}>
+              {primaryNavigation.map((item) => {
+                const active = matchesNavigation(routeLocation.pathname, item.to);
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={active ? 'is-active' : undefined}
+                    aria-current={active ? 'page' : undefined}
+                    onClick={closeNavigation}
+                  >
+                    <item.icon size={20} strokeWidth={1.75} aria-hidden="true" />
+                    <span>{t(item.label)}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
           {(panel === 'navigation' || panel === 'more') && (
             <>
-              {workspace?.isDemo && <p className="studio-panel-demo">{t('演示空间 · 测试数据')}</p>}
-              {moreNavigation.map((group) => (
-                <section
-                  className="studio-more-group"
-                  key={group.label}
-                  aria-label={t(group.label)}
-                >
-                  <h3>{t(group.label)}</h3>
-                  {group.items.map((item) => {
-                    const active = matchesNavigation(routeLocation.pathname, item.to);
-                    return (
-                      <Link
-                        key={item.to}
-                        to={item.to}
-                        className={active ? 'is-active' : undefined}
-                        aria-current={active ? 'page' : undefined}
-                        onClick={closeNavigation}
-                      >
-                        <item.icon size={19} aria-hidden="true" />
-                        <span>{t(item.label)}</span>
-                      </Link>
-                    );
-                  })}
-                </section>
-              ))}
               <Link
                 to="/usage"
-                className="studio-credit-summary"
+                className="yz-panel-credit"
                 aria-label={t('查看额度明细')}
                 onClick={closeNavigation}
               >
-                <Wallet size={19} aria-hidden="true" />
-                <span>
+                <span className="yz-panel-credit-label">
                   {workspace?.isDemo ? t('本机测试额度') : t('可用额度')}
-                  <strong>{credit.data?.available.toLocaleString() ?? '—'}</strong>
                 </span>
+                <strong>{creditLabel}</strong>
+                <span className="yz-panel-credit-unit">{t('积分')}</span>
               </Link>
+              {workspace?.isDemo && <p className="yz-panel-demo">{t('演示空间 · 测试数据')}</p>}
+              {moreNavigation.map((group) => (
+                <section className="yz-panel-group" key={group.label} aria-label={t(group.label)}>
+                  <h3>{t(group.label)}</h3>
+                  <div>
+                    {group.items.map((item) => {
+                      const active = matchesNavigation(routeLocation.pathname, item.to);
+                      return (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          className={active ? 'is-active' : undefined}
+                          aria-current={active ? 'page' : undefined}
+                          onClick={closeNavigation}
+                        >
+                          <item.icon size={18} strokeWidth={1.75} aria-hidden="true" />
+                          <span>{t(item.label)}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
+              ))}
               {accountLinks}
             </>
           )}
           {panel === 'workspace' && (
-            <section className="studio-workspace-list" aria-label={t('工作空间')}>
+            <section className="yz-panel-spaces" aria-label={t('工作空间')}>
               <p className="muted">{t('选择要进入的工作空间')}</p>
               {session?.workspaces.map((space) => (
                 <button
@@ -404,7 +505,7 @@ export function Layout() {
                     })
                   }
                 >
-                  <span className="workspace-avatar" aria-hidden="true">
+                  <span className="yz-avatar is-space" aria-hidden="true">
                     {space.name.slice(0, 1)}
                   </span>
                   <span>{space.name}</span>
@@ -417,8 +518,8 @@ export function Layout() {
             </section>
           )}
           {panel === 'account' && (
-            <section className="studio-account-details" aria-label={t('账户')}>
-              <span className="user-avatar" aria-hidden="true">
+            <section className="yz-panel-profile" aria-label={t('账户')}>
+              <span className="yz-avatar is-large" aria-hidden="true">
                 {session?.user.displayName.slice(0, 1)}
               </span>
               <h3>{session?.user.displayName}</h3>
@@ -441,14 +542,17 @@ export function Layout() {
       </Drawer>
       <TaskCenter open={tasks} onClose={() => setTasks(false)} title={t('当前进度')} />
       <Modal open={search} onClose={() => setSearch(false)} title={t('搜索项目')}>
-        <div className="studio-navigation-search">
-          <input
-            autoFocus
-            placeholder={t('搜索项目名称…')}
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            aria-label={t('搜索项目')}
-          />
+        <div className="yz-search">
+          <div className="yz-search-field">
+            <Search size={18} aria-hidden="true" />
+            <input
+              autoFocus
+              placeholder={t('搜索项目名称…')}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              aria-label={t('搜索项目')}
+            />
+          </div>
           {!searchTerm && <p className="search-hint muted">{t('输入项目名称开始搜索。')}</p>}
           {searchTerm && projects.isFetching && <Loading />}
           {searchTerm && projects.isError && (

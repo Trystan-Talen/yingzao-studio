@@ -41,9 +41,11 @@ test('does not attach a delayed image-mode upload to the video draft after switc
     await expect.poll(() => ready).toBe(true);
     await composer.getByRole('button', { name: '视频创作', exact: true }).click();
     await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-    await composer
+    const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+    await settings
       .getByRole('combobox', { name: '生成模型', exact: true })
       .selectOption('video.generate|fal|wan-2.6');
+    await settings.getByRole('button', { name: '完成', exact: true }).click();
     await prompt.fill(videoPrompt);
     release();
     await expect(picker.first().locator('.upload-drop-zone')).toHaveAttribute('aria-busy', 'false');

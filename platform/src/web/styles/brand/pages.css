@@ -1,0 +1,395 @@
+/* ==========================================================================
+   映造 · Page skins — inspiration library, cards, tools, library, tasks, auth
+   `:root` prefixes keep these above lazily-loaded legacy page stylesheets.
+   ========================================================================== */
+
+/* ---------------- Shared page kicker ---------------- */
+:root .yz-page-kicker {
+  margin-bottom: 14px;
+}
+
+/* ---------------- Inspiration library ---------------- */
+:root .page.inspiration-studio {
+  max-width: 1640px;
+  padding: 40px clamp(16px, 3vw, 48px) 80px;
+}
+:root .page.inspiration-studio .inspiration-studio-toolbar {
+  position: relative;
+  align-items: flex-end;
+  gap: 20px 32px;
+  margin-bottom: 22px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--yz-line);
+}
+:root .page.inspiration-studio .inspiration-studio-heading {
+  display: flex;
+  flex-direction: column;
+}
+:root .page.inspiration-studio .inspiration-studio-title {
+  align-items: flex-start;
+  gap: 14px;
+}
+:root .page.inspiration-studio .inspiration-studio-title h1 {
+  font-size: clamp(40px, 5vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+}
+:root .page.inspiration-studio .inspiration-studio-count {
+  margin-top: 6px;
+  padding: 3px 10px;
+  border-radius: var(--yz-r-pill);
+  background: var(--yz-aurora-action);
+  color: #fff;
+  font-family: var(--yz-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+:root .page.inspiration-studio .inspiration-studio-subtitle {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--yz-text-2);
+}
+:root .page.inspiration-studio .inspiration-studio-search {
+  width: 300px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--yz-r-pill);
+  border: 1px solid var(--yz-line-strong);
+  background: var(--yz-ink-1);
+}
+:root .page.inspiration-studio .inspiration-studio-search:focus-within {
+  outline: none;
+  border-color: var(--yz-vermilion);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--yz-vermilion) 18%, transparent);
+}
+:root .page.inspiration-studio .inspiration-studio-search input,
+:root .page.inspiration-studio .inspiration-studio-search input:focus {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+:root .page.inspiration-studio .inspiration-studio-actions > .icon-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--yz-line-strong);
+}
+:root .page.inspiration-studio .inspiration-studio-actions > .icon-button.is-active {
+  background: var(--yz-vermilion);
+  border-color: var(--yz-vermilion);
+  color: var(--yz-on-brand);
+}
+:root .page.inspiration-studio .inspiration-studio-filters {
+  gap: 12px 20px;
+  justify-content: space-between;
+  margin-bottom: 26px;
+  background: transparent;
+}
+:root .page.inspiration-studio .inspiration-studio-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+:root .page.inspiration-studio .inspiration-studio-categories button {
+  min-height: 34px;
+  padding: 6px 15px;
+  border-radius: var(--yz-r-pill);
+  border: 1px solid var(--yz-line);
+  background: transparent;
+  color: var(--yz-text-2);
+  font-size: 13px;
+  font-weight: 500;
+}
+:root .page.inspiration-studio .inspiration-studio-categories button:hover:not(.active) {
+  border-color: var(--yz-line-strong);
+  background: transparent;
+  color: var(--text);
+}
+:root .page.inspiration-studio .inspiration-studio-categories button.active {
+  background: var(--yz-text);
+  border-color: var(--yz-text);
+  color: var(--yz-ink-0);
+}
+:root .page.inspiration-studio .inspiration-studio-selects select {
+  min-height: 36px;
+  border-radius: var(--yz-r-pill);
+  font-size: 13px;
+}
+:root .page.inspiration-studio .inspiration-studio-grid {
+  column-gap: 14px;
+}
+:root .page.inspiration-studio .inspiration-studio-card {
+  margin-bottom: 22px;
+}
+:root .page.inspiration-studio .inspiration-studio-image {
+  border-radius: var(--yz-r-lg);
+  border: 1px solid var(--yz-line);
+  background: var(--yz-ink-2);
+}
+:root .page.inspiration-studio .inspiration-studio-image img {
+  transition: transform 0.8s var(--yz-ease);
+}
+:root .page.inspiration-studio .inspiration-studio-image:hover img {
+  transform: scale(1.045);
+}
+:root .page.inspiration-studio .inspiration-studio-overlay {
+  padding: 16px;
+  background: linear-gradient(to top, rgb(5 5 7 / 0.82), transparent 55%);
+  font-weight: 600;
+}
+:root .page.inspiration-studio .inspiration-studio-image:hover .inspiration-studio-overlay,
+:root .page.inspiration-studio .inspiration-studio-image:focus-visible .inspiration-studio-overlay {
+  opacity: 1;
+}
+:root .page.inspiration-studio .inspiration-studio-overlay svg {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--yz-vermilion);
+  color: #fff;
+}
+:root .page.inspiration-studio .inspiration-studio-save {
+  width: 36px;
+  height: 36px;
+  top: 10px;
+  inset-inline-end: 10px;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(10 10 12 / 0.5);
+  backdrop-filter: blur(10px);
+  color: #f4f1ea;
+}
+:root .page.inspiration-studio .inspiration-studio-save.saved {
+  background: var(--yz-vermilion);
+  border-color: var(--yz-vermilion);
+  color: #fff;
+}
+:root .page.inspiration-studio .inspiration-studio-video-label {
+  top: 10px;
+  inset-inline-start: 10px;
+  padding: 5px 10px;
+  border-radius: var(--yz-r-pill);
+  background: rgb(10 10 12 / 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+:root .page.inspiration-studio .inspiration-studio-caption {
+  margin-top: 12px;
+  padding: 0 4px;
+}
+:root .page.inspiration-studio .inspiration-studio-caption h3 {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+:root .page.inspiration-studio .inspiration-studio-footnote {
+  font-family: var(--yz-font-mono);
+  font-size: 11.5px;
+}
+:root .modal:has(.inspiration-studio-detail) {
+  border-radius: var(--yz-r-xl);
+  border-color: var(--yz-line-strong);
+  background: var(--yz-ink-2);
+  padding: 28px;
+}
+:root .inspiration-studio-media {
+  border-radius: var(--yz-r-lg);
+  overflow: hidden;
+  background: var(--yz-ink-1);
+}
+:root .inspiration-studio-use.button.primary {
+  min-height: 48px;
+  border-radius: var(--yz-r-pill);
+  background: var(--yz-aurora-action);
+  color: #fff;
+  box-shadow: 0 14px 34px -12px color-mix(in srgb, var(--yz-vermilion) 80%, transparent);
+}
+:root .inspiration-studio-use.button.primary:hover:not(:disabled) {
+  background: var(--yz-aurora-action);
+  filter: brightness(1.08);
+}
+
+/* ---------------- Generic cards across library / tasks / identities ------- */
+:root .project-card,
+:root .asset-card,
+:root .identity-card,
+:root .job-card,
+:root .compact-job-card,
+:root .result-job-card,
+:root .creation-card,
+:root .plan-card,
+:root .provider-card,
+:root .credit-card,
+:root .inspiration-card {
+  border-radius: var(--yz-r-lg);
+  border-color: var(--yz-line);
+  background: var(--yz-ink-1);
+  transition:
+    border-color 0.25s var(--yz-ease),
+    transform 0.25s var(--yz-ease),
+    background 0.25s var(--yz-ease);
+}
+:root .project-card:hover,
+:root .asset-card:hover,
+:root .identity-card:hover,
+:root .job-card:hover,
+:root .compact-job-card:hover,
+:root .result-job-card:hover {
+  border-color: var(--yz-line-strong);
+  background: var(--yz-ink-2);
+}
+:root .project-cover,
+:root .character-cover {
+  border-radius: calc(var(--yz-r-lg) - 6px);
+  background-color: var(--yz-ink-3);
+}
+:root .plan-card.featured,
+:root .plan-card.is-current {
+  border-color: color-mix(in srgb, var(--yz-vermilion) 50%, transparent);
+  background:
+    radial-gradient(
+      100% 120% at 100% 0%,
+      color-mix(in srgb, var(--yz-vermilion) 18%, transparent),
+      transparent 60%
+    ),
+    var(--yz-ink-1);
+}
+
+/* toolbars + search inputs in list pages */
+:root .library-toolbar,
+:root .toolbar,
+:root .selection-bar {
+  border-radius: var(--yz-r-lg);
+}
+:root .selection-bar {
+  border: 1px solid color-mix(in srgb, var(--yz-vermilion) 40%, transparent);
+  background: color-mix(in srgb, var(--yz-vermilion) 8%, var(--yz-ink-1));
+}
+:root .library-search input,
+:root .small-search input {
+  border-radius: var(--yz-r-pill);
+}
+:root .filter-group button[aria-pressed='true'],
+:root .filter-group button.active {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+  border-color: var(--yz-text);
+}
+
+/* ---------------- Tools directory ---------------- */
+:root .tools-grid {
+  gap: 14px;
+}
+:root .tool-card {
+  padding: 22px;
+}
+:root .tool-card h3,
+:root .tool-title {
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+:root .tool-workspace,
+:root .tool-form,
+:root .tool-results {
+  border-radius: var(--yz-r-lg);
+}
+
+/* ---------------- Tables ---------------- */
+:root .table-wrap {
+  border-radius: var(--yz-r-lg);
+}
+:root tbody tr {
+  transition: background 0.15s var(--yz-ease);
+}
+:root tbody tr:hover {
+  background: color-mix(in srgb, var(--yz-text) 3%, transparent);
+}
+
+/* ---------------- Auth / public pages ---------------- */
+:root .auth-card {
+  border-radius: var(--yz-r-xl);
+  border: 1px solid var(--yz-line-strong);
+  background: color-mix(in srgb, var(--yz-ink-2) 92%, transparent);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 40px 120px -30px rgb(0 0 0 / 0.7);
+}
+
+/* ---------------- Workbench / editor chrome ---------------- */
+:root .workbench,
+:root .project-studio.workbench {
+  background: transparent;
+}
+:root .creation-sidebar,
+:root .workbench-panel,
+:root .editor-panel {
+  border-color: var(--yz-line);
+}
+
+/* ---------------- Fixes after live review ---------------- */
+:root .page.inspiration-studio .inspiration-studio-search input {
+  height: 42px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* tool icons carry an inline pastel colour from the catalogue; re-tint for the dark canvas */
+:root .tool-card .tool-icon {
+  background: color-mix(in srgb, var(--yz-vermilion) 14%, var(--yz-ink-3)) !important;
+  color: var(--yz-vermilion) !important;
+  border: 1px solid color-mix(in srgb, var(--yz-vermilion) 22%, transparent);
+}
+:root .tool-card:nth-child(3n + 2) .tool-icon {
+  background: color-mix(in srgb, var(--yz-violet) 16%, var(--yz-ink-3)) !important;
+  color: color-mix(in srgb, var(--yz-violet) 70%, var(--yz-text)) !important;
+  border-color: color-mix(in srgb, var(--yz-violet) 26%, transparent);
+}
+:root .tool-card:nth-child(3n) .tool-icon {
+  background: color-mix(in srgb, var(--yz-lumen) 12%, var(--yz-ink-3)) !important;
+  color: color-mix(in srgb, var(--yz-lumen) 80%, var(--yz-text)) !important;
+  border-color: color-mix(in srgb, var(--yz-lumen) 22%, transparent);
+}
+:root[data-theme='light'] .tool-card:nth-child(3n) .tool-icon {
+  color: #5c6b00 !important;
+}
+:root .library-search {
+  border-radius: var(--yz-r-pill) !important;
+  border-color: var(--yz-line-strong) !important;
+  background: var(--yz-ink-1) !important;
+  padding-inline: 16px !important;
+}
+:root .library-search:focus-within {
+  border-color: var(--yz-vermilion) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--yz-vermilion) 18%, transparent) !important;
+}
+:root .library-search input,
+:root .library-search input:focus,
+:root .library-search input:hover {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding-inline: 0 !important;
+}
+
+/* Composer settings chip: [model] [ratio · res · count]; the textual "设置" label is hidden. */
+:root .composer-studio .composer-settings-toggle > span:nth-of-type(n) {
+  display: inline;
+}
+:root .composer-studio .composer-settings-toggle > span:nth-of-type(n):last-of-type {
+  display: none;
+}
+:root .composer-studio .composer-settings-model {
+  max-width: 160px;
+  overflow: hidden;
+  padding-inline-end: 8px;
+  margin-inline-end: 2px;
+  border-inline-end: 1px solid var(--yz-line-strong);
+  color: var(--text);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

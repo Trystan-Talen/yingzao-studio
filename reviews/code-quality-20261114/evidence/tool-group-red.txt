@@ -1,0 +1,40 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ❯ tests/test-launcher.test.ts (5 tests | 1 failed | 4 skipped) 1121ms
+   ↓ launches selected tests without inherited credentials, data paths, or build variables
+   ↓ preserves the nonzero exit status of failing tests
+   ↓ forwards termination to the test process group and preserves the interruption result
+   ↓ keeps an interrupted tool nonzero even when it handles the signal with a clean exit
+   × cleans a stubborn descendant after its leader exits on interruption 1120ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/test-launcher.test.ts > cleans a stubborn descendant after its leader exits on interruption
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/test-launcher.test.ts:269:10
+    267|           }
+    268|         })
+    269|         .toBe(false);
+       |          ^
+    270|     } finally {
+    271|       // Always clean the intentionally stubborn fixture, including th…
+
+Caused by: Error: Matcher did not succeed in time.
+ ❯ tests/test-launcher.test.ts:260:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  09:05:44
+   Duration  1.20s (tests 98%, transform 1%)
+

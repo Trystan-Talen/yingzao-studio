@@ -58,14 +58,24 @@ test('uses Create as the single creation destination and removes duplicate home 
   await expect(page.getByRole('link', { name: '新建创作', exact: true })).toHaveCount(0);
   await expect(page.getByRole('link', { name: '创作首页', exact: true })).toHaveCount(0);
   await home.click();
-  await expect(page).toHaveURL(`${studio.origin}/`);
+  await expect(page).toHaveURL(
+    (url) =>
+      url.origin === studio.origin &&
+      url.pathname === '/' &&
+      (!url.search || url.search === '?kind=image'),
+  );
   await expect(page).toHaveTitle('创作 · 映造 Studio');
   const brief = page.locator('.composer').getByRole('textbox', { name: '创作需求', exact: true });
   await brief.fill('创意');
   await brief.press('End');
   await brief.press('n');
   await expect(brief).toHaveValue('创意n');
-  await expect(page).toHaveURL(`${studio.origin}/`);
+  await expect(page).toHaveURL(
+    (url) =>
+      url.origin === studio.origin &&
+      url.pathname === '/' &&
+      (!url.search || url.search === '?kind=image'),
+  );
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
 });
 
@@ -97,7 +107,10 @@ test('global search exposes loading, a recoverable failure and a real project re
       });
     await route.continue();
   });
-  await page.getByRole('button', { name: '搜索项目', exact: true }).click();
+  await page
+    .getByRole('button', { name: /^搜索项目/ })
+    .filter({ visible: true })
+    .click();
   const dialog = page.getByRole('dialog', { name: '搜索项目', exact: true });
   await dialog.getByRole('textbox', { name: '搜索项目', exact: true }).fill('导航验收');
   try {
@@ -129,7 +142,7 @@ test('keyboard users can skip navigation and recover focus after closing search'
   await page.keyboard.press('Enter');
   await expect(page.getByRole('main')).toBeFocused();
   await expect(skip).toHaveCSS('opacity', '0');
-  const search = page.getByRole('button', { name: '搜索项目', exact: true });
+  const search = page.getByRole('button', { name: /^搜索项目/ }).filter({ visible: true });
   await search.focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('dialog', { name: '搜索项目', exact: true })).toBeVisible();
@@ -137,12 +150,17 @@ test('keyboard users can skip navigation and recover focus after closing search'
   await expect(search).toBeFocused();
 });
 
-test('a conditionally mounted creation assistant restores its keyboard trigger', async ({
+test('a conditionally mounted creation assistant restores focus to the available settings trigger', async ({
   page,
   studio,
 }) => {
   await page.goto(`${studio.origin}/workbench`);
   await page.getByRole('button', { name: '更多创作设置', exact: true }).click();
+  await page
+    .getByRole('dialog', { name: '创作设置', exact: true })
+    .locator('summary')
+    .filter({ hasText: '更多偏好' })
+    .click();
   const assistant = page.getByRole('button', { name: 'AI 帮我写', exact: true });
   await assistant.focus();
   await page.keyboard.press('Enter');
@@ -150,6 +168,46 @@ test('a conditionally mounted creation assistant restores its keyboard trigger',
   await expect(dialog).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
-  await expect(assistant).toBeFocused();
+  await expect(page.getByRole('button', { name: '更多创作设置', exact: true })).toBeFocused();
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
+});
+
+test('keeps navigation open when a delayed homepage module normalizes its creation-kind query', async ({
+  page,
+  studio,
+}) => {
+  let held = false;
+  let release!: () => void;
+  const barrier = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/assets/CreationLanding-*.js', async (route) => {
+    const response = await route.fetch();
+    held = true;
+    await barrier;
+    await route.fulfill({ response }).catch(() => undefined);
+  });
+  try {
+    await page.goto(studio.origin, { waitUntil: 'domcontentloaded' });
+    await expect.poll(() => held).toBe(true);
+    const mobile = page.getByRole('button', { name: '展开导航', exact: true });
+    const mobileVisible = await mobile.isVisible();
+    await (
+      mobileVisible ? mobile : page.getByRole('button', { name: '更多', exact: true })
+    ).click();
+    const drawer = page.getByRole('dialog', { name: mobileVisible ? '导航' : '更多', exact: true });
+    await expect(drawer).toBeVisible();
+    expect(new URL(page.url()).searchParams.has('kind')).toBe(false);
+    release();
+    await expect(page).toHaveURL(`${studio.origin}/?kind=image`);
+    await expect(drawer).toBeVisible();
+    await drawer.getByRole('link', { name: '项目', exact: true }).click();
+    await expect(page).toHaveURL(`${studio.origin}/projects`);
+    await expect(drawer).toBeHidden();
+    expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({
+      n: 0,
+    });
+  } finally {
+    release();
+  }
 });

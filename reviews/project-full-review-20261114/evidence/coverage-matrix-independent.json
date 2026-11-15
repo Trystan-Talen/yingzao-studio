@@ -1,0 +1,1391 @@
+{
+  "reviewDate": "2026-11-14",
+  "kind": "Independent static coverage map; inherited statuses are not new run results",
+  "featureCount": 56,
+  "groups": [
+    {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "area": "入口、灵感与偏好",
+      "tests": [
+        "platform/tests/e2e/inspiration-categories.spec.ts",
+        "platform/tests/e2e/inspiration-studio.spec.ts",
+        "platform/tests/e2e/onboarding-defaults.spec.ts"
+      ],
+      "required": "筛选/复用输入、草稿重开与空间隔离；不能以卡片可见证明模型效果"
+    },
+    {
+      "ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "area": "规划、报价、任务与生成",
+      "tests": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "required": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量"
+    },
+    {
+      "ids": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        53,
+        54
+      ],
+      "area": "工具、复刻与外部导入",
+      "tests": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "required": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列"
+    },
+    {
+      "ids": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "area": "编辑、历史、导出与分享",
+      "tests": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "required": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧"
+    },
+    {
+      "ids": [
+        33,
+        34
+      ],
+      "area": "项目、素材与集合回收",
+      "tests": [
+        "platform/tests/core.test.ts",
+        "platform/tests/collection-membership.test.ts",
+        "platform/tests/e2e/library-batch-recovery.spec.ts",
+        "platform/tests/e2e/management-editor-recovery.spec.ts"
+      ],
+      "required": "跨空间读写拒绝；软删隐藏且媒体保留；恢复后关联仍可用；迟到成功不清新草稿"
+    },
+    {
+      "ids": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "area": "人物与品牌资产",
+      "tests": [
+        "platform/tests/character-video.test.ts",
+        "platform/tests/brand-quota.test.ts",
+        "platform/tests/e2e/brand-editor-recovery.spec.ts",
+        "platform/tests/e2e/character-video.spec.ts"
+      ],
+      "required": "可见性、配额、保存冲突及引用；F35无正式认证适配；F38本地模板订阅未实现且产品范围仍未知，不能据此认定已确认必交功能缺失，也不能从台账删项；不将自我声明当外部认证"
+    },
+    {
+      "ids": [
+        39,
+        40,
+        41,
+        42,
+        43
+      ],
+      "area": "空间、成员与统计",
+      "tests": [
+        "platform/tests/core.test.ts",
+        "platform/tests/team-creation.test.ts",
+        "platform/tests/team-creation-review.test.ts",
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/usage-lifecycle.spec.ts",
+        "platform/tests/e2e/team-editor-recovery.spec.ts"
+      ],
+      "required": "当前成员权限再验证、退出撤销密钥、创建/归档账务约束；导出含实际行与UTC边界；保存期间新草稿保护"
+    },
+    {
+      "ids": [
+        44,
+        45
+      ],
+      "area": "登录、会话与设置",
+      "tests": [
+        "platform/tests/identity-auth.test.ts",
+        "platform/tests/password-recovery.test.ts",
+        "platform/tests/google-oidc.test.ts",
+        "platform/tests/e2e/account.spec.ts",
+        "platform/tests/e2e/identities.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "required": "真实session撤销/重登；本人私有缓存不得闪回；外部OAuth/短信/邮件送达及母语翻译非夹具可证明"
+    },
+    {
+      "ids": [
+        46,
+        47,
+        49,
+        51,
+        52
+      ],
+      "area": "账本、支付与营销",
+      "tests": [
+        "platform/tests/billing.test.ts",
+        "platform/tests/billing-channel.test.ts",
+        "platform/tests/credit-grant-reversal.test.ts",
+        "platform/tests/member-promotions-review.test.ts",
+        "platform/tests/referral-policy.test.ts"
+      ],
+      "required": "独立渠道余额、预留、退款来源和重复回调一致性；真实付款/退款未授权未验；原站未知换算规则不能补猜"
+    },
+    {
+      "ids": [
+        48,
+        50
+      ],
+      "area": "发票登记、通知与客服",
+      "tests": [
+        "platform/tests/quality-workflows.test.ts",
+        "platform/tests/notifications-http.test.ts",
+        "platform/tests/e2e/management-lifecycle.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/support-channels.spec.ts",
+        "platform/tests/e2e/invoice-title-pagination.spec.ts"
+      ],
+      "required": "本人/空间隔离、状态和实际持久化；发票仅本地登记不等于出票，邮件接受不等于送达"
+    },
+    {
+      "ids": [
+        55,
+        56
+      ],
+      "area": "私有记忆与产品资料",
+      "tests": [
+        "platform/tests/knowledge.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "required": "替换/期限/衰减/优先级/权限；更新显式重新规划、快照不可变、任务只结算一次；真实模型仅已有窄范围案例"
+    }
+  ],
+  "features": [
+    {
+      "id": "F01",
+      "name": "灵感分类",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "无",
+      "currentTestEntryPoints": [
+        "platform/tests/e2e/inspiration-categories.spec.ts",
+        "platform/tests/e2e/inspiration-studio.spec.ts",
+        "platform/tests/e2e/onboarding-defaults.spec.ts"
+      ],
+      "assertionBoundary": "筛选/复用输入、草稿重开与空间隔离；不能以卡片可见证明模型效果",
+      "remaining": [
+        "原站推荐/排序及素材覆盖仍未知，不复制第三方内容或伪造目录。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F02",
+      "name": "复用收藏",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "无",
+      "currentTestEntryPoints": [
+        "platform/tests/e2e/inspiration-categories.spec.ts",
+        "platform/tests/e2e/inspiration-studio.spec.ts",
+        "platform/tests/e2e/onboarding-defaults.spec.ts"
+      ],
+      "assertionBoundary": "筛选/复用输入、草稿重开与空间隔离；不能以卡片可见证明模型效果",
+      "remaining": [
+        "图片与视频复用的原子保存/重放、素材槽位和刷新已验证；视频缺主体/授权时不能提交。",
+        "保留通用视频创作与人物动作复刻两个明确意图，后者真实模型效果仍未验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F03",
+      "name": "引导偏好",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/e2e/inspiration-categories.spec.ts",
+        "platform/tests/e2e/inspiration-studio.spec.ts",
+        "platform/tests/e2e/onboarding-defaults.spec.ts"
+      ],
+      "assertionBoundary": "筛选/复用输入、草稿重开与空间隔离；不能以卡片可见证明模型效果",
+      "remaining": [
+        "完整引导与本地新旧项目默认值边界已验；原站引导当前字段与推荐规则仍未观察，不宣称等价。",
+        "本地偏好扩展不称为原站最近参数云端模板。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F04",
+      "name": "电商图片",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "当前保存、刷新和素材缺失处理已有本地与浏览器验证；真实主体一致性、画面文字和各电商模块成图质量仍待外部验收。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F05",
+      "name": "营销/自由创作",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "营销模块与自由创作草稿已真实浏览器验证，模板内容及各模块真实成图质量仍未验证。",
+        "本机三模块与专属参考规则有明确合同，不由入口观察推断原站全部模板/编辑语义等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F06",
+      "name": "视频生成",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "真实视频、音乐截断/静音尾部、生成音轨、精确字幕和口播效果未验证。",
+        "Wan音乐槽位不等于O3语音主体绑定或声音克隆；O3最多一个视频元素，更多主体/声音控制尚待正式协议与界面对照。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F07",
+      "name": "多模态/@引用",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "素材缺失逐项恢复、响应丢失及长历史恢复已有浏览器夹具；真实多模态模型效果未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F08",
+      "name": "AI帮写/报价",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "帮写任务不污染媒体草稿；免费次数原子约束和请求身份持久恢复有回归。",
+        "真实帮写质量、供应商价格与原站免费运营规则等价性仍未验证。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F09",
+      "name": "会话/方案",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "原站已存在项目显示七段长文和复制；本地结构化编辑/应用是体验改进，不能反推原站具备该操作。",
+        "真实图像分析、多轮质量与新方案生成效果仍未验证。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F10",
+      "name": "任务生命周期",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/tasks.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/quote-confirmation.spec.ts",
+        "platform/tests/e2e/experience-journeys.spec.ts"
+      ],
+      "assertionBoundary": "实际DB准备记录、报价、任务数；预留/结算一次；原件下载与解码。模拟供应商产物不证明真实模型质量",
+      "remaining": [
+        "本机响应丢失后刷新找回同一任务、单份预留及结算已有真实浏览器和数据库证据。",
+        "远端未知终态、真实供应商取消和供应商控制台核对仍需外部验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F11",
+      "name": "智能延展",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "未验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "主体保留、延展区域与像素效果未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F12",
+      "name": "局部重绘",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "跨供应商协议分离；EXIF原件保留/模型坐标归一；实际模型效果未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F13",
+      "name": "放大/超清",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "放大前64,000,000输出像素预算阻止先付费后本地超限；真实放大质量未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F14",
+      "name": "抠图",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "未验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "真实alpha与边缘质量未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F15",
+      "name": "图片翻译",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "免平台费不代表供应商预检免费；仍需提交预留余额；识别漏字可强制，真实版式质量未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F16",
+      "name": "替换/换色",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "笛卡尔组合与20输出上限是明确的本地产品规则，原站是否同规则未知。",
+        "参考保持、商品保持与换色真实视觉质量未验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F17",
+      "name": "图片复刻",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "真实模型全链没有新增实测。历史两个图片样例不外推到任意商品或逐像素保真。",
+        "真实视频复刻成片及各供应商专用效果需独立授权验收；参考视频有限帧分析不是视频产物验收。",
+        "原站完整复刻语义仍按原调查边界记录，不由自有复刻实现推断等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F18",
+      "name": "创意视频复刻",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "已实现人物图+参考视频选段动作复刻、本机裁剪、真实原声开关与按片段报价；真实动作保真效果未验证。",
+        "创意视频编辑与人物动作复刻是独立合同；不冒称Dance、逐像素1:1或原视频背景保持。",
+        "服装、人脸、商品精准替换仍未实现；原站对应模型完整语义待外部协议及效果验收。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F19",
+      "name": "1:1视频/裁剪",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "已实现人物图+参考视频选段动作复刻、本机裁剪、真实原声开关与按片段报价；真实动作保真效果未验证。",
+        "创意视频编辑与人物动作复刻是独立合同；不冒称Dance、逐像素1:1或原视频背景保持。",
+        "服装、人脸、商品精准替换仍未实现；原站对应模型完整语义待外部协议及效果验收。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F20",
+      "name": "社交链接导入",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "抖音与国际版抖音真实平台返回、下载可用性与服务商收费尚未外部验证。",
+        "小红书没有可核验视频响应结构，付费前明确拒绝；仍缺正式协议与真实效果验收。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F21",
+      "name": "主图打标",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "本地专用字段/结果解析已有合同；真实文字可读性、位置与字符准确性及原站等价性未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F22",
+      "name": "AI洗图",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "未验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "通用自然化/图像编辑路径存在；本项未找到独立当前专项回归，仍未验证。",
+        "不承诺隐藏AI来源或原站算法效果等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F23",
+      "name": "多图融合",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "专用字段与真实本机拼接/面积边界已测；真实融合视觉质量及原站效果未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F24",
+      "name": "工具历史",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "普通工具读取中/失败时禁止编辑保存提交，失败重试后恢复原参数，桌面手机已验；旧会话逐页寻找。",
+        "未完成上传二进制不属于草稿，刷新需重选；下载标记不证明最终磁盘写入，外部工具效果未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F25",
+      "name": "画布对象",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "真实PNG导出尺寸与像素已验；视频导出为静态帧、原件下载保持原文件。",
+        "复杂对象与原站完整排版语义仍待独立对照，不称完整排版软件。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F26",
+      "name": "图层/撤销",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "两对象分组/锁定/解锁/解组、禁删除/移动、位移、撤销重做与刷新已在桌面/手机专项通过；任意深度嵌套分组未穷尽。",
+        "层数与深度预算保留；原站复杂图层语义仍未知。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F27",
+      "name": "OCR/拆层",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "结构坐标校验与固定层数拆分路径存在；视觉估计坐标、透明层重组、真实可编辑语义分别验收。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F28",
+      "name": "视频后处理",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "编辑/延长/超清/口播翻译/短片擦除须分项验收。",
+        "短于5秒通用擦除不等于专用无痕字幕去除；真实输出均未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F29",
+      "name": "待应用",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "无",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "本机真实产物在晚到版本冲突、刷新恢复、仅应用一次和重复请求拒绝场景已在桌面/手机通过。",
+        "真实模型拆层输出与完整原站待应用语义仍需独立验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F30",
+      "name": "版本",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "真实编辑/刷新/恢复旧版已验；原件保留不等于无限永久版本运营承诺。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F31",
+      "name": "导出下载",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "四尺寸画布真实PNG像素、保存刷新与原件下载已验证；原站实际下载、亚马逊元信息写入及所有导出组合仍未对照。",
+        "本地来源附属文件不能冒充图片内嵌元信息；应用水印不承诺防绕过。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F32",
+      "name": "分享",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/export-policy.test.ts",
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/production-security.spec.ts",
+        "platform/tests/task-result-recovery.test.ts"
+      ],
+      "assertionBoundary": "真实文件像素/字节；版本冲突与恢复；分享默认禁原件、撤销后不可访问；视频画布导出仍为静态帧",
+      "remaining": [
+        "默认原件403、预览200及撤销后不可访问已真实验证；预览本身可截图/保存。",
+        "当前原站完整分享交互未独立观察，不由本地测试推断等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F33",
+      "name": "项目/收藏",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/collection-membership.test.ts",
+        "platform/tests/e2e/library-batch-recovery.spec.ts",
+        "platform/tests/e2e/management-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "跨空间读写拒绝；软删隐藏且媒体保留；恢复后关联仍可用；迟到成功不清新草稿",
+      "remaining": [
+        "本地名称、类型、个人收藏组合筛选及回收恢复已有桌面/手机实际通过；日期查询仅有接口合同，当前界面没有日期/作者筛选。",
+        "原站作者筛选及全部归档规则仍未知，不把旧文档要求自动当成已确认范围。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F34",
+      "name": "素材/集合",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/collection-membership.test.ts",
+        "platform/tests/e2e/library-batch-recovery.spec.ts",
+        "platform/tests/e2e/management-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "跨空间读写拒绝；软删隐藏且媒体保留；恢复后关联仍可用；迟到成功不清新草稿",
+      "remaining": [
+        "本轮集合管理、回收站关联、并发增量及错误重试的桌面/手机浏览器均通过；旧历史范围保留，不用于外推未测试的原站语义。",
+        "集合删除为软删除并保留历史关联；不声称跨空间物理去重。",
+        "原站公共模特库与人像视频语义另归F36；未复制第三方公共模特原件。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F35",
+      "name": "人脸授权认证",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "代码缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/character-video.test.ts",
+        "platform/tests/brand-quota.test.ts",
+        "platform/tests/e2e/brand-editor-recovery.spec.ts",
+        "platform/tests/e2e/character-video.spec.ts"
+      ],
+      "assertionBoundary": "可见性、配额、保存冲突及引用；F35无正式认证适配；F38本地模板订阅未实现且产品范围仍未知，不能据此认定已确认必交功能缺失，也不能从台账删项；不将自我声明当外部认证",
+      "remaining": [
+        "先确定人物真实性和素材使用权的具体核验合同，再实现正式供应商适配、回调与状态验收；当前缺口同时涉及适配代码和业务协议。",
+        "本地自述授权不得标为认证；实名或活体核验不能替代人物素材使用授权。",
+        "当前人物素材上传界面不能证明历史认证已下线，也不能证明原站采用身份证实名或活体。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F36",
+      "name": "人物素材组",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "外部服务限制",
+      "currentTestEntryPoints": [
+        "platform/tests/character-video.test.ts",
+        "platform/tests/brand-quota.test.ts",
+        "platform/tests/e2e/brand-editor-recovery.spec.ts",
+        "platform/tests/e2e/character-video.spec.ts"
+      ],
+      "assertionBoundary": "可见性、配额、保存冲突及引用；F35无正式认证适配；F38本地模板订阅未实现且产品范围仍未知，不能据此认定已确认必交功能缺失，也不能从台账删项；不将自我声明当外部认证",
+      "remaining": [
+        "本机视频人物管理与预览已验；供应商人物视频参考仅在专用能力协议明确支持时可启用，当前模型明确拒绝。",
+        "原站10个公共模特素材未复制，公共库内容与使用权需独立确定；真实模型效果未外呼验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F37",
+      "name": "个人品牌参考与品牌模型入口",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实外部联调验证",
+      "blocker": "无",
+      "currentTestEntryPoints": [
+        "platform/tests/character-video.test.ts",
+        "platform/tests/brand-quota.test.ts",
+        "platform/tests/e2e/brand-editor-recovery.spec.ts",
+        "platform/tests/e2e/character-video.spec.ts"
+      ],
+      "assertionBoundary": "可见性、配额、保存冲突及引用；F35无正式认证适配；F38本地模板订阅未实现且产品范围仍未知，不能据此认定已确认必交功能缺失，也不能从台账删项；不将自我声明当外部认证",
+      "remaining": [
+        "本例品牌更名与文字配色进入真实图片，不能称模型训练；不承诺所有品牌、模型或精确色值均已验证。",
+        "原站套餐价格与10/15/20数值未复制，新合同需实例负责人明确批准配置。",
+        "旧接口调用不带expectedUpdatedAt（预期修改时间）时保留兼容盲写行为；网页已强制带读取版本，调用方可显式启用同一约束。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F38",
+      "name": "预设品牌模板与订阅（范围待确认）",
+      "implementationStatus": "未实现",
+      "ledgerVerificationStatus": "未验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [],
+      "assertionBoundary": "本地没有预设品牌模板订阅服务；原站当前范围未确认。不存在该功能的通过用例，人物/品牌参考资料的回归不能代替模板订阅验收。保留台账项，待范围澄清后再确定实现与验收合同。",
+      "remaining": [
+        "当前个人品牌模型存在，不能推出旧预设模板订阅存在或下线。",
+        "保留范围未知；不因旧文档“非强制”而删项。"
+      ],
+      "evidencePathsExist": true,
+      "scopeStatus": "未知"
+    },
+    {
+      "id": "F39",
+      "name": "空间切换",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/team-creation.test.ts",
+        "platform/tests/team-creation-review.test.ts",
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/usage-lifecycle.spec.ts",
+        "platform/tests/e2e/team-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "当前成员权限再验证、退出撤销密钥、创建/归档账务约束；导出含实际行与UTC边界；保存期间新草稿保护",
+      "remaining": [
+        "正式启用需已批准team固定期会员合同；真实支付未执行，当前原站账号无现有团队，不能声称真实团队切换等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F40",
+      "name": "成员角色",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/team-creation.test.ts",
+        "platform/tests/team-creation-review.test.ts",
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/usage-lifecycle.spec.ts",
+        "platform/tests/e2e/team-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "当前成员权限再验证、退出撤销密钥、创建/归档账务约束；导出含实际行与UTC边界；保存期间新草稿保护",
+      "remaining": [
+        "本地成员权限与邀请/撤销存在合同，角色英阿真实浏览器已验；原站详细角色矩阵仍未知。",
+        "邀请邮件默认关闭，排队和SMTP接受均不等于收件；真实外部送达未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F41",
+      "name": "团队额度",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/team-creation.test.ts",
+        "platform/tests/team-creation-review.test.ts",
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/usage-lifecycle.spec.ts",
+        "platform/tests/e2e/team-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "当前成员权限再验证、退出撤销密钥、创建/归档账务约束；导出含实际行与UTC边界；保存期间新草稿保护",
+      "remaining": [
+        "平台预算单位是额度，不是供应商余额或现金。",
+        "本地事务和来源隔离已有回归；原站团队预算、回收和分配规则仍待有权限时核对。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F42",
+      "name": "导入统计审计",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/team-creation.test.ts",
+        "platform/tests/team-creation-review.test.ts",
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/usage-lifecycle.spec.ts",
+        "platform/tests/e2e/team-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "当前成员权限再验证、退出撤销密钥、创建/归档账务约束；导出含实际行与UTC边界；保存期间新草稿保护",
+      "remaining": [
+        "当前协调世界时日期的起日/末日边界及统计导出已有桌面/手机实际通过；当前界面没有自定义统计时区选项。",
+        "原站团队管理受会员门禁；导入、导出及审计的其余语义仍以各自合同和台账为准。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F43",
+      "name": "团队退出解散",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/core.test.ts",
+        "platform/tests/team-creation.test.ts",
+        "platform/tests/team-creation-review.test.ts",
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/usage-lifecycle.spec.ts",
+        "platform/tests/e2e/team-editor-recovery.spec.ts"
+      ],
+      "assertionBoundary": "当前成员权限再验证、退出撤销密钥、创建/归档账务约束；导出含实际行与UTC边界；保存期间新草稿保护",
+      "remaining": [
+        "本地解散以归档保留数据；新一队永久占用与转让兼容已独审并有重复/归档/转让回归。",
+        "真实付费席位/原站退出结算细则未联调，不宣称现金或套餐自动退还。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F44",
+      "name": "登录会话",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/identity-auth.test.ts",
+        "platform/tests/password-recovery.test.ts",
+        "platform/tests/google-oidc.test.ts",
+        "platform/tests/e2e/account.spec.ts",
+        "platform/tests/e2e/identities.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "assertionBoundary": "真实session撤销/重登；本人私有缓存不得闪回；外部OAuth/短信/邮件送达及母语翻译非夹具可证明",
+      "remaining": [
+        "阿里云签名、模板、最小权限密钥及已审核微信网站应用和固定回调域名需正式配置并显式开启。",
+        "真实短信送达、真实微信扫码和应用审核、正式邮件送达和谷歌授权均未外部联调。",
+        "最终完整报告已包含账户与身份分支；真实谷歌、微信及外部短信/邮件送达仍未联调。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F45",
+      "name": "资料主题语言",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/identity-auth.test.ts",
+        "platform/tests/password-recovery.test.ts",
+        "platform/tests/google-oidc.test.ts",
+        "platform/tests/e2e/account.spec.ts",
+        "platform/tests/e2e/identities.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "assertionBoundary": "真实session撤销/重登；本人私有缓存不得闪回；外部OAuth/短信/邮件送达及母语翻译非夹具可证明",
+      "remaining": [
+        "当前账户、帮助、创作、工具、额度的已覆盖分支已真实浏览器验证；未做母语审校或所有动态错误穷尽测试。",
+        "用户提示词、名称、资料与模型正文保留原值；原站语言菜单存在不证明全部翻译等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F46",
+      "name": "套餐账本兑换",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/billing.test.ts",
+        "platform/tests/billing-channel.test.ts",
+        "platform/tests/credit-grant-reversal.test.ts",
+        "platform/tests/member-promotions-review.test.ts",
+        "platform/tests/referral-policy.test.ts"
+      ],
+      "assertionBoundary": "独立渠道余额、预留、退款来源和重复回调一致性；真实付款/退款未授权未验；原站未知换算规则不能补猜",
+      "remaining": [
+        "同档会员3个月封存、续费恢复和重算已实现并独立验证，旧无封存合同仅兼容明确旧条款。",
+        "跨档期限/权益换算和原站充值转换价表仍未知且混购明确阻止；旧初始余额期限不作历史猜测。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F47",
+      "name": "支付订阅",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/billing.test.ts",
+        "platform/tests/billing-channel.test.ts",
+        "platform/tests/credit-grant-reversal.test.ts",
+        "platform/tests/member-promotions-review.test.ts",
+        "platform/tests/referral-policy.test.ts"
+      ],
+      "assertionBoundary": "独立渠道余额、预留、退款来源和重复回调一致性；真实付款/退款未授权未验；原站未知换算规则不能补猜",
+      "remaining": [
+        "网页/接口独立平台额度全链路已实现，非独立现金账户或原站换算等价。",
+        "旧资料缺付款周期/退款成功时间时保留未知并核对；真实支付未获授权、未执行。",
+        "固定期同档叠加、3个月封存和定时/首购活动已定向回归及本机目录订单浏览器验证；跨档换算仍未知。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F48",
+      "name": "发票抬头",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "代码缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/quality-workflows.test.ts",
+        "platform/tests/notifications-http.test.ts",
+        "platform/tests/e2e/management-lifecycle.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/support-channels.spec.ts",
+        "platform/tests/e2e/invoice-title-pagination.spec.ts"
+      ],
+      "assertionBoundary": "本人/空间隔离、状态和实际持久化；发票仅本地登记不等于出票，邮件接受不等于送达",
+      "remaining": [
+        "须先确定正式开票协议，再实现开具、取票、回调及状态适配，并独立验收真实票据；本地登记不会发送或出票。",
+        "用户尚未提供开票供应商或正式协议；支付平台账单不能冒称正式税务发票。",
+        "原站2026-05-16起自助开票界面已观察；无订单，真实开票未验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F49",
+      "name": "开放平台",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/billing.test.ts",
+        "platform/tests/billing-channel.test.ts",
+        "platform/tests/credit-grant-reversal.test.ts",
+        "platform/tests/member-promotions-review.test.ts",
+        "platform/tests/referral-policy.test.ts"
+      ],
+      "assertionBoundary": "独立渠道余额、预留、退款来源和重复回调一致性；真实付款/退款未授权未验；原站未知换算规则不能补猜",
+      "remaining": [
+        "使用独立平台额度账户，非独立现金账户；原站金额转算力规则和价表仍未知。",
+        "真实支付、真实接口模型调用以及原站账户等价性未验证。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F50",
+      "name": "通知工单申诉",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "配置缺失",
+      "currentTestEntryPoints": [
+        "platform/tests/quality-workflows.test.ts",
+        "platform/tests/notifications-http.test.ts",
+        "platform/tests/e2e/management-lifecycle.spec.ts",
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/support-channels.spec.ts",
+        "platform/tests/e2e/invoice-title-pagination.spec.ts"
+      ],
+      "assertionBoundary": "本人/空间隔离、状态和实际持久化；发票仅本地登记不等于出票，邮件接受不等于送达",
+      "remaining": [
+        "通知分类与计数以本地真实事件为准，不复制原站7条未读异常或伪造消息。",
+        "客服/问卷真实资料须实例负责人配置，本机地址与二维码夹具不等于外部客服接入。",
+        "邮件accepted仅表示SMTP接受，未知结果不盲发；平台额度退款不等于现金退款。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F51",
+      "name": "邀请渠道",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/billing.test.ts",
+        "platform/tests/billing-channel.test.ts",
+        "platform/tests/credit-grant-reversal.test.ts",
+        "platform/tests/member-promotions-review.test.ts",
+        "platform/tests/referral-policy.test.ts"
+      ],
+      "assertionBoundary": "独立渠道余额、预留、退款来源和重复回调一致性；真实付款/退款未授权未验；原站未知换算规则不能补猜",
+      "remaining": [
+        "取整和资格中套餐过期主语未明，默认显式未配置并阻止返奖；运营须留审计证据后启用。",
+        "历史会员资格使用真实付款周期与退款时间证据，旧资料不足时须人工核对；真实付款未验。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F52",
+      "name": "营销活动（当前会员促销与历史抽奖）",
+      "implementationStatus": "部分实现",
+      "ledgerVerificationStatus": "真实浏览器验证",
+      "blocker": "原站证据不足",
+      "currentTestEntryPoints": [
+        "platform/tests/billing.test.ts",
+        "platform/tests/billing-channel.test.ts",
+        "platform/tests/credit-grant-reversal.test.ts",
+        "platform/tests/member-promotions-review.test.ts",
+        "platform/tests/referral-policy.test.ts"
+      ],
+      "assertionBoundary": "独立渠道余额、预留、退款来源和重复回调一致性；真实付款/退款未授权未验；原站未知换算规则不能补猜",
+      "remaining": [
+        "历史抽奖是否仍可用保持未知，当前促销不能代替其范围。",
+        "当前同档固定期与3个月封存已实现；跨档叠加存在但换算/权益规则未知，本地明确阻止混购。",
+        "活动资格采用明示本地结账发起时确认合同，未声称与原站截止付款语义完全等价；真实支付未执行。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F53",
+      "name": "魔法消除",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "独立操作、角色、蒙版与供应商协议已有本地合同；真实生成效果未验证。",
+        "原图本地64MP安全上限、fal消除25MP保守上限、fal模特替换不支持背景/提示词均明确展示，与原站输入上限不完全等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F54",
+      "name": "模特替换",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "自动化验证",
+      "blocker": "预算授权",
+      "currentTestEntryPoints": [
+        "platform/tests/takeover-tools.test.ts",
+        "platform/tests/takeover-motion.test.ts",
+        "platform/tests/social-import.test.ts",
+        "platform/tests/native-exact-pan.test.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts",
+        "platform/tests/e2e/tool-asset-recovery-review.spec.ts"
+      ],
+      "assertionBoundary": "独立操作/输入角色/蒙版/权限/成本与失败恢复；本机ffmpeg像素和时长可验证，外部效果单列",
+      "remaining": [
+        "独立操作、角色、蒙版与供应商协议已有本地合同；真实生成效果未验证。",
+        "原图本地64MP安全上限、fal消除25MP保守上限、fal模特替换不支持背景/提示词均明确展示，与原站输入上限不完全等价。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F55",
+      "name": "私有创作记忆",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实外部联调验证",
+      "blocker": "无",
+      "currentTestEntryPoints": [
+        "platform/tests/knowledge.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "assertionBoundary": "替换/期限/衰减/优先级/权限；更新显式重新规划、快照不可变、任务只结算一次；真实模型仅已有窄范围案例",
+      "remaining": [
+        "本例原生图片验证本次要求优先、偏好更新与临时记忆自然到期；历史衰减年龄为隔离合成数据，不代表连续观察3天。视频及其他模型效果尚未新增验证。",
+        "没有自动推断画像、无限检索、向量数据库或收费记忆提炼；这些不属于当前已实现范围。",
+        "分组物料、独立工具及整套详情页明确不接受新记忆关联；开放接口不能读取本人私有记忆。",
+        "删除或停用影响后续选取，不承诺清除已确认快照或已生成作品中的历史体现。"
+      ],
+      "evidencePathsExist": true
+    },
+    {
+      "id": "F56",
+      "name": "产品资料库与创作关联",
+      "implementationStatus": "已实现",
+      "ledgerVerificationStatus": "真实外部联调验证",
+      "blocker": "无",
+      "currentTestEntryPoints": [
+        "platform/tests/knowledge.test.ts",
+        "platform/tests/creative-briefs.test.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-refresh.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "assertionBoundary": "替换/期限/衰减/优先级/权限；更新显式重新规划、快照不可变、任务只结算一次；真实模型仅已有窄范围案例",
+      "remaining": [
+        "本例已验证产品容量、品牌及实际参考图更新到真实成品；仅已选原生图片模型，不代表全模型或像素级商品保真。",
+        "分组物料、独立工具和整套详情页尚未接入新增产品关联；当前明确拒绝，不静默忽略。",
+        "使用远端工作流时需导入当前合同版本再联调；本轮未修改远端工作流或正式运行库。",
+        "已确认方案保留历史来源版本；资料更新不改写已有快照，到期资料不能据旧方案发起新报价。"
+      ],
+      "evidencePathsExist": true
+    }
+  ],
+  "testInfrastructure": {
+    "retries": 0,
+    "focusedOrSkippedBrowserTests": false,
+    "intentionalSkip": "Unix process-group descendant assertion skipped on Windows only",
+    "browserAutoFailures": [
+      "Unexpected external browser origin",
+      "Uncaught browser page exception"
+    ],
+    "browserDiagnosticsOnly": [
+      "HTTP 4xx/5xx",
+      "Failed network requests"
+    ],
+    "mockBoundary": "Some creative-brief browser cases intercept prepare/quote for UI state testing; service-backed tests listed separately. Synthetic providers cannot establish external quality.",
+    "networkGuardBoundary": "Browser requests and server/worker fetch use local-only guards; these do not constitute OS-wide socket denial. Native HTTPS has a separate transport. No actual external fixture escape found during this review.",
+    "runtimeBoundary": "verify-runtime is built production smoke; persistence-upgrade separately checks populated restore and real source entrypoint restarts. Neither asserts every restored paid-provider job resumes against a live provider."
+  },
+  "entryPointSemantics": "关联回归入口用于审查定位，不等于每个入口完整覆盖所属组的每一项；实际已执行结果由各阶段报告和主线程最终报告分别声明。F38范围未知且本地未实现，无功能通过入口。",
+  "validationScope": "静态覆盖映射；继承台账判定不是新验收结果。阶段局部测试数量不相加，也不替代冻结源码后的全量结果；最终浏览器状态由主线程另记。"
+}

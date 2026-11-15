@@ -69,18 +69,20 @@ for (const resource of ['project', 'document', 'messages'] as const) {
       });
       await page.goto(`${studio.origin}/workbench/${project.id}`);
       const composer = page.locator('.composer');
+      const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
       const prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
       const original = '月球上的猫，五秒竖屏水彩动画，不加文字。';
       let originalPromptNode: Awaited<ReturnType<typeof prompt.elementHandle>> | null = null;
       let readyId: string | undefined;
       if (cached) {
         await expect(prompt).toBeVisible();
-        await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
         await prompt.fill(original);
         await composer
           .getByRole('combobox', { name: '发布平台', exact: true })
           .selectOption('TikTok');
-        await composer.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+        await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+        await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+        await settings.getByRole('button', { name: '完成', exact: true }).click();
         await composer.getByRole('button', { name: '生成视频', exact: true }).click();
         const confirmation = page.getByRole('dialog', { name: '确认创作', exact: true });
         await expect(confirmation).toBeVisible();
@@ -105,9 +107,11 @@ for (const resource of ['project', 'document', 'messages'] as const) {
         await expect(composer.getByRole('combobox', { name: '发布平台', exact: true })).toHaveValue(
           'TikTok',
         );
-        await expect(composer.getByRole('combobox', { name: '比例', exact: true })).toHaveValue(
+        await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+        await expect(settings.getByRole('combobox', { name: '比例', exact: true })).toHaveValue(
           '9:16',
         );
+        await settings.getByRole('button', { name: '完成', exact: true }).click();
         await expect(composer.getByText('创作理解', { exact: false })).toBeVisible();
         expect(preparations).toHaveLength(1);
       } else await expect(composer).toHaveCount(0);

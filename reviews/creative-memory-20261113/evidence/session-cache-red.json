@@ -1,0 +1,28 @@
+{
+  "scope": "隔离数据库、真实React与查询缓存的内存DOM回归；没有真实模型调用或运行库写入",
+  "passed": 0,
+  "failed": 4,
+  "total": 4,
+  "tests": [
+    {
+      "name": "account-scoped browser query state never renders another account private cache when identity changes in the same workspace",
+      "status": "failed",
+      "error": "AssertionError: expected 'bob|alice private memory' not to contain 'alice private memory'"
+    },
+    {
+      "name": "account-scoped browser query state purges private cache after 401 before another account logs into the same workspace",
+      "status": "failed",
+      "error": "AssertionError: expected [ Query{ options: { …(10) }, …(5) } ] to have a length of +0 but got 1"
+    },
+    {
+      "name": "account-scoped browser query state ignores an old session response arriving after a newer account refresh",
+      "status": "failed",
+      "error": "AssertionError: expected 'alice' to be 'bob' // Object.is equality"
+    },
+    {
+      "name": "account-scoped browser query state does not restore a session from an old response after explicit sign-out",
+      "status": "failed",
+      "error": "AssertionError: expected { user: { id: 'alice', …(1) }, …(2) } to be null"
+    }
+  ]
+}

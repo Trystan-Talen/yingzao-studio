@@ -23,7 +23,10 @@ async function openHome(page: Page, studio: Studio, path = '/workbench') {
   ]);
   await page.goto(`${studio.origin}${path}`);
   if (path === '/' || path === '/workbench') {
-    await expect(page.locator('.studio-launch-heading h1')).toHaveText('好作品，从一个想法开始');
+    await expect(page.locator('.studio-launch-heading h1')).toHaveAttribute(
+      'aria-label',
+      '今天想映造什么？',
+    );
     await expect(page.locator('.credit-estimate-value')).toHaveText(/预计 \d+ 积分/);
   }
   const response = await page.request.get(`${studio.origin}/api/v1/auth/me`);
@@ -105,12 +108,12 @@ test('offers one immediately usable creation composer, real idea previews and ac
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
 });
 
-test('keeps the natural-language brief and primary actions in the first screen with advanced settings collapsed', async ({
+test('keeps the brief and generation in the first screen with keyboard-accessible toolbar settings', async ({
   page,
   studio,
 }) => {
   await openHome(page, studio);
-  const composer = page.locator('.new-workspace-compose .composer');
+  const composer = page.locator('.composer[data-presentation="quick"]');
   const brief = composer.getByRole('textbox', { name: '创作需求', exact: true });
   const save = composer.getByRole('button', { name: '保存草稿', exact: true });
   const generate = composer.getByRole('button', { name: '生成图片', exact: true });
@@ -121,12 +124,29 @@ test('keeps the natural-language brief and primary actions in the first screen w
     image: composer.getByRole('button', { name: '图片创作', exact: true }),
     video: composer.getByRole('button', { name: '视频创作', exact: true }),
     material: composer.getByRole('button', { name: '添加素材', exact: true }),
-    save,
     generate,
-    advanced,
     platform,
     estimate: composer.locator('.credit-estimate'),
   });
+  // The approved narrow toolbar scrolls horizontally. Its secondary actions
+  // must be reachable by keyboard without requiring a wider page.
+  for (const control of [advanced, save]) {
+    await control.focus();
+    await expect(control).toBeFocused();
+    const box = (await control.boundingBox())!;
+    const viewport = page.viewportSize()!;
+    expect(Math.min(box.x + box.width, viewport.width) - Math.max(box.x, 0)).toBeGreaterThanOrEqual(
+      44,
+    );
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height).toBeLessThanOrEqual(viewport.height);
+  }
+  await advanced.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog', { name: '创作设置', exact: true })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(advanced).toBeFocused();
+  await platform.focus();
   const minimumBriefHeight = await brief.evaluate((element) => {
     const style = getComputedStyle(element);
     return (
@@ -165,17 +185,14 @@ test('keeps the natural-language brief and primary actions in the first screen w
   await expect(brief).toBeFocused();
   await brief.clear();
   await advanced.click();
-  await expect(composer.getByRole('button', { name: '收起高级设置', exact: true })).toHaveAttribute(
-    'aria-expanded',
-    'true',
-  );
-  await expect(platform).toBeVisible();
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+  await expect(settings).toBeVisible();
   for (const name of ['生成模型', '比例', '清晰度'])
-    await expect(composer.getByRole('combobox', { name, exact: true })).toBeVisible();
+    await expect(settings.getByRole('combobox', { name, exact: true })).toBeVisible();
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await platform.selectOption('Amazon');
-  await composer.getByRole('button', { name: '收起高级设置', exact: true }).click();
-  await expect(platform).toBeVisible();
   await advanced.click();
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await expect(platform).toHaveValue('Amazon');
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
 });
@@ -276,7 +293,7 @@ test('opens a redesigned inspiration card and reuses the original media in an ed
 }) => {
   const session = await openHome(page, studio, '/inspiration');
   const title = '把清晨，装进一滴精华';
-  const card = page.locator('.inspiration-card').filter({
+  const card = page.locator('.inspiration-studio-card').filter({
     has: page.getByRole('button', { name: `${title} · 预览灵感`, exact: true }),
   });
   await expect(card).toBeVisible();

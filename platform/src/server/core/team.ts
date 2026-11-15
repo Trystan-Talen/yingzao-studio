@@ -7,7 +7,7 @@ import {
 } from '../../contracts/core';
 import { AppError } from '../errors';
 import {
-  CoreContext,
+  type CoreContext,
   type Row,
   type ListQuery,
   str,
@@ -18,7 +18,7 @@ import {
   token,
   hash,
 } from './shared';
-import { AuthService } from './auth';
+import { type AuthService } from './auth';
 import { EntitlementService } from './entitlements';
 import { claimTeamSlot, teamSlot } from './team-creation';
 export class TeamService {

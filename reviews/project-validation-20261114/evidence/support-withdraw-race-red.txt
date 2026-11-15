@@ -1,0 +1,51 @@
+Running 1 test using 1 worker
+
+(node:9476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/management-lifecycle.spec.ts:362:1 › a delayed withdrawal closes only its submitted ticket and preserves another open record (8.0s)
+
+
+  1) [desktop] › tests/e2e/management-lifecycle.spec.ts:362:1 › a delayed withdrawal closes only its submitted ticket and preserves another open record 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '仍打开记录乙', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '仍打开记录乙', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '仍打开记录乙', exact: true })
+
+
+      416 |     await finished;
+      417 |     await expect(page.locator('.toast').filter({ hasText: '工单已撤回' })).toBeVisible();
+    > 418 |     await expect(secondDialog).toBeVisible();
+          |                                ^
+      419 |     await expect(secondDialog.getByRole('textbox', { name: '补充说明', exact: true })).toHaveValue(
+      420 |       '乙记录的新草稿',
+      421 |     );
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-lifecycle.spec.ts:418:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-KvNxqb/results/management-lifecycle-a-del-aab09-eserves-another-open-record-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-KvNxqb/results/management-lifecycle-a-del-aab09-eserves-another-open-record-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-KvNxqb/results/management-lifecycle-a-del-aab09-eserves-another-open-record-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-KvNxqb/results/management-lifecycle-a-del-aab09-eserves-another-open-record-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-KvNxqb/results/management-lifecycle-a-del-aab09-eserves-another-open-record-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/management-lifecycle.spec.ts:362:1 › a delayed withdrawal closes only its submitted ticket and preserves another open record 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-KvNxqb

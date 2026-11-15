@@ -55,7 +55,7 @@ for (const path of ['/', '/workbench?kind=image']) {
       composer.getByRole('button', { name: '生成图片', exact: true }),
       page,
     );
-    await expect(composer.getByRole('region', { name: '创作设置', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('dialog', { name: '创作设置', exact: true })).toHaveCount(0);
     const platform = composer.getByRole('combobox', { name: '发布平台', exact: true });
     expect(
       await platform
@@ -65,11 +65,11 @@ for (const path of ['/', '/workbench?kind=image']) {
     await platform.selectOption('TikTok');
     await prompt.fill('窗边青绿色香氛瓶，保留我的原话。');
     await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-    const settings = composer.getByRole('region', { name: '创作设置', exact: true });
+    const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
     await expect(settings).toBeVisible();
     await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('3:4');
     await expectNoHorizontalOverflow(page);
-    await composer.getByRole('button', { name: '收起高级设置', exact: true }).click();
+    await settings.getByRole('button', { name: '完成', exact: true }).click();
     await expect(settings).toHaveCount(0);
     await expect(platform).toHaveValue('TikTok');
     await expect(prompt).toHaveValue('窗边青绿色香氛瓶，保留我的原话。');
@@ -105,10 +105,11 @@ test.describe('multi-image estimates', () => {
       (item) => item.id === 'image.generate' && item.providerId === 'openai',
     )!;
     await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-    await composer
+    const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+    await settings
       .getByRole('combobox', { name: '生成模型', exact: true })
       .selectOption('image.generate|openai|gpt-image-2.5-flare');
-    const count = composer.getByRole('combobox', { name: '生成数量', exact: true });
+    const count = settings.getByRole('combobox', { name: '生成数量', exact: true });
     await expect(count).toBeEnabled();
     await count.selectOption('2');
     await expect(composer.locator('.credit-estimate-value')).toHaveText(
@@ -297,22 +298,23 @@ test('updates video seconds pricing and creates one playable saved vertical orig
   )!;
   expect(rate.unit).toBe('second');
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  await composer
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+  await settings
     .getByRole('combobox', { name: '生成模型', exact: true })
     .selectOption('video.generate|seedance|doubao-seedance-2.0');
-  const duration = composer.getByRole('combobox', { name: '时长', exact: true });
+  const duration = settings.getByRole('combobox', { name: '时长', exact: true });
   await duration.selectOption('10');
   await expect(composer.locator('.credit-estimate-value')).toHaveText(
     `预计 ${rate.priceCredits * 10} 积分`,
   );
   await duration.selectOption('5');
-  await composer.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+  await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
   await expect(composer.locator('.credit-estimate-value')).toHaveText(
     `预计 ${rate.priceCredits * 5} 积分`,
   );
   expect(writes).toEqual([]);
   expect(creationRecords(studio)).toMatchObject({ briefs: 0, quotes: 0, jobs: 0, reserved: 0 });
-  await composer.getByRole('button', { name: '收起高级设置', exact: true }).click();
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await prompt.fill('清晨窗边青绿色香氛瓶概念片，无人物文字，固定机位。');
   await composer.getByRole('button', { name: '生成视频', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: '确认创作', exact: true });

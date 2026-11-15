@@ -1,0 +1,132 @@
+[
+  {
+    "case": "fixture-mug-r2",
+    "sections": [
+      {
+        "label": "用户原始需求",
+        "sha256": "21d778a6db47fb8a3c2e4928e1267320bad07365ca331b3a6e6da537223c03ec",
+        "characters": 163
+      },
+      {
+        "label": "文本模型生成的创作说明",
+        "sha256": "b5139fe969257b5059ea80a51cf4946e0a01780a9a64938675dc05b09bdf4058",
+        "characters": 516
+      },
+      {
+        "label": "保存的最终图片提示词",
+        "sha256": "c5e1e5a5fa2d789496a53b10323cb7915b5b040c708f2e6ab990f8d3b9de61ba",
+        "characters": 694
+      }
+    ]
+  },
+  {
+    "case": "background-mug-r2",
+    "sections": [
+      {
+        "label": "用户原始需求",
+        "sha256": "0d5d6a7a263d60298e4c0e2e993dc29e9f48aa46bfed9c323b71eab007afa100",
+        "characters": 126
+      },
+      {
+        "label": "文本模型的创作说明（不会直接用它重绘整图）",
+        "sha256": "5f62688e87cea347d63a215abbeb7adf2dee8cfdc3f97ca9f5a63a3de57c6b42",
+        "characters": 292
+      },
+      {
+        "label": "实际蒙版分支文本（由已保存方案重建）",
+        "sha256": "b240f22cb23370b0d163a8d0288f95cce1f3cdf22aebdd9fb699b2d6dc8336c0",
+        "characters": 892
+      }
+    ]
+  },
+  {
+    "case": "background-perfume-r4",
+    "sections": [
+      {
+        "label": "用户原始需求",
+        "sha256": "ab8830d44c727834b41b02ba3f8e882b197958712180bdad7c097f58ed90ea76",
+        "characters": 186
+      },
+      {
+        "label": "文本模型的创作说明（不会直接用它重绘整图）",
+        "sha256": "73b41037d69b886dece695a1496d5e7f7608736a84034ef67709931905ebb7ab",
+        "characters": 318
+      },
+      {
+        "label": "实际蒙版分支文本（由已保存方案重建）",
+        "sha256": "d0db32771223b0005df510ba916b5d10ce911bd525702ad8497d6aeb441df300",
+        "characters": 999
+      }
+    ]
+  },
+  {
+    "case": "replica-image-r4",
+    "sections": [
+      {
+        "label": "用户原始需求",
+        "sha256": "2666b72d24fd93d370ca1c34eae81bfe813527132e8397c920932226e9744e24",
+        "characters": 116
+      },
+      {
+        "label": "文本模型生成的创作说明",
+        "sha256": "764e107c2aa4554c7f0953b4f91e575b73261ddc3359362f6021fd62eebcf6b2",
+        "characters": 304
+      },
+      {
+        "label": "保存的最终图片提示词",
+        "sha256": "9bc3b9717630988e8fbb6a7fb2ab8e63912c7e69259564ecf5e769df16da0a02",
+        "characters": 1132
+      }
+    ]
+  },
+  {
+    "case": "replica-image-r5",
+    "sections": [
+      {
+        "label": "用户原始需求",
+        "sha256": "651a0425baef3f2cd2171c7856b52be31dc93c7f73c5d6caa6d9172408be2620",
+        "characters": 163
+      },
+      {
+        "label": "文本模型生成的创作说明",
+        "sha256": "97700e4a90e7113dbb84c07910c82db292e60ad57a826ec69c86a7e85c128eae",
+        "characters": 415
+      },
+      {
+        "label": "保存的最终图片提示词",
+        "sha256": "797644f14bbdc333d7864bb680e8a90d57d639b97b8b5e12038d139b6f48e08c",
+        "characters": 1355
+      }
+    ]
+  },
+  {
+    "case": "replica-video-r2",
+    "sections": [
+      {
+        "label": "用户原始需求",
+        "sha256": "25a595c61b8e653563760ee9af2113e88a19f5d85d9518616eb6ec73b78a1fbd",
+        "characters": 109
+      },
+      {
+        "label": "文本模型生成的首帧提示词",
+        "sha256": "8ec8ad3fdb5f89045643e19091514b2e8279eb423966e4b74556608b0979a5c5",
+        "characters": 148
+      },
+      {
+        "label": "文本模型生成的视频提示词",
+        "sha256": "79465a7d8731c983d561c3e879eab3a356af3b0519472bca108c98232caae972",
+        "characters": 115
+      },
+      {
+        "label": "保存后的最终首帧提示词（未执行）",
+        "sha256": "79ead6a7d766fce643c6d41d0ab84de0c14c02ce0432d48a188e24e3ed0ab9ea",
+        "characters": 443
+      },
+      {
+        "label": "保存后的最终视频提示词（未执行）",
+        "sha256": "9ebc537a934afdf8011f59c84a65d10cf33c75d7903fbc61e018ee6e76edc9f4",
+        "characters": 223
+      }
+    ]
+  }
+]

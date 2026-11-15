@@ -1,0 +1,59 @@
+Running 4 tests using 1 worker
+
+(node:95418) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/management-lifecycle.spec.ts:38:1 › creates a real read-only API key through the UI, isolates its workspace and immediately revokes it (3.9s)
+  ✓  2 [desktop] › tests/e2e/management-lifecycle.spec.ts:97:1 › saves, supplements, reloads and withdraws a support record through actual controls (5.4s)
+  ✘  3 [desktop] › tests/e2e/management-lifecycle.spec.ts:142:1 › keeps each unsaved support reply attached to its own ticket when changing records (8.9s)
+(node:95611) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [desktop] › tests/e2e/management-lifecycle.spec.ts:183:1 › invites a viewer, changes the actual member role and revokes team access while preserving team work (10.0s)
+
+
+  1) [desktop] › tests/e2e/management-lifecycle.spec.ts:142:1 › keeps each unsaved support reply attached to its own ticket when changing records 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByRole('dialog', { name: '记录乙', exact: true }).getByRole('textbox', { name: '补充说明', exact: true })
+    Expected: ""
+    Received: "只属于记录甲的未保存输入"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: '记录乙', exact: true }).getByRole('textbox', { name: '补充说明', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '记录乙', exact: true }).getByRole('textbox', { name: '补充说明', exact: true })
+        13 × locator resolved to <textarea rows="3" required="">只属于记录甲的未保存输入</textarea>
+           - unexpected value "只属于记录甲的未保存输入"
+
+
+      167 |   await open('记录乙');
+      168 |   detail = page.getByRole('dialog', { name: '记录乙', exact: true });
+    > 169 |   await expect(detail.getByRole('textbox', { name: '补充说明', exact: true })).toHaveValue('');
+          |                                                                            ^
+      170 |   await detail
+      171 |     .getByRole('textbox', { name: '补充说明', exact: true })
+      172 |     .fill('只属于记录乙的未保存输入');
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-lifecycle.spec.ts:169:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-Sq8mPP/results/management-lifecycle-keeps-ec0b8-icket-when-changing-records-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-Sq8mPP/results/management-lifecycle-keeps-ec0b8-icket-when-changing-records-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-Sq8mPP/results/management-lifecycle-keeps-ec0b8-icket-when-changing-records-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-Sq8mPP/results/management-lifecycle-keeps-ec0b8-icket-when-changing-records-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-Sq8mPP/results/management-lifecycle-keeps-ec0b8-icket-when-changing-records-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/management-lifecycle.spec.ts:142:1 › keeps each unsaved support reply attached to its own ticket when changing records 
+  3 passed (31.1s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-Sq8mPP

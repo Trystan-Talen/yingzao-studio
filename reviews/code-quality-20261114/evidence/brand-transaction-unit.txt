@@ -1,0 +1,10 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ✓ tests/brand-quotas.test.ts (11 tests) 554ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  09:00:12
+   Duration  1.18s (tests 50%, import 42%, transform 9%)
+

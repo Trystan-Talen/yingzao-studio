@@ -1,0 +1,83 @@
+{
+  "scope": "项目、素材、素材集合编辑生命周期及集合分页；其余管理功能只读交叉审查",
+  "isolation": "每例独立 SQLite 和媒体，系统 Chrome，回环接口；未访问正式数据、外部模型、支付或外部开票服务。",
+  "files": {
+    "platform/src/web/pages/Library.tsx": "6e0806dd5c299e8393e2022911397d960269c0d91a4cb58be10fddc31983c614",
+    "platform/tests/e2e/management-editor-recovery.spec.ts": "6752084c636631082546882e020f2a1e8c87aa9984e925ec57af451f10b6cf13"
+  },
+  "red": [
+    {
+      "run": "platform/var/e2e/run-gsSNLd",
+      "failed": 3,
+      "defects": [
+        "项目保存后清除提交后继续编辑的稿",
+        "旧创建项目响应跳转并覆盖新弹窗草稿",
+        "旧素材保存响应关闭另一素材编辑器"
+      ]
+    },
+    {
+      "run": "platform/var/e2e/run-JwIgFc",
+      "failed": 2,
+      "defects": [
+        "旧集合创建响应关闭后来新建的集合草稿",
+        "旧集合删除响应清空新集合筛选并关闭新编辑器"
+      ]
+    },
+    {
+      "run": "platform/var/e2e/run-5ZjhJx",
+      "failed": 1,
+      "defects": [
+        "第 101 个集合无法从页面或加入集合弹窗访问"
+      ]
+    }
+  ],
+  "fixes": [
+    "按编辑会话和草稿修订识别响应归属；保留提交后的输入。创建成功后如继续编辑，绑定返回记录的 ID，第二次保存更新原记录。",
+    "项目创建完成仅在原编辑会话仍有效时导航；创建中禁止修改创建后不可变的项目类型。",
+    "集合删除只关闭本次编辑会话、只清空仍选中已删除集合的筛选。",
+    "集合列表与加入集合弹窗可分页，当前集合跨页保留；改名同步、末页删除后校正页码。"
+  ],
+  "verification": {
+    "finalBatch": {
+      "run": "platform/var/e2e/run-pNrkeC",
+      "total": 30,
+      "passed": 29,
+      "failed": 1,
+      "newTestsPassed": 18,
+      "newTestsTotal": 18,
+      "failure": "既有手机项目列表恢复例在业务执行前的隔离 worker 启动轮询超时；未修改 timeout。"
+    },
+    "startupRecheck": {
+      "run": "platform/var/e2e/run-5W7ylH",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "note": "只重验同一手机用例；首次失败保留，不将最终批次记成一次 30/30。"
+    },
+    "earlierFixedSourceBatch": {
+      "run": "platform/var/e2e/run-cui6fH",
+      "total": 30,
+      "passed": 28,
+      "failed": 2,
+      "reason": "新测试在保持打开的模态窗下面查询已 aria-hidden 的集合筛选控件。将同一筛选值断言移到显式保存关闭弹窗后，未降低草稿/数据库断言、未改产品代码。"
+    },
+    "checks": {
+      "typecheck": "exit 0, tsc --noEmit",
+      "lint": "exit 0, 两个改动文件",
+      "format": "exit 0, 两个改动文件"
+    },
+    "regressionContents": [
+      "9 个新增场景，桌面和手机各 9 条；验证真实保存记录、原记录 ID、字段、成员关系以及删除后的集合总数。",
+      "既有集合成员增量保留、回收成员保留、列表失败重试、跨空间上传批次、部分删除恢复、项目列表失败重试。"
+    ]
+  },
+  "readOnlyReview": {
+    "accountTeamSupportShare": "核对现有 account、management-lifecycle、canvas 以及 brand-editor-recovery 等用例，已含会话失效、密钥撤销和权限、工单真实保存撤回、匿名原图禁止与分享撤销、品牌并发恢复等结果断言，不以页面可达代替通过。本专项未重新运行全部这些文件，由主线程全量验收。",
+    "usage": "交叉审查 Usage.tsx、business.ts、usage-lifecycle.spec.ts、quality-workflows.test.ts；已向主线程提出默认 24 个抬头不可达问题并由主线程修复。最新会话/修订、抬头跨页选择同步、订单已支付净额、申请分配和撤回释放逻辑未发现新增阻塞。",
+    "team": "交叉审查 Team.tsx 会话/修订守卫与邀请结果保留已提交邮箱，未发现新增阻塞；验证由团队代理负责。"
+  },
+  "limitations": [
+    "局部回归不代表本轮全项目浏览器验收已完成；最终源码由主线程冻结后统一全量验收。",
+    "付款、正式开票、真实短信/邮件、真实模型效果不属于本轮局部合同验证通过项。"
+  ]
+}

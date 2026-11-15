@@ -5,6 +5,8 @@ import type { Page } from '@playwright/test';
 import type { CreativeAnswer, CreativePreparation } from '../../src/contracts/creative-intent';
 import { CREATIVE_INTENT_CLIENT_TIMEOUT_MS } from '../../src/contracts/creative-intent-timing';
 import type { JobInput } from '../../src/contracts/jobs';
+import { creativeInputFingerprint } from '../../src/contracts/creative-fingerprint';
+import { creativeBriefStorageKey } from '../../src/web/lib/creative-brief';
 import { test, expect, type Studio } from './fixtures';
 
 test.use({ experienceProviders: true, recoveryEnabled: false, smsEnabled: false });
@@ -538,6 +540,9 @@ test('does not bypass a failed check with confirmation disabled and retries the 
   await harness.generate.click();
   await expect(page.getByText('这次理解还没完成', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: '重新检查', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '按最新资料重新整理', exact: true })).toHaveCount(
+    0,
+  );
   expect(harness.requests).toHaveLength(1);
   expect(harness.counts()).toMatchObject({ projects: 0, jobs: 0 });
   expect(harness.quoted).toHaveLength(0);
@@ -547,6 +552,9 @@ test('does not bypass a failed check with confirmation disabled and retries the 
   await harness.generate.click();
   await expect.poll(() => harness.requests.length).toBe(2);
   expect(harness.requests[1]?.requestId).toBe(harness.requests[0]?.requestId);
+  await expect(page.getByRole('button', { name: '按最新资料重新整理', exact: true })).toHaveCount(
+    0,
+  );
   expect(harness.counts()).toMatchObject({ projects: 0, jobs: 0 });
   expect(harness.quoted).toHaveLength(0);
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
@@ -679,8 +687,7 @@ test('keeps explicit video types aligned with their placement and clears the old
   const harness = await open(page, studio);
   await harness.composer.getByRole('button', { name: '视频创作', exact: true }).click();
   await harness.prompt.fill('制作一段清晰的展示视频。');
-  await harness.composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  const kind = harness.composer.getByRole('combobox', { name: '创作类型', exact: true });
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   const generate = harness.composer.getByRole('button', { name: '生成视频', exact: true });
   const quote = page.getByRole('dialog', { name: '确认创作', exact: true });
   for (const [choice, placement] of [
@@ -689,7 +696,9 @@ test('keeps explicit video types aligned with their placement and clears the old
     ['brand', 'ad-video'],
     ['free', 'general'],
   ]) {
-    await kind.selectOption(choice!);
+    await harness.composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+    await settings.getByRole('combobox', { name: '创作类型', exact: true }).selectOption(choice!);
+    await settings.getByRole('button', { name: '完成', exact: true }).click();
     await generate.click();
     await expect(quote).toBeVisible();
     const input = harness.requests.at(-1)!.input;
@@ -795,4 +804,134 @@ test('times out at the bounded client deadline without automatically replacing o
   expect(harness.requests[1]?.requestId).toBe(harness.requests[0]?.requestId);
   expect(harness.quoted).toHaveLength(0);
   expect(harness.counts()).toMatchObject({ projects: 0, jobs: 0 });
+});
+
+test('a cached ready plan uses a free configuration check and waits for explicit reset before replanning', async ({
+  page,
+  studio,
+}) => {
+  await page.clock.install();
+  const harness = await open(page, studio);
+  const original = '月球上看海的猫，水彩画，保留原话与参考。';
+  await harness.prompt.fill(original);
+  await harness.generate.click();
+  const confirmation = page.getByRole('dialog', { name: '确认创作', exact: true });
+  await expect(confirmation).toBeVisible();
+  await confirmation.getByRole('button', { name: '继续编辑', exact: true }).click();
+  let rejectedReads = 0;
+  let changed = true;
+  await page.route(/\/api\/v1\/creative-briefs\/[0-9a-f-]{36}$/, async (route) => {
+    if (!changed) return route.fallback();
+    rejectedReads++;
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: 'CREATIVE_CONFIGURATION_CHANGED',
+          message: '模型配置已改变，请重新整理需求。',
+        },
+      },
+    });
+  });
+  // Expire only the UI fixture's one-minute quote; the cached ready plan remains in memory.
+  await page.clock.fastForward(61_000);
+  await harness.generate.click();
+  const restart = page.getByRole('button', { name: '重新检查', exact: true });
+  await expect(restart).toBeVisible();
+  expect(rejectedReads).toBe(1);
+  expect(harness.requests).toHaveLength(1);
+  expect(harness.quoted).toHaveLength(1);
+  await harness.generate.click();
+  expect(harness.requests).toHaveLength(1);
+  expect(rejectedReads).toBe(1);
+  await restart.click();
+  await expect(restart).toHaveCount(0);
+  expect(harness.requests).toHaveLength(1);
+  const key = creativeBriefStorageKey(
+    harness.account.user.id,
+    harness.account.workspace.id,
+    creativeInputFingerprint(harness.requests[0]!.input),
+    harness.quoted[0]!.projectId,
+  );
+  const record = await page.evaluate(
+    (storageKey) => JSON.parse(localStorage.getItem(storageKey)!),
+    key,
+  );
+  expect(record.previousId).toBeUndefined();
+  expect(record.pending).toBeUndefined();
+  expect(record.answers).toEqual([]);
+  await page.reload();
+  await expect(harness.prompt).toHaveValue(original);
+  expect(harness.requests).toHaveLength(1);
+  expect(rejectedReads).toBe(1);
+  changed = false;
+  await harness.generate.click();
+  await expect(confirmation).toBeVisible();
+  expect(harness.requests).toHaveLength(2);
+  expect(harness.requests[1]!.requestId).not.toBe(harness.requests[0]!.requestId);
+  expect(harness.requests[1]!.previousId).toBeUndefined();
+  expect(harness.requests[1]!.answers).toEqual([]);
+  expect(harness.requests[1]!.input.assetIds).toEqual(harness.requests[0]!.input.assetIds);
+  expect(harness.counts().jobs).toBe(0);
+});
+
+test('a connection change during quotation invalidates the newly bound plan without another paid call', async ({
+  page,
+  studio,
+}) => {
+  const harness = await open(page, studio);
+  let reject = true;
+  await page.route('**/api/v1/quotes', async (route) => {
+    if (!reject) return route.fallback();
+    reject = false;
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: { code: 'MODEL_CONNECTION_CHANGED', message: '模型连接已改变，请重新整理需求。' },
+      },
+    });
+  });
+  const original = '月球上看海的猫，保持原有画面需求。';
+  await harness.prompt.fill(original);
+  await harness.generate.click();
+  const restart = page.getByRole('button', { name: '重新检查', exact: true });
+  await expect(restart).toBeVisible();
+  expect(harness.requests).toHaveLength(1);
+  expect(harness.counts().projects).toBe(1);
+  await expect(harness.prompt).toHaveValue(original);
+  await expect(page.getByRole('dialog', { name: '确认创作', exact: true })).toHaveCount(0);
+  await restart.click();
+  expect(harness.requests).toHaveLength(1);
+  await harness.generate.click();
+  await expect(page.getByRole('dialog', { name: '确认创作', exact: true })).toBeVisible();
+  expect(harness.requests).toHaveLength(2);
+  expect(harness.requests[1]!.previousId).toBeUndefined();
+  expect(harness.requests[1]!.input.projectId).toBeTruthy();
+  expect(harness.counts().projects).toBe(1);
+  expect(harness.counts().jobs).toBe(0);
+});
+
+test('a definite budget rejection preserves the draft and permits a fresh user-requested preparation', async ({
+  page,
+  studio,
+}) => {
+  const harness = await open(page, studio);
+  harness.setFailureCode('INSUFFICIENT_CREDITS');
+  harness.setRespond(async () => null);
+  const original = '生成一张好看的口红主图。';
+  await harness.prompt.fill(original);
+  await harness.generate.click();
+  const brief = page.getByRole('region', { name: '创作需求检查', exact: true });
+  await expect(brief).toContainText('内容已保留。点击下方按钮重试。');
+  await expect(brief).not.toContainText('核对同一次请求');
+  await expect(harness.prompt).toHaveValue(original);
+  expect(harness.requests).toHaveLength(1);
+  expect(harness.counts().projects).toBe(0);
+  harness.setRespond(async (request) => prepared(request));
+  await harness.generate.click();
+  await expect(page.getByRole('dialog', { name: '确认创作', exact: true })).toBeVisible();
+  expect(harness.requests).toHaveLength(2);
+  expect(harness.requests[1]!.requestId).not.toBe(harness.requests[0]!.requestId);
+  expect(harness.requests[1]!.input.prompt).toBe(original);
+  expect(harness.counts().jobs).toBe(0);
 });

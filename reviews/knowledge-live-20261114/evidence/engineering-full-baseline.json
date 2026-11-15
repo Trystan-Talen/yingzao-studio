@@ -1,0 +1,95 @@
+{
+  "started": "2026-11-14T15:46:44.323Z",
+  "finished": "2026-11-14T15:49:26.732Z",
+  "isolation": {
+    "dotenv": "/dev/null",
+    "envAllowlist": true,
+    "inheritedProviderCredentials": false,
+    "privateDatabaseRead": false,
+    "paidProviderCalls": 0,
+    "databaseFallback": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/knowledge-live-20261114/regression/final/fallback-isolated.sqlite",
+    "mediaFallback": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/knowledge-live-20261114/regression/final/fallback-isolated-media"
+  },
+  "source": {
+    "files": 650,
+    "before": "808df05616703ee92b125f58ec4459eed249e353478525df5af606598755cb38",
+    "after": "808df05616703ee92b125f58ec4459eed249e353478525df5af606598755cb38",
+    "changed": [],
+    "removed": []
+  },
+  "checks": [
+    {
+      "name": "unit",
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile.json=/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/knowledge-live-20261114/regression/final/unit.json"
+      ],
+      "started": "2026-11-14T15:46:44.324Z",
+      "finished": "2026-11-14T15:49:26.705Z",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "typecheck",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "started": "2026-11-14T15:46:44.325Z",
+      "finished": "2026-11-14T15:46:52.835Z",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "lint",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "src",
+        "scripts",
+        "tests"
+      ],
+      "started": "2026-11-14T15:46:44.325Z",
+      "finished": "2026-11-14T15:46:48.335Z",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "format-check",
+      "args": [
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "src",
+        "scripts",
+        "tests",
+        ".prettierrc.json",
+        "package.json",
+        "playwright.config.ts",
+        "tsconfig.json",
+        "vite.config.ts",
+        "vitest.config.ts"
+      ],
+      "started": "2026-11-14T15:46:44.325Z",
+      "finished": "2026-11-14T15:46:49.904Z",
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "unit": {
+    "success": true,
+    "numTotalTestSuites": 280,
+    "numPassedTestSuites": 280,
+    "numFailedTestSuites": 0,
+    "numPendingTestSuites": 0,
+    "numTotalTests": 2346,
+    "numPassedTests": 2346,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "numTodoTests": 0,
+    "files": 151
+  },
+  "validationStage": "after-native-market-null-fix-before-product-cache-refresh-fix",
+  "notFinalAfterCacheFix": true
+}

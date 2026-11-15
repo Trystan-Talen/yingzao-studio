@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-11-14T17:08:31.333Z",
+  "finishedAt": "2026-11-14T17:12:05.910Z",
+  "release": true,
+  "exitCode": 0,
+  "results": [
+    {
+      "name": "类型检查",
+      "exitCode": 0,
+      "durationMs": 7160
+    },
+    {
+      "name": "代码规范",
+      "exitCode": 0,
+      "durationMs": 5235
+    },
+    {
+      "name": "格式检查",
+      "exitCode": 0,
+      "durationMs": 4671
+    },
+    {
+      "name": "完整单元测试",
+      "exitCode": 0,
+      "durationMs": 189064
+    },
+    {
+      "name": "网页生产构建",
+      "exitCode": 0,
+      "durationMs": 2204
+    },
+    {
+      "name": "服务生产构建",
+      "exitCode": 0,
+      "durationMs": 240
+    },
+    {
+      "name": "本机处理依赖",
+      "exitCode": 0,
+      "durationMs": 86
+    },
+    {
+      "name": "隔离生产启动",
+      "exitCode": 0,
+      "durationMs": 5916
+    }
+  ],
+  "browserTestsIncluded": false,
+  "environment": "OS allowlist; application credentials and dotenv excluded"
+}

@@ -1,0 +1,53 @@
+Running 1 test using 1 worker
+
+(node:33324) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/knowledge-refresh.spec.ts:47:1 › refreshes an expired product cached in a continuously visible page after another client renews it (8.4s)
+
+
+  1) [desktop] › tests/e2e/knowledge-refresh.spec.ts:47:1 › refreshes an expired product cached in a continuously visible page after another client renews it 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  locator('.composer').getByRole('button', { name: '生成图片', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" locator('.composer').getByRole('button', { name: '生成图片', exact: true }) with timeout 5000ms
+      - waiting for locator('.composer').getByRole('button', { name: '生成图片', exact: true })
+        14 × locator resolved to <button disabled class="button primary ">…</button>
+           - unexpected value "disabled"
+
+
+      76 |   const original = await flow.prompt.inputValue();
+      77 |   await flow.refresh.click();
+    > 78 |   await expect(flow.generate).toBeEnabled();
+         |                               ^
+      79 |   await expect(flow.prompt).toHaveValue(original);
+      80 |   expect(creationRecords(studio)).toMatchObject({ briefs: 1, quotes: 1, jobs: 0 });
+      81 |   const preparing = page.waitForResponse(
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-refresh.spec.ts:78:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-CYuizr/results/knowledge-refresh-refreshe-6f90b-er-another-client-renews-it-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-CYuizr/results/knowledge-refresh-refreshe-6f90b-er-another-client-renews-it-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-CYuizr/results/knowledge-refresh-refreshe-6f90b-er-another-client-renews-it-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-CYuizr/results/knowledge-refresh-refreshe-6f90b-er-another-client-renews-it-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-CYuizr/results/knowledge-refresh-refreshe-6f90b-er-another-client-renews-it-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/knowledge-refresh.spec.ts:47:1 › refreshes an expired product cached in a continuously visible page after another client renews it 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-CYuizr

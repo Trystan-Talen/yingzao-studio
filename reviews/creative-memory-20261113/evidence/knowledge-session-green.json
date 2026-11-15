@@ -1,0 +1,160 @@
+{
+  "scope": "隔离数据库、真实React与查询缓存的内存DOM回归；没有真实模型调用或运行库写入",
+  "passed": 38,
+  "failed": 0,
+  "total": 38,
+  "tests": [
+    {
+      "name": "bounded server confirmation stops waiting for an accepted request without resubmitting or calling it rejected",
+      "status": "passed"
+    },
+    {
+      "name": "bounded server confirmation also bounds a stalled response body after headers have arrived",
+      "status": "passed"
+    },
+    {
+      "name": "bounded server confirmation clears its deadline after success and forwards the workspace and request fields",
+      "status": "passed"
+    },
+    {
+      "name": "bounded server confirmation keeps caller cancellation distinct from an unknown server confirmation",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing keeps four active tabs below the shared request budget without refreshing unrelated resources",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing replays 389 events with one refresh per active query and reads the latest state",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing keeps refreshing during a continuous event stream instead of waiting for silence",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes related outputs and credits when a running job gains an asset, without refreshing configuration",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes related outputs and credits when a succeeded job gains an asset, without refreshing configuration",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing ignores malformed events and stops related-resource refresh after a workspace switch",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes the first created lifecycle event even when polling already updated the job",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes the first succeeded lifecycle event even when polling already updated the job",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes the first partial-output lifecycle event even when polling already updated the job",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes completed outputs when the active running list empties and an inactive stale list remains",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes batch refunds when an item becomes failed (poll first: false)",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes batch refunds when an item becomes cancelled (poll first: false)",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes batch refunds when an item becomes failed (poll first: true)",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing refreshes batch refunds when an item becomes cancelled (poll first: true)",
+      "status": "passed"
+    },
+    {
+      "name": "job event refresh coalescing cancels old workspace work and ignores late events after cleanup",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory isolates owners and workspaces and permits a viewer to maintain only their own memory",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory uses exact half-life and expiry boundaries without refreshing confirmation on reads",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory replaces an existing version on explicit confirmation and rejects stale concurrent writes",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory allows pausing an expired temporary record without reconfirming it, and requires a future expiry when enabling it",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory rejects duplicate topics and constrains memory types, future dates and record capacity",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory filters media, paused, expired and decayed records and makes specific media override general topics",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory selects at most eight records and bounds total selected text without silently slicing content",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory prioritizes active temporary requirements and recent preferences ahead of profile under a limited context budget",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products enforces private visibility, workspace ownership and read-only members",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products prevents a shared product from exposing a private, deleted or inaccessible brand",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products uses versions on update, delete and restore, and retains expired records for management",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products validates media and brand links again on restore and rejects duplicate or excessive assets",
+      "status": "passed"
+    },
+    {
+      "name": "recycled product repair repairs invalid associations while retaining deleted state before explicit restore",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts returns computed memory fields, rejects malformed bodies and exposes conflicts as 409",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts requires sessions, denies API keys for memory and preserves product response fields",
+      "status": "passed"
+    },
+    {
+      "name": "account-scoped browser query state never renders another account private cache when identity changes in the same workspace",
+      "status": "passed"
+    },
+    {
+      "name": "account-scoped browser query state purges private cache after 401 before another account logs into the same workspace",
+      "status": "passed"
+    },
+    {
+      "name": "account-scoped browser query state ignores an old session response arriving after a newer account refresh",
+      "status": "passed"
+    },
+    {
+      "name": "account-scoped browser query state does not restore a session from an old response after explicit sign-out",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "realSessionExpiryStatus": 401,
+  "sameWorkspace": true,
+  "serverResponsesExcludedOtherUserData": true,
+  "leakedMemoryDuringLoad": 1,
+  "leakedProductDuringLoad": 1,
+  "leakedWords": [
+    "账户甲私密记忆只允许甲看见",
+    "账户甲私密产品只允许甲看见"
+  ],
+  "navigationMarker": "same-document"
+}

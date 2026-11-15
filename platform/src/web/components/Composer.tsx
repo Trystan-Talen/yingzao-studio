@@ -4,9 +4,14 @@ import { productWarning } from '../lib/product-messages';
 import { DesignPlanner, createDesign, type MaterialDesign } from './DesignPlanner';
 import { AIWriter } from './AIWriter';
 import { useEffect, useId, useImperativeHandle, useRef, useState, type Ref } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { ChevronDown, ChevronUp, Save, SlidersHorizontal, Sparkles, Undo2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { AssetDto, BrandDto, ProjectDto } from '../../contracts/core';
+import type { MemoryDto, ProductDto } from '../../contracts/knowledge';
+import { KnowledgeSelect } from './KnowledgeFields';
+import { MemoryEditor } from './MemorySettings';
+import '../styles/knowledge.css';
 import { IMAGE_KINDS, VIDEO_KINDS, LANGUAGES } from '../../contracts/catalog';
 import { api, CONFIRMATION_TIMEOUT_MS, useApi, useRefresh, type Page } from '../lib/api';
 import { jobDestination } from '../lib/job-navigation';
@@ -27,6 +32,10 @@ import {
   writeDraft,
   restoreAssets,
   type CreationDraft,
+  type CreationMode,
+  type ReplicaAspect,
+  composerModeKey,
+  defaultReplicaAspects,
 } from '../lib/creation-recovery';
 import type { DesignPlan } from '../../contracts/design-plan';
 import { buildPlanApplication } from '../lib/design-plan';
@@ -43,7 +52,10 @@ interface Props {
   controllerRef?: Ref<ComposerController>;
   initialWarnings?: string[];
   initialDraft?: JobInput;
-  initialRecovery?: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>;
+  initialRecovery?: Pick<
+    CreationDraft,
+    'input' | 'drafts' | 'warnings' | 'modelDefaultsPending' | 'modeDrafts' | 'activeModes'
+  >;
   onRecoveryPersisted?: () => void;
   initialPrompt?: string;
   initialKind?: 'image' | 'video';
@@ -105,6 +117,26 @@ export function Composer({
       : 'image'
     : (requestedKind ?? initialKind);
   const typeDrafts = useRef<CreationDraft['drafts']>(localDraft.value?.drafts ?? {});
+  const modeDrafts = useRef<NonNullable<CreationDraft['modeDrafts']>>(
+    localDraft.value?.modeDrafts ?? {},
+  );
+  const activeModes = useRef<NonNullable<CreationDraft['activeModes']>>(
+    localDraft.value?.activeModes ?? {},
+  );
+  const initialMode =
+    activeModes.current[draftKind] ?? (initialDraft?.replica ? 'replica' : 'original');
+  const initialModeDraft = modeDrafts.current[composerModeKey(draftKind, initialMode)];
+  const [creationMode, setCreationMode] = useState<CreationMode>(initialMode);
+  const isReplica = creationMode === 'replica';
+  const [replicaAspects, setReplicaAspects] = useState<ReplicaAspect[]>(
+    initialModeDraft?.aspects ?? initialDraft?.replica?.aspects ?? defaultReplicaAspects(draftKind),
+  );
+  const [replicaTrimStart, setReplicaTrimStart] = useState(
+    initialModeDraft?.trimStart ?? initialDraft?.replica?.trimStart ?? 0,
+  );
+  const [replicaTrimDuration, setReplicaTrimDuration] = useState<number | undefined>(
+    initialModeDraft?.trimDuration ?? initialDraft?.replica?.trimDuration,
+  );
   const [draftError, setDraftError] = useState(localDraft.error);
   const [draftBlocked, setDraftBlocked] = useState(!!localDraft.error);
   const [draftStatus, setDraftStatus] = useState(localDraft.value ? '已恢复本机草稿' : '');
@@ -185,12 +217,42 @@ export function Composer({
   const [outputKind, setOutputKind] = useState(initialDraft?.options.kind ?? 'free');
   const [designs, setDesigns] = useState<MaterialDesign[]>(initialDraft?.options.designs ?? []);
   const [brandId, setBrandId] = useState(initialDraft?.brandId ?? '');
+  const [productId, setProductId] = useState(initialDraft?.productId ?? '');
+  const [useMemory, setUseMemory] = useState<boolean | undefined>(
+    initialDraft ? initialDraft.useMemory : true,
+  );
+  const [includeProductImages, setIncludeProductImages] = useState<boolean | undefined>(
+    initialDraft?.includeProductImages,
+  );
+  const [remembering, setRemembering] = useState(false);
+  const [character, setCharacter] = useState(() =>
+    initialDraft?.characterId
+      ? { id: initialDraft.characterId, revision: initialDraft.characterRevision }
+      : undefined,
+  );
   const [language, setLanguage] = useState(
     initialDraft?.options.language ?? session?.user.preferences.defaultCreationLanguage ?? 'zh-CN',
   );
   const [platform, setPlatform] = useState(
     initialDraft?.options.platform ?? session?.user.preferences.defaultPlatform ?? '通用电商',
   );
+  const onboardingIncomplete = session?.user.preferences.onboardingCompleted === false;
+  // The homepage mounts behind the first-run modal. Do not persist its provisional
+  // defaults as a user draft before the selected onboarding preferences arrive.
+  const [onboardingDefaultsReady, setOnboardingDefaultsReady] = useState(
+    !onboardingIncomplete || !!initialDraft || !!projectId,
+  );
+  useEffect(() => {
+    if (onboardingDefaultsReady || onboardingIncomplete) return;
+    setPlatform(session?.user.preferences.defaultPlatform ?? '通用电商');
+    setLanguage(session?.user.preferences.defaultCreationLanguage ?? 'zh-CN');
+    setOnboardingDefaultsReady(true);
+  }, [
+    onboardingDefaultsReady,
+    onboardingIncomplete,
+    session?.user.preferences.defaultPlatform,
+    session?.user.preferences.defaultCreationLanguage,
+  ]);
   const [creativePlacement, setCreativePlacement] = useState(() => {
     const placement = resolveCreativePlacement({
       mediaType: draftKind,
@@ -209,11 +271,31 @@ export function Composer({
   );
   const navigate = useNavigate();
   const refresh = useRefresh();
+  const queries = useQueryClient();
+  const refreshLibraryContext = () =>
+    queries.invalidateQueries({
+      queryKey: ['api', workspace!.id],
+      predicate: (query) =>
+        query.queryKey[3] === session!.user.id &&
+        typeof query.queryKey[2] === 'string' &&
+        /^\/(products|brands|memories)(?:[/?]|$)/.test(query.queryKey[2]),
+    });
   const action = useAction();
   const capabilities = useApi<Capabilities>('/capabilities');
-  const brands = useApi<Page<BrandDto>>('/brands?pageSize=100');
+  const selectedProduct = useApi<ProductDto>(`/products/${productId}`, !!productId);
+  const linkedBrand = useApi<BrandDto>(
+    `/brands/${selectedProduct.data?.brandId ?? ''}`,
+    !!selectedProduct.data?.brandId,
+  );
+  const memories = useApi<Page<MemoryDto>>('/memories?pageSize=100', useMemory === true, 60_000);
+  const eligibleMemories =
+    memories.data?.items.filter(
+      (item) => item.eligible && (item.mediaType === 'all' || item.mediaType === kind),
+    ) ?? [];
   const operations =
-    capabilities.data?.operations.filter((op) => op.id === `${kind}.generate`) ?? [];
+    capabilities.data?.operations.filter(
+      (op) => op.id === `${kind}.generate` && (!isReplica || op.providerId === 'native'),
+    ) ?? [];
   const { operation, model: selectedModel } = resolveModelSelection(
     operations,
     operationKey,
@@ -233,12 +315,28 @@ export function Composer({
   const currentModel = modelCapability.model;
   const firstLast = kind === 'video' && referenceMode === 'first-last';
   const isO3 = currentModel?.id === 'kling-o3-4k-reference';
+  const productConflict = !!(
+    productId &&
+    brandId &&
+    !(firstLast && !isO3) &&
+    selectedProduct.data?.brandId &&
+    selectedProduct.data.brandId !== brandId
+  );
+  const productIssue =
+    productId &&
+    (selectedProduct.isPending ||
+      !!selectedProduct.error ||
+      (!!selectedProduct.data?.brandId && (linkedBrand.isPending || !!linkedBrand.error)) ||
+      productConflict ||
+      (selectedProduct.data?.validUntil &&
+        Date.parse(selectedProduct.data.validUntil) <= Date.now()));
   const isKling = kind === 'video' && currentModel?.id.startsWith('kling-');
   // These gateways reject ordinary design batches before splitting items. The
   // dedicated, confirmed detail-page flow has its own server-side exception.
   const supportsOrdinaryDesigns = !(
-    operation?.providerId === 'openai' &&
-    ['gpt-image-2', 'doubao-seedream-5.0-lite'].includes(currentModel?.id ?? model)
+    operation?.providerId === 'native' ||
+    (operation?.providerId === 'openai' &&
+      ['gpt-image-2', 'doubao-seedream-5.0-lite'].includes(currentModel?.id ?? model))
   );
   const multiple =
     kind === 'image' &&
@@ -246,7 +344,17 @@ export function Composer({
       (outputKind === 'marketing' && (supportsOrdinaryDesigns || designs.length > 0)));
   const acceptsFirstLast = kind === 'video' && (currentModel?.id === 'kling-o1-first-last' || isO3);
   const textOnly = operation?.inputMode === 'text-only';
-  const sourceMax = textOnly ? 0 : kind === 'image' ? 20 : firstLast ? 2 : isKling ? 7 : 1;
+  const sourceMax = textOnly
+    ? 0
+    : isReplica
+      ? 1
+      : kind === 'image'
+        ? 20
+        : firstLast
+          ? 2
+          : isKling
+            ? 7
+            : 1;
   const invalidVideoReferences =
     kind === 'video' &&
     (references.length > sourceMax ||
@@ -262,6 +370,7 @@ export function Composer({
     ...designs.flatMap((design) => design.assetIds),
   ];
   const referenceKey = JSON.stringify([
+    creationMode,
     backgroundAudioId,
     referenceIds,
     extraReferenceIds,
@@ -328,13 +437,44 @@ export function Composer({
     providerId: operation?.providerId ?? operationKey.split(':')[1] ?? 'openai',
     prompt,
     assetIds: referenceIds,
-    referenceAssetIds: firstLast && isO3 ? extraReferenceIds : [],
-    ...(boundProjectId ? { projectId: boundProjectId } : {}),
-    ...(initialDraft?.characterId
-      ? { characterId: initialDraft.characterId, characterRevision: initialDraft.characterRevision }
+    referenceAssetIds: isReplica || (firstLast && isO3) ? extraReferenceIds : [],
+    ...(isReplica &&
+    referenceIds[0] &&
+    extraReferenceIds[0] &&
+    referenceIds[0] !== extraReferenceIds[0] &&
+    replicaAspects.length &&
+    Number.isFinite(replicaTrimStart) &&
+    replicaTrimStart >= 0 &&
+    replicaTrimStart <= 3600 &&
+    (replicaTrimDuration === undefined ||
+      (Number.isFinite(replicaTrimDuration) &&
+        replicaTrimDuration >= 2 &&
+        replicaTrimDuration <= 15))
+      ? {
+          replica: {
+            subjectAssetId: referenceIds[0],
+            referenceAssetId: extraReferenceIds[0],
+            aspects: replicaAspects,
+            trimStart: replicaTrimStart,
+            ...(replicaTrimDuration === undefined ? {} : { trimDuration: replicaTrimDuration }),
+          },
+        }
       : {}),
+    ...(boundProjectId ? { projectId: boundProjectId } : {}),
+    ...(character ? { characterId: character.id, characterRevision: character.revision } : {}),
     ...(documentId && revision && revision >= 1 ? { documentId, baseRevision: revision } : {}),
     ...(brandId && !(firstLast && !isO3) ? { brandId } : {}),
+    ...(productId
+      ? {
+          productId,
+          ...(multiple
+            ? { includeProductImages: false }
+            : includeProductImages === undefined
+              ? {}
+              : { includeProductImages }),
+        }
+      : {}),
+    ...(multiple ? { useMemory: false } : useMemory === undefined ? {} : { useMemory }),
     options: {
       ...(multiple && designs.length
         ? { designs: designs.map((d) => ({ ...d, name: d.name.trim() || '未命名模块' })) }
@@ -356,10 +496,18 @@ export function Composer({
   });
   const creativeBrief = useCreativeBrief({
     input,
-    recoveryInput: creativeRecoveryInput,
+    recoveryInput:
+      multiple && creativeRecoveryInput
+        ? {
+            ...creativeRecoveryInput,
+            useMemory: false,
+            ...(creativeRecoveryInput.productId ? { includeProductImages: false } : {}),
+          }
+        : creativeRecoveryInput,
     userId: session!.user.id,
     workspaceId: workspace!.id,
   });
+  const [preparationSubmissionLocked, setPreparationSubmissionLocked] = useState(false);
   const referenceModeIssue =
     kind === 'video' &&
     currentModel &&
@@ -367,6 +515,9 @@ export function Composer({
       (!acceptsFirstLast && referenceMode === 'first-last'));
   const textModeIssue = currentModel?.textOverlay?.mode === 'unsupported' && needText;
   const selectionIssue =
+    (multiple && productId
+      ? t('分组物料暂不支持关联产品与个人记忆，请切换单张创作或取消关联')
+      : null) ??
     (multiple && !supportsOrdinaryDesigns
       ? t('当前模型仅支持单张创作。分组草稿已保留，请切换支持分组的模型，或改用单张类型。')
       : null) ??
@@ -391,6 +542,9 @@ export function Composer({
   }
   const localInput: JobInput = {
     ...input,
+    // Preserve dormant single-creation choices; execution uses the guarded input above.
+    useMemory,
+    includeProductImages,
     creativeBriefId: creativeBrief.briefId,
     creationWarnings: planWarnings,
     referenceAssetIds: extraReferenceIds,
@@ -402,18 +556,37 @@ export function Composer({
         : {}),
     },
   };
-  const latestDraft = useRef({ input: localInput, kind, warnings: planWarnings });
-  latestDraft.current = { input: localInput, kind, warnings: planWarnings };
+  const latestDraft = useRef({
+    input: localInput,
+    kind,
+    mode: creationMode,
+    warnings: planWarnings,
+  });
+  latestDraft.current = { input: localInput, kind, mode: creationMode, warnings: planWarnings };
+  function captureModeDraft() {
+    activeModes.current[kind] = creationMode;
+    modeDrafts.current[composerModeKey(kind, creationMode)] = {
+      input: localInput,
+      aspects: replicaAspects,
+      trimStart: replicaTrimStart,
+      trimDuration: replicaTrimDuration,
+      defaultsPending: !defaultsReady,
+    };
+  }
+  captureModeDraft();
   function acceptUploaded(
     asset: AssetDto,
     sourceKind: 'image' | 'video',
+    sourceMode: CreationMode,
     slot: 'main' | 'extra' | 'audio',
     limit: number,
   ) {
     if (!mounted.current || finalized.current) return;
     const latest = latestDraft.current;
-    const active = latest.kind === sourceKind;
-    const original = active ? latest.input : typeDrafts.current[sourceKind];
+    const active = latest.kind === sourceKind && latest.mode === sourceMode;
+    const sourceKey = composerModeKey(sourceKind, sourceMode);
+    const sourceDraft = modeDrafts.current[sourceKey];
+    const original = active ? latest.input : sourceDraft?.input;
     if (!original) return;
     const field = slot === 'main' ? 'assetIds' : 'referenceAssetIds';
     const selected =
@@ -433,7 +606,8 @@ export function Composer({
       slot === 'audio'
         ? { ...original, creativeBriefId: undefined, backgroundAudioAssetId: asset.id }
         : { ...original, creativeBriefId: undefined, [field]: [...selected, asset.id] };
-    typeDrafts.current[sourceKind] = updated;
+    if (sourceDraft) modeDrafts.current[sourceKey] = { ...sourceDraft, input: updated };
+    if (activeModes.current[sourceKind] === sourceMode) typeDrafts.current[sourceKind] = updated;
     if (active) {
       latestDraft.current = { ...latest, input: updated };
       if (slot === 'main') {
@@ -454,6 +628,8 @@ export function Composer({
         drafts: { ...typeDrafts.current, [latest.kind]: current },
         warnings: { ...warningDrafts.current, [latest.kind]: latest.warnings },
         modelDefaultsPending: pendingModelDefaults.current,
+        modeDrafts: modeDrafts.current,
+        activeModes: activeModes.current,
       });
       setDraftError(null);
     } catch {
@@ -467,6 +643,8 @@ export function Composer({
       drafts: { ...typeDrafts.current, [latest.kind]: { ...latest.input, projectId: project } },
       warnings: { ...warningDrafts.current, [latest.kind]: latest.warnings },
       modelDefaultsPending: pendingModelDefaults.current,
+      modeDrafts: modeDrafts.current,
+      activeModes: activeModes.current,
     };
   }
   function transferDraft(project: string) {
@@ -491,9 +669,14 @@ export function Composer({
   const draftSnapshot = JSON.stringify([
     { ...localInput, capabilityRevision: undefined },
     planWarnings,
+    creationMode,
+    replicaAspects,
+    replicaTrimStart,
+    replicaTrimDuration,
   ]);
   useEffect(() => {
-    if (finalized.current || draftBlocked) return;
+    if (finalized.current || draftBlocked || onboardingIncomplete || !onboardingDefaultsReady)
+      return;
     pendingModelDefaults.current[kind] = !defaultsReady;
     typeDrafts.current[kind] = localInput;
     warningDrafts.current[kind] = planWarnings;
@@ -504,6 +687,8 @@ export function Composer({
         drafts: typeDrafts.current,
         warnings: warningDrafts.current,
         modelDefaultsPending: pendingModelDefaults.current,
+        modeDrafts: modeDrafts.current,
+        activeModes: activeModes.current,
       });
       setDraftError(null);
       setDraftStatus('草稿已保存在本机');
@@ -515,12 +700,38 @@ export function Composer({
       recoveryPersisted.current = true;
       onRecoveryPersisted?.();
     }
-  }, [draftSnapshot, storageKey, draftBlocked, defaultsReady]);
+  }, [
+    draftSnapshot,
+    storageKey,
+    draftBlocked,
+    defaultsReady,
+    onboardingIncomplete,
+    onboardingDefaultsReady,
+  ]);
   function switchKind(next: 'image' | 'video') {
+    switchDraft(
+      next,
+      activeModes.current[next] ?? (typeDrafts.current[next]?.replica ? 'replica' : 'original'),
+    );
+  }
+  function switchDraft(next: 'image' | 'video', nextMode: CreationMode) {
+    captureModeDraft();
     typeDrafts.current[kind] = localInput;
     warningDrafts.current[kind] = planWarnings;
-    setPlanWarnings(warningDrafts.current[next] ?? []);
-    const draft = typeDrafts.current[next];
+    const modeDraft = modeDrafts.current[composerModeKey(next, nextMode)];
+    const legacyDraft = typeDrafts.current[next];
+    const draft =
+      modeDraft?.input ??
+      ((legacyDraft?.replica ? 'replica' : 'original') === nextMode ? legacyDraft : undefined);
+    setPlanWarnings(draft?.creationWarnings ?? []);
+    activeModes.current[next] = nextMode;
+    setCreationMode(nextMode);
+    setReplicaAspects(modeDraft?.aspects ?? draft?.replica?.aspects ?? defaultReplicaAspects(next));
+    setReplicaTrimStart(modeDraft?.trimStart ?? draft?.replica?.trimStart ?? 0);
+    setReplicaTrimDuration(modeDraft?.trimDuration ?? draft?.replica?.trimDuration);
+    setPendingAssets(null);
+    setMissingToRemove(null);
+    setIdeaUndo(null);
     setKind(next);
     setPrompt(draft?.prompt ?? '');
     setOperationKey(draft ? `${draft.operation}:${draft.providerId}` : '');
@@ -528,13 +739,21 @@ export function Composer({
     setRatio(draft?.options.ratio ?? (next === 'video' ? '16:9' : '1:1'));
     setCount(draft?.options.count ?? 1);
     setDuration(draft?.options.duration ?? 5);
-    defaultsPending.current = !draft || pendingModelDefaults.current[next] === true;
+    defaultsPending.current = modeDraft
+      ? modeDraft.defaultsPending
+      : !draft || pendingModelDefaults.current[next] === true;
     setDefaultsReady(!defaultsPending.current);
     setPromptRequested(false);
     setResolution(draft?.options.resolution ?? (next === 'video' ? '720p' : '1K'));
     setOutputKind(draft?.options.kind ?? 'free');
     setDesigns(draft?.options.designs ?? []);
     setBrandId(draft?.brandId ?? '');
+    setProductId(draft?.productId ?? '');
+    setUseMemory(draft ? draft.useMemory : true);
+    setIncludeProductImages(draft?.includeProductImages);
+    setCharacter(
+      draft?.characterId ? { id: draft.characterId, revision: draft.characterRevision } : undefined,
+    );
     setLanguage(
       draft?.options.language ?? session?.user.preferences.defaultCreationLanguage ?? 'zh-CN',
     );
@@ -730,7 +949,7 @@ export function Composer({
     }
     if (referenceIds.length >= sourceMax)
       throw new Error(`当前模式最多支持 ${sourceMax} 份参考素材，请先移除不需要的参考。`);
-    if (asset.kind === 'video' && !(isO3 && !firstLast))
+    if (asset.kind === 'video' && (isReplica || !(isO3 && !firstLast)))
       throw new Error(t('当前模式不支持视频参考，请先选择支持视频参考的模型与模式。'));
     if (!['image', 'video'].includes(asset.kind)) throw new Error(t('此结果不能用作媒体参考。'));
     setReferenceIds((ids) => [...ids, asset.id]);
@@ -777,13 +996,43 @@ export function Composer({
       promptRef.current?.scrollIntoView({ block: 'center', behavior: 'instant' });
     },
   }));
+  const replicaReference = extraReferences[0];
+  const replicaRemainingSeconds = replicaReference?.durationMs
+    ? replicaReference.durationMs / 1000 - replicaTrimStart
+    : 0;
+  const replicaClipDuration =
+    replicaTrimDuration ?? Math.min(15, Math.max(0, replicaRemainingSeconds));
+  const replicaIssue = !isReplica
+    ? null
+    : operation?.providerId !== 'native'
+      ? t('参考复刻需要已配置的原生创作服务。')
+      : operation.replicaAvailable !== true
+        ? t(operation.replicaReason || '请先配置可读取参考画面的视觉分析模型。')
+        : referenceIds.length !== 1 || extraReferenceIds.length !== 1
+          ? t('请分别添加一份参考素材和一张需要保留的主体图片。')
+          : referenceIds[0] === extraReferenceIds[0]
+            ? t('参考素材与主体图片必须是不同素材。')
+            : references[0]?.kind !== 'image' || replicaReference?.kind !== kind
+              ? t('主体必须是图片，参考素材类型须与当前图片或视频创作一致。')
+              : !replicaAspects.length
+                ? t('请至少选择一项参考要点。')
+                : kind === 'video' &&
+                    (!Number.isFinite(replicaTrimStart) ||
+                      replicaTrimStart < 0 ||
+                      replicaTrimStart > 3600 ||
+                      !Number.isFinite(replicaClipDuration) ||
+                      replicaClipDuration < 2 ||
+                      replicaClipDuration > 15 ||
+                      replicaClipDuration > replicaRemainingSeconds)
+                  ? t('参考视频选段须为2至15秒，并且不能超出原视频。')
+                  : null;
   const materials = (
     <div className="composer-materials">
       {textOnly &&
         (referenceIds.length > 0 ||
         extraReferenceIds.length > 0 ||
         brandId ||
-        initialDraft?.characterId ||
+        character ||
         designs.length > 0 ||
         backgroundAudioId ? (
           <Notice tone="warning">
@@ -795,13 +1044,13 @@ export function Composer({
             {t('用文字描述画面与细节')}
           </p>
         ))}
-      <div hidden={textOnly && references.length === 0}>
+      <div hidden={isReplica || (textOnly && references.length === 0)}>
         <AssetPicker
           inline
-          value={references}
+          value={isReplica ? [] : references}
           onChange={(items) => changeAssets(items, 'main')}
-          uploadScope={`${kind}:main`}
-          onUploaded={(asset) => acceptUploaded(asset, kind, 'main', sourceMax)}
+          uploadScope={`${kind}:${creationMode}:main`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, creationMode, 'main', sourceMax)}
           kind={kind === 'image' ? 'all' : isO3 && !firstLast ? 'visual' : 'image'}
           max={sourceMax}
           roleLabels={firstLast ? ['首帧', '尾帧'] : undefined}
@@ -815,11 +1064,107 @@ export function Composer({
           }
         />
       </div>
+      <section hidden={!isReplica} data-replica-materials aria-label={t('复刻素材与参考要点')}>
+        <p className="field-hint">
+          {t('借鉴参考的构图、光线或节奏，保留你的主体。先分析并确认方案，效果不保证成为爆款。')}
+        </p>
+        <AssetPicker
+          value={isReplica ? extraReferences : []}
+          onChange={(items) => changeAssets(items, 'extra')}
+          uploadScope={`${kind}:replica:extra`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, 'replica', 'extra', 1)}
+          kind={kind}
+          max={1}
+          projectId={boundProjectId}
+          label={t(kind === 'image' ? '风格参考图片' : '节奏与镜头参考视频')}
+        />
+        <AssetPicker
+          value={isReplica ? references : []}
+          onChange={(items) => changeAssets(items, 'main')}
+          uploadScope={`${kind}:replica:main`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, 'replica', 'main', 1)}
+          kind="image"
+          max={1}
+          projectId={boundProjectId}
+          label={t('需要保留的主体图片')}
+        />
+        <div className="field" role="group" aria-label={t('参考要点')}>
+          <span className="field-label">{t('参考要点')}</span>
+          <div className="language-options">
+            {(
+              [
+                ['composition', '构图'],
+                ['lighting', '光线'],
+                ['palette', '配色'],
+                ...(kind === 'video'
+                  ? [
+                      ['camera', '镜头运动'],
+                      ['pacing', '节奏'],
+                    ]
+                  : []),
+              ] as [ReplicaAspect, string][]
+            ).map(([aspect, label]) => (
+              <label className="checkbox" key={aspect}>
+                <input
+                  type="checkbox"
+                  disabled={!canEdit}
+                  checked={replicaAspects.includes(aspect)}
+                  onChange={(event) =>
+                    setReplicaAspects((current) =>
+                      event.target.checked
+                        ? [...current, aspect]
+                        : current.filter((value) => value !== aspect),
+                    )
+                  }
+                />
+                {t(label)}
+              </label>
+            ))}
+          </div>
+        </div>
+        {kind === 'video' && (
+          <div className="form-grid">
+            <p className="field-hint">
+              {t('根据抽帧分析迁移运镜与节奏，不直接传整段视频；未分析音轨，不保证逐帧复制。')}
+            </p>
+            <Field label={t('参考选段起点（秒）')}>
+              <input
+                type="number"
+                min={0}
+                step={0.1}
+                value={replicaTrimStart}
+                onChange={(event) => setReplicaTrimStart(Number(event.target.value))}
+              />
+            </Field>
+            <Field label={t('参考选段时长（秒）')} hint={t('只分析并参考这段视频，时长2至15秒。')}>
+              <input
+                type="number"
+                min={2}
+                max={15}
+                step={0.1}
+                value={replicaClipDuration || ''}
+                onChange={(event) =>
+                  setReplicaTrimDuration(
+                    event.target.value === '' ? undefined : Number(event.target.value),
+                  )
+                }
+              />
+            </Field>
+            {replicaReference && (
+              <p className="field-hint" role="status">
+                {t('参考区间')}：{replicaTrimStart.toFixed(1)} –{' '}
+                {(replicaTrimStart + replicaClipDuration).toFixed(1)} {t('秒')}
+              </p>
+            )}
+          </div>
+        )}
+        {replicaIssue && <Notice tone="warning">{replicaIssue}</Notice>}
+      </section>
       <div hidden={!(currentModel?.audio?.mode === 'background-music' || backgroundAudioId)}>
         <AssetPicker
           value={backgroundAudio ? [backgroundAudio] : []}
-          uploadScope={`${kind}:audio`}
-          onUploaded={(asset) => acceptUploaded(asset, kind, 'audio', 1)}
+          uploadScope={`${kind}:${creationMode}:audio`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, creationMode, 'audio', 1)}
           onChange={(assets) => {
             setBackgroundAudio(assets[0]);
             setBackgroundAudioId(assets[0]?.id);
@@ -867,12 +1212,12 @@ export function Composer({
           {t('交换首尾帧')}
         </Button>
       )}
-      {firstLast && isO3 && (
+      {!isReplica && firstLast && isO3 && (
         <AssetPicker
           value={extraReferences}
           onChange={(items) => changeAssets(items, 'extra')}
-          uploadScope={`${kind}:extra`}
-          onUploaded={(asset) => acceptUploaded(asset, kind, 'extra', 7)}
+          uploadScope={`${kind}:${creationMode}:extra`}
+          onUploaded={(asset) => acceptUploaded(asset, kind, creationMode, 'extra', 7)}
           kind="visual"
           max={7}
           projectId={boundProjectId}
@@ -935,12 +1280,22 @@ export function Composer({
         <Save size={15} />
         {t('保存草稿')}
       </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        disabled={!canEdit || !prompt.trim()}
+        onClick={() => setRemembering(true)}
+      >
+        {t('记住这次要求')}
+      </Button>
       <span className="muted" hidden={isHome}>
         {prompt.length} / {isKling ? 2100 : 12000}
       </span>
     </div>
   );
   const generationReady =
+    (!productIssue || creativeBrief.preparation?.status === 'ready') &&
+    !replicaIssue &&
     defaultsReady &&
     modelCapability.canGenerate &&
     !selectionIssue &&
@@ -949,7 +1304,7 @@ export function Composer({
       (!referenceIds.length &&
         !extraReferenceIds.length &&
         !brandId &&
-        !initialDraft?.characterId &&
+        !character &&
         !designs.length)) &&
     (!backgroundAudioId || currentModel?.audio?.mode === 'background-music') &&
     (!generateAudio || currentModel?.audio?.mode === 'generated') &&
@@ -1058,6 +1413,9 @@ export function Composer({
         onClick={() => setExpanded(!expanded)}
       >
         <SlidersHorizontal size={15} />
+        {visualVariant === 'studio' && currentModel && (
+          <span className="composer-settings-model">{t(modelName(currentModel))}</span>
+        )}
         <span>
           {ratio} · {resolution} ·{' '}
           {kind === 'video' ? `${duration}${t('秒')}` : `${count}${t('张')}`}
@@ -1115,6 +1473,49 @@ export function Composer({
             )}
           </select>
         </Field>
+        {visualVariant === 'studio' && operation && currentModel && (
+          <div
+            className={`composer-model-card${operation.available ? ' is-connected' : ''}`}
+            aria-live="polite"
+          >
+            <div className="composer-model-card-head">
+              <strong>{t(modelName(currentModel))}</strong>
+              <span className="composer-model-card-status">
+                {operation.available ? t('已连接') : t('未连接')}
+              </span>
+            </div>
+            <dl>
+              <div>
+                <dt>{t('服务商')}</dt>
+                <dd>
+                  {capabilities.data?.providers.find((item) => item.id === operation.providerId)
+                    ?.name ?? operation.providerId}
+                </dd>
+              </div>
+              <div>
+                <dt>{t('积分')}</dt>
+                <dd>
+                  {operation.priceCredits} /{' '}
+                  {t(operation.unit === 'image' ? '张' : operation.unit === 'second' ? '秒' : '次')}
+                </dd>
+              </div>
+              {!!currentModel.resolutions.length && (
+                <div>
+                  <dt>{t('最高清晰度')}</dt>
+                  <dd>{currentModel.resolutions[currentModel.resolutions.length - 1]}</dd>
+                </div>
+              )}
+              {!!currentModel.ratios.length && (
+                <div>
+                  <dt>{t('可选比例')}</dt>
+                  <dd>
+                    {currentModel.ratios.length} {t('种')}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        )}
       </div>
       <div className="composer-specs">
         {!!ratios.length && !modelCapability.adjustable('ratio') && (
@@ -1269,21 +1670,130 @@ export function Composer({
   );
   const optionalPreferences = (
     <>
+      <div className="knowledge-memory-controls">
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={!multiple && useMemory === true}
+            disabled={multiple}
+            onChange={(event) => setUseMemory(event.target.checked)}
+          />
+          {t('使用创作记忆')}
+        </label>
+        {multiple && (
+          <Notice tone="warning">
+            {t('分组物料暂不支持关联产品与个人记忆，请切换单张创作或取消关联')}
+            {productId && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setProductId('');
+                  setIncludeProductImages(undefined);
+                }}
+              >
+                {t('取消产品关联')}
+              </Button>
+            )}
+          </Notice>
+        )}
+        <p className="field-hint">
+          {t('仅采用当前空间中你确认过且仍有效的记忆；本次明确要求优先。')}{' '}
+          <Link to="/settings?tab=memory">{t('管理创作记忆')}</Link>
+        </p>
+        {!multiple && useMemory && memories.error && (
+          <Notice tone="warning">
+            {t('记忆预览读取失败，请重试；规划时会重新核对。')}{' '}
+            <Button type="button" variant="ghost" onClick={() => void memories.refetch()}>
+              {t('重试')}
+            </Button>
+          </Notice>
+        )}
+        {!multiple && useMemory && eligibleMemories.length > 0 && (
+          <details>
+            <summary>
+              {t('当前可用记忆')} · {eligibleMemories.length}
+            </summary>
+            <ul className="knowledge-preview">
+              {eligibleMemories.map((item) => (
+                <li key={item.id}>
+                  <strong>{item.topic}</strong>：{item.content}
+                </li>
+              ))}
+            </ul>
+            <p className="field-hint">
+              {t('这里只预览当前页，实际采用项以规划后的资料快照为准。')}
+            </p>
+          </details>
+        )}
+        {productId && (
+          <>
+            {selectedProduct.data?.brandId && (
+              <p className="field-hint">
+                {t('产品所属品牌')}：
+                {linkedBrand.data?.name ?? t(linkedBrand.error ? '关联品牌不可用' : '正在读取资料')}{' '}
+                · {t('未另选品牌时会采用产品所属品牌。')}
+              </p>
+            )}
+            {linkedBrand.error && (
+              <Notice tone="warning">
+                <p>{t('关联品牌无法读取，请重试或在产品库修复关联。')}</p>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={() => void linkedBrand.refetch()}
+                >
+                  {t('重试')}
+                </Button>{' '}
+                <Link to="/products">{t('管理产品库')}</Link>
+              </Notice>
+            )}
+            {productConflict && (
+              <Notice tone="warning">
+                {t('所选品牌与产品所属品牌冲突，请改选品牌或产品。')}
+                <Button type="button" variant="secondary" onClick={() => setBrandId('')}>
+                  {t('采用产品所属品牌')}
+                </Button>
+              </Notice>
+            )}
+            {selectedProduct.data?.validUntil &&
+              Date.parse(selectedProduct.data.validUntil) <= Date.now() && (
+                <Notice tone="warning">{t('产品资料已过期，请更新资料或重新选择。')}</Notice>
+              )}
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={!multiple && includeProductImages === true}
+                disabled={multiple}
+                onChange={(event) => setIncludeProductImages(event.target.checked)}
+              />
+              {t('带入产品参考图')}
+            </label>
+            <p className="field-hint">
+              {t('默认仅使用产品文字资料；参考图与本次素材共同受模型数量限制。')}
+            </p>
+          </>
+        )}
+        <Link to="/products">{t('管理产品库')}</Link>
+      </div>
       <div className="form-grid">
-        <Field label={t('参考品牌')}>
-          <select
-            disabled={firstLast && !isO3}
-            value={firstLast && !isO3 ? '' : brandId}
-            onChange={(e) => setBrandId(e.target.value)}
-          >
-            <option value="">{t('不使用品牌')}</option>
-            {brands.data?.items.map((brand) => (
-              <option key={brand.id} value={brand.id}>
-                {brand.name}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <KnowledgeSelect
+          type="brands"
+          label={t('参考品牌')}
+          value={firstLast && !isO3 ? '' : brandId}
+          onChange={setBrandId}
+          disabled={firstLast && !isO3}
+        />
+        <KnowledgeSelect
+          type="products"
+          label={t('参考产品')}
+          value={productId}
+          disabled={multiple}
+          onChange={(value) => {
+            setProductId(value);
+            setIncludeProductImages(undefined);
+          }}
+        />
         <Field label={t('画面文字语言')}>
           <select value={language} onChange={(e) => setLanguage(e.target.value)}>
             {LANGUAGES.map((value) => (
@@ -1483,6 +1993,18 @@ export function Composer({
             )}
           </Notice>
         )}
+        <div className="form-grid">
+          <Field label={t('创作模式')}>
+            <select
+              value={creationMode}
+              disabled={!canEdit}
+              onChange={(event) => switchDraft(kind, event.target.value as CreationMode)}
+            >
+              <option value="original">{t('原创')}</option>
+              <option value="replica">{t('参考复刻')}</option>
+            </select>
+          </Field>
+        </div>
         <div className="creative-prompt-surface">{promptEditor}</div>
         {ideaError && !pendingIdea && (
           <p className="field-error" role="alert">
@@ -1647,6 +2169,9 @@ export function Composer({
             setMissingToRemove(null);
           }}
         />
+        {remembering && (
+          <MemoryEditor initialContent={prompt} onClose={() => setRemembering(false)} />
+        )}
         <CreativeBrief
           preparation={creativeBrief.preparation}
           answers={creativeBrief.answers}
@@ -1654,7 +2179,27 @@ export function Composer({
           locked={creativeBrief.locked || !canEdit}
           error={creativeBrief.error}
           canRestart={creativeBrief.canRestart && canEdit}
-          onRestart={creativeBrief.restart}
+          onRestart={() => {
+            if (canEdit && !preparationSubmissionLocked && creativeBrief.canRestart) {
+              creativeBrief.restart();
+              void refreshLibraryContext();
+            }
+          }}
+          canRefreshSources={
+            creativeBrief.canRefreshSources && canEdit && !preparationSubmissionLocked
+          }
+          onRefreshSources={
+            input.productId || input.brandId || input.useMemory
+              ? () => {
+                  if (canEdit && !preparationSubmissionLocked && creativeBrief.canRefreshSources) {
+                    creativeBrief.refreshSources();
+                    // A visible tab does not receive updates made by another client.
+                    // Refresh read-only metadata so a renewed product cannot remain locally blocked.
+                    void refreshLibraryContext();
+                  }
+                }
+              : undefined
+          }
           onAnswer={creativeBrief.answer}
           mediaType={kind}
           missingQuestionId={creativeBrief.missingQuestionId}
@@ -1676,13 +2221,18 @@ export function Composer({
             !textOnly && references.length < sourceMax && canEdit
               ? () => {
                   composerRef.current
-                    ?.querySelector<HTMLButtonElement>('.asset-picker-inline .asset-add')
+                    ?.querySelector<HTMLButtonElement>(
+                      isReplica
+                        ? '[data-replica-materials] .asset-picker:nth-of-type(2) .asset-add'
+                        : '.asset-picker-inline .asset-add',
+                    )
                     ?.click();
                 }
               : undefined
           }
         />
         <JobSubmit
+          forceConfirmation={isReplica}
           label={
             creativeBrief.preparation?.status === 'needs_clarification'
               ? '补充完成，继续'
@@ -1702,6 +2252,9 @@ export function Composer({
           }
           recoveryScope={`composer:${projectId ?? 'new'}`}
           beforePrepareInput={creativeBrief.prepare}
+          onPreparationInvalid={creativeBrief.invalidatePreparation}
+          preparationRevision={creativeBrief.sourceRevision}
+          onPreparationLockChange={setPreparationSubmissionLocked}
           prepareInput={prepareSubmission}
           onCapabilityChanged={async () => {
             const result = await modelCapability.refresh();

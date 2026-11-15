@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-11-13T10:33:17.465493+00:00",
+  "files": [
+    {
+      "path": "src/server/providers/native.ts",
+      "sha256": "929b6f55318856ecce6093b854512ab24e3d09ce36d7f0f6f0121ecc07baf596"
+    },
+    {
+      "path": "src/server/providers/native-background.ts",
+      "sha256": "bd45bc3df45bf0c3f08b8b33c4072596c20a256547ffdf910d39c5fe66aecf5b"
+    },
+    {
+      "path": "src/server/providers/native-replica.ts",
+      "sha256": "d433bc2460ddc234528c76ab3e572ba7127ef118faee861227c564942cdbf422"
+    },
+    {
+      "path": "src/server/providers/native-motion-frame.ts",
+      "sha256": "4cdc6aec060b1745361c99d0adb29687a76c8366a4901aa9f678b461b15ad1dc"
+    },
+    {
+      "path": "src/server/providers/native-video-route.ts",
+      "sha256": "967d5bf57917de7bd781cb5d54da0bc230d9ef34c9798f795eaa1eb683181a41"
+    },
+    {
+      "path": "src/server/providers/native-exact-pan.ts",
+      "sha256": "f7672e403ff27e54a269b25f44323aeabfc58fd8f15f459fa43c42532f7334ba"
+    },
+    {
+      "path": "src/server/providers/native-video-tail-hold.ts",
+      "sha256": "19666bda084518b93d3ab0e8c82f7d00e2d0c6fd813d0a780c10fcc34386b4bc"
+    },
+    {
+      "path": "src/server/providers/native-reference-media.ts",
+      "sha256": "727476968ee3fb038e4298c3f6f40fc6fbfebfd453d66c85a4d5c6c1e1b3a8ec"
+    },
+    {
+      "path": "src/server/tasks/creative-capture.ts",
+      "sha256": "7177a52696e70a513639b1ca677b6afa6041702aea1da2585879b8e5ff4542a3"
+    },
+    {
+      "path": "src/server/tasks/native-capture.ts",
+      "sha256": "4816621dc02b511dc26529db8a070c48ba1eb6876ef33dd2b4968542baaa5d33"
+    },
+    {
+      "path": "src/server/tasks/creative-briefs.ts",
+      "sha256": "89acb1eac524b188e97dd843cba64144c04a68eaa453f33cae21c379f1b503e9"
+    },
+    {
+      "path": "src/server/tasks/service.ts",
+      "sha256": "ef568b138e4143c58af08202b9ee0dfc106d9a2966c9fcb66bf67a353a33ae7b"
+    },
+    {
+      "path": "src/worker/runner.ts",
+      "sha256": "abafc1061d93d39b462642dfe7552672ac2234b488096ba1da62223bc38938cc"
+    },
+    {
+      "path": "src/contracts/native-plan.ts",
+      "sha256": "ed816322fe791debe164d5311b785d9f8f07fa2eca1915fdf813d3f1131db15e"
+    }
+  ],
+  "artifactSha256": "803ae506590a8cbabc2e6285eafc2767b340bc27afe8acc6194cc08ae12d3b95",
+  "databaseRead": false,
+  "externalCalls": 0
+}

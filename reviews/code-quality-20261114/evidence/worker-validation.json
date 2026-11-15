@@ -1,0 +1,69 @@
+{
+  "changes": [
+    "src/worker/runner.ts",
+    "src/server/providers/native.ts",
+    "tests/tasks.test.ts",
+    "tests/native-integration.test.ts",
+    "tests/native-exact-pan.test.ts",
+    "tests/worker-lifecycle.test.ts"
+  ],
+  "confirmedDefects": [
+    "Native task initialization escaped exception finalization; unrelated video decryption blocked image execution; rejected tracking promises created unhandled rejections",
+    "Concurrent ticks overlapped document extraction; stop returned before asynchronous scheduler work finished",
+    "Confirmed exact-pan local processing still depended on unused encrypted model credentials"
+  ],
+  "validation": {
+    "lifecycleRed": {
+      "failed": 6,
+      "passed": 0,
+      "unrelatedFilteredOut": 60
+    },
+    "lifecycleGreen": {
+      "passed": 6,
+      "failed": 0,
+      "unrelatedFilteredOut": 60
+    },
+    "localPanRed": {
+      "passed": 1,
+      "failed": 2,
+      "unrelatedFilteredOut": 24
+    },
+    "localPanGreen": {
+      "passed": 9,
+      "failed": 0,
+      "unrelatedFilteredOut": 27
+    },
+    "finalRelated": {
+      "files": 8,
+      "passed": 188,
+      "failed": 0,
+      "skipped": 0
+    },
+    "projectTypecheck": "passed",
+    "changedFileLint": "passed",
+    "changedFileFormat": "passed"
+  },
+  "preservedSemantics": [
+    "Lease ownership and fencing before side effects and commit",
+    "No automatic repeat of uncertain paid submissions",
+    "Unsubmitted required-connection failures release reservation",
+    "Stored outputs and pure local recovery do not require provider secrets",
+    "Local pan retains reference, parameter, ownership, and immutable-plan checks"
+  ],
+  "scope": "Single-flight scheduling is per worker instance; no database migrations or provider protocol changes",
+  "sourceManifest": "source-manifest.json",
+  "independentReview": {
+    "reviewer": "memory_audit",
+    "result": "passed; no new blocking issue",
+    "scope": [
+      "native initialization and exception finalization",
+      "single-flight tick and stop ordering",
+      "exact-pan credential independence and local parameter restrictions",
+      "authorization, lease/fence and uncertain paid submission semantics"
+    ]
+  },
+  "externalPaidCalls": 0,
+  "formalDataAccess": false,
+  "productSourceFrozen": true,
+  "sourceManifestSha256": "64f783dca655766118e59c6e83b1c334b730246313d932a91b4cba820f612532"
+}

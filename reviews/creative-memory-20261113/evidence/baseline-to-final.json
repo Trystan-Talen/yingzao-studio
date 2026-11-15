@@ -1,0 +1,10 @@
+{
+  "baselineSha256": "b0aff299724b8ca42543d964f022d9437b4a9159a0de773d0df8a2676287bac2",
+  "finalSha256": "66578ba8fb86b6dad44d392ff120846657ce82f956f43bddc1e67a93ee5c9b5f",
+  "changed": [
+    "platform/src/server/tasks/creative-knowledge.ts",
+    "platform/src/web/components/Composer.tsx",
+    "platform/src/web/lib/knowledge-translations.ts"
+  ],
+  "removed": []
+}

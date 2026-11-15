@@ -1,0 +1,53 @@
+--- before/platform/src/web/components/Composer.tsx
++++ after/platform/src/web/components/Composer.tsx
+@@ -4,6 +4,7 @@
+ import { DesignPlanner, createDesign, type MaterialDesign } from './DesignPlanner';
+ import { AIWriter } from './AIWriter';
+ import { useEffect, useId, useImperativeHandle, useRef, useState, type Ref } from 'react';
++import { useQueryClient } from '@tanstack/react-query';
+ import { ChevronDown, ChevronUp, Save, SlidersHorizontal, Sparkles, Undo2 } from 'lucide-react';
+ import { Link, useNavigate } from 'react-router-dom';
+ import type { AssetDto, BrandDto, ProjectDto } from '../../contracts/core';
+@@ -270,6 +271,15 @@
+   );
+   const navigate = useNavigate();
+   const refresh = useRefresh();
++  const queries = useQueryClient();
++  const refreshLibraryContext = () =>
++    queries.invalidateQueries({
++      queryKey: ['api', workspace!.id],
++      predicate: (query) =>
++        query.queryKey[3] === session!.user.id &&
++        typeof query.queryKey[2] === 'string' &&
++        /^\/(products|brands|memories)(?:[/?]|$)/.test(query.queryKey[2]),
++    });
+   const action = useAction();
+   const capabilities = useApi<Capabilities>('/capabilities');
+   const selectedProduct = useApi<ProductDto>(`/products/${productId}`, !!productId);
+@@ -2169,14 +2179,24 @@
+           locked={creativeBrief.locked || !canEdit}
+           error={creativeBrief.error}
+           canRestart={creativeBrief.canRestart && canEdit}
+-          onRestart={creativeBrief.restart}
++          onRestart={() => {
++            if (canEdit && !preparationSubmissionLocked && creativeBrief.canRestart) {
++              creativeBrief.restart();
++              void refreshLibraryContext();
++            }
++          }}
+           canRefreshSources={
+             creativeBrief.canRefreshSources && canEdit && !preparationSubmissionLocked
+           }
+           onRefreshSources={
+             input.productId || input.brandId || input.useMemory
+               ? () => {
+-                  if (canEdit && !preparationSubmissionLocked) creativeBrief.refreshSources();
++                  if (canEdit && !preparationSubmissionLocked && creativeBrief.canRefreshSources) {
++                    creativeBrief.refreshSources();
++                    // A visible tab does not receive updates made by another client.
++                    // Refresh read-only metadata so a renewed product cannot remain locally blocked.
++                    void refreshLibraryContext();
++                  }
+                 }
+               : undefined
+           }

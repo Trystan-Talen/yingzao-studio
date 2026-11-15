@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "at": "2026-11-14T15:56:34.184Z",
+  "sameUserPrompt": true,
+  "phases": [
+    {
+      "phase": "A",
+      "preparationId": "923628ba-c82d-4e5c-8c9b-9c36fdbb41e0",
+      "requestId": "5de2a8b5-8226-4597-9ae1-1de4fc0e90ab",
+      "transportId": "3d4a6082-7135-47f4-b186-4f6c6c1db3a7",
+      "providerRequestId": "482e189f-2cce-4e61-b39e-c894f33bacd6",
+      "model": "deepseek-v4-flash-0731",
+      "usage": {
+        "prompt_tokens": 5144,
+        "completion_tokens": 5080,
+        "total_tokens": 10224,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3631
+        }
+      },
+      "productVersion": 6,
+      "memoryVersion": 1,
+      "brand": "MORA",
+      "capacityMl": 300,
+      "background": "浅粉",
+      "temporaryIncluded": true,
+      "agedPreferenceExcluded": true,
+      "actualTransportMatchesSavedRequest": true,
+      "currentCenterOverridesSidePreference": true,
+      "personalProfileExcludedFromFacts": true
+    },
+    {
+      "phase": "B",
+      "preparationId": "a7ab6b05-527f-4ba6-b3e4-daafba4cc896",
+      "requestId": "aa06de7e-d3bf-401c-995e-3629582101d6",
+      "transportId": "a88156cb-4f01-400e-9b5c-1b6262195c4b",
+      "providerRequestId": "fc590d3a-cb82-46cc-9179-fd2bdaaa35a9",
+      "model": "deepseek-v4-flash-0731",
+      "usage": {
+        "prompt_tokens": 4922,
+        "completion_tokens": 4540,
+        "total_tokens": 9462,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3073
+        }
+      },
+      "productVersion": 8,
+      "memoryVersion": 2,
+      "brand": "LUMA",
+      "capacityMl": 450,
+      "background": "浅蓝",
+      "temporaryIncluded": false,
+      "agedPreferenceExcluded": true,
+      "actualTransportMatchesSavedRequest": true,
+      "currentCenterOverridesSidePreference": true,
+      "personalProfileExcludedFromFacts": true
+    }
+  ],
+  "actualPaidRequests": [
+    {
+      "id": "867e33ad-6f50-4fb9-a0a6-8c7fa35f53bd",
+      "at": "2026-11-14T15:34:43.631Z",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731"
+    },
+    {
+      "id": "5f357922-3aa5-4eed-a38c-0a65b2d78e48",
+      "at": "2026-11-14T15:41:39.027Z",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731"
+    },
+    {
+      "id": "3d4a6082-7135-47f4-b186-4f6c6c1db3a7",
+      "at": "2026-11-14T15:48:38.396Z",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731"
+    },
+    {
+      "id": "a6391732-1a97-443d-a274-1cb087373e5c",
+      "at": "2026-11-14T15:51:40.458Z",
+      "endpoint": "/v1/images/generations",
+      "model": "doubao-seedream-5.0-lite"
+    },
+    {
+      "id": "a88156cb-4f01-400e-9b5c-1b6262195c4b",
+      "at": "2026-11-14T15:52:40.166Z",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731"
+    },
+    {
+      "id": "577ba3b1-908a-4c12-b1b7-ae4483635b42",
+      "at": "2026-11-14T15:54:03.092Z",
+      "endpoint": "/v1/images/generations",
+      "model": "doubao-seedream-5.0-lite"
+    }
+  ],
+  "decayBoundary": "Historical three-day preference is synthetic aged data; temporary expiration uses real wall clock."
+}

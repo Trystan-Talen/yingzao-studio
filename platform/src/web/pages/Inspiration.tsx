@@ -272,6 +272,7 @@ export function Inspiration() {
       <section className="inspiration-studio-section" aria-labelledby="inspiration-heading">
         <div className="inspiration-studio-toolbar">
           <div className="inspiration-studio-heading">
+            <span className="eyebrow yz-page-kicker">INSPIRATION · {t('灵感')}</span>
             <div className="inspiration-studio-title">
               <h1 id="inspiration-heading" aria-label={t('灵感探索')}>
                 {t('灵感广场')}

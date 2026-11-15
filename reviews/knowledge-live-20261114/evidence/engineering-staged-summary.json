@@ -1,0 +1,43 @@
+{
+  "scope": "Frozen engineering validation with explicit two-file cache-refresh delta; not a claim of one full suite on final source",
+  "baseline": {
+    "manifest": "final/source-after.json",
+    "sourceFiles": 650,
+    "sha256": "808df05616703ee92b125f58ec4459eed249e353478525df5af606598755cb38",
+    "unitFiles": 151,
+    "unitPassed": 2346,
+    "unitFailed": 0,
+    "unitSkipped": 0,
+    "strictChecks": "typecheck/lint/format passed",
+    "productionBuild": "passed",
+    "productionRuntime": "passed; processes stopped and disposable data removed"
+  },
+  "finalDelta": {
+    "manifest": "after-cache/source-after.json",
+    "sourceFiles": 650,
+    "sha256": "ce715688a00fd715eedfc0536266dfc7f8909382066967d2fa4ee870e561bad5",
+    "changedFiles": [
+      "src/web/components/Composer.tsx",
+      "tests/e2e/knowledge-refresh.spec.ts"
+    ],
+    "unitFiles": 3,
+    "unitPassed": 29,
+    "unitFailed": 0,
+    "unitSkipped": 0,
+    "strictChecks": "typecheck/lint/format passed",
+    "sourceUnchangedDuringChecks": true,
+    "browser": "library_audit reported desktop/mobile 8/8, run-x8k3jX; authoritative browser evidence maintained by that agent",
+    "productionBuild": "passed on final cache-fix source",
+    "productionRuntime": "passed on final build; disposable SQLite, secure registration, API/worker, clean shutdown and temporary-data removal",
+    "productionEvidence": "after-cache/production-summary.json"
+  },
+  "isolation": {
+    "dotenv": "/dev/null",
+    "credentialInheritance": false,
+    "paidCalls": 0,
+    "formalDatabaseOpened": false,
+    "productFilesEditedByThisAgent": false
+  },
+  "earlierSandboxAttempt": "sandbox-attempt-summary.json; listen EPERM caused incomplete attempt, superseded by full privileged loopback run",
+  "completed": true
+}

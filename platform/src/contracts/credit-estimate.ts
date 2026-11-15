@@ -28,6 +28,8 @@ export function estimateCreationCredits(
     capability.providerId !== input.providerId ||
     !Number.isSafeInteger(capability.priceCredits) ||
     capability.priceCredits < 0 ||
+    !Number.isSafeInteger(capability.fixedCredits ?? 0) ||
+    (capability.fixedCredits ?? 0) < 0 ||
     !['image', 'second', 'request'].includes(capability.unit)
   )
     return invalid();
@@ -64,7 +66,7 @@ export function estimateCreationCredits(
   const outputs =
     count * (input.operation === 'image.generate' ? Math.max(1, designs?.length ?? 0) : 1);
   const units = outputs * (capability.unit === 'second' ? duration : 1);
-  const credits = units * capability.priceCredits;
+  const credits = units * capability.priceCredits + outputs * (capability.fixedCredits ?? 0);
   if (!Number.isSafeInteger(units) || units <= 0 || !Number.isSafeInteger(credits))
     return invalid();
   return { status: 'ready', credits, units, outputs, unit: capability.unit };

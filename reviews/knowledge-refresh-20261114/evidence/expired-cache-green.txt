@@ -1,0 +1,17 @@
+Running 8 tests using 1 worker
+
+(node:33620) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/knowledge-refresh.spec.ts:47:1 › refreshes an expired product cached in a continuously visible page after another client renews it (3.4s)
+  ✓  2 [desktop] › tests/e2e/knowledge-refresh.spec.ts:99:1 › explicitly refreshes updated library sources without changing the request or reusing the previous quote (4.4s)
+  ✓  3 [desktop] › tests/e2e/knowledge-refresh.spec.ts:209:1 › recovers an expired-source quote error with a new plan after a reload without silently calling the planner (4.0s)
+  ✓  4 [desktop] › tests/e2e/knowledge-refresh.spec.ts:272:1 › locks source refresh during a submitted job and keeps it locked across unknown-result recovery (4.2s)
+(node:33748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [mobile] › tests/e2e/knowledge-refresh.spec.ts:47:1 › refreshes an expired product cached in a continuously visible page after another client renews it (3.4s)
+  ✓  6 [mobile] › tests/e2e/knowledge-refresh.spec.ts:99:1 › explicitly refreshes updated library sources without changing the request or reusing the previous quote (4.4s)
+  ✓  7 [mobile] › tests/e2e/knowledge-refresh.spec.ts:209:1 › recovers an expired-source quote error with a new plan after a reload without silently calling the planner (3.1s)
+  ✓  8 [mobile] › tests/e2e/knowledge-refresh.spec.ts:272:1 › locks source refresh during a submitted job and keeps it locked across unknown-result recovery (4.4s)
+
+  8 passed (34.0s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-x8k3jX

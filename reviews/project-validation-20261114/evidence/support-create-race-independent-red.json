@@ -1,0 +1,29 @@
+{
+  "scope": "独立真实浏览器复现；临时数据库、合成用户与工单；产品源码未修改",
+  "result": "reproduced",
+  "case": "创建工单的旧成功响应清空随后重新打开填写的新草稿",
+  "steps": [
+    "提交工单A并让后端实际保存，暂缓响应",
+    "关闭创建框、重新打开，填写新工单B",
+    "放行A响应，检查弹窗及草稿内容、数据库保存结果"
+  ],
+  "expected": {
+    "visibleAfterOldResponse": true,
+    "subject": "未提交的新工单B",
+    "message": "未提交的新说明B"
+  },
+  "actual": {
+    "visibleAfterOldResponse": false,
+    "subject": "",
+    "message": "",
+    "saved": [
+      {
+        "subject": "已经提交的工单A",
+        "message": "已经提交的说明A"
+      }
+    ]
+  },
+  "run": "platform/var/e2e/run-3qlLBF",
+  "sourceTest": "platform/var/support-create-repro/create-race.spec.ts",
+  "handoff": "已交给library_audit统一修复与正式回归；本文件仅记录失败证据，不代表最终状态。"
+}

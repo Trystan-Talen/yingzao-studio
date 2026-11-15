@@ -251,3 +251,18 @@
     padding-inline: 0;
   }
 }
+
+.creative-generation-plan {
+  margin-top: 16px;
+}
+.creative-generation-plan h4 {
+  margin: 14px 0 6px;
+  font-size: 12px;
+}
+.creative-generation-plan p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,79 @@
+{
+  "scope": "独立只读交叉审查；临时数据库、合成网页及点文件；Fastify注入请求，零外部服务",
+  "result": "passed",
+  "checks": [
+    {
+      "url": "/.env",
+      "status": 403,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/%2eenv",
+      "status": 403,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/.git/config",
+      "status": 403,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/%2egit/config",
+      "status": 403,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/assets/.secret",
+      "status": 403,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/assets/%2esecret",
+      "status": 403,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/assets%2f.secret",
+      "status": 200,
+      "hiddenContentReturned": false,
+      "applicationShell": true
+    },
+    {
+      "url": "/assets/public.css",
+      "status": 200,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/support",
+      "status": 200,
+      "hiddenContentReturned": false,
+      "applicationShell": true
+    },
+    {
+      "url": "/api/unknown",
+      "status": 404,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    },
+    {
+      "url": "/api/docs/",
+      "status": 401,
+      "hiddenContentReturned": false,
+      "applicationShell": false
+    }
+  ],
+  "interpretation": "根/嵌套/编码点号拒绝；编码斜线被当作客户端路径并返回应用壳，不读取隐藏文件。普通静态文件、客户端路由、接口缺失与文档授权边界保持。",
+  "newDefects": [],
+  "relatedReview": "Support回复草稿按工单隔离；提交成功仅清理仍等于提交值的原工单输入，失败保留；用户/空间变化由页面边界卸载，后端工单访问与撤回权限仍独立检查。相邻创建/撤回迟到响应由UI代理另行复现，不混作本补丁回归。",
+  "sourceSha256": {
+    "src/server/app.ts": "a00c13208a4f98c474f374cf60173c4976cf17bad5175a16fcbe4cb848f822d4",
+    "tests/production-http.test.ts": "0d7824e9f6fa50ade6eda0b7523ffd6765b7d8ff7abe937e224b67ea75022727"
+  }
+}

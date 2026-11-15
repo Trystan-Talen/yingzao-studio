@@ -6,7 +6,7 @@ import {
   type NotificationPage,
   type NotificationUnread,
 } from '../../contracts/notifications';
-import { CoreContext, nullable, str } from './shared';
+import { type CoreContext, nullable, str } from './shared';
 
 // Only the existing appeal decision event has an evidenced review meaning.
 // Historical text or an orphaned prefix must not invent a review notification.

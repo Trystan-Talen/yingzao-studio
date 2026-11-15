@@ -1,0 +1,15 @@
+Running 6 tests using 1 worker
+
+(node:81084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/knowledge-recheck.spec.ts:13:1 › retains single-creation memory and product-image choices after refreshing a grouped draft (3.6s)
+  ✓  2 [desktop] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields (3.1s)
+  ✓  3 [desktop] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields (3.1s)
+(node:81195) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [mobile] › tests/e2e/knowledge-recheck.spec.ts:13:1 › retains single-creation memory and product-image choices after refreshing a grouped draft (3.5s)
+  ✓  5 [mobile] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields (10.8s)
+  ✓  6 [mobile] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields (3.3s)
+
+  6 passed (29.9s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-1OiAm0

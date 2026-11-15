@@ -1,0 +1,9 @@
+{
+  "started": "2026-11-14T05:11:21.743Z",
+  "finished": "2026-11-14T05:11:42.187Z",
+  "exitCode": 1,
+  "dataIsolation": "fresh SQLite and media per test",
+  "webRoot": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-0MrY25/web",
+  "environmentIsolation": "fresh Vite envDir; subprocess environment allowlist",
+  "externalServices": "disabled; loopback SMTP/SMS, marked synthetic providers, local media tools only"
+}

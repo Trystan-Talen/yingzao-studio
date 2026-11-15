@@ -7,7 +7,7 @@ import {
   referralPolicySchema,
   type ReferralRuleDto,
 } from '../../contracts/referrals';
-import { CoreContext, id, now, str, num, type Row } from './shared';
+import { type CoreContext, id, now, str, num, type Row } from './shared';
 import { createCreditService } from '../tasks/credits';
 
 export interface ReferralProgram {

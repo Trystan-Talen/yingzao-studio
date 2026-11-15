@@ -1,0 +1,84 @@
+{
+  "scope": "正常已准备方案显式采用最新品牌、产品及个人记忆资料；不修改用户输入或服务端历史快照",
+  "failure": {
+    "run": "platform/var/e2e/run-zHf7pn",
+    "failed": 1,
+    "reason": "已保存品牌和产品新版，原创作输入已有方案及待确认报价，页面没有主动采用最新资料入口",
+    "evidence": "ready-refresh-red.txt"
+  },
+  "behavior": [
+    "正常已完成方案提供按最新资料重新整理；入口不调用规划模型或创建任务",
+    "点击后清除本地旧方案复用谱系，取消当前界面的待确认报价复用；原始输入和素材选择不变",
+    "下一次生成读取最新资料，生成新的准备标识、请求标识和报价；旧方案旧报价服务端数据不改写",
+    "明确提示可能再次产生策划费用及旧补答需重新确认，不静默混入旧补答",
+    "待核对规划不能清除请求标识；任务提交中、结果未知及本地提交日志读取异常时禁用新入口",
+    "旧上下文过期错误沿用显式重新检查恢复，刷新后不会自动调用规划"
+  ],
+  "browser": {
+    "run": "platform/var/e2e/run-gOzdSW",
+    "passed": 46,
+    "failed": 0,
+    "skipped": 0,
+    "projects": {
+      "desktop": 23,
+      "mobile": 23
+    },
+    "files": [
+      "knowledge-refresh.spec.ts",
+      "creative-brief.spec.ts",
+      "quote-confirmation.spec.ts",
+      "quote-expiry.spec.ts"
+    ],
+    "newCasesPerProject": 3,
+    "command": "node --import tsx scripts/e2e.ts --config=var/knowledge-chrome.config.ts knowledge-refresh.spec.ts creative-brief.spec.ts quote-confirmation.spec.ts quote-expiry.spec.ts --project=desktop --project=mobile"
+  },
+  "assertions": [
+    "品牌与产品保存新版后真实按钮发起新规划；重整按钮本身不增加规划、报价或任务数",
+    "原输入指纹保持一致；新产品版本、品牌文本和参考图实际进入规划及最终任务",
+    "旧方案和旧报价整行相等，未被回写；新任务保存模拟图片产物",
+    "过期错误后显式重置并刷新，下一次生成才读取新版且无旧谱系",
+    "真实提交已保存但响应暂缓/丢失期间，新入口禁用；刷新后仍禁用；核对找回原任务且无额外规划、报价、任务",
+    "原未知规划重试仍使用同一请求标识，无新重整入口"
+  ],
+  "checks": {
+    "unit": {
+      "passed": 25,
+      "files": [
+        "tests/creative-brief-ui.test.ts",
+        "tests/creation-recovery.test.ts"
+      ]
+    },
+    "typescript": "passed: tsc --noEmit",
+    "eslint": "passed: 8 changed files",
+    "prettier": "passed: 8 changed files",
+    "browserBuild": "Vite isolated production bundle passed"
+  },
+  "independentReview": "memory_audit只读审查五份产品源码，无阻塞问题；未编辑或调用模型",
+  "intermediateTestCorrections": [
+    {
+      "run": "platform/var/e2e/run-tzrvcC",
+      "result": "4 passed, 2 failed",
+      "reason": "确认模态框隐藏底层按钮，测试需includeHidden后检查真实disabled状态；未改产品代码"
+    },
+    {
+      "run": "platform/var/e2e/run-OunD9U",
+      "result": "6 passed, 2 failed",
+      "reason": "测试错误期待旧projects地址；真实恢复到workbench并指向原任务，修为精确原项目原任务地址断言；未改产品代码"
+    }
+  ],
+  "limitations": [
+    "均为隔离合成数据和本机模拟模型；不证明真实模型语义遵循或成图质量",
+    "过期浏览器用例注入现有KNOWLEDGE_CONTEXT_EXPIRED错误合同以验证恢复界面；服务端真实时间校验仍由已有服务测试负责",
+    "没有修改正式数据、媒体、凭据、远程服务，也没有任何本轮付费模型调用"
+  ],
+  "frozenFiles": {
+    "platform/src/web/lib/use-creative-brief.ts": "428f73bb28ce7134d1c1b4a45401c459a18b1924c91a7a50b7f31fc0f63ad7f8",
+    "platform/src/web/components/CreativeBrief.tsx": "8b03ccaa15be21c4f19ec584fd8a6e1f4bc73eb8823ce4dd8466d8e8209901a2",
+    "platform/src/web/components/Composer.tsx": "5731243d0f7c3ee21b6ac63f6a8765f08e6e443d01cab9daa8fa1ba6edd492ec",
+    "platform/src/web/components/JobSubmit.tsx": "4a663102041fbc146e1646900b4e29399c1491a4dd72550c355a5ecba1e6a394",
+    "platform/src/web/lib/creative-brief-translations.ts": "76393547a8016895c50cc92e004218dad8f1ced3f30697f2d13605c929e0600b",
+    "platform/tests/e2e/knowledge-refresh.spec.ts": "738e14946310b2432b3d2a315eb76d12cc486094de626481dc085a225d013c8b",
+    "platform/tests/e2e/creative-brief.spec.ts": "2b161f1f3593b65e103cc6ae00dc44f5eca48fc9587291ea828aaf7e0f7f0280",
+    "platform/tests/creative-brief-ui.test.ts": "bfe59d53193e606adc836596fb20ac95fac554053c90d107f69dd08639d701b7"
+  }
+}

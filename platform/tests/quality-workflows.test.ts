@@ -469,6 +469,18 @@ describe('commercial approvals and manually resolved payment risks', () => {
   });
 });
 describe('invoice requests stay local and reflect refundable amounts', () => {
+  it('reports invoiceable amounts only for paid orders', () => {
+    const order = core.business.createOrder(actor, wid, { planId: importPlan() });
+    for (const status of ['draft', 'pending', 'cancelled', 'failed', 'refunded']) {
+      db.sqlite.prepare('UPDATE orders SET status=? WHERE id=?').run(status, order.id);
+      expect(core.business.getOrder(actor, wid, order.id).invoiceableMinor, status).toBe(0);
+    }
+    db.sqlite
+      .prepare("UPDATE orders SET status='paid',refunded_minor=500 WHERE id=?")
+      .run(order.id);
+    expect(core.business.getOrder(actor, wid, order.id).invoiceableMinor).toBe(1500);
+  });
+
   it('allocates only net paid amounts, registers local requests, and preserves withdrawn allocation history', () => {
     const order = paidOrder();
     db.sqlite.prepare('UPDATE orders SET refunded_minor=500 WHERE id=?').run(order.id);

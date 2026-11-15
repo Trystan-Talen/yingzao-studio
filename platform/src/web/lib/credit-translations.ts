@@ -1,5 +1,41 @@
 /** Static credit and promotion copy; parameters retain real contract values. */
 export const CREDIT_TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: string }>>> = {
+  增加测试额度: { en: 'Add test credits', ar: 'إضافة أرصدة اختبار' },
+  增加积分: { en: 'Credits to add', ar: 'الأرصدة المطلوب إضافتها' },
+  确认增加: { en: 'Confirm addition', ar: 'تأكيد الإضافة' },
+  核对此次增加: { en: 'Check this addition', ar: 'التحقق من هذه الإضافة' },
+  '增加当前空间的项目内部积分，不是现金或模型服务商余额。': {
+    en: 'Add internal project credits to this workspace. These are not cash or model-provider funds.',
+    ar: 'إضافة أرصدة داخلية للمشروع إلى مساحة العمل. هذه ليست أموالًا نقدية أو رصيدًا لدى مزود النموذج.',
+  },
+  '仅用于本机开发测试，不会发起付款或为外部服务充值。': {
+    en: 'For local development testing only. No payment or external service top-up is made.',
+    ar: 'لاختبار التطوير المحلي فقط. لا يتم إجراء دفع أو شحن رصيد خدمة خارجية.',
+  },
+  '已有一次增加请求待核对，继续操作会使用同一编号，避免重复入账。': {
+    en: 'An addition is awaiting confirmation. Continue with the same request ID to avoid duplicate credits.',
+    ar: 'توجد إضافة تنتظر التأكيد. ستستخدم المتابعة معرّف الطلب نفسه لتجنب إضافة الأرصدة مرتين.',
+  },
+  '请输入允许范围内的正整数积分。': {
+    en: 'Enter a positive whole number within the allowed range.',
+    ar: 'أدخل عددًا صحيحًا موجبًا ضمن النطاق المسموح.',
+  },
+  '无法读取本机额度记录，请检查浏览器存储后重试。': {
+    en: 'The local credit request record could not be read. Check browser storage and retry.',
+    ar: 'تعذرت قراءة سجل طلب الأرصدة المحلي. تحقق من تخزين المتصفح ثم أعد المحاولة.',
+  },
+  '额度已入账，但本机记录清理失败；请核对此次增加，不要另建请求。': {
+    en: 'Credits were added, but the local record could not be cleared. Check this addition before creating another request.',
+    ar: 'أُضيفت الأرصدة، لكن تعذر مسح السجل المحلي. تحقق من هذه الإضافة قبل إنشاء طلب آخر.',
+  },
+  '已核对此次增加，额度未重复入账。': {
+    en: 'This addition is confirmed; no duplicate credits were added.',
+    ar: 'تم تأكيد هذه الإضافة دون تكرار إضافة الأرصدة.',
+  },
+  '已增加 {amount} 测试积分。': {
+    en: 'Added {amount} test credits.',
+    ar: 'تمت إضافة {amount} من أرصدة الاختبار.',
+  },
   '每笔会员额度分别遵循对应合同的到期、封存和续费规则；请查看对应订单条款。额度包自付款起有效 1 年，再次购买会延长尚未失效的同类额度包。':
     {
       en: 'Each membership credit lot follows its own contract’s expiry, archiving and renewal rules. Check the corresponding order terms. Credit packs are valid for 1 year from payment; a new purchase extends unexpired packs of the same type.',

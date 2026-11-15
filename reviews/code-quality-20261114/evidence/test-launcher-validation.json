@@ -1,0 +1,69 @@
+{
+  "scope": "默认测试入口、共用隔离工具和浏览器脚本；不含应用运行入口",
+  "finding": {
+    "confirmed": true,
+    "before": "直接 Vitest（测试运行器）继承终端里的供应商变量、数据库路径和 VITE（构建）变量；3 个合成断言失败",
+    "after": "安全启动器使用操作系统环境白名单；仅接受调用方显式环境增量；3 个合成断言通过"
+  },
+  "regression": {
+    "files": 3,
+    "passed": 9,
+    "failed": 0,
+    "coverage": [
+      "凭据、数据路径和构建变量不继承",
+      "环境文件不加载",
+      "单文件筛选与带空格参数透传",
+      "失败退出码保留",
+      "终止传给真实测试进程组且无遗留测试进程",
+      "子进程把终止处理为退出 0 时仍禁止继续下一步骤",
+      "调用方明确环境增量生效且 NODE_OPTIONS（节点注入选项）不继承"
+    ]
+  },
+  "browser": {
+    "passed": 1,
+    "failed": 0,
+    "suite": "production-security.spec.ts",
+    "project": "desktop",
+    "run": "run-XGOs02",
+    "assertions": "登录、真实本机媒体读取、画布导出及浏览器安全策略",
+    "earlierInfrastructureFailure": {
+      "run": "run-0bp52j",
+      "cause": "Chromium（浏览器）启动受 macOS（操作系统）Mach port（系统端口）沙箱权限限制，未进入业务断言",
+      "resolution": "经自动审批允许本机浏览器启动后重跑同一隔离用例通过"
+    }
+  },
+  "checks": {
+    "typecheck": true,
+    "ownedFilesLint": true,
+    "ownedFilesFormat": true
+  },
+  "boundaries": {
+    "productionDatabaseRead": false,
+    "productionDatabaseWritten": false,
+    "credentialsRead": false,
+    "externalModelCalls": 0,
+    "runtimeAppSourceChanged": false,
+    "windowsProcessTreeTested": false
+  },
+  "sourceSha256": {
+    "scripts/isolated-tool.ts": "91afdeb05ee238a0196a07d590ab0d66edac49e384c10f8e08ffd244e389809a",
+    "scripts/test.ts": "bb6cf25c1cc141712411bfcca05e0ba85a63b77920ac8a4daf612eab439746af",
+    "scripts/e2e.ts": "c5e07575a133017b0ccd9eb5b50f3f060901ff7d8795a49beda42f892ee0d28e",
+    "tests/test-launcher.test.ts": "964dd98b0cf1bc076b444a649030558bd0361dca05a0b0b633f1b719023012b3"
+  },
+  "remainingReadOnlyObservations": [
+    {
+      "file": "platform/scripts/create-redemption.ts:8",
+      "status": "已报根代理，未运行、未修改",
+      "observation": "兑换码管理入口未要求显式数据库路径，缺配置时使用默认 var/app.sqlite；README（项目说明）要求管理命令明确选择数据库",
+      "suggestion": "与 commerce-admin（商业管理）一致，数据操作前要求明确路径，测试无路径时不创建数据库与密钥、有路径只修改隔离数据库"
+    },
+    {
+      "file": "platform/scripts/health.ts:2",
+      "status": "静态确认，未运行、未修改",
+      "observation": "健康检查调用完整 loadConfig（配置加载），开发密钥缺失时会创建 var/.installation-key（本机密钥），不是纯只读探针",
+      "suggestion": "健康探针只解析主机和端口，不创建应用密钥；用临时目录和本机假健康端点回归无文件写入"
+    }
+  ],
+  "crossLayerInspection": "未发现产品前端或契约层导入服务端、任务执行器或脚本运行代码；未将此有限检索描述为全仓架构证明"
+}

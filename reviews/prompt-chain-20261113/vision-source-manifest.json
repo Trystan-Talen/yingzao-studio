@@ -1,0 +1,8 @@
+{
+  "src/server/providers/native-reference-study.ts": "62548f4507153cd4bdf3b5a9e72dd737055b9f1e874510ba6acf8a443b1be092",
+  "src/server/providers/native-background-study.ts": "72a166637307cee34147978e8a9933e0cb1d0a83c48bfdf64942f77df0de1ff7",
+  "src/server/providers/native-reference-media.ts": "727476968ee3fb038e4298c3f6f40fc6fbfebfd453d66c85a4d5c6c1e1b3a8ec",
+  "src/contracts/reference-study.ts": "e0c8aea24565baf445f51904bc350fa28a0d03714d568cf554724bb14f49bcf4",
+  "src/server/tasks/creative-briefs.ts": "89acb1eac524b188e97dd843cba64144c04a68eaa453f33cae21c379f1b503e9",
+  "src/server/providers/native-replica.ts": "d433bc2460ddc234528c76ab3e572ba7127ef118faee861227c564942cdbf422"
+}

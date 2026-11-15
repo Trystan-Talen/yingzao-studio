@@ -127,6 +127,98 @@ function expire(item: ItemRow, phase: string) {
     .run(phase, '2000-01-01T00:00:00.000Z', item.id);
 }
 describe('durable tasks, credits and worker integration', () => {
+  it.each(['transient', 'expired'] as const)(
+    'contains a %s lease heartbeat database error while a provider request is pending',
+    async (mode) => {
+      const { job } = submit();
+      const intervals = vi.spyOn(globalThis, 'setInterval');
+      const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      let release!: () => void;
+      let entered!: () => void;
+      const gate = new Promise<void>((done) => (release = done));
+      const started = new Promise<void>((done) => (entered = done));
+      const execute = vi.fn<ProviderAdapter['execute']>(async () => {
+        entered();
+        await gate;
+        return mode === 'transient'
+          ? { state: 'failed', message: 'Controlled provider rejection' }
+          : {
+              state: 'complete',
+              outputs: [{ buffer: png, mimeType: 'image/png', name: 'late.png' }],
+            };
+      });
+      const w = worker({ id: 'openai', execute });
+      const item = w.claim()!;
+      const running = w.runItem(item);
+      await started;
+      const heartbeat = intervals.mock.calls.find(([, delay]) => delay === 20_000)![0];
+      const originalPrepare = db.sqlite.prepare.bind(db.sqlite);
+      let failedHeartbeats = mode === 'transient' ? 1 : 2;
+      const prepare = vi.spyOn(db.sqlite, 'prepare').mockImplementation((query) => {
+        if (failedHeartbeats > 0 && query.startsWith('UPDATE job_items SET lease_until=')) {
+          failedHeartbeats--;
+          throw new Error('SQLITE_BUSY synthetic heartbeat failure');
+        }
+        return originalPrepare(query);
+      });
+      try {
+        expect(() => heartbeat()).not.toThrow();
+        expect(log).toHaveBeenCalledWith(
+          'Worker lease heartbeat failed; durable state is retained for recovery.',
+        );
+        expect(() => heartbeat()).not.toThrow();
+        expect(tasks.get(actor, wid, job.id).status).toBe('running');
+        expect(tasks.balance(actor, wid).reserved).toBe(8);
+        expect(execute).toHaveBeenCalledTimes(1);
+        if (mode === 'expired') {
+          expire(item, 'submitting');
+          expect(() => heartbeat()).not.toThrow();
+          expect(
+            db.sqlite.prepare('SELECT lease_until FROM job_items WHERE id=?').get(item.id),
+          ).toEqual({ lease_until: '2000-01-01T00:00:00.000Z' });
+        }
+      } finally {
+        prepare.mockRestore();
+        release();
+        await running;
+      }
+      if (mode === 'expired') {
+        expect(tasks.get(actor, wid, job.id).outputAssets).toEqual([]);
+        expect(db.sqlite.prepare('SELECT COUNT(*) n FROM assets').get()).toEqual({ n: 0 });
+        w.recover();
+        expect(tasks.get(actor, wid, job.id).status).toBe('reconciliation_required');
+        expect(w.claim()).toBeUndefined();
+        expect(tasks.balance(actor, wid).reserved).toBe(8);
+        expect(execute).toHaveBeenCalledTimes(1);
+      } else {
+        expect(tasks.get(actor, wid, job.id).status).toBe('failed');
+        expect(tasks.balance(actor, wid).reserved).toBe(0);
+      }
+      expect(tasks.balance(actor, wid).balance).toBe(500);
+    },
+  );
+
+  it('contains an item failure when durable error recording also fails, without an unhandled rejection', async () => {
+    const { job } = submit();
+    const log = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const refresh = vi.spyOn(tasks, 'refresh').mockImplementation(() => {
+      throw new Error('synthetic database write failure');
+    });
+    const w = worker({
+      id: 'openai',
+      execute: async () => ({ state: 'failed', message: 'Synthetic provider rejection' }),
+    });
+    await w.tick();
+    await expect(w.drain()).resolves.toBeUndefined();
+    expect(log).toHaveBeenCalledWith('Worker item failed; durable state is retained for recovery.');
+    refresh.mockRestore();
+    const item = db.sqlite.prepare('SELECT * FROM job_items WHERE job_id=?').get(job.id) as ItemRow;
+    expect(item).toMatchObject({ status: 'running', phase: 'submitting' });
+    expire(item, 'submitting');
+    w.recover();
+    expect(tasks.get(actor, wid, job.id).status).toBe('reconciliation_required');
+    expect(tasks.balance(actor, wid).reserved).toBe(8);
+  });
   it('refuses missing capability before reserving or creating a job', () => {
     tasks.settings.update(wid, { providerId: 'openai', enabled: false });
     expect(() => tasks.quote(actor, wid, input())).toThrow(AppError);

@@ -1,0 +1,184 @@
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2299 modules transformed.
+rendering chunks...
+computing gzip size...
+var/e2e/run-17HcVm/web/index.html                                  0.61 kB │ gzip:   0.44 kB
+var/e2e/run-17HcVm/web/assets/knowledge-C1GF6EJk.css               1.12 kB │ gzip:   0.49 kB
+var/e2e/run-17HcVm/web/assets/Login-DikSd-tK.css                   3.38 kB │ gzip:   1.22 kB
+var/e2e/run-17HcVm/web/assets/Settings-Bxgqvs-8.css                4.04 kB │ gzip:   1.13 kB
+var/e2e/run-17HcVm/web/assets/Workbench-CTY2Adub.css               5.06 kB │ gzip:   1.28 kB
+var/e2e/run-17HcVm/web/assets/Inspiration-C0f5FocC.css            10.39 kB │ gzip:   2.16 kB
+var/e2e/run-17HcVm/web/assets/CanvasEditor-BcQQlAIU.css           12.37 kB │ gzip:   3.11 kB
+var/e2e/run-17HcVm/web/assets/CreationLanding-CSl8TV0k.css        42.56 kB │ gzip:   7.88 kB
+var/e2e/run-17HcVm/web/assets/index-DKXG2uJQ.css                 271.74 kB │ gzip:  47.41 kB
+var/e2e/run-17HcVm/web/assets/chevron-down-CsmRKFM5.js             0.21 kB │ gzip:   0.20 kB │ map:     0.99 kB
+var/e2e/run-17HcVm/web/assets/job-snapshot-0LKF8d_t.js             0.28 kB │ gzip:   0.22 kB │ map:     1.35 kB
+var/e2e/run-17HcVm/web/assets/lock-keyhole-jlQYr0Gr.js             0.34 kB │ gzip:   0.28 kB │ map:     1.34 kB
+var/e2e/run-17HcVm/web/assets/mentions-DOj5GYvu.js                 0.38 kB │ gzip:   0.31 kB │ map:     1.08 kB
+var/e2e/run-17HcVm/web/assets/arrow-up-B7WMU6sU.js                 0.39 kB │ gzip:   0.27 kB │ map:     2.03 kB
+var/e2e/run-17HcVm/web/assets/shield-check-ApDyfmjT.js             0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+var/e2e/run-17HcVm/web/assets/trash-Fk5DG18r.js                    0.42 kB │ gzip:   0.28 kB │ map:     1.48 kB
+var/e2e/run-17HcVm/web/assets/key-round-BcaWoicB.js                0.44 kB │ gzip:   0.31 kB │ map:     1.37 kB
+var/e2e/run-17HcVm/web/assets/expand-BdAvDu4t.js                   0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+var/e2e/run-17HcVm/web/assets/CreateHome-DECCkiY8.js               0.66 kB │ gzip:   0.40 kB │ map:     0.45 kB
+var/e2e/run-17HcVm/web/assets/undo-2-_YulRNNf.js                   0.70 kB │ gzip:   0.37 kB │ map:     2.81 kB
+var/e2e/run-17HcVm/web/assets/text-align-start-DbhMhLJk.js         0.98 kB │ gzip:   0.49 kB │ map:     3.79 kB
+var/e2e/run-17HcVm/web/assets/export-policy-DoE-Ddsl.js            1.15 kB │ gzip:   0.62 kB │ map:     4.75 kB
+var/e2e/run-17HcVm/web/assets/Tasks-B-BE11kU.js                    1.73 kB │ gzip:   1.04 kB │ map:     4.84 kB
+var/e2e/run-17HcVm/web/assets/IdentityRegistration-DdXz8V-w.js     2.50 kB │ gzip:   1.37 kB │ map:     7.47 kB
+var/e2e/run-17HcVm/web/assets/Entitlements-Cr8f6EJO.js             2.65 kB │ gzip:   1.37 kB │ map:     6.22 kB
+var/e2e/run-17HcVm/web/assets/product-messages-BvUgH6cO.js         2.85 kB │ gzip:   1.05 kB │ map:     5.21 kB
+var/e2e/run-17HcVm/web/assets/PasswordRecovery-C3upIHHB.js         3.08 kB │ gzip:   1.63 kB │ map:     9.40 kB
+var/e2e/run-17HcVm/web/assets/scene-BQx0oHP_.js                    3.09 kB │ gzip:   1.43 kB │ map:    12.45 kB
+var/e2e/run-17HcVm/web/assets/inspirations-CLjSXM6O.js             3.70 kB │ gzip:   2.21 kB │ map:     7.41 kB
+var/e2e/run-17HcVm/web/assets/UsageStatistics-DNic9zOO.js          4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+var/e2e/run-17HcVm/web/assets/Public-BCA6Y-_T.js                   4.06 kB │ gzip:   2.13 kB │ map:    11.66 kB
+var/e2e/run-17HcVm/web/assets/Login-BzW-9tjL.js                    4.40 kB │ gzip:   2.27 kB │ map:    12.17 kB
+var/e2e/run-17HcVm/web/assets/GoogleAccount-Du6eI562.js            5.02 kB │ gzip:   2.32 kB │ map:    14.66 kB
+var/e2e/run-17HcVm/web/assets/ModelCapabilityStatus-DjADPdT6.js    6.16 kB │ gzip:   3.03 kB │ map:    19.24 kB
+var/e2e/run-17HcVm/web/assets/knowledge-C00vSjKE.js                6.84 kB │ gzip:   3.02 kB │ map:    20.38 kB
+var/e2e/run-17HcVm/web/assets/MemorySettings-CWsD85M5.js           7.31 kB │ gzip:   3.21 kB │ map:    23.01 kB
+var/e2e/run-17HcVm/web/assets/Developer-Cb0o-1-Y.js                7.64 kB │ gzip:   3.19 kB │ map:    20.40 kB
+var/e2e/run-17HcVm/web/assets/IdentityAccounts-CRGSormr.js         7.72 kB │ gzip:   3.06 kB │ map:    23.36 kB
+var/e2e/run-17HcVm/web/assets/Products-4dlQSwvj.js                 8.45 kB │ gzip:   3.62 kB │ map:    28.59 kB
+var/e2e/run-17HcVm/web/assets/core-C7CVJ1Cx.js                     8.54 kB │ gzip:   2.52 kB │ map:    28.66 kB
+var/e2e/run-17HcVm/web/assets/Inspiration-DPsgWJUO.js             13.88 kB │ gzip:   5.44 kB │ map:    44.74 kB
+var/e2e/run-17HcVm/web/assets/Team-CzBRe1aZ.js                    15.76 kB │ gzip:   5.36 kB │ map:    51.84 kB
+var/e2e/run-17HcVm/web/assets/Identities-D1Quo2c_.js              17.51 kB │ gzip:   6.32 kB │ map:    57.40 kB
+var/e2e/run-17HcVm/web/assets/Support-Dlqa6mZl.js                 17.80 kB │ gzip:   6.87 kB │ map:    52.57 kB
+var/e2e/run-17HcVm/web/assets/AdvancedTools-Dn_EEO5K.js           21.21 kB │ gzip:   8.28 kB │ map:    73.19 kB
+var/e2e/run-17HcVm/web/assets/Workbench-B9dqebKB.js               22.57 kB │ gzip:   8.36 kB │ map:    76.65 kB
+var/e2e/run-17HcVm/web/assets/Library-AesF6TlU.js                 25.73 kB │ gzip:   8.69 kB │ map:    80.72 kB
+var/e2e/run-17HcVm/web/assets/Settings-B64cuM-I.js                25.88 kB │ gzip:   9.22 kB │ map:    75.89 kB
+var/e2e/run-17HcVm/web/assets/Tools-_VrrUN19.js                   27.34 kB │ gzip:  10.24 kB │ map:    88.69 kB
+var/e2e/run-17HcVm/web/assets/Usage-BCgJQytm.js                   30.86 kB │ gzip:  10.42 kB │ map:    95.29 kB
+var/e2e/run-17HcVm/web/assets/DetailPageStudio-8TKEjpmC.js        43.50 kB │ gzip:  14.12 kB │ map:   148.20 kB
+var/e2e/run-17HcVm/web/assets/CreationLanding-BPwyt8rT.js         72.19 kB │ gzip:  25.54 kB │ map:   243.15 kB
+var/e2e/run-17HcVm/web/assets/react-Iff1aU_1.js                  106.13 kB │ gzip:  35.89 kB │ map:   615.23 kB
+var/e2e/run-17HcVm/web/assets/CanvasEditor-DOJ0Mlt0.js           149.88 kB │ gzip:  48.87 kB │ map:   409.91 kB
+var/e2e/run-17HcVm/web/assets/editor-DERvKPwF.js                 282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+var/e2e/run-17HcVm/web/assets/index-DnfLcuIP.js                  958.27 kB │ gzip: 308.39 kB │ map: 3,011.28 kB
+
+(!) Some chunks are larger than 750 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.98s
+
+Running 440 tests using 2 workers
+
+(node:7095) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7096) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    2 [desktop] › tests/e2e/background-region-review.spec.ts:154:1 › corrects a candidate mask through the real editor and preserves source pixels at zero credits without model access (5.3s)
+  ✓    1 [desktop] › tests/e2e/account.spec.ts:6:1 › new user recovers through a real local email, loses old sessions and logs in with the new password (5.9s)
+  ✓    3 [desktop] › tests/e2e/background-region-review.spec.ts:283:3 › image-inpaint retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft (5.1s)
+  ✓    4 [desktop] › tests/e2e/account.spec.ts:62:1 › Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser (6.1s)
+  ✓    6 [desktop] › tests/e2e/account.spec.ts:139:3 › explicitly disabled recovery › is readable without a session and sends no fabricated messages (2.0s)
+  ✓    5 [desktop] › tests/e2e/background-region-review.spec.ts:283:3 › image-erase retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft (4.1s)
+  ✓    8 [desktop] › tests/e2e/background-region-review.spec.ts:406:1 › presents background review and soft-edge editing in English without translating the user original or submitting a job (7.4s)
+  ✓    7 [desktop] › tests/e2e/brand-quota.spec.ts:100:1 › enforces per-member brand quotas in real create/delete/restore controls without making a payment (9.3s)
+  ✓    9 [desktop] › tests/e2e/background-region-review.spec.ts:552:1 › waits for the actual initial mask before permitting edits and preserves it after a delayed load (3.0s)
+  ✓   10 [desktop] › tests/e2e/brand-quota.spec.ts:195:1 › preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting (4.1s)
+  ✓   11 [desktop] › tests/e2e/background-region-review.spec.ts:616:3 › rejects an initial mask with network-error without permitting a blank replacement and recovers on explicit reopening (2.7s)
+  ✓   13 [desktop] › tests/e2e/background-region-review.spec.ts:616:3 › rejects an initial mask with wrong-dimensions without permitting a blank replacement and recovers on explicit reopening (2.6s)
+  ✓   14 [desktop] › tests/e2e/background-region-review.spec.ts:675:3 › image-inpaint freezes pixels during mask upload and never attaches a late mask to a replacement source (3.6s)
+  ✓   15 [desktop] › tests/e2e/background-region-review.spec.ts:675:3 › image-erase freezes pixels during mask upload and never attaches a late mask to a replacement source (3.6s)
+  ✓   12 [desktop] › tests/e2e/canvas-focus-review.spec.ts:4:1 › switches narrow-screen editor tabs with arrow keys without moving the selected layer (11.0s)
+  ✓   17 [desktop] › tests/e2e/capability-input-snapshot.spec.ts:21:3 › quotes and generates brand references with a valid capability proof after the server freezes the task input (5.7s)
+  ✓   16 [desktop] › tests/e2e/canvas.spec.ts:19:1 › creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project (12.8s)
+  ✓   18 [desktop] › tests/e2e/capability-input-snapshot.spec.ts:21:3 › quotes and generates document references with a valid capability proof after the server freezes the task input (6.0s)
+  ✓   19 [desktop] › tests/e2e/capability-input-snapshot.spec.ts:21:3 › quotes and generates design-module references with a valid capability proof after the server freezes the task input (5.4s)
+  ✓   20 [desktop] › tests/e2e/character-video.spec.ts:54:1 › uploads, plays and retains separate character image/video references, then explicitly handles unavailable references (7.4s)
+  ✓   21 [desktop] › tests/e2e/collection-membership-review.spec.ts:44:1 › adding an asset preserves collection membership of an item in the recycle bin (2.3s)
+  ✓   23 [desktop] › tests/e2e/collection-membership-review.spec.ts:78:1 › adding and removing selected assets preserves a concurrent collection addition (2.6s)
+  ✓   24 [desktop] › tests/e2e/collection-membership-review.spec.ts:117:1 › collection lookup failure offers retry instead of claiming the collection list is empty (2.9s)
+  ✓   22 [desktop] › tests/e2e/character-video.spec.ts:266:1 › blocks saving until character references load, retries errors and discards late responses for a closed profile (6.1s)
+  ✓   25 [desktop] › tests/e2e/composer-media.spec.ts:27:1 › persists real background music and the generated audio choice across save, model changes and refresh (5.4s)
+  ✓   26 [desktop] › tests/e2e/consumer-visual.spec.ts:60:1 › desktop studio visual states keep normal-flow creation above unobstructed artwork and keyboard controls without billable writes (5.7s)
+  ✓   28 [desktop] › tests/e2e/consumer-visual.spec.ts:176:1 › mobile studio home keeps normal-flow creation, dark artwork, header credit access and the primary action unobstructed (3.3s)
+  ✓   27 [desktop] › tests/e2e/composer-media.spec.ts:122:1 › returns an actual local output to the project composer without replacing the current prompt or submitting a second job (6.2s)
+  ✓   30 [desktop] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the project save response is delayed (5.3s)
+  ✓   29 [desktop] › tests/e2e/creation-locale.spec.ts:51:3 › uses en creation and local tool controls while retaining the original Chinese user content (8.3s)
+  ✓   31 [desktop] › tests/e2e/creation-race.spec.ts:44:3 › keeps edits, both creation kinds and uploaded references while the message save response is delayed (4.9s)
+  ✓   33 [desktop] › tests/e2e/creation-redesign.spec.ts:39:3 › shows a numeric first-screen estimate with empty input at /, and collapses settings without writes (2.2s)
+  ✓   32 [desktop] › tests/e2e/creation-locale.spec.ts:51:3 › uses ar creation and local tool controls while retaining the original Chinese user content (7.4s)
+  ✓   34 [desktop] › tests/e2e/creation-redesign.spec.ts:39:3 › shows a numeric first-screen estimate with empty input at /workbench?kind=image, and collapses settings without writes (3.2s)
+  ✓   35 [desktop] › tests/e2e/creative-brief.spec.ts:191:1 › shows one clear clarification area and focuses missing answers without another planning call (2.3s)
+  ✓   36 [desktop] › tests/e2e/creation-redesign.spec.ts:98:3 › multi-image estimates › uses the current server rate and selected image count without preparing a billable quote (1.9s)
+  ✓   37 [desktop] › tests/e2e/creative-brief.spec.ts:238:1 › switches between custom text and quick options without auto-submitting or losing restored custom answers (2.9s)
+  ✓   38 [desktop] › tests/e2e/creation-redesign.spec.ts:127:1 › shows an unresolved capability as pending and an invalid rate as unknown, never as zero (2.7s)
+  ✓   39 [desktop] › tests/e2e/creative-brief.spec.ts:268:1 › opens the normal add-reference picker instead of targeting an existing image removal action (3.0s)
+  ✓   40 [desktop] › tests/e2e/creation-redesign.spec.ts:163:1 › warns about a stale low balance without bypassing or blocking the authoritative quote (1.9s)
+  ✓   41 [desktop] › tests/e2e/creative-brief.spec.ts:312:1 › continues a complete general idea to the existing quote, and refresh only reads the saved understanding (3.8s)
+  ✓   42 [desktop] › tests/e2e/creation-redesign.spec.ts:183:1 › keeps the real local clarification chain free of quotes and tasks until the answer is complete (3.6s)
+  ✓   43 [desktop] › tests/e2e/creative-brief.spec.ts:373:1 › asks only two necessary questions, preserves separate answers across refresh, then quotes the original wording (3.4s)
+  ✓   44 [desktop] › tests/e2e/creation-redesign.spec.ts:221:1 › confirms a compact authoritative image quote once and retains the exact generated original (5.6s)
+  ✓   45 [desktop] › tests/e2e/creative-brief.spec.ts:430:1 › sends only the current round of answers and requires a fresh answer for a repeated question ID (4.8s)
+  ✓   47 [desktop] › tests/e2e/creative-brief.spec.ts:482:1 › drops late understanding after the prompt, platform and material change (2.9s)
+  ✓   46 [desktop] › tests/e2e/creation-redesign.spec.ts:288:1 › updates video seconds pricing and creates one playable saved vertical original (5.6s)
+  ✓   48 [desktop] › tests/e2e/creative-brief.spec.ts:532:1 › does not bypass a failed check with confirmation disabled and retries the same request after refresh (2.2s)
+  ✓   49 [desktop] › tests/e2e/creation-redesign.spec.ts:355:1 › honors the existing no-confirmation preference without duplicate generation (3.7s)
+  ✓   50 [desktop] › tests/e2e/creative-brief.spec.ts:557:1 › requires an explicit reset after a confirmed failure and keeps the current question answers for the new check (2.2s)
+  ✓   52 [desktop] › tests/e2e/creative-brief.spec.ts:599:1 › does not reuse the same wording and options from another existing project (3.2s)
+  ✓   51 [desktop] › tests/e2e/creative-capability-recovery.spec.ts:40:3 › preserves a bound video draft after a rejected quote, reloads it and reuses its ready understanding (5.1s)
+  ✓   53 [desktop] › tests/e2e/creative-brief.spec.ts:652:1 › stops before a paid check if its request record cannot be saved, while retaining a legacy platform (2.9s)
+  ✓   54 [desktop] › tests/e2e/creative-capability-recovery.spec.ts:40:3 › preserves a bound video draft after a rejected submission, reloads it and reuses its ready understanding (5.4s)
+  ✓   55 [desktop] › tests/e2e/creative-brief.spec.ts:677:1 › keeps explicit video types aligned with their placement and clears the old placement for free creation (5.1s)
+  ✓   57 [desktop] › tests/e2e/creative-brief.spec.ts:710:3 › accepts a 121.487-second preparation without replacing its request or timing out early (1.9s)
+  ✓   56 [desktop] › tests/e2e/creative-capability-recovery.spec.ts:40:3 › preserves a bound video draft after a rejected quote with confirmation disabled, reloads it and reuses its ready understanding (5.1s)
+  ✓   58 [desktop] › tests/e2e/creative-brief.spec.ts:710:3 › accepts a 141-second preparation without replacing its request or timing out early (2.9s)
+  ✓   60 [desktop] › tests/e2e/creative-brief.spec.ts:744:1 › times out at the bounded client deadline without automatically replacing or resending its request (2.4s)
+  ✓   59 [desktop] › tests/e2e/creative-capability-recovery.spec.ts:209:1 › a stale video tab cannot erase the newer draft when it only refreshes model information (4.7s)
+  ✓   61 [desktop] › tests/e2e/creative-brief.spec.ts:803:1 › a cached ready plan uses a free configuration check and waits for explicit reset before replanning (3.9s)
+  ✓   63 [desktop] › tests/e2e/creative-brief.spec.ts:872:1 › a connection change during quotation invalidates the newly bound plan without another paid call (2.0s)
+  ✓   64 [desktop] › tests/e2e/creative-brief.spec.ts:908:1 › a definite budget rejection preserves the draft and permits a fresh user-requested preparation (2.1s)
+  ✓   62 [desktop] › tests/e2e/creative-knowledge.spec.ts:44:1 › creates reusable memory and product, freezes reviewed sources and saves a downloadable image (9.1s)
+  ✓   65 [desktop] › tests/e2e/credits-locale.spec.ts:77:3 › translates en credit copy while keeping real values and user fields without starting payment (5.8s)
+  ✓   66 [desktop] › tests/e2e/creative-knowledge.spec.ts:245:1 › manages private memory and rejects a stale product edit without losing the editor draft (5.3s)
+  ✓   67 [desktop] › tests/e2e/credits-locale.spec.ts:222:3 › distinguishes en historical zero-archive and three-month renewal contract copy (2.7s)
+  ✓   69 [desktop] › tests/e2e/credits-locale.spec.ts:292:3 › translates en referral membership configuration without enabling rewards (3.1s)
+  ✓   68 [desktop] › tests/e2e/dark-creation-flow.spec.ts:19:3 › dark image clarification, authoritative quote, single saved original and reload (7.0s)
+  ✓   70 [desktop] › tests/e2e/credits-locale.spec.ts:77:3 › translates ar credit copy while keeping real values and user fields without starting payment (4.3s)
+  ✓   72 [desktop] › tests/e2e/credits-locale.spec.ts:222:3 › distinguishes ar historical zero-archive and three-month renewal contract copy (2.8s)
+  ✓   73 [desktop] › tests/e2e/credits-locale.spec.ts:292:3 › translates ar referral membership configuration without enabling rewards (2.7s)
+  ✓   71 [desktop] › tests/e2e/dark-creation-flow.spec.ts:19:3 › dark video clarification, authoritative quote, single saved original and reload (8.0s)
+  ✓   75 [desktop] › tests/e2e/dark-settings-popover.spec.ts:12:1 › dark settings float without reflow and retain choices through escape and outside dismissal (3.4s)
+  ✓   74 [desktop] › tests/e2e/dark-flow-recovery.spec.ts:13:1 › dark mobile failure requires an explicitly confirmed separate retry (10.5s)
+  ✓   76 [desktop] › tests/e2e/detail-page-experience.spec.ts:14:1 › reviews one screen at a time, explains invalid content and preserves the current step and brief decision (7.5s)
+  ✓   77 [desktop] › tests/e2e/dark-flow-recovery.spec.ts:66:1 › dark desktop display fixture distinguishes paused saving from an unknown outcome (6.4s)
+  ✓   78 [desktop] › tests/e2e/detail-page-project-entry.spec.ts:7:3 › returns an unsubmitted detail-page project to its own editor after a cancelled quote (4.9s)
+  ✓   79 [desktop] › tests/e2e/event-stream-tabs.spec.ts:9:1 › releases hidden-tab event streams so six tabs cannot starve navigation and resumes with fresh project data (2.1s)
+  ✓   80 [desktop] › tests/e2e/detail-page-project-entry.spec.ts:7:3 › returns an unsubmitted detail-page project to its own editor after a failed quote (3.1s)
+  ✓   81 [desktop] › tests/e2e/experience-journeys.spec.ts:73:1 › explains the planning service input limit, preserves all text and accepts the exact boundary without submitting (4.0s)
+  ✓   82 [desktop] › tests/e2e/filter-style-review.spec.ts:32:3 › task and tool filters retain real filtering with consistent dark selections (3.2s)
+  ✓   84 [desktop] › tests/e2e/filter-style-review.spec.ts:32:3 › task and tool filters retain real filtering with consistent light selections (3.2s)
+  ✓   83 [desktop] › tests/e2e/experience-journeys.spec.ts:114:3 › native text planning capabilities › generates a design plan, applies an edited direction and preserves it without automatically generating an image (5.6s)
+  ✓   85 [desktop] › tests/e2e/home-appearance.spec.ts:67:3 › renders zh-CN home in dark mode with usable keyboard controls and video materials (5.1s)
+  ✓   86 [desktop] › tests/e2e/experience-journeys.spec.ts:166:1 › creates an image from the home entry, preserves its task after refresh and downloads the saved original (7.7s)
+  ✓   87 [desktop] › tests/e2e/home-appearance.spec.ts:67:3 › renders en home in light mode with usable keyboard controls and video materials (5.9s)
+  ✓   88 [desktop] › tests/e2e/experience-journeys.spec.ts:239:1 › creates a video, plays the saved media and restores the same output after refresh (6.5s)
+  ✓   89 [desktop] › tests/e2e/home-appearance.spec.ts:67:3 › renders ar home in light mode with usable keyboard controls and video materials (5.4s)
+  ✓   91 [desktop] › tests/e2e/home-design.spec.ts:63:1 › offers one immediately usable creation composer, real idea previews and accessible directions (2.2s)
+  ✓   92 [desktop] › tests/e2e/home-design.spec.ts:111:1 › keeps the brief and generation in the first screen with keyboard-accessible toolbar settings (2.9s)
+  ✓   93 [desktop] › tests/e2e/home-design.spec.ts:200:1 › uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save (4.0s)
+  ✓   90 [desktop] › tests/e2e/experience-journeys.spec.ts:298:1 › plans six detail-page screens, confirms the edited plan and exports matching originals plus a long image (11.4s)
+  ✓   94 [desktop] › tests/e2e/home-design.spec.ts:290:1 › opens a redesigned inspiration card and reuses the original media in an editable persisted project (3.6s)
+  ✓   95 [desktop] › tests/e2e/experience-journeys.spec.ts:435:1 › keeps a failed attempt visible and creates exactly one separately confirmed retry (8.1s)
+  ✓   96 [desktop] › tests/e2e/identities.spec.ts:5:3 › local SMS protocol fixture › binds through actual UI, logs out, and signs in using a separately delivered one-time SMS (7.5s)
+  ✓   98 [desktop] › tests/e2e/identities.spec.ts:60:1 › shows unavailable external identity methods without fake codes or QR images (2.1s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-17HcVm

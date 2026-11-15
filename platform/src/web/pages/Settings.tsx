@@ -23,15 +23,21 @@ import { GoogleAccount, GoogleCallbackNotice } from '../components/GoogleAccount
 import { MailDeliveryStatus } from '../components/MailDeliveryStatus';
 import { PasswordSecurity } from '../components/PasswordSecurity';
 import { IdentityAccounts } from '../components/IdentityAccounts';
+import { ModelConnections } from '../components/ModelConnections';
+import { MemorySettings } from '../components/MemorySettings';
 export function Settings() {
   const { isAdmin } = useStudio();
   const [search, setSearch] = useSearchParams();
   const tab =
-    search.get('tab') === 'providers'
-      ? 'providers'
-      : search.get('tab') === 'mail' && isAdmin
-        ? 'mail'
-        : 'profile';
+    search.get('tab') === 'memory'
+      ? 'memory'
+      : search.get('tab') === 'models'
+        ? 'models'
+        : search.get('tab') === 'providers'
+          ? 'providers'
+          : search.get('tab') === 'mail' && isAdmin
+            ? 'mail'
+            : 'profile';
   return (
     <div className="page settings-page">
       <PageHeader title={t('设置')} description={t('管理个人偏好与工作空间的生成服务。')} />
@@ -40,13 +46,19 @@ export function Settings() {
         onChange={(value) => setSearch(value === 'profile' ? {} : { tab: value })}
         options={[
           { value: 'profile', label: '个人偏好' },
+          { value: 'memory', label: '创作记忆' },
+          { value: 'models', label: '模型配置' },
           { value: 'providers', label: '生成服务' },
           ...(isAdmin ? [{ value: 'mail', label: '邮件投递' }] : []),
         ]}
       />
       <GoogleCallbackNotice result={search.get('google')} code={search.get('code')} />
-      {tab === 'profile' ? (
+      {tab === 'memory' ? (
+        <MemorySettings />
+      ) : tab === 'profile' ? (
         <ProfileSettings />
+      ) : tab === 'models' ? (
+        <ModelConnections />
       ) : tab === 'mail' ? (
         <MailDeliveryStatus />
       ) : (
@@ -58,7 +70,7 @@ export function Settings() {
 function ProfileSettings() {
   const { session, refreshSession } = useStudio();
   const [name, setName] = useState(session?.user.displayName ?? '');
-  const [theme, setTheme] = useState(session?.user.preferences.theme ?? 'system');
+  const [theme, setTheme] = useState(session?.user.preferences.theme ?? 'dark');
   const [locale, setLocale] = useState(session?.user.preferences.locale ?? 'zh-CN');
   const [defaultPlatform, setDefaultPlatform] = useState(
     session?.user.preferences.defaultPlatform ?? '通用电商',
@@ -105,7 +117,7 @@ function ProfileSettings() {
           <div className="form-grid">
             <Field label={t('界面主题')}>
               <select value={theme} onChange={(e) => setTheme(e.target.value as typeof theme)}>
-                <option value="system">{t('跟随系统')}</option>
+                <option value="system">{t('默认（深色）')}</option>
                 <option value="light">{t('浅色')}</option>
                 <option value="dark">{t('深色')}</option>
               </select>

@@ -1,0 +1,64 @@
+{
+  "completedAt": "2026-11-14T17:46:40.885Z",
+  "sourceFrozen": true,
+  "sourceManifest": "platform/var/full-chain-audit-20261114/source-manifest.json",
+  "changes": [
+    {
+      "problem": "重试报价未检查冻结产品/记忆是否到期",
+      "severity": "P2",
+      "source": "platform/src/server/tasks/service.ts",
+      "red": "platform/var/full-chain-audit-20261114/expired-retry-red.json",
+      "redCases": 3,
+      "behavior": "重试属于新报价，过期资料须重新整理；已有有效报价提交与已有产物恢复保持原规则。",
+      "browserRed": "platform/var/e2e/run-mDmI67",
+      "browserGreen": "platform/var/e2e/run-AcC54L"
+    },
+    {
+      "problem": "执行器心跳与取消轮询的数据库错误逸出异步收尾",
+      "severity": "P2",
+      "source": "platform/src/worker/runner.ts",
+      "red": "platform/var/full-chain-audit-20261114/heartbeat-red.json",
+      "behavior": "心跳错误保留原租约与恢复状态；取消轮询无法确认执行权时中止本机工作。日志不包含原始异常。连续续租失败后旧执行者不得保存产物或结算；付费未知状态不释放预留或重发模型。",
+      "regression": "platform/var/full-chain-audit-20261114/lease-safety-green.json"
+    }
+  ],
+  "validation": {
+    "related": {
+      "files": 21,
+      "passed": 523,
+      "failed": 0,
+      "skipped": 0,
+      "report": "platform/var/full-chain-audit-20261114/full-chain-related.json"
+    },
+    "browser": {
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "report": "platform/var/full-chain-audit-20261114/expired-retry-browser-final.log",
+      "details": "桌面与手机真实接口、自然到期；模拟模型失败→重试拒绝→更新产品→原稿重新整理→独立确认→持久成品，保留原失败任务。未替换接口响应。"
+    },
+    "strict": {
+      "typecheck": "platform/var/full-chain-audit-20261114/typecheck.log",
+      "lint": "platform/var/full-chain-audit-20261114/lint.log",
+      "format": "platform/var/full-chain-audit-20261114/format.log",
+      "allPassed": true
+    },
+    "independentReview": "memory_audit 只读交叉审查未见新增阻塞。"
+  },
+  "reviewedBoundaries": [
+    "原始输入与已确认执行快照分离、产品/品牌材料权限、私有记忆不进入事实来源、规划未知提交去重。",
+    "普通创作、工具、详情页共用报价/幂等提交/预留结算；失败屏重试与已有结果恢复分离。",
+    "本机纯平移及中间产物恢复不读取模型密钥；真正模型分支仍校验配置。",
+    "租约与围栏、取消前后付费状态、已受理远程任务编号持久化、损坏恢复元数据不能重生成。",
+    "预留按来源到期、账户/成员/接口额度边界、结算事件唯一与事务回滚。",
+    "工作流节点离线编译/合同、原生规划与模拟输出版型、来源事实一致性。"
+  ],
+  "remaining": [
+    "本轮没有新增真实模型、远端Dify、供应商现金账单、真实视频或支付验证；本地模拟通过不扩大历史样片质量。",
+    "产品与个人记忆仍仅用于单项图片/视频；分组、独立工具及详情页明确拒绝，不在本轮扩展。",
+    "完整项目浏览器由根线程统一运行，本报告仅声明本次2个新增浏览器用例。",
+    "useAction 仅使用状态门闩是静态可疑点，未复现真实用户重复付费提交；提交主链持久请求标识及服务器幂等仍在，本轮不做通用重写。"
+  ],
+  "formalDatabaseTouched": false,
+  "paidExternalCalls": 0
+}

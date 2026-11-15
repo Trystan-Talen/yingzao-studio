@@ -1,0 +1,147 @@
+Running 3 tests using 1 worker
+
+(node:78611) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/knowledge-recheck.spec.ts:12:1 › retains single-creation memory and product-image choices after refreshing a grouped draft (8.8s)
+(node:78703) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields (7.9s)
+(node:78807) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields (7.9s)
+
+
+  1) [desktop] › tests/e2e/knowledge-recheck.spec.ts:12:1 › retains single-creation memory and product-image choices after refreshing a grouped draft 
+
+    Error: expect(locator).toBeChecked() failed
+
+    Locator:  getByRole('dialog', { name: '创作设置', exact: true }).getByRole('checkbox', { name: '使用创作记忆', exact: true })
+    Expected: checked
+    Received: unchecked
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeChecked" getByRole('dialog', { name: '创作设置', exact: true }).getByRole('checkbox', { name: '使用创作记忆', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '创作设置', exact: true }).getByRole('checkbox', { name: '使用创作记忆', exact: true })
+        14 × locator resolved to <input type="checkbox"/>
+           - unexpected value "unchecked"
+
+
+      47 |   ).not.toBeChecked();
+      48 |   await settings.getByRole('combobox', { name: '创作类型', exact: true }).selectOption('single');
+    > 49 |   await expect(settings.getByRole('checkbox', { name: '使用创作记忆', exact: true })).toBeChecked();
+         |                                                                                 ^
+      50 |   await expect(
+      51 |     settings.getByRole('checkbox', { name: '带入产品参考图', exact: true }),
+      52 |   ).toBeChecked();
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-recheck.spec.ts:49:81
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-retains--b8012--refreshing-a-grouped-draft-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-retains--b8012--refreshing-a-grouped-draft-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-r5BLIS/results/knowledge-recheck-retains--b8012--refreshing-a-grouped-draft-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-retains--b8012--refreshing-a-grouped-draft-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-r5BLIS/results/knowledge-recheck-retains--b8012--refreshing-a-grouped-draft-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog')
+    Expected substring: "另一窗口的修改"
+    Received string:    "编辑记忆只保存你明确确认的信息；本次需求不会自动变成长期记忆。记忆主题同一适用范围的相同主题请编辑原记忆，避免重复与矛盾。记忆内容当前窗口的修改最多2000字；请精简为需要跨次复用的内容。记忆类型长期背景创作偏好临时要求适用创作图片与视频图片视频到期时间临时要求必须设置期限；到期后不再带入新规划。记忆状态启用停用职业等长期背景不随时间衰减；发生变化时请编辑替换。关闭保存记忆"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog') with timeout 5000ms
+      - waiting for getByRole('dialog')
+        14 × locator resolved to <div role="dialog" tabindex="-1" class="modal " id="radix-_r_s_" data-state="open" aria-label="编辑记忆" aria-labelledby="radix-_r_t_">…</div>
+           - unexpected value "编辑记忆只保存你明确确认的信息；本次需求不会自动变成长期记忆。记忆主题同一适用范围的相同主题请编辑原记忆，避免重复与矛盾。记忆内容当前窗口的修改最多2000字；请精简为需要跨次复用的内容。记忆类型长期背景创作偏好临时要求适用创作图片与视频图片视频到期时间临时要求必须设置期限；到期后不再带入新规划。记忆状态启用停用职业等长期背景不随时间衰减；发生变化时请编辑替换。关闭保存记忆"
+
+
+      134 |     expect((await conflicted).status()).toBe(409);
+      135 |     await expect(field).toHaveValue('当前窗口的修改');
+    > 136 |     await expect(editor).toContainText('另一窗口的修改');
+          |                          ^
+      137 |     await editor.getByRole('button', { name: '合并最新记录并继续编辑', exact: true }).click();
+      138 |     await expect(field).toHaveValue('当前窗口的修改');
+      139 |     if (memory)
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-recheck.spec.ts:136:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog')
+    Expected substring: "另一窗口的修改"
+    Received string:    "产品资料产品名称产品描述产品事实（每行一条）旧规格仅填写已确认的规格、材质和卖点，最多16条。使用限制（每行一条）例如不可宣称的功效、不可改动的外观，最多8条。关联品牌不使用品牌搜索更多品牌可见范围仅自己空间共享产品有效期包含价格、促销或阶段信息时请设置期限；到期后不能用于新规划。产品参考图片0 / 4添加素材拖入文件，或聚焦这里粘贴图片保存资料不会调用模型。创作时默认只带入文字，勾选后才使用产品参考图。管理品牌 · 空间共享产品不能关联私有品牌。关闭保存产品"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog') with timeout 5000ms
+      - waiting for getByRole('dialog')
+        14 × locator resolved to <div role="dialog" tabindex="-1" id="radix-_r_o_" data-state="open" aria-label="产品资料" class="modal wide" aria-labelledby="radix-_r_p_">…</div>
+           - unexpected value "产品资料产品名称产品描述产品事实（每行一条）旧规格仅填写已确认的规格、材质和卖点，最多16条。使用限制（每行一条）例如不可宣称的功效、不可改动的外观，最多8条。关联品牌不使用品牌搜索更多品牌可见范围仅自己空间共享产品有效期包含价格、促销或阶段信息时请设置期限；到期后不能用于新规划。产品参考图片0 / 4添加素材拖入文件，或聚焦这里粘贴图片保存资料不会调用模型。创作时默认只带入文字，勾选后才使用产品参考图。管理品牌 · 空间共享产品不能关联私有品牌。关闭保存产品"
+
+
+      134 |     expect((await conflicted).status()).toBe(409);
+      135 |     await expect(field).toHaveValue('当前窗口的修改');
+    > 136 |     await expect(editor).toContainText('另一窗口的修改');
+          |                          ^
+      137 |     await editor.getByRole('button', { name: '合并最新记录并继续编辑', exact: true }).click();
+      138 |     await expect(field).toHaveValue('当前窗口的修改');
+      139 |     if (memory)
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-recheck.spec.ts:136:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-r5BLIS/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [desktop] › tests/e2e/knowledge-recheck.spec.ts:12:1 › retains single-creation memory and product-image choices after refreshing a grouped draft 
+    [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields 
+    [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-r5BLIS

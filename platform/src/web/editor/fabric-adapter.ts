@@ -5,7 +5,7 @@ import {
   ActiveSelection,
   Ellipse,
   FabricImage,
-  FabricObject,
+  type FabricObject,
   FixedLayout,
   Group,
   LayoutManager,

@@ -1,5 +1,8 @@
 import type { BillingChannel } from './billing-channel';
 import { z } from 'zod';
+import { nativeCameraControlSchema, nativeFirstFrameSchema } from './native-plan';
+import { nativeImageEditSchema } from './native-image-edit';
+import { replicaInputSchema, nativeReplicaSchema } from './native-replica';
 import { OPERATION_IDS } from './catalog';
 import type { AssetDto } from './core';
 import type { JobResultData } from './job-result';
@@ -12,6 +15,7 @@ function normalizeColor(value: string): string {
     : color;
 }
 export const providerIdSchema = z.enum([
+  'native',
   'local',
   'openai',
   'fal',
@@ -96,6 +100,44 @@ export const jobInputSchema = z
     operation: z.enum(OPERATION_IDS),
     providerId: providerIdSchema,
     capabilityRevision: z.string().uuid().optional(),
+    nativeRevision: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
+    nativePlan: z
+      .object({
+        imagePrompt: z.string().min(1).max(11000),
+        videoPrompt: z.string().min(1).max(11000),
+        firstFrame: nativeFirstFrameSchema.optional(),
+        cameraControl: nativeCameraControlSchema.optional(),
+        motionRenderer: z.literal('exact-pan-v1').optional(),
+        videoPostprocess: z.literal('model-video-tail-hold-v1').optional(),
+      })
+      .strict()
+      .superRefine((plan, ctx) => {
+        if (
+          plan.videoPostprocess &&
+          (plan.cameraControl?.type !== 'zoom' || plan.firstFrame?.mode !== 'reference')
+        )
+          ctx.addIssue({
+            code: 'custom',
+            path: ['videoPostprocess'],
+            message: '模型尾段停稳仅支持已确认参考图的受控静物中心变焦。',
+          });
+        if (
+          plan.motionRenderer &&
+          (plan.cameraControl?.type !== 'translate' || plan.firstFrame?.mode !== 'reference')
+        )
+          ctx.addIssue({
+            code: 'custom',
+            path: ['motionRenderer'],
+            message: '精确平移需要已确认的参考原图与平移方案。',
+          });
+      })
+      .optional(),
+    imageEdit: nativeImageEditSchema.optional(),
+    replica: replicaInputSchema.optional(),
+    nativeReplica: nativeReplicaSchema.optional(),
     creativeBriefId: z.string().uuid().optional(),
     projectId: z.string().uuid().optional(),
     documentId: z.string().uuid().optional(),
@@ -112,6 +154,9 @@ export const jobInputSchema = z
     backgroundAssetId: z.string().uuid().optional(),
     backgroundAudioAssetId: z.string().uuid().optional(),
     brandId: z.string().uuid().optional(),
+    productId: z.string().uuid().optional(),
+    useMemory: z.boolean().optional(),
+    includeProductImages: z.boolean().optional(),
     characterId: z.string().uuid().optional(),
     characterRevision: z.number().int().positive().optional(),
     options: jobOptionsSchema.default(() => jobOptionsSchema.parse({})),
@@ -182,6 +227,7 @@ export interface JobItemDto {
   canResume?: boolean;
 }
 export interface JobDto {
+  backgroundReview?: import('./background-review').BackgroundReview[];
   creativeReview?: {
     summary: string;
     assumptions: string[];
@@ -231,6 +277,8 @@ export interface ModelCapability {
   };
 }
 export interface OperationCapability {
+  replicaAvailable?: boolean;
+  replicaReason?: string | null;
   inputMode?: 'text-only';
   maxCount?: number;
   id: string;
@@ -240,6 +288,7 @@ export interface OperationCapability {
   reason: string | null;
   models: ModelCapability[];
   priceCredits: number;
+  fixedCredits?: number;
   unit: 'image' | 'second' | 'request';
   liveVerified: boolean;
 }

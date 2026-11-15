@@ -14,6 +14,12 @@ import './styles/studio.css';
 import './styles/creative.css';
 import './styles/home-quick.css';
 import './styles/creation-refresh.css';
+// 映造 2026 brand layer — must stay last so it re-skins every legacy stylesheet.
+import './styles/brand/tokens.css';
+import './styles/brand/foundation.css';
+import './styles/brand/pages.css';
+import './styles/brand/fixes.css';
+import './styles/brand/display-font.css';
 const client = new QueryClient({
   defaultOptions: { queries: { staleTime: 15000, refetchOnWindowFocus: false } },
 });

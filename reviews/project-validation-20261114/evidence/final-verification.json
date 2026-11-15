@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-11-14T05:18:57.053201+00:00",
+  "sourceManifestSha256": "e02795b2ee62433f1f8b246fce3b4b9619f009caef7c46d8af056844c2f5c418",
+  "fileCount": 649,
+  "changedSinceFinalFreeze": [],
+  "unit": {
+    "passed": 2341,
+    "failed": 0,
+    "skipped": 0,
+    "files": 151
+  },
+  "browserFullBaseline": {
+    "passed": 446,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "sourceManifest": "browser-full-manifest.json"
+  },
+  "finalBrowserFollowup": {
+    "passed": 26,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "sourceManifest": "final-manifest.json"
+  },
+  "singleFullBrowserRunOfFinalSource": false,
+  "finalDelta": [
+    "platform/src/web/lib/i18n.ts",
+    "platform/tests/e2e/home-appearance.spec.ts"
+  ],
+  "scope": "Final delta adds homepage translations and regression assertions only; baseline and follow-up counts are not summed."
+}

@@ -1,0 +1,35 @@
+{
+  "stage": "red",
+  "passed": 1,
+  "failed": 3,
+  "skipped": 28,
+  "tests": [
+    {
+      "name": "native planning accepts a null optional market only as an omitted market when none was requested",
+      "status": "failed",
+      "failureSummary": [
+        "Error: 文本模型返回的策划不完整、事实依据不符或输出被截断（brief.market: invalid_type）；已停止生成，请重新整理需求。"
+      ]
+    },
+    {
+      "name": "native planning normalizes only an unspecified market while preserving a clarification plan",
+      "status": "failed",
+      "failureSummary": [
+        "Error: 文本模型返回的策划不完整、事实依据不符或输出被截断（brief.market: invalid_type）；已停止生成，请重新整理需求。"
+      ]
+    },
+    {
+      "name": "native planning still requires the exact explicitly requested market and rejects an invented market",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning does not let optional-market normalization hide required-field, fact or truncation failures",
+      "status": "failed",
+      "failureSummary": [
+        "AssertionError: expected [ { stage: 'schema', …(2) } ] to deep equally contain ObjectContaining{…}"
+      ]
+    }
+  ],
+  "externalCalls": 0
+}

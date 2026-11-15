@@ -14,6 +14,7 @@ import { IdentityService } from './identity';
 import { ReferralService } from './referrals';
 import { EntitlementService } from './entitlements';
 import { TeamCreationService } from './team-creation';
+import { KnowledgeService } from './knowledge';
 export type { CoreConfig, CoreHooks } from './shared';
 export type { IngestAssetInput, PreparedAsset, PreparedVariant } from './storage';
 export type { JobAssetContext } from './assets';
@@ -39,6 +40,7 @@ export function createCoreServices(db: DatabaseContext, config: CoreConfig, hook
     documents,
     projects,
     references,
+    knowledge: new KnowledgeService(context),
     brands: { get: references.getBrand.bind(references), list: references.brands.bind(references) },
     team,
     teamCreation: new TeamCreationService(context, business),

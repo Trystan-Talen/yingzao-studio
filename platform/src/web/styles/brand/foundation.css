@@ -1,0 +1,486 @@
+/* ==========================================================================
+   映造 · Foundation — typography & shared primitives
+   Re-skins the shared ui.tsx primitives (button, field, panel, modal, drawer…)
+   used by every page. `:root` prefix raises specificity above legacy rules.
+   ========================================================================== */
+
+:root body {
+  font-family: var(--yz-font-sans);
+  background: var(--page);
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+:root ::selection {
+  background: color-mix(in srgb, var(--yz-vermilion) 45%, transparent);
+  color: var(--yz-text);
+}
+
+/* ---- Type ---------------------------------------------------------------- */
+:root h1,
+:root h2,
+:root h3 {
+  font-family: var(--yz-font-display);
+  color: var(--text);
+}
+:root h1 {
+  font-size: clamp(28px, 2.6vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+:root h2 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+:root h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+:root .eyebrow,
+:root .detail-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--yz-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--yz-vermilion);
+}
+:root .eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--yz-aurora);
+}
+:root .muted {
+  color: var(--muted);
+}
+:root .numeric,
+:root .stat-card strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Focus --------------------------------------------------------------- */
+:root button:focus-visible,
+:root a:focus-visible,
+:root input:focus-visible,
+:root textarea:focus-visible,
+:root select:focus-visible,
+:root summary:focus-visible {
+  outline: 2px solid var(--yz-vermilion);
+  outline-offset: 2px;
+}
+
+/* ---- Buttons ------------------------------------------------------------- */
+:root .button {
+  min-height: 40px;
+  padding: 9px 18px;
+  border-radius: var(--yz-r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition:
+    background 0.2s var(--yz-ease),
+    border-color 0.2s var(--yz-ease),
+    color 0.2s var(--yz-ease),
+    transform 0.2s var(--yz-ease),
+    box-shadow 0.2s var(--yz-ease);
+}
+:root .button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+:root .button.primary {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+  border-color: transparent;
+}
+:root .button.primary:hover:not(:disabled) {
+  background: var(--yz-vermilion);
+  color: var(--yz-on-brand);
+  box-shadow: 0 8px 28px -8px color-mix(in srgb, var(--yz-vermilion) 70%, transparent);
+}
+:root .button.secondary {
+  background: color-mix(in srgb, var(--yz-text) 5%, transparent);
+  border-color: var(--yz-line-strong);
+  color: var(--text);
+}
+:root .button.secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--yz-text) 10%, transparent);
+  border-color: color-mix(in srgb, var(--yz-text) 28%, transparent);
+}
+:root .button.ghost {
+  color: var(--yz-text-2);
+}
+:root .button.ghost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--yz-text) 7%, transparent);
+  color: var(--text);
+}
+:root .button.danger {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+  color: var(--danger);
+}
+:root .button.danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 24%, transparent);
+}
+:root .icon-button {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--yz-r-pill);
+  color: var(--yz-text-2);
+  transition:
+    background 0.2s var(--yz-ease),
+    color 0.2s var(--yz-ease);
+}
+:root .icon-button:hover,
+:root .icon-button.is-active {
+  background: color-mix(in srgb, var(--yz-text) 8%, transparent);
+  color: var(--text);
+}
+:root .text-button {
+  color: var(--yz-vermilion);
+  font-weight: 600;
+}
+:root .text-button:hover {
+  color: var(--yz-vermilion-hi);
+}
+
+/* ---- Badges -------------------------------------------------------------- */
+:root .badge {
+  padding: 3px 9px;
+  border-radius: var(--yz-r-pill);
+  font-size: 11px;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--yz-text) 6%, transparent);
+  border: 1px solid var(--yz-line);
+  color: var(--yz-text-2);
+}
+:root .badge.green {
+  background: color-mix(in srgb, var(--yz-lumen) 14%, transparent);
+  color: color-mix(in srgb, var(--yz-lumen) 75%, var(--yz-text));
+  border-color: transparent;
+}
+:root[data-theme='light'] .badge.green {
+  background: #eef6cf;
+  color: #4b5a07;
+}
+:root .badge.orange {
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+  color: var(--warning);
+}
+:root .badge.red {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  color: var(--danger);
+}
+
+/* ---- Fields -------------------------------------------------------------- */
+:root .field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--yz-text-2);
+}
+:root input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+:root textarea,
+:root select {
+  border: 1px solid var(--yz-line-strong);
+  background-color: var(--yz-ink-1);
+  color: var(--text);
+  border-radius: var(--yz-r-sm);
+  transition:
+    border-color 0.2s var(--yz-ease),
+    box-shadow 0.2s var(--yz-ease),
+    background-color 0.2s var(--yz-ease);
+}
+:root
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):hover,
+:root textarea:hover,
+:root select:hover {
+  border-color: color-mix(in srgb, var(--yz-text) 24%, transparent);
+}
+:root
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):focus,
+:root textarea:focus,
+:root select:focus {
+  border-color: var(--yz-vermilion);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--yz-vermilion) 18%, transparent);
+  outline: none;
+}
+:root input::placeholder,
+:root textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 85%, transparent);
+}
+:root input[type='checkbox'],
+:root input[type='radio'],
+:root input[type='range'] {
+  accent-color: var(--yz-vermilion);
+}
+
+/* ---- Segments / tabs ----------------------------------------------------- */
+:root .segments {
+  padding: 4px;
+  gap: 2px;
+  border-radius: var(--yz-r-pill);
+  background: color-mix(in srgb, var(--yz-text) 5%, transparent);
+  border: 1px solid var(--yz-line);
+}
+:root .segments button {
+  min-height: 32px;
+  padding: 6px 16px;
+  border-radius: var(--yz-r-pill);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  transition:
+    background 0.2s var(--yz-ease),
+    color 0.2s var(--yz-ease);
+}
+:root .segments button:hover:not(.active) {
+  color: var(--text);
+}
+:root .segments button.active {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+  box-shadow: none;
+}
+
+/* ---- Surfaces ------------------------------------------------------------ */
+:root .panel,
+:root .settings-panel {
+  background: var(--yz-ink-1);
+  border: 1px solid var(--yz-line);
+  border-radius: var(--yz-r-lg);
+}
+:root .panel-heading {
+  border-bottom-color: var(--yz-line);
+}
+:root .stat-card {
+  background: var(--yz-ink-1);
+  border: 1px solid var(--yz-line);
+  border-radius: var(--yz-r-lg);
+}
+:root .stat-card.primary-stat {
+  background:
+    radial-gradient(
+      120% 140% at 100% 0%,
+      color-mix(in srgb, var(--yz-vermilion) 30%, transparent),
+      transparent 60%
+    ),
+    var(--yz-ink-2);
+  border-color: color-mix(in srgb, var(--yz-vermilion) 30%, var(--yz-line));
+}
+:root .notice {
+  border-radius: var(--yz-r-md);
+  background: color-mix(in srgb, var(--yz-violet) 9%, var(--yz-ink-1));
+  border: 1px solid color-mix(in srgb, var(--yz-violet) 22%, transparent);
+}
+:root .notice.warning {
+  background: color-mix(in srgb, var(--warning) 9%, var(--yz-ink-1));
+  border-color: color-mix(in srgb, var(--warning) 26%, transparent);
+}
+:root .empty {
+  border-radius: var(--yz-r-lg);
+  border: 1px dashed var(--yz-line-strong);
+  background:
+    radial-gradient(
+      60% 80% at 50% 0%,
+      color-mix(in srgb, var(--yz-violet) 10%, transparent),
+      transparent 70%
+    ),
+    transparent;
+}
+:root .empty > svg {
+  color: var(--yz-vermilion);
+}
+:root table {
+  border-color: var(--yz-line);
+}
+:root th {
+  font-family: var(--yz-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+:root td,
+:root th {
+  border-color: var(--yz-line) !important;
+}
+
+/* ---- Overlays ------------------------------------------------------------ */
+:root .modal-overlay {
+  background: rgb(4 4 6 / 0.62);
+  backdrop-filter: blur(10px) saturate(120%);
+}
+:root[data-theme='light'] .modal-overlay {
+  background: rgb(30 26 20 / 0.32);
+}
+:root .modal {
+  padding: 28px;
+  border-radius: var(--yz-r-xl);
+  border: 1px solid var(--yz-line-strong);
+  background: var(--yz-ink-2);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.2),
+    0 40px 120px -20px rgb(0 0 0 / 0.7);
+  animation: yz-pop 0.32s var(--yz-ease);
+}
+:root .modal.wide {
+  width: min(980px, calc(100vw - 32px));
+}
+:root .modal-heading h2 {
+  font-size: 22px;
+  letter-spacing: -0.025em;
+}
+:root .modal-actions {
+  border-top-color: var(--yz-line);
+}
+:root .drawer {
+  margin: 10px;
+  width: min(460px, calc(100vw - 20px));
+  inset-block: 0;
+  height: calc(100dvh - 20px);
+  border-radius: var(--yz-r-xl);
+  border: 1px solid var(--yz-line-strong);
+  background: var(--yz-ink-2);
+  box-shadow: 0 40px 120px -20px rgb(0 0 0 / 0.7);
+  animation: yz-slide-in 0.38s var(--yz-ease);
+}
+:root .toast {
+  border-radius: var(--yz-r-pill);
+  padding: 12px 18px;
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+  border: 0;
+  box-shadow: 0 20px 50px -10px rgb(0 0 0 / 0.6);
+}
+:root .toast > svg {
+  color: var(--yz-vermilion);
+}
+:root .toast > button:not(.icon-button) {
+  color: var(--yz-vermilion);
+}
+:root .toast .icon-button {
+  color: var(--yz-ink-0);
+}
+
+@keyframes yz-pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -47%) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+[dir='rtl'] .modal {
+  animation-name: yz-fade;
+}
+@keyframes yz-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes yz-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- Pages --------------------------------------------------------------- */
+:root .page {
+  max-width: 1560px;
+  padding: 40px clamp(20px, 3.4vw, 56px) 80px;
+}
+:root .page-heading {
+  align-items: flex-end;
+  margin-bottom: 36px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--yz-line);
+}
+:root .page-heading h1 {
+  font-size: clamp(32px, 3.4vw, 52px);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+:root .page-description {
+  margin-top: 14px;
+  max-width: 62ch;
+  font-size: 14px;
+  color: var(--yz-text-2);
+}
+:root .section-heading h2 {
+  font-size: 18px;
+}
+
+/* ---- Tool cards (Tools directory, misc grids) ---------------------------- */
+:root .tool-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--yz-ink-1);
+  border: 1px solid var(--yz-line);
+  border-radius: var(--yz-r-lg);
+  transition:
+    border-color 0.25s var(--yz-ease),
+    transform 0.25s var(--yz-ease),
+    background 0.25s var(--yz-ease);
+}
+:root .tool-card::after {
+  content: '';
+  position: absolute;
+  inset: auto -30% -60% auto;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--yz-aurora);
+  filter: blur(50px);
+  opacity: 0;
+  transition: opacity 0.35s var(--yz-ease);
+  pointer-events: none;
+}
+:root .tool-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--yz-line-strong);
+  background: var(--yz-ink-2);
+}
+:root .tool-card:hover::after {
+  opacity: 0.22;
+}
+:root .tool-icon,
+:root .feature-symbol {
+  border-radius: var(--yz-r-sm);
+  background: color-mix(in srgb, var(--yz-vermilion) 14%, transparent);
+  color: var(--yz-vermilion);
+}
+
+/* ---- Scrollbars ---------------------------------------------------------- */
+:root * {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--yz-text) 18%, transparent) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root *,
+  :root *::before,
+  :root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

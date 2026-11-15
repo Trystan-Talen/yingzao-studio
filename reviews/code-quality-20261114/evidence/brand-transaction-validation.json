@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-11-14T17:00:40.195960+00:00",
+  "change": "removeBrand now runs permission/read/write under the same BEGIN IMMEDIATE transaction, matching update/restore",
+  "unit": {
+    "passed": 11,
+    "file": "tests/brand-quotas.test.ts",
+    "assertions": "frozen clock update/delete/restore each advances by exactly 1ms, preserves description, rejects pre-delete token"
+  },
+  "checks": {
+    "typecheck": "all-project exit 0",
+    "lint": "two changed files exit 0",
+    "format": "two changed files exit 0"
+  },
+  "browser": "18 prior browser cases predate this transaction-only delta; no browser rerun claimed",
+  "files": [
+    {
+      "path": "platform/src/server/core/references.ts",
+      "sha256": "a5463df0195aba328e265a9cf05607bb681891de6bd278b1dee2150f1b648d2d"
+    },
+    {
+      "path": "platform/tests/brand-quotas.test.ts",
+      "sha256": "ecc8f31ba4f9c963f5dacd16f49426dd8c57897e43d18624d45b23950af4fb0b"
+    }
+  ]
+}

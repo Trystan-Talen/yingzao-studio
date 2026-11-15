@@ -1,0 +1,26 @@
+{
+  "sourceManifest": "final-manifest.json",
+  "sourceManifestSha256": "e248b61fccdfe884dc8f7d144bf1abcc098ba48518ec41ca1e6522ca0e01bbb5",
+  "typecheck": {
+    "exitCode": 0,
+    "scope": "full project"
+  },
+  "lint": {
+    "exitCode": 0,
+    "scope": "src scripts tests"
+  },
+  "format": {
+    "exitCode": 0,
+    "scope": "src scripts tests and root ts/json"
+  },
+  "build": {
+    "exitCode": 0,
+    "scope": "isolated Vite web and tsup API/worker production outputs"
+  },
+  "runtime": {
+    "exitCode": 0,
+    "scope": "isolated actual API/worker processes, fresh database, secure registration, concurrent migrations, clean shutdown"
+  },
+  "externalServices": "disabled; no paid calls",
+  "formalDataTouched": false
+}

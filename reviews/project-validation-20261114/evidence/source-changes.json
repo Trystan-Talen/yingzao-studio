@@ -1,0 +1,20 @@
+{
+  "baselineSha256": "0c6a0fe8fe8c641c334a1cb993d19394cda49dd755e6e8a7b649217f01f74784",
+  "finalSha256": "e02795b2ee62433f1f8b246fce3b4b9619f009caef7c46d8af056844c2f5c418",
+  "changed": [
+    "platform/package.json",
+    "platform/pnpm-lock.yaml",
+    "platform/src/server/app.ts",
+    "platform/src/web/lib/i18n.ts",
+    "platform/src/web/pages/Support.tsx",
+    "platform/tests/e2e/home-appearance.spec.ts",
+    "platform/tests/e2e/management-lifecycle.spec.ts",
+    "platform/tests/persistence-upgrade.test.ts",
+    "platform/tests/production-http.test.ts"
+  ],
+  "removed": [],
+  "afterFullBrowserChanges": [
+    "platform/src/web/lib/i18n.ts",
+    "platform/tests/e2e/home-appearance.spec.ts"
+  ]
+}

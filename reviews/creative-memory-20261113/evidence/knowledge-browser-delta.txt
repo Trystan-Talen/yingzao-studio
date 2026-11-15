@@ -1,0 +1,13 @@
+Running 10 tests using 1 worker
+  ✓   1 [desktop] › tests/e2e/knowledge-group-boundary.spec.ts:14:1 › keeps existing grouped creation usable without personal memory or a product (5.9s)
+  ✓   2 [desktop] › tests/e2e/knowledge-group-boundary.spec.ts:61:1 › requires explicit product unlinking for groups and preserves single-creation preferences (2.8s)
+  ✓   3 [desktop] › tests/e2e/knowledge-locale.spec.ts:10:3 › keeps en memory and product controls readable, personal content unchanged and the default dark (3.3s)
+  ✓   4 [desktop] › tests/e2e/knowledge-locale.spec.ts:10:3 › keeps ar memory and product controls readable, personal content unchanged and the default dark (2.5s)
+  ✓   5 [desktop] › tests/e2e/knowledge-session-isolation.spec.ts:8:1 › never flashes the previous account private memory or products after an expired session in the same workspace (3.2s)
+  ✓   6 [mobile] › tests/e2e/knowledge-group-boundary.spec.ts:14:1 › keeps existing grouped creation usable without personal memory or a product (5.9s)
+  ✓   7 [mobile] › tests/e2e/knowledge-group-boundary.spec.ts:61:1 › requires explicit product unlinking for groups and preserves single-creation preferences (4.0s)
+  ✓   8 [mobile] › tests/e2e/knowledge-locale.spec.ts:10:3 › keeps en memory and product controls readable, personal content unchanged and the default dark (4.1s)
+  ✓   9 [mobile] › tests/e2e/knowledge-locale.spec.ts:10:3 › keeps ar memory and product controls readable, personal content unchanged and the default dark (4.2s)
+  ✓  10 [mobile] › tests/e2e/knowledge-session-isolation.spec.ts:8:1 › never flashes the previous account private memory or products after an expired session in the same workspace (3.7s)
+  10 passed (42.2s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-4753jX

@@ -1,0 +1,6679 @@
+{
+  "stats": {
+    "startTime": "2026-11-14T17:58:07.231Z",
+    "duration": 1257467.253,
+    "expected": 510,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "countsByProject": {
+    "desktop": 252,
+    "mobile": 252,
+    "notebook": 5,
+    "tablet": 1
+  },
+  "testFiles": 72,
+  "workers": 2,
+  "allProjects": [
+    {
+      "name": "desktop",
+      "testMatch": [
+        "**/*.spec.ts"
+      ]
+    },
+    {
+      "name": "mobile",
+      "testMatch": [
+        "**/*.spec.ts"
+      ]
+    },
+    {
+      "name": "notebook",
+      "testMatch": [
+        "**/{canvas,home-design}.spec.ts"
+      ]
+    },
+    {
+      "name": "tablet",
+      "testMatch": [
+        "**/canvas.spec.ts"
+      ]
+    }
+  ],
+  "fullRepositorySuite": true,
+  "filter": null,
+  "run": "platform/var/e2e/run-dI9pvp",
+  "tests": [
+    {
+      "file": "account.spec.ts",
+      "title": "new user recovers through a real local email, loses old sessions and logs in with the new password",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7974
+        }
+      ]
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5613
+        }
+      ]
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "new user recovers through a real local email, loses old sessions and logs in with the new password",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6914
+        }
+      ]
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7163
+        }
+      ]
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "account.spec.ts > is readable without a session and sends no fabricated messages",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2959
+        }
+      ]
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "account.spec.ts > is readable without a session and sends no fabricated messages",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3015
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "corrects a candidate mask through the real editor and preserves source pixels at zero credits without model access",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6447
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4193
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4169
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "presents background review and soft-edge editing in English without translating the user original or submitting a job",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7928
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "waits for the actual initial mask before permitting edits and preserves it after a delayed load",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2999
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with network-error without permitting a blank replacement and recovers on explicit reopening",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2660
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with wrong-dimensions without permitting a blank replacement and recovers on explicit reopening",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3687
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3613
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4647
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "corrects a candidate mask through the real editor and preserves source pixels at zero credits without model access",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6513
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4227
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5156
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "presents background review and soft-edge editing in English without translating the user original or submitting a job",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7930
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "waits for the actual initial mask before permitting edits and preserves it after a delayed load",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2913
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with network-error without permitting a blank replacement and recovers on explicit reopening",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2656
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with wrong-dimensions without permitting a blank replacement and recovers on explicit reopening",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2666
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3581
+        }
+      ]
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3567
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand update and saves them to the same record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2532
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand creation and saves them to the same record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2529
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "brand conflicts preserve local edits, explicitly merge current fields and references, and can reload a later version",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3130
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand update and saves them to the same record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2601
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand creation and saves them to the same record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2625
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "brand conflicts preserve local edits, explicitly merge current fields and references, and can reload a later version",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 11690
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "enforces per-member brand quotas in real create/delete/restore controls without making a payment",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8901
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4045
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "enforces per-member brand quotas in real create/delete/restore controls without making a payment",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 22788
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4217
+        }
+      ]
+    },
+    {
+      "file": "canvas-focus-review.spec.ts",
+      "title": "switches narrow-screen editor tabs with arrow keys without moving the selected layer",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 11041
+        }
+      ]
+    },
+    {
+      "file": "canvas-focus-review.spec.ts",
+      "title": "switches narrow-screen editor tabs with arrow keys without moving the selected layer",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 11170
+        }
+      ]
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 12774
+        }
+      ]
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 13213
+        }
+      ]
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "notebook",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 14244
+        }
+      ]
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "tablet",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 13116
+        }
+      ]
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates brand references with a valid capability proof after the server freezes the task input",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5659
+        }
+      ]
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates document references with a valid capability proof after the server freezes the task input",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6185
+        }
+      ]
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates design-module references with a valid capability proof after the server freezes the task input",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5331
+        }
+      ]
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates brand references with a valid capability proof after the server freezes the task input",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5801
+        }
+      ]
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates document references with a valid capability proof after the server freezes the task input",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6156
+        }
+      ]
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates design-module references with a valid capability proof after the server freezes the task input",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5903
+        }
+      ]
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "uploads, plays and retains separate character image/video references, then explicitly handles unavailable references",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7614
+        }
+      ]
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "blocks saving until character references load, retries errors and discards late responses for a closed profile",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6133
+        }
+      ]
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "uploads, plays and retains separate character image/video references, then explicitly handles unavailable references",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8159
+        }
+      ]
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "blocks saving until character references load, retries errors and discards late responses for a closed profile",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6474
+        }
+      ]
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding an asset preserves collection membership of an item in the recycle bin",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2285
+        }
+      ]
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding and removing selected assets preserves a concurrent collection addition",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2631
+        }
+      ]
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "collection lookup failure offers retry instead of claiming the collection list is empty",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2944
+        }
+      ]
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding an asset preserves collection membership of an item in the recycle bin",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2806
+        }
+      ]
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding and removing selected assets preserves a concurrent collection addition",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2688
+        }
+      ]
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "collection lookup failure offers retry instead of claiming the collection list is empty",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2937
+        }
+      ]
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "persists real background music and the generated audio choice across save, model changes and refresh",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5898
+        }
+      ]
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "returns an actual local output to the project composer without replacing the current prompt or submitting a second job",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5959
+        }
+      ]
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "persists real background music and the generated audio choice across save, model changes and refresh",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6953
+        }
+      ]
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "returns an actual local output to the project composer without replacing the current prompt or submitting a second job",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6083
+        }
+      ]
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "desktop studio visual states keep normal-flow creation above unobstructed artwork and keyboard controls without billable writes",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5629
+        }
+      ]
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "mobile studio home keeps normal-flow creation, dark artwork, header credit access and the primary action unobstructed",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4471
+        }
+      ]
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "desktop studio visual states keep normal-flow creation above unobstructed artwork and keyboard controls without billable writes",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7100
+        }
+      ]
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "mobile studio home keeps normal-flow creation, dark artwork, header credit access and the primary action unobstructed",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4625
+        }
+      ]
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses en creation and local tool controls while retaining the original Chinese user content",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7894
+        }
+      ]
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses ar creation and local tool controls while retaining the original Chinese user content",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8408
+        }
+      ]
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses en creation and local tool controls while retaining the original Chinese user content",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8577
+        }
+      ]
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses ar creation and local tool controls while retaining the original Chinese user content",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7967
+        }
+      ]
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the project save response is delayed",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5360
+        }
+      ]
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the message save response is delayed",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6014
+        }
+      ]
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the project save response is delayed",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6563
+        }
+      ]
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the message save response is delayed",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5626
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /, and collapses settings without writes",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2219
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /workbench?kind=image, and collapses settings without writes",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2207
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows an unresolved capability as pending and an invalid rate as unknown, never as zero",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2625
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "warns about a stale low balance without bypassing or blocking the authoritative quote",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1933
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "keeps the real local clarification chain free of quotes and tasks until the answer is complete",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3664
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "confirms a compact authoritative image quote once and retains the exact generated original",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6617
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "updates video seconds pricing and creates one playable saved vertical original",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6664
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "honors the existing no-confirmation preference without duplicate generation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4694
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /, and collapses settings without writes",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2593
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /workbench?kind=image, and collapses settings without writes",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2542
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows an unresolved capability as pending and an invalid rate as unknown, never as zero",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2674
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "warns about a stale low balance without bypassing or blocking the authoritative quote",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2933
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "keeps the real local clarification chain free of quotes and tasks until the answer is complete",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5631
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "confirms a compact authoritative image quote once and retains the exact generated original",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6148
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "updates video seconds pricing and creates one playable saved vertical original",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6781
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "honors the existing no-confirmation preference without duplicate generation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4782
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "creation-redesign.spec.ts > uses the current server rate and selected image count without preparing a billable quote",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1873
+        }
+      ]
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "creation-redesign.spec.ts > uses the current server rate and selected image count without preparing a billable quote",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2841
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "shows one clear clarification area and focuses missing answers without another planning call",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2246
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "switches between custom text and quick options without auto-submitting or losing restored custom answers",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2878
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "opens the normal add-reference picker instead of targeting an existing image removal action",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3068
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "continues a complete general idea to the existing quote, and refresh only reads the saved understanding",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3772
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "asks only two necessary questions, preserves separate answers across refresh, then quotes the original wording",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4397
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "sends only the current round of answers and requires a fresh answer for a repeated question ID",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4973
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "drops late understanding after the prompt, platform and material change",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1997
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not bypass a failed check with confirmation disabled and retries the same request after refresh",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3319
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "requires an explicit reset after a confirmed failure and keeps the current question answers for the new check",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2180
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not reuse the same wording and options from another existing project",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3223
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "stops before a paid check if its request record cannot be saved, while retaining a legacy platform",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1857
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "keeps explicit video types aligned with their placement and clears the old placement for free creation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5127
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 121.487-second preparation without replacing its request or timing out early",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2959
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 141-second preparation without replacing its request or timing out early",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2946
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "times out at the bounded client deadline without automatically replacing or resending its request",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3393
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a cached ready plan uses a free configuration check and waits for explicit reset before replanning",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3493
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a connection change during quotation invalidates the newly bound plan without another paid call",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2070
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a definite budget rejection preserves the draft and permits a fresh user-requested preparation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2041
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "shows one clear clarification area and focuses missing answers without another planning call",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3731
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "switches between custom text and quick options without auto-submitting or losing restored custom answers",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3908
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "opens the normal add-reference picker instead of targeting an existing image removal action",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2091
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "continues a complete general idea to the existing quote, and refresh only reads the saved understanding",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5163
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "asks only two necessary questions, preserves separate answers across refresh, then quotes the original wording",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4768
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "sends only the current round of answers and requires a fresh answer for a repeated question ID",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6572
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "drops late understanding after the prompt, platform and material change",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3095
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not bypass a failed check with confirmation disabled and retries the same request after refresh",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2854
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "requires an explicit reset after a confirmed failure and keeps the current question answers for the new check",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2191
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not reuse the same wording and options from another existing project",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3310
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "stops before a paid check if its request record cannot be saved, while retaining a legacy platform",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2887
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "keeps explicit video types aligned with their placement and clears the old placement for free creation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5053
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 121.487-second preparation without replacing its request or timing out early",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1962
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 141-second preparation without replacing its request or timing out early",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2979
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "times out at the bounded client deadline without automatically replacing or resending its request",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3068
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a cached ready plan uses a free configuration check and waits for explicit reset before replanning",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5973
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a connection change during quotation invalidates the newly bound plan without another paid call",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2153
+        }
+      ]
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a definite budget rejection preserves the draft and permits a fresh user-requested preparation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3125
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote, reloads it and reuses its ready understanding",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5129
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected submission, reloads it and reuses its ready understanding",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6025
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote with confirmation disabled, reloads it and reuses its ready understanding",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4585
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "a stale video tab cannot erase the newer draft when it only refreshes model information",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3758
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote, reloads it and reuses its ready understanding",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5581
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected submission, reloads it and reuses its ready understanding",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5097
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote with confirmation disabled, reloads it and reuses its ready understanding",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5710
+        }
+      ]
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "a stale video tab cannot erase the newer draft when it only refreshes model information",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5303
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "creates reusable memory and product, freezes reviewed sources and saves a downloadable image",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8793
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "manages private memory and rejects a stale product edit without losing the editor draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5305
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "creates reusable memory and product, freezes reviewed sources and saves a downloadable image",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10381
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "manages private memory and rejects a stale product edit without losing the editor draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 13543
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en credit copy while keeping real values and user fields without starting payment",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6408
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes en historical zero-archive and three-month renewal contract copy",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3753
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en referral membership configuration without enabling rewards",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1706
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar credit copy while keeping real values and user fields without starting payment",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5990
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes ar historical zero-archive and three-month renewal contract copy",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4287
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar referral membership configuration without enabling rewards",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2788
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en credit copy while keeping real values and user fields without starting payment",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6139
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes en historical zero-archive and three-month renewal contract copy",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3045
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en referral membership configuration without enabling rewards",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3282
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar credit copy while keeping real values and user fields without starting payment",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7135
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes ar historical zero-archive and three-month renewal contract copy",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3942
+        }
+      ]
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar referral membership configuration without enabling rewards",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2240
+        }
+      ]
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark image clarification, authoritative quote, single saved original and reload",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7110
+        }
+      ]
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark video clarification, authoritative quote, single saved original and reload",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8059
+        }
+      ]
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark image clarification, authoritative quote, single saved original and reload",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10391
+        }
+      ]
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark video clarification, authoritative quote, single saved original and reload",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8527
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark mobile failure requires an explicitly confirmed separate retry",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10701
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark desktop display fixture distinguishes paused saving from an unknown outcome",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7704
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark mobile failure requires an explicitly confirmed separate retry",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10864
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark desktop display fixture distinguishes paused saving from an unknown outcome",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7704
+        }
+      ]
+    },
+    {
+      "file": "dark-settings-popover.spec.ts",
+      "title": "dark settings float without reflow and retain choices through escape and outside dismissal",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4555
+        }
+      ]
+    },
+    {
+      "file": "dark-settings-popover.spec.ts",
+      "title": "dark settings float without reflow and retain choices through escape and outside dismissal",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3778
+        }
+      ]
+    },
+    {
+      "file": "detail-page-experience.spec.ts",
+      "title": "reviews one screen at a time, explains invalid content and preserves the current step and brief decision",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8484
+        }
+      ]
+    },
+    {
+      "file": "detail-page-experience.spec.ts",
+      "title": "reviews one screen at a time, explains invalid content and preserves the current step and brief decision",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7993
+        }
+      ]
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a cancelled quote",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5533
+        }
+      ]
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a failed quote",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4675
+        }
+      ]
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a cancelled quote",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5698
+        }
+      ]
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a failed quote",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5213
+        }
+      ]
+    },
+    {
+      "file": "event-stream-tabs.spec.ts",
+      "title": "releases hidden-tab event streams so six tabs cannot starve navigation and resumes with fresh project data",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3170
+        }
+      ]
+    },
+    {
+      "file": "event-stream-tabs.spec.ts",
+      "title": "releases hidden-tab event streams so six tabs cannot starve navigation and resumes with fresh project data",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2202
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "explains the planning service input limit, preserves all text and accepts the exact boundary without submitting",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3081
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates an image from the home entry, preserves its task after refresh and downloads the saved original",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7819
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates a video, plays the saved media and restores the same output after refresh",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6682
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "plans six detail-page screens, confirms the edited plan and exports matching originals plus a long image",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 14932
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "keeps a failed attempt visible and creates exactly one separately confirmed retry",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8859
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "explains the planning service input limit, preserves all text and accepts the exact boundary without submitting",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4409
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates an image from the home entry, preserves its task after refresh and downloads the saved original",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7044
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates a video, plays the saved media and restores the same output after refresh",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7407
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "plans six detail-page screens, confirms the edited plan and exports matching originals plus a long image",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 15551
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "keeps a failed attempt visible and creates exactly one separately confirmed retry",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8831
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "experience-journeys.spec.ts > generates a design plan, applies an edited direction and preserves it without automatically generating an image",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6684
+        }
+      ]
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "experience-journeys.spec.ts > generates a design plan, applies an edited direction and preserves it without automatically generating an image",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6806
+        }
+      ]
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent dark selections",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4329
+        }
+      ]
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent light selections",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4262
+        }
+      ]
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent dark selections",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4331
+        }
+      ]
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent light selections",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4315
+        }
+      ]
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders zh-CN home in dark mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6856
+        }
+      ]
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders en home in light mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7122
+        }
+      ]
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders ar home in light mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7004
+        }
+      ]
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders zh-CN home in dark mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8276
+        }
+      ]
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders en home in light mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8968
+        }
+      ]
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders ar home in light mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 9041
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3256
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4034
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5305
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4248
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3735
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4526
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6092
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4281
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "notebook",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2288
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "notebook",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3972
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "notebook",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4565
+        }
+      ]
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "notebook",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3190
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "shows unavailable external identity methods without fake codes or QR images",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3260
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "can detach existing identity fixtures with a password after both providers are disabled",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3631
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "shows unavailable external identity methods without fake codes or QR images",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3224
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "can detach existing identity fixtures with a password after both providers are disabled",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4060
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "identities.spec.ts > binds through actual UI, logs out, and signs in using a separately delivered one-time SMS",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7739
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "identities.spec.ts > binds through actual UI, logs out, and signs in using a separately delivered one-time SMS",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7971
+        }
+      ]
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "creates and reclassifies a real video inspiration, preserves filters on refresh and keeps legacy videos unclassified",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6378
+        }
+      ]
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "a delayed category response cannot reopen a closed detail or replace another inspiration",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3991
+        }
+      ]
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "creates and reclassifies a real video inspiration, preserves filters on refresh and keeps legacy videos unclassified",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7058
+        }
+      ]
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "a delayed category response cannot reopen a closed detail or replace another inspiration",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4070
+        }
+      ]
+    },
+    {
+      "file": "inspiration-replica.spec.ts",
+      "title": "recovers a video inspiration action-reference draft after a lost reuse response and refresh",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7402
+        }
+      ]
+    },
+    {
+      "file": "inspiration-replica.spec.ts",
+      "title": "recovers a video inspiration action-reference draft after a lost reuse response and refresh",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7180
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "keeps rapid favorite search and media changes together before navigation renders",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4533
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "shows complete artwork before optional prompt editing and persists favorites without generating",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4822
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "recovers the same edited image draft after a lost response, retains its original and returns to URL filters",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6057
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "restores every video filter and page from the URL and resets only pagination when filters change",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4799
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "keeps rapid favorite search and media changes together before navigation renders",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5346
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "shows complete artwork before optional prompt editing and persists favorites without generating",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4657
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "recovers the same edited image draft after a lost response, retains its original and returns to URL filters",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7590
+        }
+      ]
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "restores every video filter and page from the URL and resets only pagination when filters change",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4689
+        }
+      ]
+    },
+    {
+      "file": "invoice-title-pagination.spec.ts",
+      "title": "reaches and edits a saved invoice title beyond the first 100 records",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3236
+        }
+      ]
+    },
+    {
+      "file": "invoice-title-pagination.spec.ts",
+      "title": "keeps an off-page selected title for an actual invoice and clears it after deleting the last-page title",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3847
+        }
+      ]
+    },
+    {
+      "file": "invoice-title-pagination.spec.ts",
+      "title": "reaches and edits a saved invoice title beyond the first 100 records",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3740
+        }
+      ]
+    },
+    {
+      "file": "invoice-title-pagination.spec.ts",
+      "title": "keeps an off-page selected title for an actual invoice and clears it after deleting the last-page title",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2941
+        }
+      ]
+    },
+    {
+      "file": "knowledge-editor-recovery.spec.ts",
+      "title": "preserves edited product text on image-load retry and repairs recycled references before restoring",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5070
+        }
+      ]
+    },
+    {
+      "file": "knowledge-editor-recovery.spec.ts",
+      "title": "preserves edited product text on image-load retry and repairs recycled references before restoring",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5024
+        }
+      ]
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "keeps existing grouped creation usable without personal memory or a product",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6840
+        }
+      ]
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "requires explicit product unlinking for groups and preserves single-creation preferences",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4071
+        }
+      ]
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "keeps existing grouped creation usable without personal memory or a product",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5766
+        }
+      ]
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "requires explicit product unlinking for groups and preserves single-creation preferences",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3903
+        }
+      ]
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps en memory and product controls readable, personal content unchanged and the default dark",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3891
+        }
+      ]
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps ar memory and product controls readable, personal content unchanged and the default dark",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3704
+        }
+      ]
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps en memory and product controls readable, personal content unchanged and the default dark",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2952
+        }
+      ]
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps ar memory and product controls readable, personal content unchanged and the default dark",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4296
+        }
+      ]
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "retains single-creation memory and product-image choices after refreshing a grouped draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4659
+        }
+      ]
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent memory edit without discarding local input or another editor's untouched fields",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4171
+        }
+      ]
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent product edit without discarding local input or another editor's untouched fields",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3115
+        }
+      ]
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "retains single-creation memory and product-image choices after refreshing a grouped draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4392
+        }
+      ]
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent memory edit without discarding local input or another editor's untouched fields",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 11776
+        }
+      ]
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent product edit without discarding local input or another editor's untouched fields",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3211
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "rejects an expired failed-task retry and lets the preserved draft replan with renewed product facts",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 18734
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "refreshes an expired product cached in a continuously visible page after another client renews it",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4350
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "explicitly refreshes updated library sources without changing the request or reusing the previous quote",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6360
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "recovers an expired-source quote error with a new plan after a reload without silently calling the planner",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3984
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "locks source refresh during a submitted job and keeps it locked across unknown-result recovery",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5101
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "rejects an expired failed-task retry and lets the preserved draft replan with renewed product facts",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 18817
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "refreshes an expired product cached in a continuously visible page after another client renews it",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3249
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "explicitly refreshes updated library sources without changing the request or reusing the previous quote",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5388
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "recovers an expired-source quote error with a new plan after a reload without silently calling the planner",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4199
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "locks source refresh during a submitted job and keeps it locked across unknown-result recovery",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5378
+        }
+      ]
+    },
+    {
+      "file": "knowledge-session-isolation.spec.ts",
+      "title": "never flashes the previous account private memory or products after an expired session in the same workspace",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2714
+        }
+      ]
+    },
+    {
+      "file": "knowledge-session-isolation.spec.ts",
+      "title": "never flashes the previous account private memory or products after an expired session in the same workspace",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5070
+        }
+      ]
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "keeps every upload in its original workspace when switching spaces during a delayed batch",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3249
+        }
+      ]
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "refreshes successful batch deletions and retries only remaining assets after a partial failure",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3570
+        }
+      ]
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "reports an unavailable project library and restores saved work through an explicit retry",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3736
+        }
+      ]
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "keeps every upload in its original workspace when switching spaces during a delayed batch",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4358
+        }
+      ]
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "refreshes successful batch deletions and retries only remaining assets after a partial failure",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2738
+        }
+      ]
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "reports an unavailable project library and restores saved work through an explicit retry",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3808
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "manages a named collection through rename, membership removal and deletion while preserving both originals",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5395
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 17535
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8487
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3859
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3936
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "manages a named collection through rename, membership removal and deletion while preserving both originals",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5721
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 17824
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 9107
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3851
+        }
+      ]
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3969
+        }
+      ]
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "the local installation owner adds internal credits once and sees the refreshed balance",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2159
+        }
+      ]
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a lost credit response survives reload and retries the same request without duplicate credit",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3776
+        }
+      ]
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a workspace owner without installation ownership has no local grant control",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1545
+        }
+      ]
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "the local installation owner adds internal credits once and sees the refreshed balance",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3338
+        }
+      ]
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a lost credit response survives reload and retries the same request without duplicate credit",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3829
+        }
+      ]
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a workspace owner without installation ownership has no local grant control",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1602
+        }
+      ]
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists en interface language while keeping creation language separate and translating account and help pages",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6676
+        }
+      ]
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists ar interface language while keeping creation language separate and translating account and help pages",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6697
+        }
+      ]
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists en interface language while keeping creation language separate and translating account and help pages",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5858
+        }
+      ]
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists ar interface language while keeping creation language separate and translating account and help pages",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6847
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed project creation keeps later input attached to the created record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3537
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed collection creation keeps later input attached to the created record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3409
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed project update preserves fields typed after submission",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3572
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed project creation does not navigate away from a newly opened project draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3987
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed asset update does not close another asset or clear its draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3989
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed asset update preserves later name and tag changes in the same editor",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3558
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed collection creation preserves a newly reopened collection draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3488
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed collection deletion preserves the next selected collection and its name draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4033
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "reaches collection 101 for membership and keeps its selection while paging, renaming and deleting",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4988
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed project creation keeps later input attached to the created record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3570
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed collection creation keeps later input attached to the created record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3044
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed project update preserves fields typed after submission",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3618
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed project creation does not navigate away from a newly opened project draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3980
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed asset update does not close another asset or clear its draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4014
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed asset update preserves later name and tag changes in the same editor",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3615
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed collection creation preserves a newly reopened collection draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4024
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "a delayed collection deletion preserves the next selected collection and its name draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3051
+        }
+      ]
+    },
+    {
+      "file": "management-editor-recovery.spec.ts",
+      "title": "reaches collection 101 for membership and keeps its selection while paging, renaming and deleting",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4024
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "creates a real read-only API key through the UI, isolates its workspace and immediately revokes it",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5251
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "saves, supplements, reloads and withdraws a support record through actual controls",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7328
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "keeps each unsaved support reply attached to its own ticket when changing records",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4082
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed support save does not clear newer drafts in either the original or another ticket",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4126
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the same creation dialog",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3550
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the reopened creation dialog",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2942
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed withdrawal closes only its submitted ticket and preserves another open record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3692
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "invites a viewer, changes the actual member role and revokes team access while preserving team work",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10742
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "creates a real read-only API key through the UI, isolates its workspace and immediately revokes it",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4273
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "saves, supplements, reloads and withdraws a support record through actual controls",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6395
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "keeps each unsaved support reply attached to its own ticket when changing records",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3036
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed support save does not clear newer drafts in either the original or another ticket",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3109
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the same creation dialog",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2558
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the reopened creation dialog",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2952
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed withdrawal closes only its submitted ticket and preserves another open record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2725
+        }
+      ]
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "invites a viewer, changes the actual member role and revokes team access while preserving team work",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10900
+        }
+      ]
+    },
+    {
+      "file": "material-designs.spec.ts",
+      "title": "restores ordered marketing modules and their own real references from the server, then preserves them while saving free creation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8036
+        }
+      ]
+    },
+    {
+      "file": "material-designs.spec.ts",
+      "title": "restores ordered marketing modules and their own real references from the server, then preserves them while saving free creation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7478
+        }
+      ]
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10197
+        }
+      ]
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "reuses an inspiration with its actual reference image and restores the persisted draft after refresh",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5280
+        }
+      ]
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10291
+        }
+      ]
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "reuses an inspiration with its actual reference image and restores the persisted draft after refresh",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5607
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "reads selected model metadata through the real API and presents fixed values with truthful provenance",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3233
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "blocks generation while model information is loading or failed and explicitly retries without losing the brief",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2042
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "ignores a delayed previous model response and quotes only the current model with its own revision",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2397
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "preserves a now unsupported duration until explicit correction and quotes the corrected value with the refreshed proof",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5568
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "disables an already open quote when its model information expires instead of submitting stale settings",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7284
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented image dimensions survive reload and reach the quote with their capability proof",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3124
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented video controls quote fifteen seconds with synchronized audio and 4K",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2259
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home starts with ready defaults and an actionable empty prompt without creating a quote or job",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3188
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home restores text entered before metadata is ready and finishes defaults without replacing an explicit saved choice",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4468
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "reads selected model metadata through the real API and presents fixed values with truthful provenance",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3382
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "blocks generation while model information is loading or failed and explicitly retries without losing the brief",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3146
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "ignores a delayed previous model response and quotes only the current model with its own revision",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3710
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "preserves a now unsupported duration until explicit correction and quotes the corrected value with the refreshed proof",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6831
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "disables an already open quote when its model information expires instead of submitting stale settings",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 8277
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented image dimensions survive reload and reach the quote with their capability proof",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4571
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented video controls quote fifteen seconds with synchronized audio and 4K",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3750
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home starts with ready defaults and an actionable empty prompt without creating a quote or job",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3354
+        }
+      ]
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home restores text entered before metadata is ready and finishes defaults without replacing an explicit saved choice",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5026
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "a failed background refresh retains other stage drafts and the successfully saved connection",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4014
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "selecting an explicit Seedream model chooses its image protocol without rewriting model aliases",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4123
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "configuration discovers before selecting a model, persists encrypted keys and keeps stage drafts",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3374
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "directory failure preserves configuration, manual models work, and removing a key is explicit",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3792
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "saves and clears a separate vision model without replacing the planning model or calling either model",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3637
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "a failed background refresh retains other stage drafts and the successfully saved connection",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4300
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "selecting an explicit Seedream model chooses its image protocol without rewriting model aliases",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4211
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "configuration discovers before selecting a model, persists encrypted keys and keeps stage drafts",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4489
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "directory failure preserves configuration, manual models work, and removing a key is explicit",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3960
+        }
+      ]
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "saves and clears a separate vision model without replacing the planning model or calling either model",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4245
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows a loading state until the actual isolated notification response arrives",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2318
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows one injected notification failure and retries against the real API without an empty-state claim",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1781
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "reaches notification 25 through real pagination and preserves read and workspace boundaries",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3001
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "filters actual review events and keeps unread counts synchronized across category pages and spaces",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2257
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates en team role labels while retaining the actual owner role",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1589
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates ar team role labels while retaining the actual owner role",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2622
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows a loading state until the actual isolated notification response arrives",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1389
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows one injected notification failure and retries against the real API without an empty-state claim",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2758
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "reaches notification 25 through real pagination and preserves read and workspace boundaries",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3061
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "filters actual review events and keeps unread counts synchronized across category pages and spaces",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2316
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates en team role labels while retaining the actual owner role",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2751
+        }
+      ]
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates ar team role labels while retaining the actual owner role",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1752
+        }
+      ]
+    },
+    {
+      "file": "onboarding-defaults.spec.ts",
+      "title": "completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7401
+        }
+      ]
+    },
+    {
+      "file": "onboarding-defaults.spec.ts",
+      "title": "completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7630
+        }
+      ]
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in dark theme",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1940
+        }
+      ]
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in light theme",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3308
+        }
+      ]
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in dark theme",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3454
+        }
+      ]
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in light theme",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3325
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "finds a saved draft through the home project navigation and returns to the exact brief without generating",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4752
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "searches the entire tool catalog and recovers from an empty search",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3273
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "keeps detail-page preparation and its action within a notebook screen",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3711
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "renders the complete product shell without overflow or page errors",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 14112
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "finds a saved draft through the home project navigation and returns to the exact brief without generating",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5086
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "searches the entire tool catalog and recovers from an empty search",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3257
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "keeps detail-page preparation and its action within a notebook screen",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3440
+        }
+      ]
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "renders the complete product shell without overflow or page errors",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 15840
+        }
+      ]
+    },
+    {
+      "file": "production-security.spec.ts",
+      "title": "production security policy permits sign-in, real media and saved canvas exports without violations",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 9206
+        }
+      ]
+    },
+    {
+      "file": "production-security.spec.ts",
+      "title": "production security policy permits sign-in, real media and saved canvas exports without violations",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 10411
+        }
+      ]
+    },
+    {
+      "file": "quote-confirmation.spec.ts",
+      "title": "shows separate music and generated sound choices in a real quote without submitting a model task",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6915
+        }
+      ]
+    },
+    {
+      "file": "quote-confirmation.spec.ts",
+      "title": "shows separate music and generated sound choices in a real quote without submitting a model task",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7273
+        }
+      ]
+    },
+    {
+      "file": "quote-expiry.spec.ts",
+      "title": "expires a historical retry quote without a model hook and requires a new quote before creating one retry",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6583
+        }
+      ]
+    },
+    {
+      "file": "quote-expiry.spec.ts",
+      "title": "expires a historical retry quote without a model hook and requires a new quote before creating one retry",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 7818
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "image reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3344
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "video reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3486
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "isolates all four drafts and returns a delayed uploaded reference to its original mode and role",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3493
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "keeps a late reference study with its original draft and blocks confirmation until the owned plan can be read",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3511
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "shows the reference role controls in English and prevents selecting the subject itself as the style reference",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3221
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "replica waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4018
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "referenced-original waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5365
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "refreshes expired capabilities after a completed reference study without another paid preparation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3046
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "image reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4662
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "video reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5225
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "isolates all four drafts and returns a delayed uploaded reference to its original mode and role",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4709
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "keeps a late reference study with its original draft and blocks confirmation until the owned plan can be read",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3668
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "shows the reference role controls in English and prevents selecting the subject itself as the style reference",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3496
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "replica waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5127
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "referenced-original waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5836
+        }
+      ]
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "refreshes expired capabilities after a completed reference study without another paid preparation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3177
+        }
+      ]
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "forgot-password navigation and return to login work without reloading",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3839
+        }
+      ]
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "session retry returns to login when a temporary server error becomes an expired session",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3096
+        }
+      ]
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "forgot-password navigation and return to login work without reloading",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3906
+        }
+      ]
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "session retry returns to login when a temporary server error becomes an expired session",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3199
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "navigation closes the mobile drawer for account and support destinations",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6455
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "uses Create as the single creation destination and removes duplicate home navigation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2764
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "global search exposes loading, a recoverable failure and a real project result",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4033
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keyboard users can skip navigation and recover focus after closing search",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2630
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "a conditionally mounted creation assistant restores focus to the available settings trigger",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3214
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keeps navigation open when a delayed homepage module normalizes its creation-kind query",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3249
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "navigation closes the mobile drawer for account and support destinations",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6722
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "uses Create as the single creation destination and removes duplicate home navigation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3246
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "global search exposes loading, a recoverable failure and a real project result",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4579
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keyboard users can skip navigation and recover focus after closing search",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2688
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "a conditionally mounted creation assistant restores focus to the available settings trigger",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4284
+        }
+      ]
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keeps navigation open when a delayed homepage module normalizes its creation-kind query",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3340
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps five primary destinations and every secondary destination reachable without a media request",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1915
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps en navigation, account actions, direction and chosen theme intact",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1862
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps ar navigation, account actions, direction and chosen theme intact",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1885
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "switches the workspace through the existing session and signs out through the account panel",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3378
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps five primary destinations and every secondary destination reachable without a media request",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3195
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps en navigation, account actions, direction and chosen theme intact",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4382
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps ar navigation, account actions, direction and chosen theme intact",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4413
+        }
+      ]
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "switches the workspace through the existing session and signs out through the account panel",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4315
+        }
+      ]
+    },
+    {
+      "file": "support-channels.spec.ts",
+      "title": "shows truthful contact availability, retries the configured QR image and opens a separate survey",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4764
+        }
+      ]
+    },
+    {
+      "file": "support-channels.spec.ts",
+      "title": "shows truthful contact availability, retries the configured QR image and opens a separate survey",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5579
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "shows missing team contract and payment configuration without creating a usable team",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3551
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "recovers the same unpaid team order after refresh and lets its creator close the draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4914
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "guides a legacy team owner into the existing team instead of offering another creation",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3523
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "translates the team gate in English and Arabic while preserving user team names",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3499
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "shows missing team contract and payment configuration without creating a usable team",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3600
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "recovers the same unpaid team order after refresh and lets its creator close the draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3827
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "guides a legacy team owner into the existing team instead of offering another creation",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2631
+        }
+      ]
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "translates the team gate in English and Arabic while preserving user team names",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5129
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed member save preserves subsequent role, nickname and budget edits",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2200
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed member save cannot close the next member editor",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3545
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed invitation keeps an edited invitation draft and its one-time result",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3912
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed invitation keeps a reopened invitation draft and its one-time result",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2965
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed member save preserves subsequent role, nickname and budget edits",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3260
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed member save cannot close the next member editor",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2670
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed invitation keeps an edited invitation draft and its one-time result",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2980
+        }
+      ]
+    },
+    {
+      "file": "team-editor-recovery.spec.ts",
+      "title": "a delayed invitation keeps a reopened invitation draft and its one-time result",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3018
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "new accounts explicitly default to dark while the operating system uses light",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2028
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4744
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "explicit light and dark choices are not overridden by operating-system changes",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4066
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "a legacy account without a theme keeps dark appearance without rewriting stored preferences",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1515
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "new accounts explicitly default to dark while the operating system uses light",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2584
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3139
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "explicit light and dark choices are not overridden by operating-system changes",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3075
+        }
+      ]
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "a legacy account without a theme keeps dark appearance without rewriting stored preferences",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1591
+        }
+      ]
+    },
+    {
+      "file": "tool-asset-recovery-review.spec.ts",
+      "title": "locks tool inputs until delayed draft assets are restored, then saves the chosen replacement",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4143
+        }
+      ]
+    },
+    {
+      "file": "tool-asset-recovery-review.spec.ts",
+      "title": "locks tool inputs until delayed draft assets are restored, then saves the chosen replacement",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3223
+        }
+      ]
+    },
+    {
+      "file": "tool-draft-loading.spec.ts",
+      "title": "blocks tool draft writes until project messages recover and offers a safe retry after a read failure",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5412
+        }
+      ]
+    },
+    {
+      "file": "tool-draft-loading.spec.ts",
+      "title": "blocks tool draft writes until project messages recover and offers a safe retry after a read failure",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5477
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in dark theme",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2619
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in light theme",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3620
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "floating drawers fit narrow screens and restore trigger focus",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2771
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "desktop rail keeps account and workspace controls reachable on short screens",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2782
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "home keeps its creative controls visible in both themes",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2124
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in dark theme",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3623
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in light theme",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3681
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "floating drawers fit narrow screens and restore trigger focus",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3070
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "desktop rail keeps account and workspace controls reachable on short screens",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3430
+        }
+      ]
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "home keeps its creative controls visible in both themes",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3357
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "shares one recoverable image and video draft across both entry URLs without creating a project",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5239
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "previews without changing a draft, applies only explicit text choices and never undoes later manual edits",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3597
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps an unsupported historical marketing group intact and blocks new quotes until the user resolves it",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3550
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 12000 characters",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6113
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 2100 characters",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5359
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "shares one recoverable image and video draft across both entry URLs without creating a project",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5560
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "previews without changing a draft, applies only explicit text choices and never undoes later manual edits",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4189
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps an unsupported historical marketing group intact and blocks new quotes until the user resolves it",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4477
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 12000 characters",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5533
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 2100 characters",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5508
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "unified-creation.spec.ts > quotes the supported direction with the current server unit price without submitting a job",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3621
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "unified-creation.spec.ts > quotes the supported direction with the current server unit price without submitting a job",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4038
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "unified-creation.spec.ts > quotes the supported direction with the current server unit price without submitting a job",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2712
+        }
+      ]
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "unified-creation.spec.ts > quotes the supported direction with the current server unit price without submitting a job",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4116
+        }
+      ]
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "does not attach a delayed image-mode upload to the video draft after switching creation kind",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6050
+        }
+      ]
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "preserves same-kind prompt edits while an accepted upload response is delayed",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5527
+        }
+      ]
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "does not attach a delayed image-mode upload to the video draft after switching creation kind",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6549
+        }
+      ]
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "preserves same-kind prompt edits while an accepted upload response is delayed",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5629
+        }
+      ]
+    },
+    {
+      "file": "upload-recovery.spec.ts",
+      "title": "handles browser file drop and paste, recovers a lost upload response without duplicate assets, and rejects disguised files",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5616
+        }
+      ]
+    },
+    {
+      "file": "upload-recovery.spec.ts",
+      "title": "handles browser file drop and paste, recovers a lost upload response without duplicate assets, and rejects disguised files",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5918
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "keeps invoice title edits during delayed creation and continues on the saved record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3555
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "keeps invoice title edits during delayed update and continues on the saved record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2512
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "does not close a new invoice title editor when an older editor finishes saving",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3959
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "redeems each code once, preserves the next code during a delayed response, and keeps API credits separate",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3839
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "creates and cancels an unpaid order without granting credits or starting checkout",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2953
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "saves, registers, withdraws and reapplies a local invoice with preserved title snapshots and released amounts",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 6740
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "selects invoice orders across pages without losing selections or reporting allocated amounts as available",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3822
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "preserves another invoice selection after an earlier request finishes saving",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4050
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "keeps a second invoice withdrawal and its reason when the first withdrawal response is delayed",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3749
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "keeps invoice title edits during delayed creation and continues on the saved record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2684
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "keeps invoice title edits during delayed update and continues on the saved record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3575
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "does not close a new invoice title editor when an older editor finishes saving",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3143
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "redeems each code once, preserves the next code during a delayed response, and keeps API credits separate",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4431
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "creates and cancels an unpaid order without granting credits or starting checkout",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3078
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "saves, registers, withdraws and reapplies a local invoice with preserved title snapshots and released amounts",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 13440
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "selects invoice orders across pages without losing selections or reporting allocated amounts as available",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3966
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "preserves another invoice selection after an earlier request finishes saving",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4163
+        }
+      ]
+    },
+    {
+      "file": "usage-lifecycle.spec.ts",
+      "title": "keeps a second invoice withdrawal and its reason when the first withdrawal response is delayed",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4812
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached project errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4820
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial project errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3824
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached document errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4789
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial document errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2759
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached messages errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5275
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial messages errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2798
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached project errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 5477
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial project errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3795
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached document errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4955
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial document errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 3772
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached messages errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 4493
+        }
+      ]
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial messages errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2779
+        }
+      ]
+    }
+  ]
+}

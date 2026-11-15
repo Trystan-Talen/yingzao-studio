@@ -104,7 +104,7 @@ export function ComposerSettingsPopover({
       .querySelector<HTMLElement>(
         '.composer-settings-fields select:not(:disabled), .composer-settings-fields input:not(:disabled)',
       )
-      ?.focus();
+      ?.focus({ preventScroll: true });
   }, [open, panel, focusRequest]);
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -136,12 +136,15 @@ export function ComposerSettingsPopover({
               );
             if (field) {
               event.preventDefault();
-              requestAnimationFrame(() => field.isConnected && field.focus());
+              requestAnimationFrame(
+                () => field.isConnected && field.focus({ preventScroll: true }),
+              );
             }
           }}
           onCloseAutoFocus={(event) => {
             event.preventDefault();
-            if (restoreFocus && anchorRef.current?.isConnected) anchorRef.current.focus();
+            if (restoreFocus && anchorRef.current?.isConnected)
+              anchorRef.current.focus({ preventScroll: true });
           }}
         >
           <header className="composer-settings-heading">

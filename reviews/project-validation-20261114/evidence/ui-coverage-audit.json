@@ -1,0 +1,194 @@
+{
+  "reviewType": "独立只读覆盖质量审查与专项补测",
+  "existingAssessment": "主要用户链路包含业务状态和产物断言；页面可达/布局测试作为补充，不被当成生成或保存成功的唯一证据。",
+  "areas": [
+    {
+      "area": "工作空间与会话",
+      "sources": [
+        "platform/tests/e2e/studio-navigation.spec.ts",
+        "platform/tests/e2e/library-batch-recovery.spec.ts",
+        "platform/tests/e2e/knowledge-session-isolation.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "实际会话工作空间切换",
+        "迟到上传的数据库归属与原件字节",
+        "过期后同页跨账户缓存与瞬时DOM无泄漏"
+      ]
+    },
+    {
+      "area": "画布与分享",
+      "sources": [
+        "platform/tests/e2e/canvas.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts",
+        "platform/tests/e2e/canvas-focus-review.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "保存后的场景图层及版本数据库事实",
+        "导出真实图片尺寸和指定像素",
+        "版本恢复生成新版本",
+        "匿名分享原件403与撤销即时失效",
+        "迟到本地任务与画布版本冲突保护"
+      ]
+    },
+    {
+      "area": "素材与项目",
+      "sources": [
+        "platform/tests/e2e/media.spec.ts",
+        "platform/tests/e2e/library-batch-recovery.spec.ts",
+        "platform/tests/e2e/collection-membership-review.spec.ts",
+        "platform/tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "上传下载字节摘要一致",
+        "批量删除部分失败只重试未完成条目",
+        "集合并发加入及回收引用保留",
+        "项目搜索筛选与恢复",
+        "执行器重启后历史结果恢复"
+      ]
+    },
+    {
+      "area": "图片视频主创作",
+      "sources": [
+        "platform/tests/e2e/experience-journeys.spec.ts",
+        "platform/tests/e2e/dark-creation-flow.spec.ts",
+        "platform/tests/e2e/creation-race.spec.ts",
+        "platform/tests/e2e/quote-expiry.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "模拟服务生成结果持久化",
+        "视频可播放且下载原件一致",
+        "草稿刷新及异步切换保留输入",
+        "过期报价必须重新确认",
+        "失败重试独立确认且不重复创建"
+      ]
+    },
+    {
+      "area": "整套详情页",
+      "sources": [
+        "platform/tests/e2e/experience-journeys.spec.ts",
+        "platform/tests/e2e/detail-page-experience.spec.ts",
+        "platform/tests/e2e/detail-page-project-entry.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "六屏逐项审核并将用户编辑写入最终任务",
+        "六个不同图片源加载与刷新恢复",
+        "压缩包各原件摘要匹配",
+        "长图750x6000尺寸核验",
+        "未提交报价重新进入专用项目编辑器"
+      ]
+    },
+    {
+      "area": "账号与设置",
+      "sources": [
+        "platform/tests/e2e/account.spec.ts",
+        "platform/tests/e2e/identities.spec.ts",
+        "platform/tests/e2e/onboarding-defaults.spec.ts",
+        "platform/tests/e2e/theme-preference-review.spec.ts",
+        "platform/tests/e2e/model-connections.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "本地邮件找回及一次性令牌防重放",
+        "旧会话实际失效",
+        "本地短信协议验证码已消费记录",
+        "界面/创作语言分别持久化",
+        "系统主题仍深色",
+        "模型凭据加密保存和失败读取保留草稿"
+      ]
+    },
+    {
+      "area": "品牌产品记忆",
+      "sources": [
+        "platform/tests/e2e/brand-quota.spec.ts",
+        "platform/tests/e2e/character-video.spec.ts",
+        "platform/tests/e2e/creative-knowledge.spec.ts",
+        "platform/tests/e2e/knowledge-editor-recovery.spec.ts",
+        "platform/tests/e2e/knowledge-recheck.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "额度/权限/回收生命周期",
+        "明确参考图关联和失效修复",
+        "规划来源冻结以及模拟产物可下载",
+        "并发合并保留本地改动和新版未改字段",
+        "期限到秒保留及分组草稿选择恢复"
+      ]
+    },
+    {
+      "area": "团队和开发者",
+      "sources": [
+        "platform/tests/e2e/team-creation.spec.ts",
+        "platform/tests/e2e/management-lifecycle.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "未配置支付保持未开通",
+        "未付订单恢复关闭且无成员假开通",
+        "新增邀请注册/只读拒写/成员升级创建/移除后拒访问",
+        "新增界面创建密钥/真实接口范围和空间拒绝/撤销401"
+      ]
+    },
+    {
+      "area": "客服和通知",
+      "sources": [
+        "platform/tests/e2e/notifications-team.spec.ts",
+        "platform/tests/e2e/support-channels.spec.ts",
+        "platform/tests/e2e/management-lifecycle.spec.ts"
+      ],
+      "assertionsReviewed": [
+        "分页未读状态落库与空间隔离",
+        "配置不可用不伪造联系入口",
+        "新增工单真实保存/补充/刷新/撤回",
+        "新增未保存草稿按工单隔离及迟到响应回归"
+      ]
+    }
+  ],
+  "knownLimits": [
+    "模拟模型与本地邮件/短信仅验证协议和工程链路，不提升真实模型质量或外部通知送达结论",
+    "团队付费、真实支付退款、外部认证与远端工作流效果继续按功能台账保留未验证项",
+    "浏览器执行以系统Chrome和模拟视口为范围；不宣称Firefox、Safari或真机通过",
+    "不存在穷举所有状态组合的保证；本次完整浏览器最终通过数字由父任务统一记录"
+  ],
+  "newBrowserFile": "platform/tests/e2e/management-lifecycle.spec.ts",
+  "productFinding": "Support.tsx补充说明原先使用单一共享状态，造成切工单串稿与迟到保存清空新输入；已按工单隔离，清理仅限提交时相同内容，两个失败证据先于修改。另补工单类型和创建时间前缀静态漏译。",
+  "initialManagementRun": {
+    "path": "platform/var/e2e/run-Sq8mPP",
+    "passed": 3,
+    "failed": 1,
+    "failure": "跨工单补充输入串用；期望空值，收到甲工单草稿"
+  },
+  "delayedSaveRed": {
+    "path": "platform/var/e2e/run-2olzzV",
+    "failed": 1,
+    "failure": "旧工单提交返回后，乙工单新草稿被清空"
+  },
+  "finalManagementRun": {
+    "path": "platform/var/e2e/run-2K8ty9",
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 54.0,
+    "projects": {
+      "desktop": 5,
+      "mobile": 5
+    },
+    "updatedDependencies": true,
+    "localesInSupportLifecycle": [
+      "zh-CN",
+      "en",
+      "ar"
+    ]
+  },
+  "staticChecks": {
+    "typecheck": "passed",
+    "eslintChangedFiles": "passed",
+    "formatChangedFiles": "passed"
+  },
+  "sourceFrozen": true,
+  "sourceFiles": {
+    "platform/src/web/pages/Support.tsx": "f5e23226ad95a56c85e6c38f3c2eb9c06d631ee88399a3373a23ad954f4666ac",
+    "platform/src/web/lib/i18n.ts": "f134524f7a974c9975b2ee580d181e3eba3e195ed136f164e8f90372e22b3b86",
+    "platform/tests/e2e/management-lifecycle.spec.ts": "c54ea304af3dfdcd4209ee4310f7f3f43fdd9d75bb3a1450b917079bf9b743a6"
+  },
+  "testHarnessCorrections": [
+    "首轮新测试将label文本匹配改为语义role匹配，避免select选项和textarea内容混入标签；不计为产品缺陷",
+    "手机新账号注册后显式等待展开导航出现，避免提前isVisible分支；不计为产品缺陷"
+  ]
+}

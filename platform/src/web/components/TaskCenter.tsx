@@ -1,6 +1,7 @@
 import type { AssetDto } from '../../contracts/core';
 import { ResultComparison } from './ResultComparison';
 import { CreativeQuality } from './CreativeQuality';
+import { BackgroundEditReview } from './BackgroundEditReview';
 import { t } from '../lib/i18n';
 import { OCRResultPanel } from './OCRResultPanel';
 import { TaskReconcile } from './TaskReconcile';
@@ -75,6 +76,8 @@ export function JobCard({
   const refresh = useRefresh();
   const [detail, setDetail] = useState(false);
   const [resumed, setResumed] = useState(false);
+  const [backgroundItem, setBackgroundItem] = useState<string | null>(null);
+  const backgroundCandidate = job.backgroundReview?.some((review) => review.state === 'candidate');
   const presentation = presentJob(job);
   const summary = job.input.options.detailPagePlan ? jobInputSummary(job.input) : job.prompt;
   const TypeIcon = job.operation.startsWith('video.')
@@ -120,16 +123,18 @@ export function JobCard({
         </div>
         <Badge
           tone={
-            job.status === 'succeeded'
-              ? 'green'
-              : job.status === 'failed'
-                ? 'red'
-                : job.status === 'reconciliation_required'
-                  ? 'orange'
-                  : 'neutral'
+            backgroundCandidate
+              ? 'orange'
+              : job.status === 'succeeded'
+                ? 'green'
+                : job.status === 'failed'
+                  ? 'red'
+                  : job.status === 'reconciliation_required'
+                    ? 'orange'
+                    : 'neutral'
           }
         >
-          {t(statusLabels[job.status] ?? job.status)}
+          {t(backgroundCandidate ? '背景候选 · 待核对' : (statusLabels[job.status] ?? job.status))}
         </Badge>
       </div>
       {(!compact || waiting || presentation.canResume) &&
@@ -299,6 +304,32 @@ export function JobCard({
         </details>
       )}
       {!compact && job.outputAssets.length > 0 && <CreativeQuality review={job.creativeReview} />}
+      {!compact &&
+        job.backgroundReview?.map((review) => (
+          <Notice key={review.itemId}>
+            {t(
+              review.state === 'candidate'
+                ? '背景区域由模型识别，当前为待核对候选；请检查后调整并确认。'
+                : '背景按已确认区域在本机合成，原候选仍保留。',
+            )}
+            {canEdit && (
+              <Button variant="secondary" onClick={() => setBackgroundItem(review.itemId)}>
+                {t('调整背景区域')}
+              </Button>
+            )}
+          </Notice>
+        ))}
+      {backgroundItem && (
+        <BackgroundEditReview
+          job={job}
+          itemId={backgroundItem}
+          onClose={() => setBackgroundItem(null)}
+          onCreated={(created) => {
+            onJobCreated?.(created);
+            void refresh();
+          }}
+        />
+      )}
       {!compact && ['failed', 'partial', 'cancelled'].includes(job.status) && canRetry && (
         <Notice>
           {t('成功结果会保留。仅重试可重试且尚未建立重试任务的条目；结果待核对项需先核对。')}

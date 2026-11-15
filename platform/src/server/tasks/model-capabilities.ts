@@ -51,6 +51,7 @@ interface CacheEntry {
 interface Dependencies {
   secret(wid: string, provider: ProviderId): string | undefined;
   capabilities(wid: string): CapabilitiesDto;
+  configurationRevision?(wid: string, provider: ProviderId, operation: string): string;
 }
 export function capabilityInputMode(input: JobInput): 'text' | 'image' {
   return input.assetIds.length || input.referenceAssetIds.length ? 'image' : 'text';
@@ -233,7 +234,12 @@ export function createModelCapabilityService(config: AppConfig, dependencies: De
     const secret = dependencies.secret(wid, query.providerId);
     const fingerprint = createHash('sha256')
       .update(
-        JSON.stringify([secret || null, config.imageGateway || null, config.seedance || null]),
+        JSON.stringify([
+          secret || null,
+          config.imageGateway || null,
+          config.seedance || null,
+          dependencies.configurationRevision?.(wid, query.providerId, query.operation) || '',
+        ]),
       )
       .digest('hex');
     const key = JSON.stringify([

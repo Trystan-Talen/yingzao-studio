@@ -1,7 +1,12 @@
 import { z } from 'zod';
+import {
+  referenceStudySchema,
+  referenceStudyEvidenceSchema,
+} from '../../contracts/reference-study';
 import { creativeInputFingerprint } from '../../contracts/creative-fingerprint';
 import {
   creativeAnswerSchema,
+  creativeContextSourceSchema,
   creativeIntentResultSchema,
   type CreativeAnswer,
   type CreativePreparation,
@@ -23,6 +28,25 @@ const recordSchema = z.object({
     .optional(),
 });
 export type CreativeBriefRecord = z.infer<typeof recordSchema>;
+
+export function creativeConfigurationChanged(code: string | undefined) {
+  return [
+    'CREATIVE_CONFIGURATION_CHANGED',
+    'MODEL_CONNECTION_CHANGED',
+    'KNOWLEDGE_CONTEXT_EXPIRED',
+  ].includes(code ?? '');
+}
+
+export function creativePreparationNotStarted(code: string | undefined) {
+  return ['INSUFFICIENT_CREDITS', 'MEMBER_BUDGET_EXCEEDED', 'BUDGET_NOT_ALLOCATED'].includes(
+    code ?? '',
+  );
+}
+
+/** An explicit reset forgets the old plan lineage without changing the user's input. */
+export function resetCreativeBrief(record: CreativeBriefRecord): CreativeBriefRecord {
+  return { version: 1, fingerprint: record.fingerprint, answers: [] };
+}
 
 /** Answers belong to one question set; previousId carries the server-side history. */
 export function advanceCreativeBrief(
@@ -80,6 +104,12 @@ const preparationSchema = z.object({
   status: z.enum(['ready', 'needs_clarification']),
   result: creativeIntentResultSchema,
   input: jobInputSchema,
+  contextSources: z.array(creativeContextSourceSchema).max(10).optional(),
+  omittedMemoryCount: z.number().int().nonnegative().optional(),
+  referenceStudy: z
+    .object({ study: referenceStudySchema, evidence: referenceStudyEvidenceSchema })
+    .strict()
+    .optional(),
 });
 export function checkCreativePreparation(value: unknown, input: JobInput): CreativePreparation {
   const result = preparationSchema.parse(value);

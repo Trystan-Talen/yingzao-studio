@@ -1,0 +1,54 @@
+{
+  "taskFilter": {
+    "source": "platform/src/web/styles/library-tasks.css:360",
+    "borderRadius": "8px"
+  },
+  "toolFilter": {
+    "source": "platform/src/web/styles.css:1308",
+    "borderRadius": "7px",
+    "selectedBackground": "var(--tint)",
+    "selectedColor": "var(--primary)"
+  },
+  "browserMeasurements": [
+    {
+      "source": "platform/var/e2e/run-o3tSdH/case-RP63UW/filter-style-light.json",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "task": {
+        "radius": 8,
+        "height": 36,
+        "background": "rgb(226, 64, 28)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "tool": {
+        "radius": 7,
+        "height": 34.140625,
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(201, 51, 15)"
+      }
+    },
+    {
+      "source": "platform/var/e2e/run-o3tSdH/case-vrASDO/filter-style-dark.json",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "task": {
+        "radius": 8,
+        "height": 36,
+        "background": "rgb(255, 90, 54)",
+        "color": "rgb(22, 6, 3)"
+      },
+      "tool": {
+        "radius": 7,
+        "height": 34.140625,
+        "background": "rgb(21, 21, 25)",
+        "color": "rgb(255, 90, 54)"
+      }
+    }
+  ]
+}

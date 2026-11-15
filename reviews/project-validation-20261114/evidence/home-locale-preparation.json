@@ -1,0 +1,26 @@
+{
+  "status": "reproduced-before-fix",
+  "formalSourceUnmodified": true,
+  "testCount": 1,
+  "passed": 0,
+  "failed": 1,
+  "softAssertionFailures": 9,
+  "run": "platform/var/e2e/run-0MrY25",
+  "actualFailures": [
+    "English heading aria-label is Chinese",
+    "Shortcut hints are Chinese",
+    "Result hint is Chinese",
+    "20 untranslated dictionary keys",
+    "Model card definition labels are Chinese",
+    "Ratio count renders 8 种"
+  ],
+  "candidateFiles": [
+    "platform/var/home-locale-review/candidate-i18n.ts",
+    "platform/var/home-locale-review/candidate-home-appearance.spec.ts"
+  ],
+  "patch": "reviews/project-validation-20261114/evidence/home-locale-prepared.patch",
+  "checks": "Candidate files formatted; 26 static keys cover all 10 rotating words and 5 greetings; actual DOM includes accessible heading, shortcuts, footer, model labels and ratio unit. Original Chinese user name is preserved. Raw provider and model names exempt.",
+  "initialEnvironmentAttempt": "Sandbox Chrome launch SIGABRT; not counted as product failure. Explicit isolated local-browser approval then ran successfully and reproduced copy failures.",
+  "paidCalls": 0,
+  "formalDatabaseAccess": false
+}

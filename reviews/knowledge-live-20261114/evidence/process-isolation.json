@@ -1,0 +1,9 @@
+{
+  "observedApiPid": 28168,
+  "observedWorkerPid": 28190,
+  "actualOpenDatabase": "platform/var/knowledge-live-20261114/runtime/database.sqlite",
+  "formalDatabaseOpenedByRuntime": false,
+  "inspection": "lsof open database handles",
+  "finalRestart": "restart-validation.json",
+  "formalDataPreservation": "final-integrity.json"
+}

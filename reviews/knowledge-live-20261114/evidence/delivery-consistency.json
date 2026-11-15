@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "sourceFiles": 650,
+  "sourceSha256": "ce715688a00fd715eedfc0536266dfc7f8909382066967d2fa4ee870e561bad5",
+  "changed": [],
+  "missingReportLinks": [],
+  "invalidLedgerRows": [],
+  "realPostRequests": 6,
+  "isolatedApiExitConfirmed": true,
+  "isolatedWorkerExitConfirmed": true
+}

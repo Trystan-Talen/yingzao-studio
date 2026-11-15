@@ -22,7 +22,7 @@ export interface WorkspaceAccess {
   role: Role;
 }
 export const PreferencesSchema = z.object({
-  theme: z.enum(['light', 'dark', 'system']).default('system'),
+  theme: z.enum(['light', 'dark', 'system']).default('dark'),
   locale: z.enum(['zh-CN', 'en', 'ar']).default('zh-CN'),
   confirmGeneration: z.boolean().default(true),
   onboardingCompleted: z.boolean().default(false),
@@ -238,6 +238,7 @@ export const BrandInputSchema = z
   .strict();
 export const BrandPatchSchema = z
   .object({
+    expectedUpdatedAt: IsoDateSchema.optional(),
     name: NameSchema.optional(),
     description: z.string().max(4000).optional(),
     colors: z
@@ -343,6 +344,22 @@ export const AcceptInvitationInputSchema = z
 export const SetCollectionAssetsInputSchema = z
   .object({ assetIds: z.array(IdSchema).max(500) })
   .strict();
+export const PatchCollectionAssetsInputSchema = z
+  .object({
+    addAssetIds: z.array(IdSchema).max(500).default([]),
+    removeAssetIds: z.array(IdSchema).max(500).default([]),
+  })
+  .strict()
+  .refine((input) => input.addAssetIds.length + input.removeAssetIds.length > 0, {
+    message: '请选择要加入或移出的素材',
+  })
+  .refine(
+    (input) => {
+      const added = new Set(input.addAssetIds);
+      return !input.removeAssetIds.some((id) => added.has(id));
+    },
+    { message: '同一素材不能同时加入和移出集合' },
+  );
 export const CreateOrderInputSchema = z
   .object({
     planId: z.string().min(1).max(100),

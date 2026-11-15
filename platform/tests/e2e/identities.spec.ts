@@ -28,6 +28,10 @@ test.describe('local SMS protocol fixture', () => {
     await studio.advanceIdentityClock(61_000);
     const mobileNavigation = page.getByRole('button', { name: '展开导航', exact: true });
     if (await mobileNavigation.isVisible()) await mobileNavigation.click();
+    await page
+      .getByRole('button', { name: /账户与退出/ })
+      .filter({ visible: true })
+      .click();
     await page.getByRole('button', { name: '退出登录', exact: true }).click();
     await page.getByRole('button', { name: '手机验证码登录', exact: true }).click();
     const login = page.getByRole('dialog', { name: '手机验证码登录', exact: true });

@@ -19,7 +19,7 @@ export const entitlementLabels: Record<string, string> = {
 };
 export function BrandQuotaSummary({ quota }: { quota: BrandQuota }) {
   return (
-    <div className="stat-card" aria-label={t('品牌额度')}>
+    <div className="stat-card brand-quota-strip" aria-label={t('品牌额度')}>
       <span>{t('我的品牌用量')}</span>
       <strong>
         {quota.memberUsed}

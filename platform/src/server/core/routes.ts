@@ -388,6 +388,26 @@ export async function registerCoreRoutes(app: FastifyInstance, core: CoreService
   route('PUT', '/collections/:id/assets', null, (a, w, r) =>
     core.references.setCollectionAssets(a, w, pid(r), r.body),
   );
+  route('PATCH', '/collections/:id/assets', null, (a, w, r) =>
+    core.references.patchCollectionAssets(a, w, pid(r), r.body),
+  );
+  route('GET', '/memories', null, (a, w, r) => core.knowledge.listMemories(a, w, query(r)));
+  route('GET', '/memories/:id', null, (a, w, r) => core.knowledge.getMemory(a, w, pid(r)));
+  route('POST', '/memories', null, (a, w, r) => core.knowledge.createMemory(a, w, r.body), true);
+  route('PATCH', '/memories/:id', null, (a, w, r) =>
+    core.knowledge.updateMemory(a, w, pid(r), r.body),
+  );
+  route('DELETE', '/memories/:id', null, (a, w, r) => core.knowledge.removeMemory(a, w, pid(r)));
+  route('GET', '/products', null, (a, w, r) => core.knowledge.listProducts(a, w, query(r)));
+  route('GET', '/products/:id', null, (a, w, r) => core.knowledge.getProduct(a, w, pid(r)));
+  route('POST', '/products', null, (a, w, r) => core.knowledge.createProduct(a, w, r.body), true);
+  route('PATCH', '/products/:id', null, (a, w, r) =>
+    core.knowledge.updateProduct(a, w, pid(r), r.body),
+  );
+  route('DELETE', '/products/:id', null, (a, w, r) => core.knowledge.removeProduct(a, w, pid(r)));
+  route('POST', '/products/:id/restore', null, (a, w, r) =>
+    core.knowledge.restoreProduct(a, w, pid(r)),
+  );
   route('GET', '/brands', null, (a, w, r) => core.references.brands(a, w, query(r)));
   route('POST', '/brands', null, (a, w, r) => core.references.createBrand(a, w, r.body), true);
   route('GET', '/brands/:id', null, (a, w, r) => core.references.getBrand(a, w, pid(r)));

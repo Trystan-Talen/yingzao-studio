@@ -79,17 +79,28 @@ for (const language of [
     ]);
     await page.goto(`${studio.origin}/workbench`);
     const composer = page.locator('.composer');
+    const settings = page.getByRole('dialog', {
+      name: translatedControl('创作设置'),
+      exact: true,
+    });
+    const openSettings = () =>
+      composer
+        .getByRole('button', { name: translatedControl('更多创作设置'), exact: true })
+        .click();
+    const closeSettings = () =>
+      settings.getByRole('button', { name: translatedControl('完成'), exact: true }).click();
     await composer.getByRole('button', { name: language.video, exact: true }).click();
     await composer
       .getByRole('button', { name: translatedControl('更多创作设置'), exact: true })
       .click();
-    await composer
+    await settings
       .getByRole('combobox', { name: translatedControl('生成模型'), exact: true })
       .selectOption('video.generate|fal|wan-2.6');
-    await expect(composer.getByText(language.music, { exact: true })).toBeVisible();
-    await composer
+    await settings
       .getByRole('combobox', { name: translatedControl('清晰度'), exact: true })
       .selectOption('720p');
+    await closeSettings();
+    await expect(composer.getByText(language.music, { exact: true })).toBeVisible();
     await expect(
       composer.locator('.submit-block').getByText(language.notConnected, { exact: false }),
     ).toBeVisible();
@@ -105,13 +116,13 @@ for (const language of [
     const text = '用户输入保持中文，不因界面语言被改写。';
     const prompt = composer.getByRole('textbox', { name: language.brief, exact: true });
     await prompt.fill(text);
-    await expect(
-      composer.getByRole('region', { name: translatedControl('创作设置'), exact: true }),
-    ).toBeVisible();
-    await composer
+    await openSettings();
+    await expect(settings).toBeVisible();
+    await settings
       .locator('select')
       .filter({ has: page.locator('option[value="video.generate|fal|kling-o3-4k-reference"]') })
       .selectOption('video.generate|fal|kling-o3-4k-reference');
+    await closeSettings();
     await composer.getByRole('checkbox', { name: language.generated, exact: true }).check();
     await composer.getByRole('button', { name: language.save, exact: true }).click();
     await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
@@ -123,10 +134,10 @@ for (const language of [
     const retainedValueWarning = translatedControl(
       '“{parameter}”的当前值不受此模型支持。原值已保留，请重新选择。',
     ).replace('{parameter}', translatedControl('清晰度'));
-    await expect(composer.getByText(retainedValueWarning, { exact: false })).toBeVisible();
-    await expect(composer.getByRole('status', { includeHidden: true })).toContainText(
-      language.saved,
-    );
+    await openSettings();
+    await expect(settings.getByText(retainedValueWarning, { exact: false })).toBeVisible();
+    await closeSettings();
+    await expect(composer.locator('.composer-note[role="status"]')).toContainText(language.saved);
     const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
     const readDrafts = async () => {
       const messages = await page.request.get(
@@ -152,10 +163,12 @@ for (const language of [
     await expect(
       composer.getByRole('button', { name: translatedControl('生成视频'), exact: true }),
     ).toBeDisabled();
-    await composer
+    await openSettings();
+    await settings
       .getByRole('button', { name: translatedControl('采用当前模型的固定参数'), exact: true })
       .click();
-    await expect(composer.getByText(retainedValueWarning, { exact: false })).toHaveCount(0);
+    await expect(settings.getByText(retainedValueWarning, { exact: false })).toHaveCount(0);
+    await closeSettings();
     await expect(prompt).toHaveValue(text);
     await expect(
       composer.getByRole('checkbox', { name: language.generated, exact: true }),
@@ -172,7 +185,9 @@ for (const language of [
     await expect(
       composer.getByRole('checkbox', { name: language.generated, exact: true }),
     ).toBeChecked();
-    await expect(composer.getByText(retainedValueWarning, { exact: false })).toHaveCount(0);
+    await openSettings();
+    await expect(settings.getByText(retainedValueWarning, { exact: false })).toHaveCount(0);
+    await closeSettings();
     const fixedDrafts = await readDrafts();
     expect(
       fixedDrafts.some(

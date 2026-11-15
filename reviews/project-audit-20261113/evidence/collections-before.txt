@@ -1,0 +1,114 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ❯ tests/collection-membership.test.ts (7 tests | 5 failed) 665ms
+   ❯ atomic collection membership (7)
+     × keeps recycled memberships when adding another asset and restores the original membership 153ms
+     × preserves independent additions from simultaneous clients and supports safe retries 90ms
+     × removes only named memberships, including recycled assets, without disturbing others 89ms
+     × rejects deleted additions, missing changes, ambiguous deltas and oversized payloads 82ms
+     × requires write access and an active collection 82ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/collection-membership.test.ts > atomic collection membership > keeps recycled memberships when adding another asset and restores the original membership
+AssertionError: {"message":"Route PATCH:/api/v1/collections/d3cc2449-b835-43bf-af6a-8dfe4829aa5e/assets not found","error":"Not Found","statusCode":404}: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/collection-membership.test.ts:91:44
+     89|     core.assets.remove(owner, wid, assetIds[0]!);
+     90|     const result = await patch({ addAssetIds: [assetIds[1]] });
+     91|     expect(result.statusCode, result.body).toBe(200);
+       |                                            ^
+     92|     expect(members()).toEqual([assetIds[0], assetIds[1]].sort());
+     93|     core.assets.restore(owner, wid, assetIds[0]!);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/collection-membership.test.ts > atomic collection membership > preserves independent additions from simultaneous clients and supports safe retries
+AssertionError: {"message":"Route PATCH:/api/v1/collections/e9e625eb-d56d-4b73-94d9-0d896e4f8dbb/assets not found","error":"Not Found","statusCode":404}: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/collection-membership.test.ts:104:74
+    102|       patch({ addAssetIds: [assetIds[0], assetIds[0]] }),
+    103|     ]);
+    104|     for (const result of results) expect(result.statusCode, result.bod…
+       |                                                                          ^
+    105|     expect(members()).toEqual([assetIds[0], assetIds[1]].sort());
+    106|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/collection-membership.test.ts > atomic collection membership > removes only named memberships, including recycled assets, without disturbing others
+AssertionError: {"message":"Route PATCH:/api/v1/collections/d00c8dcb-a456-4275-ad99-adb25b2ad19c/assets not found","error":"Not Found","statusCode":404}: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ tests/collection-membership.test.ts:115:46
+    113|     for (let attempt = 0; attempt < 2; attempt++) {
+    114|       const result = await patch({ removeAssetIds: [assetIds[0], asset…
+    115|       expect(result.statusCode, result.body).toBe(200);
+       |                                              ^
+    116|       expect(members()).toEqual([assetIds[2]]);
+    117|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/collection-membership.test.ts > atomic collection membership > rejects deleted additions, missing changes, ambiguous deltas and oversized payloads
+AssertionError: {"message":"Route PATCH:/api/v1/collections/7aae41ff-1db8-4bb0-9b48-e9f229dd4a3b/assets not found","error":"Not Found","statusCode":404}: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ tests/collection-membership.test.ts:152:46
+    150|     ]) {
+    151|       const result = await patch(payload);
+    152|       expect(result.statusCode, result.body).toBe(400);
+       |                                              ^
+    153|     }
+    154|     expect(members()).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/collection-membership.test.ts > atomic collection membership > requires write access and an active collection
+AssertionError: expected 404 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 404
+
+ ❯ tests/collection-membership.test.ts:161:70
+    159|       .prepare("UPDATE memberships SET role='viewer' WHERE workspace_i…
+    160|       .run(wid, owner.userId);
+    161|     expect((await patch({ addAssetIds: [assetIds[0]] })).statusCode).t…
+       |                                                                      ^
+    162|     application.services.db.sqlite
+    163|       .prepare("UPDATE memberships SET role='owner' WHERE workspace_id…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 2 passed (7)
+   Start at  07:43:04
+   Duration  1.38s (tests 50%, import 43%, transform 7%)
+

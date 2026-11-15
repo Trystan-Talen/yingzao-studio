@@ -1,0 +1,46 @@
+{
+  "modified": [
+    "platform/src/contracts/core.ts",
+    "platform/src/server/core/references.ts",
+    "platform/src/server/core/route-schemas.ts",
+    "platform/src/server/core/routes.ts",
+    "platform/src/server/providers/http.ts",
+    "platform/src/web/App.tsx",
+    "platform/src/web/context.tsx",
+    "platform/src/web/pages/Library.tsx",
+    "platform/src/web/pages/Settings.tsx",
+    "platform/src/web/pages/Tools.tsx",
+    "platform/src/web/styles/brand/create.css",
+    "platform/src/web/styles/brand/fixes.css",
+    "platform/src/web/styles/brand/foundation.css",
+    "platform/src/web/styles/brand/login.css",
+    "platform/src/web/styles/brand/pages.css",
+    "platform/src/web/styles/brand/shell.css",
+    "platform/src/web/styles/brand/tokens.css",
+    "platform/tests/dify-workflow-nodes.test.ts",
+    "platform/vitest.config.ts"
+  ],
+  "added": [
+    "platform/tests/collection-membership.test.ts",
+    "platform/tests/e2e/collection-membership-review.spec.ts",
+    "platform/tests/e2e/filter-style-review.spec.ts",
+    "platform/tests/e2e/placeholder-contrast-review.spec.ts",
+    "platform/tests/e2e/session-recovery-review.spec.ts",
+    "platform/tests/e2e/theme-preference-review.spec.ts",
+    "platform/tests/e2e/tool-asset-recovery-review.spec.ts",
+    "platform/tests/e2e/ui-audit.spec.ts",
+    "platform/tests/provider-http.test.ts",
+    "platform/tests/vitest-environment.test.ts"
+  ],
+  "removed": [],
+  "documentation": [
+    "设计系统.md",
+    "specs/backend-contract.md",
+    "reviews/takeover/STATUS.md",
+    "reviews/takeover/scope-ledger.json",
+    "reviews/project-audit-20261113/DELIVERY.md",
+    "reviews/project-audit-20261113/UI.md",
+    "reviews/project-audit-20261113/FLOWS.md",
+    "reviews/project-audit-20261113/CODE.md"
+  ]
+}

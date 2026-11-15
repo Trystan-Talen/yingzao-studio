@@ -17,7 +17,7 @@ import {
 } from '../../contracts/core';
 import { AppError } from '../errors';
 import {
-  CoreContext,
+  type CoreContext,
   type Row,
   type ListQuery,
   str,
@@ -199,15 +199,18 @@ export class BusinessService {
       paidAt: nullable(r, 'paid_at'),
       paymentEnvironment: str(r, 'payment_environment'),
       refundedMinor: num(r, 'refunded_minor'),
-      invoiceableMinor: Math.max(
-        0,
-        num(r, 'amount_minor') -
-          num(r, 'refunded_minor') -
-          (this.c.get<{ amount: number }>(
-            'SELECT COALESCE(SUM(amount_minor),0) amount FROM invoice_orders WHERE order_id=? AND released_at IS NULL',
-            str(r, 'id'),
-          )?.amount ?? 0),
-      ),
+      invoiceableMinor:
+        r.status === 'paid'
+          ? Math.max(
+              0,
+              num(r, 'amount_minor') -
+                num(r, 'refunded_minor') -
+                (this.c.get<{ amount: number }>(
+                  'SELECT COALESCE(SUM(amount_minor),0) amount FROM invoice_orders WHERE order_id=? AND released_at IS NULL',
+                  str(r, 'id'),
+                )?.amount ?? 0),
+            )
+          : 0,
     };
   }
   orders(actor: Actor, wid: string, q: ListQuery, billingChannel: BillingChannel = 'web') {

@@ -110,9 +110,11 @@ for (const heldStep of ['project', 'message'] as const) {
       await composer.getByRole('button', { name: '视频创作', exact: true }).click();
       await expect(prompt).toHaveValue('');
       await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-      await composer
+      const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+      await settings
         .getByRole('combobox', { name: '生成模型', exact: true })
         .selectOption('video.generate|fal|kling-o3-4k-reference');
+      await settings.getByRole('button', { name: '完成', exact: true }).click();
       await prompt.fill(videoPrompt);
       await uploadReference(page, videoName, '#264f9d');
       await expect(composer.getByRole('button', { name: '视频创作', exact: true })).toHaveAttribute(

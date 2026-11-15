@@ -142,18 +142,26 @@ test('shows complete artwork before optional prompt editing and persists favorit
   );
   for (const image of await cards.locator('.inspiration-studio-image img').all()) {
     await image.scrollIntoViewIfNeeded();
+    // Verify the resting artwork; the approved hover animation deliberately zooms it.
+    await page.mouse.move(0, 0);
     await expect
       .poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth))
       .toBeGreaterThan(0);
     const dimensions = await image.evaluate((el) => {
       const img = el as HTMLImageElement;
       const rect = img.getBoundingClientRect();
-      const frame = img.closest('button')!.getBoundingClientRect();
+      const frameElement = img.closest('button')!;
+      const frame = frameElement.getBoundingClientRect();
+      const frameStyle = getComputedStyle(frameElement);
+      const horizontalBorder =
+        parseFloat(frameStyle.borderLeftWidth) + parseFloat(frameStyle.borderRightWidth);
+      const verticalBorder =
+        parseFloat(frameStyle.borderTopWidth) + parseFloat(frameStyle.borderBottomWidth);
       return {
         displayedRatio: rect.width / rect.height,
         originalRatio: img.naturalWidth / img.naturalHeight,
-        frameWidthGap: Math.abs(frame.width - rect.width),
-        frameHeightGap: Math.abs(frame.height - rect.height),
+        frameWidthGap: Math.abs(frame.width - horizontalBorder - rect.width),
+        frameHeightGap: Math.abs(frame.height - verticalBorder - rect.height),
         fit: getComputedStyle(img).objectFit,
         transform: getComputedStyle(img).transform,
       };

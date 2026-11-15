@@ -1,0 +1,15 @@
+yz-display-serif.woff
+=====================
+
+Subset of Noto Serif SC (思源宋体), weight 900, containing only the glyphs used in
+映造 Studio display headlines. Renamed "YZ Display Serif" to avoid clashing with an
+installed copy of the full family. Noto Serif SC has no Reserved Font Name.
+
+Source: https://github.com/google/fonts/tree/main/ofl/notoserifsc
+Copyright 2012 Google Inc. All Rights Reserved.
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+Full text: https://openfontlicense.org/open-font-license-official-text/
+
+To add characters (e.g. a new headline), re-subset the full Noto Serif SC [wght]
+file at wght=900 with fontTools (pyftsubset) and replace this file.

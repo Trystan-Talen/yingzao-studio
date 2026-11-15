@@ -1,6 +1,21 @@
 export const CREATIVE_BRIEF_TRANSLATIONS: Readonly<
   Record<string, Readonly<{ en: string; ar: string }>>
 > = {
+  按最新资料重新整理: {
+    en: 'Replan with the latest information',
+    ar: 'إعادة التخطيط بأحدث المعلومات',
+  },
+  '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。':
+    {
+      en: 'Discard the current unconfirmed quote; saved plans and submitted tasks stay unchanged. Click Generate again to read the latest information and replan, which may incur planning fees.',
+      ar: 'تجاهل عرض السعر الحالي غير المؤكد؛ تبقى الخطط المحفوظة والمهام المرسلة دون تغيير. انقر على إنشاء مرة أخرى لقراءة أحدث المعلومات وإعادة التخطيط، وقد تُفرض رسوم للتخطيط.',
+    },
+  '原始需求与素材选择不变；旧方案的补充回答需要重新确认。': {
+    en: 'Your original request and selected assets stay unchanged. Follow-up answers from the old plan need to be confirmed again.',
+    ar: 'يبقى طلبك الأصلي والمواد المحددة دون تغيير. يجب تأكيد الإجابات الإضافية من الخطة القديمة من جديد.',
+  },
+  首帧画面: { en: 'First frame', ar: 'الإطار الأول' },
+  镜头与动作: { en: 'Camera and motion', ar: 'الكاميرا والحركة' },
   '选好或填好答案，再点击继续。': {
     en: 'Choose or write your answers, then continue.',
     ar: 'اختر إجاباتك أو اكتبها، ثم تابع.',

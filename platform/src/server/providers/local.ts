@@ -8,6 +8,8 @@ import { ProviderError, type ProviderAdapter } from '../tasks/types';
 const exec = promisify(execFile);
 export const hasFfmpeg = () =>
   spawnSync('ffmpeg', ['-version'], { stdio: 'ignore', timeout: 5000 }).status === 0;
+export const hasFfprobe = () =>
+  spawnSync('ffprobe', ['-version'], { stdio: 'ignore', timeout: 5000 }).status === 0;
 const MAX_OUTPUT_PIXELS = 64_000_000;
 const MAX_OUTPUT_SIDE = 16_384;
 function assertOutputSize(width: number, height: number) {

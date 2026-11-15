@@ -1,0 +1,3604 @@
+{
+  "scope": "Complete browser regression after functional fixes; before final homepage translation-only follow-up",
+  "sourceManifestSha256": "e248b61fccdfe884dc8f7d144bf1abcc098ba48518ec41ca1e6522ca0e01bbb5",
+  "run": "platform/var/e2e/run-KL4eeR",
+  "runSummary": {
+    "started": "2026-11-14T04:56:36.876Z",
+    "finished": "2026-11-14T05:13:45.811Z",
+    "exitCode": 0,
+    "dataIsolation": "fresh SQLite and media per test",
+    "webRoot": "/Users/xm-talen/Desktop/\u5c0f\u660e/coding/yingzao-studio-main1112/platform/var/e2e/run-KL4eeR/web",
+    "environmentIsolation": "fresh Vite envDir; subprocess environment allowlist",
+    "externalServices": "disabled; loopback SMTP/SMS, marked synthetic providers, local media tools only"
+  },
+  "stats": {
+    "total": 446,
+    "expected": 446,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true
+  },
+  "startTime": 1794632199334,
+  "durationMs": 1026268.9110000001,
+  "projectNames": [
+    "desktop",
+    "mobile",
+    "notebook",
+    "tablet"
+  ],
+  "errors": [],
+  "retries": 0,
+  "cases": [
+    {
+      "file": "account.spec.ts",
+      "title": "new user recovers through a real local email, loses old sessions and logs in with the new password",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7920
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6306
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "is readable without a session and sends no fabricated messages",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2971
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "new user recovers through a real local email, loses old sessions and logs in with the new password",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5875
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "Google-only fixture must keep its login until mailbox proof adds a local password in the initiating browser",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6453
+    },
+    {
+      "file": "account.spec.ts",
+      "title": "is readable without a session and sends no fabricated messages",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2022
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "corrects a candidate mask through the real editor and preserves source pixels at zero credits without model access",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6514
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5139
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5120
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "presents background review and soft-edge editing in English without translating the user original or submitting a job",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7408
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "waits for the actual initial mask before permitting edits and preserves it after a delayed load",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4017
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with network-error without permitting a blank replacement and recovers on explicit reopening",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2706
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with wrong-dimensions without permitting a blank replacement and recovers on explicit reopening",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3709
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3562
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3563
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "corrects a candidate mask through the real editor and preserves source pixels at zero credits without model access",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5293
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4263
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase retains the existing alpha mask contract when restoring, painting, saving and reopening a tool draft",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4135
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "presents background review and soft-edge editing in English without translating the user original or submitting a job",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7957
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "waits for the actual initial mask before permitting edits and preserves it after a delayed load",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2954
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with network-error without permitting a blank replacement and recovers on explicit reopening",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2644
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "rejects an initial mask with wrong-dimensions without permitting a blank replacement and recovers on explicit reopening",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2616
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-inpaint freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3577
+    },
+    {
+      "file": "background-region-review.spec.ts",
+      "title": "image-erase freezes pixels during mask upload and never attaches a late mask to a replacement source",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3630
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "enforces per-member brand quotas in real create/delete/restore controls without making a payment",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8904
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5058
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "enforces per-member brand quotas in real create/delete/restore controls without making a payment",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 22924
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4215
+    },
+    {
+      "file": "canvas-focus-review.spec.ts",
+      "title": "switches narrow-screen editor tabs with arrow keys without moving the selected layer",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 11051
+    },
+    {
+      "file": "canvas-focus-review.spec.ts",
+      "title": "switches narrow-screen editor tabs with arrow keys without moving the selected layer",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 11143
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 12824
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 13033
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 12931
+    },
+    {
+      "file": "canvas.spec.ts",
+      "title": "creates an editable canvas, uploads real pixels, edits layers, undoes, exports and restores the saved project",
+      "project": "tablet",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 12992
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates brand references with a valid capability proof after the server freezes the task input",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5678
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates document references with a valid capability proof after the server freezes the task input",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6556
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates design-module references with a valid capability proof after the server freezes the task input",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4789
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates brand references with a valid capability proof after the server freezes the task input",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5740
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates document references with a valid capability proof after the server freezes the task input",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5875
+    },
+    {
+      "file": "capability-input-snapshot.spec.ts",
+      "title": "quotes and generates design-module references with a valid capability proof after the server freezes the task input",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6188
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "uploads, plays and retains separate character image/video references, then explicitly handles unavailable references",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8500
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "blocks saving until character references load, retries errors and discards late responses for a closed profile",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6050
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "uploads, plays and retains separate character image/video references, then explicitly handles unavailable references",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8526
+    },
+    {
+      "file": "character-video.spec.ts",
+      "title": "blocks saving until character references load, retries errors and discards late responses for a closed profile",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7464
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding an asset preserves collection membership of an item in the recycle bin",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3287
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding and removing selected assets preserves a concurrent collection addition",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3259
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "collection lookup failure offers retry instead of claiming the collection list is empty",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3951
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding an asset preserves collection membership of an item in the recycle bin",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2455
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "adding and removing selected assets preserves a concurrent collection addition",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2359
+    },
+    {
+      "file": "collection-membership-review.spec.ts",
+      "title": "collection lookup failure offers retry instead of claiming the collection list is empty",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2980
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "persists real background music and the generated audio choice across save, model changes and refresh",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5872
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "returns an actual local output to the project composer without replacing the current prompt or submitting a second job",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6991
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "persists real background music and the generated audio choice across save, model changes and refresh",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5420
+    },
+    {
+      "file": "composer-media.spec.ts",
+      "title": "returns an actual local output to the project composer without replacing the current prompt or submitting a second job",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6540
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "desktop studio visual states keep normal-flow creation above unobstructed artwork and keyboard controls without billable writes",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6688
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "mobile studio home keeps normal-flow creation, dark artwork, header credit access and the primary action unobstructed",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3447
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "desktop studio visual states keep normal-flow creation above unobstructed artwork and keyboard controls without billable writes",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5939
+    },
+    {
+      "file": "consumer-visual.spec.ts",
+      "title": "mobile studio home keeps normal-flow creation, dark artwork, header credit access and the primary action unobstructed",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3657
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses en creation and local tool controls while retaining the original Chinese user content",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8385
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses ar creation and local tool controls while retaining the original Chinese user content",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7855
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses en creation and local tool controls while retaining the original Chinese user content",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9437
+    },
+    {
+      "file": "creation-locale.spec.ts",
+      "title": "uses ar creation and local tool controls while retaining the original Chinese user content",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9330
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the project save response is delayed",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5923
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the message save response is delayed",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5995
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the project save response is delayed",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5471
+    },
+    {
+      "file": "creation-race.spec.ts",
+      "title": "keeps edits, both creation kinds and uploaded references while the message save response is delayed",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5638
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /, and collapses settings without writes",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2210
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /workbench?kind=image, and collapses settings without writes",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3237
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "uses the current server rate and selected image count without preparing a billable quote",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1852
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows an unresolved capability as pending and an invalid rate as unknown, never as zero",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3621
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "warns about a stale low balance without bypassing or blocking the authoritative quote",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2911
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "keeps the real local clarification chain free of quotes and tasks until the answer is complete",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4600
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "confirms a compact authoritative image quote once and retains the exact generated original",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5604
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "updates video seconds pricing and creates one playable saved vertical original",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6650
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "honors the existing no-confirmation preference without duplicate generation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4734
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /, and collapses settings without writes",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2650
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows a numeric first-screen estimate with empty input at /workbench?kind=image, and collapses settings without writes",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2548
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "uses the current server rate and selected image count without preparing a billable quote",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1816
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "shows an unresolved capability as pending and an invalid rate as unknown, never as zero",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2764
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "warns about a stale low balance without bypassing or blocking the authoritative quote",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1951
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "keeps the real local clarification chain free of quotes and tasks until the answer is complete",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4597
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "confirms a compact authoritative image quote once and retains the exact generated original",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6018
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "updates video seconds pricing and creates one playable saved vertical original",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5824
+    },
+    {
+      "file": "creation-redesign.spec.ts",
+      "title": "honors the existing no-confirmation preference without duplicate generation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3704
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "shows one clear clarification area and focuses missing answers without another planning call",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3330
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "switches between custom text and quick options without auto-submitting or losing restored custom answers",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3867
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "opens the normal add-reference picker instead of targeting an existing image removal action",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3007
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "continues a complete general idea to the existing quote, and refresh only reads the saved understanding",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4774
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "asks only two necessary questions, preserves separate answers across refresh, then quotes the original wording",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4454
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "sends only the current round of answers and requires a fresh answer for a repeated question ID",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4840
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "drops late understanding after the prompt, platform and material change",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3038
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not bypass a failed check with confirmation disabled and retries the same request after refresh",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2288
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "requires an explicit reset after a confirmed failure and keeps the current question answers for the new check",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2254
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not reuse the same wording and options from another existing project",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4204
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "stops before a paid check if its request record cannot be saved, while retaining a legacy platform",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2877
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "keeps explicit video types aligned with their placement and clears the old placement for free creation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5127
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 121.487-second preparation without replacing its request or timing out early",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1934
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 141-second preparation without replacing its request or timing out early",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2956
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "times out at the bounded client deadline without automatically replacing or resending its request",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3446
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a cached ready plan uses a free configuration check and waits for explicit reset before replanning",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4010
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a connection change during quotation invalidates the newly bound plan without another paid call",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2080
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a definite budget rejection preserves the draft and permits a fresh user-requested preparation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3032
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "shows one clear clarification area and focuses missing answers without another planning call",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3334
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "switches between custom text and quick options without auto-submitting or losing restored custom answers",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2884
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "opens the normal add-reference picker instead of targeting an existing image removal action",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2103
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "continues a complete general idea to the existing quote, and refresh only reads the saved understanding",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4152
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "asks only two necessary questions, preserves separate answers across refresh, then quotes the original wording",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5252
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "sends only the current round of answers and requires a fresh answer for a repeated question ID",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7556
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "drops late understanding after the prompt, platform and material change",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2048
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not bypass a failed check with confirmation disabled and retries the same request after refresh",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2445
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "requires an explicit reset after a confirmed failure and keeps the current question answers for the new check",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3240
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "does not reuse the same wording and options from another existing project",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3315
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "stops before a paid check if its request record cannot be saved, while retaining a legacy platform",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1894
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "keeps explicit video types aligned with their placement and clears the old placement for free creation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4063
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 121.487-second preparation without replacing its request or timing out early",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1972
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "accepts a 141-second preparation without replacing its request or timing out early",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2967
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "times out at the bounded client deadline without automatically replacing or resending its request",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2997
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a cached ready plan uses a free configuration check and waits for explicit reset before replanning",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3007
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a connection change during quotation invalidates the newly bound plan without another paid call",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2144
+    },
+    {
+      "file": "creative-brief.spec.ts",
+      "title": "a definite budget rejection preserves the draft and permits a fresh user-requested preparation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2075
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote, reloads it and reuses its ready understanding",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6121
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected submission, reloads it and reuses its ready understanding",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5058
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote with confirmation disabled, reloads it and reuses its ready understanding",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5070
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "a stale video tab cannot erase the newer draft when it only refreshes model information",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3751
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote, reloads it and reuses its ready understanding",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6240
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected submission, reloads it and reuses its ready understanding",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6184
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "preserves a bound video draft after a rejected quote with confirmation disabled, reloads it and reuses its ready understanding",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4372
+    },
+    {
+      "file": "creative-capability-recovery.spec.ts",
+      "title": "a stale video tab cannot erase the newer draft when it only refreshes model information",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4194
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "creates reusable memory and product, freezes reviewed sources and saves a downloadable image",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9250
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "manages private memory and rejects a stale product edit without losing the editor draft",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5311
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "creates reusable memory and product, freezes reviewed sources and saves a downloadable image",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 11495
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "manages private memory and rejects a stale product edit without losing the editor draft",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 12485
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en credit copy while keeping real values and user fields without starting payment",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5348
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes en historical zero-archive and three-month renewal contract copy",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2664
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en referral membership configuration without enabling rewards",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3125
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar credit copy while keeping real values and user fields without starting payment",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4873
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes ar historical zero-archive and three-month renewal contract copy",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3292
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar referral membership configuration without enabling rewards",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2712
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en credit copy while keeping real values and user fields without starting payment",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6171
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes en historical zero-archive and three-month renewal contract copy",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3393
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates en referral membership configuration without enabling rewards",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2227
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar credit copy while keeping real values and user fields without starting payment",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6122
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "distinguishes ar historical zero-archive and three-month renewal contract copy",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2953
+    },
+    {
+      "file": "credits-locale.spec.ts",
+      "title": "translates ar referral membership configuration without enabling rewards",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2210
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark image clarification, authoritative quote, single saved original and reload",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7919
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark video clarification, authoritative quote, single saved original and reload",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6827
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark image clarification, authoritative quote, single saved original and reload",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9068
+    },
+    {
+      "file": "dark-creation-flow.spec.ts",
+      "title": "dark video clarification, authoritative quote, single saved original and reload",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8693
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark mobile failure requires an explicitly confirmed separate retry",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9498
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark desktop display fixture distinguishes paused saving from an unknown outcome",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6432
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark mobile failure requires an explicitly confirmed separate retry",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9308
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark desktop display fixture distinguishes paused saving from an unknown outcome",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7827
+    },
+    {
+      "file": "dark-settings-popover.spec.ts",
+      "title": "dark settings float without reflow and retain choices through escape and outside dismissal",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4373
+    },
+    {
+      "file": "dark-settings-popover.spec.ts",
+      "title": "dark settings float without reflow and retain choices through escape and outside dismissal",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3728
+    },
+    {
+      "file": "detail-page-experience.spec.ts",
+      "title": "reviews one screen at a time, explains invalid content and preserves the current step and brief decision",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7741
+    },
+    {
+      "file": "detail-page-experience.spec.ts",
+      "title": "reviews one screen at a time, explains invalid content and preserves the current step and brief decision",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7377
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a cancelled quote",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3972
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a failed quote",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5061
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a cancelled quote",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4575
+    },
+    {
+      "file": "detail-page-project-entry.spec.ts",
+      "title": "returns an unsubmitted detail-page project to its own editor after a failed quote",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3639
+    },
+    {
+      "file": "event-stream-tabs.spec.ts",
+      "title": "releases hidden-tab event streams so six tabs cannot starve navigation and resumes with fresh project data",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2137
+    },
+    {
+      "file": "event-stream-tabs.spec.ts",
+      "title": "releases hidden-tab event streams so six tabs cannot starve navigation and resumes with fresh project data",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2023
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "explains the planning service input limit, preserves all text and accepts the exact boundary without submitting",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2984
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "generates a design plan, applies an edited direction and preserves it without automatically generating an image",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5527
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates an image from the home entry, preserves its task after refresh and downloads the saved original",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6527
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates a video, plays the saved media and restores the same output after refresh",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6949
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "plans six detail-page screens, confirms the edited plan and exports matching originals plus a long image",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 14663
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "keeps a failed attempt visible and creates exactly one separately confirmed retry",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7652
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "explains the planning service input limit, preserves all text and accepts the exact boundary without submitting",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3780
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "generates a design plan, applies an edited direction and preserves it without automatically generating an image",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5259
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates an image from the home entry, preserves its task after refresh and downloads the saved original",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6892
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "creates a video, plays the saved media and restores the same output after refresh",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7375
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "plans six detail-page screens, confirms the edited plan and exports matching originals plus a long image",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 14948
+    },
+    {
+      "file": "experience-journeys.spec.ts",
+      "title": "keeps a failed attempt visible and creates exactly one separately confirmed retry",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6809
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent dark selections",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4245
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent light selections",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2747
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent dark selections",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3315
+    },
+    {
+      "file": "filter-style-review.spec.ts",
+      "title": "task and tool filters retain real filtering with consistent light selections",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3306
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders zh-CN home in dark mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5129
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders en home in light mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5187
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders ar home in light mode with usable keyboard controls and video materials",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5522
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders zh-CN home in dark mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7765
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders en home in light mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7875
+    },
+    {
+      "file": "home-appearance.spec.ts",
+      "title": "renders ar home in light mode with usable keyboard controls and video materials",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6600
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2163
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2891
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4025
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3174
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3632
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3455
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5050
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3660
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "offers one immediately usable creation composer, real idea previews and accessible directions",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2092
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "keeps the brief and generation in the first screen with keyboard-accessible toolbar settings",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2924
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4529
+    },
+    {
+      "file": "home-design.spec.ts",
+      "title": "opens a redesigned inspiration card and reuses the original media in an editable persisted project",
+      "project": "notebook",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4244
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "binds through actual UI, logs out, and signs in using a separately delivered one-time SMS",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6578
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "shows unavailable external identity methods without fake codes or QR images",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2122
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "can detach existing identity fixtures with a password after both providers are disabled",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2447
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "binds through actual UI, logs out, and signs in using a separately delivered one-time SMS",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6854
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "shows unavailable external identity methods without fake codes or QR images",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2215
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "can detach existing identity fixtures with a password after both providers are disabled",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3024
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "creates and reclassifies a real video inspiration, preserves filters on refresh and keeps legacy videos unclassified",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5363
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "a delayed category response cannot reopen a closed detail or replace another inspiration",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2915
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "creates and reclassifies a real video inspiration, preserves filters on refresh and keeps legacy videos unclassified",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6016
+    },
+    {
+      "file": "inspiration-categories.spec.ts",
+      "title": "a delayed category response cannot reopen a closed detail or replace another inspiration",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2995
+    },
+    {
+      "file": "inspiration-replica.spec.ts",
+      "title": "recovers a video inspiration action-reference draft after a lost reuse response and refresh",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7090
+    },
+    {
+      "file": "inspiration-replica.spec.ts",
+      "title": "recovers a video inspiration action-reference draft after a lost reuse response and refresh",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6127
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "keeps rapid favorite search and media changes together before navigation renders",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3348
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "shows complete artwork before optional prompt editing and persists favorites without generating",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3683
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "recovers the same edited image draft after a lost response, retains its original and returns to URL filters",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5910
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "restores every video filter and page from the URL and resets only pagination when filters change",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4561
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "keeps rapid favorite search and media changes together before navigation renders",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4334
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "shows complete artwork before optional prompt editing and persists favorites without generating",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3575
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "recovers the same edited image draft after a lost response, retains its original and returns to URL filters",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6054
+    },
+    {
+      "file": "inspiration-studio.spec.ts",
+      "title": "restores every video filter and page from the URL and resets only pagination when filters change",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4653
+    },
+    {
+      "file": "knowledge-editor-recovery.spec.ts",
+      "title": "preserves edited product text on image-load retry and repairs recycled references before restoring",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3970
+    },
+    {
+      "file": "knowledge-editor-recovery.spec.ts",
+      "title": "preserves edited product text on image-load retry and repairs recycled references before restoring",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4026
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "keeps existing grouped creation usable without personal memory or a product",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5646
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "requires explicit product unlinking for groups and preserves single-creation preferences",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2931
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "keeps existing grouped creation usable without personal memory or a product",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5695
+    },
+    {
+      "file": "knowledge-group-boundary.spec.ts",
+      "title": "requires explicit product unlinking for groups and preserves single-creation preferences",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2878
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps en memory and product controls readable, personal content unchanged and the default dark",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2799
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps ar memory and product controls readable, personal content unchanged and the default dark",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2921
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps en memory and product controls readable, personal content unchanged and the default dark",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3444
+    },
+    {
+      "file": "knowledge-locale.spec.ts",
+      "title": "keeps ar memory and product controls readable, personal content unchanged and the default dark",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4124
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "retains single-creation memory and product-image choices after refreshing a grouped draft",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2915
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent memory edit without discarding local input or another editor's untouched fields",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3120
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent product edit without discarding local input or another editor's untouched fields",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3092
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "retains single-creation memory and product-image choices after refreshing a grouped draft",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3369
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent memory edit without discarding local input or another editor's untouched fields",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 10699
+    },
+    {
+      "file": "knowledge-recheck.spec.ts",
+      "title": "recovers a concurrent product edit without discarding local input or another editor's untouched fields",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3150
+    },
+    {
+      "file": "knowledge-session-isolation.spec.ts",
+      "title": "never flashes the previous account private memory or products after an expired session in the same workspace",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2713
+    },
+    {
+      "file": "knowledge-session-isolation.spec.ts",
+      "title": "never flashes the previous account private memory or products after an expired session in the same workspace",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5098
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "keeps every upload in its original workspace when switching spaces during a delayed batch",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3234
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "refreshes successful batch deletions and retries only remaining assets after a partial failure",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2562
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "reports an unavailable project library and restores saved work through an explicit retry",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3209
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "keeps every upload in its original workspace when switching spaces during a delayed batch",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4296
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "refreshes successful batch deletions and retries only remaining assets after a partial failure",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2693
+    },
+    {
+      "file": "library-batch-recovery.spec.ts",
+      "title": "reports an unavailable project library and restores saved work through an explicit retry",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2800
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "manages a named collection through rename, membership removal and deletion while preserving both originals",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5385
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 16549
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9138
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2885
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2650
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "manages a named collection through rename, membership removal and deletion while preserving both originals",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5627
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "groups and locks two editable layers, blocks destructive controls and saves their ungrouped geometry after unlock",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 16844
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "applies a real pending local result after a canvas revision conflict without losing the newer edit or applying twice",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9083
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "combines project name, kind and personal favorite filters and restores a filtered project from the recycle bin",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2664
+    },
+    {
+      "file": "library-canvas-review.spec.ts",
+      "title": "uses inclusive UTC calendar dates for actual settled local jobs and exports exactly the visible statistics",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2916
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "the local installation owner adds internal credits once and sees the refreshed balance",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2188
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a lost credit response survives reload and retries the same request without duplicate credit",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3782
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a workspace owner without installation ownership has no local grant control",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1555
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "the local installation owner adds internal credits once and sees the refreshed balance",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2325
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a lost credit response survives reload and retries the same request without duplicate credit",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3852
+    },
+    {
+      "file": "local-test-credits.spec.ts",
+      "title": "a workspace owner without installation ownership has no local grant control",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1617
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists en interface language while keeping creation language separate and translating account and help pages",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5734
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists ar interface language while keeping creation language separate and translating account and help pages",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5235
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists en interface language while keeping creation language separate and translating account and help pages",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5372
+    },
+    {
+      "file": "locale.spec.ts",
+      "title": "persists ar interface language while keeping creation language separate and translating account and help pages",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5337
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "creates a real read-only API key through the UI, isolates its workspace and immediately revokes it",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4206
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "saves, supplements, reloads and withdraws a support record through actual controls",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6295
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "keeps each unsaved support reply attached to its own ticket when changing records",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3016
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed support save does not clear newer drafts in either the original or another ticket",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4188
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the same creation dialog",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2530
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the reopened creation dialog",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2914
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed withdrawal closes only its submitted ticket and preserves another open record",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2782
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "invites a viewer, changes the actual member role and revokes team access while preserving team work",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8622
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "creates a real read-only API key through the UI, isolates its workspace and immediately revokes it",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3782
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "saves, supplements, reloads and withdraws a support record through actual controls",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6303
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "keeps each unsaved support reply attached to its own ticket when changing records",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3019
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed support save does not clear newer drafts in either the original or another ticket",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3252
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the same creation dialog",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3578
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed ticket creation preserves later edits in the reopened creation dialog",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3501
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "a delayed withdrawal closes only its submitted ticket and preserves another open record",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2698
+    },
+    {
+      "file": "management-lifecycle.spec.ts",
+      "title": "invites a viewer, changes the actual member role and revokes team access while preserving team work",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9806
+    },
+    {
+      "file": "material-designs.spec.ts",
+      "title": "restores ordered marketing modules and their own real references from the server, then preserves them while saving free creation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6784
+    },
+    {
+      "file": "material-designs.spec.ts",
+      "title": "restores ordered marketing modules and their own real references from the server, then preserves them while saving free creation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6841
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8161
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "reuses an inspiration with its actual reference image and restores the persisted draft after refresh",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5194
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "uploads a real image, confirms local resize, downloads actual pixels and restores history after worker restart",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9251
+    },
+    {
+      "file": "media.spec.ts",
+      "title": "reuses an inspiration with its actual reference image and restores the persisted draft after refresh",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5414
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "reads selected model metadata through the real API and presents fixed values with truthful provenance",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2175
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "blocks generation while model information is loading or failed and explicitly retries without losing the brief",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2496
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "ignores a delayed previous model response and quotes only the current model with its own revision",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1997
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "preserves a now unsupported duration until explicit correction and quotes the corrected value with the refreshed proof",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5534
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "disables an already open quote when its model information expires instead of submitting stale settings",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7268
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented image dimensions survive reload and reach the quote with their capability proof",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3123
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented video controls quote fifteen seconds with synchronized audio and 4K",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2277
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home starts with ready defaults and an actionable empty prompt without creating a quote or job",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2186
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home restores text entered before metadata is ready and finishes defaults without replacing an explicit saved choice",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3458
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "reads selected model metadata through the real API and presents fixed values with truthful provenance",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2393
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "blocks generation while model information is loading or failed and explicitly retries without losing the brief",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2105
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "ignores a delayed previous model response and quotes only the current model with its own revision",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2060
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "preserves a now unsupported duration until explicit correction and quotes the corrected value with the refreshed proof",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5537
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "disables an already open quote when its model information expires instead of submitting stale settings",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7268
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented image dimensions survive reload and reach the quote with their capability proof",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3418
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "documented video controls quote fifteen seconds with synchronized audio and 4K",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3646
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home starts with ready defaults and an actionable empty prompt without creating a quote or job",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2341
+    },
+    {
+      "file": "model-capability-refresh.spec.ts",
+      "title": "home restores text entered before metadata is ready and finishes defaults without replacing an explicit saved choice",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3448
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "a failed background refresh retains other stage drafts and the successfully saved connection",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3042
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "selecting an explicit Seedream model chooses its image protocol without rewriting model aliases",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3632
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "configuration discovers before selecting a model, persists encrypted keys and keeps stage drafts",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3844
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "directory failure preserves configuration, manual models work, and removing a key is explicit",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2772
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "saves and clears a separate vision model without replacing the planning model or calling either model",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2603
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "a failed background refresh retains other stage drafts and the successfully saved connection",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3113
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "selecting an explicit Seedream model chooses its image protocol without rewriting model aliases",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3666
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "configuration discovers before selecting a model, persists encrypted keys and keeps stage drafts",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3968
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "directory failure preserves configuration, manual models work, and removing a key is explicit",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4421
+    },
+    {
+      "file": "model-connections.spec.ts",
+      "title": "saves and clears a separate vision model without replacing the planning model or calling either model",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4181
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows a loading state until the actual isolated notification response arrives",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2314
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows one injected notification failure and retries against the real API without an empty-state claim",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1793
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "reaches notification 25 through real pagination and preserves read and workspace boundaries",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2002
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "filters actual review events and keeps unread counts synchronized across category pages and spaces",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2298
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates en team role labels while retaining the actual owner role",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2575
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates ar team role labels while retaining the actual owner role",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1587
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows a loading state until the actual isolated notification response arrives",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1355
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "shows one injected notification failure and retries against the real API without an empty-state claim",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2746
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "reaches notification 25 through real pagination and preserves read and workspace boundaries",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2033
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "filters actual review events and keeps unread counts synchronized across category pages and spaces",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2811
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates en team role labels while retaining the actual owner role",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1739
+    },
+    {
+      "file": "notifications-team.spec.ts",
+      "title": "translates ar team role labels while retaining the actual owner role",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2759
+    },
+    {
+      "file": "onboarding-defaults.spec.ts",
+      "title": "completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6411
+    },
+    {
+      "file": "onboarding-defaults.spec.ts",
+      "title": "completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7085
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in dark theme",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2923
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in light theme",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3320
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in dark theme",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2378
+    },
+    {
+      "file": "placeholder-contrast-review.spec.ts",
+      "title": "home placeholder and explanatory text remain readable in light theme",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1791
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "finds a saved draft through the home project navigation and returns to the exact brief without generating",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3687
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "searches the entire tool catalog and recovers from an empty search",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2254
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "keeps detail-page preparation and its action within a notebook screen",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2637
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "renders the complete product shell without overflow or page errors",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 14131
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "finds a saved draft through the home project navigation and returns to the exact brief without generating",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4017
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "searches the entire tool catalog and recovers from an empty search",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3225
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "keeps detail-page preparation and its action within a notebook screen",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3421
+    },
+    {
+      "file": "product-experience.spec.ts",
+      "title": "renders the complete product shell without overflow or page errors",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 18151
+    },
+    {
+      "file": "production-security.spec.ts",
+      "title": "production security policy permits sign-in, real media and saved canvas exports without violations",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 8995
+    },
+    {
+      "file": "production-security.spec.ts",
+      "title": "production security policy permits sign-in, real media and saved canvas exports without violations",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 9363
+    },
+    {
+      "file": "quote-confirmation.spec.ts",
+      "title": "shows separate music and generated sound choices in a real quote without submitting a model task",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5779
+    },
+    {
+      "file": "quote-confirmation.spec.ts",
+      "title": "shows separate music and generated sound choices in a real quote without submitting a model task",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6295
+    },
+    {
+      "file": "quote-expiry.spec.ts",
+      "title": "expires a historical retry quote without a model hook and requires a new quote before creating one retry",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7612
+    },
+    {
+      "file": "quote-expiry.spec.ts",
+      "title": "expires a historical retry quote without a model hook and requires a new quote before creating one retry",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 7773
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "image reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3783
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "video reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3448
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "isolates all four drafts and returns a delayed uploaded reference to its original mode and role",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2960
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "keeps a late reference study with its original draft and blocks confirmation until the owned plan can be read",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3481
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "shows the reference role controls in English and prevents selecting the subject itself as the style reference",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3241
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "replica waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3934
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "referenced-original waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4308
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "refreshes expired capabilities after a completed reference study without another paid preparation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3007
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "image reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3513
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "video reference recreation keeps material roles and requires the frozen study even when ordinary confirmation is disabled",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3692
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "isolates all four drafts and returns a delayed uploaded reference to its original mode and role",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4092
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "keeps a late reference study with its original draft and blocks confirmation until the owned plan can be read",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3663
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "shows the reference role controls in English and prevents selecting the subject itself as the style reference",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3438
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "replica waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4013
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "referenced-original waits for the longer reference analysis deadline and preserves the same request after an unknown timeout",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4366
+    },
+    {
+      "file": "reference-recreation.spec.ts",
+      "title": "refreshes expired capabilities after a completed reference study without another paid preparation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3101
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "forgot-password navigation and return to login work without reloading",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3852
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "session retry returns to login when a temporary server error becomes an expired session",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3146
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "forgot-password navigation and return to login work without reloading",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2868
+    },
+    {
+      "file": "session-recovery-review.spec.ts",
+      "title": "session retry returns to login when a temporary server error becomes an expired session",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2146
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "navigation closes the mobile drawer for account and support destinations",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 6434
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "uses Create as the single creation destination and removes duplicate home navigation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2750
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "global search exposes loading, a recoverable failure and a real project result",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4023
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keyboard users can skip navigation and recover focus after closing search",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1557
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "a conditionally mounted creation assistant restores focus to the available settings trigger",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2658
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keeps navigation open when a delayed homepage module normalizes its creation-kind query",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3221
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "navigation closes the mobile drawer for account and support destinations",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5196
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "uses Create as the single creation destination and removes duplicate home navigation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3166
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "global search exposes loading, a recoverable failure and a real project result",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3085
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keyboard users can skip navigation and recover focus after closing search",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2663
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "a conditionally mounted creation assistant restores focus to the available settings trigger",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3246
+    },
+    {
+      "file": "shell-quality.spec.ts",
+      "title": "keeps navigation open when a delayed homepage module normalizes its creation-kind query",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3326
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps five primary destinations and every secondary destination reachable without a media request",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1916
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps en navigation, account actions, direction and chosen theme intact",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1837
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps ar navigation, account actions, direction and chosen theme intact",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1848
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "switches the workspace through the existing session and signs out through the account panel",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2370
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps five primary destinations and every secondary destination reachable without a media request",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3342
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps en navigation, account actions, direction and chosen theme intact",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3347
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "keeps ar navigation, account actions, direction and chosen theme intact",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3375
+    },
+    {
+      "file": "studio-navigation.spec.ts",
+      "title": "switches the workspace through the existing session and signs out through the account panel",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3309
+    },
+    {
+      "file": "support-channels.spec.ts",
+      "title": "shows truthful contact availability, retries the configured QR image and opens a separate survey",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4253
+    },
+    {
+      "file": "support-channels.spec.ts",
+      "title": "shows truthful contact availability, retries the configured QR image and opens a separate survey",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4562
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "shows missing team contract and payment configuration without creating a usable team",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2486
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "recovers the same unpaid team order after refresh and lets its creator close the draft",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3856
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "guides a legacy team owner into the existing team instead of offering another creation",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2494
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "translates the team gate in English and Arabic while preserving user team names",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3466
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "shows missing team contract and payment configuration without creating a usable team",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2533
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "recovers the same unpaid team order after refresh and lets its creator close the draft",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3834
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "guides a legacy team owner into the existing team instead of offering another creation",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2628
+    },
+    {
+      "file": "team-creation.spec.ts",
+      "title": "translates the team gate in English and Arabic while preserving user team names",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4049
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "new accounts explicitly default to dark while the operating system uses light",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 1551
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3210
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "explicit light and dark choices are not overridden by operating-system changes",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3072
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "a legacy account without a theme keeps dark appearance without rewriting stored preferences",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2069
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "new accounts explicitly default to dark while the operating system uses light",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2056
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2625
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "explicit light and dark choices are not overridden by operating-system changes",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2547
+    },
+    {
+      "file": "theme-preference-review.spec.ts",
+      "title": "a legacy account without a theme keeps dark appearance without rewriting stored preferences",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2065
+    },
+    {
+      "file": "tool-asset-recovery-review.spec.ts",
+      "title": "locks tool inputs until delayed draft assets are restored, then saves the chosen replacement",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3154
+    },
+    {
+      "file": "tool-asset-recovery-review.spec.ts",
+      "title": "locks tool inputs until delayed draft assets are restored, then saves the chosen replacement",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3153
+    },
+    {
+      "file": "tool-draft-loading.spec.ts",
+      "title": "blocks tool draft writes until project messages recover and offers a safe retry after a read failure",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4353
+    },
+    {
+      "file": "tool-draft-loading.spec.ts",
+      "title": "blocks tool draft writes until project messages recover and offers a safe retry after a read failure",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4915
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in dark theme",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2601
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in light theme",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2623
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "floating drawers fit narrow screens and restore trigger focus",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2780
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "desktop rail keeps account and workspace controls reachable on short screens",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2813
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "home keeps its creative controls visible in both themes",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2143
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in dark theme",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2620
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "brand action text remains readable in light theme",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2659
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "floating drawers fit narrow screens and restore trigger focus",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2014
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "desktop rail keeps account and workspace controls reachable on short screens",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3404
+    },
+    {
+      "file": "ui-audit.spec.ts",
+      "title": "home keeps its creative controls visible in both themes",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3335
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "shares one recoverable image and video draft across both entry URLs without creating a project",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4780
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "previews without changing a draft, applies only explicit text choices and never undoes later manual edits",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3604
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "quotes the supported direction with the current server unit price without submitting a job",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3637
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "quotes the supported direction with the current server unit price without submitting a job",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2672
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps an unsupported historical marketing group intact and blocks new quotes until the user resolves it",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3530
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 12000 characters",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4509
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 2100 characters",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5084
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "shares one recoverable image and video draft across both entry URLs without creating a project",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5028
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "previews without changing a draft, applies only explicit text choices and never undoes later manual edits",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4875
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "quotes the supported direction with the current server unit price without submitting a job",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3084
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "quotes the supported direction with the current server unit price without submitting a job",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3065
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps an unsupported historical marketing group intact and blocks new quotes until the user resolves it",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3415
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 12000 characters",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4744
+    },
+    {
+      "file": "unified-creation.spec.ts",
+      "title": "keeps the complete saved draft when appending an idea would exceed 2100 characters",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4009
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "does not attach a delayed image-mode upload to the video draft after switching creation kind",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5034
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "preserves same-kind prompt edits while an accepted upload response is delayed",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5469
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "does not attach a delayed image-mode upload to the video draft after switching creation kind",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5445
+    },
+    {
+      "file": "upload-context-review.spec.ts",
+      "title": "preserves same-kind prompt edits while an accepted upload response is delayed",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4536
+    },
+    {
+      "file": "upload-recovery.spec.ts",
+      "title": "handles browser file drop and paste, recovers a lost upload response without duplicate assets, and rejects disguised files",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4558
+    },
+    {
+      "file": "upload-recovery.spec.ts",
+      "title": "handles browser file drop and paste, recovers a lost upload response without duplicate assets, and rejects disguised files",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4936
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached project errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5194
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial project errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2769
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached document errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4210
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial document errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2764
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached messages errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 4229
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial messages errors preserve the appropriate workbench recovery path",
+      "project": "desktop",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2766
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached project errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5860
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial project errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 2784
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached document errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5888
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial document errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3781
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "cached messages errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 5386
+    },
+    {
+      "file": "workbench-background-error.spec.ts",
+      "title": "initial messages errors preserve the appropriate workbench recovery path",
+      "project": "mobile",
+      "outcome": "expected",
+      "resultCount": 1,
+      "durationMs": 3795
+    }
+  ],
+  "frozenFiles": 649,
+  "changedDuringRun": []
+}

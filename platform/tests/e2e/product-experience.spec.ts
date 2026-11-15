@@ -16,19 +16,24 @@ test.beforeEach(async ({ page, studio }) => {
   ]);
 });
 
-test('finds a saved draft from Home and returns to the exact brief without generating', async ({
+test('finds a saved draft through the home project navigation and returns to the exact brief without generating', async ({
   page,
   studio,
 }) => {
   await page.goto(studio.origin);
-  await page.locator('.entry-image').click();
+  await page.getByRole('button', { name: '图片创作', exact: true }).click();
   const brief = '陶瓷杯主图，自然光、暖白背景，保留杯身比例。';
   await page.getByRole('textbox', { name: '创作需求', exact: true }).fill(brief);
   await page.getByRole('button', { name: '保存草稿', exact: true }).click();
   await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
   const destination = new URL(page.url()).pathname;
   await page.goto(studio.origin);
-  const project = page.locator(`.home-session[href="${destination}"]`);
+  const navigation = page.getByRole('button', { name: '展开导航', exact: true });
+  if (await navigation.isVisible()) await navigation.click();
+  await page.getByRole('link', { name: '项目', exact: true }).filter({ visible: true }).click();
+  const project = page
+    .locator(`.project-card a[href="${destination}"]`)
+    .filter({ hasText: '继续创作' });
   await expect(project).toBeVisible();
   await project.click();
   await expect(page.getByRole('textbox', { name: '创作需求', exact: true })).toHaveValue(brief);

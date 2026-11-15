@@ -1,0 +1,9 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  2 passed (2)
+      Tests  25 passed (25)
+   Start at  07:28:49
+   Duration  352ms (import 67%, tests 16%, transform 15%, worker 2%)
+

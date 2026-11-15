@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-11-13T10:34:23.318Z",
+  "scope": "Read-only prompt inventory; no model calls or product code edits",
+  "files": [
+    {
+      "file": "platform/src/server/providers/native-planner.ts",
+      "sha256": "2561bb7a65b49899cfb4abe8feafc377ca8dac803174874859a9dc88472ee26b"
+    },
+    {
+      "file": "platform/src/server/providers/native-reference-study.ts",
+      "sha256": "62548f4507153cd4bdf3b5a9e72dd737055b9f1e874510ba6acf8a443b1be092"
+    },
+    {
+      "file": "platform/src/server/providers/native-background-study.ts",
+      "sha256": "72a166637307cee34147978e8a9933e0cb1d0a83c48bfdf64942f77df0de1ff7"
+    },
+    {
+      "file": "platform/src/contracts/creative-strategy.ts",
+      "sha256": "e17cd385a3777d5a586528201ca1a538f6651057acc72dea4c1da7b05f272d70"
+    },
+    {
+      "file": "platform/src/server/tasks/creative-capture.ts",
+      "sha256": "7177a52696e70a513639b1ca677b6afa6041702aea1da2585879b8e5ff4542a3"
+    },
+    {
+      "file": "platform/src/server/tasks/native-capture.ts",
+      "sha256": "4816621dc02b511dc26529db8a070c48ba1eb6876ef33dd2b4968542baaa5d33"
+    },
+    {
+      "file": "platform/src/server/tasks/creative-briefs.ts",
+      "sha256": "89acb1eac524b188e97dd843cba64144c04a68eaa453f33cae21c379f1b503e9"
+    },
+    {
+      "file": "platform/src/server/providers/native.ts",
+      "sha256": "929b6f55318856ecce6093b854512ab24e3d09ce36d7f0f6f0121ecc07baf596"
+    },
+    {
+      "file": "platform/src/server/providers/native-background.ts",
+      "sha256": "bd45bc3df45bf0c3f08b8b33c4072596c20a256547ffdf910d39c5fe66aecf5b"
+    },
+    {
+      "file": "platform/src/server/providers/native-replica.ts",
+      "sha256": "d433bc2460ddc234528c76ab3e572ba7127ef118faee861227c564942cdbf422"
+    },
+    {
+      "file": "platform/src/server/providers/native-video-route.ts",
+      "sha256": "967d5bf57917de7bd781cb5d54da0bc230d9ef34c9798f795eaa1eb683181a41"
+    },
+    {
+      "file": "platform/src/web/components/JobSubmit.tsx",
+      "sha256": "7eeda79a212eafe8849cdb57f3801772d3f339fec892f231b2659a41ae073ff5"
+    }
+  ],
+  "systemPromptLengths": [
+    {
+      "name": "文字规划",
+      "characters": 6746
+    },
+    {
+      "name": "参考复刻视觉分析",
+      "characters": 1171
+    },
+    {
+      "name": "精确背景视觉分析",
+      "characters": 1695
+    }
+  ]
+}

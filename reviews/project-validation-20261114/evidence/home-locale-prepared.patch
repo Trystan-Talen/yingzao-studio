@@ -1,0 +1,184 @@
+--- a/platform/src/web/lib/i18n.ts
++++ b/platform/src/web/lib/i18n.ts
+@@ -6135,6 +6135,32 @@
+   ...EXPERIENCE_TRANSLATIONS,
+   ...MODEL_CAPABILITY_TRANSLATIONS,
+   ...CREATIVE_TRANSLATIONS,
++  种草海报: { en: 'Product showcase poster', ar: 'ملصق لعرض منتج' },
++  场景大片: { en: 'Cinematic scene', ar: 'مشهد سينمائي' },
++  营销物料: { en: 'Marketing assets', ar: 'مواد تسويقية' },
++  种草短片: { en: 'Product showcase clip', ar: 'مقطع لعرض منتج' },
++  产品广告: { en: 'Product ad', ar: 'إعلان منتج' },
++  开箱视频: { en: 'Unboxing video', ar: 'فيديو فتح العبوة' },
++  品牌短片: { en: 'Brand film', ar: 'فيلم قصير للعلامة التجارية' },
++  口播视频: { en: 'Talking-head video', ar: 'فيديو تقديم أمام الكاميرا' },
++  夜深了: { en: "It's late", ar: 'الوقت متأخر' },
++  整套长图: { en: 'Complete detail page', ar: 'صفحة منتج متكاملة' },
++  '抠图 · 扩图 · 高清': {
++    en: 'Cut out · Extend · Upscale',
++    ar: 'إزالة الخلفية · توسيع · تحسين الدقة',
++  },
++  上传与复用: { en: 'Upload and reuse', ar: 'رفع وإعادة استخدام' },
++  海量案例: { en: 'Explore examples', ar: 'استكشف الأمثلة' },
++  '今天想映造什么？': { en: 'What would you like to create today?', ar: 'ماذا تود أن تنشئ اليوم؟' },
++  '参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在': {
++    en: 'Drag references onto “Add assets” · Creations are saved to projects. Open',
++    ar: 'اسحب الصور المرجعية إلى «إضافة مواد» · تُحفظ الأعمال تلقائيًا في المشاريع. افتح',
++  },
++  中查看: { en: 'to check progress.', ar: 'لمتابعة التقدم.' },
++  服务商: { en: 'Provider', ar: 'مزوّد الخدمة' },
++  最高清晰度: { en: 'Max resolution', ar: 'أقصى دقة' },
++  可选比例: { en: 'Aspect ratios', ar: 'نسب الأبعاد المتاحة' },
++  种: { en: 'options', ar: 'خيارات' },
+   '演示空间 · 测试数据': { en: 'Demo workspace · Test data', ar: 'مساحة تجريبية · بيانات اختبار' },
+   '在首页的快速创作区选择图片、视频或商品详情页。填写需求、添加参考素材并确认费用后开始生成；也可以从灵感探索中选择画面继续创作。服务未连接时仍可保存草稿和整理素材。':
+     {
+--- a/platform/tests/e2e/home-appearance.spec.ts
++++ b/platform/tests/e2e/home-appearance.spec.ts
+@@ -2,9 +2,64 @@
+ import { join } from 'node:path';
+ import type { Locator, Page } from '@playwright/test';
+ import { test, expect } from './fixtures';
+-import { t } from '../../src/web/lib/i18n';
++import { t, TRANSLATIONS, type Locale } from '../../src/web/lib/i18n';
+ 
+ test.use({ experienceProviders: true, recoveryEnabled: false, smsEnabled: false });
++
++const originalDisplayName = '首页用户原名';
++// Cover every rotating image/video word and every greeting without depending on animation timing.
++const homeStaticCopy = [
++  '种草海报',
++  '场景大片',
++  '营销物料',
++  '种草短片',
++  '产品广告',
++  '开箱视频',
++  '品牌短片',
++  '口播视频',
++  '夜深了',
++  '整套长图',
++  '抠图 · 扩图 · 高清',
++  '上传与复用',
++  '海量案例',
++  '今天想映造什么？',
++  '参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在',
++  '中查看',
++  '服务商',
++  '最高清晰度',
++  '可选比例',
++  '种',
++  '商品主图',
++  '白底图',
++  '早上好',
++  '中午好',
++  '下午好',
++  '晚上好',
++] as const;
++
++async function localizedHomeCopy(page: Page, locale: Locale) {
++  await expect(page.locator('.yz-greeting')).toContainText(originalDisplayName);
++  if (locale === 'zh-CN') return;
++  await expect
++    .soft(page.locator('.studio-launch-heading h1'))
++    .not.toHaveAttribute('aria-label', /[\u4e00-\u9fff]/);
++  // User display names and provider/model names remain their original content.
++  for (const region of [
++    '.studio-launch-heading h1',
++    '.studio-compose-shell',
++    '.studio-discover',
++    '.yz-capabilities',
++    '.yz-result-hint',
++  ])
++    expect.soft(await page.locator(region).innerText(), region).not.toMatch(/[\u4e00-\u9fff]/);
++  const greeting = (await page.locator('.yz-greeting').innerText()).replace(
++    `，${originalDisplayName}`,
++    '',
++  );
++  expect
++    .soft(greeting, 'The greeting is translated without rewriting the user name')
++    .not.toMatch(/[\u4e00-\u9fff]/);
++}
+ 
+ async function horizontalBounds(page: Page, controls: Locator) {
+   const width = page.viewportSize()!.width;
+@@ -69,15 +124,18 @@
+     studio,
+   }) => {
+     const account = await studio.existingIdentitySession();
+-    studio.services.db.sqlite.prepare('UPDATE users SET preferences_json=? WHERE id=?').run(
+-      JSON.stringify({
+-        ...account.user.preferences,
+-        onboardingCompleted: true,
+-        locale: variant.locale,
+-        theme: variant.theme,
+-      }),
+-      account.user.id,
+-    );
++    studio.services.db.sqlite
++      .prepare('UPDATE users SET preferences_json=?,display_name=? WHERE id=?')
++      .run(
++        JSON.stringify({
++          ...account.user.preferences,
++          onboardingCompleted: true,
++          locale: variant.locale,
++          theme: variant.theme,
++        }),
++        originalDisplayName,
++        account.user.id,
++      );
+     await page.context().addCookies([
+       {
+         name: 'studio_session',
+@@ -107,9 +165,16 @@
+         .poll(() => card.locator('img').evaluate((image: HTMLImageElement) => image.naturalWidth))
+         .toBeGreaterThan(0);
+     }
++    await localizedHomeCopy(page, variant.locale);
+     if (variant.locale !== 'zh-CN') {
+-      for (const region of ['.studio-launch-heading', '.studio-compose-shell', '.studio-discover'])
+-        expect(await page.locator(region).innerText()).not.toMatch(/[\u4e00-\u9fff]/);
++      const locale = variant.locale;
++      const untranslated = homeStaticCopy.filter((key) => {
++        const entry = Object.hasOwn(TRANSLATIONS, key) ? TRANSLATIONS[key] : undefined;
++        return !entry?.[locale].trim() || /[\u4e00-\u9fff]/.test(entry[locale]);
++      });
++      expect
++        .soft(untranslated, 'All static, rotating, and greeting copy has a translation')
++        .toEqual([]);
+     }
+     const quick = page.locator('.composer[data-presentation="quick"]');
+     await page.evaluate(() => scrollTo(0, 0));
+@@ -161,10 +226,7 @@
+       expect(box!.y + box!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+     }
+     await horizontalBounds(page, composer.locator('button, select, textarea'));
+-    if (variant.locale !== 'zh-CN') {
+-      for (const region of ['.studio-launch-heading', '.studio-compose-shell', '.studio-discover'])
+-        expect(await page.locator(region).innerText()).not.toMatch(/[\u4e00-\u9fff]/);
+-    }
++    await localizedHomeCopy(page, variant.locale);
+ 
+     const platform = composer.getByRole('combobox', {
+       name: t('发布平台', variant.locale),
+@@ -178,6 +240,21 @@
+       .click();
+     const advanced = page.getByRole('dialog', { name: t('创作设置', variant.locale), exact: true });
+     await expect(advanced).toBeVisible();
++    const modelCard = advanced.locator('.composer-model-card');
++    await expect(modelCard).toBeVisible();
++    await expect(modelCard.locator('dt').first()).toHaveText(t('服务商', variant.locale));
++    const ratioDetails = modelCard
++      .getByText(t('可选比例', variant.locale), { exact: true })
++      .locator('..')
++      .locator('dd');
++    await expect(ratioDetails).toBeVisible();
++    expect(await ratioDetails.innerText()).toMatch(new RegExp(`^\\d+ ${t('种', variant.locale)}$`));
++    if (variant.locale !== 'zh-CN') {
++      expect
++        .soft(await modelCard.locator('dt').allTextContents())
++        .not.toEqual(expect.arrayContaining([expect.stringMatching(/[\u4e00-\u9fff]/)]));
++      expect.soft(await ratioDetails.innerText()).not.toMatch(/[\u4e00-\u9fff]/);
++    }
+     await advanced.getByText(t('更多偏好', variant.locale), { exact: true }).click();
+     const settings = [
+       '生成模型',

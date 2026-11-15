@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-11-14T04:04:27.426736+00:00",
+  "unitTests": {
+    "files": 150,
+    "passed": 2339,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browserTests": {
+    "passed": 66,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "projects": {
+      "desktop": 33,
+      "mobile": 33
+    },
+    "singleFinalSelectedRun": true,
+    "fullRepositorySuite": false,
+    "report": "platform/var/e2e/run-pbaVGN"
+  },
+  "staticChecks": {
+    "types": "passed",
+    "lint": "passed",
+    "format": "passed"
+  },
+  "productionBuild": "passed",
+  "isolatedProductionRuntime": "passed",
+  "sourceManifest": {
+    "fileCount": 381,
+    "sha256": "1c5eab6693aa93f641b6b2b26a44b8308b44fb177e900a004f9ab37c5dd8695e",
+    "unchangedAtDelivery": true
+  },
+  "newMigrations": [
+    "0041-creative-planner-revision.sql"
+  ],
+  "runtimeDatabaseModified": false,
+  "paidModelCalls": 0,
+  "remoteWorkflowModified": false
+}

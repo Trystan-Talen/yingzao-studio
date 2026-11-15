@@ -1,7 +1,128 @@
 {
   "schemaVersion": 1,
   "recordedDate": "2026-10-16",
-  "phase": "商品质量改进工程修复通过；4图3视频保存成功但严格视觉验收均拒收，高质量成品目标未完成。",
+  "phase": "全项目完整复查完成：最终冻结源码156文件2394项单元／集成，全部72文件510项浏览器（桌面252、手机252、笔记本5、平板1），均零失败／跳过／重试；生产构建及隔离运行通过。真实外部效果与原未实现／范围未知项保留。",
+  "latestCreativeKnowledgeRecheck": {
+    "recordedAt": "2026-11-14T04:04:27.426736+00:00",
+    "unitTests": {
+      "files": 150,
+      "passed": 2339,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browserTests": {
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "projects": {
+        "desktop": 33,
+        "mobile": 33
+      },
+      "singleFinalSelectedRun": true,
+      "fullRepositorySuite": false,
+      "report": "platform/var/e2e/run-pbaVGN"
+    },
+    "staticChecks": {
+      "types": "passed",
+      "lint": "passed",
+      "format": "passed"
+    },
+    "productionBuild": "passed",
+    "isolatedProductionRuntime": "passed",
+    "sourceManifest": {
+      "fileCount": 381,
+      "sha256": "1c5eab6693aa93f641b6b2b26a44b8308b44fb177e900a004f9ab37c5dd8695e",
+      "unchangedAtDelivery": true
+    },
+    "newMigrations": [
+      "0041-creative-planner-revision.sql"
+    ],
+    "runtimeDatabaseModified": false,
+    "paidModelCalls": 0,
+    "remoteWorkflowModified": false,
+    "status": "状态：已确认缺陷修复完成，交叉审查及最终回归通过。未在已列范围内发现剩余阻塞问题；不作“所有场景绝无缺陷”的保证。上一轮通过数字不代替本轮结论。",
+    "scope": "个人创作记忆、既有品牌复用、产品资料库；单项图片／视频主创作的选择、规划、来源快照、执行和模拟产物保存下载。",
+    "findings": [
+      "相同需求的偏好权重随时间变化，可能绕过分析中／结果未知保护；工作流规划原本缺少相同保护，可能重复请求计费服务",
+      "产品和记忆的部分更新继承创建默认值，省略字段会清空资料或恢复启用",
+      "库内图片作为唯一原图配合蒙版时，规划就绪后报价仍查原始上传列表，错误拒绝继续",
+      "分组模式保存的是临时关闭后的参数，刷新或切换入口丢失原记忆／产品图偏好",
+      "版本冲突后只能退出编辑器或持续失败，无法保留输入完成修订",
+      "数据库与选取逻辑的主题大小写规则不一致，允许同用途的矛盾记忆同时带入",
+      "非创建者将共享产品转私有，旧流程直到末尾才报不存在并回滚"
+    ],
+    "report": "reviews/creative-memory-recheck-20261114/REVIEW.md",
+    "evidence": [
+      "reviews/creative-memory-recheck-20261114/evidence/checks.json",
+      "reviews/creative-memory-recheck-20261114/evidence/source-changes.json"
+    ],
+    "previousPhaseSummary": "当前新增创作记忆与产品资料的本地实现和工程验收完成；正式运行部署、真实模型新增效果及历史商业未验项继续保留。"
+  },
+  "latestCreativeKnowledge": {
+    "recordedAt": "2026-11-14T03:43:12.760892+00:00",
+    "status": "本地实现、审查及已列范围验收完成；正式运行部署与真实模型效果未纳入本轮。",
+    "scope": "个人创作记忆、既有品牌复用、产品资料库；单项图片／视频主创作的选择、规划、来源快照、执行和模拟产物保存下载。",
+    "design": [
+      "长期背景显式替换；偏好默认90天半衰、低于四分之一停止自动带入；临时要求必填截止时间。",
+      "本人当前空间隔离，开放接口不能借用个人记忆；最多8条、主题与正文合计6000字。",
+      "产品事实独立于个人偏好；产品图显式选择；品牌私有权限不能经共享产品泄露。",
+      "补答和执行使用确认快照，新方案读取新版；到期旧资料拒绝新报价，已报价任务不改写。"
+    ],
+    "unitTests": {
+      "files": 149,
+      "passed": 2308,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browserTests": {
+      "baselinePassed": 86,
+      "baselineReport": "platform/var/e2e/run-NTfUfo",
+      "behaviorDeltaPassed": 10,
+      "behaviorDeltaReport": "platform/var/e2e/run-4753jX",
+      "singleItemDeltaPassed": 4,
+      "singleItemDeltaReport": "platform/var/e2e/run-asvtdk",
+      "translationDeltaPassed": 4,
+      "translationDeltaReport": "platform/var/e2e/run-XcfWgP",
+      "singleFullFinalRun": false,
+      "duplicateTestsNotSummed": true
+    },
+    "checks": {
+      "types": "通过",
+      "lint": "通过",
+      "format": "通过",
+      "productionBuild": "通过",
+      "isolatedRuntime": "通过"
+    },
+    "sourceManifest": {
+      "sha256": "66578ba8fb86b6dad44d392ff120846657ce82f956f43bddc1e67a93ee5c9b5f",
+      "fileCount": 379,
+      "unchangedAtDelivery": true
+    },
+    "fixed": [
+      "同一空间跨账户缓存及迟到响应隔离",
+      "回收产品修复失效素材和品牌关联后恢复",
+      "编辑加载重试和并发冲突保留草稿",
+      "阻断分组模块原文绕过新知识规划约束",
+      "英阿语记忆状态漏翻"
+    ],
+    "boundaries": [
+      "分组套图、独立工具、整套详情页不支持新资料关联；旧分组保留。",
+      "没有自动推断画像、向量数据库、无限资料检索或收费记忆提炼。",
+      "新增模型链路仅模拟和合同验收，不能证明真实模型遵循资料的效果。",
+      "远端旧版工作流须重新导入；本轮未修改远端。",
+      "未迁移正式运行库、修改正式媒体或重启正式服务；应用追加迁移前须在线备份、媒体校验和恢复检查。"
+    ],
+    "newPaidModelCalls": 0,
+    "runtimeDatabaseModified": false,
+    "evidence": [
+      "reviews/creative-memory-20261113/PLAN.md",
+      "reviews/creative-memory-20261113/DELIVERY.md",
+      "reviews/creative-memory-20261113/evidence/checks.json"
+    ],
+    "previousPhaseSummary": "参考复刻已实现、两类真实图片通过本例，正式源码工程全检通过；自动蒙版仍未过完整质量验收，真实视频创建按用户要求暂停。",
+    "followupReview": "reviews/creative-memory-recheck-20261114/REVIEW.md"
+  },
   "latestFrontendExperience": {
     "recordedAt": "2026-11-02T04:10:27.181Z",
     "scope": "首页横向快速创作、全站创意视觉、导航简化、模型主动核查与另一会话有效修改整合。",
@@ -118,7 +239,10 @@
     "latestFrontendExperience": "2026年10月30日前端体验重构与隔离主链验收；不提升真实模型商业质量结论",
     "latestGenerationIntegration": "2026年10月29日生成接入最新事实；只提升明确验收的窄范围",
     "latestDetailPageRepair": "2026年10月30日节点修复、云端第5版发布与测试额度记录；日期按UTC（协调世界时）",
-    "latestProductQuality": "最新商品质量与交互稳定性改进"
+    "latestProductQuality": "最新商品质量与交互稳定性改进",
+    "latestNativeFinalAcceptance": "2026年11月12日多参考质量修复及完整工程验收；只提升明确验证的样例与范围",
+    "latestNativeAutomaticAndReplica": "2026年11月12日自动蒙版与参考复刻最新验收；不扩大视频或其他商业能力结论",
+    "latestProjectValidation": "2026年11月14日全项目当前验证；最终浏览器状态单独确认，不继承历史数字"
   },
   "rules": [
     "保留F01–F52，数量不代表完成比例。",
@@ -1164,6 +1288,11 @@
           "kind": "2026-11-03需求理解与平台策略当前证据",
           "path": "reviews/creative-intent-20261103/DELIVERY.md",
           "note": "五平台与通用策略、关键追问、草稿恢复；本轮真实图片和视频各一例技术验收，严格商品保真与全面商业质量未通过。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "过期资料重试新报价校验；定时数据库异常收尾、租约失效不能保存结算。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
         }
       ],
       "historicalEvidence": [
@@ -1885,10 +2014,10 @@
       "id": "F17",
       "name": "图片复刻",
       "implementationStatus": "部分实现",
-      "verificationStatus": "未验证",
-      "blocker": "配置缺失",
+      "verificationStatus": "真实浏览器验证",
+      "blocker": "预算授权",
       "semanticEquivalent": null,
-      "assessmentBasis": "共享结果对比与继续创作组件已通过本机缩放结果的浏览器验证；图片复刻专用表单/提交未在本轮独立执行，不用共享组件通过代替此项验收。",
+      "assessmentBasis": "主体与参考作品分槽、实际参考分析、可确认复刻计划及主体图编辑执行均已实现；本轮原生复刻10项隔离合同重新通过。本轮完整446项浏览器通过，最后首页文案增量26项复测通过；历史两种真实图片只支持当时样例，不等于当前全部模型质量验收。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -1917,6 +2046,31 @@
           "kind": "共享组件浏览器证据；非本功能执行",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "creation-locale 4项包含本机缩放原图/结果对比；仅支持共享组件，不作为图片复刻专用流程通过。"
+        },
+        {
+          "kind": "2026-11-14当前源码与隔离验证核对",
+          "path": "reviews/project-validation-20261114/evidence/scope-current-findings.json",
+          "note": "F17逐项依据；历史证据不替代本轮验证。"
+        },
+        {
+          "kind": "2026-11-14隔离合同通过",
+          "path": "reviews/project-validation-20261114/evidence/scope-implementation.json",
+          "note": "native-replica.test.ts（原生复刻测试）10项通过，未外呼模型。"
+        },
+        {
+          "kind": "当前实现",
+          "path": "platform/src/server/providers/native-replica.ts",
+          "note": "主体图与参考分析分离，按确认方案执行。"
+        },
+        {
+          "kind": "历史窄范围真实样例",
+          "path": "reviews/reference-recreation-20261112/DELIVERY.md",
+          "note": "两类图片当时通过；视频分析不替代真实视频复刻成片。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/project-validation-20261114/evidence/browser-full.json",
+          "note": "完整446项桌面/手机/笔记本/平板基线通过；最后两文件文案增量另记26项，不相加。"
         }
       ],
       "historicalEvidence": [
@@ -1935,6 +2089,20 @@
           "source": "reviews/takeover/original-evidence-date-map.md",
           "sourceDate": "2026-10-13",
           "observation": "图片复刻参考/商品槽、通道、模型、比例与文字参数；空态未见数量字段。"
+        },
+        {
+          "kind": "2026-11-14逐项判定更新前的历史记录",
+          "archivedDate": "2026-11-14",
+          "source": "reviews/takeover/scope-ledger.json",
+          "previousCurrentAssessment": {
+            "implementationStatus": "部分实现",
+            "verificationStatus": "未验证",
+            "blocker": "配置缺失",
+            "assessmentBasis": "共享结果对比与继续创作组件已通过本机缩放结果的浏览器验证；图片复刻专用表单/提交未在本轮独立执行，不用共享组件通过代替此项验收。",
+            "remaining": [
+              "新广告参考生成不保证逐像素一致；当前已有输入原图与产物对比器及作为参考继续创作入口，真实复刻视觉质量未验证。"
+            ]
+          }
         }
       ],
       "currentOriginalEvidence": [
@@ -1950,7 +2118,9 @@
         }
       ],
       "remaining": [
-        "新广告参考生成不保证逐像素一致；当前已有输入原图与产物对比器及作为参考继续创作入口，真实复刻视觉质量未验证。"
+        "真实模型全链没有新增实测。历史两个图片样例不外推到任意商品或逐像素保真。",
+        "真实视频复刻成片及各供应商专用效果需独立授权验收；参考视频有限帧分析不是视频产物验收。",
+        "原站完整复刻语义仍按原调查边界记录，不由自有复刻实现推断等价。"
       ],
       "currentOriginalAssessment": "10月19日目录入口已有独立原件；完整表单参数仍按各自观察日期记录，不由入口确认推出执行/效果等价。"
     },
@@ -2386,6 +2556,11 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "tool-draft-loading 2项与media 2项真实处理/下载历史；高级工具专属分片另记。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-13项目审查与隔离回归",
+          "path": "reviews/project-audit-20261113/DELIVERY.md",
+          "note": "工具素材恢复期间禁交互，换图保存和重新打开检查持久化引用。"
         }
       ],
       "historicalEvidence": [
@@ -2844,6 +3019,11 @@
           "kind": "10月19日本机真实专项",
           "path": "reviews/takeover/library-canvas-statistics-validation.md",
           "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "项目迟到保存保留后续草稿，新建后继续更新同一记录。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
         }
       ],
       "historicalEvidence": [
@@ -2877,7 +3057,7 @@
       "verificationStatus": "真实浏览器验证",
       "blocker": "原站证据不足",
       "semanticEquivalent": null,
-      "assessmentBasis": "真实上传、丢失响应恢复、原件摘要与刷新已有浏览器验证；集合增改和空间边界有源码/合同，集合完整管理界面未在96项中执行。",
+      "assessmentBasis": "集合成员事务增量、软删关联保留、并发编辑、总成员限额和完整管理界面已有实现；本轮集合8项隔离合同通过。旧96项未执行集合管理只属于该历史轮次；本轮完整446项浏览器通过，最后首页文案增量26项复测通过。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -2899,6 +3079,31 @@
           "kind": "10月19日本机真实专项",
           "path": "reviews/takeover/library-canvas-statistics-validation.md",
           "note": "五场景桌面/手机10个不同用例分轮通过；最终样式后6项及手机43px真实红测分别归档，不冒称单轮10项全绿。"
+        },
+        {
+          "kind": "2026-11-13项目审查与隔离回归",
+          "path": "reviews/project-audit-20261113/DELIVERY.md",
+          "note": "集合事务增量保留回收站关联和并发成员，保持500总成员上限；错误重试及输入约束已核验。"
+        },
+        {
+          "kind": "2026-11-14当前源码与隔离验证核对",
+          "path": "reviews/project-validation-20261114/evidence/scope-current-findings.json",
+          "note": "F34逐项依据；历史证据不替代本轮验证。"
+        },
+        {
+          "kind": "2026-11-14集合服务合同通过",
+          "path": "reviews/project-validation-20261114/evidence/scope-implementation.json",
+          "note": "collection-membership.test.ts（集合成员测试）8项通过；完整浏览器含集合管理、并发和回收关联，见最终报告。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/project-validation-20261114/evidence/browser-full.json",
+          "note": "完整446项桌面/手机/笔记本/平板基线通过；最后两文件文案增量另记26项，不相加。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "素材与集合迟到响应隔离，第101集合分页及末页删除闭环。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
         }
       ],
       "historicalEvidence": [
@@ -2911,6 +3116,22 @@
           "externalClaim": "不涉及",
           "browserClaim": "UI集合新增/素材查看/原件",
           "boundaryClaim": "文件hash元数据存在，不代表跨空间物理去重；未冒充原站公共模特库"
+        },
+        {
+          "kind": "2026-11-14逐项判定更新前的历史记录",
+          "archivedDate": "2026-11-14",
+          "source": "reviews/takeover/scope-ledger.json",
+          "previousCurrentAssessment": {
+            "implementationStatus": "部分实现",
+            "verificationStatus": "真实浏览器验证",
+            "blocker": "原站证据不足",
+            "assessmentBasis": "真实上传、丢失响应恢复、原件摘要与刷新已有浏览器验证；集合增改和空间边界有源码/合同，集合完整管理界面未在96项中执行。",
+            "remaining": [
+              "命名集合新建/改名/关联/移除/组合搜索/删除集合保留原件已有桌面/手机实际通过；手机搜索压缩缺陷已真实红绿修复。",
+              "集合删除为软删除并保留历史关联；不声称跨空间物理去重。",
+              "原站公共模特库与人像视频语义另归F36；未复制第三方公共模特原件。"
+            ]
+          }
         }
       ],
       "currentOriginalEvidence": [
@@ -2921,7 +3142,7 @@
         }
       ],
       "remaining": [
-        "命名集合新建/改名/关联/移除/组合搜索/删除集合保留原件已有桌面/手机实际通过；手机搜索压缩缺陷已真实红绿修复。",
+        "本轮集合管理、回收站关联、并发增量及错误重试的桌面/手机浏览器均通过；旧历史范围保留，不用于外推未测试的原站语义。",
         "集合删除为软删除并保留历史关联；不声称跨空间物理去重。",
         "原站公共模特库与人像视频语义另归F36；未复制第三方公共模特原件。"
       ]
@@ -2931,9 +3152,9 @@
       "name": "人脸授权认证",
       "implementationStatus": "部分实现",
       "verificationStatus": "自动化验证",
-      "blocker": "外部服务限制",
+      "blocker": "代码缺失",
       "semanticEquivalent": null,
-      "assessmentBasis": "本轮已复核相关源码与下列当前证据；当前实现与原站语义等价分别判定。",
+      "assessmentBasis": "本地人物授权声明、素材版本、撤回及可注入核验状态机存在；当前服务没有注入正式核验提供方，也没有正式供应商适配。正式核验子项尚未实现，不是仅填写密钥即可启用。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -2950,6 +3171,11 @@
           "kind": "本轮当前证据",
           "path": "platform/tests/quality-workflows.test.ts",
           "note": "仅注入合同夹具，无真实人脸核验"
+        },
+        {
+          "kind": "2026-11-14当前源码与隔离验证核对",
+          "path": "reviews/project-validation-20261114/evidence/scope-current-findings.json",
+          "note": "F35逐项依据；历史证据不替代本轮验证。"
         }
       ],
       "historicalEvidence": [
@@ -2962,6 +3188,21 @@
           "externalClaim": "**真实认证适配未实现**",
           "browserClaim": "UI人物未认证；新授权页待末轮验证",
           "boundaryClaim": "只有接口注入契约，部署无实际FACE实现；不可说加密钥即完成实名认证"
+        },
+        {
+          "kind": "2026-11-14逐项判定更新前的历史记录",
+          "archivedDate": "2026-11-14",
+          "source": "reviews/takeover/scope-ledger.json",
+          "previousCurrentAssessment": {
+            "implementationStatus": "部分实现",
+            "verificationStatus": "自动化验证",
+            "blocker": "外部服务限制",
+            "assessmentBasis": "本轮已复核相关源码与下列当前证据；当前实现与原站语义等价分别判定。",
+            "remaining": [
+              "当前人物素材上传界面不能证明历史认证已下线，也不能证明原站采用身份证实名或活体。",
+              "现有本地人物授权声明/素材版本与认证状态机不等于正式核验；无明确供应商/业务协议前不得用政府实名适配冒充人物使用授权。"
+            ]
+          }
         }
       ],
       "currentOriginalEvidence": [
@@ -2972,8 +3213,9 @@
         }
       ],
       "remaining": [
-        "当前人物素材上传界面不能证明历史认证已下线，也不能证明原站采用身份证实名或活体。",
-        "现有本地人物授权声明/素材版本与认证状态机不等于正式核验；无明确供应商/业务协议前不得用政府实名适配冒充人物使用授权。"
+        "先确定人物真实性和素材使用权的具体核验合同，再实现正式供应商适配、回调与状态验收；当前缺口同时涉及适配代码和业务协议。",
+        "本地自述授权不得标为认证；实名或活体核验不能替代人物素材使用授权。",
+        "当前人物素材上传界面不能证明历史认证已下线，也不能证明原站采用身份证实名或活体。"
       ]
     },
     {
@@ -3025,10 +3267,10 @@
       "id": "F37",
       "name": "个人品牌参考与品牌模型入口",
       "implementationStatus": "已实现",
-      "verificationStatus": "真实浏览器验证",
-      "blocker": "预算授权",
+      "verificationStatus": "真实外部联调验证",
+      "blocker": "无",
       "semanticEquivalent": null,
-      "assessmentBasis": "新增显式workspace/member额度合同；历史无scope仍按空间，已批准team快照才接受每成员合同；按原创建者在创建/恢复事务内计数，混合合同分别判定且不相加。",
+      "assessmentBasis": "新增显式workspace/member额度合同；历史无scope仍按空间，已批准team快照才接受每成员合同；按原创建者在创建/恢复事务内计数，混合合同分别判定且不相加。 2026年11月14日新增本例真实外部验收：品牌、产品容量、参考图和个人偏好更新正确生效；临时记忆自然到期排除，历史快照保持。补齐显式重整及当前空间资料缓存刷新，真实可选市场空值失败已修复。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -3060,6 +3302,16 @@
           "kind": "2026-10-19最终品牌浏览器复验",
           "path": "reviews/takeover/e2e/20261019-scope-green/report/index.html",
           "note": "桌面/手机品牌4项通过，含当前回收视图翻译精确断言；与新增引导/营销同构建运行8项，不重复累加。"
+        },
+        {
+          "kind": "2026年11月14日本例真实图片链路",
+          "path": "reviews/knowledge-live-20261114/DELIVERY.md",
+          "note": "相同原话下两张真实对照成品；资料版本、实际出站参考图、自然到期、旧报价冻结、存储和浏览器下载均核对。仅所列原生文本与图片模型，不扩大至视频或远端工作流。"
+        },
+        {
+          "kind": "2026年11月14日品牌并发与草稿质量整改",
+          "path": "reviews/code-quality-20261114/evidence/brand-editor-validation.json",
+          "note": "迟到保存保留后续输入；网页保存带读取版本，冲突明确载入或合并。最终统一验收见代码质量交付。"
         }
       ],
       "historicalEvidence": [
@@ -3088,8 +3340,9 @@
         }
       ],
       "remaining": [
-        "品牌参考资料管理与配额合同已实现，真实生成一致性未外呼验证；不能称模型训练。",
-        "原站套餐价格与10/15/20数值未复制，新合同需实例负责人明确批准配置。"
+        "本例品牌更名与文字配色进入真实图片，不能称模型训练；不承诺所有品牌、模型或精确色值均已验证。",
+        "原站套餐价格与10/15/20数值未复制，新合同需实例负责人明确批准配置。",
+        "旧接口调用不带expectedUpdatedAt（预期修改时间）时保留兼容盲写行为；网页已强制带读取版本，调用方可显式启用同一约束。"
       ]
     },
     {
@@ -3212,6 +3465,11 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "notifications-team中角色英阿4项；角色权限矩阵仍主要由自动合同验证。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "成员角色与邀请迟到响应保留新草稿，邀请链接标明所属邮箱。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
         }
       ],
       "historicalEvidence": [
@@ -3437,6 +3695,11 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "account 6项与identities 6项：本机邮件恢复、仅谷歌夹具设置密码、本机短信登录和关闭后解绑；非真实外部授权/送达。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-13项目审查与隔离回归",
+          "path": "reviews/project-audit-20261113/DELIVERY.md",
+          "note": "忘记密码点击路由和服务错误后登录过期恢复已用桌面手机闭环验证。"
         }
       ],
       "historicalEvidence": [
@@ -3697,6 +3960,16 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "locale/creation-locale及credits-locale各分支、其他功能英阿检查；不是全站母语审校。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-13项目审查与隔离回归",
+          "path": "reviews/project-audit-20261113/DELIVERY.md",
+          "note": "此条原主题结论已撤回：让旧系统主题跟随操作系统违反既定深色主风格；纠正结果另见主题纠正记录。原检查仅保留作历史证据。"
+        },
+        {
+          "kind": "2026-11-13主题误判纠正",
+          "path": "reviews/project-audit-20261113/THEME-CORRECTION.md",
+          "note": "恢复既定深色主风格；旧系统值不随操作系统变浅，保留显式选择；28项主题与语言回归通过，运行账户偏好未改写。"
         }
       ],
       "historicalEvidence": [
@@ -3752,6 +4025,11 @@
           "kind": "本轮完整浏览器证据",
           "path": "reviews/takeover/e2e/20261016T102637Z-final-full/report/index.html",
           "note": "credits-locale 12项中的期限/来源/续订合同显示；真实金额和账本合同另记。 业务完整版本96/96；最终品牌静态文案4项另记。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "兑换只入账一次且保留下一兑换码，网页／接口额度隔离，未付草稿关闭不充值。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
         }
       ],
       "historicalEvidence": [
@@ -3849,9 +4127,9 @@
       "name": "发票抬头",
       "implementationStatus": "部分实现",
       "verificationStatus": "自动化验证",
-      "blocker": "外部服务限制",
+      "blocker": "代码缺失",
       "semanticEquivalent": null,
-      "assessmentBasis": "已核对抬头、订单净额占用、申请、撤回和退款复核；submitInvoice明确只写本地登记，未有正式开票适配。",
+      "assessmentBasis": "本地抬头、订单净额占用、申请、撤回及退款复核已实现；提交只登记未发送事件。正式开票、取票和供应商状态适配缺失，不是只增加配置即可完成。",
       "sourceReviewed": true,
       "evidence": [
         {
@@ -3863,6 +4141,16 @@
           "kind": "本轮当前证据",
           "path": "platform/tests/quality-workflows.test.ts",
           "note": "本地开票申请净额占用/撤回历史合同，非正式税务出票。"
+        },
+        {
+          "kind": "2026-11-14当前源码与隔离验证核对",
+          "path": "reviews/project-validation-20261114/evidence/scope-current-findings.json",
+          "note": "F48逐项依据；历史证据不替代本轮验证。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "只计已支付净额；本地申请登记、撤回释放、重申请及抬头／订单分页，不代表正式出票。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
         }
       ],
       "historicalEvidence": [
@@ -3875,6 +4163,22 @@
           "externalClaim": "**正式INVOICE适配未实现**",
           "browserClaim": "UI申请/详情入口待新回归",
           "boundaryClaim": "本地登记不发送、不生成正式票；不是仅差发票API key"
+        },
+        {
+          "kind": "2026-11-14逐项判定更新前的历史记录",
+          "archivedDate": "2026-11-14",
+          "source": "reviews/takeover/scope-ledger.json",
+          "previousCurrentAssessment": {
+            "implementationStatus": "部分实现",
+            "verificationStatus": "自动化验证",
+            "blocker": "外部服务限制",
+            "assessmentBasis": "已核对抬头、订单净额占用、申请、撤回和退款复核；submitInvoice明确只写本地登记，未有正式开票适配。",
+            "remaining": [
+              "本地发票抬头、申请、金额占用、撤回、退款复核已实现；正式开票、取票与状态供应商适配缺失。",
+              "用户未提供开票供应商或正式协议，现阶段真实阻塞是协议和配置；不能把本地登记或Stripe账单冒称正式发票。",
+              "原站2026-05-16起自助开票界面已观察；无订单，真实开票未验证。"
+            ]
+          }
         }
       ],
       "currentOriginalEvidence": [
@@ -3885,8 +4189,8 @@
         }
       ],
       "remaining": [
-        "本地发票抬头、申请、金额占用、撤回、退款复核已实现；正式开票、取票与状态供应商适配缺失。",
-        "用户未提供开票供应商或正式协议，现阶段真实阻塞是协议和配置；不能把本地登记或Stripe账单冒称正式发票。",
+        "须先确定正式开票协议，再实现开具、取票、回调及状态适配，并独立验收真实票据；本地登记不会发送或出票。",
+        "用户尚未提供开票供应商或正式协议；支付平台账单不能冒称正式税务发票。",
         "原站2026-05-16起自助开票界面已观察；无订单，真实开票未验证。"
       ]
     },
@@ -4428,6 +4732,153 @@
         }
       ],
       "sourceReviewed": true
+    },
+    {
+      "id": "F55",
+      "name": "私有创作记忆",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实外部联调验证",
+      "blocker": "无",
+      "semanticEquivalent": null,
+      "assessmentBasis": "自有明确范围：本人当前空间的长期背景、创作偏好和临时要求可显式保存、替换、暂停、重新确认与删除；记录版本、到期及偏好衰减参与选取。仅接入单项图片/视频主创作，独立低优先级上下文不作为产品事实；本轮完整单元/集成通过，本轮完整446项浏览器通过，最后首页文案增量26项复测通过。 2026年11月14日新增本例真实外部验收：品牌、产品容量、参考图和个人偏好更新正确生效；临时记忆自然到期排除，历史快照保持。补齐显式重整及当前空间资料缓存刷新，真实可选市场空值失败已修复。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前合同与服务",
+          "path": "platform/src/contracts/knowledge.ts",
+          "note": "长期背景、偏好、临时要求；期限、半衰期、版本及部分更新。"
+        },
+        {
+          "kind": "当前本人空间隔离及选取",
+          "path": "platform/src/server/core/knowledge.ts",
+          "note": "只在本人登录会话使用；同主题用途选取、状态和时效过滤，最多8条及总6000字边界。"
+        },
+        {
+          "kind": "当前规划与冻结执行",
+          "path": "platform/src/server/tasks/creative-knowledge.ts",
+          "note": "记忆与商品来源分离；新报价及补答检验时效，已报价任务保持快照。"
+        },
+        {
+          "kind": "当前回归入口",
+          "path": "platform/tests/knowledge.test.ts",
+          "note": "权限、生命周期、版本和选取；纳入本轮151文件2341项完整单元/集成。"
+        },
+        {
+          "kind": "本轮最终验证记录",
+          "path": "reviews/project-validation-20261114/VALIDATION.md",
+          "note": "完整446项浏览器基线和最终首页文案26项增量均通过；模拟供应商产物不代表真实模型质量。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/project-validation-20261114/evidence/browser-full.json",
+          "note": "完整446项桌面/手机/笔记本/平板基线通过；最后两文件文案增量另记26项，不相加。"
+        },
+        {
+          "kind": "2026年11月14日本例真实图片链路",
+          "path": "reviews/knowledge-live-20261114/DELIVERY.md",
+          "note": "相同原话下两张真实对照成品；资料版本、实际出站参考图、自然到期、旧报价冻结、存储和浏览器下载均核对。仅所列原生文本与图片模型，不扩大至视频或远端工作流。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "临时记忆到期、偏好衰减后不能用旧方案创建新重试报价。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "kind": "首次实现与复查范围",
+          "source": "reviews/creative-memory-recheck-20261114/REVIEW.md",
+          "sourceDate": "2026-11-14",
+          "note": "保留此前关联66项浏览器与动态权重防重复规划修复，不作为本轮完整浏览器结果。"
+        }
+      ],
+      "currentOriginalEvidence": [],
+      "currentOriginalAssessment": "自有明确产品合同，不主张与原站或编码助手的全部记忆能力等价。",
+      "remaining": [
+        "本例原生图片验证本次要求优先、偏好更新与临时记忆自然到期；历史衰减年龄为隔离合成数据，不代表连续观察3天。视频及其他模型效果尚未新增验证。",
+        "没有自动推断画像、无限检索、向量数据库或收费记忆提炼；这些不属于当前已实现范围。",
+        "分组物料、独立工具及整套详情页明确不接受新记忆关联；开放接口不能读取本人私有记忆。",
+        "删除或停用影响后续选取，不承诺清除已确认快照或已生成作品中的历史体现。"
+      ]
+    },
+    {
+      "id": "F56",
+      "name": "产品资料库与创作关联",
+      "implementationStatus": "已实现",
+      "verificationStatus": "真实外部联调验证",
+      "blocker": "无",
+      "semanticEquivalent": null,
+      "assessmentBasis": "自有明确范围：产品说明、事实、使用限制、品牌关联、最多4张参考图、有效期和私有/空间可见性可保存复用，支持版本冲突、回收和失效关联修复。单项图片/视频规划可显式关联产品及选择是否使用产品图，品牌冲突拒绝，补答和执行沿用来源快照；本轮完整单元/集成通过，本轮完整446项浏览器通过，最后首页文案增量26项复测通过。 2026年11月14日新增本例真实外部验收：品牌、产品容量、参考图和个人偏好更新正确生效；临时记忆自然到期排除，历史快照保持。补齐显式重整及当前空间资料缓存刷新，真实可选市场空值失败已修复。",
+      "sourceReviewed": true,
+      "evidence": [
+        {
+          "kind": "当前产品数据合同",
+          "path": "platform/src/contracts/knowledge.ts",
+          "note": "事实、限制、品牌、图片、可见范围、有效期、版本和回收状态。"
+        },
+        {
+          "kind": "当前产品管理界面",
+          "path": "platform/src/web/pages/Products.tsx",
+          "note": "产品维护、关联修复与复用入口；不替代既有F37品牌库。"
+        },
+        {
+          "kind": "当前规划整合",
+          "path": "platform/src/server/tasks/creative-knowledge.ts",
+          "note": "校验产品与品牌可见性/冲突/时效；有界来源及图片显式选择。"
+        },
+        {
+          "kind": "当前冻结与执行合同",
+          "path": "platform/tests/creative-briefs.test.ts",
+          "note": "来源归属、伪造事实阻断、补答快照、到期与关闭；纳入本轮完整单元/集成。"
+        },
+        {
+          "kind": "当前库图原生执行回归",
+          "path": "platform/tests/native-plan-freeze.test.ts",
+          "note": "库图作为原图配蒙版可确认、报价、提交，删除原图仍拒绝。"
+        },
+        {
+          "kind": "本轮最终验证记录",
+          "path": "reviews/project-validation-20261114/VALIDATION.md",
+          "note": "完整446项浏览器基线和最终首页文案26项增量均通过；模拟供应商产物不代表真实模型质量。"
+        },
+        {
+          "kind": "本轮完整浏览器证据",
+          "path": "reviews/project-validation-20261114/evidence/browser-full.json",
+          "note": "完整446项桌面/手机/笔记本/平板基线通过；最后两文件文案增量另记26项，不相加。"
+        },
+        {
+          "kind": "2026年11月14日本例真实图片链路",
+          "path": "reviews/knowledge-live-20261114/DELIVERY.md",
+          "note": "相同原话下两张真实对照成品；资料版本、实际出站参考图、自然到期、旧报价冻结、存储和浏览器下载均核对。仅所列原生文本与图片模型，不扩大至视频或远端工作流。"
+        },
+        {
+          "kind": "2026-11-14最终全项目隔离验收",
+          "path": "reviews/project-full-review-20261114/DELIVERY.md",
+          "note": "产品自然过期后旧失败任务新重试拒绝；更新资料重新整理可确认并生成。 全量浏览器510项及单元／集成2394项通过，不扩大真实外部效果。"
+        }
+      ],
+      "historicalEvidence": [
+        {
+          "kind": "首次设计与交付范围",
+          "source": "reviews/creative-memory-20261113/DELIVERY.md",
+          "sourceDate": "2026-11-13",
+          "note": "初次资料管理/关联和模拟创作范围；后续部分更新、权限与库图蒙版修复见复查。"
+        },
+        {
+          "kind": "复查记录",
+          "source": "reviews/creative-memory-recheck-20261114/REVIEW.md",
+          "sourceDate": "2026-11-14",
+          "note": "先失败后修复及关联回归，不能替代本轮最终全仓结论。"
+        }
+      ],
+      "currentOriginalEvidence": [],
+      "currentOriginalAssessment": "自有资料复用合同，品牌参考不等于模型训练，用户提供的产品事实不等于独立真实性认证。",
+      "remaining": [
+        "本例已验证产品容量、品牌及实际参考图更新到真实成品；仅已选原生图片模型，不代表全模型或像素级商品保真。",
+        "分组物料、独立工具和整套详情页尚未接入新增产品关联；当前明确拒绝，不静默忽略。",
+        "使用远端工作流时需导入当前合同版本再联调；本轮未修改远端工作流或正式运行库。",
+        "已确认方案保留历史来源版本；资料更新不改写已有快照，到期资料不能据旧方案发起新报价。"
+      ]
     }
   ],
   "currentEvidenceIndex": [
@@ -4494,11 +4945,27 @@
     {
       "path": "reviews/product-quality-20261103/DELIVERY.md",
       "kind": "商品质量工程修复通过、4图3视频严格拒收与最终费用浏览器范围"
+    },
+    {
+      "path": "reviews/project-validation-20261114/VALIDATION.md",
+      "kind": "历史阶段完整446项浏览器基线及最后首页26项增量验证，最终范围见该报告；不替代本轮完整510项。"
+    },
+    {
+      "path": "reviews/project-validation-20261114/SCOPE.md",
+      "kind": "2026-11-14逐项未完成范围与最小外部案例"
+    },
+    {
+      "path": "reviews/project-validation-20261114/DEPENDENCIES.md",
+      "kind": "2026-11-14生产依赖修补与静态服务边界"
+    },
+    {
+      "path": "reviews/project-full-review-20261114/DELIVERY.md",
+      "kind": "2026-11-14最终冻结源码完整510项浏览器及2394项单元／集成验证；主要本地业务链路与修复记录"
     }
   ],
   "historicalFeatureCount": 52,
-  "totalFeatureCount": 54,
-  "evidenceReconciledDate": "2026-11-03",
+  "totalFeatureCount": 56,
+  "evidenceReconciledDate": "2026-11-14",
   "latestQualityReview": {
     "recordedDate": "2026-10-26",
     "report": "reviews/commercial-20261026/DELIVERY.md",
@@ -6215,5 +6682,663 @@
     "evidence": [
       "reviews/creation-flow-20261104/DELIVERY.md"
     ]
+  },
+  "latestNativeGeneration": {
+    "recordedDate": "2026-11-11",
+    "status": "implemented_contract_verified_live_unverified",
+    "statusLabel": "实现及隔离合同测试通过，真实生成与质量未验收",
+    "delivery": "reviews/native-generation-20261111/DELIVERY.md",
+    "features": [
+      "文本、图片、视频独立中转配置",
+      "密钥加密及模型目录读取",
+      "项目内文本规划与图片生成",
+      "首帧图片到异步视频编排",
+      "配置版本冻结与免费恢复核验",
+      "额度前置检查及首帧复用",
+      "视频实际尺寸时长校验",
+      "独立真实模式启动入口"
+    ],
+    "verification": {
+      "fullUnitFiles": 113,
+      "fullUnitPassed": 1702,
+      "additionalLauncherTestsPassed": 5,
+      "browserPassed": 8,
+      "browserScopes": [
+        "桌面与手机配置页",
+        "桌面与手机配置失效恢复"
+      ],
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "build": true,
+      "builtRuntimeSmoke": true,
+      "liveProviderCalls": 0
+    },
+    "runtime": {
+      "webPort": 5176,
+      "apiPort": 4316,
+      "database": "platform/var/app.sqlite",
+      "demoMode": false,
+      "originalRuntimeModified": false
+    },
+    "remaining": [
+      "真实星云引力模型与协议权限联调",
+      "实际生成图片和视频的质量验收",
+      "参考图像素理解与商品保真验证"
+    ],
+    "privateEvidence": "platform/var/native-full-unit-verified.json; platform/var/e2e/run-zFUWva; platform/var/e2e/run-YwTlj7",
+    "historicalAcceptanceInherited": false
+  },
+  "latestNativeLiveAcceptance": {
+    "recordedDate": "2026-11-11",
+    "status": "live_image_video_pipeline_verified",
+    "statusLabel": "当前用户模型真实图片与首帧视频链路通过",
+    "delivery": "reviews/native-live-20261111/DELIVERY.md",
+    "verification": {
+      "unitFiles": 115,
+      "unitPassed": 1739,
+      "incrementalBrowserPassed": 10,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "build": true,
+      "builtRuntimeSmoke": true,
+      "liveImageSavedAndDownloaded": true,
+      "liveVideoSavedDownloadedDecodedAndPlayedToEnd": true
+    },
+    "localCredits": {
+      "granted": 1000,
+      "settled": 41,
+      "balance": 959,
+      "reserved": 0
+    },
+    "liveCalls": {
+      "text": 3,
+      "images": 2,
+      "videoSubmissions": 1
+    },
+    "outputs": {
+      "image": [
+        2048,
+        2048
+      ],
+      "firstFrame": [
+        2848,
+        1600
+      ],
+      "video": [
+        1280,
+        720
+      ],
+      "videoDurationSeconds": 5.041667
+    },
+    "limitations": [
+      "仅覆盖当前用户选择的三个模型和本次规格",
+      "文字首次视频响应无效，修复后重试成功",
+      "概念图有细小表面杂点；视频严格平移控制仍可优化",
+      "供应商人民币费用未逐项核对"
+    ],
+    "historicalAcceptanceInherited": false
+  },
+  "latestNativeQualityAcceptance": {
+    "recordedDate": "2026-11-11",
+    "report": "reviews/generation-quality-20261111/DELIVERY.md",
+    "unitTests": {
+      "files": 119,
+      "passed": 1840,
+      "failed": 0,
+      "skipped": 0
+    },
+    "webSourceFilesUnchanged": 143,
+    "imageJob": "dbe15be9-dbad-4d89-a7b2-883b115f28d7",
+    "rejectedVideoJob": "9a01fdaa-5e71-4bee-81c9-0687ae1e04e8",
+    "acceptedVideoJob": "613dc564-8ff1-4845-bf09-6b083185f0d4",
+    "liveCalls": {
+      "text": 3,
+      "image": 1,
+      "video": 2
+    },
+    "credits": {
+      "before": 918,
+      "spent": 58,
+      "after": 860,
+      "reserved": 0
+    },
+    "visualScope": "本例概念口红主体几何与轻微横移通过；背景纹理和反光仍有细微变化，不保证其他参考或实物保真。",
+    "browserScope": "最终视频完整播放、下载摘要匹配；本轮未重跑完整浏览器套件。"
+  },
+  "latestCodeQuality": {
+    "recordedDate": "2026-11-11",
+    "report": "reviews/code-quality-20261111/DELIVERY.md",
+    "unitTests": {
+      "passed": 1928,
+      "failed": 0,
+      "skipped": 0,
+      "files": 125
+    },
+    "browserTests": {
+      "uniqueCases": 68,
+      "eventuallyPassed": 68,
+      "initialPassed": 57,
+      "initialFailed": 11,
+      "singleFullRun": false,
+      "scope": "选定配置、额度、需求规划、图视频生成、报价及恢复；桌面和手机模拟视口"
+    },
+    "checks": [
+      "类型",
+      "规范",
+      "格式",
+      "前后端构建",
+      "隔离生产启动",
+      "在线备份恢复",
+      "媒体摘要",
+      "原库与余额不变"
+    ],
+    "newPaidModelCalls": 0,
+    "live": {
+      "webPort": 5176,
+      "apiPort": 4316,
+      "jobs": 7,
+      "assets": 11,
+      "webCredits": 860,
+      "reservedCredits": 0,
+      "mediaFilesVerified": 25
+    },
+    "sourceManifestFiles": 493,
+    "visualChange": "仅修复960像素及以下单列布局被桌面吸顶规则覆盖；配色、字体与组件设计保持。",
+    "limitations": [
+      "非全仓浏览器运行",
+      "旧记录无历史阶段快照或报价时只能首次兼容编译固定",
+      "本轮无新增真实模型质量实测"
+    ]
+  },
+  "latestNativeRealRetest": {
+    "recordedDate": "2026-11-11",
+    "report": "reviews/live-quality-rerun-20261111/DELIVERY.md",
+    "unitTests": {
+      "passed": 1963,
+      "failed": 0,
+      "skipped": 0,
+      "files": 125
+    },
+    "webSourceFilesUnchanged": 143,
+    "liveCalls": {
+      "textPreparations": 7,
+      "imageSubmissions": 3,
+      "videoSubmissions": 4,
+      "extraVideoFirstFrameImages": 0
+    },
+    "credits": {
+      "before": 860,
+      "spent": 124,
+      "after": 736,
+      "reserved": 0
+    },
+    "acceptedVideo": {
+      "jobId": "f30e730e-e175-4122-a10f-5dceaa225b22",
+      "assetId": "cd741b09-be37-4788-bea6-08d29b199f7a",
+      "width": 960,
+      "height": 960,
+      "durationMs": 5042,
+      "requestedScale": 1.03,
+      "observedScale": 1.0294065541472495,
+      "maximumObservedScale": 1.0298248632659732,
+      "scope": "本例固定中心微变焦、主体结构与结尾停稳；非像素保真与通用保证"
+    },
+    "rejectedVideos": [
+      {
+        "jobId": "0ed5e5d1-0a20-4ace-a8f2-d3191ecde155",
+        "reason": "平移中段盖子端面变宽与倾角变化"
+      },
+      {
+        "jobId": "a95f65a2-5aae-4618-ad4c-fa92653b0361",
+        "reason": "二维平移措辞复测仍中段漂移"
+      },
+      {
+        "jobId": "1cc8d1ac-ec18-4adc-a1b9-16186986aaef",
+        "reason": "普通变焦实际约125%，超过103%目标"
+      }
+    ],
+    "imageSample": {
+      "jobId": "85026d84-fdc8-42a1-8c5b-14d5eb5487e6",
+      "subjectStructureAccepted": true,
+      "exactBackgroundColorAccepted": false,
+      "scope": "暖色材质保留改善，精确背景色和前景像素不保证"
+    },
+    "browserScope": "最终图片预览原图对比，最终视频原件完整播放至结尾、下载摘要一致；非全仓浏览器套件",
+    "backupRestoreVerified": true,
+    "originalMediaFilesUnchanged": 25,
+    "limitations": [
+      "受控平移仍未通过本例中段一致性，不能用变焦通过替代",
+      "生成细纹、高光与局部颜色仍可变化",
+      "未逐项核对供应商人民币账单",
+      "双帧输入总请求大小边界另有未实联限制，本次约14.19MB输入已实际通过"
+    ]
+  },
+  "latestNativeFinalAcceptance": {
+    "recordedAt": "2026-11-12",
+    "status": "工程通过；新模型视频全链与既有外部商业范围仍待验",
+    "evidence": [
+      "reviews/final-acceptance-20261111/DELIVERY.md",
+      "reviews/final-acceptance-20261111/MATRIX.md",
+      "reviews/final-acceptance-20261111/RUNS.md",
+      "reviews/final-acceptance-20261111/GENERATION-FLOW.md"
+    ],
+    "unit": {
+      "files": 132,
+      "passed": 2101,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "baselineFullPassed": 342,
+      "finalAffectedPassed": 34,
+      "finalInventory": 352,
+      "singleFinalFullRun": false,
+      "changedFiles": 5,
+      "unchangedFiles": 585,
+      "officialFixturesUnchanged": 12
+    },
+    "strictBuildIsolatedStartupPassed": true,
+    "finalSourceMatchesSnapshot": true,
+    "images": {
+      "referenceStructures": 3,
+      "automaticBackgroundCandidatesAccepted": false,
+      "manualConfirmedLocalComposites": [
+        {
+          "case": "圆管口红",
+          "revision": 6,
+          "accepted": true
+        },
+        {
+          "case": "方底口红",
+          "revision": 1,
+          "accepted": true
+        },
+        {
+          "case": "香水",
+          "revision": 7,
+          "accepted": true
+        }
+      ],
+      "boundary": "本例保护区逐像素保持；软边混合，不宣称所有边缘不变或实物摄影保真。"
+    },
+    "videos": {
+      "localExactPans": {
+        "accepted": 2,
+        "revision": 3,
+        "movement": "约2%水平平移、全段减速、末半秒停稳",
+        "modelGenerated": false
+      },
+      "realSquarecaseMicroZoomAccepted": true,
+      "priorRealPerfumeRawTailHoldFailed": true,
+      "priorRealPerfumeLocalTailRepairAccepted": true,
+      "newPerfumeModelCreation": "供应商拒绝创建，预留25积分已退回；用户选择先验其他部分",
+      "newModelRetestComplete": false
+    },
+    "data": {
+      "jobs": 41,
+      "assets": 91,
+      "newJobs": 27,
+      "originalJobsAndItemsUnchanged": 14,
+      "originalAssetsUnchanged": 22,
+      "originalMediaDigestsUnchanged": 50,
+      "backupAndRestoreVerified": true,
+      "settledPlatformCredits": 98,
+      "balance": 638,
+      "reserved": 0
+    },
+    "limits": [
+      "文本规划当前不读取参考图像素；图片模型收到参考原图。",
+      "没有线上自动主体一致性／运镜视觉评分，本轮人工与全帧指标属于验收。",
+      "未实现或未实联商业能力继续按原功能台账保留，不由本地工程通过替代。"
+    ]
+  },
+  "latestNativeAutomaticAndReplica": {
+    "recordedAt": "2026-11-13T09:43:48.104Z",
+    "status": "本轮图片质量与已实现范围工程验收完成；真实视频创建暂停",
+    "replicaImageSamples": {
+      "accepted": 2,
+      "rejected": 1,
+      "boundary": "本例主体及风格验收；不承诺像素保真或通用身份保证"
+    },
+    "newAutomaticMaskSamples": {
+      "accepted": 3,
+      "rejected": 3,
+      "manualMasksUsed": false,
+      "acceptedCases": [
+        "cup-r2",
+        "plant-r2",
+        "perfume-r4"
+      ],
+      "boundary": "三种正式自动样本按预先登记标准通过；保留植物混合区例外及柔边光学透明度不可确认限制，不外推通用分割保证"
+    },
+    "fullBrowserSnapshot": {
+      "passed": 370,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "sourceTreeSha256": "d6d8c0d875d58d36b3af58f54b176db55a5eb7479aeecdd06b8b4fd220db5f9e",
+      "backendDeltaPending": false
+    },
+    "recoveryRegressionPassed": 69,
+    "videoCreationPausedByUser": true,
+    "newImageJobs": 11,
+    "platformCreditsSettled": 88,
+    "platformBalance": 550,
+    "platformReserved": 0,
+    "evidence": [
+      "reviews/reference-recreation-20261112/DELIVERY.md",
+      "reviews/reference-recreation-20261112/PLAN.md",
+      "reviews/reference-recreation-20261112/GENERATION-FLOW.md",
+      "reviews/final-acceptance-20261112/BROWSER.md"
+    ],
+    "formalChecks": {
+      "sourceTreeSha256": "3d4da5edfd659dafb48d66f1cb939ae6f8a8986cdeefade9c0ac48adcbbe99f4",
+      "unitPassed": 2249,
+      "testFiles": 144,
+      "failed": 0,
+      "skipped": 0,
+      "trackedCoreFiles": 548,
+      "sourceUnchanged": true,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "build": true,
+      "runtime": true,
+      "runtimeOnlyTemporaryDatabase": true
+    },
+    "browserIntegration": {
+      "passed": 80,
+      "desktop": 40,
+      "mobile": 40,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "sourceTreeSha256": "1227b39bd16c8b0275c0810fc22ecedb8f4df1a1b2cef3552f7b0aebaf635fab",
+      "finalDeltaFiles": 4,
+      "finalDeltaRegressionPassed": 69,
+      "scope": "浏览器集成快照之后的4个后端／测试文件补丁由关联回归及最后完整单元／整合覆盖；不称最后版本单次完整浏览器验收"
+    },
+    "preservation": {
+      "originalJobs": 41,
+      "originalItems": 41,
+      "originalAssets": 91,
+      "originalVariants": 245,
+      "originalMedia": 245,
+      "allUnchanged": true,
+      "finalJobs": 52,
+      "finalAssets": 123,
+      "onlineBackup": true,
+      "mediaDigests": true,
+      "restoreVerified": true
+    },
+    "liveDownloads": {
+      "automaticImages": 3,
+      "replicaImages": 2,
+      "allMatchStoredOriginals": true
+    },
+    "plantRecovery": {
+      "sameJob": true,
+      "samePaidRaw": true,
+      "noNewGeneration": true,
+      "reservedCredits": 8,
+      "settledCredits": 8,
+      "resultMatchesIndependentlyReviewedBytes": true
+    },
+    "ui": {
+      "filesCompared": 146,
+      "changedFiles": 0,
+      "addedFiles": 0
+    }
+  },
+  "latestProjectQualityAudit": {
+    "date": "2026-11-13",
+    "status": "已确认缺陷修复与本地工程检查通过，外部商业能力未验项保留",
+    "report": "reviews/project-audit-20261113/DELIVERY.md",
+    "scope": [
+      "界面布局",
+      "视觉一致性",
+      "设计细节",
+      "交互",
+      "功能流程",
+      "代码质量"
+    ],
+    "verification": {
+      "unitIntegration": {
+        "files": 147,
+        "passed": 2265,
+        "failed": 0
+      },
+      "browserBaseline": {
+        "passed": 392,
+        "failed": 0
+      },
+      "browserIncrement": {
+        "passed": 166,
+        "failed": 2,
+        "failureReason": "两项测试错误要求移动布局显示桌面专有说明；实际对比度通过",
+        "correctedPlaceholderRetest": 4,
+        "finalFilterAndPlaceholderRetest": 8
+      },
+      "staticChecks": "类型、规范、格式通过",
+      "productionBuildAndIsolatedRuntime": "通过",
+      "singleFullBrowserRunOfFinalSource": false
+    },
+    "boundaries": [
+      "未使用真实凭据调用外部服务",
+      "未修改正式数据库或重启正式服务",
+      "真实视频继续暂停",
+      "既有未实现及未验范围不升级",
+      "旧测试配置可能隐式加载本机环境文件，最终配置已修复并有黑盒回归"
+    ],
+    "themeCorrection": {
+      "date": "2026-11-13",
+      "status": "原主题判断撤回，恢复深色主风格并验证",
+      "report": "reviews/project-audit-20261113/THEME-CORRECTION.md",
+      "browserPassed": 28,
+      "browserFailed": 0,
+      "historicalVerificationScope": "原verification字段为主题纠正前的检查，不代表纠正后单次全量",
+      "runtimePreferencesChanged": false
+    }
+  },
+  "latestProjectValidation": {
+    "recordedAt": "2026-11-14T05:20:20.281619+00:00",
+    "status": "已实现范围本地工程验收通过；真实外部效果和未实现能力仍有边界。",
+    "scope": "当前自有功能的完整工程验证、业务授权与恢复边界、功能台账纠偏、生产依赖修补和静态目录保护。",
+    "report": "reviews/project-validation-20261114/VALIDATION.md",
+    "scopeReport": "reviews/project-validation-20261114/SCOPE.md",
+    "dependencyReport": "reviews/project-validation-20261114/DEPENDENCIES.md",
+    "unitTests": {
+      "files": 151,
+      "passed": 2341,
+      "failed": 0,
+      "skipped": 0,
+      "report": "reviews/project-validation-20261114/evidence/unit-final.json"
+    },
+    "browserTests": {
+      "status": "完整基线446项通过；最后两文件文案增量26项通过，数字不相加。",
+      "planned": 446,
+      "passed": 446,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "singleFullFinalRun": false,
+      "report": "reviews/project-validation-20261114/evidence/browser-full.json",
+      "firstAttemptIssue": "首页旧控件数量断言未包含新产品；随后交叉审查复现创建/撤回工单迟到响应问题。均修复后重新冻结并执行完整446项，提前停止的批次不计最终通过。",
+      "finalIncrement": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 0,
+        "retries": 0,
+        "report": "reviews/project-validation-20261114/evidence/browser-home-final.json",
+        "changedFiles": [
+          "platform/src/web/lib/i18n.ts",
+          "platform/tests/e2e/home-appearance.spec.ts"
+        ]
+      }
+    },
+    "staticChecks": {
+      "types": "通过",
+      "lint": "通过",
+      "format": "通过"
+    },
+    "productionBuild": "通过（隔离环境）",
+    "isolatedProductionRuntime": "通过（最终源码、临时数据库、实际接口及执行器进程）",
+    "dependencyAudit": {
+      "scope": "仅生产依赖",
+      "moderateBefore": 2,
+      "advisoriesAfter": 0,
+      "report": "reviews/project-validation-20261114/evidence/dependency-audit-green.json",
+      "developmentResidual": "开发语法分析器仍带旧模式匹配依赖；当前调用仅默认优化级别1且项目未配置相关模式，未满足公告至少2的触发条件；不宣称全部依赖零风险。"
+    },
+    "featureUpdates": [
+      "F17",
+      "F34",
+      "F35",
+      "F48",
+      "F55",
+      "F56"
+    ],
+    "paidModelCalls": 0,
+    "runtimeDatabaseModified": false,
+    "remoteWorkflowModified": false,
+    "evidence": [
+      "reviews/project-validation-20261114/evidence/scope-current-findings.json",
+      "reviews/project-validation-20261114/evidence/business-boundaries.json",
+      "reviews/project-validation-20261114/evidence/scope-implementation.json",
+      "reviews/project-validation-20261114/evidence/static-boundary-green.json",
+      "reviews/project-validation-20261114/evidence/dependency-resolution.json",
+      "reviews/project-validation-20261114/evidence/support-lifecycle-races.json",
+      "reviews/project-validation-20261114/evidence/persistence-validation.json",
+      "reviews/project-validation-20261114/evidence/browser-full.json",
+      "reviews/project-validation-20261114/evidence/browser-home-final.json",
+      "reviews/project-validation-20261114/evidence/final-verification.json"
+    ],
+    "boundaries": [
+      "真实模型、正式支付/退款、外部身份与通知送达未在本轮新增联调。",
+      "F35正式核验、F48正式开票、F19.3视频精准替换、小红书解析等适配缺口继续保留。",
+      "历史真实样例不代表当前所有模型、商品或原站语义均已通过。"
+    ],
+    "finalSourceManifest": "reviews/project-validation-20261114/evidence/final-manifest.json",
+    "finalVerification": "reviews/project-validation-20261114/evidence/final-verification.json"
+  },
+  "latestCreativeKnowledgeLive": {
+    "recordedAt": "2026-11-14T16:03:18.702Z",
+    "status": "本例真实图片资料链路通过，三处产品缺口修复；精确构图与未验模型边界保留。",
+    "report": "reviews/knowledge-live-20261114/DELIVERY.md",
+    "featureUpdates": [
+      "F37",
+      "F55",
+      "F56"
+    ],
+    "textCalls": 4,
+    "imageCalls": 2,
+    "videoCalls": 0,
+    "platformCreditsSettled": 16,
+    "providerInvoiceReconciled": false,
+    "formalDatabaseModified": false,
+    "formalMediaModified": false,
+    "remoteWorkflowModified": false,
+    "sourceManifest": "reviews/knowledge-live-20261114/evidence/source-final.json",
+    "engineering": "reviews/knowledge-live-20261114/evidence/engineering-staged-summary.json",
+    "naturalExpiry": "reviews/knowledge-live-20261114/evidence/natural-expiry.json",
+    "integrity": "reviews/knowledge-live-20261114/evidence/final-integrity.json",
+    "bounds": [
+      "单项原生图片链路；没有新增真实视频生成。",
+      "A成图主体偏下，不计精确垂直居中通过。",
+      "远端工作流、其他模型和未实现能力不扩大结论。",
+      "最终缓存两文件增量独立验收，不宣称最终源码再次全量。"
+    ]
+  },
+  "latestProjectCodeQuality": {
+    "recordedAt": "2026-11-14T17:16:56.836Z",
+    "status": "已复现问题修复，冻结版本完整单元、关联浏览器、规范与生产运行检查通过。",
+    "report": "reviews/code-quality-20261114/DELIVERY.md",
+    "maintenanceStandard": "platform/QUALITY.md",
+    "unitTests": {
+      "files": 156,
+      "passed": 2387,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browserTests": {
+      "passed": 38,
+      "desktop": 19,
+      "mobile": 19,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "fullSuite": false
+    },
+    "productionBuild": "passed",
+    "isolatedProductionRuntime": "passed",
+    "qualityEntry": "pnpm quality:check / pnpm quality:release",
+    "sourceManifest": "reviews/code-quality-20261114/evidence/source-final.json",
+    "finalValidation": "reviews/code-quality-20261114/evidence/final-validation.json",
+    "paidExternalCalls": 0,
+    "formalDataWriteOperations": 0,
+    "newDependencies": 0,
+    "newDatabaseMigrations": 0,
+    "deployed": false,
+    "bounds": [
+      "本轮外部服务使用隔离协议夹具，不扩大历史真实模型效果。",
+      "完整进程组退出在本机苹果系统验收；视窗系统只处理直接子进程。",
+      "旧健康帮助红测的一次默认本机只读健康请求已单列，未据其宣称隔离通过。"
+    ]
+  },
+  "latestProjectFullReview": {
+    "recordedAt": "2026-11-14T18:20:57.439215+00:00",
+    "status": "已复现问题修复完成；冻结源码全部浏览器、全量单元集成、生产构建运行和最终视觉抽查通过。仅声明已列本地实现范围。",
+    "featureCountReviewed": 56,
+    "unitTests": {
+      "files": 156,
+      "passed": 2394,
+      "failed": 0,
+      "skipped": 0,
+      "report": "unit-final.json"
+    },
+    "browserTests": {
+      "files": 72,
+      "passed": 510,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "projects": {
+        "desktop": 252,
+        "mobile": 252,
+        "notebook": 5,
+        "tablet": 1
+      },
+      "fullRepositorySuite": true,
+      "singleFrozenFinalRun": true,
+      "report": "browser-final.json",
+      "privateRun": "platform/var/e2e/run-dI9pvp"
+    },
+    "additionalVisualChecks": {
+      "passed": 2,
+      "failed": 0,
+      "report": "visual-verification.json",
+      "notAddedToFullSuiteCount": true
+    },
+    "qualityGate": {
+      "allEightStagesPassed": true,
+      "report": "quality-release.json",
+      "privateRun": "platform/var/quality/run-Lf0Ylw"
+    },
+    "sourceManifest": {
+      "files": 676,
+      "sha256": "1dc83783c22147f133de5388204f25f94908ed184a76c6a4022bcd8970b9e80e",
+      "unchangedAtDelivery": true,
+      "report": "source-final.json"
+    },
+    "newPaidExternalCalls": 0,
+    "formalDatabaseOrMediaWrites": 0,
+    "newMigrations": [],
+    "newDependencies": [],
+    "deployed": false,
+    "stageRunsNotSummed": true,
+    "report": "reviews/project-full-review-20261114/DELIVERY.md",
+    "evidenceRoot": "reviews/project-full-review-20261114/evidence"
   }
 }

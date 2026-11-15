@@ -1,0 +1,6 @@
+  ✓  1 [desktop] › tests/e2e/creative-knowledge.spec.ts:44:1 › creates reusable memory and product, freezes reviewed sources and saves a downloadable image (9.4s)
+  ✓  2 [desktop] › tests/e2e/creative-knowledge.spec.ts:245:1 › manages private memory and rejects a stale product edit without losing the editor draft (5.3s)
+  ✓  3 [mobile] › tests/e2e/creative-knowledge.spec.ts:44:1 › creates reusable memory and product, freezes reviewed sources and saves a downloadable image (9.9s)
+  ✓  4 [mobile] › tests/e2e/creative-knowledge.spec.ts:245:1 › manages private memory and rejects a stale product edit without losing the editor draft (13.6s)
+  4 passed (40.9s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-asvtdk

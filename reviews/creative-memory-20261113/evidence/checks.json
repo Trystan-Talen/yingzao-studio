@@ -1,0 +1,38 @@
+{
+  "recordedAt": "2026-11-14T03:43:12.760892+00:00",
+  "unit": {
+    "success": true,
+    "numTotalTests": 2308,
+    "numPassedTests": 2308,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "startTime": 1794627571685,
+    "fileCount": 149
+  },
+  "typecheck": "passed",
+  "lint": "passed; final two translation entries and locale assertions additionally checked",
+  "format": "passed; translation delta additionally checked",
+  "productionBuild": "passed",
+  "isolatedRuntime": "passed",
+  "sourceManifest": {
+    "sha256": "66578ba8fb86b6dad44d392ff120846657ce82f956f43bddc1e67a93ee5c9b5f",
+    "fileCount": 379,
+    "unchangedAtDelivery": true
+  },
+  "browser": {
+    "baselinePassed": 86,
+    "baselineReport": "platform/var/e2e/run-NTfUfo",
+    "behaviorDeltaPassed": 10,
+    "behaviorDeltaReport": "platform/var/e2e/run-4753jX",
+    "singleItemDeltaPassed": 4,
+    "singleItemDeltaReport": "platform/var/e2e/run-asvtdk",
+    "translationDeltaPassed": 4,
+    "translationDeltaReport": "platform/var/e2e/run-XcfWgP",
+    "singleFullFinalRun": false,
+    "duplicateTestsNotSummed": true
+  },
+  "runtimeDatabaseModified": false,
+  "externalModelCalls": 0,
+  "remoteWorkflowUpdated": false,
+  "scope": "Local source, isolated SQLite databases, synthetic media and simulated provider protocols; not real model quality verification"
+}

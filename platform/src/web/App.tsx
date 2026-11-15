@@ -1,6 +1,6 @@
 import { t } from './lib/i18n';
 import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useStudio } from './context';
 import { Layout } from './components/Layout';
 import { Empty, Button, Loading } from './components/ui';
@@ -34,6 +34,9 @@ const Projects = lazy(() =>
   import('./pages/Library').then((module) => ({ default: module.Projects })),
 );
 const Assets = lazy(() => import('./pages/Library').then((module) => ({ default: module.Assets })));
+const Products = lazy(() =>
+  import('./pages/Products').then((module) => ({ default: module.Products })),
+);
 const Brands = lazy(() =>
   import('./pages/Identities').then((module) => ({ default: module.Brands })),
 );
@@ -99,16 +102,19 @@ class PageBoundary extends Component<{ children: ReactNode }, { error: Error | n
 }
 export function App() {
   const { session, workspace } = useStudio();
-  if (location.pathname === '/auth/complete-registration')
+  const route = useLocation();
+  if (route.pathname === '/auth/complete-registration')
     return <PageBoundary>{page(<IdentityRegistration />)}</PageBoundary>;
-  if (['/password/forgot', '/password/reset'].includes(location.pathname))
-    return <PageBoundary>{page(<PasswordRecovery />)}</PageBoundary>;
-  if (location.pathname.startsWith('/share'))
+  if (['/password/forgot', '/password/reset'].includes(route.pathname))
+    return (
+      <PageBoundary key={route.pathname + route.hash}>{page(<PasswordRecovery />)}</PageBoundary>
+    );
+  if (route.pathname.startsWith('/share'))
     return <PageBoundary>{page(<PublicShare />)}</PageBoundary>;
   if (!session) return page(<Login />);
-  if (location.pathname === '/invite') return page(<InvitePage />);
+  if (route.pathname === '/invite') return page(<InvitePage />);
   return (
-    <PageBoundary key={workspace?.id ?? 'no-workspace'}>
+    <PageBoundary key={`${session.user.id}:${workspace?.id ?? 'no-workspace'}`}>
       <Routes>
         <Route element={<Layout />}>
           <Route index element={page(<CreateHome />)} />
@@ -124,6 +130,7 @@ export function App() {
           <Route path="projects" element={page(<Projects />)} />
           <Route path="assets" element={page(<Assets />)} />
           <Route path="brands" element={page(<Brands />)} />
+          <Route path="products" element={page(<Products />)} />
           <Route path="characters" element={page(<Characters />)} />
           <Route path="team" element={page(<Team key={workspace?.id} />)} />
           <Route path="usage" element={page(<Usage />)} />

@@ -78,6 +78,41 @@ export interface ProviderOutput {
   name: string;
   text?: string;
   resultData?: JobResultData;
+  /** Trusted adapter's actual request size; never populated from provider JSON or client input. */
+  expectedImageSize?: { width: number; height: number };
+  /** Internal processing provenance, validated against the server-frozen input by the worker. */
+  processing?: NativeProcessing;
+}
+type ProcessingParameters = Record<string, string | number | boolean | null>;
+export type NativeProcessing =
+  | {
+      method: 'model-video-tail-hold-v1';
+      sourceAssetId: string;
+      params?: ProcessingParameters;
+    }
+  | {
+      method: 'exact-pan-v1';
+      sourceAssetId: string;
+      params?: ProcessingParameters;
+    }
+  | {
+      method: 'exact-background-v1';
+      sourceAssetId: string;
+      maskAssetIds: { raw?: string; baseline?: string; normalized: string };
+      color: string;
+      params?: ProcessingParameters;
+    };
+export type NativeArtifactRole =
+  | 'background-mask-raw'
+  | 'background-mask-baseline'
+  | 'background-mask'
+  | 'background-matting-composite'
+  | 'video-model-raw';
+export interface NativeArtifact {
+  assetId: string;
+  buffer: Buffer;
+  mimeType: string;
+  name: string;
 }
 export interface RemoteTask {
   id: string;
@@ -89,6 +124,7 @@ export interface RemoteTask {
   responseUrl?: string;
   cancelUrl?: string;
   endpoint?: string;
+  nativeModel?: string;
 }
 export type ProviderResult =
   | {
@@ -107,6 +143,27 @@ export interface ExecutionContext {
   assetUrl?: (id: string, variant?: 'original' | 'mask-white') => string;
   readAsset: (id: string) => Promise<{ buffer: Buffer; mimeType: string; name: string }>;
   onRemoteAccepted?: (remote: RemoteTask) => void | Promise<void>;
+  onStage?: (stage: string) => void;
+  beforeAdditionalSubmission?: () => void;
+  /** A durable local-processing checkpoint exists; a missing artifact must not trigger a model call. */
+  resumeLocalProcessing?: boolean;
+  localMatting?: {
+    config: import('../providers/local-matting-installation').LocalMattingConfig;
+    signal?: AbortSignal;
+    owns: () => boolean;
+  };
+  nativeArtifacts?: {
+    load: (role: NativeArtifactRole) => Promise<NativeArtifact | undefined>;
+    save: (role: NativeArtifactRole, output: ProviderOutput) => Promise<NativeArtifact>;
+    saveMattingPair?: (
+      mask: Buffer,
+      composite: Buffer,
+    ) => Promise<{ mask: NativeArtifact; composite: NativeArtifact }>;
+  };
+  nativeFrame?: {
+    load: () => Promise<{ buffer: Buffer; mimeType: string; name: string } | undefined>;
+    save: (output: ProviderOutput) => Promise<void>;
+  };
   textPresence?: (
     assetId: string,
     detectorId: string,

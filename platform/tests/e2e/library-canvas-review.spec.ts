@@ -156,10 +156,20 @@ test('manages a named collection through rename, membership removal and deletion
   });
   const search = page.getByRole('textbox', { name: '搜索素材', exact: true });
   if ((page.viewportSize()?.width ?? 1440) <= 480) {
+    const queryWidth = await search.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const context = globalThis.document.createElement('canvas').getContext('2d')!;
+      context.font = style.font;
+      return (
+        context.measureText('集合绿图').width +
+        parseFloat(style.paddingLeft) +
+        parseFloat(style.paddingRight)
+      );
+    });
     expect(
       (await search.boundingBox())!.width,
-      'Mobile collection search remains wide enough to enter a usable query',
-    ).toBeGreaterThanOrEqual(240);
+      'The complete collection query fits within the current mobile search field',
+    ).toBeGreaterThanOrEqual(queryWidth);
   }
   await search.fill('集合绿图');
   await expect(page.locator('.asset-card')).toHaveCount(1);
@@ -307,7 +317,7 @@ test('applies a real pending local result after a canvas revision conflict witho
   await expect.poll(() => document(studio, p.id).scene.layers.length).toBe(2);
   const edited = document(studio, p.id);
   await expect(page.getByText('有一个新结果等待应用', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: '预览并应用', exact: true }).click();
+  await page.getByRole('button', { name: '预览并添加到画布', exact: true }).click();
   const applying = page.getByRole('dialog', { name: '应用创作结果', exact: true });
   await expect(applying.getByRole('img', { name: '待应用结果', exact: true })).toBeVisible();
   await expect(applying.getByRole('combobox', { name: '应用方式', exact: true })).toHaveValue(
@@ -360,7 +370,8 @@ test('applies a real pending local result after a canvas revision conflict witho
     fullPage: true,
   });
   await page.reload();
-  await page.getByRole('button', { name: '预览并应用', exact: true }).click();
+  await page.getByRole('button', { name: '画布编辑', exact: true }).click();
+  await page.getByRole('button', { name: '预览并添加到画布', exact: true }).click();
   await applying.getByRole('button', { name: '确认应用', exact: true }).click();
   await expect(applying).toHaveCount(0);
   await expect.poll(() => document(studio, p.id).scene.layers.length).toBe(3);
@@ -380,7 +391,8 @@ test('applies a real pending local result after a canvas revision conflict witho
   expect((await duplicate.json()).error.code).toBe('RESULT_NOT_FOUND');
   expect(document(studio, p.id).scene.layers).toHaveLength(3);
   await page.reload();
-  await expect(page.getByRole('button', { name: '预览并应用', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '画布编辑', exact: true }).click();
+  await expect(page.getByRole('button', { name: '预览并添加到画布', exact: true })).toHaveCount(0);
   expect(document(studio, p.id).scene).toEqual(applied.scene);
   expect(
     studio.services.db.sqlite
@@ -410,9 +422,22 @@ test('combines project name, kind and personal favorite filters and restores a f
     .filter({ has: page.getByRole('heading', { name: '秋季产品图', exact: true }) });
   await wanted.getByRole('button', { name: '收藏项目', exact: true }).click();
   await expect(wanted.getByRole('button', { name: '取消收藏', exact: true })).toBeVisible();
-  await page.getByLabel('搜索项目', { exact: true }).fill('秋季');
+  await page.getByRole('textbox', { name: '搜索项目', exact: true }).fill('秋季');
   await page.getByLabel('项目类型', { exact: true }).selectOption('image');
-  await page.getByRole('button', { name: '收藏', exact: true }).click();
+  const favoriteFilter = page.getByRole('button', { name: '收藏', exact: true });
+  const favoriteBox = (await favoriteFilter.boundingBox())!;
+  const viewBox = (await page.locator('.library-toolbar > .segments').boundingBox())!;
+  const overlapWidth =
+    Math.min(favoriteBox.x + favoriteBox.width, viewBox.x + viewBox.width) -
+    Math.max(favoriteBox.x, viewBox.x);
+  const overlapHeight =
+    Math.min(favoriteBox.y + favoriteBox.height, viewBox.y + viewBox.height) -
+    Math.max(favoriteBox.y, viewBox.y);
+  expect(
+    overlapWidth <= 0 || overlapHeight <= 0,
+    'View controls must not cover the favorite filter',
+  ).toBe(true);
+  await favoriteFilter.click();
   await expect(page.locator('.project-card')).toHaveCount(1);
   await expect(wanted).toBeVisible();
   await page.getByLabel('项目类型', { exact: true }).selectOption('video');
@@ -432,7 +457,7 @@ test('combines project name, kind and personal favorite filters and restores a f
   await wanted.getByRole('button', { name: '恢复', exact: true }).click();
   await expect(page.locator('.project-card')).toHaveCount(0);
   await page.getByRole('button', { name: '回收站', exact: true }).click();
-  await page.getByLabel('搜索项目', { exact: true }).fill('');
+  await page.getByRole('textbox', { name: '搜索项目', exact: true }).fill('');
   await page.getByLabel('项目类型', { exact: true }).selectOption('');
   await expect(page.locator('.project-card')).toHaveCount(3);
   await expect(wanted.getByRole('button', { name: '取消收藏', exact: true })).toBeVisible();

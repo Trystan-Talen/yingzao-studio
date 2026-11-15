@@ -290,7 +290,7 @@ export async function createApp(
   });
   const webRoot = resolve(options.webRoot ?? 'dist/web');
   if (options.serveWeb !== false && existsSync(webRoot)) {
-    await app.register(staticFiles, { root: webRoot });
+    await app.register(staticFiles, { root: webRoot, dotfiles: 'deny' });
     app.setNotFoundHandler((req, reply) =>
       req.url.startsWith('/api/')
         ? reply.code(404).send({ error: { code: 'NOT_FOUND', message: '接口不存在' } })

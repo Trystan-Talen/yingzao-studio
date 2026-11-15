@@ -7,7 +7,7 @@ import type {
   NotificationUnread,
 } from '../../contracts/notifications';
 import { useStudio } from '../context';
-import { api, post, useApi, useRefresh } from '../lib/api';
+import { api, apiQueryKey, post, useApi, useRefresh } from '../lib/api';
 import { t } from '../lib/i18n';
 import {
   Button,
@@ -22,14 +22,14 @@ import {
 } from './ui';
 
 export function NotificationCenter() {
-  const { workspace } = useStudio();
+  const { workspace, session } = useStudio();
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<NotificationCategory>('system');
   const summary = useApi<NotificationUnread>('/notifications/unread', !!workspace, 30000);
   const path = `/notifications?pageSize=24&page=${page}&category=${category}`;
   const notices = useQuery({
-    queryKey: ['api', workspace?.id ?? null, path],
+    queryKey: apiQueryKey(path, workspace?.id ?? null, session?.user.id ?? null),
     queryFn: ({ signal }) => api<NotificationPage>(path, { signal }, workspace?.id ?? null),
     enabled: open && !!workspace,
     retry: false,

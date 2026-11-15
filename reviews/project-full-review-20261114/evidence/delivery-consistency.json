@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "changedManifestFiles": [],
+  "missingReportLinks": [],
+  "featureCount": 56,
+  "unitTests": 2394,
+  "fullBrowserTests": 510,
+  "zeroRetriesOrSkips": true,
+  "artifactsExcludeCredentialsAndRuntimeData": true
+}

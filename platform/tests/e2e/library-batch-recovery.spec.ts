@@ -62,7 +62,10 @@ test('keeps every upload in its original workspace when switching spaces during 
     await expect.poll(() => ready).toBe(true);
     const openNavigation = page.getByRole('button', { name: '展开导航', exact: true });
     if (await openNavigation.isVisible()) await openNavigation.click();
-    await page.locator('.workspace-switch:visible').click();
+    await page
+      .getByRole('button', { name: /切换工作空间/ })
+      .filter({ visible: true })
+      .click();
     await page.getByRole('button', { name: other.name, exact: true }).click();
     await expect
       .poll(async () => {

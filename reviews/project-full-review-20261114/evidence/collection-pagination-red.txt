@@ -1,0 +1,44 @@
+Running 1 test using 1 worker
+
+(node:67038) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/management-editor-recovery.spec.ts:256:1 › reaches collection 101 for membership and keeps its selection while paging, renaming and deleting (14.0s)
+
+
+  1) [desktop] › tests/e2e/management-editor-recovery.spec.ts:256:1 › reaches collection 101 for membership and keeps its selection while paging, renaming and deleting 
+
+    TimeoutError: locator.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: '加入素材集合', exact: true }).getByRole('button', { name: '下一页', exact: true })
+
+
+      282 |   await page.getByRole('button', { name: '加入集合', exact: true }).click();
+      283 |   const adding = page.getByRole('dialog', { name: '加入素材集合', exact: true });
+    > 284 |   await adding.getByRole('button', { name: '下一页', exact: true }).click();
+          |                                                                  ^
+      285 |   await adding.getByRole('button', { name: oldest.name, exact: true }).click();
+      286 |   await expect(adding).toHaveCount(0);
+      287 |   expect(
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-editor-recovery.spec.ts:284:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-5ZjhJx/results/management-editor-recovery-5c5d8-aging-renaming-and-deleting-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-5ZjhJx/results/management-editor-recovery-5c5d8-aging-renaming-and-deleting-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-5ZjhJx/results/management-editor-recovery-5c5d8-aging-renaming-and-deleting-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-5ZjhJx/results/management-editor-recovery-5c5d8-aging-renaming-and-deleting-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-5ZjhJx/results/management-editor-recovery-5c5d8-aging-renaming-and-deleting-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/management-editor-recovery.spec.ts:256:1 › reaches collection 101 for membership and keeps its selection while paging, renaming and deleting 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-5ZjhJx

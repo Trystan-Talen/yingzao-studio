@@ -1,0 +1,16 @@
+跨账号同空间缓存隔离浏览器回归
+
+测试：platform/tests/e2e/knowledge-session-isolation.spec.ts
+旧实现：1项失败。MutationObserver（页面变化监听）观察到前账户私有记忆和私有产品短暂显示；两个列表加载期间均有1项前账户记录。服务端返回已正确排除前账户数据，证实问题发生在浏览器缓存。
+修复后：同一测试1项通过，约4.0秒。两个列表加载期间前账户记录均为0，监听没有捕获敏感词，页面保持同一文档，未通过整页刷新清除缓存。
+
+路径：账户甲真实载入记忆及私有产品；设置保存的真实PATCH（部分更新）成功后，在隔离数据库撤销该会话；页面接续的GET（读取）返回真实401；账户乙通过登录表单登录同一团队空间；延迟其记忆与产品列表响应，核对响应和中间页面状态。MutationObserver（页面变化监听）持续记录新增节点与文字变化，不只核对最终状态。
+
+旧实现来自修复前保存的context.tsx（会话上下文）、api.ts（接口客户端）和App.tsx（应用入口），在独立临时源码副本中运行；3处直接查询键恢复为旧空间/路径结构以与旧客户端兼容。未回改工作区源码。旧副本首轮因缺少index.html（网页构建入口）构建失败，补齐后才运行本次真实失败测试；不把环境构建失败算作缺陷证据。
+
+新版命令：node --import tsx scripts/e2e.ts --config=var/knowledge-chrome.config.ts knowledge-session-isolation.spec.ts --project=desktop
+旧版运行目录：/private/tmp/knowledge-session-red-vtcr4s2_
+旧版报告：/private/tmp/knowledge-session-red-vtcr4s2_/var/e2e/run-4mrHgM
+新版报告：platform/var/e2e/run-u6b6TA
+
+全部使用隔离数据库与合成账户，没有真实模型或外部通知调用。此证据仅覆盖单个桌面用例，不代表全量浏览器回归。

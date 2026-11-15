@@ -1,9 +1,17 @@
+import { useQuery } from '@tanstack/react-query';
 import { jobInputSchema } from '../../contracts/jobs';
 import { t } from '../lib/i18n';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowUpRight, CheckCircle2, Coins, Image, Sparkles, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { api, ApiError, CONFIRMATION_TIMEOUT_MS, errorMessage, useRefresh } from '../lib/api';
+import {
+  api,
+  apiQueryKey,
+  ApiError,
+  CONFIRMATION_TIMEOUT_MS,
+  errorMessage,
+  useRefresh,
+} from '../lib/api';
 import { jobDestination } from '../lib/job-navigation';
 import { jobInputSummary } from '../lib/job-presentation';
 import {
@@ -17,8 +25,11 @@ import type { Job, JobInput, Operation, Quote } from '../lib/tasks';
 import { Button, Modal, Notice, useAction } from './ui';
 import { useStudio } from '../context';
 import { canConfirmQuote, quoteFormFingerprint } from '../lib/quote-confirmation';
-import { CreativeSummary } from './CreativeBrief';
+import { CreativeContextSources, CreativeSummary, ReferenceStudyPreview } from './CreativeBrief';
+import type { CreativePreparation } from '../../contracts/creative-intent';
+import { checkCreativePreparation } from '../lib/creative-brief';
 import { CreditEstimate } from './CreditEstimate';
+import { creativeConfigurationChanged } from '../lib/creative-brief';
 import '../styles/job-submit.css';
 
 export function JobCreatedReceipt({ job }: { job: Job }) {
@@ -49,6 +60,9 @@ export function JobSubmit({
   secondaryActions,
   onRequestPrompt,
   onCapabilityChanged,
+  onPreparationInvalid,
+  preparationRevision,
+  onPreparationLockChange,
 }: {
   input: JobInput;
   operation: Operation | undefined;
@@ -69,6 +83,12 @@ export function JobSubmit({
   onRequestPrompt?: () => void;
   /** Refresh metadata only; the user must request and confirm a new quote afterwards. */
   onCapabilityChanged?: () => Promise<boolean>;
+  /** A changed connection invalidates the old plan; never starts a new model call. */
+  onPreparationInvalid?: (error: ApiError) => void;
+  /** Explicitly choosing fresh sources invalidates quote reuse, without changing user input. */
+  preparationRevision?: number;
+  /** Prevent fresh-source preparation while a submission is running or awaiting reconciliation. */
+  onPreparationLockChange?: (locked: boolean) => void;
 }) {
   const { canEdit, session, workspace } = useStudio();
   const mounted = useRef(true);
@@ -106,6 +126,7 @@ export function JobSubmit({
   const [needsReconfirmation, setNeedsReconfirmation] = useState(false);
   const confirmGeneration =
     forceConfirmation ||
+    !!input.replica ||
     needsReconfirmation ||
     session?.user.preferences.confirmGeneration !== false;
   const capabilityRecovery = useRef(onCapabilityChanged);
@@ -127,6 +148,38 @@ export function JobSubmit({
     return () => clearTimeout(timer);
   }, [quoteExpiresAt, confirmGeneration]);
   const [snapshot, setSnapshot] = useState<JobInput | null>(null);
+  const needsContextReview =
+    !!snapshot?.creativeBriefId &&
+    (!!snapshot.productId || snapshot.useMemory === true || !!snapshot.brandId);
+  const needsPlanReview = !!snapshot?.replica || needsContextReview;
+  const referencePath = `/creative-briefs/${snapshot?.creativeBriefId ?? ''}`;
+  const referenceQuery = useQuery({
+    queryKey: apiQueryKey(referencePath, workspace?.id ?? null, session?.user.id ?? null),
+    queryFn: ({ signal }) =>
+      api<CreativePreparation>(
+        referencePath,
+        { signal, timeoutMs: CONFIRMATION_TIMEOUT_MS },
+        workspace?.id,
+      ),
+    enabled: needsPlanReview && !!snapshot?.creativeBriefId,
+    retry: false,
+  });
+  let referencePreparation: CreativePreparation | undefined;
+  let referencePreparationError: string | undefined;
+  if (snapshot && needsPlanReview && referenceQuery.data) {
+    try {
+      referencePreparation = checkCreativePreparation(referenceQuery.data, snapshot);
+    } catch (error) {
+      referencePreparationError = errorMessage(error);
+    }
+  }
+  const referencePlanReady =
+    !needsPlanReview ||
+    (!referenceQuery.error &&
+      !referenceQuery.isFetching &&
+      referencePreparation?.status === 'ready' &&
+      (!snapshot?.replica ||
+        referencePreparation.referenceStudy?.study.visualStatus === 'readable'));
   const mediaGeneration = ['image.generate', 'video.generate'].includes(input.operation);
   const mediaQuote =
     !!snapshot && ['image.generate', 'video.generate'].includes(snapshot.operation);
@@ -137,7 +190,10 @@ export function JobSubmit({
   const requestId = useRef<string | null>(null);
   const validated = jobInputSchema.safeParse(input);
   const requestPrompt = !input.prompt.trim() && onRequestPrompt;
-  const formFingerprint = quoteFormFingerprint(input);
+  const formFingerprint =
+    preparationRevision === undefined
+      ? quoteFormFingerprint(input)
+      : JSON.stringify([quoteFormFingerprint(input), preparationRevision]);
   const latestForm = useRef({
     valid,
     canEdit,
@@ -151,6 +207,7 @@ export function JobSubmit({
     fingerprint: formFingerprint,
   };
   const confirmationAllowed =
+    referencePlanReady &&
     !!quote &&
     canConfirmQuote(
       valid && canEdit && !!operation?.available,
@@ -160,8 +217,20 @@ export function JobSubmit({
     );
   const quoteExpired = !!quote && !(Date.parse(quote.expiresAt) > Date.now());
   const action = useAction();
+  useEffect(() => {
+    onPreparationLockChange?.(action.busy || !!recovery || !!journal.error);
+  }, [action.busy, recovery, journal.error, onPreparationLockChange]);
   const refresh = useRefresh();
   async function recoverCapability(error: unknown) {
+    if (error instanceof ApiError && creativeConfigurationChanged(error.code) && mounted.current) {
+      pendingRequest.current = null;
+      requestId.current = null;
+      setQuote(null);
+      setSnapshot(null);
+      setNeedsReconfirmation(true);
+      onPreparationInvalid?.(error);
+      return error;
+    }
     if (
       !(error instanceof ApiError) ||
       error.code !== 'CAPABILITY_CHANGED' ||
@@ -349,7 +418,7 @@ export function JobSubmit({
     });
   }
   async function submit() {
-    if (!quote || !snapshot || !requestId.current) return;
+    if (!quote || !snapshot || !requestId.current || !referencePlanReady) return;
     if (
       !canConfirmQuote(
         latestForm.current.valid && latestForm.current.canEdit && !!latestForm.current.available,
@@ -570,6 +639,55 @@ export function JobSubmit({
                 </div>
               </section>
             )}
+            {needsContextReview && referencePreparation && (
+              <CreativeContextSources preparation={referencePreparation} />
+            )}
+            {needsContextReview && !snapshot.replica && !referencePlanReady && (
+              <Notice tone={referenceQuery.error || referencePreparationError ? 'warning' : 'info'}>
+                <p>
+                  {t(
+                    referenceQuery.isLoading
+                      ? '正在读取资料快照…'
+                      : '资料快照未能读取，请重试后确认。',
+                  )}
+                </p>
+                {(referenceQuery.error || referencePreparationError) && (
+                  <p>{referencePreparationError ?? errorMessage(referenceQuery.error)}</p>
+                )}
+                {!referenceQuery.isLoading && (
+                  <Button variant="secondary" onClick={() => void referenceQuery.refetch()}>
+                    {t('重试读取方案')}
+                  </Button>
+                )}
+              </Notice>
+            )}
+            {snapshot.replica &&
+              (referencePlanReady && referencePreparation?.referenceStudy ? (
+                <ReferenceStudyPreview
+                  value={referencePreparation.referenceStudy}
+                  preparation={referencePreparation}
+                />
+              ) : (
+                <Notice
+                  tone={referenceQuery.error || referencePreparationError ? 'warning' : 'info'}
+                >
+                  <p>
+                    {t(
+                      referenceQuery.isLoading
+                        ? '正在读取本次复刻方案…'
+                        : '本次复刻方案未能读取或已失效，请重新核对后确认。',
+                    )}
+                  </p>
+                  {(referenceQuery.error || referencePreparationError) && (
+                    <p>{referencePreparationError ?? errorMessage(referenceQuery.error)}</p>
+                  )}
+                  {!referenceQuery.isLoading && (
+                    <Button variant="secondary" onClick={() => void referenceQuery.refetch()}>
+                      {t('重试读取方案')}
+                    </Button>
+                  )}
+                </Notice>
+              ))}
             <details
               className={mediaQuote ? 'media-quote-details' : undefined}
               open={mediaQuote ? undefined : true}

@@ -35,12 +35,20 @@ test('restores ordered marketing modules and their own real references from the 
   const headers = { 'x-workspace-id': session.activeWorkspaceId };
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
-  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  const kind = composer.getByRole('combobox', { name: '创作类型', exact: true });
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+  const openSettings = () =>
+    composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+  const closeSettings = () => settings.getByRole('button', { name: '完成', exact: true }).click();
+  const kind = settings.getByRole('combobox', { name: '创作类型', exact: true });
   const prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
   await prompt.fill('春季上新：按物料构图与各自参考保存，不生成');
+  await openSettings();
+  await settings
+    .getByRole('combobox', { name: '生成模型', exact: true })
+    .selectOption('image.generate|openai|gpt-image-2.5-flare');
   await kind.selectOption('marketing');
-  await composer.getByRole('combobox', { name: '每模块生成数量', exact: true }).selectOption('2');
+  await settings.getByRole('combobox', { name: '每模块生成数量', exact: true }).selectOption('2');
+  await closeSettings();
   const planner = composer.locator('details.composer-materials');
   await planner.locator('summary').click();
   const modules = planner.locator('.design-module');
@@ -117,6 +125,7 @@ test('restores ordered marketing modules and their own real references from the 
   await page.reload();
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await expect(kind).toHaveValue('marketing');
+  await closeSettings();
   await expect(prompt).toHaveValue('春季上新：按物料构图与各自参考保存，不生成');
   await planner.locator('summary').click();
   await assertModules();
@@ -155,10 +164,12 @@ test('restores ordered marketing modules and their own real references from the 
     fullPage: true,
   });
 
+  await openSettings();
   await kind.selectOption('free');
+  await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('3:2');
+  await closeSettings();
   await expect(planner).toHaveCount(0);
   await prompt.fill('自由创作：保留模块草稿但当前只创作一张自由图');
-  await composer.getByRole('combobox', { name: '比例', exact: true }).selectOption('3:2');
   await upload(composer.locator('.composer-materials').first(), '自由创作参考.png', '#a34b24');
   const freeSave = page.waitForResponse(
     (response) =>
@@ -179,11 +190,14 @@ test('restores ordered marketing modules and their own real references from the 
   await page.reload();
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await expect(kind).toHaveValue('free');
+  await expect(settings.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('3:2');
+  await closeSettings();
   await expect(prompt).toHaveValue('自由创作：保留模块草稿但当前只创作一张自由图');
-  await expect(composer.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('3:2');
   await expect(composer.locator('.asset-chip')).toHaveCount(1);
   await expect(composer.locator('.asset-chip')).toContainText('自由创作参考.png');
+  await openSettings();
   await kind.selectOption('marketing');
+  await closeSettings();
   await planner.locator('summary').click();
   await assertModules();
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM projects').get()).toEqual({

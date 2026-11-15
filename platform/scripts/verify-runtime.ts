@@ -7,6 +7,7 @@ import { createServer } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { isolatedTestEnvironment } from './test-environment';
 
 const socket = createServer();
 await new Promise<void>((done, reject) => {
@@ -23,7 +24,7 @@ const folder = await mkdtemp(join(tmpdir(), 'yingzao-production-smoke-'));
 const origin = `http://127.0.0.1:${port}`;
 const processes: ChildProcess[] = [];
 const env = {
-  ...process.env,
+  ...isolatedTestEnvironment(process.cwd()),
   NODE_ENV: 'production',
   DEMO_MODE: 'false',
   HOST: '127.0.0.1',

@@ -9,14 +9,18 @@ import type {
 } from '../../contracts/jobs';
 import type { AppConfig } from '../config';
 import type { DatabaseContext } from '../db/connection';
+import type { Actor } from '../../contracts/core';
 import { AppError } from '../errors';
-import { hasFfmpeg } from '../providers/local';
+import { hasFfmpeg, hasFfprobe } from '../providers/local';
 import { FAL_REFERENCE_MODELS } from '../providers/fal-reference';
 import { FAL_MOTION_MODELS } from '../providers/fal-motion';
 import { validateSeedanceInput } from '../providers/seedance';
 import { validateImageGatewayInput } from '../providers/openai';
 import { ProviderError } from './types';
 import { createModelCapabilityService } from './model-capabilities';
+import { createModelConnectionsService } from './model-connections';
+import { nativeImageModel, nativeVideoModel, validateNativeInput } from '../providers/native';
+import { frozenCreativeContext, frozenNativeImageEdit } from './creative-briefs';
 interface Setting {
   provider_id: ProviderId;
   encrypted_secret: string | null;
@@ -83,8 +87,10 @@ export const FLYELEP_OPERATIONS = [
   'text.assist',
 ];
 export function createSettingsService(db: DatabaseContext, config: AppConfig) {
+  const connections = createModelConnectionsService(db, config);
   const key = createHash('sha256').update(config.encryptionKey).digest();
   const ffmpeg = hasFfmpeg();
+  const ffprobe = hasFfprobe();
   const encrypt = (value: string) => {
     const iv = randomBytes(12);
     const cipher = createCipheriv('aes-256-gcm', key, iv);
@@ -110,7 +116,7 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       .get(wid, id) as Setting | undefined;
   }
   function secret(wid: string, id: ProviderId): string | undefined {
-    if (id === 'local') return undefined;
+    if (id === 'local' || id === 'native') return undefined;
     const row = get(wid, id);
     if (row?.enabled === 0) return undefined;
     return row?.encrypted_secret
@@ -118,7 +124,7 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       : config.environmentSecrets[id] || undefined;
   }
   function list(wid: string): ProviderSettingDto[] {
-    return PROVIDERS.filter((p) => p.id !== 'local').map((p) => {
+    return PROVIDERS.filter((p) => p.id !== 'local' && p.id !== 'native').map((p) => {
       const row = get(wid, p.id);
       const value = secret(wid, p.id);
       return {
@@ -181,7 +187,11 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
         p.id === 'openai' && config.imageGateway?.model === 'doubao-seedream-5.0-lite'
           ? 'Seedream（豆包生图）'
           : p.name,
-      configured: p.id === 'local' || Boolean(secret(wid, p.id)),
+      configured:
+        p.id === 'local' ||
+        (p.id === 'native'
+          ? Boolean(connections.runtime(wid, 'text') && connections.runtime(wid, 'image'))
+          : Boolean(secret(wid, p.id))),
     }));
     const operations: OperationCapability[] = [];
     const add = (
@@ -233,6 +243,49 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
           : {}),
       });
     };
+    const image = connections.runtime(wid, 'image');
+    const video = connections.runtime(wid, 'video');
+    const text = connections.runtime(wid, 'text');
+    add(
+      'image.generate',
+      'native',
+      image ? [nativeImageModel(image.model, image.protocol)] : [],
+      8,
+      'image',
+      config.demoMode
+        ? '演示模式不调用自定义模型，请在正式模式配置并生成'
+        : text && image
+          ? null
+          : '请在模型配置中启用文本与图片服务',
+    );
+    add(
+      'video.generate',
+      'native',
+      video ? [nativeVideoModel(video.model)] : [],
+      5,
+      'second',
+      config.demoMode
+        ? '演示模式不调用自定义模型，请在正式模式配置并生成'
+        : !ffmpeg || !ffprobe
+          ? '请先安装 FFmpeg（媒体处理工具）与 ffprobe（媒体探测工具），再生成视频'
+          : text && image && video
+            ? null
+            : '请在模型配置中启用文本、图片与视频服务',
+    );
+    for (const operation of operations) {
+      if (operation.providerId === 'native') {
+        operation.maxCount = 1;
+        operation.replicaReason = !operation.available
+          ? operation.reason
+          : !text?.visionModel
+            ? '请在文本服务中配置视觉分析模型后使用爆款复刻'
+            : operation.id === 'video.generate' && (!ffmpeg || !ffprobe)
+              ? '视频参考分析需要本机媒体处理工具'
+              : null;
+        operation.replicaAvailable = operation.available && !operation.replicaReason;
+        if (operation.id === 'video.generate') operation.fixedCredits = 8;
+      }
+    }
     add(
       'media.import',
       'tikhub',
@@ -466,13 +519,85 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
     );
     return { providers, operations };
   }
-  function validateCapability(wid: string, input: JobInput) {
+  function validateCapability(
+    wid: string,
+    input: JobInput,
+    actor?: Actor,
+    trustedSnapshot = false,
+  ): OperationCapability {
+    // Only an owned immutable preparation can opt out of external model requirements.
+    // Client-supplied imageEdit is not evidence that this is a local operation.
+    if (
+      actor &&
+      (input.creativeBriefId || trustedSnapshot) &&
+      input.providerId === 'native' &&
+      input.operation === 'image.generate'
+    ) {
+      // This flag is supplied only by service code after resolving an owned preparation,
+      // a persisted execution snapshot, or an owned quote. It is never parsed from JSON.
+      const edit = input.creativeBriefId
+        ? frozenNativeImageEdit(db, actor, wid, input)
+        : input.imageEdit;
+      if (edit?.mask.mode === 'asset') {
+        try {
+          // The original can come from the confirmed library materials, before the
+          // execution snapshot expands those IDs. Do not consult the current library.
+          const references = input.creativeBriefId
+            ? (frozenCreativeContext(db, actor, wid, input)
+                ?.materials.filter(
+                  (material) =>
+                    material.kind === 'image' &&
+                    (material.role === 'input' || material.role === 'reference'),
+                )
+                .map((material) => material.id) ?? [])
+            : [];
+          validateNativeInput(
+            {
+              ...input,
+              referenceAssetIds: [...new Set([...input.referenceAssetIds, ...references])],
+              imageEdit: edit,
+            },
+            {},
+          );
+        } catch (error) {
+          if (error instanceof ProviderError)
+            throw new AppError(400, 'MODEL_INPUT_INVALID', error.message);
+          throw error;
+        }
+        return {
+          id: 'image.generate',
+          name: '背景区域本机合成',
+          providerId: 'native',
+          available: true,
+          reason: null,
+          models: [],
+          priceCredits: 0,
+          unit: 'request',
+          liveVerified: false,
+        };
+      }
+    }
     const c = capabilities(wid).operations.find(
       (v) => v.id === input.operation && v.providerId === input.providerId,
     );
     if (!c || !c.available)
       throw new AppError(503, 'CAPABILITY_UNAVAILABLE', c?.reason || '此服务不支持所选操作');
     try {
+      if (input.providerId === 'native') {
+        validateNativeInput(input, {
+          image: connections.runtime(wid, 'image'),
+          video: connections.runtime(wid, 'video'),
+        });
+        if (
+          input.nativeRevision &&
+          input.nativeRevision !== connections.revision(wid, input.operation)
+        )
+          throw new AppError(
+            409,
+            'MODEL_CONNECTION_CHANGED',
+            '模型配置已改变，请重新规划并获取报价。',
+          );
+      }
       if (input.providerId === 'seedance') validateSeedanceInput(input);
       if (input.providerId === 'openai' && config.imageGateway)
         validateImageGatewayInput(input, config.imageGateway);
@@ -515,7 +640,21 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
     modelCapabilities.validate(wid, input);
     return c;
   }
-  const modelCapabilities = createModelCapabilityService(config, { secret, capabilities });
-  return { secret, list, update, capabilities, validateCapability, modelCapabilities, ffmpeg };
+  const modelCapabilities = createModelCapabilityService(config, {
+    secret,
+    capabilities,
+    configurationRevision: (wid, provider, operation) =>
+      provider === 'native' ? connections.revision(wid, operation) : '',
+  });
+  return {
+    secret,
+    list,
+    update,
+    capabilities,
+    validateCapability,
+    modelCapabilities,
+    connections,
+    ffmpeg,
+  };
 }
 export type SettingsService = ReturnType<typeof createSettingsService>;

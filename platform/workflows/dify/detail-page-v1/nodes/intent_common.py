@@ -75,8 +75,18 @@ def intent_number(value):
         intent_fail("INTENT_NUMBER_INVALID")
 
 
+def intent_datetime(value):
+    from datetime import datetime
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]+)?Z", value):
+        intent_fail("INTENT_DATE_INVALID")
+    try:
+        datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        intent_fail("INTENT_DATE_INVALID")
+
+
 def validate_intent_request(value, brief=None):
-    intent_fields(value, ("version", "requestId", "rawPrompt", "sourceTexts", "answers", "materials", "context", "strategy"), ("previousSummary",))
+    intent_fields(value, ("version", "requestId", "rawPrompt", "sourceTexts", "answers", "materials", "context", "strategy"), ("previousSummary", "memoryContext", "contextSources"))
     if type(value["version"]) is not int or value["version"] != 1:
         intent_fail("INTENT_VERSION_INVALID")
     intent_uuid(value["requestId"])
@@ -91,6 +101,47 @@ def validate_intent_request(value, brief=None):
         if source["id"] in source_ids:
             intent_fail("INTENT_SOURCE_DUPLICATED")
         source_ids.add(source["id"])
+    if "contextSources" in value:
+        for source in intent_list(value["contextSources"], 10):
+            intent_fields(source, ("kind", "id", "label", "content"), ("version", "updatedAt", "expiresAt"))
+            intent_enum(source["kind"], ("brand", "product", "memory"))
+            intent_uuid(source["id"])
+            intent_string(source["label"], 300, 1)
+            intent_string(source["content"], 20000)
+            if "version" in source:
+                if type(source["version"]) is not int or source["version"] < 1:
+                    intent_fail("INTENT_CONTEXT_VERSION_INVALID")
+            if "updatedAt" in source:
+                intent_datetime(source["updatedAt"])
+            if source.get("expiresAt") is not None:
+                intent_datetime(source["expiresAt"])
+    if "memoryContext" in value:
+        memory = value["memoryContext"]
+        intent_fields(memory, ("items", "omitted"))
+        if type(memory["omitted"]) is not int or memory["omitted"] < 0:
+            intent_fail("INTENT_MEMORY_INVALID")
+        memory_size = 0
+        for item in intent_list(memory["items"], 8):
+            intent_fields(item, ("id", "topic", "kind", "content", "version", "updatedAt", "weight"), ("confirmedAt", "expiresAt", "halfLifeDays"))
+            intent_uuid(item["id"])
+            intent_enum(item["kind"], ("profile", "preference", "temporary"))
+            intent_string(item["topic"], 80, 1)
+            intent_string(item["content"], 2000, 1)
+            memory_size += len(item["content"].encode("utf-16-le", errors="surrogatepass")) // 2
+            intent_datetime(item["updatedAt"])
+            if "confirmedAt" in item:
+                intent_datetime(item["confirmedAt"])
+            if item.get("expiresAt") is not None:
+                intent_datetime(item["expiresAt"])
+            if item.get("halfLifeDays") is not None and (type(item["halfLifeDays"]) is not int or not 1 <= item["halfLifeDays"] <= 3650):
+                intent_fail("INTENT_MEMORY_INVALID")
+            if type(item["version"]) is not int or item["version"] < 1:
+                intent_fail("INTENT_CONTEXT_VERSION_INVALID")
+            intent_number(item["weight"])
+            if not 0 <= item["weight"] <= 1:
+                intent_fail("INTENT_MEMORY_INVALID")
+        if memory_size > 6000:
+            intent_fail("INTENT_MEMORY_INVALID")
     if "previousSummary" in value:
         intent_string(value["previousSummary"], 2000)
     for answer in intent_list(value["answers"], 12):
@@ -98,11 +149,14 @@ def validate_intent_request(value, brief=None):
         intent_string(answer["questionId"], 60, 1)
         answer["answer"] = intent_string(answer["answer"], 2000, 1, True)
     for material in intent_list(value["materials"], 40):
-        intent_fields(material, ("id", "name", "kind", "role"))
+        intent_fields(material, ("id", "name", "kind", "role"), ("width", "height", "byteSize"))
         intent_uuid(material["id"])
         intent_string(material["name"], 300)
         intent_enum(material["kind"], ("image", "video", "audio", "document"))
-        intent_enum(material["role"], ("reference", "input", "background", "audio"))
+        intent_enum(material["role"], ("reference", "input", "background", "audio", "mask"))
+        for key in ("width", "height", "byteSize"):
+            if key in material and (type(material[key]) is not int or material[key] <= 0):
+                intent_fail("INTENT_MATERIAL_INVALID")
     context = value["context"]
     intent_fields(context, ("mediaType", "platform", "placement", "language", "count", "ratio", "resolution", "supportsReference", "supportsAudio", "supportsText"), ("market", "duration"))
     intent_enum(context["mediaType"], ("image", "video"))

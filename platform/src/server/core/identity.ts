@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CoreContext, id, now, str, num, json, nullable } from './shared';
+import { type CoreContext, id, now, str, num, json, nullable } from './shared';
 import {
   CharacterAuthorizationInputSchema,
   ReasonInputSchema,

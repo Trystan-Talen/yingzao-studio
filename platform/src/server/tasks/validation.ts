@@ -12,6 +12,7 @@ import { isFalReferenceModel, validateFalReferenceInput } from '../providers/fal
 import { buildWanPrompt } from '../providers/wan-options';
 import { validateFalMotionInput } from '../providers/fal-motion';
 import { parseSocialVideoLink } from '../../contracts/social-import';
+import { validateCreativeKnowledgeInput } from './creative-knowledge';
 export function canonical(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
   if (value && typeof value === 'object')
@@ -34,11 +35,79 @@ export function validateInput(
   actor: Actor,
   wid: string,
   raw: unknown,
+  trustedSnapshot = false,
 ): JobInput {
   core.requireAccess(actor, wid, 'write');
   checkScope(actor, 'jobs:write');
   const i = jobInputSchema.parse(raw);
   const o = i.options;
+  validateCreativeKnowledgeInput(actor, i);
+  if (i.replica) {
+    const intent = i.replica;
+    if (
+      i.providerId !== 'native' ||
+      !['image.generate', 'video.generate'].includes(i.operation) ||
+      i.assetIds.length !== 1 ||
+      i.assetIds[0] !== intent.subjectAssetId ||
+      i.referenceAssetIds.length !== 1 ||
+      i.referenceAssetIds[0] !== intent.referenceAssetId ||
+      i.brandId ||
+      i.includeProductImages ||
+      i.characterId ||
+      i.maskAssetId ||
+      i.backgroundAssetId ||
+      i.backgroundAudioAssetId ||
+      i.documentId ||
+      i.targetLayerId ||
+      o.designs?.length ||
+      o.count !== 1
+    )
+      throw new AppError(
+        400,
+        'REPLICA_INPUT_INVALID',
+        '复刻需要一份参考作品与一张自己的主体图，请使用独立素材槽位。',
+      );
+    const subject = core.assets.get(actor, wid, intent.subjectAssetId);
+    const reference = core.assets.get(actor, wid, intent.referenceAssetId);
+    const kind = i.operation === 'video.generate' ? 'video' : 'image';
+    if (subject.kind !== 'image' || reference.kind !== kind)
+      throw new AppError(
+        400,
+        'REPLICA_REFERENCE_INVALID',
+        '自己的主体须为图片；参考作品类型须与当前创作入口相同。',
+      );
+    if (
+      [subject, ...(kind === 'image' ? [reference] : [])].some(
+        (asset) =>
+          !['image/png', 'image/jpeg', 'image/webp'].includes(asset.mimeType) ||
+          asset.byteSize > 10 * 1024 * 1024 ||
+          !asset.width ||
+          !asset.height ||
+          asset.width * asset.height > 36_000_000,
+      )
+    )
+      throw new AppError(
+        400,
+        'REPLICA_IMAGE_LIMIT',
+        '复刻图片须为PNG/JPEG/WebP（图片格式），不超过10MiB（兆字节）和3600万像素。',
+      );
+    if (
+      kind === 'image' &&
+      (intent.trimStart !== 0 ||
+        intent.trimDuration !== undefined ||
+        intent.aspects.some((v) => v === 'camera' || v === 'pacing'))
+    )
+      throw new AppError(
+        400,
+        'REPLICA_ASPECT_INVALID',
+        '图片复刻仅支持构图、布光和配色，不接受视频选段或运镜设置。',
+      );
+    if (
+      trustedSnapshot &&
+      (!i.nativeReplica || JSON.stringify(i.nativeReplica.intent) !== JSON.stringify(intent))
+    )
+      throw new AppError(409, 'REPLICA_PLAN_REQUIRED', '复刻缺少匹配的已确认参考分析。');
+  }
   if (i.operation === 'media.import') {
     checkScope(actor, 'assets:write');
     if (!o.referenceAuthorized || !o.externalCostAccepted)
@@ -74,7 +143,7 @@ export function validateInput(
   } else if (i.linkUrl) {
     throw new AppError(400, 'SHARE_LINK_UNSUPPORTED', '请先导入分享链接，再选择保存的视频素材。');
   }
-  settings.validateCapability(wid, i);
+  settings.validateCapability(wid, i, actor, trustedSnapshot);
   if (i.projectId) core.projects.get(actor, wid, i.projectId);
   if (i.documentId) {
     const doc = core.documents.get(actor, wid, i.documentId);
@@ -90,7 +159,7 @@ export function validateInput(
     ...(i.maskAssetId ? [i.maskAssetId] : []),
     ...(i.backgroundAssetId ? [i.backgroundAssetId] : []),
   ].map((id) => core.assets.get(actor, wid, id));
-  if (i.brandId) {
+  if (i.brandId && !i.creativeBriefId) {
     const brand = core.brands.get(actor, wid, i.brandId);
     for (const id of brand.referenceAssetIds) core.assets.get(actor, wid, id);
   }
@@ -184,7 +253,8 @@ export function validateInput(
   if (i.options.designs?.length && i.operation !== 'image.generate')
     throw new AppError(400, 'DESIGNS_UNSUPPORTED', '分模块设计只适用于图片创作');
   if (i.options.designs?.length)
-    for (const part of splitItems(i)) settings.validateCapability(wid, part);
+    for (const part of splitItems(i))
+      settings.validateCapability(wid, part, actor, trustedSnapshot);
   if (tool && (i.assetIds.length < tool.minInputs || i.assetIds.length > tool.maxInputs))
     throw new AppError(
       400,

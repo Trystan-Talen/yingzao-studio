@@ -1,0 +1,26 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ✓ tests/test-launcher.test.ts (5 tests) 1275ms
+   ✓ launches selected tests without inherited credentials, data paths, or build variables 375ms
+   ✓ preserves the nonzero exit status of failing tests 313ms
+   ✓ forwards termination to the test process group and preserves the interruption result 317ms
+ ✓ tests/script-test-environment.test.ts (4 tests) 1336ms
+   ✓ test subprocess isolation (4)
+     ✓ finds bundled media commands with an otherwise minimal PATH and prefers the current installation 1205ms
+ ✓ tests/vitest-environment.test.ts (1 test) 319ms
+   ✓ keeps both Vite environment loading and application dotenv imports away from local settings 319ms
+stdout | tests/quality-runner.test.ts > records a failed stage and stops before later tools without inheriting application settings
+
+质量检查：类型检查
+
+stdout | tests/quality-runner.test.ts > records a failed stage and stops before later tools without inheriting application settings
+质量检查记录：/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-quality-failure-V06C7Y/var/quality/run-lyju97
+
+ ✓ tests/quality-runner.test.ts (2 tests) 26ms
+
+ Test Files  4 passed (4)
+      Tests  12 passed (12)
+   Start at  09:06:25
+   Duration  3.21s (tests 98%, import 1%, transform 1%)
+

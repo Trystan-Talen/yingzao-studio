@@ -1,0 +1,26 @@
+[
+  {
+    "source": "platform/var/e2e/run-nASGst/case-Clkdoz/contrast-dark.json",
+    "theme": "dark",
+    "normal": 5.6236618452002665,
+    "hover": 4.951035586078794
+  },
+  {
+    "source": "platform/var/e2e/run-nASGst/case-FHorrb/contrast-light.json",
+    "theme": "light",
+    "normal": 7.100611763071383,
+    "hover": 6.359328050742382
+  },
+  {
+    "source": "platform/var/e2e/run-nASGst/case-ITRXj3/contrast-light.json",
+    "theme": "light",
+    "normal": 7.048559789470746,
+    "hover": 6.2911092395035695
+  },
+  {
+    "source": "platform/var/e2e/run-nASGst/case-sMMCjM/contrast-dark.json",
+    "theme": "dark",
+    "normal": 5.560401234409938,
+    "hover": 4.896943291750759
+  }
+]

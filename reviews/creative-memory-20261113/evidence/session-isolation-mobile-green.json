@@ -1,0 +1,9 @@
+{
+  "realSessionExpiryStatus": 401,
+  "sameWorkspace": true,
+  "serverResponsesExcludedOtherUserData": true,
+  "leakedMemoryDuringLoad": 0,
+  "leakedProductDuringLoad": 0,
+  "leakedWords": [],
+  "navigationMarker": "same-document"
+}

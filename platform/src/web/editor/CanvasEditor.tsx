@@ -888,9 +888,11 @@ export function CanvasEditor({
               <div className="ce-empty-icon">
                 <ImagePlus size={24} />
               </div>
-              <strong>{t('好作品，从这里开始')}</strong>
+              <strong>{t('画布还是空的')}</strong>
               <span>
-                {readOnly ? t('此画布尚未添加内容') : t('添加素材、文字，或把生成结果放进画布')}
+                {readOnly
+                  ? t('此画布尚未添加内容')
+                  : t('放入素材或生成结果，也可以用上方工具栏添加文字和形状')}
               </span>
               {!readOnly && (
                 <button type="button" onClick={() => setDialog('assets')}>

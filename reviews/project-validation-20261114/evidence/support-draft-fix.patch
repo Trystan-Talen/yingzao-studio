@@ -1,0 +1,67 @@
+--- before/Support.tsx
++++ after/Support.tsx
+@@ -78,7 +78,8 @@
+   const [message, setMessage] = useState('');
+   const [jobId, setJobId] = useState('');
+   const [detail, setDetail] = useState<string | null>(null);
+-  const [reply, setReply] = useState('');
++  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
++  const reply = detail ? (replyDrafts[detail] ?? '') : '';
+   const [ticketPage, setTicketPage] = useState(1);
+   const tickets = useApi<Page<Ticket>>(
+     `/support/tickets?pageSize=100&page=${ticketPage}`,
+@@ -184,8 +185,10 @@
+                         <strong>{item.subject}</strong>
+                       </td>
+                       <td>
+-                        {{ feedback: '反馈', appeal: '申诉', support: '支持' }[item.category] ??
+-                          item.category}
++                        {t(
++                          { feedback: '反馈', appeal: '申诉', support: '支持' }[item.category] ??
++                            item.category,
++                        )}
+                       </td>
+                       <td>
+                         <Badge>
+@@ -347,7 +350,7 @@
+         open={!!detail}
+         onClose={() => setDetail(null)}
+         title={ticket.data?.subject ?? '工单详情'}
+-        description={ticket.data ? `创建于 ${dateTime(ticket.data.createdAt)}` : undefined}
++        description={ticket.data ? `${t('创建于')} ${dateTime(ticket.data.createdAt)}` : undefined}
+       >
+         {ticket.isLoading ? (
+           <Loading />
+@@ -388,9 +391,18 @@
+               <form
+                 onSubmit={(e) => {
+                   e.preventDefault();
++                  if (!detail) return;
++                  const submittedTicket = detail;
++                  const submittedReply = reply;
+                   void action.run(async () => {
+-                    await post(`/support/tickets/${detail}/replies`, { message: reply });
+-                    setReply('');
++                    await post(`/support/tickets/${submittedTicket}/replies`, {
++                      message: submittedReply,
++                    });
++                    setReplyDrafts((drafts) =>
++                      drafts[submittedTicket] === submittedReply
++                        ? { ...drafts, [submittedTicket]: '' }
++                        : drafts,
++                    );
+                     await refresh();
+                   }, '补充说明已保存');
+                 }}
+@@ -399,7 +411,10 @@
+                   <textarea
+                     disabled={['withdrawn', 'resolved', 'closed'].includes(ticket.data.status)}
+                     value={reply}
+-                    onChange={(e) => setReply(e.target.value)}
++                    onChange={(e) => {
++                      if (detail)
++                        setReplyDrafts((drafts) => ({ ...drafts, [detail]: e.target.value }));
++                    }}
+                     required
+                     rows={3}
+                   />

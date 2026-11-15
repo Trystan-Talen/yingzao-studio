@@ -1,0 +1,331 @@
+{
+  "sourceUnmodified": true,
+  "missingKeys": 20,
+  "coverage": "20 missing static keys; enhanced test also checks the other 6 rotating/greeting strings. User/provider names are exempt from translation.",
+  "inventory": [
+    {
+      "key": "种草海报",
+      "existing": null,
+      "actualEn": "种草海报",
+      "actualAr": "种草海报",
+      "proposed": {
+        "en": "Product showcase poster",
+        "ar": "ملصق لعرض منتج"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "key": "场景大片",
+      "existing": null,
+      "actualEn": "场景大片",
+      "actualAr": "场景大片",
+      "proposed": {
+        "en": "Cinematic scene",
+        "ar": "مشهد سينمائي"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "key": "营销物料",
+      "existing": null,
+      "actualEn": "营销物料",
+      "actualAr": "营销物料",
+      "proposed": {
+        "en": "Marketing assets",
+        "ar": "مواد تسويقية"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 40
+        }
+      ]
+    },
+    {
+      "key": "种草短片",
+      "existing": null,
+      "actualEn": "种草短片",
+      "actualAr": "种草短片",
+      "proposed": {
+        "en": "Product showcase clip",
+        "ar": "مقطع لعرض منتج"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "key": "产品广告",
+      "existing": null,
+      "actualEn": "产品广告",
+      "actualAr": "产品广告",
+      "proposed": {
+        "en": "Product ad",
+        "ar": "إعلان منتج"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "key": "开箱视频",
+      "existing": null,
+      "actualEn": "开箱视频",
+      "actualAr": "开箱视频",
+      "proposed": {
+        "en": "Unboxing video",
+        "ar": "فيديو فتح العبوة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "key": "品牌短片",
+      "existing": null,
+      "actualEn": "品牌短片",
+      "actualAr": "品牌短片",
+      "proposed": {
+        "en": "Brand film",
+        "ar": "فيلم قصير للعلامة التجارية"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "key": "口播视频",
+      "existing": null,
+      "actualEn": "口播视频",
+      "actualAr": "口播视频",
+      "proposed": {
+        "en": "Talking-head video",
+        "ar": "فيديو تقديم أمام الكاميرا"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "key": "夜深了",
+      "existing": null,
+      "actualEn": "夜深了",
+      "actualAr": "夜深了",
+      "proposed": {
+        "en": "It's late",
+        "ar": "الوقت متأخر"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 45
+        }
+      ]
+    },
+    {
+      "key": "整套长图",
+      "existing": null,
+      "actualEn": "整套长图",
+      "actualAr": "整套长图",
+      "proposed": {
+        "en": "Complete detail page",
+        "ar": "صفحة منتج متكاملة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 63
+        }
+      ]
+    },
+    {
+      "key": "抠图 · 扩图 · 高清",
+      "existing": null,
+      "actualEn": "抠图 · 扩图 · 高清",
+      "actualAr": "抠图 · 扩图 · 高清",
+      "proposed": {
+        "en": "Cut out · Extend · Upscale",
+        "ar": "إزالة الخلفية · توسيع · تحسين الدقة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "key": "上传与复用",
+      "existing": null,
+      "actualEn": "上传与复用",
+      "actualAr": "上传与复用",
+      "proposed": {
+        "en": "Upload and reuse",
+        "ar": "رفع وإعادة استخدام"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 65
+        }
+      ]
+    },
+    {
+      "key": "海量案例",
+      "existing": null,
+      "actualEn": "海量案例",
+      "actualAr": "海量案例",
+      "proposed": {
+        "en": "Explore examples",
+        "ar": "استكشف الأمثلة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 66
+        }
+      ]
+    },
+    {
+      "key": "今天想映造什么？",
+      "existing": null,
+      "actualEn": "今天想映造什么？",
+      "actualAr": "今天想映造什么？",
+      "proposed": {
+        "en": "What would you like to create today?",
+        "ar": "ماذا تود أن تنشئ اليوم؟"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 125
+        }
+      ]
+    },
+    {
+      "key": "参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在",
+      "existing": null,
+      "actualEn": "参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在",
+      "actualAr": "参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在",
+      "proposed": {
+        "en": "Drag references onto “Add assets” · Creations are saved to projects. Open",
+        "ar": "اسحب الصور المرجعية إلى «إضافة مواد» · تُحفظ الأعمال تلقائيًا في المشاريع. افتح"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 203
+        }
+      ]
+    },
+    {
+      "key": "中查看",
+      "existing": null,
+      "actualEn": "中查看",
+      "actualAr": "中查看",
+      "proposed": {
+        "en": "to check progress.",
+        "ar": "لمتابعة التقدم."
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/CreationLanding.tsx",
+          "line": 204
+        }
+      ]
+    },
+    {
+      "key": "服务商",
+      "existing": null,
+      "actualEn": "服务商",
+      "actualAr": "服务商",
+      "proposed": {
+        "en": "Provider",
+        "ar": "مزوّد الخدمة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/Composer.tsx",
+          "line": 1478
+        }
+      ]
+    },
+    {
+      "key": "最高清晰度",
+      "existing": null,
+      "actualEn": "最高清晰度",
+      "actualAr": "最高清晰度",
+      "proposed": {
+        "en": "Max resolution",
+        "ar": "أقصى دقة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/Composer.tsx",
+          "line": 1493
+        }
+      ]
+    },
+    {
+      "key": "可选比例",
+      "existing": null,
+      "actualEn": "可选比例",
+      "actualAr": "可选比例",
+      "proposed": {
+        "en": "Aspect ratios",
+        "ar": "نسب الأبعاد المتاحة"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/Composer.tsx",
+          "line": 1499
+        }
+      ]
+    },
+    {
+      "key": "种",
+      "existing": null,
+      "actualEn": "种",
+      "actualAr": "种",
+      "proposed": {
+        "en": "options",
+        "ar": "خيارات"
+      },
+      "sources": [
+        {
+          "file": "platform/src/web/components/Composer.tsx",
+          "line": 1501
+        }
+      ]
+    }
+  ],
+  "frozenSourceHashes": {
+    "src/web/lib/i18n.ts": "f134524f7a974c9975b2ee580d181e3eba3e195ed136f164e8f90372e22b3b86",
+    "tests/e2e/home-appearance.spec.ts": "bba79b94f999c6585bc19eed0e3df251ded72628676ebf7e454e46961e2b9575"
+  }
+}

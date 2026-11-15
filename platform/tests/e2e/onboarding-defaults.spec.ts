@@ -4,15 +4,17 @@ import { test, expect } from './fixtures';
 
 test.use({ recoveryEnabled: false });
 
-async function advanced(composer: Locator) {
-  const platform = composer.getByRole('combobox', { name: '发布平台', exact: true });
-  const language = composer.getByRole('combobox', { name: '画面文字语言', exact: true });
-  if (!(await language.isVisible()))
-    await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  return {
+async function checkDefaults(composer: Locator, platform: string, language: string) {
+  await expect(composer.getByRole('combobox', { name: '发布平台', exact: true })).toHaveValue(
     platform,
+  );
+  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
+  const settings = composer.page().getByRole('dialog', { name: '创作设置', exact: true });
+  await settings.locator('summary').filter({ hasText: '更多偏好' }).click();
+  await expect(settings.getByRole('combobox', { name: '画面文字语言', exact: true })).toHaveValue(
     language,
-  };
+  );
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
 }
 
 test('completes onboarding, applies persisted defaults to new drafts and preserves an existing project after defaults change', async ({
@@ -26,10 +28,16 @@ test('completes onboarding, applies persisted defaults to new drafts and preserv
   await page.getByRole('button', { name: '创建并开始创作', exact: true }).click();
   const onboarding = page.getByRole('dialog', { name: '欢迎来到映造', exact: true });
   await expect(onboarding).toBeVisible();
+  expect(
+    await page.evaluate(() =>
+      Object.keys(localStorage).filter((key) => key.startsWith('yingzao:creation:v1:')),
+    ),
+  ).toEqual([]);
   await onboarding.getByRole('combobox', { name: /^默认发布平台/ }).selectOption('Shopify');
   await onboarding.getByRole('combobox', { name: /^默认创作语言/ }).selectOption('ja');
   await onboarding.getByRole('button', { name: '开始我的创作', exact: true }).click();
   await expect(onboarding).toHaveCount(0);
+  await checkDefaults(page.locator('.composer'), 'Shopify', 'ja');
   await page.reload();
   await expect(onboarding).toHaveCount(0);
   const session = (await (await page.request.get(`${studio.origin}/api/v1/auth/me`)).json()).data;
@@ -53,9 +61,7 @@ test('completes onboarding, applies persisted defaults to new drafts and preserv
   };
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
-  let controls = await advanced(composer);
-  await expect(controls.platform).toHaveValue('Shopify');
-  await expect(controls.language).toHaveValue('ja');
+  await checkDefaults(composer, 'Shopify', 'ja');
   await composer
     .getByRole('textbox', { name: '创作需求', exact: true })
     .fill('保留既有项目的日语需求');
@@ -90,18 +96,14 @@ test('completes onboarding, applies persisted defaults to new drafts and preserv
     `yingzao:creation:v1:${session.user.id}:${session.activeWorkspaceId}:${oldId}`,
   );
   await page.goto(`${studio.origin}/workbench/${oldId}`);
-  controls = await advanced(composer);
-  await expect(controls.platform).toHaveValue('Shopify');
-  await expect(controls.language).toHaveValue('ja');
+  await checkDefaults(composer, 'Shopify', 'ja');
   await expect(composer.getByRole('textbox', { name: '创作需求', exact: true })).toHaveValue(
     '保留既有项目的日语需求',
   );
   expect(await savedDraft(oldId)).toEqual(oldDraft);
 
   await page.goto(`${studio.origin}/workbench`);
-  controls = await advanced(composer);
-  await expect(controls.platform).toHaveValue('Amazon');
-  await expect(controls.language).toHaveValue('fr');
+  await checkDefaults(composer, 'Amazon', 'fr');
   await composer
     .getByRole('textbox', { name: '创作需求', exact: true })
     .fill('新项目采用法语默认值');

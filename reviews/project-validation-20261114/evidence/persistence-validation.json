@@ -1,0 +1,182 @@
+{
+  "scope": "隔离持久化、升级、备份恢复与真实进程重启验收",
+  "result": "passed",
+  "tests": {
+    "passed": 24,
+    "failed": 0,
+    "files": 5,
+    "cases": [
+      {
+        "file": "platform/tests/backup-integrity.test.ts",
+        "status": "passed",
+        "durationMs": 928.53,
+        "assertions": [
+          {
+            "name": "recoverable backups rejects nested destinations reached through a parent symlink before staging data",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups rejects a destination nested inside media before copying recursively",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups publishes only one of two simultaneous restores to the same destination",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups rejects equal-length corrupted originals and leaves no restored directory",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups detects modified encryption keys before publishing a restored copy",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups rejects corrupted source media instead of declaring a successful backup",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups never creates a missing source database as a side effect of backing up",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups writes a checksum manifest and restores the same source bytes",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups still restores legacy backups and verifies their original asset digest",
+            "status": "passed"
+          },
+          {
+            "name": "recoverable backups refuses symlinks in source media",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "platform/tests/concurrency-migration.test.ts",
+        "status": "passed",
+        "durationMs": 51.51,
+        "assertions": [
+          {
+            "name": "preserves existing billing modes and payment holds while upgrading the configured concurrency boundary",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "platform/tests/migrations.test.ts",
+        "status": "passed",
+        "durationMs": 216.46,
+        "assertions": [
+          {
+            "name": "serializes simultaneous API/worker migrations on the same SQLite database",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "platform/tests/persistence-upgrade.test.ts",
+        "status": "passed",
+        "durationMs": 2417.65,
+        "assertions": [
+          {
+            "name": "upgrades a populated 0039 backup and preserves new knowledge, planner revisions and media through restore and real API/worker restarts",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "file": "platform/tests/restored-cache.test.ts",
+        "status": "passed",
+        "durationMs": 2228.78,
+        "assertions": [
+          {
+            "name": "does not publish a backup whose copied in-flight cache has disappeared",
+            "status": "passed"
+          },
+          {
+            "name": "restores a complete online backup into a new installation and completes cached work without touching its source",
+            "status": "passed"
+          },
+          {
+            "name": "reproduces a stalled restored cache, then recovers its copied bytes without any new provider submission",
+            "status": "passed"
+          },
+          {
+            "name": "rebases legacy array manifests to the final destination while preserving status and source metadata",
+            "status": "passed"
+          },
+          {
+            "name": "never falls back to an existing original-installation file if the copied cache is missing",
+            "status": "passed"
+          },
+          {
+            "name": "rejects invalid ownership before updating any cache references",
+            "status": "passed"
+          },
+          {
+            "name": "rejects invalid symlink before updating any cache references",
+            "status": "passed"
+          },
+          {
+            "name": "rejects invalid bytes before updating any cache references",
+            "status": "passed"
+          },
+          {
+            "name": "rejects invalid state before updating any cache references",
+            "status": "passed"
+          },
+          {
+            "name": "rejects invalid format before updating any cache references",
+            "status": "passed"
+          },
+          {
+            "name": "leaves cleared successful tasks and pathless text results unchanged",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "checks": [
+    "只用临时SQLite和合成PNG；测试环境拒绝dotenv与继承应用凭据；未读取或修改正式运行库。",
+    "从截至0039的38份迁移建立含账户、会话、项目、品牌、素材及旧创作快照的数据库，保持连接开启时执行在线备份。",
+    "恢复旧版备份后追加0040和0041，执行两次迁移；旧表全部记录与原迁移校验和保持一致，旧创作快照仅新增planner_revision=null。",
+    "新资料、回收产品、私人记忆、带来源和规划配置摘要的新快照在线备份，再恢复到另一目录。",
+    "原安装与中间升级安装目录删除后，恢复副本可解密合成供应商配置；原会话仍可访问原业务数据。",
+    "直接启动真实API与worker入口，连续完成两轮启动/正常停止；测试注入只观察SQLite真实database_list并禁止子进程外部fetch。",
+    "两进程每轮均验证实际打开的数据库为恢复目录；旧/新方案、记忆、产品、品牌和项目经HTTP读取成功；原图逐字节一致，预览及缩略图可解码。",
+    "两轮重启后创作快照完全不变、无生成任务、外键检查为空、数据库完整性为ok；两份源备份所有摘要始终不变。",
+    "已有回归另覆盖坏原件/大小/密钥、符号链接、并发目标发布、在途缓存路径重定位及零外部重新提交。"
+  ],
+  "validation": {
+    "typecheck": "passed",
+    "ownedTestEslint": "passed",
+    "ownedTestPrettier": "passed"
+  },
+  "newProductDefects": [],
+  "changes": [
+    "只新增 platform/tests/persistence-upgrade.test.ts；未修改产品、迁移或备份恢复实现。"
+  ],
+  "limits": [
+    "未对正式运行库应用迁移或重启正式服务。",
+    "未验证外部模型、真实支付或通知投递；无付费调用。",
+    "本项验收直接运行TypeScript入口；生产构建与全量浏览器由主任务另行汇总。"
+  ],
+  "initialAttemptNotes": [
+    "初次沙箱禁止本机监听与tsx本机管道，放宽后同一隔离范围通过；不是产品缺陷。",
+    "新增夹具初版修正过迁移编号连续性、模拟能力配置和macOS路径别名假设；未作为产品失败证据。"
+  ],
+  "sourceSha256": {
+    "platform/scripts/backup.ts": "006168633a71cda1e606929e6a6835d153bc9f83d467a7260acea1bbfa8e8de3",
+    "platform/scripts/restore.ts": "fb2033bd192f545ebdf093cb14ad7afb98ed65c7f7ccda328ad26a7b62b6a5a7",
+    "platform/scripts/backup-integrity.ts": "1b4d385abb4d408587d128169c8a36acb658a4b9d8e20f9acdbdc934d236db1c",
+    "platform/scripts/restored-cache.ts": "e297102f5fae45606953ced68038e48a114a320096146b627835079848c759ce",
+    "platform/src/server/db/migrate.ts": "e4a16483c2ecf9967b935c02f1a03f48bfe6c89dfaee663b38ed3f800d6a850e",
+    "platform/src/server/db/connection.ts": "fdbab6214834e7f2fd5bd0425847bf766660cc70f972ab0a3eda7fdd41af8e05",
+    "platform/migrations/0040-creative-knowledge.sql": "8a4d9b3b082421d7c0b5991908de408cf0212468a9dec7369102d132ebb30943",
+    "platform/migrations/0041-creative-planner-revision.sql": "e5aa25b301df44f89750618656a5207828fbf02722f51f718dfca97a74da1050",
+    "platform/tests/persistence-upgrade.test.ts": "ba6c9a0be5a508d41d750c7c95699842b3bba954d27c3c2b9eeb4da0586a2c49"
+  }
+}

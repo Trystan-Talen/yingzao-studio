@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { creativeInputFingerprint } from '../../contracts/creative-fingerprint';
 import type { CreativePreparation } from '../../contracts/creative-intent';
-import { CREATIVE_INTENT_CLIENT_TIMEOUT_MS } from '../../contracts/creative-intent-timing';
+import {
+  CREATIVE_INTENT_CLIENT_TIMEOUT_MS,
+  CREATIVE_REPLICA_CLIENT_TIMEOUT_MS,
+} from '../../contracts/creative-intent-timing';
 import type { JobInput } from '../../contracts/jobs';
 import { api, ApiError, CONFIRMATION_TIMEOUT_MS, errorMessage } from './api';
 import {
@@ -9,7 +12,10 @@ import {
   checkCreativePreparation,
   creativeAnswersComplete,
   creativeBriefStorageKey,
+  creativeConfigurationChanged,
+  creativePreparationNotStarted,
   readCreativeBrief,
+  resetCreativeBrief,
   updateCreativeAnswer,
   writeCreativeBrief,
   type CreativeBriefRecord,
@@ -46,6 +52,7 @@ export function useCreativeBrief({
   const entries = useRef(new Map<string, Entry>());
   const mounted = useRef(true);
   const [, redraw] = useState(0);
+  const [sourceRevision, setSourceRevision] = useState(0);
   const [loadError, setLoadError] = useState<{ key: string; message: string }>();
   const notify = () => {
     if (mounted.current) redraw((value) => value + 1);
@@ -63,7 +70,9 @@ export function useCreativeBrief({
     const cached = entries.current.get(key);
     if (cached) return cached;
     let record: CreativeBriefRecord;
+    let storedRecord: boolean;
     try {
+      storedRecord = localStorage.getItem(key) !== null;
       record = readCreativeBrief(localStorage, key, identity);
     } catch {
       throw new Error('无法恢复需求检查记录，请检查浏览器存储后重试。原话仍保留在创作框。');
@@ -71,6 +80,7 @@ export function useCreativeBrief({
     // A server draft may be opened on a different browser with no local record.
     if (
       !record.previousId &&
+      !storedRecord &&
       recoveryInput?.creativeBriefId &&
       (!recoveryInput.projectId || recoveryInput.projectId === value.projectId) &&
       creativeInputFingerprint(recoveryInput) === identity
@@ -94,8 +104,14 @@ export function useCreativeBrief({
     entry.record = record;
   }
 
-  async function restore(entry: Entry, value: JobInput) {
-    if (!entry.record.previousId || entry.preparation || entry.record.pending) return;
+  async function restore(entry: Entry, value: JobInput, verifyCached = false) {
+    if (
+      !entry.record.previousId ||
+      (entry.preparation && !verifyCached) ||
+      entry.record.pending ||
+      creativeConfigurationChanged(entry.errorCode)
+    )
+      return;
     if (entry.restoring) return entry.restoring;
     entry.busy = true;
     entry.error = undefined;
@@ -115,12 +131,14 @@ export function useCreativeBrief({
           (data.input.projectId && data.input.projectId !== value.projectId)
         ) {
           persist(entry, { version: 1, fingerprint: entry.record.fingerprint, answers: [] });
+          entry.preparation = undefined;
           return;
         }
         entry.preparation = checkCreativePreparation(data, value);
       } catch (error) {
         entry.error = errorMessage(error);
         entry.errorCode = error instanceof ApiError ? error.code : undefined;
+        if (creativeConfigurationChanged(entry.errorCode)) entry.preparation = undefined;
         throw error;
       } finally {
         entry.busy = false;
@@ -148,7 +166,15 @@ export function useCreativeBrief({
     let entry: Entry | undefined;
     try {
       entry = entryFor(value);
-      await restore(entry, value);
+      if (creativeConfigurationChanged(entry.errorCode))
+        throw new ApiError(
+          entry.errorCode!,
+          entry.error || '模型配置已改变，请先重新检查创作需求。',
+          409,
+        );
+      // A cached plan can outlive a model change in another tab. This read is free;
+      // an invalid plan requires an explicit reset before another paid preparation.
+      await restore(entry, value, entry.preparation?.status === 'ready');
       if (!mounted.current || latest.current !== requestKey) return null;
       setLoadError(undefined);
       entry.error = undefined;
@@ -191,7 +217,13 @@ export function useCreativeBrief({
         {
           method: 'POST',
           body: JSON.stringify({ ...request, input: value }),
-          timeoutMs: CREATIVE_INTENT_CLIENT_TIMEOUT_MS,
+          timeoutMs:
+            value.replica ||
+            (value.providerId === 'native' &&
+              value.operation === 'image.generate' &&
+              (value.assetIds.length > 0 || value.referenceAssetIds.length > 0))
+              ? CREATIVE_REPLICA_CLIENT_TIMEOUT_MS
+              : CREATIVE_INTENT_CLIENT_TIMEOUT_MS,
         },
         workspaceId,
       );
@@ -210,6 +242,16 @@ export function useCreativeBrief({
       if (entry) {
         entry.error = errorMessage(error);
         entry.errorCode = error instanceof ApiError ? error.code : undefined;
+        if (creativeConfigurationChanged(entry.errorCode)) entry.preparation = undefined;
+        if (creativePreparationNotStarted(entry.errorCode) && entry.record.pending) {
+          // Budget preflight rejected before a planner call or brief row existed.
+          // Preserve previous answers and the user's draft; the next click is a new request.
+          try {
+            persist(entry, { ...entry.record, pending: undefined });
+          } catch (storageError) {
+            entry.error = errorMessage(storageError);
+          }
+        }
       } else if (mounted.current) setLoadError({ key: requestKey, message: errorMessage(error) });
       throw error;
     } finally {
@@ -256,15 +298,76 @@ export function useCreativeBrief({
 
   function restart() {
     const entry = entries.current.get(cacheKey);
-    if (!entry || entry.busy || entry.errorCode !== 'CREATIVE_BRIEF_FAILED') return;
+    if (
+      !entry ||
+      entry.busy ||
+      (entry.errorCode !== 'CREATIVE_BRIEF_FAILED' &&
+        !creativeConfigurationChanged(entry.errorCode))
+    )
+      return;
     try {
-      persist(entry, { ...entry.record, pending: undefined });
+      const configurationChanged = creativeConfigurationChanged(entry.errorCode);
+      persist(
+        entry,
+        configurationChanged
+          ? resetCreativeBrief(entry.record)
+          : { ...entry.record, pending: undefined },
+      );
       entry.error = undefined;
       entry.errorCode = undefined;
+      if (configurationChanged) {
+        entry.preparation = undefined;
+        entry.missingQuestionId = undefined;
+      }
       // Reading the prior question set is free; a new preparation still needs a click.
-      void restore(entry, input).catch(() => undefined);
+      if (!configurationChanged) void restore(entry, input).catch(() => undefined);
     } catch (error) {
       entry.error = errorMessage(error);
+    }
+    notify();
+  }
+
+  function refreshSources() {
+    const entry = entries.current.get(cacheKey);
+    if (
+      !entry ||
+      entry.busy ||
+      entry.record.pending ||
+      entry.error ||
+      entry.preparation?.status !== 'ready'
+    )
+      return;
+    try {
+      // Explicitly start a new lineage, preserving the old server-owned plan and quote.
+      // Persist before changing the UI; an unresolved paid request can never enter here.
+      persist(entry, resetCreativeBrief(entry.record));
+      entry.preparation = undefined;
+      entry.errorCode = undefined;
+      entry.missingQuestionId = undefined;
+      // The unchanged user input must not reuse a quote compiled from the old plan.
+      setSourceRevision((revision) => revision + 1);
+    } catch (error) {
+      entry.error = errorMessage(error);
+    }
+    notify();
+  }
+
+  function invalidatePreparation(error: ApiError) {
+    if (!creativeConfigurationChanged(error.code)) return;
+    const entry = entries.current.get(cacheKey);
+    if (!entry) return;
+    // A first submission may bind an unbound plan to a newly created project
+    // while quotation is in flight. Invalidate that alias as well.
+    for (const candidate of entries.current.values()) {
+      if (
+        candidate !== entry &&
+        (!entry.record.previousId || candidate.record.previousId !== entry.record.previousId)
+      )
+        continue;
+      candidate.error = error.message;
+      candidate.errorCode = error.code;
+      candidate.preparation = undefined;
+      candidate.missingQuestionId = undefined;
     }
     notify();
   }
@@ -274,7 +377,17 @@ export function useCreativeBrief({
     prepare,
     bindProject,
     restart,
-    canRestart: current?.errorCode === 'CREATIVE_BRIEF_FAILED' && !!current.record.pending,
+    refreshSources,
+    sourceRevision,
+    canRefreshSources:
+      current?.preparation?.status === 'ready' &&
+      !current.busy &&
+      !current.record.pending &&
+      !current.error,
+    invalidatePreparation,
+    canRestart:
+      creativeConfigurationChanged(current?.errorCode) ||
+      (current?.errorCode === 'CREATIVE_BRIEF_FAILED' && !!current.record.pending),
     answer,
     preparation: current?.preparation,
     answers: current?.record.answers ?? [],

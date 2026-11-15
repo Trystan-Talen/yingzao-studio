@@ -1,0 +1,1840 @@
+--- a/platform/src/contracts/core.ts
++++ b/platform/src/contracts/core.ts
+@@ -22,7 +22,7 @@
+   role: Role;
+ }
+ export const PreferencesSchema = z.object({
+-  theme: z.enum(['light', 'dark', 'system']).default('system'),
++  theme: z.enum(['light', 'dark', 'system']).default('dark'),
+   locale: z.enum(['zh-CN', 'en', 'ar']).default('zh-CN'),
+   confirmGeneration: z.boolean().default(true),
+   onboardingCompleted: z.boolean().default(false),
+@@ -343,6 +343,22 @@
+ export const SetCollectionAssetsInputSchema = z
+   .object({ assetIds: z.array(IdSchema).max(500) })
+   .strict();
++export const PatchCollectionAssetsInputSchema = z
++  .object({
++    addAssetIds: z.array(IdSchema).max(500).default([]),
++    removeAssetIds: z.array(IdSchema).max(500).default([]),
++  })
++  .strict()
++  .refine((input) => input.addAssetIds.length + input.removeAssetIds.length > 0, {
++    message: '请选择要加入或移出的素材',
++  })
++  .refine(
++    (input) => {
++      const added = new Set(input.addAssetIds);
++      return !input.removeAssetIds.some((id) => added.has(id));
++    },
++    { message: '同一素材不能同时加入和移出集合' },
++  );
+ export const CreateOrderInputSchema = z
+   .object({
+     planId: z.string().min(1).max(100),
+--- a/platform/src/server/core/references.ts
++++ b/platform/src/server/core/references.ts
+@@ -324,4 +324,40 @@
+       return { id: cid, assetIds: ids };
+     });
+   }
++  patchCollectionAssets(actor: Actor, wid: string, cid: string, raw: unknown) {
++    const input = inputs.PatchCollectionAssetsInputSchema.parse(raw);
++    return this.c.transaction(() => {
++      this.c.requireAccess(actor, wid, 'write');
++      this.c.resource('collections', wid, cid);
++      const added = [...new Set(input.addAssetIds)];
++      const removed = [...new Set(input.removeAssetIds)];
++      added.forEach((aid) => this.c.resource('assets', wid, aid));
++      removed.forEach((aid) => this.c.resource('assets', wid, aid, true));
++      const membership = new Set(
++        this.c
++          .all('SELECT asset_id FROM asset_collections WHERE collection_id=?', cid)
++          .map((row) => str(row, 'asset_id')),
++      );
++      removed.forEach((aid) => membership.delete(aid));
++      added.forEach((aid) => membership.add(aid));
++      if (membership.size > 500)
++        throw new AppError(
++          409,
++          'COLLECTION_ASSET_LIMIT',
++          '每个集合最多保存500个素材，请先移出部分素材',
++        );
++      // Apply the caller's delta to the current membership, never a visible-list snapshot.
++      // Recycled assets and concurrent changes to unrelated assets remain intact.
++      removed.forEach((aid) =>
++        this.c.run('DELETE FROM asset_collections WHERE collection_id=? AND asset_id=?', cid, aid),
++      );
++      added.forEach((aid) =>
++        this.c.run('INSERT OR IGNORE INTO asset_collections VALUES (?,?)', cid, aid),
++      );
++      return {
++        id: cid,
++        assetIds: [...membership].sort(),
++      };
++    });
++  }
+ }
+--- a/platform/src/server/core/route-schemas.ts
++++ b/platform/src/server/core/route-schemas.ts
+@@ -37,6 +37,7 @@
+   'POST /collections': c.WorkspaceInputSchema,
+   'PATCH /collections/:id': c.WorkspaceInputSchema,
+   'PUT /collections/:id/assets': c.SetCollectionAssetsInputSchema,
++  'PATCH /collections/:id/assets': c.PatchCollectionAssetsInputSchema,
+   'POST /brands': c.BrandInputSchema,
+   'PATCH /brands/:id': c.BrandPatchSchema,
+   'POST /characters': c.CharacterInputSchema,
+--- a/platform/src/server/core/routes.ts
++++ b/platform/src/server/core/routes.ts
+@@ -388,6 +388,9 @@
+   route('PUT', '/collections/:id/assets', null, (a, w, r) =>
+     core.references.setCollectionAssets(a, w, pid(r), r.body),
+   );
++  route('PATCH', '/collections/:id/assets', null, (a, w, r) =>
++    core.references.patchCollectionAssets(a, w, pid(r), r.body),
++  );
+   route('GET', '/brands', null, (a, w, r) => core.references.brands(a, w, query(r)));
+   route('POST', '/brands', null, (a, w, r) => core.references.createBrand(a, w, r.body), true);
+   route('GET', '/brands/:id', null, (a, w, r) => core.references.getBrand(a, w, pid(r)));
+--- a/platform/src/server/providers/http.ts
++++ b/platform/src/server/providers/http.ts
+@@ -147,6 +147,7 @@
+     );
+   }
+   if (!response.ok) {
++    void response.body?.cancel().catch(() => {});
+     const ambiguous = Boolean(options.submission && response.status >= 500);
+     throw new ProviderError(
+       response.status === 401 || response.status === 403
+@@ -159,22 +160,28 @@
+     );
+   }
+   const length = Number(response.headers.get('content-length') || 0);
+-  if (length > 160 * 1024 * 1024)
++  if (length > 160 * 1024 * 1024) {
++    void response.body?.cancel().catch(() => {});
+     throw new ProviderError('服务响应超过大小限制。', Boolean(options.submission));
++  }
+   try {
+     if (!response.body) throw new Error('EMPTY_RESPONSE');
+     const reader = response.body.getReader(),
+       chunks: Uint8Array[] = [];
+-    let size = 0;
+-    while (true) {
+-      const next = await reader.read();
+-      if (next.done) break;
+-      size += next.value.byteLength;
+-      if (size > 160 * 1024 * 1024) {
+-        await reader.cancel();
+-        throw new ProviderError('服务响应超过大小限制。', Boolean(options.submission));
++    try {
++      let size = 0;
++      while (true) {
++        const next = await reader.read();
++        if (next.done) break;
++        size += next.value.byteLength;
++        if (size > 160 * 1024 * 1024) {
++          void reader.cancel().catch(() => {});
++          throw new ProviderError('服务响应超过大小限制。', Boolean(options.submission));
++        }
++        chunks.push(next.value);
+       }
+-      chunks.push(next.value);
++    } finally {
++      reader.releaseLock();
+     }
+     return JSON.parse(Buffer.concat(chunks).toString('utf8')) as unknown;
+   } catch (error) {
+--- a/platform/src/web/App.tsx
++++ b/platform/src/web/App.tsx
+@@ -1,6 +1,6 @@
+ import { t } from './lib/i18n';
+ import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from 'react';
+-import { Routes, Route, Link } from 'react-router-dom';
++import { Routes, Route, Link, useLocation } from 'react-router-dom';
+ import { useStudio } from './context';
+ import { Layout } from './components/Layout';
+ import { Empty, Button, Loading } from './components/ui';
+@@ -99,14 +99,17 @@
+ }
+ export function App() {
+   const { session, workspace } = useStudio();
+-  if (location.pathname === '/auth/complete-registration')
++  const route = useLocation();
++  if (route.pathname === '/auth/complete-registration')
+     return <PageBoundary>{page(<IdentityRegistration />)}</PageBoundary>;
+-  if (['/password/forgot', '/password/reset'].includes(location.pathname))
+-    return <PageBoundary>{page(<PasswordRecovery />)}</PageBoundary>;
+-  if (location.pathname.startsWith('/share'))
++  if (['/password/forgot', '/password/reset'].includes(route.pathname))
++    return (
++      <PageBoundary key={route.pathname + route.hash}>{page(<PasswordRecovery />)}</PageBoundary>
++    );
++  if (route.pathname.startsWith('/share'))
+     return <PageBoundary>{page(<PublicShare />)}</PageBoundary>;
+   if (!session) return page(<Login />);
+-  if (location.pathname === '/invite') return page(<InvitePage />);
++  if (route.pathname === '/invite') return page(<InvitePage />);
+   return (
+     <PageBoundary key={workspace?.id ?? 'no-workspace'}>
+       <Routes>
+--- a/platform/src/web/context.tsx
++++ b/platform/src/web/context.tsx
+@@ -56,6 +56,7 @@
+       if (err instanceof Error && 'status' in err && err.status === 401) {
+         setSession(null);
+         setApiWorkspace(null);
++        setError(null);
+       } else setError(err);
+     } finally {
+       setReady(true);
+@@ -108,16 +109,17 @@
+     };
+   }, [workspace?.id, query]);
+   useEffect(() => {
+-    const theme = session?.user.preferences.theme ?? 'system';
++    const theme = session?.user.preferences.theme ?? 'dark';
+     const locale = session?.user.preferences.locale ?? 'zh-CN';
+     document.documentElement.lang = locale;
+     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
++    if (theme !== 'system') {
++      document.documentElement.dataset.theme = theme;
++      return;
++    }
+     const mq = window.matchMedia('(prefers-color-scheme: dark)');
+     const apply = () => {
+-      document.documentElement.dataset.theme =
+-        // 映造 is dark-first: "system" uses the brand's dark canvas; an explicit light or dark
+-        // choice in Settings is always honoured.
+-        theme === 'system' ? 'dark' : theme;
++      document.documentElement.dataset.theme = mq.matches ? 'dark' : 'light';
+     };
+     apply();
+     mq.addEventListener('change', apply);
+--- a/platform/src/web/pages/Library.tsx
++++ b/platform/src/web/pages/Library.tsx
+@@ -550,18 +550,6 @@
+   useEffect(() => {
+     setSelected([]);
+   }, [q, kind, tag, favorite, deleted, collection, page]);
+-  async function collectionIds(id: string) {
+-    const first = await api<Page<AssetDto>>(`/assets?collectionId=${id}&pageSize=100`);
+-    const items = [...first.items];
+-    for (let page = 2; items.length < first.total; page++) {
+-      const next = await api<Page<AssetDto>>(
+-        `/assets?collectionId=${id}&pageSize=100&page=${page}`,
+-      );
+-      if (!next.items.length) throw new Error('集合内容发生变化，请刷新后重试');
+-      items.push(...next.items);
+-    }
+-    return items.map((item) => item.id);
+-  }
+   async function upload(files: FileList | null) {
+     if (!files || !workspace) return;
+     // Keep the whole batch in the space chosen when the files were selected.
+@@ -681,6 +669,7 @@
+           <select
+             aria-label={t('素材集合')}
+             value={collection}
++            disabled={collections.isLoading || !!collections.error}
+             onChange={(e) => {
+               setCollection(e.target.value);
+               setPage(1);
+@@ -739,6 +728,7 @@
+           ]}
+         />
+       </div>
++      {collections.error && <ErrorState error={collections.error} retry={collections.refetch} />}
+       <div className="library-result-heading">
+         <h2>
+           {deleted
+@@ -787,9 +777,8 @@
+                   busy={action.busy}
+                   onClick={() =>
+                     void action.run(async () => {
+-                      const ids = await collectionIds(collection);
+-                      await put(`/collections/${collection}/assets`, {
+-                        assetIds: ids.filter((id) => !selected.includes(id)),
++                      await patch(`/collections/${collection}/assets`, {
++                        removeAssetIds: selected,
+                       });
+                       setSelected([]);
+                       await refresh();
+@@ -1122,7 +1111,7 @@
+               value={collectionName}
+               onChange={(e) => setCollectionName(e.target.value)}
+               required
+-              maxLength={120}
++              maxLength={80}
+             />
+           </Field>
+           <div className="modal-actions">
+@@ -1181,27 +1170,34 @@
+       />
+       <Modal open={addTo} onClose={() => setAddTo(false)} title={t('加入素材集合')}>
+         <p className="muted">{t('现有素材会保留，新选择的素材会合并加入。')}</p>
+-        {collections.data?.items.map((item) => (
+-          <button
+-            key={item.id}
+-            className="search-result"
+-            onClick={() =>
+-              void action.run(async () => {
+-                const existing = await collectionIds(item.id);
+-                await put(`/collections/${item.id}/assets`, {
+-                  assetIds: [...new Set([...existing, ...selected])],
+-                });
+-                setAddTo(false);
+-                setSelected([]);
+-                await refresh();
+-              }, '素材已加入集合')
+-            }
+-          >
+-            <FolderOpen size={18} />
+-            {item.name}
+-          </button>
+-        ))}
+-        {!collections.data?.items.length && <Empty title={t('请先创建一个集合')} />}
++        {collections.isLoading ? (
++          <Loading />
++        ) : collections.error ? (
++          <ErrorState error={collections.error} retry={collections.refetch} />
++        ) : collections.data?.items.length ? (
++          collections.data.items.map((item) => (
++            <button
++              key={item.id}
++              className="search-result"
++              disabled={action.busy}
++              onClick={() =>
++                void action.run(async () => {
++                  await patch(`/collections/${item.id}/assets`, {
++                    addAssetIds: selected,
++                  });
++                  setAddTo(false);
++                  setSelected([]);
++                  await refresh();
++                }, '素材已加入集合')
++              }
++            >
++              <FolderOpen size={18} />
++              {item.name}
++            </button>
++          ))
++        ) : (
++          <Empty title={t('请先创建一个集合')} />
++        )}
+       </Modal>
+       <Confirm
+         open={deleting}
+--- a/platform/src/web/pages/Settings.tsx
++++ b/platform/src/web/pages/Settings.tsx
+@@ -64,7 +64,7 @@
+ function ProfileSettings() {
+   const { session, refreshSession } = useStudio();
+   const [name, setName] = useState(session?.user.displayName ?? '');
+-  const [theme, setTheme] = useState(session?.user.preferences.theme ?? 'system');
++  const [theme, setTheme] = useState(session?.user.preferences.theme ?? 'dark');
+   const [locale, setLocale] = useState(session?.user.preferences.locale ?? 'zh-CN');
+   const [defaultPlatform, setDefaultPlatform] = useState(
+     session?.user.preferences.defaultPlatform ?? '通用电商',
+--- a/platform/src/web/pages/Tools.tsx
++++ b/platform/src/web/pages/Tools.tsx
+@@ -621,7 +621,11 @@
+         </div>
+       )}
+       <div className="tool-workspace">
+-        <section className="tool-form panel" inert={!projectRecoveryReady}>
++        <section
++          className="tool-form panel"
++          inert={!projectRecoveryReady || restoringAssets}
++          aria-busy={!projectRecoveryReady || restoringAssets}
++        >
+           <div className="panel-heading">
+             <h2>{t('输入与参数')}</h2>
+             <Badge tone={actualOperation.startsWith('local.') ? 'green' : 'neutral'}>
+--- a/platform/src/web/styles/brand/create.css
++++ b/platform/src/web/styles/brand/create.css
+@@ -379,7 +379,8 @@
+   resize: none;
+ }
+ .yz-create .composer-studio textarea.prompt-input::placeholder {
+-  color: color-mix(in srgb, var(--muted) 78%, transparent);
++  color: var(--yz-muted);
++  opacity: 1;
+ }
+ .yz-create .composer-studio .asset-add {
+   border-radius: 18px;
+@@ -513,7 +514,7 @@
+   min-height: 48px;
+   padding: 10px 22px;
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   background-size: 160% 100%;
+   background-position: 0% 50%;
+   color: #fff;
+@@ -529,7 +530,7 @@
+     opacity 0.2s var(--yz-ease);
+ }
+ .yz-create .composer-studio .submit-row > .button.primary:hover:not(:disabled) {
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   background-size: 160% 100%;
+   background-position: 100% 50%;
+   transform: translateY(-1px);
+--- a/platform/src/web/styles/brand/fixes.css
++++ b/platform/src/web/styles/brand/fixes.css
+@@ -90,7 +90,7 @@
+ }
+ :root:root .ce-export-button {
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+ }
+ :root:root .ce-empty-canvas .ce-empty-icon {
+@@ -340,7 +340,7 @@
+ :root:root .creation-sidebar .composer-studio .submit-row > .button.primary {
+   min-height: 46px;
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   font-weight: 700;
+   box-shadow: 0 14px 34px -14px color-mix(in srgb, var(--yz-vermilion) 80%, transparent);
+@@ -388,8 +388,13 @@
+   gap: 12px;
+   margin-bottom: 18px;
+ }
+-:root:root .task-status-tabs button[aria-pressed='true'],
+-:root:root .task-status-tabs button.active {
++:root:root .task-status-tabs .button,
++:root:root .tools-page .category-tabs button {
++  border-radius: var(--yz-r-pill);
++}
++:root:root .task-status-tabs .button[aria-pressed='true'],
++:root:root .task-status-tabs .button.active,
++:root:root .tools-page .category-tabs button[aria-pressed='true'] {
+   background: var(--yz-text);
+   color: var(--yz-ink-0);
+   border-color: var(--yz-text);
+@@ -410,13 +415,13 @@
+   padding: 10px 18px;
+   border: 0;
+   border-radius: 999px;
+-  background: linear-gradient(118deg, #ff5a36, #ff3d7f 48%, #8f7dff);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   font-weight: 650;
+   box-shadow: 0 12px 28px -12px rgb(255 61 95 / 0.7);
+ }
+ :root:root .ce-empty-canvas button:hover:not(:disabled) {
+-  background: linear-gradient(118deg, #ff5a36, #ff3d7f 48%, #8f7dff);
++  background: var(--yz-aurora-action);
+   filter: brightness(1.06);
+ }
+ 
+@@ -453,13 +458,13 @@
+ /* ---------- P1 · Every primary submit uses the brand gradient ---------- */
+ :root:root .submit-row > .button.primary {
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   font-weight: 700;
+   box-shadow: 0 14px 34px -14px color-mix(in srgb, var(--yz-vermilion) 80%, transparent);
+ }
+ :root:root .submit-row > .button.primary:hover:not(:disabled) {
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   filter: brightness(1.07);
+ }
+ :root:root .submit-row > .button.primary:disabled {
+@@ -666,7 +671,8 @@
+ :root:root input::placeholder,
+ :root:root textarea::placeholder,
+ .yz-create .composer-studio textarea.prompt-input::placeholder {
+-  color: color-mix(in srgb, var(--yz-text-2) 82%, transparent);
++  color: var(--yz-muted);
++  opacity: 1;
+ }
+ 
+ /* -- focus inside horizontally scrolling chip rows is not clipped -- */
+--- a/platform/src/web/styles/brand/foundation.css
++++ b/platform/src/web/styles/brand/foundation.css
+@@ -343,6 +343,7 @@
+ }
+ :root .drawer {
+   margin: 10px;
++  width: min(460px, calc(100vw - 20px));
+   inset-block: 0;
+   height: calc(100dvh - 20px);
+   border-radius: var(--yz-r-xl);
+--- a/platform/src/web/styles/brand/login.css
++++ b/platform/src/web/styles/brand/login.css
+@@ -166,13 +166,13 @@
+   min-height: 50px;
+   padding-inline: 22px;
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   font-size: 15px;
+   box-shadow: 0 16px 40px -14px color-mix(in srgb, var(--yz-vermilion) 85%, transparent);
+ }
+ :root .login-form form > .button:hover:not(:disabled) {
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   filter: brightness(1.08);
+   color: #fff;
+ }
+--- a/platform/src/web/styles/brand/pages.css
++++ b/platform/src/web/styles/brand/pages.css
+@@ -39,7 +39,7 @@
+   margin-top: 6px;
+   padding: 3px 10px;
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   font-family: var(--yz-font-mono);
+   font-size: 12px;
+@@ -202,12 +202,12 @@
+ :root .inspiration-studio-use.button.primary {
+   min-height: 48px;
+   border-radius: var(--yz-r-pill);
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   box-shadow: 0 14px 34px -12px color-mix(in srgb, var(--yz-vermilion) 80%, transparent);
+ }
+ :root .inspiration-studio-use.button.primary:hover:not(:disabled) {
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   filter: brightness(1.08);
+ }
+ 
+--- a/platform/src/web/styles/brand/shell.css
++++ b/platform/src/web/styles/brand/shell.css
+@@ -48,9 +48,15 @@
+   width: var(--yz-rail);
+   padding: 16px 0 14px;
+   gap: 6px;
++  overflow-y: auto;
++  overscroll-behavior-y: contain;
++  scroll-padding-block: 14px;
+   background: color-mix(in srgb, var(--yz-ink-1) 92%, transparent);
+   border-inline-end: 1px solid var(--yz-line);
+   backdrop-filter: blur(18px);
++}
++.yz-rail > * {
++  flex-shrink: 0;
+ }
+ .yz-rail-brand {
+   display: grid;
+@@ -193,7 +199,7 @@
+ }
+ .yz-avatar.is-space {
+   border-radius: 11px;
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   border-color: transparent;
+   color: #fff;
+ }
+@@ -201,7 +207,7 @@
+   width: 72px;
+   height: 72px;
+   font-size: 28px;
+-  background: var(--yz-aurora);
++  background: var(--yz-aurora-action);
+   color: #fff;
+   border: 0;
+ }
+--- a/platform/src/web/styles/brand/tokens.css
++++ b/platform/src/web/styles/brand/tokens.css
+@@ -110,6 +110,13 @@
+     var(--yz-magenta) 48%,
+     var(--yz-violet) 100%
+   );
++  /* Text-bearing surfaces need darker stops than decorative light effects. */
++  --yz-aurora-action: linear-gradient(
++    118deg,
++    color-mix(in srgb, var(--yz-vermilion) 72%, #000) 0%,
++    color-mix(in srgb, var(--yz-magenta) 72%, #000) 48%,
++    color-mix(in srgb, var(--yz-violet) 72%, #000) 100%
++  );
+   --yz-font-sans:
+     Inter, 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+     'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+--- /dev/null
++++ b/platform/tests/collection-membership.test.ts
+@@ -0,0 +1,236 @@
++import { afterEach, beforeEach, describe, expect, it } from 'vitest';
++import { mkdtemp, rm } from 'node:fs/promises';
++import { randomUUID } from 'node:crypto';
++import { tmpdir } from 'node:os';
++import { join } from 'node:path';
++import { createApp } from '../src/server/app';
++import type { Actor } from '../src/contracts/core';
++
++let folder: string;
++let application: Awaited<ReturnType<typeof createApp>>;
++let owner: Actor;
++let wid: string;
++let collectionId: string;
++let cookie: string;
++let assetIds: string[];
++const origin = 'http://127.0.0.1:4310';
++
++beforeEach(async () => {
++  folder = await mkdtemp(join(tmpdir(), 'yingzao-collection-membership-'));
++  application = await createApp(
++    {
++      host: '127.0.0.1',
++      port: 4310,
++      publicOrigin: origin,
++      databasePath: join(folder, 'test.sqlite'),
++      storageDir: join(folder, 'media'),
++      sessionSecret: 'isolated-collection-session',
++      encryptionKey: 'isolated-collection-encryption',
++      isProduction: false,
++      demoMode: false,
++      environmentSecrets: {},
++    },
++    { serveWeb: false },
++  );
++  const registered = await application.services.core.auth.register({
++    email: 'collection-owner@example.local',
++    password: 'CollectionPassword2026!',
++    displayName: 'Collection owner',
++  });
++  owner = {
++    userId: registered.user.id,
++    authType: 'session',
++    apiKeyId: null,
++    workspaceId: null,
++    scopes: [],
++  };
++  wid = registered.workspace.id;
++  cookie = `studio_session=${registered.sessionToken}`;
++  collectionId = application.services.core.references.createCollection(owner, wid, {
++    name: 'Collection',
++  }).id;
++  assetIds = [];
++  for (let index = 0; index < 3; index++) {
++    const asset = await application.services.core.assets.ingest(owner, wid, {
++      name: `asset-${index}.txt`,
++      mimeType: 'text/plain',
++      buffer: Buffer.from(`isolated collection fixture ${index}`),
++    });
++    assetIds.push(asset.id);
++  }
++});
++
++afterEach(async () => {
++  await application?.app.close();
++  await rm(folder, { recursive: true, force: true });
++});
++
++function patch(
++  payload: Record<string, unknown>,
++  options: { cookie?: string; wid?: string; id?: string } = {},
++) {
++  return application.app.inject({
++    method: 'PATCH',
++    url: `/api/v1/collections/${options.id ?? collectionId}/assets`,
++    headers: { origin, cookie: options.cookie ?? cookie, 'x-workspace-id': options.wid ?? wid },
++    payload,
++  });
++}
++
++function members(): string[] {
++  return (
++    application.services.db.sqlite
++      .prepare('SELECT asset_id FROM asset_collections WHERE collection_id=? ORDER BY asset_id')
++      .all(collectionId) as { asset_id: string }[]
++  ).map((row) => row.asset_id);
++}
++
++describe('atomic collection membership', () => {
++  it('keeps recycled memberships when adding another asset and restores the original membership', async () => {
++    const core = application.services.core;
++    core.references.setCollectionAssets(owner, wid, collectionId, { assetIds: [assetIds[0]] });
++    core.assets.remove(owner, wid, assetIds[0]!);
++    const result = await patch({ addAssetIds: [assetIds[1]] });
++    expect(result.statusCode, result.body).toBe(200);
++    expect(members()).toEqual([assetIds[0], assetIds[1]].sort());
++    core.assets.restore(owner, wid, assetIds[0]!);
++    expect(
++      core.assets
++        .list(owner, wid, { collectionId })
++        .items.map((asset) => asset.id)
++        .sort(),
++    ).toEqual([assetIds[0], assetIds[1]].sort());
++  });
++
++  it('preserves independent additions from simultaneous clients and supports safe retries', async () => {
++    const results = await Promise.all([
++      patch({ addAssetIds: [assetIds[0]] }),
++      patch({ addAssetIds: [assetIds[1]] }),
++      patch({ addAssetIds: [assetIds[0], assetIds[0]] }),
++    ]);
++    for (const result of results) expect(result.statusCode, result.body).toBe(200);
++    expect(members()).toEqual([assetIds[0], assetIds[1]].sort());
++  });
++
++  it('removes only named memberships, including recycled assets, without disturbing others', async () => {
++    const core = application.services.core;
++    core.references.setCollectionAssets(owner, wid, collectionId, { assetIds });
++    core.assets.remove(owner, wid, assetIds[0]!);
++    core.assets.remove(owner, wid, assetIds[2]!);
++    for (let attempt = 0; attempt < 2; attempt++) {
++      const result = await patch({ removeAssetIds: [assetIds[0], assetIds[1]] });
++      expect(result.statusCode, result.body).toBe(200);
++      expect(members()).toEqual([assetIds[2]]);
++    }
++  });
++
++  it('validates the entire delta before changing membership and rejects cross-workspace assets', async () => {
++    const core = application.services.core;
++    core.references.setCollectionAssets(owner, wid, collectionId, { assetIds: [assetIds[0]] });
++    const other = core.auth.createWorkspace(owner.userId, 'Other workspace', 'personal');
++    const foreign = await core.assets.ingest(owner, other.id, {
++      name: 'foreign.txt',
++      mimeType: 'text/plain',
++      buffer: Buffer.from('foreign fixture'),
++    });
++    for (const payload of [
++      { addAssetIds: [assetIds[1], foreign.id], removeAssetIds: [assetIds[0]] },
++      { addAssetIds: [assetIds[1]], removeAssetIds: [foreign.id] },
++      { addAssetIds: [assetIds[1], randomUUID()], removeAssetIds: [assetIds[0]] },
++    ]) {
++      const result = await patch(payload);
++      expect(result.statusCode, result.body).toBe(404);
++      expect(members()).toEqual([assetIds[0]]);
++    }
++    const wrongWorkspace = await patch({ addAssetIds: [foreign.id] }, { wid: other.id });
++    expect(wrongWorkspace.statusCode, wrongWorkspace.body).toBe(404);
++    expect(members()).toEqual([assetIds[0]]);
++  });
++
++  it('rejects deleted additions, missing changes, ambiguous deltas and oversized payloads', async () => {
++    application.services.core.assets.remove(owner, wid, assetIds[0]!);
++    expect((await patch({ addAssetIds: [assetIds[0]] })).statusCode).toBe(404);
++    for (const payload of [
++      {},
++      { addAssetIds: [], removeAssetIds: [] },
++      { addAssetIds: [assetIds[1]], removeAssetIds: [assetIds[1]] },
++      { addAssetIds: Array.from({ length: 501 }, () => assetIds[1]) },
++      { addAssetIds: ['invalid-id'] },
++      { assetIds: [assetIds[1]] },
++    ]) {
++      const result = await patch(payload);
++      expect(result.statusCode, result.body).toBe(400);
++    }
++    expect(members()).toEqual([]);
++  });
++
++  it('requires write access and an active collection', async () => {
++    application.services.db.sqlite
++      .prepare("UPDATE memberships SET role='viewer' WHERE workspace_id=? AND user_id=?")
++      .run(wid, owner.userId);
++    expect((await patch({ addAssetIds: [assetIds[0]] })).statusCode).toBe(403);
++    application.services.db.sqlite
++      .prepare("UPDATE memberships SET role='owner' WHERE workspace_id=? AND user_id=?")
++      .run(wid, owner.userId);
++    expect((await patch({ addAssetIds: [assetIds[0]] }, { cookie: '' })).statusCode).toBe(401);
++    application.services.core.references.removeCollection(owner, wid, collectionId);
++    expect((await patch({ addAssetIds: [assetIds[0]] })).statusCode).toBe(404);
++    expect(members()).toEqual([]);
++  });
++
++  it('keeps the explicit full-replacement endpoint compatible', async () => {
++    const response = await application.app.inject({
++      method: 'PUT',
++      url: `/api/v1/collections/${collectionId}/assets`,
++      headers: { origin, cookie, 'x-workspace-id': wid },
++      payload: { assetIds: [assetIds[0], assetIds[0]] },
++    });
++    expect(response.statusCode, response.body).toBe(200);
++    expect(members()).toEqual([assetIds[0]]);
++  });
++
++  it('enforces the 500-member limit while allowing no-op retries and a same-size replacement', async () => {
++    const core = application.services.core;
++    const existing = [assetIds[0]!, ...Array.from({ length: 499 }, () => randomUUID())];
++    const copy = application.services.db.sqlite.prepare(
++      `INSERT INTO assets(id,workspace_id,name,kind,mime_type,byte_size,source,tags_json,sha256,created_by,created_at,updated_at)
++       SELECT ?,workspace_id,name,kind,mime_type,byte_size,source,tags_json,sha256,created_by,created_at,updated_at FROM assets WHERE id=?`,
++    );
++    application.services.db.sqlite.transaction(() => {
++      for (const id of existing.slice(1)) copy.run(id, assetIds[0]);
++    })();
++    core.references.setCollectionAssets(owner, wid, collectionId, { assetIds: existing });
++    core.assets.remove(owner, wid, existing[1]!);
++
++    const overCapacity = await patch({ addAssetIds: [assetIds[1]] });
++    expect(overCapacity.statusCode, overCapacity.body).toBe(409);
++    expect(overCapacity.json().error.code).toBe('COLLECTION_ASSET_LIMIT');
++    expect(members()).toEqual([...existing].sort());
++
++    const retry = await patch({ addAssetIds: [assetIds[0], assetIds[0]] });
++    expect(retry.statusCode, retry.body).toBe(200);
++    expect(members()).toHaveLength(500);
++
++    const replacement = await patch({ addAssetIds: [assetIds[1]], removeAssetIds: [existing[1]] });
++    expect(replacement.statusCode, replacement.body).toBe(200);
++    expect(members()).toEqual([...existing.filter((id) => id !== existing[1]), assetIds[1]].sort());
++
++    core.assets.restore(owner, wid, existing[1]!);
++    const invalidBatch = await patch({
++      addAssetIds: [existing[1], assetIds[2]],
++      removeAssetIds: [assetIds[1]],
++    });
++    expect(invalidBatch.statusCode, invalidBatch.body).toBe(409);
++    expect(members()).toHaveLength(500);
++    expect(members()).toContain(assetIds[1]);
++    expect(members()).not.toContain(existing[1]);
++
++    expect((await patch({ removeAssetIds: [existing[2]] })).statusCode).toBe(200);
++    const concurrent = await Promise.all([
++      patch({ addAssetIds: [existing[1]] }),
++      patch({ addAssetIds: [assetIds[2]] }),
++    ]);
++    expect(concurrent.map((result) => result.statusCode).sort()).toEqual([200, 409]);
++    expect(members()).toHaveLength(500);
++  });
++});
+--- a/platform/tests/dify-workflow-nodes.test.ts
++++ b/platform/tests/dify-workflow-nodes.test.ts
+@@ -1,7 +1,9 @@
+ import { expect, it } from 'vitest';
+-import { readFileSync } from 'node:fs';
++import { closeSync, mkdtempSync, openSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+ import { execFileSync } from 'node:child_process';
+ import { createRequire } from 'node:module';
++import { tmpdir } from 'node:os';
++import { join } from 'node:path';
+ import { z } from 'zod';
+ import JSZip from 'jszip';
+ import { createHash } from 'node:crypto';
+@@ -82,13 +84,25 @@
+   if (!code) throw new Error('Missing code node');
+   const script =
+     'import sys,json\np=json.load(sys.stdin)\nscope={}\nexec(compile(p["code"],"dify-node","exec"),scope)\ntry:\n print(json.dumps({"ok":True,"result":scope[p["entryPoint"]](**p["args"])}))\nexcept Exception as error:\n print(json.dumps({"ok":False,"error":str(error)}))\n';
+-  return JSON.parse(
+-    execFileSync('python3', ['-c', script], {
+-      input: JSON.stringify({ code, args, entryPoint }),
+-      encoding: 'utf8',
+-      timeout: 10000,
+-    }),
+-  ) as { ok: boolean; result: Record<string, string | number>; error?: string };
++  // Large synchronous stdin pipes can stall before Python reads the complete payload.
++  // A file descriptor preserves the exact stdin contract without relaxing execution bounds.
++  const folder = mkdtempSync(join(tmpdir(), 'yingzao-dify-node-'));
++  let input: number | undefined;
++  try {
++    const payload = join(folder, 'input.json');
++    writeFileSync(payload, JSON.stringify({ code, args, entryPoint }), { mode: 0o600 });
++    input = openSync(payload, 'r');
++    return JSON.parse(
++      execFileSync('python3', ['-c', script], {
++        stdio: [input, 'pipe', 'pipe'],
++        encoding: 'utf8',
++        timeout: 10000,
++      }),
++    ) as { ok: boolean; result: Record<string, string | number>; error?: string };
++  } finally {
++    if (input !== undefined) closeSync(input);
++    rmSync(folder, { recursive: true, force: true });
++  }
+ }
+ const finalArgs = () => ({
+   body: response(screens()),
+--- /dev/null
++++ b/platform/tests/e2e/collection-membership-review.spec.ts
+@@ -0,0 +1,140 @@
++import sharp from 'sharp';
++import type { Page } from '@playwright/test';
++import { test, expect, type Studio } from './fixtures';
++
++test.use({ recoveryEnabled: false, smsEnabled: false });
++
++async function setup(page: Page, studio: Studio) {
++  const owner = await studio.existingIdentitySession();
++  await page
++    .context()
++    .addCookies([{ name: 'studio_session', value: owner.sessionToken, url: studio.origin }]);
++  const headers = { origin: studio.origin, 'x-workspace-id': owner.workspace.id };
++  const assets: { id: string; name: string }[] = [];
++  for (const [index, background] of ['#24704b', '#b54b32', '#234578'].entries()) {
++    const response = await page.request.post(`${studio.origin}/api/v1/assets/upload`, {
++      headers,
++      multipart: {
++        file: {
++          name: `集合素材${index + 1}.png`,
++          mimeType: 'image/png',
++          buffer: await sharp({ create: { width: 64, height: 64, channels: 3, background } })
++            .png()
++            .toBuffer(),
++        },
++      },
++    });
++    expect(response.status()).toBe(201);
++    assets.push((await response.json()).data);
++  }
++  const response = await page.request.post(`${studio.origin}/api/v1/collections`, {
++    headers,
++    data: { name: '保留完整归属的集合' },
++  });
++  expect(response.status()).toBe(201);
++  const collection = (await response.json()).data as { id: string; name: string };
++  const assigned = await page.request.put(
++    `${studio.origin}/api/v1/collections/${collection.id}/assets`,
++    { headers, data: { assetIds: [assets[0]!.id] } },
++  );
++  expect(assigned.status()).toBe(200);
++  return { headers, assets, collection };
++}
++
++test('adding an asset preserves collection membership of an item in the recycle bin', async ({
++  page,
++  studio,
++}) => {
++  const { headers, assets, collection } = await setup(page, studio);
++  const removed = await page.request.delete(`${studio.origin}/api/v1/assets/${assets[0]!.id}`, {
++    headers,
++  });
++  expect(removed.status()).toBe(200);
++  await page.goto(`${studio.origin}/assets`);
++  await page.getByRole('checkbox', { name: `选择${assets[1]!.name}`, exact: true }).check();
++  await page.getByRole('button', { name: '加入集合', exact: true }).click();
++  await page.getByRole('dialog').getByRole('button', { name: collection.name }).click();
++  await expect(page.getByRole('dialog')).toHaveCount(0);
++  const restored = await page.request.post(
++    `${studio.origin}/api/v1/assets/${assets[0]!.id}/restore`,
++    { headers },
++  );
++  expect(restored.status()).toBe(200);
++  const result = await page.request.get(
++    `${studio.origin}/api/v1/assets?collectionId=${collection.id}`,
++    { headers },
++  );
++  expect((await result.json()).data.items.map((asset: { id: string }) => asset.id).sort()).toEqual(
++    [assets[0]!.id, assets[1]!.id].sort(),
++  );
++  await page.getByRole('combobox', { name: '素材集合', exact: true }).selectOption(collection.id);
++  await expect(page.locator('.asset-card')).toHaveCount(2);
++  await page.screenshot({
++    path: `${studio.folder}/collection-recycle-preserved.png`,
++    fullPage: true,
++  });
++});
++
++test('adding and removing selected assets preserves a concurrent collection addition', async ({
++  page,
++  studio,
++}) => {
++  const { headers, assets, collection } = await setup(page, studio);
++  let inserted = false;
++  await page.route(`**/api/v1/collections/${collection.id}/assets`, async (route) => {
++    if (!inserted && ['PUT', 'PATCH'].includes(route.request().method())) {
++      inserted = true;
++      const other = await page.request.put(
++        `${studio.origin}/api/v1/collections/${collection.id}/assets`,
++        { headers, data: { assetIds: [assets[0]!.id, assets[2]!.id] } },
++      );
++      expect(other.status()).toBe(200);
++    }
++    await route.continue();
++  });
++  await page.goto(`${studio.origin}/assets`);
++  await page.getByRole('checkbox', { name: `选择${assets[1]!.name}`, exact: true }).check();
++  await page.getByRole('button', { name: '加入集合', exact: true }).click();
++  await page.getByRole('dialog').getByRole('button', { name: collection.name }).click();
++  await expect(page.getByRole('dialog')).toHaveCount(0);
++  await page.getByRole('combobox', { name: '素材集合', exact: true }).selectOption(collection.id);
++  await expect(page.locator('.asset-card')).toHaveCount(3);
++  await page.getByRole('checkbox', { name: `选择${assets[1]!.name}`, exact: true }).check();
++  await page.getByRole('button', { name: '移出当前集合', exact: true }).click();
++  await expect(page.locator('.asset-card')).toHaveCount(2);
++  const result = await page.request.get(
++    `${studio.origin}/api/v1/assets?collectionId=${collection.id}`,
++    { headers },
++  );
++  expect((await result.json()).data.items.map((asset: { id: string }) => asset.id).sort()).toEqual(
++    [assets[0]!.id, assets[2]!.id].sort(),
++  );
++  expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM assets').get()).toEqual({
++    n: 3,
++  });
++});
++
++test('collection lookup failure offers retry instead of claiming the collection list is empty', async ({
++  page,
++  studio,
++}) => {
++  const { assets, collection } = await setup(page, studio);
++  let unavailable = true;
++  await page.route('**/api/v1/collections?*', async (route) => {
++    if (!unavailable) return route.continue();
++    await route.fulfill({
++      status: 503,
++      contentType: 'application/json',
++      body: JSON.stringify({ error: { code: 'FIXTURE_UNAVAILABLE', message: '集合暂时无法读取' } }),
++    });
++  });
++  await page.goto(`${studio.origin}/assets`);
++  await page.getByRole('checkbox', { name: `选择${assets[1]!.name}`, exact: true }).check();
++  await page.getByRole('button', { name: '加入集合', exact: true }).click();
++  const dialog = page.getByRole('dialog');
++  await expect(dialog).toContainText('集合暂时无法读取');
++  await expect(dialog).not.toContainText('请先创建一个集合');
++  unavailable = false;
++  await dialog.getByRole('button', { name: '重试', exact: true }).click();
++  await expect(dialog.getByRole('button', { name: collection.name })).toBeVisible();
++});
+--- /dev/null
++++ b/platform/tests/e2e/filter-style-review.spec.ts
+@@ -0,0 +1,142 @@
++import { randomUUID } from 'node:crypto';
++import { writeFile } from 'node:fs/promises';
++import type { Locator } from '@playwright/test';
++import { jobInputSchema } from '../../src/contracts/jobs';
++import { test, expect } from './fixtures';
++
++test.use({ reducedMotion: 'reduce' });
++
++async function filterStyle(button: Locator, theme: 'dark' | 'light') {
++  const style = await button.evaluate((element) => {
++    const computed = getComputedStyle(element);
++    return {
++      radius: parseFloat(computed.borderTopLeftRadius),
++      height: element.getBoundingClientRect().height,
++      background: computed.backgroundColor,
++      color: computed.color,
++    };
++  });
++  expect
++    .soft(style.radius, 'A selected filter uses the shared pill shape')
++    .toBeGreaterThanOrEqual(style.height / 2);
++  expect
++    .soft(style.background, 'A selected filter uses the shared selection color')
++    .toBe(theme === 'dark' ? 'rgb(244, 241, 234)' : 'rgb(20, 19, 16)');
++  expect
++    .soft(style.color, 'Selected filter text uses the inverse surface color')
++    .toBe(theme === 'dark' ? 'rgb(7, 7, 8)' : 'rgb(243, 240, 233)');
++  return style;
++}
++
++for (const theme of ['dark', 'light'] as const) {
++  test(`task and tool filters retain real filtering with consistent ${theme} selections`, async ({
++    page,
++    studio,
++  }) => {
++    const account = await studio.existingIdentitySession();
++    studio.services.db.sqlite
++      .prepare('UPDATE users SET preferences_json=? WHERE id=?')
++      .run(
++        JSON.stringify({ ...account.user.preferences, theme, onboardingCompleted: true }),
++        account.user.id,
++      );
++    await page.context().addCookies([
++      {
++        name: 'studio_session',
++        value: account.sessionToken,
++        url: studio.origin,
++        httpOnly: true,
++        sameSite: 'Lax',
++      },
++    ]);
++    // Terminal synthetic records exercise the real list/filter endpoint without generation.
++    const ids = { succeeded: randomUUID(), cancelled: randomUUID() };
++    const date = new Date().toISOString();
++    for (const status of ['succeeded', 'cancelled'] as const) {
++      const prompt = status === 'succeeded' ? '筛选验证：已完成示例' : '筛选验证：已取消示例';
++      studio.services.db.sqlite
++        .prepare(
++          "INSERT INTO jobs(id,workspace_id,user_id,operation,provider_id,prompt,input_json,input_hash,request_id,pricing_version,status,stage,requested_credits,settled_credits,created_at,updated_at) VALUES(?,?,?,'image.generate','native',?,?,'filter-fixture',?,'fixture',?,'complete',0,0,?,?)",
++        )
++        .run(
++          ids[status],
++          account.workspace.id,
++          account.user.id,
++          prompt,
++          JSON.stringify(
++            jobInputSchema.parse({
++              operation: 'image.generate',
++              providerId: 'native',
++              prompt,
++              assetIds: [],
++              options: {},
++            }),
++          ),
++          randomUUID(),
++          status,
++          date,
++          date,
++        );
++    }
++    await page.goto(`${studio.origin}/tasks`);
++    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
++    await expect(page.locator('.task-list-item')).toHaveCount(2);
++    const statuses = page.getByLabel('按状态查看任务', { exact: true });
++    const completed = statuses.getByRole('button', { name: '已完成', exact: true });
++    const response = page.waitForResponse(
++      (item) =>
++        new URL(item.url()).pathname === '/api/v1/jobs' &&
++        new URL(item.url()).searchParams.get('status') === 'succeeded',
++    );
++    await completed.click();
++    expect((await response).status()).toBe(200);
++    await expect(completed).toHaveAttribute('aria-pressed', 'true');
++    await expect(completed).toBeFocused();
++    await expect(page.locator('.task-list-item')).toHaveCount(1);
++    await expect(page.locator('.task-list-item [data-job-id]')).toHaveAttribute(
++      'data-job-id',
++      ids.succeeded,
++    );
++    const task = await filterStyle(completed, theme);
++    await page.screenshot({
++      path: `${studio.folder}/task-filter-${theme}.png`,
++      fullPage: true,
++      scale: 'css',
++    });
++    await statuses.getByRole('button', { name: '已取消', exact: true }).click();
++    await expect(page.locator('.task-list-item [data-job-id]')).toHaveAttribute(
++      'data-job-id',
++      ids.cancelled,
++    );
++    await expect(completed).toHaveAttribute('aria-pressed', 'false');
++    await statuses.getByRole('button', { name: '全部', exact: true }).click();
++    await expect(page.locator('.task-list-item')).toHaveCount(2);
++
++    await page.goto(`${studio.origin}/tools`);
++    const categories = page.locator('.tools-page .category-tabs');
++    const local = categories.getByRole('button', { name: '本机处理', exact: true });
++    await local.click();
++    await expect(local).toHaveAttribute('aria-pressed', 'true');
++    await expect(local).toBeFocused();
++    await expect(page.locator('.tool-card')).toHaveCount(4);
++    await expect(page.locator('.tool-card').filter({ hasText: '图片缩放' })).toBeVisible();
++    await expect(page.locator('.tool-card').filter({ hasText: '魔法消除' })).toHaveCount(0);
++    const tool = await filterStyle(local, theme);
++    await page.screenshot({
++      path: `${studio.folder}/tool-filter-${theme}.png`,
++      fullPage: true,
++      scale: 'css',
++    });
++    await categories.getByRole('button', { name: '编辑', exact: true }).click();
++    await expect(local).toHaveAttribute('aria-pressed', 'false');
++    await expect(page.locator('.tool-card').filter({ hasText: '魔法消除' })).toBeVisible();
++    await expect(page.locator('.tool-card').filter({ hasText: '图片缩放' })).toHaveCount(0);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(
++      true,
++    );
++    await writeFile(
++      `${studio.folder}/filter-style-${theme}.json`,
++      JSON.stringify({ theme, viewport: page.viewportSize(), task, tool }, null, 2),
++    );
++  });
++}
+--- /dev/null
++++ b/platform/tests/e2e/placeholder-contrast-review.spec.ts
+@@ -0,0 +1,125 @@
++import { writeFile } from 'node:fs/promises';
++import { test, expect } from './fixtures';
++
++test.use({ reducedMotion: 'reduce' });
++
++for (const theme of ['dark', 'light'] as const) {
++  test(`home placeholder and explanatory text remain readable in ${theme} theme`, async ({
++    page,
++    studio,
++  }) => {
++    const account = await studio.existingIdentitySession();
++    await page.context().addCookies([
++      {
++        name: 'studio_session',
++        value: account.sessionToken,
++        url: studio.origin,
++        httpOnly: true,
++        sameSite: 'Lax',
++      },
++    ]);
++    await page.goto(studio.origin);
++    await page.getByRole('textbox', { name: '创作需求', exact: true }).waitFor();
++    await page.evaluate(
++      (value) => document.documentElement.setAttribute('data-theme', value),
++      theme,
++    );
++    const measurements = await page.evaluate(() => {
++      const canvas = document.createElement('canvas');
++      canvas.width = canvas.height = 1;
++      const context = canvas.getContext('2d')!;
++      const rgba = (color: string) => {
++        context.clearRect(0, 0, 1, 1);
++        context.fillStyle = color;
++        context.fillRect(0, 0, 1, 1);
++        const values = [...context.getImageData(0, 0, 1, 1).data];
++        return [values[0]!, values[1]!, values[2]!, values[3]! / 255];
++      };
++      const blend = (front: number[], back: number[]) =>
++        front
++          .slice(0, 3)
++          .map((channel, index) => channel * front[3]! + back[index]! * (1 - front[3]!));
++      const luminance = (rgb: number[]) =>
++        rgb.reduce((sum, channel, index) => {
++          const value = channel / 255;
++          return (
++            sum +
++            (value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4) *
++              [0.2126, 0.7152, 0.0722][index]!
++          );
++        }, 0);
++      const selectors = [
++        ['.yz-create textarea.prompt-input', '::placeholder'],
++        ['.yz-result-hint', ''],
++        ['.credit-estimate-note', ''],
++        ['.composer-note', ''],
++        ['.yz-capability-text small', ''],
++        ['.yz-note', ''],
++      ];
++      return selectors.flatMap(([selector, pseudo]) =>
++        [...document.querySelectorAll<HTMLElement>(selector!)]
++          .filter((element) => element.getClientRects().length > 0)
++          .map((element) => {
++            const style = getComputedStyle(element, pseudo || null);
++            const ancestors: { selector: string; color: string; opacity: number; image: string }[] =
++              [];
++            for (let parent: HTMLElement | null = element; parent; parent = parent.parentElement) {
++              const current = getComputedStyle(parent);
++              ancestors.unshift({
++                selector: parent.tagName + '.' + parent.className,
++                color: current.backgroundColor,
++                opacity: Number(current.opacity),
++                image: current.backgroundImage,
++              });
++            }
++            let background = [255, 255, 255];
++            for (const ancestor of ancestors) background = blend(rgba(ancestor.color), background);
++            const color = rgba(style.color);
++            color[3] =
++              color[3]! *
++              ancestors.reduce((value, ancestor) => value * ancestor.opacity, 1) *
++              (pseudo ? Number(style.opacity) : 1);
++            const foreground = blend(color, background);
++            const a = luminance(foreground),
++              b = luminance(background);
++            return {
++              selector,
++              pseudo,
++              text: pseudo ? element.getAttribute('placeholder') : element.textContent,
++              color: style.color,
++              opacity: style.opacity,
++              foreground,
++              background,
++              contrast: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
++              ancestors,
++            };
++          }),
++      );
++    });
++    await writeFile(
++      `${studio.folder}/text-contrast-${theme}.json`,
++      JSON.stringify(measurements, null, 2),
++    );
++    await page.screenshot({
++      path: `${studio.folder}/placeholder-${theme}.png`,
++      fullPage: true,
++      scale: 'css',
++    });
++    expect(measurements).toEqual(
++      expect.arrayContaining([
++        expect.objectContaining({
++          selector: '.yz-create textarea.prompt-input',
++          pseudo: '::placeholder',
++        }),
++        ...['.yz-result-hint', '.credit-estimate-note', '.yz-note'].map((selector) =>
++          expect.objectContaining({ selector, pseudo: '' }),
++        ),
++      ]),
++    );
++    for (const measurement of measurements) {
++      expect
++        .soft(measurement.contrast, `${measurement.selector} ${measurement.text}`)
++        .toBeGreaterThanOrEqual(4.5);
++    }
++  });
++}
+--- /dev/null
++++ b/platform/tests/e2e/session-recovery-review.spec.ts
+@@ -0,0 +1,45 @@
++import { test, expect } from './fixtures';
++
++test('forgot-password navigation and return to login work without reloading', async ({
++  page,
++  studio,
++}) => {
++  await studio.existingIdentitySession();
++  await page.goto(`${studio.origin}/login`);
++  await page.getByRole('link', { name: '忘记密码？', exact: true }).click();
++  await expect(page).toHaveURL(`${studio.origin}/password/forgot`);
++  await expect(page.getByRole('heading', { name: '忘记密码', exact: true })).toBeVisible();
++  await page.getByRole('link', { name: '返回登录', exact: true }).click();
++  await expect(page).toHaveURL(`${studio.origin}/login`);
++  await expect(page.getByRole('button', { name: '登录工作空间', exact: true })).toBeVisible();
++  await page.goBack();
++  await expect(page.getByRole('heading', { name: '忘记密码', exact: true })).toBeVisible();
++  expect(studio.smtp.messages).toHaveLength(0);
++});
++
++test('session retry returns to login when a temporary server error becomes an expired session', async ({
++  page,
++  studio,
++}) => {
++  const account = await studio.existingIdentitySession();
++  let unavailable = true;
++  await page.route('**/api/v1/auth/me', async (route) => {
++    if (!unavailable) return route.continue();
++    await route.fulfill({
++      status: 503,
++      contentType: 'application/json',
++      body: JSON.stringify({ error: { code: 'UNAVAILABLE', message: '隔离测试：服务暂不可用' } }),
++    });
++  });
++  await page.goto(`${studio.origin}/login`);
++  await expect(page.getByRole('alert')).toContainText('隔离测试：服务暂不可用');
++  unavailable = false;
++  await page.getByRole('button', { name: '重试', exact: true }).click();
++  await expect(page.getByRole('button', { name: '登录工作空间', exact: true })).toBeVisible();
++  await expect(page.getByRole('alert')).toHaveCount(0);
++  await page.getByLabel('邮箱', { exact: true }).fill(account.user.email);
++  await page.getByLabel('密码', { exact: true }).fill(account.password);
++  await page.getByRole('button', { name: '登录工作空间', exact: true }).click();
++  await expect(page.getByRole('main')).toBeVisible();
++  expect((await page.request.get(`${studio.origin}/api/v1/auth/me`)).status()).toBe(200);
++});
+--- /dev/null
++++ b/platform/tests/e2e/theme-preference-review.spec.ts
+@@ -0,0 +1,100 @@
++import type { Page } from '@playwright/test';
++import { test, expect, type Studio } from './fixtures';
++
++test.use({ recoveryEnabled: false, smsEnabled: false });
++
++async function account(page: Page, studio: Studio) {
++  const owner = await studio.existingIdentitySession();
++  await page
++    .context()
++    .addCookies([{ name: 'studio_session', value: owner.sessionToken, url: studio.origin }]);
++  return owner;
++}
++
++async function saveTheme(page: Page, value: 'light' | 'dark' | 'system') {
++  await page.getByRole('combobox', { name: '界面主题', exact: true }).selectOption(value);
++  const saved = page.waitForResponse(
++    (response) =>
++      response.url().endsWith('/api/v1/auth/me') && response.request().method() === 'PATCH',
++  );
++  await page.getByRole('button', { name: '保存设置', exact: true }).click();
++  expect((await saved).status()).toBe(200);
++}
++
++test('new accounts explicitly default to dark while the operating system uses light', async ({
++  page,
++  studio,
++}) => {
++  await page.emulateMedia({ colorScheme: 'light' });
++  const owner = await account(page, studio);
++  expect(owner.user.preferences.theme).toBe('dark');
++  await page.goto(`${studio.origin}/settings`);
++  await expect(page.getByRole('combobox', { name: '界面主题', exact: true })).toHaveValue('dark');
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++  await page.emulateMedia({ colorScheme: 'dark' });
++  await page.emulateMedia({ colorScheme: 'light' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++});
++
++test('system theme follows live operating-system changes and remains selected after reload', async ({
++  page,
++  studio,
++}) => {
++  await page.emulateMedia({ colorScheme: 'light' });
++  const owner = await account(page, studio);
++  await page.goto(`${studio.origin}/settings`);
++  await saveTheme(page, 'system');
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
++  await page.emulateMedia({ colorScheme: 'dark' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++  await page.emulateMedia({ colorScheme: 'light' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
++  await page.reload();
++  await expect(page.getByRole('combobox', { name: '界面主题', exact: true })).toHaveValue('system');
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
++  const record = studio.services.db.sqlite
++    .prepare('SELECT preferences_json FROM users WHERE id=?')
++    .get(owner.user.id) as { preferences_json: string };
++  expect(JSON.parse(record.preferences_json).theme).toBe('system');
++  await page.screenshot({ path: `${studio.folder}/system-theme-light.png`, fullPage: true });
++});
++
++test('explicit light and dark choices are not overridden by operating-system changes', async ({
++  page,
++  studio,
++}) => {
++  await account(page, studio);
++  await page.goto(`${studio.origin}/settings`);
++  await saveTheme(page, 'light');
++  await page.emulateMedia({ colorScheme: 'dark' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
++  await page.emulateMedia({ colorScheme: 'light' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
++  await saveTheme(page, 'dark');
++  await page.emulateMedia({ colorScheme: 'dark' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++  await page.emulateMedia({ colorScheme: 'light' });
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++  await page.reload();
++  await expect(page.getByRole('combobox', { name: '界面主题', exact: true })).toHaveValue('dark');
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++});
++
++test('a legacy account without a theme keeps dark appearance without rewriting stored preferences', async ({
++  page,
++  studio,
++}) => {
++  await page.emulateMedia({ colorScheme: 'light' });
++  const owner = await account(page, studio);
++  const preferences = { onboardingCompleted: true, locale: 'zh-CN', defaultPlatform: '通用电商' };
++  studio.services.db.sqlite
++    .prepare('UPDATE users SET preferences_json=? WHERE id=?')
++    .run(JSON.stringify(preferences), owner.user.id);
++  await page.goto(`${studio.origin}/settings`);
++  await expect(page.getByRole('combobox', { name: '界面主题', exact: true })).toHaveValue('dark');
++  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
++  const record = studio.services.db.sqlite
++    .prepare('SELECT preferences_json FROM users WHERE id=?')
++    .get(owner.user.id) as { preferences_json: string };
++  expect(JSON.parse(record.preferences_json)).toEqual(preferences);
++});
+--- /dev/null
++++ b/platform/tests/e2e/tool-asset-recovery-review.spec.ts
+@@ -0,0 +1,103 @@
++import sharp from 'sharp';
++import { test, expect } from './fixtures';
++
++test.use({ recoveryEnabled: false, smsEnabled: false });
++
++test('locks tool inputs until delayed draft assets are restored, then saves the chosen replacement', async ({
++  page,
++  studio,
++}) => {
++  const owner = await studio.existingIdentitySession();
++  await page
++    .context()
++    .addCookies([{ name: 'studio_session', value: owner.sessionToken, url: studio.origin }]);
++  const headers = { origin: studio.origin, 'x-workspace-id': owner.workspace.id };
++  const assets: { id: string; name: string }[] = [];
++  for (const [index, background] of ['#24704b', '#b54b32'].entries()) {
++    const response = await page.request.post(`${studio.origin}/api/v1/assets/upload`, {
++      headers,
++      multipart: {
++        file: {
++          name: `工具恢复素材${index + 1}.png`,
++          mimeType: 'image/png',
++          buffer: await sharp({ create: { width: 64, height: 64, channels: 3, background } })
++            .png()
++            .toBuffer(),
++        },
++      },
++    });
++    expect(response.status()).toBe(201);
++    assets.push((await response.json()).data);
++  }
++  const created = await page.request.post(`${studio.origin}/api/v1/projects`, {
++    headers,
++    data: { name: '保持工具草稿素材选择', kind: 'image' },
++  });
++  const project = (await created.json()).data as { id: string };
++  const saved = await page.request.post(`${studio.origin}/api/v1/projects/${project.id}/messages`, {
++    headers,
++    data: {
++      role: 'user',
++      content: '保持原工具草稿',
++      metadata: {
++        draft: {
++          operation: 'local.resize',
++          providerId: 'local',
++          projectId: project.id,
++          prompt: '保持原工具草稿',
++          assetIds: [assets[0]!.id],
++          options: { width: 300, height: 300 },
++        },
++      },
++    },
++  });
++  expect(saved.status()).toBe(200);
++  let ready = false;
++  let release!: () => void;
++  const barrier = new Promise<void>((resolve) => {
++    release = resolve;
++  });
++  await page.route(`**/api/v1/assets/${assets[0]!.id}`, async (route) => {
++    const response = await route.fetch();
++    ready = true;
++    await barrier;
++    await route.fulfill({ response }).catch(() => undefined);
++  });
++  try {
++    await page.goto(`${studio.origin}/tools/local.resize?projectId=${project.id}`);
++    await expect.poll(() => ready).toBe(true);
++    const form = page.locator('.tool-form');
++    await expect(form).toHaveAttribute('inert', '');
++    await expect(page.getByRole('button', { name: '保存为项目', exact: true })).toBeDisabled();
++    release();
++    await expect(form).not.toHaveAttribute('inert');
++    await expect(form.locator('.asset-chip')).toContainText(assets[0]!.name);
++    await form.getByRole('button', { name: `移除${assets[0]!.name}`, exact: true }).click();
++    await form.getByRole('button', { name: '添加素材', exact: true }).click();
++    const dialog = page.getByRole('dialog', { name: '原始图片', exact: true });
++    await dialog.getByText(assets[1]!.name, { exact: true }).click();
++    await dialog.getByRole('button', { name: '完成选择', exact: true }).click();
++    await page.getByRole('button', { name: '保存为项目', exact: true }).click();
++    await expect
++      .poll(async () => {
++        const response = await page.request.get(
++          `${studio.origin}/api/v1/projects/${project.id}/messages`,
++          { headers },
++        );
++        const items = (await response.json()).data.items as {
++          createdAt: string;
++          metadata?: { draft?: { assetIds?: string[] } };
++        }[];
++        return items.sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]?.metadata?.draft
++          ?.assetIds;
++      })
++      .toEqual([assets[1]!.id]);
++    expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({
++      n: 0,
++    });
++    await page.goto(`${studio.origin}/tools/local.resize?projectId=${project.id}`);
++    await expect(page.locator('.tool-form .asset-chip')).toContainText(assets[1]!.name);
++  } finally {
++    release();
++  }
++});
+--- /dev/null
++++ b/platform/tests/e2e/ui-audit.spec.ts
+@@ -0,0 +1,165 @@
++import sharp from 'sharp';
++import { writeFile } from 'node:fs/promises';
++import type { Locator } from '@playwright/test';
++import { test, expect } from './fixtures';
++
++test.use({ reducedMotion: 'reduce' });
++
++async function minimumButtonContrast(button: Locator) {
++  const foreground = await button.evaluate((element) =>
++    getComputedStyle(element)
++      .color.match(/[\d.]+/g)!
++      .slice(0, 3)
++      .map(Number),
++  );
++  const image = await sharp(await button.screenshot({ scale: 'css' }))
++    .ensureAlpha()
++    .raw()
++    .toBuffer({
++      resolveWithObject: true,
++    });
++  const luminance = (rgb: number[]) =>
++    rgb.reduce((sum, channel, index) => {
++      const value = channel / 255;
++      return (
++        sum +
++        (value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4) *
++          [0.2126, 0.7152, 0.0722][index]!
++      );
++    }, 0);
++  const text = luminance(foreground);
++  const samples: number[] = [];
++  // Sample the actual rendered gradient above the text and inside rounded corners.
++  for (let x = 32; x < image.info.width - 32; x += 5) {
++    const offset = (6 * image.info.width + x) * 4;
++    const background = luminance([...image.data.subarray(offset, offset + 3)]);
++    samples.push((Math.max(text, background) + 0.05) / (Math.min(text, background) + 0.05));
++  }
++  expect(samples.length).toBeGreaterThan(5);
++  return Math.min(...samples);
++}
++
++for (const theme of ['dark', 'light'] as const) {
++  test(`brand action text remains readable in ${theme} theme`, async ({ page, studio }) => {
++    await page.goto(studio.origin);
++    await page.locator('.login-form form > .button').waitFor();
++    await page.evaluate(
++      (value) => document.documentElement.setAttribute('data-theme', value),
++      theme,
++    );
++    const submit = page.locator('.login-form form > .button');
++    await page.mouse.move(0, 0);
++    await page.screenshot({ path: `${studio.folder}/brand-${theme}-normal.png` });
++    const normal = await minimumButtonContrast(submit);
++    expect.soft(normal, 'Normal action text contrast').toBeGreaterThanOrEqual(4.5);
++    await submit.hover();
++    await page.screenshot({ path: `${studio.folder}/brand-${theme}-hover.png` });
++    const hover = await minimumButtonContrast(submit);
++    await writeFile(
++      `${studio.folder}/contrast-${theme}.json`,
++      JSON.stringify({ theme, normal, hover }),
++    );
++    expect.soft(hover, 'Hovered action text contrast').toBeGreaterThanOrEqual(4.5);
++  });
++}
++
++test('floating drawers fit narrow screens and restore trigger focus', async ({ page, studio }) => {
++  const account = await studio.existingIdentitySession();
++  await page.context().addCookies([
++    {
++      name: 'studio_session',
++      value: account.sessionToken,
++      url: studio.origin,
++      httpOnly: true,
++      sameSite: 'Lax',
++    },
++  ]);
++  for (const width of [320, 390, 768]) {
++    await page.setViewportSize({ width, height: 844 });
++    await page.goto(studio.origin);
++    const trigger = page.getByRole('button', { name: '通知', exact: true });
++    await trigger.click();
++    const drawer = page.getByRole('dialog', { name: '通知', exact: true });
++    await expect(drawer).toBeVisible();
++    await page.screenshot({ path: `${studio.folder}/notification-drawer-${width}.png` });
++    const bounds = (await drawer.boundingBox())!;
++    expect.soft(bounds.x, `Drawer start at ${width}px`).toBeGreaterThanOrEqual(9);
++    expect.soft(bounds.x + bounds.width, `Drawer end at ${width}px`).toBeLessThanOrEqual(width - 9);
++    await drawer.getByRole('button', { name: '关闭', exact: true }).click();
++    await expect(trigger).toBeFocused();
++  }
++});
++
++test('desktop rail keeps account and workspace controls reachable on short screens', async ({
++  page,
++  studio,
++}) => {
++  const account = await studio.existingIdentitySession();
++  await page.context().addCookies([
++    {
++      name: 'studio_session',
++      value: account.sessionToken,
++      url: studio.origin,
++      httpOnly: true,
++      sameSite: 'Lax',
++    },
++  ]);
++  for (const viewport of [
++    { width: 1280, height: 720 },
++    { width: 1024, height: 600 },
++  ]) {
++    await page.setViewportSize(viewport);
++    await page.goto(studio.origin);
++    const rail = page.getByRole('complementary', { name: '工作空间导航' });
++    const accountTrigger = rail.getByRole('button', { name: /^账户与退出/ });
++    await accountTrigger.scrollIntoViewIfNeeded();
++    const bounds = (await accountTrigger.boundingBox())!;
++    await page.screenshot({ path: `${studio.folder}/short-rail-${viewport.height}.png` });
++    expect
++      .soft(bounds.y + bounds.height, 'Account trigger must be inside the viewport after scrolling')
++      .toBeLessThanOrEqual(viewport.height);
++    // A click must open the real account panel, not merely find an offscreen DOM node.
++    if (bounds.y + bounds.height <= viewport.height) {
++      await accountTrigger.click();
++      await expect(page.getByRole('dialog', { name: '账户与退出', exact: true })).toBeVisible();
++      await page.screenshot({ path: `${studio.folder}/short-account-open-${viewport.height}.png` });
++      await page.getByRole('dialog').getByRole('button', { name: '关闭', exact: true }).click();
++      const workspaceTrigger = rail.getByRole('button', { name: /^切换工作空间/ });
++      await workspaceTrigger.click();
++      await expect(page.getByRole('dialog', { name: '切换工作空间', exact: true })).toBeVisible();
++      await page.getByRole('dialog').getByRole('button', { name: '关闭', exact: true }).click();
++    }
++  }
++});
++
++test('home keeps its creative controls visible in both themes', async ({ page, studio }) => {
++  const account = await studio.existingIdentitySession();
++  await page.context().addCookies([
++    {
++      name: 'studio_session',
++      value: account.sessionToken,
++      url: studio.origin,
++      httpOnly: true,
++      sameSite: 'Lax',
++    },
++  ]);
++  await page.setViewportSize({ width: 1440, height: 1000 });
++  await page.goto(studio.origin);
++  for (const theme of ['dark', 'light']) {
++    await page.evaluate(
++      (value) => document.documentElement.setAttribute('data-theme', value),
++      theme,
++    );
++    const brief = page.getByRole('textbox', { name: '创作需求', exact: true });
++    await expect(brief).toBeVisible();
++    await expect(page.getByRole('button', { name: '生成图片', exact: true })).toBeVisible();
++    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
++      true,
++    );
++    await page.screenshot({
++      path: `${studio.folder}/home-${theme}-desktop.png`,
++      fullPage: true,
++      scale: 'css',
++    });
++  }
++});
+--- /dev/null
++++ b/platform/tests/provider-http.test.ts
+@@ -0,0 +1,71 @@
++import { afterEach, describe, expect, it, vi } from 'vitest';
++import { providerJson } from '../src/server/providers/http';
++
++afterEach(() => vi.unstubAllGlobals());
++
++describe('provider response cleanup', () => {
++  it.each([401, 429, 503])(
++    'cancels rejected HTTP %i bodies without consuming their content',
++    async (status) => {
++      const cancel = vi.fn();
++      const body = new ReadableStream<Uint8Array>({ cancel });
++      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(body, { status })));
++
++      await expect(
++        providerJson('https://provider.example.test/run', { submission: true }),
++      ).rejects.toMatchObject({ code: `PROVIDER_HTTP_${status}`, ambiguous: status >= 500 });
++      expect(cancel).toHaveBeenCalledOnce();
++      expect(body.locked).toBe(false);
++    },
++  );
++
++  it('cancels an oversized declared body before reading it', async () => {
++    const cancel = vi.fn();
++    const body = new ReadableStream<Uint8Array>({ cancel });
++    vi.stubGlobal(
++      'fetch',
++      vi.fn().mockResolvedValue(
++        new Response(body, {
++          headers: { 'content-length': String(161 * 1024 * 1024) },
++        }),
++      ),
++    );
++
++    await expect(
++      providerJson('https://provider.example.test/run', { submission: true }),
++    ).rejects.toThrow('大小限制');
++    expect(cancel).toHaveBeenCalledOnce();
++    expect(body.locked).toBe(false);
++  });
++
++  it.each(['{"ok":true}', 'invalid-json'])(
++    'releases the reader after a complete response: %s',
++    async (text) => {
++      const response = new Response(text);
++      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response));
++
++      if (text.startsWith('{')) {
++        await expect(providerJson('https://provider.example.test/run')).resolves.toEqual({
++          ok: true,
++        });
++      } else {
++        await expect(providerJson('https://provider.example.test/run')).rejects.toThrow('无法解析');
++      }
++      expect(response.body?.locked).toBe(false);
++    },
++  );
++
++  it('releases the reader after a stream failure and keeps uncertain submissions marked for reconciliation', async () => {
++    const body = new ReadableStream<Uint8Array>({
++      pull(controller) {
++        controller.error(new Error('synthetic-sensitive-provider-error'));
++      },
++    });
++    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(body)));
++
++    await expect(
++      providerJson('https://provider.example.test/run', { submission: true }),
++    ).rejects.toMatchObject({ ambiguous: true, message: '服务商返回无法解析的响应。' });
++    expect(body.locked).toBe(false);
++  });
++});
+--- /dev/null
++++ b/platform/tests/vitest-environment.test.ts
+@@ -0,0 +1,54 @@
++import { afterEach, expect, it } from 'vitest';
++import { spawnSync } from 'node:child_process';
++import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import { join, resolve } from 'node:path';
++import { isolatedTestEnvironment } from '../scripts/test-environment';
++
++const temporary: string[] = [];
++afterEach(() => {
++  for (const root of temporary.splice(0)) rmSync(root, { recursive: true, force: true });
++});
++
++it('keeps both Vite environment loading and application dotenv imports away from local settings', () => {
++  const root = mkdtempSync(join(tmpdir(), 'yingzao-vitest-environment-'));
++  temporary.push(root);
++  mkdirSync(join(root, 'tests'));
++  writeFileSync(
++    join(root, '.env'),
++    ['DIFY_API_KEY=synthetic-dotenv-only', 'VITE_TEST_ISOLATION_SENTINEL=synthetic-vite-only'].join(
++      '\n',
++    ),
++    { mode: 0o600 },
++  );
++  // Run only a generated child test; never recursively run this parent suite.
++  writeFileSync(
++    join(root, 'tests', 'isolated-sentinel.test.ts'),
++    `import { expect, it } from ${JSON.stringify(resolve('node_modules/vitest/dist/index.js'))};
++     import ${JSON.stringify(resolve('src/server/config.ts'))};
++     it('does not import either synthetic local setting', () => {
++       expect.soft(process.env.DIFY_API_KEY).toBeUndefined();
++       expect.soft(process.env.VITE_TEST_ISOLATION_SENTINEL).toBeUndefined();
++       expect.soft(process.env.DOTENV_CONFIG_PATH).toBe(${JSON.stringify(process.platform === 'win32' ? 'NUL' : '/dev/null')});
++     });`,
++  );
++  const env = isolatedTestEnvironment(resolve('.'));
++  // The actual project test configuration must supply the guard, not this test launcher.
++  delete env.DOTENV_CONFIG_PATH;
++  const child = spawnSync(
++    process.execPath,
++    [
++      resolve('node_modules/vitest/vitest.mjs'),
++      'run',
++      '--config',
++      resolve('vitest.config.ts'),
++      '--root',
++      root,
++      '--maxWorkers',
++      '1',
++      'tests/isolated-sentinel.test.ts',
++    ],
++    { cwd: root, env, encoding: 'utf8', timeout: 20000 },
++  );
++  expect(child.status, child.error?.message || `${child.stdout}\n${child.stderr}`).toBe(0);
++}, 25000);
+--- a/platform/vitest.config.ts
++++ b/platform/vitest.config.ts
+@@ -1,9 +1,11 @@
+ import { defineConfig } from 'vitest/config';
+ import { isolatedTestEnvironment } from './scripts/test-environment';
++const isolated = isolatedTestEnvironment(process.cwd());
+ export default defineConfig({
++  envDir: false,
+   test: {
+     environment: 'node',
+-    env: { PATH: isolatedTestEnvironment(process.cwd()).PATH! },
++    env: { PATH: isolated.PATH!, DOTENV_CONFIG_PATH: isolated.DOTENV_CONFIG_PATH! },
+     include: ['tests/**/*.test.ts', 'src/web/editor/**/*.test.ts'],
+     testTimeout: 15000,
+     fileParallelism: false,

@@ -1,0 +1,21 @@
+{
+  "stats": {
+    "startTime": "2026-11-14T18:19:16.469Z",
+    "duration": 7657.1359999999995,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "additionalToFullSuite": true,
+  "run": "platform/var/e2e/run-BTZe8L",
+  "sourceChanged": false,
+  "screenshots": [
+    "desktop-invoice-modal.png",
+    "desktop-title-last-page.png",
+    "mobile-invoice-modal.png",
+    "mobile-title-last-page.png"
+  ],
+  "manualReview": "四张稳定截图均已实际查看：深色外观保留，弹窗文本和操作清晰、边界在视口内，第二页旧抬头可见且分页可操作。",
+  "capture": "关闭入场动画，固定视口；不把动画中途全页截图的叠影判为产品失败。"
+}

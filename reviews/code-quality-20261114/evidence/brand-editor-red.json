@@ -1,0 +1,24 @@
+{
+  "run": "platform/var/e2e/run-O8jJm4",
+  "failed": 2,
+  "scenarios": [
+    {
+      "case": "delayed-brand-save.json",
+      "result": {
+        "dialogCount": 0,
+        "persistedDescription": "本次提交A",
+        "expectedDraft": "提交后继续输入B，不应丢失"
+      }
+    },
+    {
+      "case": "stale-brand-save.json",
+      "result": {
+        "before": "其他编辑已保存的新描述",
+        "after": "旧描述",
+        "savedName": "本地只修改名称",
+        "conflictPromptPresent": 0
+      }
+    }
+  ],
+  "excludedHarnessAttempt": "run-Pj3QRg: textarea getByLabel exact locator mismatch; not a product failure"
+}

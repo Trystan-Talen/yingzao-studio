@@ -1,0 +1,23 @@
+{
+  "changed": [
+    "src/server/core/business.ts",
+    "src/server/tasks/service.ts",
+    "src/web/lib/i18n.ts",
+    "src/web/pages/Library.tsx",
+    "src/web/pages/Team.tsx",
+    "src/web/pages/Usage.tsx",
+    "src/worker/runner.ts",
+    "tests/creative-briefs.test.ts",
+    "tests/e2e/knowledge-refresh.spec.ts",
+    "tests/native-artifacts.test.ts",
+    "tests/quality-workflows.test.ts",
+    "tests/tasks.test.ts"
+  ],
+  "added": [
+    "tests/e2e/invoice-title-pagination.spec.ts",
+    "tests/e2e/management-editor-recovery.spec.ts",
+    "tests/e2e/team-editor-recovery.spec.ts",
+    "tests/e2e/usage-lifecycle.spec.ts"
+  ],
+  "removed": []
+}

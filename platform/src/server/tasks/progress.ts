@@ -1,7 +1,7 @@
 import type { ItemRow } from './types';
 
 /** A recovery target must already exist; this never authorizes another generation. */
-export function recoverablePhase(item: ItemRow): 'downloading' | 'polling' | null {
+export function recoverablePhase(item: ItemRow): 'downloading' | 'polling' | 'processing' | null {
   if (item.result_json) {
     try {
       const value = JSON.parse(item.result_json);
@@ -32,6 +32,8 @@ export function recoverablePhase(item: ItemRow): 'downloading' | 'polling' | nul
       /* Preserve the original task for manual reconciliation. */
     }
   }
+  // The service/worker separately verifies the trusted checkpoint before execution.
+  if (item.phase === 'processing') return 'processing';
   return null;
 }
 
@@ -41,16 +43,23 @@ export function taskStage(item: ItemRow): string {
     if (recoverablePhase(item) === 'downloading')
       return '结果已生成，自动保存已暂停，可恢复已有结果';
     if (recoverablePhase(item) === 'polling') return '远程任务已保留，自动查询已暂停，可恢复查询';
+    if (recoverablePhase(item) === 'processing')
+      return '中间产物已保留，本机处理已暂停，可恢复处理';
     return '提交结果尚未确认，需核对服务商记录，不能重复生成';
   }
-  if (item.recovery_failures > 0 && ['polling', 'downloading'].includes(phase || '')) {
-    const action = phase === 'downloading' ? '保存结果' : '查询远程任务';
+  if (
+    item.recovery_failures > 0 &&
+    ['polling', 'downloading', 'processing'].includes(phase || '')
+  ) {
+    const action =
+      phase === 'downloading' ? '保存结果' : phase === 'processing' ? '本机处理' : '查询远程任务';
     return item.lease_owner
       ? `正在恢复${action}（第 ${item.recovery_failures} 次），不会重新生成`
       : `${action}暂时中断，等待自动恢复（${item.recovery_failures}/10），不会重新生成`;
   }
   if (phase === 'downloading') return '结果已生成，正在下载并保存';
   if (phase === 'polling') return '任务已受理，正在查询进度';
+  if (phase === 'processing') return '正在处理已有素材，不会重新请求模型';
   if (phase === 'submitting') return '请求已发送，等待模型返回，勿重复提交';
   return item.status === 'queued' ? '等待处理' : '准备素材';
 }

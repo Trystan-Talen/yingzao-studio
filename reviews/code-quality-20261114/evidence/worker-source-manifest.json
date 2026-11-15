@@ -1,0 +1,29 @@
+{
+  "files": [
+    {
+      "path": "src/server/providers/native.ts",
+      "sha256": "744c7d2e12108bfd11885662b3d9eb29a0933d9c2135daa63ae9ed3f991d8367"
+    },
+    {
+      "path": "src/worker/runner.ts",
+      "sha256": "6fff83c575f715cb4c1beae4da3dacda28cc273e2fa5652eaaf422ec1a179eab"
+    },
+    {
+      "path": "tests/native-exact-pan.test.ts",
+      "sha256": "94ec514762106e310dd0539e7bfa3b969c17203c64b78fc2a2eda52cee103148"
+    },
+    {
+      "path": "tests/native-integration.test.ts",
+      "sha256": "65cb9d9fe4090e18c84b41f67949d62a7b96c81cb0bee58716616269848dca13"
+    },
+    {
+      "path": "tests/tasks.test.ts",
+      "sha256": "9a2dd600fb592e1e4710a398950543c6a22597f437cc226046f400dd7d4c14c7"
+    },
+    {
+      "path": "tests/worker-lifecycle.test.ts",
+      "sha256": "7b8ee8fe4be37b47a6a213fbbc45b6f7813e61d3b9c91aa93d0a72be56a065fe"
+    }
+  ],
+  "sha256": "64f783dca655766118e59c6e83b1c334b730246313d932a91b4cba820f612532"
+}

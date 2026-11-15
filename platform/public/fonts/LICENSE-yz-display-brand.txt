@@ -1,0 +1,19 @@
+yz-display-brand.woff
+=====================
+
+Subset of ZCOOL QingKe HuangYou (站酷庆科黄油体), containing only the glyphs used in
+映造 Studio display headlines. Renamed "YZ Display Brand" to avoid clashing with an
+installed copy of the full family.
+
+Source: https://github.com/google/fonts/tree/main/ofl/zcoolqingkehuangyou
+Copyright 2018 The ZCOOL QingKe HuangYou Project Authors
+(https://www.github.com/googlefonts/zcool-qingke-huangyou)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+Full text: https://openfontlicense.org/open-font-license-official-text/
+
+To add characters (e.g. a new headline), re-subset the full
+ZCOOLQingKeHuangYou-Regular.ttf with fontTools (pyftsubset) and replace this file.
+
+yz-display-serif.woff (Noto Serif SC Heavy subset) is kept as the previously
+evaluated alternative; it is not referenced by the stylesheets.

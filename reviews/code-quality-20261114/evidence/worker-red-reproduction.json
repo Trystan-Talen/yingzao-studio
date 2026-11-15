@@ -1,0 +1,27 @@
+{
+  "paidCalls": 0,
+  "formalDatabaseOpened": false,
+  "productFilesModified": false,
+  "initialization": {
+    "tickRejected": false,
+    "unhandled": [
+      "模型配置密钥无法解密，请重新保存密钥。"
+    ],
+    "item": {
+      "status": "running",
+      "phase": "claimed",
+      "error_message": null
+    },
+    "credits": 8,
+    "imageConnectionWorks": true
+  },
+  "shutdown": {
+    "extractionCalls": 2,
+    "extractionsCompleted": 0,
+    "stoppedBeforeExtractionFinished": true,
+    "lateTickErrors": [
+      "The database connection is not open",
+      "The database connection is not open"
+    ]
+  }
+}

@@ -147,6 +147,7 @@ export async function providerJson(
     );
   }
   if (!response.ok) {
+    void response.body?.cancel().catch(() => {});
     const ambiguous = Boolean(options.submission && response.status >= 500);
     throw new ProviderError(
       response.status === 401 || response.status === 403
@@ -159,22 +160,28 @@ export async function providerJson(
     );
   }
   const length = Number(response.headers.get('content-length') || 0);
-  if (length > 160 * 1024 * 1024)
+  if (length > 160 * 1024 * 1024) {
+    void response.body?.cancel().catch(() => {});
     throw new ProviderError('服务响应超过大小限制。', Boolean(options.submission));
+  }
   try {
     if (!response.body) throw new Error('EMPTY_RESPONSE');
     const reader = response.body.getReader(),
       chunks: Uint8Array[] = [];
-    let size = 0;
-    while (true) {
-      const next = await reader.read();
-      if (next.done) break;
-      size += next.value.byteLength;
-      if (size > 160 * 1024 * 1024) {
-        await reader.cancel();
-        throw new ProviderError('服务响应超过大小限制。', Boolean(options.submission));
+    try {
+      let size = 0;
+      while (true) {
+        const next = await reader.read();
+        if (next.done) break;
+        size += next.value.byteLength;
+        if (size > 160 * 1024 * 1024) {
+          void reader.cancel().catch(() => {});
+          throw new ProviderError('服务响应超过大小限制。', Boolean(options.submission));
+        }
+        chunks.push(next.value);
       }
-      chunks.push(next.value);
+    } finally {
+      reader.releaseLock();
     }
     return JSON.parse(Buffer.concat(chunks).toString('utf8')) as unknown;
   } catch (error) {

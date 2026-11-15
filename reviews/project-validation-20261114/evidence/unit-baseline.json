@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "numTotalTests": 2339,
+  "numPassedTests": 2339,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "startTime": 1794629936939,
+  "fileCount": 150,
+  "scope": "Baseline before support and dependency fixes; not final validation."
+}

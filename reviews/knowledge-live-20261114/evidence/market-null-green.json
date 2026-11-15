@@ -1,0 +1,1384 @@
+{
+  "stage": "green",
+  "passed": 275,
+  "failed": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "name": "keeps the original wording and freezes compiled guidance only in quoted items",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not quote or submit a preparation that still needs a necessary answer",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "invalidates a ready preparation after changing prompt",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "invalidates a ready preparation after changing ratio",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "invalidates a ready preparation after changing language",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "invalidates a ready preparation after changing platform",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "invalidates a ready preparation after changing reference",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not let a ready preparation replace quotation or alter a quoted request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "returns the same completed request without a second model call and rejects changed input",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects a changed answer payload under a reused follow-up request ID",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "merges answers and their verbatim source evidence without changing the original prompt",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "includes explicit source text in the planner evidence, without trusting its instructions",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects fabricated source quotations even if the model reports ready",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "revalidates the selected platform at the service boundary",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "revalidates the selected placement at the service boundary",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "revalidates the selected market at the service boundary",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not accept a background image as the product reference",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "prevents concurrent repeats while one request is still being analyzed",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "restores completed preparation after restart without another model call",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not replay uncertain requests after restart and does not expose arbitrary exception details",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "persists terminal DIFY_INTENT_FAILED without replaying it and allows only an explicit new request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "persists terminal DIFY_INTENT_INVALID without replaying it and allows only an explicit new request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps brief tokens scoped to their workspace and actor, even for another editor",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "blocks read-only members before any model request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not treat unrelated project messages as evidence after the current reference changes",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves compiled item snapshots when a cancelled generation is quoted for retry",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent required branding or optional parameters when a product-reference fixture is ready",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "freezes reference geometry once while preserving explicit edits, closeups and every constraint",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps explicit market in local simulation without calling the real planner branch",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not impose product identity constraints on a general creative image reference",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not reuse a project-scoped preparation in another project or without its original project",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "allows an initially unbound preparation to be assigned to its first new project",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects a ready result that silently treats an explicit product placement as general creativity",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "retains a quotation for provenance without upgrading a negated fragment into a generated claim",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "provides explicit legacy copy options as sources but does not append them after the corrected plan",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves the explicit legacy video/product selection in the planning request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves the explicit legacy video/social selection in the planning request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves the explicit legacy video/brand selection in the planning request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves the explicit legacy image/detail selection in the planning request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "omits source citations from execution prompts while retaining their audit evidence",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects an over-budget compiled Wan prompt before writing a payable quote",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "audits raw brand and document sources without reintroducing corrected claims into execution",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves the existing unprepared generation path for raw reference prose and copy options",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for seedream with no image yet",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for seedream input image",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for seedream reference image",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for seedream excessive images",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for text-only image gateway",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for unknown image model",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for seedance text-to-video",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for wan with no image yet",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for wan first frame",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for wan wrong reference slot",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for wan too many frames",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for kling first and last frames",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for kling first-last with no image yet",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for kling first-last extra reference",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for kling reference images",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for kling reference with no image yet",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "reports actual reference capability for kling unsupported first-last mode",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "treats a document as planner context rather than an image for openai",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "treats a document as planner context rather than an image for fal",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not claim Wan can use brand images that would enter an unsupported reference slot",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "uses only explicitly enabled, eligible personal context and never turns it into product evidence",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "resolves selected product and its brand as versioned text without silently attaching images",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "freezes library sources and personal context through clarification and refreshes only on a new preparation",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "blocks expired or mismatched product data before a planner call",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "requires a prepared plan for product or personal memory and rejects unsupported operations",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "invalidates a prepared plan when context selections change and retains old retry evidence after deleting memory",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects cross-workspace products and over-limit product pictures without any planner request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not expose private context snapshots through an API key owned by the same user",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "blocks a new quote using expired product evidence while retaining an already issued quote snapshot",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects expired personal context before continuing a clarification and refreshes it in a new request",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps an explicitly selected brand snapshot after its library record is removed, but still checks frozen assets",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects unplanned grouped product context before preparation or quotation",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects unplanned grouped memory context before preparation or quotation",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects unplanned grouped product-images context before preparation or quotation",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves legacy grouped creation with memory undefined",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves legacy grouped creation with memory false",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "protects an analyzing Dify preparation with private context from a fresh request ID",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "protects an uncertain Dify preparation with private context from a fresh request ID",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "allows an explicit new request after changing the actual Dify planner connection",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves explicit retry behavior for legacy nonnative attempts with no recorded planner identity",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning appends source-specific observations without replacing the user region or treating observations as editing permission",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning keeps explicit source/color/region and discloses the model-mask/local-composite boundary exactly once",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects invented editing intent: no-color",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects invented editing intent: multiple-colors",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects invented editing intent: not-background-only",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects invented editing intent: different-color",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects invented editing intent: attachment-only",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects unavailable source or mask capability: unowned",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects unavailable source or mask capability: multiple",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning rejects unavailable source or mask capability: unsupported",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning clarifies a dimension mismatch instead of resizing or silently reverting to generative editing",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "strict background planning accepts only the supplied mask role with identical measured dimensions",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition removes only isolated model-gray drawings while retaining white holes and their edge pixels",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition preserves every protected pixel and fills the exact target across 32×32 sources",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition preserves every protected pixel and fills the exact target across 48×32 sources",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition preserves every protected pixel and fills the exact target across 32×48 sources",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition rejects a color candidate without resizing it",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition rejects a all-white candidate without resizing it",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition rejects a all-black candidate without resizing it",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition rejects a gray candidate without resizing it",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "deterministic background composition rejects a wrong-size candidate without resizing it",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "confirmed alpha mask precision keeps every user alpha level and wide soft transitions instead of applying model thresholds",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "confirmed alpha mask precision rejects a uniform alpha mask without both protection and editing: 0",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "confirmed alpha mask precision rejects a uniform alpha mask without both protection and editing: 255",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution binds visual guidance to the exact original source bytes before a paid mask call",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution freezes raw, v2 baseline and calibrated mask separately and reuses the saved calibrated bytes",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution recovers after the baseline is persisted without purchasing another mask and reports unsupported edges",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution does not silently create a missing baseline for an already saved calibrated mask",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution keeps a legacy paid raw-mask recovery on v2 rather than opting it into calibration",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution does not re-normalize an older saved mask or relabel its algorithm on recovery",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution stores raw and normalized masks separately, returns only the composite, and resumes without another model call",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution retains an invalid paid candidate and never purchases a replacement on recovery",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution fails a missing checkpoint on local recovery without calling a model",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "durable mask execution uses an existing alpha mask without calling the image model",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection freezes an explicit, disclosed half-second hold: 最后0.5秒停稳。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection freezes an explicit, disclosed half-second hold: 末尾半秒保持末帧。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection freezes an explicit, disclosed half-second hold: 结尾0.5秒完全静止。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 结尾停住。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 最后1秒停稳。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 最后0.5秒不要停稳。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 最后0.5秒停稳，禁止本机后处理。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 最后0.5秒停稳，只保留模型原片。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 背景烟雾升起，最后0.5秒停稳。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 布料飘动，最后0.5秒停稳。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer or override retiming permission: 随音乐节奏变焦，最后0.5秒停稳。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not infer a hold from planner text, attachments, or a superseded answer",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed real model video tail hold selection does not retime ordinary dynamic model video or a locally rendered pan",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 需要真实空间视差。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 要求三维相机横移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 改变景深并进行焦点转移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 前后层不同移动。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 前景移动比背景快。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 需要真实 parallax 和 3D camera movement。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 不能没有真实视差。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not replace requested spatial motion with a cropped photo: 不需要二维动画而是需要三维相机运动。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: 不需要三维视差。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: 不要真实空间视差。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: 不做三维相机横移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: 无需改变景深。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: 不要前后层不同移动。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: 保持景深不变，不拉焦。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection keeps explicitly excluded spatial effects compatible with exact pan: without parallax, no 3D camera motion。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection accepts the actual clarified perfume request with naturally repeated same-direction motion",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection allows repetition only when camera direction and amount agree: 镜头向右轻移，镜头向右小幅平移2%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection allows repetition only when camera direction and amount agree: 镜头向右小幅平移2%，镜头向右轻移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection allows repetition only when camera direction and amount agree: 镜头向右小幅平移1%，镜头向右小幅平移2%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection allows repetition only when camera direction and amount agree: 镜头向右小幅平移2%，镜头向左小幅平移2%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 允许裁切少量边缘背景。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 允许裁切少量背景，不调用视频模型。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 允许对背景进行少量裁切。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 不允许裁切背景。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 允许裁切主体。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 允许裁切少量背景，必须调用视频模型。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: 允许裁切少量背景，原样作为首帧。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection honors the actual crop and renderer choice: ",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "disclosed exact photo pan selection does not inherit permission to crop from a superseded request or an attachment",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native capture stage isolation keeps camera timing out of the first-frame request and does not append alternative strategy shots",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native capture stage isolation retains reference geometry rather than inventing a left-front placement from its filename",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native capture stage isolation keeps an explicitly chosen orbit rather than adding a conflicting fixed-camera default",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native capture stage isolation keeps legacy two-prompt plans valid without inventing a reference choice",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance accepts a matching input image and freezes its explicit source selection",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a missing reference before submitting media",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a background reference before submitting media",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a document reference before submitting media",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a unsupported reference before submitting media",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects ratio mismatch rather than silently cropping, stretching or regenerating a supplied frame",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects missing-size mismatch rather than silently cropping, stretching or regenerating a supplied frame",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a known unsupported original before issuing a frozen media plan: { width: 299, height: 299, …(1) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a known unsupported original before issuing a frozen media plan: { width: 6001, height: 6001, …(1) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance rejects a known unsupported original before issuing a frozen media plan: { width: 2048, height: 2048, …(1) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance accepts the inclusive 300-pixel limit and a source just under the byte limit",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance accepts the inclusive 6000-pixel limit and a source just under the byte limit",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native reference plan provenance keeps an already-persisted reference decision without byte metadata valid",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan always discloses source reuse and endpoint guidance without claiming to guarantee the middle frames",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan maps a confirmed left camera indication to one opposite two-dimensional whole-scene shift",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan maps a confirmed right camera indication to one opposite two-dimensional whole-scene shift",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan does not silently enable endpoint control on an existing plan after the model gains support",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan compiles a center-fixed 101-percent endpoint without importing a larger model zoom",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan compiles a center-fixed 101.5-percent endpoint without importing a larger model zoom",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan compiles a center-fixed 103-percent endpoint without importing a larger model zoom",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects camera control when the trusted support flag is false",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects camera control when the trusted support flag is undefined",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects controlled motion for a generated scene rather than changing its rendering path",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects controlled motion for a legacy scene rather than changing its rendering path",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects controlled motion for a general scene rather than changing its rendering path",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'orbit', …(2) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'translate', …(2) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'translate', …(2) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'translate', …(2) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'zoom', scalePercent: 3 }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'zoom', scalePercent: 100.9 }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'zoom', scalePercent: 103.1 }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'zoom', …(2) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native controlled camera plan rejects unsupported endpoint instructions { type: 'translate', …(3) }",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning accepts a null optional market only as an omitted market when none was requested",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning normalizes only an unspecified market while preserving a clarification plan",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning still requires the exact explicitly requested market and rejects an invented market",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning does not let optional-market normalization hide required-field, fact or truncation failures",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning reports safe field paths for received invalid output and does not classify it as an unknown submission",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning never exposes unknown response field names or values in schema diagnostics",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning captures one raw received response for an explicit trusted observer before rejecting it",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning preserves transport uncertainty and does not call the observer or replay a missing response",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning sanitizes observer failures and requires reconciliation without replaying a received response",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning calls the configured text model once and validates a structured evidence-backed plan",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning does not accept incomplete or redirected planning output (length)",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning does not accept incomplete or redirected planning output (content_filter)",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning does not accept incomplete or redirected planning output (tool_calls)",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning rejects invented source quotations and mismatched request IDs",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native planning requires separate first-frame and motion prompts for a ready video plan",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration checks measured 720p dimensions with even-pixel rounding and a half-second duration tolerance",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration uses configured image aliases and accepts signed artifact URLs without forwarding credentials",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration saves a fully decodable first frame before submitting one video with that exact frame",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration does not repeat first-frame generation when a persisted frame is available",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration submits the exact Xingyun collection through its same-origin host route and polls the native task",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration retains the native protocol without applying the gateway exception to https://xingyunyinli.com.attacker.example/doubao/api/v3/contents/generations/tasks",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration retains the native protocol without applying the gateway exception to https://xingyunyinli.com/api/v3/contents/generations/tasks",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration retains the native protocol without applying the gateway exception to https://xingyunyinli.com:8443/doubao/api/v3/contents/generations/tasks",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration retains the native protocol without applying the gateway exception to https://other.example/doubao/api/v3/contents/generations/tasks",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration continues polling documented active task status pending",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration continues polling documented active task status queued",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration continues polling documented active task status processing",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration continues polling documented active task status running",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration does not submit a video when frame storage fails or cancellation occurs after saving",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration retains a low-resolution generated frame but blocks video spending, including on retry",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration stops on invalid first-frame bytes without a paid video submission",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "native image-to-video orchestration polls only the persisted task and rejects a changed route or model before sending credentials",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "recovers only redundant omitted video fields from a complete validated stage plan",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "rejects hallucinated output pixels while preserving reference dimensions",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "canonicalizes only absent inactive prompt text in a valid clarification",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "canonicalizes only null inactive prompt text in a valid clarification",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 商品保持静止，固定镜头，不要移动。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 商品保持静止，镜头小幅向左平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 镜头小幅向右平移，同时让商品旋转。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 商品保持静止，镜头向右移动画宽10%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 参考图制作产品短片。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 背景保持静止，镜头小幅向右平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 光线保持静止，镜头小幅向右平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 主体的灯光保持静止，镜头小幅向右平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 主体保持静止，镜头先轻微向左平移，然后镜头轻微向右平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 主体保持静止，镜头先轻微向左平移然后轻微向右平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize a conflicting or unrequested controlled endpoint: 主体保持静止，镜头小幅向右平移，结尾不要停。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not authorize transforms from attachment instructions or a generated summary",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "accepts a subsequent explicit user correction, but rejects a later cancellation",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not inherit stale static-subject consent after the answer 让主体跑起来。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not inherit stale static-subject consent after the answer 改为镜头向右轻微平移。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not inherit stale static-subject consent after the answer 使用暖色光。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "preserves an explicit percent and accepts fixed focal length without confusing it with a stationary camera",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps one canonical camera disclosure and preserves the entire bounded user-facing summary",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "uses the confirmed structured movement without sending a contradictory model motion paragraph",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 相机机位固定，画面中心固定，光学变焦等比放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 背景静止，相机机位固定，画面中心固定，等比放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，画面中心固定，等比放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，光学变焦放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，轻微光学变焦。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，等比放大到110%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，等比放大到102%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，先等比放大到102%，再等比放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，从101%等比放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，从100%等比放大到102%再到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体全程静止，相机机位和朝向固定，仅以非常缓慢的光学变焦，让整幅画面围绕固定画面中心等比放大到起始的103%。最后0.5秒保持。镜头向右平移2%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体全程静止，相机机位和朝向固定，仅以非常缓慢的光学变焦，让整幅画面围绕固定画面中心等比放大到起始的103%。最后0.5秒保持。商品随后旋转。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体全程静止，相机机位和朝向固定，仅以非常缓慢的光学变焦，让整幅画面围绕固定画面中心等比放大到起始的103%。最后0.5秒保持。最后缩小。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体全程静止，相机机位和朝向固定，仅以非常缓慢的光学变焦，让整幅画面围绕固定画面中心等比放大到起始的103%。最后0.5秒保持。不要裁切任何边缘。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体全程静止，相机机位和朝向固定，仅以非常缓慢的光学变焦，让整幅画面围绕固定画面中心等比放大到起始的103%。最后0.5秒保持。最后不要停。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "does not invent or alter a bounded fixed-center zoom: 主体静止，相机机位固定，画面中心固定，不要等比放大到103%。",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps the explicitly requested zoom amount 等比放大到起始的103%",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps the explicitly requested zoom amount 等比放大至101.5%",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps the explicitly requested zoom amount 等比放大约2%",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "keeps the explicitly requested zoom amount 光学变焦约1%",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "accepts the original live request with one explicit 100-to-103-percent range",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "requires complete fresh zoom intent after an answer and keeps ordinary video available",
+      "status": "passed",
+      "failureSummary": []
+    },
+    {
+      "name": "discloses zoom cropping once without falsely claiming background extension",
+      "status": "passed",
+      "failureSummary": []
+    }
+  ],
+  "externalCalls": 0
+}

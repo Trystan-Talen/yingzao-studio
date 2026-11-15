@@ -1,0 +1,57 @@
+{
+  "node": "v22.23.1",
+  "packageManager": "pnpm@11.25.0",
+  "directChange": {
+    "@fastify/static": {
+      "from": "10.1.6",
+      "to": "10.1.9"
+    }
+  },
+  "resolvedProductionChain": [
+    {
+      "name": "@fastify/static",
+      "version": "10.1.9"
+    },
+    {
+      "name": "@fastify/static",
+      "version": "10.1.9"
+    },
+    {
+      "name": "@fastify/send",
+      "version": "4.2.1"
+    },
+    {
+      "name": "glob",
+      "version": "14.0.6"
+    },
+    {
+      "name": "minimatch",
+      "version": "11.0.8"
+    },
+    {
+      "name": "path-scurry",
+      "version": "3.0.0"
+    },
+    {
+      "name": "@isaacs/nonrecursive-glob-match",
+      "version": "1.1.0"
+    }
+  ],
+  "developmentBoundary": "@typescript-eslint/typescript-estree still resolves minimatch 10.2.6; it is outside the production-only advisory result",
+  "noOverridesAdded": true,
+  "noFormalDataTouched": true,
+  "developmentReview": {
+    "consumer": "@typescript-eslint/typescript-estree@8.71.2",
+    "dependency": "minimatch@10.2.6",
+    "callsite": "dist/useProgramFromProjectService.js:244",
+    "options": {
+      "dot": true
+    },
+    "defaultOptimizationLevel": 1,
+    "advisoryRequiresOptimizationLevelAtLeast": 2,
+    "patternSource": "allowDefaultProject parser configuration",
+    "projectConfiguration": "eslint.config.js does not enable projectService or provide allowDefaultProject",
+    "applicationRequestPatternEntryFound": false,
+    "decision": "No vulnerable branch reachable through this reviewed call under current configuration. Keep residual advisory explicit; do not force a cross-major development-tool override during the frozen verification."
+  }
+}

@@ -133,6 +133,30 @@ for (const kind of ['image', 'video'] as const) {
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     const task = page.locator('.focused-task');
     await expect(task.locator('.job-card')).toHaveAttribute('data-job-id', accepted.id);
+    const resultAction = task.getByRole('button', {
+      name: kind === 'image' ? `查看 ${asset.name}` : '下载原件',
+      exact: true,
+    });
+    await resultAction.scrollIntoViewIfNeeded();
+    const interaction = await resultAction.evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      const x = (Math.max(0, rect.left) + Math.min(innerWidth, rect.right)) / 2;
+      const y = (Math.max(0, rect.top) + Math.min(innerHeight, rect.bottom)) / 2;
+      const target = document.elementFromPoint(x, y);
+      const sidebar = document.querySelector('.creation-sidebar')!;
+      const style = getComputedStyle(sidebar);
+      return {
+        viewport: { width: innerWidth, height: innerHeight },
+        actionBounds: rect.toJSON(),
+        sidebarBounds: sidebar.getBoundingClientRect().toJSON(),
+        sidebarStyle: { position: style.position, top: style.top, maxHeight: style.maxHeight },
+        hitElement: target?.tagName,
+        hitClass: target?.className,
+        receivesPointer: !!target && node.contains(target),
+      };
+    });
+    await darkEvidence(studio, `${kind}-result-interaction`, interaction);
+    expect(interaction.receivesPointer).toBe(true);
     if (kind === 'image') {
       const image = task.getByRole('img', { name: asset.name, exact: true });
       await expect(image).toBeVisible();

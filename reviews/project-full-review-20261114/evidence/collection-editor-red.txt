@@ -1,0 +1,98 @@
+Running 2 tests using 1 worker
+
+(node:63435) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/management-editor-recovery.spec.ts:170:1 › a delayed collection creation preserves a newly reopened collection draft (9.0s)
+(node:63545) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › tests/e2e/management-editor-recovery.spec.ts:209:1 › a delayed collection deletion preserves the next selected collection and its name draft (9.1s)
+
+
+  1) [desktop] › tests/e2e/management-editor-recovery.spec.ts:170:1 › a delayed collection creation preserves a newly reopened collection draft 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: '新建素材集合', exact: true }).getByRole('textbox', { name: '集合名称', exact: true })
+    Expected: "后续集合B草稿"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: '新建素材集合', exact: true }).getByRole('textbox', { name: '集合名称', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '新建素材集合', exact: true }).getByRole('textbox', { name: '集合名称', exact: true })
+
+
+      186 |     held.release();
+      187 |     await expect(page.getByText('集合已创建', { exact: true })).toBeVisible();
+    > 188 |     await expect(editor.getByRole('textbox', { name: '集合名称', exact: true })).toHaveValue(
+          |                                                                              ^
+      189 |       '后续集合B草稿',
+      190 |     );
+      191 |     expect(
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-editor-recovery.spec.ts:188:78
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-JwIgFc/results/management-editor-recovery-8f454-y-reopened-collection-draft-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-JwIgFc/results/management-editor-recovery-8f454-y-reopened-collection-draft-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-JwIgFc/results/management-editor-recovery-8f454-y-reopened-collection-draft-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-JwIgFc/results/management-editor-recovery-8f454-y-reopened-collection-draft-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-JwIgFc/results/management-editor-recovery-8f454-y-reopened-collection-draft-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/management-editor-recovery.spec.ts:209:1 › a delayed collection deletion preserves the next selected collection and its name draft 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByRole('combobox', { name: '素材集合', exact: true })
+    Expected: "b4adefec-d657-427d-b819-19ae79c94936"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByRole('combobox', { name: '素材集合', exact: true }) with timeout 5000ms
+      - waiting for getByRole('combobox', { name: '素材集合', exact: true })
+        14 × locator resolved to <select aria-label="素材集合">…</select>
+           - unexpected value ""
+
+
+      237 |     held.release();
+      238 |     await expect(page.getByText('集合已删除', { exact: true })).toBeVisible();
+    > 239 |     await expect(filter).toHaveValue(b.id);
+          |                          ^
+      240 |     await expect(editor.getByRole('textbox', { name: '集合名称', exact: true })).toHaveValue(
+      241 |       '集合B新名称草稿',
+      242 |     );
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/management-editor-recovery.spec.ts:239:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-JwIgFc/results/management-editor-recovery-a4875-llection-and-its-name-draft-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-JwIgFc/results/management-editor-recovery-a4875-llection-and-its-name-draft-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-JwIgFc/results/management-editor-recovery-a4875-llection-and-its-name-draft-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-JwIgFc/results/management-editor-recovery-a4875-llection-and-its-name-draft-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-JwIgFc/results/management-editor-recovery-a4875-llection-and-its-name-draft-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/management-editor-recovery.spec.ts:170:1 › a delayed collection creation preserves a newly reopened collection draft 
+    [desktop] › tests/e2e/management-editor-recovery.spec.ts:209:1 › a delayed collection deletion preserves the next selected collection and its name draft 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-JwIgFc

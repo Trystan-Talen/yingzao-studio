@@ -1,0 +1,37 @@
+{
+  "scope": "本地合成数据、隔离SQLite测试库、模拟模型；未触及正式数据或真实模型",
+  "initialRed": {
+    "run": "platform/var/e2e/run-r5BLIS",
+    "failed": 3,
+    "reason": [
+      "分组刷新后单项记忆/产品图选择丢失",
+      "记忆版本冲突无法保留输入继续编辑",
+      "产品版本冲突无法保留输入继续编辑"
+    ]
+  },
+  "dateRed": {
+    "run": "platform/var/e2e/run-jrQpG3",
+    "failed": 2,
+    "passed": 1,
+    "reason": "合并后本地00秒期限被服务端同分钟40秒期限静默替换"
+  },
+  "finalGreen": {
+    "run": "platform/var/e2e/run-1OiAm0",
+    "passed": 6,
+    "failed": 0,
+    "seconds": 29.9,
+    "projects": [
+      "desktop",
+      "mobile"
+    ]
+  },
+  "validated": [
+    "分组实际输入仍关闭知识关联，但草稿保留单项原选择",
+    "版本冲突展示完整最新记录及版本/双方冲突字段",
+    "合并保留本地改动并采用未改字段的新版内容，不自动提交",
+    "明确选择载入最新版可放弃本地修改，仍需再次保存",
+    "精确时间保留到秒，对照显示完整年月日时分秒和时区",
+    "界面无横向溢出"
+  ],
+  "sourceFrozen": true
+}

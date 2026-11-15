@@ -49,6 +49,7 @@ for (const scenario of ['brand', 'document', 'design-module'] as const) {
     }
     await page.goto(studio.origin);
     const composer = page.locator('.composer[data-presentation="quick"]');
+    const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
     await composer
       .getByRole('textbox', { name: '创作需求', exact: true })
       .fill(`本机验证 ${scenario} 引用与有效能力版本，不调用真实模型。`);
@@ -56,9 +57,11 @@ for (const scenario of ['brand', 'document', 'design-module'] as const) {
     const documentText = '产品：植物精华。容量：30毫升。卖点：轻盈质地和透明玻璃瓶。';
     if (scenario === 'brand') {
       await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-      await composer
+      await settings.getByText('更多偏好', { exact: true }).click();
+      await settings
         .getByRole('combobox', { name: '参考品牌', exact: true })
         .selectOption(brandId!);
+      await settings.getByRole('button', { name: '完成', exact: true }).click();
     } else if (scenario === 'document') {
       await composer.getByRole('button', { name: '添加素材', exact: true }).click();
       const picker = page.getByRole('dialog', { name: '参考图片、视频或文档', exact: true });
@@ -94,9 +97,10 @@ for (const scenario of ['brand', 'document', 'design-module'] as const) {
         .toBe('ready');
     } else {
       await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-      await composer
+      await settings
         .getByRole('combobox', { name: '创作类型', exact: true })
         .selectOption('marketing');
+      await settings.getByRole('button', { name: '完成', exact: true }).click();
       const planner = composer.locator('details.composer-materials');
       await planner.locator('summary').click();
       const modules = planner.locator('.design-module');

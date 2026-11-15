@@ -47,11 +47,15 @@ test('production security policy permits sign-in, real media and saved canvas ex
   await expect(page.getByRole('dialog', { name: '欢迎来到映造', exact: true })).toBeHidden();
   const mobileMenu = page.getByRole('button', { name: '展开导航', exact: true });
   if (await mobileMenu.isVisible()) await mobileMenu.click();
+  await page
+    .getByRole('button', { name: /账户与退出/ })
+    .filter({ visible: true })
+    .click();
   await page.getByRole('button', { name: '退出登录', exact: true }).click();
   await page.getByLabel('邮箱', { exact: true }).fill('production-policy@example.test');
   await page.getByLabel('密码', { exact: true }).fill('ProductionPolicyPassword2026!');
   await page.getByRole('button', { name: '登录工作空间', exact: true }).click();
-  await expect(page.locator('.create-home h1')).toHaveText('放开想象，开始创作。');
+  await expect(page.getByRole('heading', { name: '今天想映造什么？', exact: true })).toBeVisible();
   expect(await page.evaluate(async () => (await fetch('/api/v1/auth/me')).status)).toBe(200);
   const cookie = (await page.context().cookies()).find((item) => item.name === 'studio_session');
   expect(cookie).toMatchObject({ httpOnly: true, secure: true, sameSite: 'Lax' });

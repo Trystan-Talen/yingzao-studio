@@ -8,6 +8,12 @@ import type { ServerResponse } from 'node:http';
 import type { Actor, Permission } from '../../contracts/core';
 import { jobInputSchema, jobSubmitSchema, providerSettingsInputSchema } from '../../contracts/jobs';
 import { modelCapabilityQuerySchema } from '../../contracts/model-capabilities';
+import { localTestGrantInputSchema } from '../../contracts/local-test-credits';
+import { createLocalTestCreditService } from './local-test-credits';
+import {
+  modelConnectionInputSchema,
+  modelConnectionKindSchema,
+} from '../../contracts/model-connections';
 import { capabilityInputMode } from './model-capabilities';
 import {
   jobResultDataSchema,
@@ -16,6 +22,7 @@ import {
 } from '../../contracts/job-result';
 import { registerDetailPageRoutes } from './detail-page-routes';
 import { registerCreativeBriefRoutes } from './creative-brief-routes';
+import { registerBackgroundReviewRoutes } from './background-review-routes';
 import { createDetailPageServices } from './detail-pages';
 import { addDetailPageToArchive } from './detail-page-export';
 import { AppError } from '../errors';
@@ -57,6 +64,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
   const response = (data: unknown) => ({ data });
   registerDetailPageRoutes(app, s, access);
   registerCreativeBriefRoutes(app, s, access);
+  registerBackgroundReviewRoutes(app, s, access);
   const page = (items: unknown[]) => ({
     items,
     total: items.length,
@@ -85,6 +93,53 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     const { wid } = await access(req, 'manage');
     return response(page(s.settings.list(wid)));
   });
+  app.get('/api/v1/model-connections', async (req, reply) => {
+    const { wid } = await access(req, 'manage');
+    reply.header('Cache-Control', 'private, no-store');
+    return response(page(s.settings.connections.list(wid)));
+  });
+  app.put(
+    '/api/v1/model-connections',
+    { schema: { body: modelConnectionInputSchema } },
+    async (req, reply) => {
+      const { actor, wid } = await access(req, 'manage');
+      const input = modelConnectionInputSchema.parse(req.body);
+      const result = s.transaction(() => {
+        const saved = s.settings.connections.update(wid, input);
+        core.context.audit(
+          actor,
+          wid,
+          'model-connection.configure',
+          'model-connection',
+          input.kind,
+          {
+            kind: input.kind,
+            protocol: input.protocol,
+            enabled: input.enabled,
+          },
+        );
+        s.settings.modelCapabilities.invalidate(wid, 'native');
+        return saved;
+      });
+      reply.header('Cache-Control', 'private, no-store');
+      return response(result);
+    },
+  );
+  app.post(
+    '/api/v1/model-connections/:kind/models',
+    {
+      schema: { params: z.object({ kind: modelConnectionKindSchema }) },
+      config: { rateLimit: { max: 12, timeWindow: '1 minute' } },
+    },
+    async (req, reply) => {
+      const { actor, wid } = await access(req, 'manage');
+      const { kind } = z.object({ kind: modelConnectionKindSchema }).parse(req.params);
+      const result = await s.settings.connections.refreshModels(wid, kind);
+      core.requireAccess(actor, wid, 'manage');
+      reply.header('Cache-Control', 'private, no-store');
+      return response(result);
+    },
+  );
   app.put('/api/v1/providers', { schema: { body: providerSettingsInputSchema } }, async (req) => {
     const { actor, wid } = await access(req, 'manage');
     const input = providerSettingsInputSchema.parse(req.body);
@@ -590,6 +645,24 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
       ),
     });
   });
+  const localTestCredits = createLocalTestCreditService(s);
+  app.get('/api/v1/credits/local-test-grant', async (req, reply) => {
+    const { actor, wid } = await access(req, 'read', 'credits:read');
+    reply.header('Cache-Control', 'private, no-store');
+    return response(localTestCredits.availability(actor, wid, req.ip));
+  });
+  app.post(
+    '/api/v1/credits/local-test-grant',
+    {
+      schema: { body: localTestGrantInputSchema },
+      config: { rateLimit: { max: 30, timeWindow: '1 minute' } },
+    },
+    async (req, reply) => {
+      const { actor, wid } = await access(req, 'manage');
+      reply.header('Cache-Control', 'private, no-store');
+      return response(localTestCredits.grant(actor, wid, req.ip, req.body));
+    },
+  );
   app.get('/api/v1/export-policy', async (req, reply) => {
     const { wid } = await access(req, 'read', 'projects:read');
     reply.header('Cache-Control', 'no-store');

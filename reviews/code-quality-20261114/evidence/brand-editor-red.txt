@@ -1,0 +1,168 @@
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2299 modules transformed.
+rendering chunks...
+computing gzip size...
+var/e2e/run-O8jJm4/web/index.html                                  0.61 kB │ gzip:   0.44 kB
+var/e2e/run-O8jJm4/web/assets/knowledge-C1GF6EJk.css               1.12 kB │ gzip:   0.49 kB
+var/e2e/run-O8jJm4/web/assets/Login-DikSd-tK.css                   3.38 kB │ gzip:   1.22 kB
+var/e2e/run-O8jJm4/web/assets/Settings-Bxgqvs-8.css                4.04 kB │ gzip:   1.13 kB
+var/e2e/run-O8jJm4/web/assets/Workbench-CTY2Adub.css               5.06 kB │ gzip:   1.28 kB
+var/e2e/run-O8jJm4/web/assets/Inspiration-C0f5FocC.css            10.39 kB │ gzip:   2.16 kB
+var/e2e/run-O8jJm4/web/assets/CanvasEditor-BcQQlAIU.css           12.37 kB │ gzip:   3.11 kB
+var/e2e/run-O8jJm4/web/assets/CreationLanding-CSl8TV0k.css        42.56 kB │ gzip:   7.88 kB
+var/e2e/run-O8jJm4/web/assets/index-DKXG2uJQ.css                 271.74 kB │ gzip:  47.41 kB
+var/e2e/run-O8jJm4/web/assets/chevron-down-DQ4SR8hf.js             0.21 kB │ gzip:   0.20 kB │ map:     0.99 kB
+var/e2e/run-O8jJm4/web/assets/job-snapshot-0LKF8d_t.js             0.28 kB │ gzip:   0.22 kB │ map:     1.35 kB
+var/e2e/run-O8jJm4/web/assets/lock-keyhole-C-B3h0yA.js             0.34 kB │ gzip:   0.28 kB │ map:     1.34 kB
+var/e2e/run-O8jJm4/web/assets/mentions-DOj5GYvu.js                 0.38 kB │ gzip:   0.31 kB │ map:     1.08 kB
+var/e2e/run-O8jJm4/web/assets/arrow-up-CMv0YPQQ.js                 0.39 kB │ gzip:   0.27 kB │ map:     2.03 kB
+var/e2e/run-O8jJm4/web/assets/shield-check-KHN01piy.js             0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+var/e2e/run-O8jJm4/web/assets/trash-ct9Nh9q4.js                    0.42 kB │ gzip:   0.28 kB │ map:     1.48 kB
+var/e2e/run-O8jJm4/web/assets/key-round-C1gZTB_F.js                0.44 kB │ gzip:   0.32 kB │ map:     1.37 kB
+var/e2e/run-O8jJm4/web/assets/expand-DcQJcYDn.js                   0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+var/e2e/run-O8jJm4/web/assets/CreateHome-BfzmnTQ4.js               0.66 kB │ gzip:   0.40 kB │ map:     0.45 kB
+var/e2e/run-O8jJm4/web/assets/undo-2-D6gDguTc.js                   0.70 kB │ gzip:   0.37 kB │ map:     2.81 kB
+var/e2e/run-O8jJm4/web/assets/text-align-start-2Osj4mjp.js         0.98 kB │ gzip:   0.49 kB │ map:     3.79 kB
+var/e2e/run-O8jJm4/web/assets/export-policy-BAc66zaI.js            1.15 kB │ gzip:   0.62 kB │ map:     4.75 kB
+var/e2e/run-O8jJm4/web/assets/Tasks-DnwtJsrv.js                    1.73 kB │ gzip:   1.04 kB │ map:     4.84 kB
+var/e2e/run-O8jJm4/web/assets/IdentityRegistration-C_4HtiZr.js     2.50 kB │ gzip:   1.38 kB │ map:     7.47 kB
+var/e2e/run-O8jJm4/web/assets/Entitlements-kigDE7ud.js             2.65 kB │ gzip:   1.37 kB │ map:     6.22 kB
+var/e2e/run-O8jJm4/web/assets/product-messages-BUkGiuxd.js         2.85 kB │ gzip:   1.05 kB │ map:     5.21 kB
+var/e2e/run-O8jJm4/web/assets/PasswordRecovery-Bpdicb2j.js         3.08 kB │ gzip:   1.63 kB │ map:     9.40 kB
+var/e2e/run-O8jJm4/web/assets/scene-CUPowV3L.js                    3.09 kB │ gzip:   1.44 kB │ map:    12.45 kB
+var/e2e/run-O8jJm4/web/assets/inspirations-Cs7xlg4B.js             3.70 kB │ gzip:   2.21 kB │ map:     7.41 kB
+var/e2e/run-O8jJm4/web/assets/UsageStatistics-WtUxuL5a.js          4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+var/e2e/run-O8jJm4/web/assets/Public-CaOMJfL3.js                   4.06 kB │ gzip:   2.13 kB │ map:    11.66 kB
+var/e2e/run-O8jJm4/web/assets/Login-v4mGHcfu.js                    4.40 kB │ gzip:   2.27 kB │ map:    12.17 kB
+var/e2e/run-O8jJm4/web/assets/GoogleAccount-BI01_Om_.js            5.02 kB │ gzip:   2.32 kB │ map:    14.66 kB
+var/e2e/run-O8jJm4/web/assets/ModelCapabilityStatus-BEuK8vc9.js    6.16 kB │ gzip:   3.03 kB │ map:    19.24 kB
+var/e2e/run-O8jJm4/web/assets/knowledge-D-Lm3_8D.js                6.84 kB │ gzip:   3.01 kB │ map:    20.38 kB
+var/e2e/run-O8jJm4/web/assets/MemorySettings-BDIaV7-m.js           7.31 kB │ gzip:   3.21 kB │ map:    23.01 kB
+var/e2e/run-O8jJm4/web/assets/Developer-DvFzogD_.js                7.64 kB │ gzip:   3.20 kB │ map:    20.40 kB
+var/e2e/run-O8jJm4/web/assets/IdentityAccounts-DA_KoGXy.js         7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+var/e2e/run-O8jJm4/web/assets/Products-jUKYJNoi.js                 8.45 kB │ gzip:   3.62 kB │ map:    28.59 kB
+var/e2e/run-O8jJm4/web/assets/core-CYYvcrU7.js                     8.54 kB │ gzip:   2.52 kB │ map:    28.66 kB
+var/e2e/run-O8jJm4/web/assets/Inspiration-kazv3Uu5.js             13.88 kB │ gzip:   5.44 kB │ map:    44.74 kB
+var/e2e/run-O8jJm4/web/assets/Team-CpyftSgD.js                    15.76 kB │ gzip:   5.36 kB │ map:    51.84 kB
+var/e2e/run-O8jJm4/web/assets/Identities-DsMWb5tM.js              17.51 kB │ gzip:   6.32 kB │ map:    57.40 kB
+var/e2e/run-O8jJm4/web/assets/Support-DvgH8eMw.js                 18.04 kB │ gzip:   6.95 kB │ map:    54.35 kB
+var/e2e/run-O8jJm4/web/assets/AdvancedTools-BapKBA1I.js           21.21 kB │ gzip:   8.28 kB │ map:    73.19 kB
+var/e2e/run-O8jJm4/web/assets/Workbench-RdSc_nSJ.js               22.57 kB │ gzip:   8.37 kB │ map:    76.65 kB
+var/e2e/run-O8jJm4/web/assets/Library-D5p6KGQt.js                 25.73 kB │ gzip:   8.69 kB │ map:    80.72 kB
+var/e2e/run-O8jJm4/web/assets/Settings-D2ouqjP0.js                25.88 kB │ gzip:   9.23 kB │ map:    75.89 kB
+var/e2e/run-O8jJm4/web/assets/Tools-DIJCCYsW.js                   27.34 kB │ gzip:  10.24 kB │ map:    88.69 kB
+var/e2e/run-O8jJm4/web/assets/Usage-C3jh4jNh.js                   30.86 kB │ gzip:  10.41 kB │ map:    95.29 kB
+var/e2e/run-O8jJm4/web/assets/DetailPageStudio-DTDSgNe1.js        43.50 kB │ gzip:  14.12 kB │ map:   148.20 kB
+var/e2e/run-O8jJm4/web/assets/CreationLanding-Cu7XiL3K.js         73.09 kB │ gzip:  25.85 kB │ map:   247.04 kB
+var/e2e/run-O8jJm4/web/assets/react-Iff1aU_1.js                  106.13 kB │ gzip:  35.89 kB │ map:   615.23 kB
+var/e2e/run-O8jJm4/web/assets/CanvasEditor-y00P3YFb.js           149.88 kB │ gzip:  48.87 kB │ map:   409.91 kB
+var/e2e/run-O8jJm4/web/assets/editor-DERvKPwF.js                 282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+var/e2e/run-O8jJm4/web/assets/index-DxfPJ-ks.js                  961.97 kB │ gzip: 309.63 kB │ map: 3,017.42 kB
+
+(!) Some chunks are larger than 750 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.92s
+
+Running 2 tests using 1 worker
+
+(node:44496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › var/quality-ui-audit/audit.spec.ts:8:1 › brand save must preserve changes typed while its response is delayed (7.9s)
+(node:44562) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [desktop] › var/quality-ui-audit/audit.spec.ts:42:1 › stale brand editor must not silently overwrite another saved field (2.7s)
+
+
+  1) [desktop] › var/quality-ui-audit/audit.spec.ts:8:1 › brand save must preserve changes typed while its response is delayed 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '品牌参考', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '品牌参考', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '品牌参考', exact: true })
+
+
+      36 |   };
+      37 |   await writeFile(join(studio.folder, 'delayed-brand-save.json'), JSON.stringify(actual, null, 2));
+    > 38 |   await expect(dialog).toBeVisible();
+         |                        ^
+      39 |   await expect(dialog.getByRole('textbox', { name: '品牌描述', exact: true })).toHaveValue(actual.expectedDraft);
+      40 | });
+      41 |
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/quality-ui-audit/audit.spec.ts:38:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-O8jJm4/results/audit-brand-save-must-pres-9de7e-ile-its-response-is-delayed-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-O8jJm4/results/audit-brand-save-must-pres-9de7e-ile-its-response-is-delayed-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-O8jJm4/results/audit-brand-save-must-pres-9de7e-ile-its-response-is-delayed-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-O8jJm4/results/audit-brand-save-must-pres-9de7e-ile-its-response-is-delayed-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-O8jJm4/results/audit-brand-save-must-pres-9de7e-ile-its-response-is-delayed-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › var/quality-ui-audit/audit.spec.ts:42:1 › stale brand editor must not silently overwrite another saved field 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "其他编辑已保存的新描述"
+    Received: "旧描述"
+
+      60 |     conflictPromptPresent: await page.getByText('记录已被修改', { exact: false }).count(),
+      61 |   }, null, 2));
+    > 62 |   expect(final.description).toBe('其他编辑已保存的新描述');
+         |                             ^
+      63 | });
+      64 |
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/quality-ui-audit/audit.spec.ts:62:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-O8jJm4/results/audit-stale-brand-editor-m-65015-erwrite-another-saved-field-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-O8jJm4/results/audit-stale-brand-editor-m-65015-erwrite-another-saved-field-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-O8jJm4/results/audit-stale-brand-editor-m-65015-erwrite-another-saved-field-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-O8jJm4/results/audit-stale-brand-editor-m-65015-erwrite-another-saved-field-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-O8jJm4/results/audit-stale-brand-editor-m-65015-erwrite-another-saved-field-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › var/quality-ui-audit/audit.spec.ts:8:1 › brand save must preserve changes typed while its response is delayed 
+    [desktop] › var/quality-ui-audit/audit.spec.ts:42:1 › stale brand editor must not silently overwrite another saved field 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-O8jJm4

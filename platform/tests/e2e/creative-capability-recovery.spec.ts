@@ -7,10 +7,29 @@ import { test, expect } from './fixtures';
 
 test.use({ experienceProviders: true, recoveryEnabled: false, smsEnabled: false });
 
+function settingsPanel(composer: Locator) {
+  return composer
+    .page()
+    .getByRole('dialog', { name: '创作设置', exact: true })
+    .or(composer.getByRole('region', { name: '创作设置', exact: true }));
+}
 async function openSettings(composer: Locator) {
+  const settings = settingsPanel(composer);
+  if (await settings.isVisible()) return settings;
   const toggle = composer.getByRole('button', { name: /^(更多创作设置|收起高级设置)$/ });
   await expect(toggle).toBeVisible();
-  if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
+  await toggle.click();
+  await expect(settings).toBeVisible();
+  return settings;
+}
+async function closeSettings(composer: Locator) {
+  const dialog = composer.page().getByRole('dialog', { name: '创作设置', exact: true });
+  if (await dialog.isVisible()) {
+    await dialog.getByRole('button', { name: '完成', exact: true }).click();
+    await expect(dialog).not.toBeVisible();
+  } else {
+    await composer.getByRole('button', { name: '收起高级设置', exact: true }).click();
+  }
 }
 
 for (const { failureAt, confirmationDisabled } of [
@@ -52,13 +71,14 @@ for (const { failureAt, confirmationDisabled } of [
     const composer = page.locator('.composer');
     const prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
     const platform = composer.getByRole('combobox', { name: '发布平台', exact: true });
-    const ratio = composer.getByRole('combobox', { name: '比例', exact: true });
+    const ratio = settingsPanel(composer).getByRole('combobox', { name: '比例', exact: true });
     const generate = composer.getByRole('button', { name: '生成视频', exact: true });
     const confirmation = page.getByRole('dialog', { name: '确认创作', exact: true });
     await expect(prompt).toBeVisible();
-    await openSettings(composer);
     await platform.selectOption('TikTok');
+    await openSettings(composer);
     await ratio.selectOption('9:16');
+    await closeSettings(composer);
     await prompt.fill('月球上的猫，五秒竖屏水彩动画，不加文字。');
     await expect(generate).toBeEnabled();
     await generate.click();
@@ -79,7 +99,6 @@ for (const { failureAt, confirmationDisabled } of [
         { preferences: { confirmGeneration: false } },
       );
     await page.reload();
-    await openSettings(composer);
     await expect(prompt).toHaveValue('月球上的猫，五秒竖屏水彩动画，不加文字。');
     const original = '月球上的猫，五秒竖屏水彩动画，不加文字。整体干净清新。';
     await prompt.fill(original);
@@ -124,7 +143,9 @@ for (const { failureAt, confirmationDisabled } of [
     await confirmation.getByRole('button', { name: '继续编辑', exact: true }).click();
     await expect(prompt).toHaveValue(original);
     await expect(platform).toHaveValue('TikTok');
+    await openSettings(composer);
     await expect(ratio).toHaveValue('9:16');
+    await closeSettings(composer);
     const draftKey = `yingzao:creation:v1:${account.user.id}:${account.workspace.id}:new`;
     const beforeReload = await page.evaluate(
       (key) => JSON.parse(localStorage.getItem(key) ?? 'null'),
@@ -137,10 +158,11 @@ for (const { failureAt, confirmationDisabled } of [
       options: { platform: 'TikTok', ratio: '9:16' },
     });
     await page.reload();
-    await openSettings(composer);
     await expect(prompt).toHaveValue(original);
     await expect(platform).toHaveValue('TikTok');
+    await openSettings(composer);
     await expect(ratio).toHaveValue('9:16');
+    await closeSettings(composer);
     await expect(generate).toBeEnabled();
     expect(preparations).toHaveLength(2);
     if (!confirmationDisabled) {
@@ -162,10 +184,11 @@ for (const { failureAt, confirmationDisabled } of [
     await projectLink.click();
     await expect(page).toHaveURL(`${studio.origin}/workbench/${projectId}`);
     await expect(page.getByRole('region', { name: '项目作品与编辑', exact: true })).toBeVisible();
-    await openSettings(composer);
     await expect(prompt).toHaveValue(original);
     await expect(platform).toHaveValue('TikTok');
+    await openSettings(composer);
     await expect(ratio).toHaveValue('9:16');
+    await closeSettings(composer);
     expect(preparations).toHaveLength(2);
     expect(submissions).toBe(failureAt === 'submission' ? 1 : 0);
     expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({
@@ -199,21 +222,24 @@ test('a stale video tab cannot erase the newer draft when it only refreshes mode
   ]);
   await page.goto(`${studio.origin}/workbench?kind=video`);
   const composer = page.locator('.composer');
-  await openSettings(composer);
-  await expect(composer.locator('.model-capability-status summary')).toContainText('参数已补齐');
+  const settings = await openSettings(composer);
+  await expect(settings.locator('.model-capability-status summary')).toContainText('参数已补齐');
+  await closeSettings(composer);
   const stale = await page.context().newPage();
   try {
     await stale.goto(`${studio.origin}/workbench?kind=video`);
     const oldComposer = stale.locator('.composer');
-    await openSettings(oldComposer);
-    await expect(oldComposer.locator('.model-capability-status summary')).toContainText(
+    const oldSettings = await openSettings(oldComposer);
+    await expect(oldSettings.locator('.model-capability-status summary')).toContainText(
       '参数已补齐',
     );
     const original = '月球上的猫，五秒竖屏水彩动画，不加文字。整体干净清新。';
     const prompt = composer.getByRole('textbox', { name: '创作需求', exact: true });
     await prompt.fill(original);
     await composer.getByRole('combobox', { name: '发布平台', exact: true }).selectOption('TikTok');
-    await composer.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+    await openSettings(composer);
+    await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+    await closeSettings(composer);
     await composer.getByRole('button', { name: '生成视频', exact: true }).click();
     const confirmation = page.getByRole('dialog', { name: '确认创作', exact: true });
     await expect(confirmation).toBeVisible();
@@ -221,12 +247,14 @@ test('a stale video tab cannot erase the newer draft when it only refreshes mode
     const draftKey = `yingzao:creation:v1:${account.user.id}:${account.workspace.id}:new`;
     const before = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), draftKey);
     expect(before.input.prompt).toBe(original);
-    const oldStatus = oldComposer.locator('.model-capability-status');
-    const settingsBounds = await oldComposer.locator('.composer-advanced').boundingBox();
-    const inspirationBounds = await stale.getByRole('region', { name: '创作灵感' }).boundingBox();
+    const oldStatus = oldSettings.locator('.model-capability-status');
+    const settingsBounds = await oldSettings.boundingBox();
+    const viewport = stale.viewportSize()!;
     expect(settingsBounds).not.toBeNull();
-    expect(inspirationBounds).not.toBeNull();
-    expect(settingsBounds!.y + settingsBounds!.height).toBeLessThanOrEqual(inspirationBounds!.y);
+    expect(settingsBounds!.x).toBeGreaterThanOrEqual(0);
+    expect(settingsBounds!.y).toBeGreaterThanOrEqual(0);
+    expect(settingsBounds!.x + settingsBounds!.width).toBeLessThanOrEqual(viewport.width);
+    expect(settingsBounds!.y + settingsBounds!.height).toBeLessThanOrEqual(viewport.height);
     await oldStatus.locator('summary').click();
     studio.services.settings.modelCapabilities.invalidate(account.workspace.id, 'seedance');
     const refreshed = stale.waitForResponse(
@@ -247,12 +275,13 @@ test('a stale video tab cannot erase the newer draft when it only refreshes mode
       options: { platform: 'TikTok', ratio: '9:16' },
     });
     await page.reload();
-    await openSettings(composer);
     await expect(prompt).toHaveValue(original);
     await expect(composer.getByRole('combobox', { name: '发布平台', exact: true })).toHaveValue(
       'TikTok',
     );
-    await expect(composer.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('9:16');
+    await openSettings(composer);
+    await expect(settings.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('9:16');
+    await closeSettings(composer);
     expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({
       n: 0,
     });

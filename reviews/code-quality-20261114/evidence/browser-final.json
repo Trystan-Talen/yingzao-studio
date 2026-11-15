@@ -1,0 +1,515 @@
+{
+  "run": "platform/var/e2e/run-8SnXFM",
+  "statistics": {
+    "startTime": "2026-11-14T17:08:32.452Z",
+    "duration": 237930.70200000002,
+    "expected": 38,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "passed": 38,
+  "failed": 0,
+  "skipped": 0,
+  "retries": 0,
+  "projects": {
+    "desktop": 19,
+    "mobile": 19
+  },
+  "tests": [
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand update and saves them to the same record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3692
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand creation and saves them to the same record",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2562
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "brand conflicts preserve local edits, explicitly merge current fields and references, and can reload a later version",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3132
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand update and saves them to the same record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3794
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "preserves edits made during a delayed brand creation and saves them to the same record",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2640
+        }
+      ]
+    },
+    {
+      "file": "brand-editor-recovery.spec.ts",
+      "title": "brand conflicts preserve local edits, explicitly merge current fields and references, and can reload a later version",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 10722
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "enforces per-member brand quotas in real create/delete/restore controls without making a payment",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 9392
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4046
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "enforces per-member brand quotas in real create/delete/restore controls without making a payment",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 22811
+        }
+      ]
+    },
+    {
+      "file": "brand-quota.spec.ts",
+      "title": "preserves brand editors through delayed reads and saves, handles missing references and removes assets without submitting",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4223
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "creates reusable memory and product, freezes reviewed sources and saves a downloadable image",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 9186
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "manages private memory and rejects a stale product edit without losing the editor draft",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 5275
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "creates reusable memory and product, freezes reviewed sources and saves a downloadable image",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 10805
+        }
+      ]
+    },
+    {
+      "file": "creative-knowledge.spec.ts",
+      "title": "manages private memory and rejects a stale product edit without losing the editor draft",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 12529
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark mobile failure requires an explicitly confirmed separate retry",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 9562
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark desktop display fixture distinguishes paused saving from an unknown outcome",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6508
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark mobile failure requires an explicitly confirmed separate retry",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 9840
+        }
+      ]
+    },
+    {
+      "file": "dark-flow-recovery.spec.ts",
+      "title": "dark desktop display fixture distinguishes paused saving from an unknown outcome",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 7871
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "shows unavailable external identity methods without fake codes or QR images",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2119
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "can detach existing identity fixtures with a password after both providers are disabled",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3965
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "shows unavailable external identity methods without fake codes or QR images",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2218
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "can detach existing identity fixtures with a password after both providers are disabled",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3007
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "binds through actual UI, logs out, and signs in using a separately delivered one-time SMS",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 7810
+        }
+      ]
+    },
+    {
+      "file": "identities.spec.ts",
+      "title": "binds through actual UI, logs out, and signs in using a separately delivered one-time SMS",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6976
+        }
+      ]
+    },
+    {
+      "file": "knowledge-editor-recovery.spec.ts",
+      "title": "preserves edited product text on image-load retry and repairs recycled references before restoring",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4027
+        }
+      ]
+    },
+    {
+      "file": "knowledge-editor-recovery.spec.ts",
+      "title": "preserves edited product text on image-load retry and repairs recycled references before restoring",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4122
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "refreshes an expired product cached in a continuously visible page after another client renews it",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3205
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "explicitly refreshes updated library sources without changing the request or reusing the previous quote",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4332
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "recovers an expired-source quote error with a new plan after a reload without silently calling the planner",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2936
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "locks source refresh during a submitted job and keeps it locked across unknown-result recovery",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4166
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "refreshes an expired product cached in a continuously visible page after another client renews it",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3190
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "explicitly refreshes updated library sources without changing the request or reusing the previous quote",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4348
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "recovers an expired-source quote error with a new plan after a reload without silently calling the planner",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3103
+        }
+      ]
+    },
+    {
+      "file": "knowledge-refresh.spec.ts",
+      "title": "locks source refresh during a submitted job and keeps it locked across unknown-result recovery",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4381
+        }
+      ]
+    },
+    {
+      "file": "production-security.spec.ts",
+      "title": "production security policy permits sign-in, real media and saved canvas exports without violations",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 10105
+        }
+      ]
+    },
+    {
+      "file": "production-security.spec.ts",
+      "title": "production security policy permits sign-in, real media and saved canvas exports without violations",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 9313
+        }
+      ]
+    },
+    {
+      "file": "quote-confirmation.spec.ts",
+      "title": "shows separate music and generated sound choices in a real quote without submitting a model task",
+      "project": "desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6825
+        }
+      ]
+    },
+    {
+      "file": "quote-confirmation.spec.ts",
+      "title": "shows separate music and generated sound choices in a real quote without submitting a model task",
+      "project": "mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 5767
+        }
+      ]
+    }
+  ]
+}

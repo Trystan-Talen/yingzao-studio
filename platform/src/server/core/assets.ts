@@ -10,7 +10,17 @@ import {
 import { AppError } from '../errors';
 import { createHash } from 'node:crypto';
 import { rm } from 'node:fs/promises';
-import { CoreContext, type Row, type ListQuery, str, nullable, json, num, id, now } from './shared';
+import {
+  type CoreContext,
+  type Row,
+  type ListQuery,
+  str,
+  nullable,
+  json,
+  num,
+  id,
+  now,
+} from './shared';
 import { PrivateStorage, type IngestAssetInput, type PreparedAsset } from './storage';
 export interface JobAssetContext {
   workspaceId: string;

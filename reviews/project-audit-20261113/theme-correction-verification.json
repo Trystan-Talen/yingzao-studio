@@ -1,0 +1,15 @@
+{
+  "scope": "主题纠正后的最终源码摘要；不覆盖此前历史摘要",
+  "files": {
+    "platform/src/web/context.tsx": "80bf8d366ce6994dc3a6fd2d24886d72197c256f3c305059f171aeed4e9cd8eb",
+    "platform/src/web/pages/Settings.tsx": "4d33ffd43b7967796d39c4bf0e10286e8a96c5b139beb430bb35ea1e907cc88e",
+    "platform/src/web/lib/i18n.ts": "882321673c49da4c28ecc7dd25e0dc3aae60791453c5af9d589bebafbfa9c866",
+    "platform/tests/e2e/theme-preference-review.spec.ts": "052b2f97b7b01528f3ad553272c2cd61e4c19adc3fb56f600ba8ab19d752c1c4"
+  },
+  "browser": {
+    "passed": 28,
+    "failed": 0,
+    "report": "platform/var/e2e/theme-brand-corrected-cK5mMW/report/index.html"
+  },
+  "liveDemo": "已实际核对首页深色，未改写账户偏好"
+}

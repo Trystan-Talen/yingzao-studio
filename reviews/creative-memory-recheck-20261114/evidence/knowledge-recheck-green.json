@@ -1,0 +1,92 @@
+{
+  "scope": "知识数据与HTTP接口隔离测试；未读写运行库、未调用外部模型",
+  "passed": 21,
+  "failed": 0,
+  "total": 21,
+  "tests": [
+    {
+      "name": "private creative memory isolates owners and workspaces and permits a viewer to maintain only their own memory",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory uses exact half-life and expiry boundaries without refreshing confirmation on reads",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory replaces an existing version on explicit confirmation and rejects stale concurrent writes",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory allows pausing an expired temporary record without reconfirming it, and requires a future expiry when enabling it",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory rejects duplicate topics and constrains memory types, future dates and record capacity",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory filters media, paused, expired and decayed records and makes specific media override general topics",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory selects at most eight records and bounds total selected text without silently slicing content",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory prioritizes active temporary requirements and recent preferences ahead of profile under a limited context budget",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory rejects duplicate Unicode-case topics consistently with resolution",
+      "status": "passed"
+    },
+    {
+      "name": "private creative memory resolves legacy Unicode-case duplicates once without deleting either stored record",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products enforces private visibility, workspace ownership and read-only members",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products prevents a shared product from exposing a private, deleted or inaccessible brand",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products uses versions on update, delete and restore, and retains expired records for management",
+      "status": "passed"
+    },
+    {
+      "name": "reusable products validates media and brand links again on restore and rejects duplicate or excessive assets",
+      "status": "passed"
+    },
+    {
+      "name": "recycled product repair repairs invalid associations while retaining deleted state before explicit restore",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts returns an explicit permission error when another member tries to make a shared product private",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts preserves omitted memory fields on PATCH and applies explicit nulls and kind changes safely",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts preserves product associations and facts when PATCH changes only its name",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts provides current authorized records for conflict review without exposing another user private memory",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts returns computed memory fields, rejects malformed bodies and exposes conflicts as 409",
+      "status": "passed"
+    },
+    {
+      "name": "knowledge HTTP contracts requires sessions, denies API keys for memory and preserves product response fields",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "reviewDate": "2026-11-14",
+  "finding": "A successful member save or invitation create response arriving late closed a changed/reopened editor and discarded a new draft.",
+  "severity": "P2",
+  "scope": [
+    "platform/src/web/pages/Team.tsx",
+    "platform/tests/e2e/team-editor-recovery.spec.ts"
+  ],
+  "red": {
+    "run": "platform/var/e2e/run-Ao40bx",
+    "desktop": {
+      "total": 4,
+      "failed": 4,
+      "passed": 0
+    },
+    "assertions": [
+      "Same member edited after submission remains open",
+      "Saving member A must not close member B editor",
+      "Changed invitation draft survives first link result",
+      "Reopened invitation draft survives first link result"
+    ],
+    "evidenceType": "Real loopback API write succeeded; only response delivery held; no mocked business success"
+  },
+  "excludedDiagnosticRun": {
+    "run": "platform/var/e2e/run-ZHCgYu",
+    "reason": "Three initial failures were exact-label selectors, corrected before formal red. One genuine member-cross-editor failure; not counted as four defects."
+  },
+  "fix": [
+    "Each editor opening has its own session counter; every edited field increments a draft revision.",
+    "Success closes/clears only the exact submitted opening and unchanged draft.",
+    "Invitation result keeps the one-time URL and displays the submitted email; later invitation draft stays intact."
+  ],
+  "green": {
+    "run": "platform/var/e2e/run-fABBz2",
+    "total": 28,
+    "passed": 28,
+    "failed": 0,
+    "skipped": 0,
+    "projects": [
+      "desktop",
+      "mobile"
+    ],
+    "suites": [
+      "platform/tests/e2e/team-editor-recovery.spec.ts",
+      "platform/tests/e2e/notifications-team.spec.ts",
+      "platform/tests/e2e/team-creation.spec.ts"
+    ],
+    "newCases": 8,
+    "actualStateAssertions": [
+      "Member nickname/role/creditLimit after first and second writes",
+      "Different members retain independently saved nicknames",
+      "First and second invitation email/role persisted with distinct one-time URLs",
+      "Normal unchanged save/create closes its own editor"
+    ]
+  },
+  "checks": {
+    "typecheck": "tsc --noEmit passed",
+    "lint": "owned two files passed with --max-warnings 0",
+    "format": "owned two files passed"
+  },
+  "isolation": "Synthetic accounts, temp SQLite and media, loopback-only local SMTP; no formal DB or external paid service",
+  "sha256": {
+    "platform/src/web/pages/Team.tsx": "26f7953a61d00954a4b18ef7193e5ce6af496f1534215f518018f13a9c1eea02",
+    "platform/tests/e2e/team-editor-recovery.spec.ts": "209709040ace8883747403bf0d3e141e0ec9b1e19cbb3d6292998e632b16f564"
+  },
+  "validationScope": "本报告仅记录所列阶段局部验证；不得与其它阶段或最终全量数量相加，不代表最终冻结源码的完整浏览器验收已完成。",
+  "pathBase": "所有证据路径均相对仓库根目录。"
+}

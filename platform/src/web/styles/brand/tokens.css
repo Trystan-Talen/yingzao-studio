@@ -1,0 +1,144 @@
+/* ==========================================================================
+   映造 YINGZAO · Brand tokens (2026)
+   "映光 / Light-forged" — ink-black studio, vermilion seal, aurora glow.
+   Loaded after every legacy stylesheet; these selectors intentionally out-rank
+   the legacy :root and :root[data-theme] token blocks.
+   ========================================================================== */
+
+:root:not([data-theme='light']),
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --yz-ink-0: #070708;
+  --yz-ink-1: #0e0e11;
+  --yz-ink-2: #151519;
+  --yz-ink-3: #1d1d23;
+  --yz-ink-4: #27272f;
+  --yz-line: rgb(255 255 255 / 0.075);
+  --yz-line-strong: rgb(255 255 255 / 0.14);
+  --yz-glass: rgb(20 20 25 / 0.72);
+
+  --yz-text: #f4f1ea;
+  --yz-text-2: #c9c5bb;
+  --yz-muted: #9b978d;
+
+  --yz-vermilion: #ff5a36;
+  --yz-vermilion-hi: #ff7a57;
+  --yz-magenta: #ff3d7f;
+  --yz-violet: #8f7dff;
+  --yz-lumen: #e6ff5c;
+  --yz-on-brand: #160603;
+  --yz-grain-opacity: 0.06;
+
+  /* Legacy token bridge — every existing page re-skins through these */
+  --page: var(--yz-ink-0);
+  --panel: var(--yz-ink-2);
+  --text: var(--yz-text);
+  --muted: var(--yz-muted);
+  --border: var(--yz-line-strong);
+  --primary: var(--yz-vermilion);
+  --primary-hover: var(--yz-vermilion-hi);
+  --primary-text: var(--yz-on-brand);
+  --tint: rgb(255 90 54 / 0.12);
+  --field: var(--yz-ink-1);
+  --accent: var(--yz-lumen);
+  --danger: #ff8a7a;
+  --warning: #f2c46b;
+  --shadow: 0 24px 80px rgb(0 0 0 / 0.55);
+  --action: var(--yz-vermilion);
+  --action-hover: var(--yz-vermilion-hi);
+  --action-text: var(--yz-on-brand);
+  --ink: var(--yz-text);
+  --lavender: color-mix(in srgb, var(--yz-violet) 22%, var(--yz-ink-2));
+
+  color: var(--text);
+  background: var(--page);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --yz-ink-0: #f3f0e9;
+  --yz-ink-1: #faf8f3;
+  --yz-ink-2: #ffffff;
+  --yz-ink-3: #efebe2;
+  --yz-ink-4: #e4dfd3;
+  --yz-line: rgb(20 18 14 / 0.07);
+  --yz-line-strong: rgb(20 18 14 / 0.13);
+  --yz-glass: rgb(255 255 255 / 0.8);
+
+  --yz-text: #141310;
+  --yz-text-2: #3b3934;
+  --yz-muted: #66625a;
+
+  --yz-vermilion: #e2401c;
+  --yz-vermilion-hi: #c9330f;
+  --yz-magenta: #e62e6d;
+  --yz-violet: #6a57f0;
+  --yz-lumen: #c4e01e;
+  --yz-on-brand: #ffffff;
+  --yz-grain-opacity: 0.035;
+
+  --page: var(--yz-ink-0);
+  --panel: var(--yz-ink-2);
+  --text: var(--yz-text);
+  --muted: var(--yz-muted);
+  --border: var(--yz-line-strong);
+  --primary: #c9330f;
+  --primary-hover: #a92a0c;
+  --primary-text: #ffffff;
+  --tint: rgb(226 64 28 / 0.09);
+  --field: var(--yz-ink-1);
+  --accent: var(--yz-lumen);
+  --danger: #b2301f;
+  --warning: #8a5a10;
+  --shadow: 0 24px 70px rgb(40 30 10 / 0.14);
+  --action: #c9330f;
+  --action-hover: #a92a0c;
+  --action-text: #ffffff;
+  --ink: var(--yz-text);
+  --lavender: color-mix(in srgb, var(--yz-violet) 14%, #fff);
+
+  color: var(--text);
+  background: var(--page);
+}
+
+:root {
+  --yz-aurora: linear-gradient(
+    118deg,
+    var(--yz-vermilion) 0%,
+    var(--yz-magenta) 48%,
+    var(--yz-violet) 100%
+  );
+  /* Text-bearing surfaces need darker stops than decorative light effects. */
+  --yz-aurora-action: linear-gradient(
+    118deg,
+    color-mix(in srgb, var(--yz-vermilion) 72%, #000) 0%,
+    color-mix(in srgb, var(--yz-magenta) 72%, #000) 48%,
+    color-mix(in srgb, var(--yz-violet) 72%, #000) 100%
+  );
+  --yz-font-sans:
+    Inter, 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --yz-font-display:
+    'SF Pro Display', Inter, -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --yz-font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --yz-r-xs: 8px;
+  --yz-r-sm: 12px;
+  --yz-r-md: 16px;
+  --yz-r-lg: 22px;
+  --yz-r-xl: 30px;
+  --yz-r-pill: 999px;
+
+  --yz-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --yz-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --yz-rail: 88px;
+  --yz-topbar: 64px;
+
+  font-family: var(--yz-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

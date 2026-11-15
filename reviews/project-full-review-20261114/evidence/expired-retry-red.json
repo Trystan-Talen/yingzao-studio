@@ -1,0 +1,909 @@
+{
+  "numTotalTestSuites": 1,
+  "numPassedTestSuites": 0,
+  "numFailedTestSuites": 1,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 86,
+  "numPassedTests": 0,
+  "numFailedTests": 3,
+  "numPendingTests": 83,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1794677889516,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps the original wording and freezes compiled guidance only in quoted items",
+          "status": "skipped",
+          "title": "keeps the original wording and freezes compiled guidance only in quoted items",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not quote or submit a preparation that still needs a necessary answer",
+          "status": "skipped",
+          "title": "does not quote or submit a preparation that still needs a necessary answer",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "invalidates a ready preparation after changing prompt",
+          "status": "skipped",
+          "title": "invalidates a ready preparation after changing prompt",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "invalidates a ready preparation after changing ratio",
+          "status": "skipped",
+          "title": "invalidates a ready preparation after changing ratio",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "invalidates a ready preparation after changing language",
+          "status": "skipped",
+          "title": "invalidates a ready preparation after changing language",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "invalidates a ready preparation after changing platform",
+          "status": "skipped",
+          "title": "invalidates a ready preparation after changing platform",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "invalidates a ready preparation after changing reference",
+          "status": "skipped",
+          "title": "invalidates a ready preparation after changing reference",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not let a ready preparation replace quotation or alter a quoted request",
+          "status": "skipped",
+          "title": "does not let a ready preparation replace quotation or alter a quoted request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "returns the same completed request without a second model call and rejects changed input",
+          "status": "skipped",
+          "title": "returns the same completed request without a second model call and rejects changed input",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects a changed answer payload under a reused follow-up request ID",
+          "status": "skipped",
+          "title": "rejects a changed answer payload under a reused follow-up request ID",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "merges answers and their verbatim source evidence without changing the original prompt",
+          "status": "skipped",
+          "title": "merges answers and their verbatim source evidence without changing the original prompt",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "includes explicit source text in the planner evidence, without trusting its instructions",
+          "status": "skipped",
+          "title": "includes explicit source text in the planner evidence, without trusting its instructions",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects fabricated source quotations even if the model reports ready",
+          "status": "skipped",
+          "title": "rejects fabricated source quotations even if the model reports ready",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "revalidates the selected platform at the service boundary",
+          "status": "skipped",
+          "title": "revalidates the selected platform at the service boundary",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "revalidates the selected placement at the service boundary",
+          "status": "skipped",
+          "title": "revalidates the selected placement at the service boundary",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "revalidates the selected market at the service boundary",
+          "status": "skipped",
+          "title": "revalidates the selected market at the service boundary",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not accept a background image as the product reference",
+          "status": "skipped",
+          "title": "does not accept a background image as the product reference",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "prevents concurrent repeats while one request is still being analyzed",
+          "status": "skipped",
+          "title": "prevents concurrent repeats while one request is still being analyzed",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "restores completed preparation after restart without another model call",
+          "status": "skipped",
+          "title": "restores completed preparation after restart without another model call",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not replay uncertain requests after restart and does not expose arbitrary exception details",
+          "status": "skipped",
+          "title": "does not replay uncertain requests after restart and does not expose arbitrary exception details",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "persists terminal DIFY_INTENT_FAILED without replaying it and allows only an explicit new request",
+          "status": "skipped",
+          "title": "persists terminal DIFY_INTENT_FAILED without replaying it and allows only an explicit new request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "persists terminal DIFY_INTENT_INVALID without replaying it and allows only an explicit new request",
+          "status": "skipped",
+          "title": "persists terminal DIFY_INTENT_INVALID without replaying it and allows only an explicit new request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps brief tokens scoped to their workspace and actor, even for another editor",
+          "status": "skipped",
+          "title": "keeps brief tokens scoped to their workspace and actor, even for another editor",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "blocks read-only members before any model request",
+          "status": "skipped",
+          "title": "blocks read-only members before any model request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not treat unrelated project messages as evidence after the current reference changes",
+          "status": "skipped",
+          "title": "does not treat unrelated project messages as evidence after the current reference changes",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves compiled item snapshots when a cancelled generation is quoted for retry",
+          "status": "skipped",
+          "title": "preserves compiled item snapshots when a cancelled generation is quoted for retry",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not invent required branding or optional parameters when a product-reference fixture is ready",
+          "status": "skipped",
+          "title": "does not invent required branding or optional parameters when a product-reference fixture is ready",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "freezes reference geometry once while preserving explicit edits, closeups and every constraint",
+          "status": "skipped",
+          "title": "freezes reference geometry once while preserving explicit edits, closeups and every constraint",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps explicit market in local simulation without calling the real planner branch",
+          "status": "skipped",
+          "title": "keeps explicit market in local simulation without calling the real planner branch",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not impose product identity constraints on a general creative image reference",
+          "status": "skipped",
+          "title": "does not impose product identity constraints on a general creative image reference",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not reuse a project-scoped preparation in another project or without its original project",
+          "status": "skipped",
+          "title": "does not reuse a project-scoped preparation in another project or without its original project",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "allows an initially unbound preparation to be assigned to its first new project",
+          "status": "skipped",
+          "title": "allows an initially unbound preparation to be assigned to its first new project",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects a ready result that silently treats an explicit product placement as general creativity",
+          "status": "skipped",
+          "title": "rejects a ready result that silently treats an explicit product placement as general creativity",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "retains a quotation for provenance without upgrading a negated fragment into a generated claim",
+          "status": "skipped",
+          "title": "retains a quotation for provenance without upgrading a negated fragment into a generated claim",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "provides explicit legacy copy options as sources but does not append them after the corrected plan",
+          "status": "skipped",
+          "title": "provides explicit legacy copy options as sources but does not append them after the corrected plan",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves the explicit legacy video/product selection in the planning request",
+          "status": "skipped",
+          "title": "preserves the explicit legacy video/product selection in the planning request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves the explicit legacy video/social selection in the planning request",
+          "status": "skipped",
+          "title": "preserves the explicit legacy video/social selection in the planning request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves the explicit legacy video/brand selection in the planning request",
+          "status": "skipped",
+          "title": "preserves the explicit legacy video/brand selection in the planning request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves the explicit legacy image/detail selection in the planning request",
+          "status": "skipped",
+          "title": "preserves the explicit legacy image/detail selection in the planning request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "omits source citations from execution prompts while retaining their audit evidence",
+          "status": "skipped",
+          "title": "omits source citations from execution prompts while retaining their audit evidence",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects an over-budget compiled Wan prompt before writing a payable quote",
+          "status": "skipped",
+          "title": "rejects an over-budget compiled Wan prompt before writing a payable quote",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "audits raw brand and document sources without reintroducing corrected claims into execution",
+          "status": "skipped",
+          "title": "audits raw brand and document sources without reintroducing corrected claims into execution",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves the existing unprepared generation path for raw reference prose and copy options",
+          "status": "skipped",
+          "title": "preserves the existing unprepared generation path for raw reference prose and copy options",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for seedream with no image yet",
+          "status": "skipped",
+          "title": "reports actual reference capability for seedream with no image yet",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for seedream input image",
+          "status": "skipped",
+          "title": "reports actual reference capability for seedream input image",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for seedream reference image",
+          "status": "skipped",
+          "title": "reports actual reference capability for seedream reference image",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for seedream excessive images",
+          "status": "skipped",
+          "title": "reports actual reference capability for seedream excessive images",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for text-only image gateway",
+          "status": "skipped",
+          "title": "reports actual reference capability for text-only image gateway",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for unknown image model",
+          "status": "skipped",
+          "title": "reports actual reference capability for unknown image model",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for seedance text-to-video",
+          "status": "skipped",
+          "title": "reports actual reference capability for seedance text-to-video",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for wan with no image yet",
+          "status": "skipped",
+          "title": "reports actual reference capability for wan with no image yet",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for wan first frame",
+          "status": "skipped",
+          "title": "reports actual reference capability for wan first frame",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for wan wrong reference slot",
+          "status": "skipped",
+          "title": "reports actual reference capability for wan wrong reference slot",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for wan too many frames",
+          "status": "skipped",
+          "title": "reports actual reference capability for wan too many frames",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for kling first and last frames",
+          "status": "skipped",
+          "title": "reports actual reference capability for kling first and last frames",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for kling first-last with no image yet",
+          "status": "skipped",
+          "title": "reports actual reference capability for kling first-last with no image yet",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for kling first-last extra reference",
+          "status": "skipped",
+          "title": "reports actual reference capability for kling first-last extra reference",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for kling reference images",
+          "status": "skipped",
+          "title": "reports actual reference capability for kling reference images",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for kling reference with no image yet",
+          "status": "skipped",
+          "title": "reports actual reference capability for kling reference with no image yet",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "reports actual reference capability for kling unsupported first-last mode",
+          "status": "skipped",
+          "title": "reports actual reference capability for kling unsupported first-last mode",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "treats a document as planner context rather than an image for openai",
+          "status": "skipped",
+          "title": "treats a document as planner context rather than an image for openai",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "treats a document as planner context rather than an image for fal",
+          "status": "skipped",
+          "title": "treats a document as planner context rather than an image for fal",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not claim Wan can use brand images that would enter an unsupported reference slot",
+          "status": "skipped",
+          "title": "does not claim Wan can use brand images that would enter an unsupported reference slot",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "uses only explicitly enabled, eligible personal context and never turns it into product evidence",
+          "status": "skipped",
+          "title": "uses only explicitly enabled, eligible personal context and never turns it into product evidence",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "resolves selected product and its brand as versioned text without silently attaching images",
+          "status": "skipped",
+          "title": "resolves selected product and its brand as versioned text without silently attaching images",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "freezes library sources and personal context through clarification and refreshes only on a new preparation",
+          "status": "skipped",
+          "title": "freezes library sources and personal context through clarification and refreshes only on a new preparation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "blocks expired or mismatched product data before a planner call",
+          "status": "skipped",
+          "title": "blocks expired or mismatched product data before a planner call",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "requires a prepared plan for product or personal memory and rejects unsupported operations",
+          "status": "skipped",
+          "title": "requires a prepared plan for product or personal memory and rejects unsupported operations",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "invalidates a prepared plan when context selections change and retains old retry evidence after deleting memory",
+          "status": "skipped",
+          "title": "invalidates a prepared plan when context selections change and retains old retry evidence after deleting memory",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects cross-workspace products and over-limit product pictures without any planner request",
+          "status": "skipped",
+          "title": "rejects cross-workspace products and over-limit product pictures without any planner request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "does not expose private context snapshots through an API key owned by the same user",
+          "status": "skipped",
+          "title": "does not expose private context snapshots through an API key owned by the same user",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "blocks a new quote using expired product evidence while retaining an already issued quote snapshot",
+          "status": "skipped",
+          "title": "blocks a new quote using expired product evidence while retaining an already issued quote snapshot",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "blocks a retry quote using expired product without changing the previous job or balance",
+          "status": "failed",
+          "title": "blocks a retry quote using expired product without changing the previous job or balance",
+          "duration": 175.85870799999987,
+          "failureMessages": [
+            "AssertionError: expected [Function] to throw an error\n    at Proxy.<anonymous> (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:2303:114)\n    at Proxy.<anonymous> (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:1958:14)\n    at Proxy.methodWrapper (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/creative-briefs.test.ts:1445:65\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:2794:20"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "blocks a retry quote using expired temporary-memory without changing the previous job or balance",
+          "status": "failed",
+          "title": "blocks a retry quote using expired temporary-memory without changing the previous job or balance",
+          "duration": 109.41345799999999,
+          "failureMessages": [
+            "AssertionError: expected [Function] to throw an error\n    at Proxy.<anonymous> (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:2303:114)\n    at Proxy.<anonymous> (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:1958:14)\n    at Proxy.methodWrapper (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/creative-briefs.test.ts:1445:65\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:2794:20"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "blocks a retry quote using expired decayed-memory without changing the previous job or balance",
+          "status": "failed",
+          "title": "blocks a retry quote using expired decayed-memory without changing the previous job or balance",
+          "duration": 121.00074999999993,
+          "failureMessages": [
+            "AssertionError: expected [Function] to throw an error\n    at Proxy.<anonymous> (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:2303:114)\n    at Proxy.<anonymous> (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:1958:14)\n    at Proxy.methodWrapper (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)\n    at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/creative-briefs.test.ts:1445:65\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:2794:20"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects expired personal context before continuing a clarification and refreshes it in a new request",
+          "status": "skipped",
+          "title": "rejects expired personal context before continuing a clarification and refreshes it in a new request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "keeps an explicitly selected brand snapshot after its library record is removed, but still checks frozen assets",
+          "status": "skipped",
+          "title": "keeps an explicitly selected brand snapshot after its library record is removed, but still checks frozen assets",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects unplanned grouped product context before preparation or quotation",
+          "status": "skipped",
+          "title": "rejects unplanned grouped product context before preparation or quotation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects unplanned grouped memory context before preparation or quotation",
+          "status": "skipped",
+          "title": "rejects unplanned grouped memory context before preparation or quotation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "rejects unplanned grouped product-images context before preparation or quotation",
+          "status": "skipped",
+          "title": "rejects unplanned grouped product-images context before preparation or quotation",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves legacy grouped creation with memory undefined",
+          "status": "skipped",
+          "title": "preserves legacy grouped creation with memory undefined",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves legacy grouped creation with memory false",
+          "status": "skipped",
+          "title": "preserves legacy grouped creation with memory false",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "protects an analyzing Dify preparation with private context from a fresh request ID",
+          "status": "skipped",
+          "title": "protects an analyzing Dify preparation with private context from a fresh request ID",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "protects an uncertain Dify preparation with private context from a fresh request ID",
+          "status": "skipped",
+          "title": "protects an uncertain Dify preparation with private context from a fresh request ID",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "allows an explicit new request after changing the actual Dify planner connection",
+          "status": "skipped",
+          "title": "allows an explicit new request after changing the actual Dify planner connection",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "preserves explicit retry behavior for legacy nonnative attempts with no recorded planner identity",
+          "status": "skipped",
+          "title": "preserves explicit retry behavior for legacy nonnative attempts with no recorded planner identity",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794677890460,
+      "endTime": 1794677890867.0007,
+      "status": "failed",
+      "message": "",
+      "name": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/creative-briefs.test.ts"
+    }
+  ]
+}

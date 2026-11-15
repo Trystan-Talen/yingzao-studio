@@ -1,0 +1,94 @@
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2297 modules transformed.
+rendering chunks...
+computing gzip size...
+var/knowledge-build-SmyeCp/dist/web/index.html                                  0.61 kB │ gzip:   0.44 kB
+var/knowledge-build-SmyeCp/dist/web/assets/knowledge-C1GF6EJk.css               1.12 kB │ gzip:   0.49 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Login-DikSd-tK.css                   3.38 kB │ gzip:   1.22 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Settings-Bxgqvs-8.css                4.04 kB │ gzip:   1.13 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Workbench-CTY2Adub.css               5.06 kB │ gzip:   1.28 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Inspiration-C0f5FocC.css            10.39 kB │ gzip:   2.16 kB
+var/knowledge-build-SmyeCp/dist/web/assets/CanvasEditor-BcQQlAIU.css           12.37 kB │ gzip:   3.11 kB
+var/knowledge-build-SmyeCp/dist/web/assets/CreationLanding-CSl8TV0k.css        42.56 kB │ gzip:   7.88 kB
+var/knowledge-build-SmyeCp/dist/web/assets/index-DKXG2uJQ.css                 271.74 kB │ gzip:  47.41 kB
+var/knowledge-build-SmyeCp/dist/web/assets/chevron-down-CySP3z3o.js             0.21 kB │ gzip:   0.20 kB │ map:     0.99 kB
+var/knowledge-build-SmyeCp/dist/web/assets/job-snapshot-0LKF8d_t.js             0.28 kB │ gzip:   0.22 kB │ map:     1.35 kB
+var/knowledge-build-SmyeCp/dist/web/assets/lock-keyhole-BnH4dfIW.js             0.34 kB │ gzip:   0.28 kB │ map:     1.34 kB
+var/knowledge-build-SmyeCp/dist/web/assets/mentions-DOj5GYvu.js                 0.38 kB │ gzip:   0.31 kB │ map:     1.08 kB
+var/knowledge-build-SmyeCp/dist/web/assets/arrow-up-BGWn_9bd.js                 0.39 kB │ gzip:   0.27 kB │ map:     2.03 kB
+var/knowledge-build-SmyeCp/dist/web/assets/shield-check-BTZAeuL0.js             0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+var/knowledge-build-SmyeCp/dist/web/assets/trash-ClwIYalC.js                    0.42 kB │ gzip:   0.28 kB │ map:     1.48 kB
+var/knowledge-build-SmyeCp/dist/web/assets/key-round-nKb0eod8.js                0.44 kB │ gzip:   0.31 kB │ map:     1.37 kB
+var/knowledge-build-SmyeCp/dist/web/assets/expand-hIohdPou.js                   0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+var/knowledge-build-SmyeCp/dist/web/assets/CreateHome-Ce4Ku6eb.js               0.56 kB │ gzip:   0.36 kB │ map:     0.45 kB
+var/knowledge-build-SmyeCp/dist/web/assets/undo-2-DvPn-kd6.js                   0.70 kB │ gzip:   0.37 kB │ map:     2.81 kB
+var/knowledge-build-SmyeCp/dist/web/assets/text-align-start-DszDuxk2.js         0.98 kB │ gzip:   0.50 kB │ map:     3.79 kB
+var/knowledge-build-SmyeCp/dist/web/assets/export-policy-CmZLCWoA.js            1.15 kB │ gzip:   0.62 kB │ map:     4.75 kB
+var/knowledge-build-SmyeCp/dist/web/assets/knowledge-Cjc3PwMb.js                1.46 kB │ gzip:   0.84 kB │ map:     4.97 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Tasks-BrcaG-4L.js                    1.73 kB │ gzip:   1.04 kB │ map:     4.84 kB
+var/knowledge-build-SmyeCp/dist/web/assets/IdentityRegistration-BDBPzP-W.js     2.50 kB │ gzip:   1.38 kB │ map:     7.47 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Entitlements-BLfCCrAn.js             2.65 kB │ gzip:   1.37 kB │ map:     6.22 kB
+var/knowledge-build-SmyeCp/dist/web/assets/product-messages-BFEkONvw.js         2.85 kB │ gzip:   1.05 kB │ map:     5.21 kB
+var/knowledge-build-SmyeCp/dist/web/assets/PasswordRecovery-DcB4m7Cv.js         3.08 kB │ gzip:   1.63 kB │ map:     9.40 kB
+var/knowledge-build-SmyeCp/dist/web/assets/scene-QkShuDi-.js                    3.09 kB │ gzip:   1.43 kB │ map:    12.45 kB
+var/knowledge-build-SmyeCp/dist/web/assets/inspirations-CNh0_fr3.js             3.70 kB │ gzip:   2.21 kB │ map:     7.41 kB
+var/knowledge-build-SmyeCp/dist/web/assets/UsageStatistics-fNG4oGiA.js          4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Public-BQjhMwFD.js                   4.06 kB │ gzip:   2.13 kB │ map:    11.66 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Login-1Kx_SUBi.js                    4.40 kB │ gzip:   2.27 kB │ map:    12.17 kB
+var/knowledge-build-SmyeCp/dist/web/assets/GoogleAccount-B9D3Dy2O.js            5.02 kB │ gzip:   2.32 kB │ map:    14.66 kB
+var/knowledge-build-SmyeCp/dist/web/assets/ModelCapabilityStatus-DhLXfXdE.js    6.16 kB │ gzip:   3.03 kB │ map:    19.24 kB
+var/knowledge-build-SmyeCp/dist/web/assets/MemorySettings-CKIM24SN.js           6.67 kB │ gzip:   2.90 kB │ map:    20.11 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Products-axohYtWO.js                 7.19 kB │ gzip:   3.15 kB │ map:    24.03 kB
+var/knowledge-build-SmyeCp/dist/web/assets/IdentityAccounts-CW6hb8zU.js         7.72 kB │ gzip:   3.07 kB │ map:    23.36 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Inspiration-CKVZy8q7.js             13.88 kB │ gzip:   5.44 kB │ map:    44.74 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Team-DC0LLv9S.js                    15.76 kB │ gzip:   5.36 kB │ map:    51.84 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Developer-DsGf019c.js               16.03 kB │ gzip:   5.46 kB │ map:    48.96 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Identities-DwGg6DZw.js              17.51 kB │ gzip:   6.32 kB │ map:    57.40 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Support-D5l8g4I2.js                 17.70 kB │ gzip:   6.77 kB │ map:    51.54 kB
+var/knowledge-build-SmyeCp/dist/web/assets/AdvancedTools-D_h0RXmE.js           21.21 kB │ gzip:   8.28 kB │ map:    73.19 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Workbench-DZs8IaHL.js               22.54 kB │ gzip:   8.35 kB │ map:    76.65 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Library-B-Jlml-t.js                 25.73 kB │ gzip:   8.69 kB │ map:    80.72 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Settings-nSHcKl10.js                25.79 kB │ gzip:   9.17 kB │ map:    75.89 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Tools-B4kItr1U.js                   27.34 kB │ gzip:  10.24 kB │ map:    88.69 kB
+var/knowledge-build-SmyeCp/dist/web/assets/Usage-6-djVaX9.js                   30.86 kB │ gzip:  10.42 kB │ map:    95.29 kB
+var/knowledge-build-SmyeCp/dist/web/assets/DetailPageStudio-C6-62PcP.js        43.50 kB │ gzip:  14.12 kB │ map:   148.20 kB
+var/knowledge-build-SmyeCp/dist/web/assets/CreationLanding-_Kb_A0ck.js         72.08 kB │ gzip:  25.51 kB │ map:   242.67 kB
+var/knowledge-build-SmyeCp/dist/web/assets/react-Iff1aU_1.js                  106.13 kB │ gzip:  35.89 kB │ map:   615.23 kB
+var/knowledge-build-SmyeCp/dist/web/assets/CanvasEditor-CkkHFyQi.js           149.88 kB │ gzip:  48.87 kB │ map:   409.91 kB
+var/knowledge-build-SmyeCp/dist/web/assets/editor-DERvKPwF.js                 282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+var/knowledge-build-SmyeCp/dist/web/assets/index-BU-N3hGL.js                  956.25 kB │ gzip: 307.67 kB │ map: 3,008.78 kB
+
+(!) Some chunks are larger than 750 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.13s
+CLI Building entry: src/server/main.ts, src/worker/main.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: node22
+CLI Cleaning output folder
+ESM Build start
+ESM var/knowledge-build-SmyeCp/dist/runtime/server/main.js        397.00 B
+ESM var/knowledge-build-SmyeCp/dist/runtime/worker/main.js        74.19 KB
+ESM var/knowledge-build-SmyeCp/dist/runtime/chunk-ZPSP4MNZ.js     1.17 MB
+ESM var/knowledge-build-SmyeCp/dist/runtime/worker/main.js.map    116.58 KB
+ESM var/knowledge-build-SmyeCp/dist/runtime/server/main.js.map    757.00 B
+ESM var/knowledge-build-SmyeCp/dist/runtime/chunk-ZPSP4MNZ.js.map 1.91 MB
+ESM ⚡️ Build success in 60ms
+Production runtime verified: built HTML/JS, healthy SQLite, empty-db registration, secure cookie, concurrent API/worker migrations.
+Production runtime stopped cleanly; temporary data removed.
+Isolated production build and runtime verified: /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/knowledge-build-SmyeCp

@@ -1,0 +1,26 @@
+{
+  "actualDeadline": "2026-11-14T15:51:38.334Z",
+  "checkedAt": "2026-11-14T15:51:39.130Z",
+  "naturalClockExpiry": true,
+  "errors": [
+    {
+      "path": "/quotes",
+      "status": 409,
+      "code": "KNOWLEDGE_CONTEXT_EXPIRED"
+    },
+    {
+      "path": "/creative-briefs/prepare",
+      "status": 409,
+      "code": "PRODUCT_CONTEXT_EXPIRED"
+    }
+  ],
+  "temporaryEligible": false,
+  "callsBefore": 3,
+  "callsAfter": 3,
+  "oldQuoteId": "867604ae-5b70-4d93-8faa-f15707f20011",
+  "oldQuoteExpiresAt": "2026-11-14T15:53:38.087Z",
+  "oldQuoteJobId": "42d6e40a-cb6e-40b3-bb44-0b277a008aec",
+  "firstSubmittedAt": "2026-11-14T15:51:39.136Z",
+  "windowVerified": true,
+  "submitReplaySameJob": true
+}

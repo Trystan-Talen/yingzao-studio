@@ -1,0 +1,12 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ✓ tests/knowledge.test.ts (21 tests) 1680ms
+ ✓ tests/brand-quotas.test.ts (11 tests) 536ms
+ ✓ tests/knowledge-edit.test.ts (3 tests) 2ms
+
+ Test Files  3 passed (3)
+      Tests  35 passed (35)
+   Start at  08:55:33
+   Duration  3.64s (tests 64%, import 32%, transform 4%)
+

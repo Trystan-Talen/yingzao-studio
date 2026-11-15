@@ -1,0 +1,1070 @@
+{
+  "success": true,
+  "numTotalTests": 2341,
+  "numPassedTests": 2341,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "startTime": 1794632197936,
+  "fileCount": 151,
+  "scope": "Full unit/integration suite after all product, dependency and test changes were frozen.",
+  "sourceManifestSha256": "e248b61fccdfe884dc8f7d144bf1abcc098ba48518ec41ca1e6522ca0e01bbb5",
+  "testResults": [
+    {
+      "path": "platform/tests/advanced-recovery.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/ai-writer-capabilities.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/aliyun-sms.test.ts",
+      "status": "passed",
+      "passed": 42,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/api-billing-ui.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/api-billing.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/api-request-timeout.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/app.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/background-mask-stroke.test.ts",
+      "status": "passed",
+      "passed": 18,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/background-review.test.ts",
+      "status": "passed",
+      "passed": 14,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/backup-integrity.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/billing-channel-migration.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/billing-channel.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/billing-environment.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/billing-periods.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/billing.test.ts",
+      "status": "passed",
+      "passed": 32,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/brand-quota.test.ts",
+      "status": "passed",
+      "passed": 18,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/brand-quotas.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/character-video.test.ts",
+      "status": "passed",
+      "passed": 7,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/collection-membership.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/commercial-assets.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/commercial-download-timeout.test.ts",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/commercial-worker-safety.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/concurrency-limit.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/concurrency-migration.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/core.test.ts",
+      "status": "passed",
+      "passed": 17,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creation-recovery.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-brief-ui.test.ts",
+      "status": "passed",
+      "passed": 14,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-briefs.test.ts",
+      "status": "passed",
+      "passed": 83,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-capture.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-intent-simulation.test.ts",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-placement.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-quality.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/creative-strategy.test.ts",
+      "status": "passed",
+      "passed": 47,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/credit-estimate.test.ts",
+      "status": "passed",
+      "passed": 23,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/credit-grant-reversal.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/credit-lots.test.ts",
+      "status": "passed",
+      "passed": 20,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/delivery-regressions.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/design-plan.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/detail-page-ui-state.test.ts",
+      "status": "passed",
+      "passed": 15,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/detail-page-workflow.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/detail-pages.test.ts",
+      "status": "passed",
+      "passed": 16,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/dify-clarification-style.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/dify-detail-page.test.ts",
+      "status": "passed",
+      "passed": 79,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/dify-intent-timeout.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/dify-intent.test.ts",
+      "status": "passed",
+      "passed": 70,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/dify-provider.test.ts",
+      "status": "passed",
+      "passed": 50,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/dify-workflow-nodes.test.ts",
+      "status": "passed",
+      "passed": 57,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/documented-model-capabilities.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/entitlements-appeals.test.ts",
+      "status": "passed",
+      "passed": 7,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/export-policy.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/fal-motion.test.ts",
+      "status": "passed",
+      "passed": 19,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/flyelep-provider.test.ts",
+      "status": "passed",
+      "passed": 34,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/gateway-integration.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/generation-media-kind.test.ts",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/google-oidc.test.ts",
+      "status": "passed",
+      "passed": 30,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/identity-auth.test.ts",
+      "status": "passed",
+      "passed": 27,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/image-orientation.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/inspiration-replica.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/installation-owner.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/job-event-refresh.test.ts",
+      "status": "passed",
+      "passed": 15,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/job-events-auth.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/job-navigation.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/job-presentation.test.ts",
+      "status": "passed",
+      "passed": 29,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/job-snapshot.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/knowledge-edit.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/knowledge.test.ts",
+      "status": "passed",
+      "passed": 21,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/library-task-experience.test.ts",
+      "status": "passed",
+      "passed": 15,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/local-matting-build.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/local-matting-installation.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/local-matting-output.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/local-provider.test.ts",
+      "status": "passed",
+      "passed": 7,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/local-test-credits.test.ts",
+      "status": "passed",
+      "passed": 15,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/mail-outbox.test.ts",
+      "status": "passed",
+      "passed": 23,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/media-download-public-doh.test.ts",
+      "status": "passed",
+      "passed": 36,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/media-download.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/member-promotions-review.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/member-promotions.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/migrations.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/model-capabilities-api.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/model-capabilities.test.ts",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/model-capability-ui.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/model-connections.test.ts",
+      "status": "passed",
+      "passed": 20,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-artifacts.test.ts",
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-background-calibration-holdout.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-background-calibration.test.ts",
+      "status": "passed",
+      "passed": 7,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-background-study.test.ts",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-background.test.ts",
+      "status": "passed",
+      "passed": 34,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-capture.test.ts",
+      "status": "passed",
+      "passed": 80,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-configuration-boundaries.test.ts",
+      "status": "passed",
+      "passed": 23,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-exact-pan.test.ts",
+      "status": "passed",
+      "passed": 3,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-frame-contract.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-generation.test.ts",
+      "status": "passed",
+      "passed": 28,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-http.test.ts",
+      "status": "passed",
+      "passed": 18,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-image-spec.test.ts",
+      "status": "passed",
+      "passed": 36,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-integration.test.ts",
+      "status": "passed",
+      "passed": 23,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-local-matting.test.ts",
+      "status": "passed",
+      "passed": 14,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-motion-frame.test.ts",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-plan-freeze.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-plan-quality.test.ts",
+      "status": "passed",
+      "passed": 46,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-planning-recovery.test.ts",
+      "status": "passed",
+      "passed": 37,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-reference-frame.test.ts",
+      "status": "passed",
+      "passed": 17,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-reference-media.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-reference-study.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-replica.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-semantic-mask.test.ts",
+      "status": "passed",
+      "passed": 16,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-video-artifact.test.ts",
+      "status": "passed",
+      "passed": 31,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/native-video-tail-hold.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/naturalize-contract.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/notifications-http.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/notifications.test.ts",
+      "status": "passed",
+      "passed": 9,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/openai-gateway.test.ts",
+      "status": "passed",
+      "passed": 75,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/openai-provider.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/password-recovery.test.ts",
+      "status": "passed",
+      "passed": 17,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/persistence-upgrade.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/prepaid-credit-validity.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/product-errors.test.ts",
+      "status": "passed",
+      "passed": 13,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/product-messages.test.ts",
+      "status": "passed",
+      "passed": 52,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/production-config.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/production-http.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/project-creation-workflow.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/project-workflow-navigation.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/provider-extra.test.ts",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/provider-http.test.ts",
+      "status": "passed",
+      "passed": 7,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/provider-reference.test.ts",
+      "status": "passed",
+      "passed": 16,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/quality-workflows.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/real-launch-environment.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/real-launch-lifecycle.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/referral-admin-policy.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/referral-policy.test.ts",
+      "status": "passed",
+      "passed": 17,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/restored-cache.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/result-studio.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/script-test-environment.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/seedance-provider.test.ts",
+      "status": "passed",
+      "passed": 69,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/session-cache-isolation.test.ts",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/social-import.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/support-channels.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/takeover-backend.test.ts",
+      "status": "passed",
+      "passed": 12,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/takeover-migration.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/takeover-motion.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/takeover-tools.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/task-result-recovery.test.ts",
+      "status": "passed",
+      "passed": 16,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/tasks.test.ts",
+      "status": "passed",
+      "passed": 37,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/team-creation-review.test.ts",
+      "status": "passed",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/team-creation.test.ts",
+      "status": "passed",
+      "passed": 8,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/tool-recovery.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/ui-controls.test.ts",
+      "status": "passed",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/video-audio-options.test.ts",
+      "status": "passed",
+      "passed": 5,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/vitest-environment.test.ts",
+      "status": "passed",
+      "passed": 1,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/tests/wechat-gateway.test.ts",
+      "status": "passed",
+      "passed": 52,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/src/web/editor/export-bundle.test.ts",
+      "status": "passed",
+      "passed": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    {
+      "path": "platform/src/web/editor/scene.test.ts",
+      "status": "passed",
+      "passed": 11,
+      "failed": 0,
+      "pending": 0
+    }
+  ]
+}

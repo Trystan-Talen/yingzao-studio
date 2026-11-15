@@ -1,0 +1,199 @@
+{
+  "numTotalTestSuites": 5,
+  "numPassedTestSuites": 3,
+  "numFailedTestSuites": 2,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 13,
+  "numPassedTests": 0,
+  "numFailedTests": 1,
+  "numPendingTests": 12,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1794678236969,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "reference authorization is distinct from identity verification"
+          ],
+          "fullName": "reference authorization is distinct from identity verification requires an explicit declaration and never creates a verification session without a configured provider",
+          "status": "skipped",
+          "title": "requires an explicit declaration and never creates a verification session without a configured provider",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "reference authorization is distinct from identity verification"
+          ],
+          "fullName": "reference authorization is distinct from identity verification revokes new references and binds consent to the actual asset revision while preserving renames",
+          "status": "skipped",
+          "title": "revokes new references and binds consent to the actual asset revision while preserving renames",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "reference authorization is distinct from identity verification"
+          ],
+          "fullName": "reference authorization is distinct from identity verification accepts verification only from a server provider and rejects cross-space access and expired evidence",
+          "status": "skipped",
+          "title": "accepts verification only from a server provider and rejects cross-space access and expired evidence",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "referral registration and configured live-purchase rewards"
+          ],
+          "fullName": "referral registration and configured live-purchase rewards keeps referral registration closed by default and attributes an enabled registration atomically",
+          "status": "skipped",
+          "title": "keeps referral registration closed by default and attributes an enabled registration atomically",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "referral registration and configured live-purchase rewards"
+          ],
+          "fullName": "referral registration and configured live-purchase rewards rewards one first qualifying live purchase, never test payments, and exposes no invitee identity",
+          "status": "skipped",
+          "title": "rewards one first qualifying live purchase, never test payments, and exposes no invitee identity",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "referral registration and configured live-purchase rewards"
+          ],
+          "fullName": "referral registration and configured live-purchase rewards reverses partial refunds cumulatively and records debt instead of overdrawing reserved credits",
+          "status": "skipped",
+          "title": "reverses partial refunds cumulatively and records debt instead of overdrawing reserved credits",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "referral registration and configured live-purchase rewards"
+          ],
+          "fullName": "referral registration and configured live-purchase rewards requires explicit channel approval and exports only authorized aggregate/opaque attribution records",
+          "status": "skipped",
+          "title": "requires explicit channel approval and exports only authorized aggregate/opaque attribution records",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "referral registration and configured live-purchase rewards"
+          ],
+          "fullName": "referral registration and configured live-purchase rewards holds a referral recipient when a refund exceeds the remaining unallocated pool",
+          "status": "skipped",
+          "title": "holds a referral recipient when a refund exceeds the remaining unallocated pool",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "commercial approvals and manually resolved payment risks"
+          ],
+          "fullName": "commercial approvals and manually resolved payment risks imports validated official plans with immutable order snapshots and rejects non-admin changes",
+          "status": "skipped",
+          "title": "imports validated official plans with immutable order snapshots and rejects non-admin changes",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "commercial approvals and manually resolved payment risks"
+          ],
+          "fullName": "commercial approvals and manually resolved payment risks blocks cash checkout for demo/unapproved snapshots before making any Stripe request",
+          "status": "skipped",
+          "title": "blocks cash checkout for demo/unapproved snapshots before making any Stripe request",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "commercial approvals and manually resolved payment risks"
+          ],
+          "fullName": "commercial approvals and manually resolved payment risks resolves only the named manually handled risks and releases hold only after all risks are resolved",
+          "status": "skipped",
+          "title": "resolves only the named manually handled risks and releases hold only after all risks are resolved",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "invoice requests stay local and reflect refundable amounts"
+          ],
+          "fullName": "invoice requests stay local and reflect refundable amounts reports invoiceable amounts only for paid orders",
+          "status": "failed",
+          "title": "reports invoiceable amounts only for paid orders",
+          "duration": 78.27929099999994,
+          "failureMessages": [
+            "AssertionError: draft: expected 2000 to be +0 // Object.is equality\n    at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/quality-workflows.test.ts:476:85\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:1632:35\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:2794:26\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3334:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3329:10)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3314:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3272:10)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3895:64\n    at run (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:1352:20)\n    at limiterFn (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:1362:59)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3895:38\n    at Traces.$ (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/traces.js:143:27)\n    at trace (file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/index.uwTEEBsB.js:8585:21)\n    at file:///Users/xm-talen/Desktop/%E5%B0%8F%E6%98%8E/coding/yingzao-studio-main1112/platform/node_modules/.pnpm/vitest@5.0.4_@types+node@22.20.5_jsdom@26.1.0_canvas@3.2.3_supports-color@7.2.0__vite@7_2d099fe5466afac66f870ce2a96aa54a/node_modules/vitest/dist/chunks/run.Cm2sd7-x.js:3895:13"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": [
+            "invoice requests stay local and reflect refundable amounts"
+          ],
+          "fullName": "invoice requests stay local and reflect refundable amounts allocates only net paid amounts, registers local requests, and preserves withdrawn allocation history",
+          "status": "skipped",
+          "title": "allocates only net paid amounts, registers local requests, and preserves withdrawn allocation history",
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1794678237532,
+      "endTime": 1794678237610.2793,
+      "status": "failed",
+      "message": "",
+      "name": "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/quality-workflows.test.ts"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{"run": 1, "exitCode": 0, "elapsedSeconds": 4.183}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:52:41
+   Duration  4.02s (tests 98%, import 2%, transform 1%)
+
+
+{"run": 2, "exitCode": 0, "elapsedSeconds": 4.443}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:52:45
+   Duration  4.28s (tests 98%, import 1%)
+
+
+{"run": 3, "exitCode": 0, "elapsedSeconds": 4.159}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:52:49
+   Duration  3.97s (tests 98%, import 2%)
+
+
+{"run": 4, "exitCode": 0, "elapsedSeconds": 4.31}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:52:53
+   Duration  4.11s (tests 97%, import 2%)
+
+
+{"run": 5, "exitCode": 0, "elapsedSeconds": 5.163}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:52:58
+   Duration  4.97s (tests 98%, import 2%)
+
+
+{"run": 6, "exitCode": 0, "elapsedSeconds": 4.549}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:53:03
+   Duration  4.35s (tests 98%, import 2%)
+
+
+{"run": 7, "exitCode": 0, "elapsedSeconds": 4.082}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:53:08
+   Duration  3.88s (tests 98%, import 2%)
+
+
+{"run": 8, "exitCode": 0, "elapsedSeconds": 4.129}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:53:12
+   Duration  3.95s (tests 97%, import 2%)
+
+
+{"run": 9, "exitCode": 0, "elapsedSeconds": 4.114}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:53:16
+   Duration  3.95s (tests 98%, import 2%)
+
+
+{"run": 10, "exitCode": 0, "elapsedSeconds": 3.967}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:53:20
+   Duration  3.81s (tests 98%, import 2%)
+
+

@@ -1,0 +1,18 @@
+{
+  "scope": "Human inspection of final synthetic browser screenshots",
+  "files": [
+    {
+      "path": "home-ar-final.png",
+      "sha256": "987248fe57ad5d252c952b9cb2ff5cb033b4269adfa70e6142c0f52e86f0a1c7"
+    },
+    {
+      "path": "home-mobile-en-final.png",
+      "sha256": "85e2c8262c2b2be2eb645bd86cabcf7524fadb7cfde7aade0117233d5efde18c"
+    }
+  ],
+  "observations": [
+    "Arabic shortcut hints and model-field labels are translated; original workspace/user/provider names remain unchanged.",
+    "Mobile English composer and primary action fit the viewport; existing style and user-selected light theme are preserved."
+  ],
+  "limit": "Hero text can be captured during its existing transition animation; these stills do not replace the complete keyboard/layout tests or native-language proofreading."
+}

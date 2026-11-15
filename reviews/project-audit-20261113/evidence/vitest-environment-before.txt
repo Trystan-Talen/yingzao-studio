@@ -1,0 +1,104 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ❯ tests/vitest-environment.test.ts (1 test | 1 failed) 480ms
+   × keeps both Vite environment loading and application dotenv imports away from local settings 479ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/vitest-environment.test.ts > keeps both Vite environment loading and application dotenv imports away from local settings
+AssertionError: 
+ RUN  v5.0.4 /var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-vitest-environment-RYtVzN
+
+ ❯ tests/isolated-sentinel.test.ts (1 test | 1 failed) 6ms
+   × does not import either synthetic local setting 6ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  07:59:14
+   Duration  219ms (transform 48%, import 45%, tests 5%, worker 2%)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/isolated-sentinel.test.ts > does not import either synthetic local setting
+AssertionError: expected 'synthetic-dotenv-only' to be undefined
+
+- Expected:
+undefined
+
++ Received:
+"synthetic-dotenv-only"
+
+ ❯ ../../../../../../private/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-vitest-environment-RYtVzN/tests/isolated-sentinel.test.ts:4:46
+      2|      import "/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112…
+      3|      it('does not import either synthetic local setting', () => {
+      4|        expect.soft(process.env.DIFY_API_KEY).toBeUndefined();
+       |                                              ^
+      5|        expect.soft(process.env.VITE_TEST_ISOLATION_SENTINEL).toBeUndef…
+      6|        expect.soft(process.env.DOTENV_CONFIG_PATH).toBe("/dev/null");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/isolated-sentinel.test.ts > does not import either synthetic local setting
+AssertionError: expected 'synthetic-vite-only' to be undefined
+
+- Expected:
+undefined
+
++ Received:
+"synthetic-vite-only"
+
+ ❯ ../../../../../../private/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-vitest-environment-RYtVzN/tests/isolated-sentinel.test.ts:5:62
+      3|      it('does not import either synthetic local setting', () => {
+      4|        expect.soft(process.env.DIFY_API_KEY).toBeUndefined();
+      5|        expect.soft(process.env.VITE_TEST_ISOLATION_SENTINEL).toBeUndef…
+       |                                                              ^
+      6|        expect.soft(process.env.DOTENV_CONFIG_PATH).toBe("/dev/null");
+      7|      });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/isolated-sentinel.test.ts > does not import either synthetic local setting
+AssertionError: expected undefined to be '/dev/null' // Object.is equality
+
+- Expected:
+"/dev/null"
+
++ Received:
+undefined
+
+ ❯ ../../../../../../private/var/folders/lt/701jz3295z19vn2m25937y980000gn/T/yingzao-vitest-environment-RYtVzN/tests/isolated-sentinel.test.ts:6:52
+      4|        expect.soft(process.env.DIFY_API_KEY).toBeUndefined();
+      5|        expect.soft(process.env.VITE_TEST_ISOLATION_SENTINEL).toBeUndef…
+      6|        expect.soft(process.env.DOTENV_CONFIG_PATH).toBe("/dev/null");
+       |                                                    ^
+      7|      });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ tests/vitest-environment.test.ts:54:84
+     52|     { cwd: root, env, encoding: 'utf8', timeout: 20000 },
+     53|   );
+     54|   expect(child.status, child.error?.message || `${child.stdout}\n${chi…
+       |                                                                                    ^
+     55| }, 25000);
+     56|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  07:59:13
+   Duration  593ms (tests 94%, transform 3%, import 2%, worker 1%)
+

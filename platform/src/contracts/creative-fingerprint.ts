@@ -8,6 +8,10 @@ export function creativeInputFingerprint(input: JobInput): string {
   delete value.documentId;
   delete value.baseRevision;
   delete value.capabilityRevision;
+  delete value.nativeRevision;
+  delete value.nativePlan;
+  delete value.imageEdit;
+  delete value.nativeReplica;
   const canonical = (item: unknown): unknown => {
     if (Array.isArray(item)) return item.map(canonical);
     if (item && typeof item === 'object')

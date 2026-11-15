@@ -27,7 +27,9 @@ test('shares one recoverable image and video draft across both entry URLs withou
   const platform = composer.getByRole('combobox', { name: '发布平台', exact: true });
   await platform.selectOption('小红书');
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  await composer.getByRole('combobox', { name: '比例', exact: true }).selectOption('3:4');
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+  await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('3:4');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await page.goto(`${studio.origin}/workbench`);
   await expect(page.locator('.composer')).toHaveCount(1);
   await expect(prompt).toHaveValue(imagePrompt);
@@ -315,9 +317,11 @@ for (const limit of [12000, 2100]) {
     if (limit === 2100) {
       await composer.getByRole('button', { name: '视频创作', exact: true }).click();
       await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-      await composer
+      const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+      await settings
         .getByRole('combobox', { name: '生成模型', exact: true })
         .selectOption('video.generate|fal|kling-o3-4k-reference');
+      await settings.getByRole('button', { name: '完成', exact: true }).click();
     }
     await expect(prompt).toHaveAttribute('maxlength', String(limit));
     await expect(composer.locator('.credit-estimate-value')).toHaveText(/预计 \d+ 积分/);

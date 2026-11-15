@@ -4,7 +4,7 @@ import type { Actor } from '../../contracts/core';
 import { AppError } from '../errors';
 import { createPromotions } from '../billing/promotions';
 import type { BusinessService } from './business';
-import { CoreContext, id, now, str, num, json, type Row } from './shared';
+import { type CoreContext, id, now, str, num, json, type Row } from './shared';
 
 export function teamSlot(c: CoreContext, userId: string) {
   return (

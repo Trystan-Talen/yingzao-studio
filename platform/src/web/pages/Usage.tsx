@@ -2,7 +2,7 @@ import { EntitlementsPanel, entitlementLabels } from '../components/Entitlements
 import { CreditBuckets } from '../components/CreditBuckets';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getLocale, t } from '../lib/i18n';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FileText, Gift, Plus, Receipt, Wallet } from 'lucide-react';
 import type { CreditDto } from '../../contracts/jobs';
 import type { StripeInvoiceDocument } from '../../contracts/billing';
@@ -35,6 +35,7 @@ import {
 } from '../components/ui';
 import { useStudio } from '../context';
 import { UsageStatistics } from '../components/UsageStatistics';
+import { LocalTestCredits } from '../components/LocalTestCredits';
 interface Ledger {
   id: string;
   kind: string;
@@ -226,20 +227,31 @@ export function Usage() {
   const availablePlans = plans.data?.items.filter((plan) => !apiAccount || plan.kind === 'credits');
   const orders = useApi<Page<Order>>(
     `/orders?pageSize=100&page=${page}&billingChannel=${apiAccount ? 'api' : 'web'}`,
-    (tab === 'orders' || tab === 'invoices') && isAdmin,
+    tab === 'orders' && isAdmin,
     fromCheckout === 'success' ? 5000 : undefined,
   );
   const subscriptions = useApi<Page<Subscription>>(
     '/subscriptions',
     !apiAccount && tab === 'plans',
   );
-  const titles = useApi<Page<Title>>('/invoice-titles', tab === 'invoices' && isAdmin);
+  const [titlePage, setTitlePage] = useState(1);
+  const titles = useApi<Page<Title>>(
+    `/invoice-titles?pageSize=100&page=${titlePage}`,
+    tab === 'invoices' && isAdmin,
+  );
+  useEffect(() => {
+    if (!titles.data) return;
+    const last = Math.max(1, Math.ceil(titles.data.total / titles.data.pageSize));
+    if (titlePage > last) setTitlePage(last);
+  }, [titlePage, titles.data]);
   const invoices = useApi<Page<Invoice>>(
     `/invoices?pageSize=100&page=${page}`,
     tab === 'invoices' && isAdmin,
   );
   const [redeem, setRedeem] = useState(false);
   const [code, setCode] = useState('');
+  const redeemSession = useRef(0);
+  const redeemRevision = useRef(0);
   const [purchase, setPurchase] = useState<Plan | null>(null);
   useEffect(() => setPurchase(null), [workspace?.id]);
   const [editingTitle, setEditingTitle] = useState<Title | null>(null);
@@ -248,22 +260,53 @@ export function Usage() {
   const [titleName, setTitleName] = useState('');
   const [taxId, setTaxId] = useState('');
   const [email, setEmail] = useState('');
+  const titleSession = useRef(0);
+  const titleRevision = useRef(0);
+  const [titleSavedWithEdits, setTitleSavedWithEdits] = useState(false);
+  function openTitle(title: Title | null) {
+    titleSession.current++;
+    setEditingTitle(title);
+    setTitleType(title?.type ?? 'company');
+    setTitleName(title?.name ?? '');
+    setTaxId(title?.taxId ?? '');
+    setEmail(title?.email ?? '');
+    setTitleSavedWithEdits(false);
+    setTitleModal(true);
+  }
+  function closeTitle() {
+    titleSession.current++;
+    setTitleModal(false);
+  }
   const [invoiceDetailId, setInvoiceDetailId] = useState<string | null>(null);
   const [billingOrderId, setBillingOrderId] = useState<string | null>(null);
   const billingDocument = useApi<StripeInvoiceDocument>(
     `/orders/${billingOrderId}/billing-document`,
     !!billingOrderId,
   );
-  const [invoiceWithdraw, setInvoiceWithdraw] = useState(false);
+  const [invoiceWithdrawId, setInvoiceWithdrawId] = useState<string | null>(null);
+  const withdrawSession = useRef(0);
+  const [withdrawingSession, setWithdrawingSession] = useState<number | null>(null);
   const [invoiceReason, setInvoiceReason] = useState('');
+  function closeWithdrawal() {
+    withdrawSession.current++;
+    setInvoiceWithdrawId(null);
+    setInvoiceReason('');
+  }
   const invoiceDetail = useApi<
     Invoice & {
       events: { id: string; kind: string; createdAt: string; details: Record<string, unknown> }[];
     }
   >(`/invoices/${invoiceDetailId}`, !!invoiceDetailId);
   const [invoiceModal, setInvoiceModal] = useState(false);
+  const invoiceSession = useRef(0);
+  const invoiceRevision = useRef(0);
+  const [invoiceOrderPage, setInvoiceOrderPage] = useState(1);
+  const invoiceOrders = useApi<Page<Order>>(
+    `/orders?pageSize=100&page=${invoiceOrderPage}&billingChannel=web`,
+    invoiceModal && isAdmin && !apiAccount,
+  );
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
-  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedTitle, setSelectedTitle] = useState<Title | null>(null);
   const [cancelOrder, setCancelOrder] = useState<Order | null>(null);
   const action = useAction();
   const refresh = useRefresh();
@@ -282,10 +325,19 @@ export function Usage() {
         )}
         action={
           !apiAccount && (
-            <Button variant="secondary" onClick={() => setRedeem(true)}>
-              <Gift size={16} />
-              {t('兑换额度')}
-            </Button>
+            <div className="inline-actions">
+              <LocalTestCredits />
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  redeemSession.current++;
+                  setRedeem(true);
+                }}
+              >
+                <Gift size={16} />
+                {t('兑换额度')}
+              </Button>
+            </div>
           )
         }
       />
@@ -673,21 +725,20 @@ export function Usage() {
           <div className="section-heading">
             <h2>{t('发票记录')}</h2>
             <div className="inline-actions">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setEditingTitle(null);
-                  setTitleType('company');
-                  setTitleName('');
-                  setTaxId('');
-                  setEmail('');
-                  setTitleModal(true);
-                }}
-              >
+              <Button variant="secondary" onClick={() => openTitle(null)}>
                 <Plus size={15} />
                 {t('新增抬头')}
               </Button>
-              <Button onClick={() => setInvoiceModal(true)}>
+              <Button
+                onClick={() => {
+                  invoiceSession.current++;
+                  setSelectedOrders([]);
+                  setInvoiceOrderPage(1);
+                  setTitlePage(1);
+                  setInvoiceModal(true);
+                  void refresh();
+                }}
+              >
                 <FileText size={15} />
                 {t('申请发票')}
               </Button>
@@ -746,40 +797,46 @@ export function Usage() {
               )}
             />
           )}
-          <h2 className="section-spaced">{t('已保存抬头')}</h2>
-          <div className="title-grid">
-            {titles.data?.items.map((title) => (
-              <article className="panel title-card" key={title.id}>
-                <Badge>{title.type === 'company' ? t('企业') : t('个人')}</Badge>
-                <h3>{title.name}</h3>
-                <p>{title.taxId ?? t('个人抬头')}</p>
-                <span className="muted">{title.email ?? t('未设置邮箱')}</span>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setEditingTitle(title);
-                    setTitleType(title.type);
-                    setTitleName(title.name);
-                    setTaxId(title.taxId ?? '');
-                    setEmail(title.email ?? '');
-                    setTitleModal(true);
-                  }}
-                >
-                  {t('编辑抬头')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() =>
-                    void action.run(async () => {
-                      await remove(`/invoice-titles/${title.id}`);
-                      await refresh();
-                    }, '抬头已删除')
-                  }
-                >
-                  {t('删除抬头')}
-                </Button>
-              </article>
-            ))}
+          <div role="region" aria-label={t('已保存抬头')}>
+            <h2 className="section-spaced">{t('已保存抬头')}</h2>
+            {titles.isLoading ? (
+              <Loading />
+            ) : titles.error ? (
+              <ErrorState error={titles.error} retry={titles.refetch} />
+            ) : null}
+            <div className="title-grid">
+              {titles.data?.items.map((title) => (
+                <article className="panel title-card" key={title.id}>
+                  <Badge>{title.type === 'company' ? t('企业') : t('个人')}</Badge>
+                  <h3>{title.name}</h3>
+                  <p>{title.taxId ?? t('个人抬头')}</p>
+                  <span className="muted">{title.email ?? t('未设置邮箱')}</span>
+                  <Button variant="ghost" onClick={() => openTitle(title)}>
+                    {t('编辑抬头')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() =>
+                      void action.run(async () => {
+                        await remove(`/invoice-titles/${title.id}`);
+                        setSelectedTitle((current) => (current?.id === title.id ? null : current));
+                        await refresh();
+                      }, '抬头已删除')
+                    }
+                  >
+                    {t('删除抬头')}
+                  </Button>
+                </article>
+              ))}
+            </div>
+            {titles.data && (
+              <Pagination
+                page={titlePage}
+                total={titles.data.total}
+                pageSize={titles.data.pageSize}
+                onPage={setTitlePage}
+              />
+            )}
           </div>
         </section>
       )}
@@ -900,7 +957,14 @@ export function Usage() {
                 </div>
               ))}
               {['draft', 'pending', 'review-required'].includes(invoiceDetail.data.status) && (
-                <Button variant="danger" onClick={() => setInvoiceWithdraw(true)}>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    withdrawSession.current++;
+                    setInvoiceWithdrawId(invoiceDetailId);
+                    setInvoiceReason('');
+                  }}
+                >
                   {t('撤回申请')}
                 </Button>
               )}
@@ -909,8 +973,8 @@ export function Usage() {
         )}
       </Modal>
       <Modal
-        open={invoiceWithdraw}
-        onClose={() => setInvoiceWithdraw(false)}
+        open={!!invoiceWithdrawId}
+        onClose={closeWithdrawal}
         title={t('撤回开票申请')}
         description={t('撤回后释放可申请金额，申请及撤回记录仍然保留。')}
       >
@@ -918,12 +982,13 @@ export function Usage() {
           <textarea
             rows={3}
             value={invoiceReason}
+            disabled={withdrawingSession === withdrawSession.current}
             onChange={(e) => setInvoiceReason(e.target.value)}
             maxLength={500}
           />
         </Field>
         <div className="modal-actions">
-          <Button variant="secondary" onClick={() => setInvoiceWithdraw(false)}>
+          <Button variant="secondary" onClick={closeWithdrawal}>
             {t('取消')}
           </Button>
           <Button
@@ -932,9 +997,15 @@ export function Usage() {
             disabled={!invoiceReason.trim()}
             onClick={() =>
               void action.run(async () => {
-                await post(`/invoices/${invoiceDetailId}/withdraw`, { reason: invoiceReason });
-                setInvoiceWithdraw(false);
-                setInvoiceReason('');
+                if (!invoiceWithdrawId) return;
+                const session = withdrawSession.current;
+                setWithdrawingSession(session);
+                try {
+                  await post(`/invoices/${invoiceWithdrawId}/withdraw`, { reason: invoiceReason });
+                  if (session === withdrawSession.current) closeWithdrawal();
+                } finally {
+                  setWithdrawingSession((current) => (current === session ? null : current));
+                }
                 await refresh();
               }, '申请已撤回')
             }
@@ -945,7 +1016,10 @@ export function Usage() {
       </Modal>
       <Modal
         open={redeem}
-        onClose={() => setRedeem(false)}
+        onClose={() => {
+          redeemSession.current++;
+          setRedeem(false);
+        }}
         title={t('兑换额度')}
         description={t('仅有效且符合当前空间规则的兑换码可以入账。')}
       >
@@ -953,9 +1027,13 @@ export function Usage() {
           onSubmit={(e) => {
             e.preventDefault();
             void action.run(async () => {
+              const session = redeemSession.current;
+              const revision = redeemRevision.current;
               await post('/credits/redeem', { code });
-              setRedeem(false);
-              setCode('');
+              if (session === redeemSession.current && revision === redeemRevision.current) {
+                setRedeem(false);
+                setCode('');
+              }
               await refresh();
             }, '兑换成功，额度已入账');
           }}
@@ -964,7 +1042,10 @@ export function Usage() {
             <input
               required
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => {
+                redeemRevision.current++;
+                setCode(e.target.value);
+              }}
               autoComplete="off"
               maxLength={200}
             />
@@ -1035,27 +1116,38 @@ export function Usage() {
       </Modal>
       <Modal
         open={titleModal}
-        onClose={() => setTitleModal(false)}
+        onClose={closeTitle}
         title={editingTitle ? t('编辑发票抬头') : t('新增发票抬头')}
       >
+        {titleSavedWithEdits && <Notice>{t('提交内容已保存，之后的修改仍未保存。')}</Notice>}
         <form
+          onChange={() => {
+            titleRevision.current++;
+            setTitleSavedWithEdits(false);
+          }}
           onSubmit={(e) => {
             e.preventDefault();
             void action.run(async () => {
-              await (
+              const session = titleSession.current;
+              const revision = titleRevision.current;
+              const saved = await (
                 editingTitle
-                  ? (data: unknown) => patch(`/invoice-titles/${editingTitle.id}`, data)
-                  : (data: unknown) => post('/invoice-titles', data)
+                  ? (data: unknown) => patch<Title>(`/invoice-titles/${editingTitle.id}`, data)
+                  : (data: unknown) => post<Title>('/invoice-titles', data)
               )({
                 type: titleType,
                 name: titleName,
                 taxId: titleType === 'company' ? taxId : null,
                 email: email || null,
               });
-              setTitleModal(false);
-              setTitleName('');
-              setTaxId('');
-              setEmail('');
+              setSelectedTitle((current) => (current?.id === saved.id ? saved : current));
+              if (session === titleSession.current) {
+                // A new title becomes the edit baseline even when typing continues.
+                // This keeps the next save on the same record instead of duplicating it.
+                setEditingTitle(saved);
+                if (revision === titleRevision.current) closeTitle();
+                else setTitleSavedWithEdits(true);
+              }
               await refresh();
             }, '发票抬头已保存');
           }}
@@ -1089,56 +1181,114 @@ export function Usage() {
           </div>
         </form>
       </Modal>
-      <Modal open={invoiceModal} onClose={() => setInvoiceModal(false)} title={t('申请发票')}>
+      <Modal
+        open={invoiceModal}
+        onClose={() => {
+          invoiceSession.current++;
+          setInvoiceModal(false);
+        }}
+        title={t('申请发票')}
+      >
         <Notice>
           {t('当前没有接通正式开票服务。记录仅为本地申请，不代表已发送或已开具发票。')}
         </Notice>
         <form
+          onChange={() => {
+            invoiceRevision.current++;
+          }}
           onSubmit={(e) => {
             e.preventDefault();
             void action.run(async () => {
-              await post('/invoices', { titleId: selectedTitle, orderIds: selectedOrders });
-              setInvoiceModal(false);
-              setSelectedOrders([]);
+              const session = invoiceSession.current;
+              const revision = invoiceRevision.current;
+              const submittedOrders = selectedOrders;
+              await post('/invoices', { titleId: selectedTitle?.id, orderIds: selectedOrders });
+              if (session === invoiceSession.current) {
+                setSelectedOrders((current) =>
+                  current.filter((id) => !submittedOrders.includes(id)),
+                );
+                if (revision === invoiceRevision.current) setInvoiceModal(false);
+              }
               await refresh();
             }, '发票申请已保存');
           }}
         >
-          <Field label={t('发票抬头')}>
-            <select
-              value={selectedTitle}
-              onChange={(e) => setSelectedTitle(e.target.value)}
-              required
-            >
-              <option value="">{t('选择已保存的抬头')}</option>
-              {titles.data?.items.map((title) => (
-                <option key={title.id} value={title.id}>
-                  {title.name}
-                </option>
-              ))}
-            </select>
-          </Field>
+          <div role="region" aria-label={t('已保存抬头')}>
+            <Field label={t('发票抬头')}>
+              <select
+                value={selectedTitle?.id ?? ''}
+                onChange={(e) =>
+                  setSelectedTitle(
+                    titles.data?.items.find((title) => title.id === e.target.value) ?? null,
+                  )
+                }
+                disabled={titles.isLoading || !!titles.error}
+                required
+              >
+                <option value="">{t('选择已保存的抬头')}</option>
+                {selectedTitle &&
+                  !titles.data?.items.some((title) => title.id === selectedTitle.id) && (
+                    <option value={selectedTitle.id}>{selectedTitle.name}</option>
+                  )}
+                {titles.data?.items.map((title) => (
+                  <option key={title.id} value={title.id}>
+                    {title.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            {titles.isLoading ? (
+              <Loading />
+            ) : titles.error ? (
+              <ErrorState error={titles.error} retry={titles.refetch} />
+            ) : null}
+            {titles.data && (
+              <Pagination
+                page={titlePage}
+                total={titles.data.total}
+                pageSize={titles.data.pageSize}
+                onPage={setTitlePage}
+              />
+            )}
+          </div>
           <span className="field-label">{t('选择已支付订单')}</span>
-          {orders.data?.items
-            .filter((order) => order.invoiceableMinor > 0)
-            .map((order) => (
-              <label className="checkbox" key={order.id}>
-                <input
-                  type="checkbox"
-                  checked={selectedOrders.includes(order.id)}
-                  onChange={(e) =>
-                    setSelectedOrders(
-                      e.target.checked
-                        ? [...selectedOrders, order.id]
-                        : selectedOrders.filter((id) => id !== order.id),
-                    )
-                  }
-                />
-                {order.number} · {money(order.invoiceableMinor, order.currency)}
-              </label>
-            ))}
-          {!orders.data?.items.some((order) => order.status === 'paid') && (
-            <Empty title={t('暂无可开票的已支付订单')} />
+          <p className="field-hint">{t('每次最多选择100笔订单')}</p>
+          {invoiceOrders.isLoading ? (
+            <Loading />
+          ) : invoiceOrders.error ? (
+            <ErrorState error={invoiceOrders.error} retry={invoiceOrders.refetch} />
+          ) : (
+            invoiceOrders.data?.items
+              .filter((order) => order.invoiceableMinor > 0)
+              .map((order) => (
+                <label className="checkbox" key={order.id}>
+                  <input
+                    type="checkbox"
+                    checked={selectedOrders.includes(order.id)}
+                    disabled={!selectedOrders.includes(order.id) && selectedOrders.length >= 100}
+                    onChange={(e) =>
+                      setSelectedOrders(
+                        e.target.checked
+                          ? [...selectedOrders, order.id]
+                          : selectedOrders.filter((id) => id !== order.id),
+                      )
+                    }
+                  />
+                  {order.number} · {money(order.invoiceableMinor, order.currency)}
+                </label>
+              ))
+          )}
+          {invoiceOrders.data &&
+            !invoiceOrders.data.items.some((order) => order.invoiceableMinor > 0) && (
+              <Empty title={t('当前页没有可申请金额的已支付订单')} />
+            )}
+          {invoiceOrders.data && (
+            <Pagination
+              page={invoiceOrderPage}
+              total={invoiceOrders.data.total}
+              pageSize={invoiceOrders.data.pageSize}
+              onPage={setInvoiceOrderPage}
+            />
           )}
           <div className="modal-actions">
             <Button

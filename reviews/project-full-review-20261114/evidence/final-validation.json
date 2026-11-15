@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-11-14T18:20:57.439215+00:00",
+  "status": "已复现问题修复完成；冻结源码全部浏览器、全量单元集成、生产构建运行和最终视觉抽查通过。仅声明已列本地实现范围。",
+  "featureCountReviewed": 56,
+  "unitTests": {
+    "files": 156,
+    "passed": 2394,
+    "failed": 0,
+    "skipped": 0,
+    "report": "unit-final.json"
+  },
+  "browserTests": {
+    "files": 72,
+    "passed": 510,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "projects": {
+      "desktop": 252,
+      "mobile": 252,
+      "notebook": 5,
+      "tablet": 1
+    },
+    "fullRepositorySuite": true,
+    "singleFrozenFinalRun": true,
+    "report": "browser-final.json",
+    "privateRun": "platform/var/e2e/run-dI9pvp"
+  },
+  "additionalVisualChecks": {
+    "passed": 2,
+    "failed": 0,
+    "report": "visual-verification.json",
+    "notAddedToFullSuiteCount": true
+  },
+  "qualityGate": {
+    "allEightStagesPassed": true,
+    "report": "quality-release.json",
+    "privateRun": "platform/var/quality/run-Lf0Ylw"
+  },
+  "sourceManifest": {
+    "files": 676,
+    "sha256": "1dc83783c22147f133de5388204f25f94908ed184a76c6a4022bcd8970b9e80e",
+    "unchangedAtDelivery": true,
+    "report": "source-final.json"
+  },
+  "newPaidExternalCalls": 0,
+  "formalDatabaseOrMediaWrites": 0,
+  "newMigrations": [],
+  "newDependencies": [],
+  "deployed": false,
+  "stageRunsNotSummed": true,
+  "report": "reviews/project-full-review-20261114/DELIVERY.md"
+}

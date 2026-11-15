@@ -3,3 +3,5 @@
 // These are bounded waits, not retries or recovery of an unknown upstream run.
 export const CREATIVE_INTENT_SERVER_TIMEOUT_MS = 160_000;
 export const CREATIVE_INTENT_CLIENT_TIMEOUT_MS = CREATIVE_INTENT_SERVER_TIMEOUT_MS + 15_000;
+// Reference preparation additionally permits bounded visual inference and local frame extraction.
+export const CREATIVE_REPLICA_CLIENT_TIMEOUT_MS = CREATIVE_INTENT_CLIENT_TIMEOUT_MS + 360_000;

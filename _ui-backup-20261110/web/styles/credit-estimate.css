@@ -1,0 +1,78 @@
+.credit-estimate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  margin-left: auto;
+  min-width: 0;
+}
+.credit-estimate-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text, #24342d);
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.credit-estimate-note {
+  color: var(--muted, #65716b);
+  font-size: 11px;
+}
+.credit-estimate-warning {
+  color: #9c4b0a;
+  font-size: 12px;
+}
+.media-quote-summary {
+  display: grid;
+  gap: 14px;
+  padding: 4px 0 14px;
+}
+.media-quote-summary > p {
+  margin: 0;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.media-quote-price {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+.media-quote-price strong {
+  font-size: 36px;
+  font-weight: 650;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.media-quote-price span {
+  font-size: 14px;
+}
+.media-quote-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.media-quote-specs span {
+  padding: 5px 8px;
+  border: 1px solid var(--border, #dce3dc);
+  border-radius: 7px;
+  font-size: 12px;
+}
+.media-quote-details > summary {
+  cursor: pointer;
+  color: var(--muted, #65716b);
+  font-size: 13px;
+  padding: 10px 0;
+}
+.media-quote-note {
+  margin: 10px 0 0;
+  color: var(--muted, #65716b);
+  font-size: 12px;
+  line-height: 1.5;
+}
+@media (max-width: 540px) {
+  .credit-estimate {
+    align-items: flex-start;
+    margin-left: 0;
+  }
+}

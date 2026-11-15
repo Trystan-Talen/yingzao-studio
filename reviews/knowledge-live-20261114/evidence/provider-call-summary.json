@@ -1,0 +1,131 @@
+{
+  "requests": [
+    {
+      "id": "9abb68ac-8daa-41db-a22d-8c1044e6d049",
+      "at": "2026-11-14T15:28:45.870Z",
+      "method": "GET",
+      "endpoint": "/v1/models",
+      "model": null,
+      "status": 200,
+      "providerRequestId": null,
+      "usage": null
+    },
+    {
+      "id": "72d22098-d6e8-42e1-8431-689f2a4b8a56",
+      "at": "2026-11-14T15:28:47.612Z",
+      "method": "GET",
+      "endpoint": "/v1/models",
+      "model": null,
+      "status": 200,
+      "providerRequestId": null,
+      "usage": null
+    },
+    {
+      "id": "867e33ad-6f50-4fb9-a0a6-8c7fa35f53bd",
+      "at": "2026-11-14T15:34:43.631Z",
+      "method": "POST",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731",
+      "status": 200,
+      "providerRequestId": "186236b9-c6ad-458c-888e-debfbaf7ca53",
+      "usage": {
+        "prompt_tokens": 5133,
+        "completion_tokens": 8518,
+        "total_tokens": 13651,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7173
+        }
+      }
+    },
+    {
+      "id": "5f357922-3aa5-4eed-a38c-0a65b2d78e48",
+      "at": "2026-11-14T15:41:39.027Z",
+      "method": "POST",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731",
+      "status": 200,
+      "providerRequestId": "5866ed66-bb34-42e7-b8ec-d85980d40e5a",
+      "usage": {
+        "prompt_tokens": 5142,
+        "completion_tokens": 7270,
+        "total_tokens": 12412,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 5880
+        }
+      }
+    },
+    {
+      "id": "3d4a6082-7135-47f4-b186-4f6c6c1db3a7",
+      "at": "2026-11-14T15:48:38.396Z",
+      "method": "POST",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731",
+      "status": 200,
+      "providerRequestId": "482e189f-2cce-4e61-b39e-c894f33bacd6",
+      "usage": {
+        "prompt_tokens": 5144,
+        "completion_tokens": 5080,
+        "total_tokens": 10224,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3631
+        }
+      }
+    },
+    {
+      "id": "a6391732-1a97-443d-a274-1cb087373e5c",
+      "at": "2026-11-14T15:51:40.458Z",
+      "method": "POST",
+      "endpoint": "/v1/images/generations",
+      "model": "doubao-seedream-5.0-lite",
+      "status": 200,
+      "providerRequestId": null,
+      "usage": null
+    },
+    {
+      "id": "a88156cb-4f01-400e-9b5c-1b6262195c4b",
+      "at": "2026-11-14T15:52:40.166Z",
+      "method": "POST",
+      "endpoint": "/v1/chat/completions",
+      "model": "deepseek-v4-flash-0731",
+      "status": 200,
+      "providerRequestId": "fc590d3a-cb82-46cc-9179-fd2bdaaa35a9",
+      "usage": {
+        "prompt_tokens": 4922,
+        "completion_tokens": 4540,
+        "total_tokens": 9462,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3073
+        }
+      }
+    },
+    {
+      "id": "577ba3b1-908a-4c12-b1b7-ae4483635b42",
+      "at": "2026-11-14T15:54:03.092Z",
+      "method": "POST",
+      "endpoint": "/v1/images/generations",
+      "model": "doubao-seedream-5.0-lite",
+      "status": 200,
+      "providerRequestId": null,
+      "usage": null
+    }
+  ],
+  "textCalls": 4,
+  "imageCalls": 2,
+  "videoCalls": 0,
+  "catalogReads": 2,
+  "platformCredits": 16,
+  "providerInvoiceReconciled": false,
+  "rawResponsesAndMedia": "private local var directory only"
+}

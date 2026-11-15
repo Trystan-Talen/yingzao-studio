@@ -1,0 +1,25 @@
+Running 16 tests using 1 worker
+
+(node:10042) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/management-lifecycle.spec.ts:42:1 › creates a real read-only API key through the UI, isolates its workspace and immediately revokes it (4.4s)
+  ✓   2 [desktop] › tests/e2e/management-lifecycle.spec.ts:101:1 › saves, supplements, reloads and withdraws a support record through actual controls (6.4s)
+  ✓   3 [desktop] › tests/e2e/management-lifecycle.spec.ts:158:1 › keeps each unsaved support reply attached to its own ticket when changing records (3.0s)
+  ✓   4 [desktop] › tests/e2e/management-lifecycle.spec.ts:199:1 › a delayed support save does not clear newer drafts in either the original or another ticket (3.1s)
+  ✓   5 [desktop] › tests/e2e/management-lifecycle.spec.ts:281:3 › a delayed ticket creation preserves later edits in the same creation dialog (3.5s)
+  ✓   6 [desktop] › tests/e2e/management-lifecycle.spec.ts:281:3 › a delayed ticket creation preserves later edits in the reopened creation dialog (2.9s)
+  ✓   7 [desktop] › tests/e2e/management-lifecycle.spec.ts:362:1 › a delayed withdrawal closes only its submitted ticket and preserves another open record (2.7s)
+  ✓   8 [desktop] › tests/e2e/management-lifecycle.spec.ts:435:1 › invites a viewer, changes the actual member role and revokes team access while preserving team work (8.7s)
+(node:10267) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 [mobile] › tests/e2e/management-lifecycle.spec.ts:42:1 › creates a real read-only API key through the UI, isolates its workspace and immediately revokes it (4.4s)
+  ✓  10 [mobile] › tests/e2e/management-lifecycle.spec.ts:101:1 › saves, supplements, reloads and withdraws a support record through actual controls (6.4s)
+  ✓  11 [mobile] › tests/e2e/management-lifecycle.spec.ts:158:1 › keeps each unsaved support reply attached to its own ticket when changing records (3.0s)
+  ✓  12 [mobile] › tests/e2e/management-lifecycle.spec.ts:199:1 › a delayed support save does not clear newer drafts in either the original or another ticket (3.1s)
+  ✓  13 [mobile] › tests/e2e/management-lifecycle.spec.ts:281:3 › a delayed ticket creation preserves later edits in the same creation dialog (2.5s)
+  ✓  14 [mobile] › tests/e2e/management-lifecycle.spec.ts:281:3 › a delayed ticket creation preserves later edits in the reopened creation dialog (3.0s)
+  ✓  15 [mobile] › tests/e2e/management-lifecycle.spec.ts:362:1 › a delayed withdrawal closes only its submitted ticket and preserves another open record (2.7s)
+  ✓  16 [mobile] › tests/e2e/management-lifecycle.spec.ts:435:1 › invites a viewer, changes the actual member role and revokes team access while preserving team work (9.9s)
+
+  16 passed (1.2m)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-VkKLHX

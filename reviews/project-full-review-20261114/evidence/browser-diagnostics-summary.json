@@ -1,0 +1,136 @@
+{
+  "baseline": {
+    "cases": 460,
+    "uncaughtExceptions": 0,
+    "responses5xx": [
+      {
+        "path": "/api/v1/assets/:id",
+        "status": 500,
+        "count": 6
+      },
+      {
+        "path": "/api/v1/assets/:id",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/capabilities/model",
+        "status": 503,
+        "count": 4
+      },
+      {
+        "path": "/api/v1/collections",
+        "status": 503,
+        "count": 4
+      },
+      {
+        "path": "/api/v1/creative-briefs/:id",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/creative-briefs/prepare",
+        "status": 503,
+        "count": 8
+      },
+      {
+        "path": "/api/v1/credits/local-test-grant",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/detail-pages/plan-quote",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/model-connections",
+        "status": 503,
+        "count": 4
+      },
+      {
+        "path": "/api/v1/notifications",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/projects",
+        "status": 503,
+        "count": 8
+      }
+    ]
+  },
+  "final": {
+    "cases": 510,
+    "uncaughtExceptions": 0,
+    "responses5xx": [
+      {
+        "path": "/api/v1/assets/:id",
+        "status": 500,
+        "count": 6
+      },
+      {
+        "path": "/api/v1/assets/:id",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/auth/me",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/capabilities/model",
+        "status": 503,
+        "count": 4
+      },
+      {
+        "path": "/api/v1/collections",
+        "status": 503,
+        "count": 4
+      },
+      {
+        "path": "/api/v1/creative-briefs/:id",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/creative-briefs/prepare",
+        "status": 503,
+        "count": 8
+      },
+      {
+        "path": "/api/v1/credits/local-test-grant",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/detail-pages/plan-quote",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/model-connections",
+        "status": 503,
+        "count": 4
+      },
+      {
+        "path": "/api/v1/notifications",
+        "status": 503,
+        "count": 2
+      },
+      {
+        "path": "/api/v1/projects",
+        "status": 503,
+        "count": 8
+      }
+    ]
+  },
+  "same5xxAsBaseline": true,
+  "note": "500/503为既有错误恢复用例主动注入；不以所有HTTP均200作为通过标准。浏览器外连与未捕获异常由自动夹具断言拒绝。"
+}

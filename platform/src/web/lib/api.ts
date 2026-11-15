@@ -12,10 +12,23 @@ export class ApiError extends Error {
   }
 }
 let activeWorkspace: string | null = null;
+let activeUser: string | null = null;
 export const CONFIRMATION_TIMEOUT_MS = 15_000;
 export type ApiRequestInit = RequestInit & { timeoutMs?: number };
 export function setApiWorkspace(id: string | null) {
   activeWorkspace = id;
+}
+export function setApiIdentity(userId: string | null, workspaceId: string | null) {
+  activeUser = userId;
+  activeWorkspace = workspaceId;
+}
+/** Keep the workspace/path prefix compatible with targeted job-event invalidation. */
+export function apiQueryKey(
+  path: string,
+  workspaceId: string | null = activeWorkspace,
+  userId: string | null = activeUser,
+) {
+  return ['api', workspaceId, path, userId] as const;
 }
 export async function api<T>(
   path: string,
@@ -118,7 +131,7 @@ export function qs(values: Record<string, string | number | boolean | null | und
 export function useApi<T>(path: string, enabled = true, interval?: number) {
   const workspaceId = activeWorkspace;
   return useQuery({
-    queryKey: ['api', workspaceId, path],
+    queryKey: apiQueryKey(path, workspaceId),
     queryFn: ({ signal }) => api<T>(path, { signal }, workspaceId),
     enabled,
     retry: 1,
@@ -132,6 +145,14 @@ export function useRefresh() {
 const brandErrorCopy: Readonly<Record<string, string>> = {
   ENTITLEMENT_LIMIT: '已达到对应合同的品牌数量上限',
   BRAND_QUOTA_INVALID: '品牌配额合同无效，请核对套餐配置',
+  MEMORY_EXPIRY_REQUIRED: '临时记忆必须设置未来的到期时间',
+  MEMORY_TOPIC_EXISTS: '此用途下已有同主题记忆，请编辑已有记录',
+  MEMORY_LIMIT: '最多保存100条个人创作记忆，请先整理已有记录',
+  KNOWLEDGE_VERSION_CONFLICT: '记录已被修改，请刷新后再保存',
+  BRAND_VERSION_CONFLICT: '记录已被修改，请刷新后再保存',
+  PRODUCT_BRAND_PRIVATE: '关联私有品牌的产品也必须设为私有',
+  PRODUCT_VISIBILITY_FORBIDDEN: '只有产品创建者可以将共享产品设为私有',
+  KNOWLEDGE_GROUP_UNSUPPORTED: '分组物料暂不支持关联产品与个人记忆，请切换单张创作或取消关联',
 };
 export const errorMessage = (error: unknown) => {
   if (!(error instanceof Error)) return '操作未完成，请重试。';

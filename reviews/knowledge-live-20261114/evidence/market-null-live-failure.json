@@ -1,0 +1,22 @@
+{
+  "source": "platform/var/knowledge-live-20261114/provider-response-5f357922-3aa5-4eed-a38c-0a65b2d78e48.json",
+  "sourceSha256": "b27aeaa9d11f60613f86b59d7fd8e1a0a194f6e973fe07d064a278551c00149d",
+  "finishReason": "stop",
+  "status": "ready",
+  "requestedMarket": "absent, confirmed by live coordinator",
+  "returnedMarket": null,
+  "before": {
+    "success": false,
+    "diagnostics": [
+      {
+        "path": "brief.market",
+        "code": "invalid_type"
+      }
+    ]
+  },
+  "offlineSchemaReplay": {
+    "onlyChange": "omit brief.market:null",
+    "success": true
+  },
+  "scope": "Only the explicitly provided response file was read. No credentials, database, external service, or saved plan was changed."
+}

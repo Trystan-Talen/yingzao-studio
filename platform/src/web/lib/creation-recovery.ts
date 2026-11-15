@@ -1,5 +1,23 @@
 import { z } from 'zod';
 import { jobInputSchema, type JobInput } from '../../contracts/jobs';
+import { replicaAspectSchema } from '../../contracts/native-replica';
+
+export const creationModeSchema = z.enum(['original', 'replica']);
+export type CreationMode = z.infer<typeof creationModeSchema>;
+export type ReplicaAspect = z.infer<typeof replicaAspectSchema>;
+const modeDraftSchema = z.object({
+  input: jobInputSchema,
+  aspects: z.array(replicaAspectSchema),
+  trimStart: z.number().min(0),
+  trimDuration: z.number().optional(),
+  defaultsPending: z.boolean(),
+});
+export type ComposerModeDraft = z.infer<typeof modeDraftSchema>;
+export type ComposerModeKey = `${'image' | 'video'}:${CreationMode}`;
+export const composerModeKey = (kind: 'image' | 'video', mode: CreationMode): ComposerModeKey =>
+  `${kind}:${mode}`;
+export const defaultReplicaAspects = (kind: 'image' | 'video'): ReplicaAspect[] =>
+  kind === 'image' ? ['composition', 'lighting', 'palette'] : ['camera', 'pacing', 'palette'];
 
 export type RecoveryStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 const draftSchema = z.object({
@@ -7,6 +25,17 @@ const draftSchema = z.object({
   updatedAt: z.string(),
   input: jobInputSchema,
   drafts: z.object({ image: jobInputSchema.optional(), video: jobInputSchema.optional() }),
+  modeDrafts: z
+    .object({
+      'image:original': modeDraftSchema.optional(),
+      'image:replica': modeDraftSchema.optional(),
+      'video:original': modeDraftSchema.optional(),
+      'video:replica': modeDraftSchema.optional(),
+    })
+    .optional(),
+  activeModes: z
+    .object({ image: creationModeSchema.optional(), video: creationModeSchema.optional() })
+    .optional(),
   modelDefaultsPending: z
     .object({ image: z.boolean().optional(), video: z.boolean().optional() })
     .optional(),
@@ -32,7 +61,10 @@ export function readDraft(storage: RecoveryStorage, key: string) {
 export function writeDraft(
   storage: RecoveryStorage,
   key: string,
-  draft: Pick<CreationDraft, 'input' | 'drafts' | 'warnings' | 'modelDefaultsPending'>,
+  draft: Pick<
+    CreationDraft,
+    'input' | 'drafts' | 'warnings' | 'modelDefaultsPending' | 'modeDrafts' | 'activeModes'
+  >,
 ) {
   const record = draftSchema.parse({ ...draft, version: 1, updatedAt: new Date().toISOString() });
   storage.setItem(key, JSON.stringify(record));

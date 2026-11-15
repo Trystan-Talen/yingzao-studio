@@ -8,6 +8,7 @@ import { readSupportConfig } from './support-config';
 import type { SupportChannelsDto } from '../contracts/support';
 import type { SmsConfig, WechatConfig } from './auth/identity/types';
 import type { OpenAiImageGatewayConfig } from './providers/openai';
+import type { LocalMattingConfig } from './providers/local-matting-installation';
 import {
   ExportWatermarkConfigSchema,
   type ExportWatermarkConfig,
@@ -22,6 +23,9 @@ const schema = z.object({
   MEDIA_DOWNLOAD_TIMEOUT_MS: z.coerce.number().int().min(1000).max(600000).default(120000),
   DEMO_MODE: z.enum(['true', 'false']).default('false'),
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  LOCAL_MATTING_INSTALLATION_DIR: z.string().trim().min(1).optional(),
+  LOCAL_MATTING_WORK_DIR: z.string().trim().min(1).optional(),
+  LOCAL_MATTING_HELPER_DIR: z.string().trim().min(1).optional(),
   SESSION_SECRET: z.string().optional(),
   ENCRYPTION_KEY: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
@@ -73,6 +77,7 @@ export interface AppConfig {
   encryptionKey: string;
   isProduction: boolean;
   demoMode: boolean;
+  localMatting?: LocalMattingConfig;
   environmentSecrets: Partial<
     Record<'openai' | 'fal' | 'flyelep' | 'tikhub' | 'dify' | 'seedance', string>
   >;
@@ -162,6 +167,17 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     encryptionKey: c.ENCRYPTION_KEY || fallback,
     isProduction: production,
     demoMode: demo,
+    ...(c.LOCAL_MATTING_INSTALLATION_DIR
+      ? {
+          localMatting: {
+            installationDir: resolve(c.LOCAL_MATTING_INSTALLATION_DIR),
+            workDir: resolve(c.LOCAL_MATTING_WORK_DIR || 'var/local-matting-work'),
+            ...(c.LOCAL_MATTING_HELPER_DIR
+              ? { helperDir: resolve(c.LOCAL_MATTING_HELPER_DIR) }
+              : {}),
+          },
+        }
+      : {}),
     environmentSecrets: {
       openai: c.OPENAI_API_KEY,
       dify: c.DIFY_API_KEY,

@@ -1,0 +1,121 @@
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2299 modules transformed.
+rendering chunks...
+computing gzip size...
+var/e2e/run-HIwjqM/web/index.html                                  0.61 kB │ gzip:   0.44 kB
+var/e2e/run-HIwjqM/web/assets/knowledge-C1GF6EJk.css               1.12 kB │ gzip:   0.49 kB
+var/e2e/run-HIwjqM/web/assets/Login-DikSd-tK.css                   3.38 kB │ gzip:   1.22 kB
+var/e2e/run-HIwjqM/web/assets/Settings-Bxgqvs-8.css                4.04 kB │ gzip:   1.13 kB
+var/e2e/run-HIwjqM/web/assets/Workbench-CTY2Adub.css               5.06 kB │ gzip:   1.28 kB
+var/e2e/run-HIwjqM/web/assets/Inspiration-C0f5FocC.css            10.39 kB │ gzip:   2.16 kB
+var/e2e/run-HIwjqM/web/assets/CanvasEditor-BcQQlAIU.css           12.37 kB │ gzip:   3.11 kB
+var/e2e/run-HIwjqM/web/assets/CreationLanding-CSl8TV0k.css        42.56 kB │ gzip:   7.88 kB
+var/e2e/run-HIwjqM/web/assets/index-DKXG2uJQ.css                 271.74 kB │ gzip:  47.41 kB
+var/e2e/run-HIwjqM/web/assets/chevron-down-XG5oaZhb.js             0.21 kB │ gzip:   0.20 kB │ map:     0.99 kB
+var/e2e/run-HIwjqM/web/assets/job-snapshot-0LKF8d_t.js             0.28 kB │ gzip:   0.22 kB │ map:     1.35 kB
+var/e2e/run-HIwjqM/web/assets/lock-keyhole-BPCNIBbc.js             0.34 kB │ gzip:   0.28 kB │ map:     1.34 kB
+var/e2e/run-HIwjqM/web/assets/mentions-DOj5GYvu.js                 0.38 kB │ gzip:   0.31 kB │ map:     1.08 kB
+var/e2e/run-HIwjqM/web/assets/arrow-up-CsWOkyiw.js                 0.39 kB │ gzip:   0.28 kB │ map:     2.03 kB
+var/e2e/run-HIwjqM/web/assets/shield-check-Dmv4g39u.js             0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+var/e2e/run-HIwjqM/web/assets/trash-DvpT4d1i.js                    0.42 kB │ gzip:   0.28 kB │ map:     1.48 kB
+var/e2e/run-HIwjqM/web/assets/key-round-DsEF_ruX.js                0.44 kB │ gzip:   0.32 kB │ map:     1.37 kB
+var/e2e/run-HIwjqM/web/assets/expand-sEho67Vw.js                   0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+var/e2e/run-HIwjqM/web/assets/CreateHome-CGSFcaci.js               0.66 kB │ gzip:   0.41 kB │ map:     0.45 kB
+var/e2e/run-HIwjqM/web/assets/undo-2-BSJ2EMwn.js                   0.70 kB │ gzip:   0.37 kB │ map:     2.81 kB
+var/e2e/run-HIwjqM/web/assets/text-align-start-CI1Toh2B.js         0.98 kB │ gzip:   0.50 kB │ map:     3.79 kB
+var/e2e/run-HIwjqM/web/assets/export-policy-BbyT54F4.js            1.15 kB │ gzip:   0.62 kB │ map:     4.75 kB
+var/e2e/run-HIwjqM/web/assets/Tasks-CnYx82lh.js                    1.73 kB │ gzip:   1.04 kB │ map:     4.84 kB
+var/e2e/run-HIwjqM/web/assets/IdentityRegistration-zXkAOwj6.js     2.50 kB │ gzip:   1.38 kB │ map:     7.47 kB
+var/e2e/run-HIwjqM/web/assets/Entitlements-D6kgfDa6.js             2.65 kB │ gzip:   1.37 kB │ map:     6.22 kB
+var/e2e/run-HIwjqM/web/assets/product-messages-Dhmzyyzd.js         2.85 kB │ gzip:   1.05 kB │ map:     5.21 kB
+var/e2e/run-HIwjqM/web/assets/PasswordRecovery-CqwTURPa.js         3.08 kB │ gzip:   1.63 kB │ map:     9.40 kB
+var/e2e/run-HIwjqM/web/assets/scene-DIjM-sZ1.js                    3.09 kB │ gzip:   1.43 kB │ map:    12.45 kB
+var/e2e/run-HIwjqM/web/assets/inspirations-CxNKSZr8.js             3.70 kB │ gzip:   2.21 kB │ map:     7.41 kB
+var/e2e/run-HIwjqM/web/assets/UsageStatistics-D2nBWKkM.js          4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+var/e2e/run-HIwjqM/web/assets/Public-BhKP-FMu.js                   4.06 kB │ gzip:   2.13 kB │ map:    11.66 kB
+var/e2e/run-HIwjqM/web/assets/Login-CVKZdGxB.js                    4.40 kB │ gzip:   2.27 kB │ map:    12.17 kB
+var/e2e/run-HIwjqM/web/assets/GoogleAccount-BSStb0i-.js            5.02 kB │ gzip:   2.32 kB │ map:    14.66 kB
+var/e2e/run-HIwjqM/web/assets/ModelCapabilityStatus-BcZSA9ga.js    6.16 kB │ gzip:   3.03 kB │ map:    19.24 kB
+var/e2e/run-HIwjqM/web/assets/knowledge-4kc3NZEn.js                6.84 kB │ gzip:   3.01 kB │ map:    20.38 kB
+var/e2e/run-HIwjqM/web/assets/MemorySettings-DKKmKAVB.js           7.31 kB │ gzip:   3.21 kB │ map:    23.01 kB
+var/e2e/run-HIwjqM/web/assets/Developer-cODbl5IO.js                7.64 kB │ gzip:   3.20 kB │ map:    20.40 kB
+var/e2e/run-HIwjqM/web/assets/IdentityAccounts-Dd09K82t.js         7.72 kB │ gzip:   3.06 kB │ map:    23.36 kB
+var/e2e/run-HIwjqM/web/assets/Products-BTG2u5DK.js                 8.45 kB │ gzip:   3.62 kB │ map:    28.59 kB
+var/e2e/run-HIwjqM/web/assets/core-qyM9dGht.js                     8.54 kB │ gzip:   2.52 kB │ map:    28.66 kB
+var/e2e/run-HIwjqM/web/assets/Inspiration-XfXfjC4Q.js             13.88 kB │ gzip:   5.44 kB │ map:    44.74 kB
+var/e2e/run-HIwjqM/web/assets/Team-D5Tmg7S3.js                    15.76 kB │ gzip:   5.36 kB │ map:    51.84 kB
+var/e2e/run-HIwjqM/web/assets/Identities-Dh4M76wX.js              17.51 kB │ gzip:   6.32 kB │ map:    57.40 kB
+var/e2e/run-HIwjqM/web/assets/Support-DgIvJNrD.js                 18.04 kB │ gzip:   6.95 kB │ map:    54.35 kB
+var/e2e/run-HIwjqM/web/assets/AdvancedTools-C8mTNURM.js           21.21 kB │ gzip:   8.28 kB │ map:    73.19 kB
+var/e2e/run-HIwjqM/web/assets/Workbench-ClgHDuO0.js               22.57 kB │ gzip:   8.36 kB │ map:    76.65 kB
+var/e2e/run-HIwjqM/web/assets/Library-KqkTL4_E.js                 25.73 kB │ gzip:   8.69 kB │ map:    80.72 kB
+var/e2e/run-HIwjqM/web/assets/Settings-1PVLLqL_.js                25.88 kB │ gzip:   9.22 kB │ map:    75.89 kB
+var/e2e/run-HIwjqM/web/assets/Tools-Kofmmj8s.js                   27.34 kB │ gzip:  10.24 kB │ map:    88.69 kB
+var/e2e/run-HIwjqM/web/assets/Usage-moxz3DbE.js                   30.86 kB │ gzip:  10.42 kB │ map:    95.29 kB
+var/e2e/run-HIwjqM/web/assets/DetailPageStudio-BkSOJQmV.js        43.50 kB │ gzip:  14.12 kB │ map:   148.20 kB
+var/e2e/run-HIwjqM/web/assets/CreationLanding-Cpzx6ub3.js         72.19 kB │ gzip:  25.54 kB │ map:   243.15 kB
+var/e2e/run-HIwjqM/web/assets/react-Iff1aU_1.js                  106.13 kB │ gzip:  35.89 kB │ map:   615.23 kB
+var/e2e/run-HIwjqM/web/assets/CanvasEditor-CAhgjcKW.js           149.88 kB │ gzip:  48.87 kB │ map:   409.91 kB
+var/e2e/run-HIwjqM/web/assets/editor-DERvKPwF.js                 282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+var/e2e/run-HIwjqM/web/assets/index-DFIA8tJD.js                  960.02 kB │ gzip: 309.07 kB │ map: 3,013.93 kB
+
+(!) Some chunks are larger than 750 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.18s
+
+Running 26 tests using 2 workers
+
+(node:21432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21434) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/home-design.spec.ts:63:1 › offers one immediately usable creation composer, real idea previews and accessible directions (3.5s)
+  ✓   2 [desktop] › tests/e2e/home-appearance.spec.ts:122:3 › renders zh-CN home in dark mode with usable keyboard controls and video materials (6.8s)
+  ✓   3 [desktop] › tests/e2e/home-design.spec.ts:111:1 › keeps the brief and generation in the first screen with keyboard-accessible toolbar settings (4.1s)
+  ✓   5 [desktop] › tests/e2e/home-design.spec.ts:200:1 › uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save (5.2s)
+  ✓   4 [desktop] › tests/e2e/home-appearance.spec.ts:122:3 › renders en home in light mode with usable keyboard controls and video materials (6.4s)
+  ✓   6 [desktop] › tests/e2e/home-design.spec.ts:290:1 › opens a redesigned inspiration card and reuses the original media in an editable persisted project (4.3s)
+  ✓   7 [desktop] › tests/e2e/home-appearance.spec.ts:122:3 › renders ar home in light mode with usable keyboard controls and video materials (5.3s)
+(node:21731) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 [desktop] › tests/e2e/theme-preference-review.spec.ts:24:1 › new accounts explicitly default to dark while the operating system uses light (2.6s)
+  ✓  10 [desktop] › tests/e2e/theme-preference-review.spec.ts:39:1 › legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage (3.8s)
+  ✓   9 [mobile] › tests/e2e/home-appearance.spec.ts:122:3 › renders zh-CN home in dark mode with usable keyboard controls and video materials (7.2s)
+  ✓  11 [desktop] › tests/e2e/theme-preference-review.spec.ts:88:1 › explicit light and dark choices are not overridden by operating-system changes (4.1s)
+  ✓  13 [desktop] › tests/e2e/theme-preference-review.spec.ts:109:1 › a legacy account without a theme keeps dark appearance without rewriting stored preferences (1.6s)
+(node:21878) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  14 [mobile] › tests/e2e/home-design.spec.ts:63:1 › offers one immediately usable creation composer, real idea previews and accessible directions (4.0s)
+  ✓  12 [mobile] › tests/e2e/home-appearance.spec.ts:122:3 › renders en home in light mode with usable keyboard controls and video materials (8.4s)
+  ✓  15 [mobile] › tests/e2e/home-design.spec.ts:111:1 › keeps the brief and generation in the first screen with keyboard-accessible toolbar settings (4.6s)
+  ✓  16 [mobile] › tests/e2e/home-appearance.spec.ts:122:3 › renders ar home in light mode with usable keyboard controls and video materials (7.0s)
+  ✓  17 [mobile] › tests/e2e/home-design.spec.ts:200:1 › uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save (5.7s)
+  ✓  18 [mobile] › tests/e2e/theme-preference-review.spec.ts:24:1 › new accounts explicitly default to dark while the operating system uses light (2.6s)
+  ✓  19 [mobile] › tests/e2e/home-design.spec.ts:290:1 › opens a redesigned inspiration card and reuses the original media in an editable persisted project (3.2s)
+(node:22244) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  20 [mobile] › tests/e2e/theme-preference-review.spec.ts:39:1 › legacy system preference keeps the brand dark theme across operating-system changes without rewriting storage (3.1s)
+  ✓  22 [notebook] › tests/e2e/home-design.spec.ts:63:1 › offers one immediately usable creation composer, real idea previews and accessible directions (2.3s)
+  ✓  21 [mobile] › tests/e2e/theme-preference-review.spec.ts:88:1 › explicit light and dark choices are not overridden by operating-system changes (4.1s)
+  ✓  24 [mobile] › tests/e2e/theme-preference-review.spec.ts:109:1 › a legacy account without a theme keeps dark appearance without rewriting stored preferences (2.6s)
+  ✓  23 [notebook] › tests/e2e/home-design.spec.ts:111:1 › keeps the brief and generation in the first screen with keyboard-accessible toolbar settings (4.0s)
+  ✓  25 [notebook] › tests/e2e/home-design.spec.ts:200:1 › uploads a real reference from the creation workspace and preserves separate image/video drafts through refresh and project save (4.5s)
+  ✓  26 [notebook] › tests/e2e/home-design.spec.ts:290:1 › opens a redesigned inspiration card and reuses the original media in an editable persisted project (3.1s)
+
+  26 passed (1.1m)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-HIwjqM

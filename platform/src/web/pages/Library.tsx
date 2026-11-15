@@ -70,6 +70,9 @@ export function Projects() {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState('');
   const [projectKind, setProjectKind] = useState('image');
+  const editorEpoch = useRef(0);
+  const draftRevision = useRef(0);
+  const [savedWithDraft, setSavedWithDraft] = useState(false);
   const [deleting, setDeleting] = useState<ProjectDto | null>(null);
   const query = useApi<Page<ProjectDto>>(
     `/projects${qs({ q, kind, favorite: favorite || undefined, deleted: deleted || undefined, page })}`,
@@ -88,7 +91,24 @@ export function Projects() {
   useEffect(() => {
     setSelectedProjects([]);
   }, [q, kind, favorite, deleted, page]);
+  useEffect(
+    () => () => {
+      editorEpoch.current++;
+    },
+    [],
+  );
+  function closeEditor() {
+    editorEpoch.current++;
+    setEdit(null);
+    setSavedWithDraft(false);
+  }
+  function change<T>(set: (value: T) => void, value: T) {
+    draftRevision.current++;
+    set(value);
+  }
   function open(project: ProjectDto | 'new') {
+    editorEpoch.current++;
+    setSavedWithDraft(false);
     setEdit(project);
     setName(project === 'new' ? '' : project.name);
     setDescription(project === 'new' ? '' : project.description);
@@ -97,28 +117,38 @@ export function Projects() {
   }
   async function save(e: React.FormEvent) {
     e.preventDefault();
+    if (!edit || !canEdit) return;
+    const submittedEpoch = editorEpoch.current;
+    const submittedRevision = draftRevision.current;
     await action.run(async () => {
-      if (edit === 'new') {
-        const project = await post<ProjectDto>('/projects', {
-          name,
-          description,
-          kind: projectKind,
-        });
-        setEdit(null);
-        await refresh();
-        navigate(projectDestination(project));
-      } else if (edit) {
-        await patch(`/projects/${edit.id}`, {
-          name,
-          description,
-          tags: tags
-            .split(/[,，]/)
-            .map((t) => t.trim())
-            .filter(Boolean),
-        });
-        setEdit(null);
-        await refresh();
+      const project =
+        edit === 'new'
+          ? await post<ProjectDto>('/projects', {
+              name,
+              description,
+              kind: projectKind,
+            })
+          : await patch<ProjectDto>(`/projects/${edit.id}`, {
+              name,
+              description,
+              tags: tags
+                .split(/[,，]/)
+                .map((t) => t.trim())
+                .filter(Boolean),
+            });
+      let navigationEpoch: number | undefined;
+      if (editorEpoch.current === submittedEpoch) {
+        if (draftRevision.current === submittedRevision) {
+          closeEditor();
+          if (edit === 'new') navigationEpoch = editorEpoch.current;
+        } else {
+          setEdit(project);
+          setSavedWithDraft(true);
+        }
       }
+      await refresh();
+      if (navigationEpoch !== undefined && editorEpoch.current === navigationEpoch)
+        navigate(projectDestination(project));
     }, '项目已保存');
   }
   return (
@@ -401,7 +431,7 @@ export function Projects() {
       )}
       <Modal
         open={!!edit}
-        onClose={() => setEdit(null)}
+        onClose={closeEditor}
         title={edit === 'new' ? t('新建项目') : t('编辑项目')}
       >
         <form onSubmit={save}>
@@ -411,12 +441,16 @@ export function Projects() {
               required
               maxLength={120}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => change(setName, e.target.value)}
             />
           </Field>
           {edit === 'new' && (
             <Field label={t('项目类型')}>
-              <select value={projectKind} onChange={(e) => setProjectKind(e.target.value)}>
+              <select
+                value={projectKind}
+                disabled={action.busy}
+                onChange={(e) => change(setProjectKind, e.target.value)}
+              >
                 <option value="image">{t('图片')}</option>
                 <option value="video">{t('视频')}</option>
                 <option value="mixed">{t('混合创作')}</option>
@@ -428,14 +462,15 @@ export function Projects() {
               maxLength={4000}
               rows={3}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => change(setDescription, e.target.value)}
             />
           </Field>
           {edit !== 'new' && (
             <Field label={t('标签')} hint={t('用逗号分隔')}>
-              <input value={tags} onChange={(e) => setTags(e.target.value)} />
+              <input value={tags} onChange={(e) => change(setTags, e.target.value)} />
             </Field>
           )}
+          {savedWithDraft && <Notice>{t('提交内容已保存，之后的修改仍未保存。')}</Notice>}
           <div className="modal-actions">
             <Button type="submit" busy={action.busy}>
               {t('保存项目')}
@@ -512,9 +547,14 @@ export function Assets() {
   const [favorite, setFavorite] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const [collection, setCollection] = useState('');
+  const [collectionPage, setCollectionPage] = useState(1);
+  const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
   const [detail, setDetail] = useState<AssetDto | null>(null);
+  const detailEpoch = useRef(0);
+  const detailRevision = useRef(0);
+  const [savedWithDraft, setSavedWithDraft] = useState(false);
   const [name, setName] = useState('');
   const [tags, setTags] = useState('');
   const [deleting, setDeleting] = useState(false);
@@ -522,6 +562,10 @@ export function Assets() {
   const [newCollection, setNewCollection] = useState(false);
   const [collectionName, setCollectionName] = useState('');
   const [managingCollection, setManagingCollection] = useState(false);
+  const [editingCollectionId, setEditingCollectionId] = useState<string | null>(null);
+  const collectionEpoch = useRef(0);
+  const collectionRevision = useRef(0);
+  const [collectionSavedWithDraft, setCollectionSavedWithDraft] = useState(false);
   const [removingCollection, setRemovingCollection] = useState(false);
   const [addTo, setAddTo] = useState(false);
   const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -529,7 +573,7 @@ export function Assets() {
   const query = useApi<Page<AssetDto>>(
     `/assets${qs({ q, kind, tag, collectionId: collection, favorite: favorite || undefined, deleted: deleted || undefined, page })}`,
   );
-  const collections = useApi<Page<Collection>>('/collections?pageSize=100');
+  const collections = useApi<Page<Collection>>(`/collections?pageSize=100&page=${collectionPage}`);
   const text = useApi<AssetTextDto>(
     `/assets/${detail?.id ?? ''}/text`,
     !!detail && detail.kind === 'document',
@@ -538,7 +582,18 @@ export function Assets() {
   const action = useAction();
   const toast = useToast();
   const hasFilters = !!(q || kind || tag || favorite || collection);
-  const activeCollection = collections.data?.items.find((item) => item.id === collection);
+  const visibleCollection = collections.data?.items.find((item) => item.id === collection);
+  const activeCollection =
+    visibleCollection ?? (selectedCollection?.id === collection ? selectedCollection : undefined);
+  useEffect(() => {
+    if (collections.data) {
+      const lastPage = Math.max(1, Math.ceil(collections.data.total / collections.data.pageSize));
+      if (collectionPage > lastPage) setCollectionPage(lastPage);
+    }
+  }, [collections.data, collectionPage]);
+  useEffect(() => {
+    if (visibleCollection) setSelectedCollection(visibleCollection);
+  }, [visibleCollection]);
   function clearFilters() {
     setQ('');
     setKind('');
@@ -550,17 +605,65 @@ export function Assets() {
   useEffect(() => {
     setSelected([]);
   }, [q, kind, tag, favorite, deleted, collection, page]);
-  async function collectionIds(id: string) {
-    const first = await api<Page<AssetDto>>(`/assets?collectionId=${id}&pageSize=100`);
-    const items = [...first.items];
-    for (let page = 2; items.length < first.total; page++) {
-      const next = await api<Page<AssetDto>>(
-        `/assets?collectionId=${id}&pageSize=100&page=${page}`,
-      );
-      if (!next.items.length) throw new Error('集合内容发生变化，请刷新后重试');
-      items.push(...next.items);
-    }
-    return items.map((item) => item.id);
+  useEffect(
+    () => () => {
+      detailEpoch.current++;
+      collectionEpoch.current++;
+    },
+    [],
+  );
+  function closeDetail() {
+    detailEpoch.current++;
+    setDetail(null);
+    setSavedWithDraft(false);
+  }
+  function changeDetail<T>(set: (value: T) => void, value: T) {
+    detailRevision.current++;
+    set(value);
+  }
+  function openCollection(item?: Collection) {
+    collectionEpoch.current++;
+    setEditingCollectionId(item?.id ?? null);
+    setCollectionName(item?.name ?? '');
+    setCollectionSavedWithDraft(false);
+    setNewCollection(!item);
+    setManagingCollection(!!item);
+    setRemovingCollection(false);
+  }
+  function closeCollection() {
+    collectionEpoch.current++;
+    setNewCollection(false);
+    setManagingCollection(false);
+    setRemovingCollection(false);
+    setCollectionSavedWithDraft(false);
+  }
+  function changeCollectionName(value: string) {
+    collectionRevision.current++;
+    setCollectionName(value);
+  }
+  async function saveCollection() {
+    if (!canEdit || !collectionName.trim()) return;
+    const submittedEpoch = collectionEpoch.current;
+    const submittedRevision = collectionRevision.current;
+    await action.run(
+      async () => {
+        const saved = editingCollectionId
+          ? await patch<Collection>(`/collections/${editingCollectionId}`, { name: collectionName })
+          : await post<Collection>('/collections', { name: collectionName });
+        setSelectedCollection((current) => (current?.id === saved.id ? saved : current));
+        if (collectionEpoch.current === submittedEpoch) {
+          if (collectionRevision.current === submittedRevision) closeCollection();
+          else {
+            setEditingCollectionId(saved.id);
+            setNewCollection(false);
+            setManagingCollection(true);
+            setCollectionSavedWithDraft(true);
+          }
+        }
+        await refresh();
+      },
+      editingCollectionId ? '集合已更新' : '集合已创建',
+    );
   }
   async function upload(files: FileList | null) {
     if (!files || !workspace) return;
@@ -588,6 +691,8 @@ export function Assets() {
     if (input.current) input.current.value = '';
   }
   function show(asset: AssetDto) {
+    detailEpoch.current++;
+    setSavedWithDraft(false);
     setDetail(asset);
     setName(asset.name);
     setTags(asset.tags.join(', '));
@@ -631,7 +736,7 @@ export function Assets() {
         action={
           canEdit && (
             <>
-              <Button variant="secondary" onClick={() => setNewCollection(true)}>
+              <Button variant="secondary" onClick={() => openCollection()}>
                 <FolderOpen size={16} />
                 {t('新建集合')}
               </Button>
@@ -681,12 +786,19 @@ export function Assets() {
           <select
             aria-label={t('素材集合')}
             value={collection}
+            disabled={collections.isLoading || !!collections.error}
             onChange={(e) => {
               setCollection(e.target.value);
+              setSelectedCollection(
+                collections.data?.items.find((item) => item.id === e.target.value) ?? null,
+              );
               setPage(1);
             }}
           >
             <option value="">{t('全部集合')}</option>
+            {activeCollection && !visibleCollection && (
+              <option value={activeCollection.id}>{activeCollection.name}</option>
+            )}
             {collections.data?.items.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -696,12 +808,7 @@ export function Assets() {
           {collection && canEdit && (
             <Button
               variant="ghost"
-              onClick={() => {
-                setCollectionName(
-                  collections.data?.items.find((c) => c.id === collection)?.name ?? '',
-                );
-                setManagingCollection(true);
-              }}
+              onClick={() => openCollection({ id: collection, name: activeCollection?.name ?? '' })}
             >
               {t('管理集合')}
             </Button>
@@ -739,6 +846,17 @@ export function Assets() {
           ]}
         />
       </div>
+      {collections.data && collections.data.total > 100 && (
+        <section aria-label={t('素材集合')}>
+          <Pagination
+            page={collectionPage}
+            total={collections.data.total}
+            pageSize={100}
+            onPage={setCollectionPage}
+          />
+        </section>
+      )}
+      {collections.error && <ErrorState error={collections.error} retry={collections.refetch} />}
       <div className="library-result-heading">
         <h2>
           {deleted
@@ -787,9 +905,8 @@ export function Assets() {
                   busy={action.busy}
                   onClick={() =>
                     void action.run(async () => {
-                      const ids = await collectionIds(collection);
-                      await put(`/collections/${collection}/assets`, {
-                        assetIds: ids.filter((id) => !selected.includes(id)),
+                      await patch(`/collections/${collection}/assets`, {
+                        removeAssetIds: selected,
                       });
                       setSelected([]);
                       await refresh();
@@ -968,7 +1085,7 @@ export function Assets() {
           onPage={setPage}
         />
       )}
-      <Modal open={!!detail} onClose={() => setDetail(null)} title={t('素材详情')} wide>
+      <Modal open={!!detail} onClose={closeDetail} title={t('素材详情')} wide>
         {detail && (
           <div className="asset-detail">
             <div className="asset-detail-preview">
@@ -1009,15 +1126,24 @@ export function Assets() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                if (!canEdit) return;
+                const submittedEpoch = detailEpoch.current;
+                const submittedRevision = detailRevision.current;
                 void action.run(async () => {
-                  await patch(`/assets/${detail.id}`, {
+                  const saved = await patch<AssetDto>(`/assets/${detail.id}`, {
                     name,
                     tags: tags
                       .split(/[,，]/)
                       .map((t) => t.trim())
                       .filter(Boolean),
                   });
-                  setDetail(null);
+                  if (detailEpoch.current === submittedEpoch) {
+                    if (detailRevision.current === submittedRevision) closeDetail();
+                    else {
+                      setDetail(saved);
+                      setSavedWithDraft(true);
+                    }
+                  }
                   await refresh();
                 }, '素材信息已保存');
               }}
@@ -1025,13 +1151,17 @@ export function Assets() {
               <Field label={t('名称')}>
                 <input
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => changeDetail(setName, e.target.value)}
                   required
                   disabled={!canEdit}
                 />
               </Field>
               <Field label={t('标签')} hint={t('用逗号分隔')}>
-                <input value={tags} onChange={(e) => setTags(e.target.value)} disabled={!canEdit} />
+                <input
+                  value={tags}
+                  onChange={(e) => changeDetail(setTags, e.target.value)}
+                  disabled={!canEdit}
+                />
               </Field>
               <dl className="detail-list">
                 <div>
@@ -1081,6 +1211,7 @@ export function Assets() {
                     )}
                   </div>
                 )}
+              {savedWithDraft && <Notice>{t('提交内容已保存，之后的修改仍未保存。')}</Notice>}
               <div className="inline-actions">
                 <Button
                   type="button"
@@ -1105,24 +1236,19 @@ export function Assets() {
           </div>
         )}
       </Modal>
-      <Modal open={newCollection} onClose={() => setNewCollection(false)} title={t('新建素材集合')}>
+      <Modal open={newCollection} onClose={closeCollection} title={t('新建素材集合')}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            void action.run(async () => {
-              await post('/collections', { name: collectionName });
-              setNewCollection(false);
-              setCollectionName('');
-              await refresh();
-            }, '集合已创建');
+            void saveCollection();
           }}
         >
           <Field label={t('集合名称')}>
             <input
               value={collectionName}
-              onChange={(e) => setCollectionName(e.target.value)}
+              onChange={(e) => changeCollectionName(e.target.value)}
               required
-              maxLength={120}
+              maxLength={80}
             />
           </Field>
           <div className="modal-actions">
@@ -1132,18 +1258,15 @@ export function Assets() {
           </div>
         </form>
       </Modal>
-      <Modal
-        open={managingCollection}
-        onClose={() => setManagingCollection(false)}
-        title={t('管理素材集合')}
-      >
+      <Modal open={managingCollection} onClose={closeCollection} title={t('管理素材集合')}>
         <Field label={t('集合名称')}>
           <input
             maxLength={80}
             value={collectionName}
-            onChange={(e) => setCollectionName(e.target.value)}
+            onChange={(e) => changeCollectionName(e.target.value)}
           />
         </Field>
+        {collectionSavedWithDraft && <Notice>{t('提交内容已保存，之后的修改仍未保存。')}</Notice>}
         <div className="modal-actions">
           <Button variant="danger" onClick={() => setRemovingCollection(true)}>
             {t('删除集合')}
@@ -1151,13 +1274,7 @@ export function Assets() {
           <Button
             disabled={!collectionName.trim()}
             busy={action.busy}
-            onClick={() =>
-              void action.run(async () => {
-                await patch(`/collections/${collection}`, { name: collectionName });
-                setManagingCollection(false);
-                await refresh();
-              }, '集合已更新')
-            }
+            onClick={() => void saveCollection()}
           >
             {t('保存名称')}
           </Button>
@@ -1168,40 +1285,57 @@ export function Assets() {
         onClose={() => setRemovingCollection(false)}
         title={t('删除素材集合')}
         description={t('集合会删除，其中的原始素材仍保留在素材库。')}
+        busy={action.busy}
         onConfirm={() => {
+          if (!editingCollectionId || !canEdit) return;
+          const submittedId = editingCollectionId;
+          const submittedEpoch = collectionEpoch.current;
           void action.run(async () => {
-            await remove(`/collections/${collection}`);
-            setRemovingCollection(false);
-            setManagingCollection(false);
-            setCollection('');
-            setSelected([]);
+            await remove(`/collections/${submittedId}`);
+            if (collectionEpoch.current === submittedEpoch) closeCollection();
+            setCollection((current) => (current === submittedId ? '' : current));
             await refresh();
           }, '集合已删除');
         }}
       />
       <Modal open={addTo} onClose={() => setAddTo(false)} title={t('加入素材集合')}>
         <p className="muted">{t('现有素材会保留，新选择的素材会合并加入。')}</p>
-        {collections.data?.items.map((item) => (
-          <button
-            key={item.id}
-            className="search-result"
-            onClick={() =>
-              void action.run(async () => {
-                const existing = await collectionIds(item.id);
-                await put(`/collections/${item.id}/assets`, {
-                  assetIds: [...new Set([...existing, ...selected])],
-                });
-                setAddTo(false);
-                setSelected([]);
-                await refresh();
-              }, '素材已加入集合')
-            }
-          >
-            <FolderOpen size={18} />
-            {item.name}
-          </button>
-        ))}
-        {!collections.data?.items.length && <Empty title={t('请先创建一个集合')} />}
+        {collections.isLoading ? (
+          <Loading />
+        ) : collections.error ? (
+          <ErrorState error={collections.error} retry={collections.refetch} />
+        ) : collections.data?.items.length ? (
+          collections.data.items.map((item) => (
+            <button
+              key={item.id}
+              className="search-result"
+              disabled={action.busy}
+              onClick={() =>
+                void action.run(async () => {
+                  await patch(`/collections/${item.id}/assets`, {
+                    addAssetIds: selected,
+                  });
+                  setAddTo(false);
+                  setSelected([]);
+                  await refresh();
+                }, '素材已加入集合')
+              }
+            >
+              <FolderOpen size={18} />
+              {item.name}
+            </button>
+          ))
+        ) : (
+          <Empty title={t('请先创建一个集合')} />
+        )}
+        {collections.data && (
+          <Pagination
+            page={collectionPage}
+            total={collections.data.total}
+            pageSize={100}
+            onPage={setCollectionPage}
+          />
+        )}
       </Modal>
       <Confirm
         open={deleting}

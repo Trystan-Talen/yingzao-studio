@@ -12,7 +12,10 @@ import {
   checkCreativePreparation,
   creativeAnswersComplete,
   creativeBriefStorageKey,
+  creativeConfigurationChanged,
+  creativePreparationNotStarted,
   readCreativeBrief,
+  resetCreativeBrief,
   updateCreativeAnswer,
   writeCreativeBrief,
 } from '../src/web/lib/creative-brief';
@@ -136,8 +139,90 @@ describe('creative brief UI boundaries', () => {
     expect(unknown).toContain('请求结果未知，不能确认是否仍在运行。');
     expect(unknown).not.toContain('>重新检查<');
   });
+  it('keeps the video first-frame and camera plan inside the collapsed review', () => {
+    const result = preparation();
+    result.result.generationPlan = {
+      imagePrompt: '首帧保持完整瓶身。',
+      videoPrompt: '镜头缓慢推进，结尾停稳。',
+    };
+    const html = renderBrief(result);
+    expect(html).toContain('首帧画面');
+    expect(html).toContain('镜头与动作');
+    expect(html).toContain('首帧保持完整瓶身。');
+    expect(html).toContain('镜头缓慢推进，结尾停稳。');
+    expect(html).not.toContain('<details open');
+  });
+  it('offers explicit source refresh only for ready plans and disables it while locked', () => {
+    const controls = { canRefreshSources: true, onRefreshSources: () => undefined };
+    const ready = renderBrief(preparation(), [], controls);
+    expect(ready).toContain('按最新资料重新整理');
+    expect(ready).toContain('再次点击生成才会读取最新资料');
+    expect(ready).toContain('旧方案的补充回答需要重新确认');
+    const locked = renderBrief(preparation(), [], { ...controls, locked: true });
+    expect(locked).toMatch(/<button[^>]*disabled=""[^>]*>按最新资料重新整理<\/button>/);
+    const unknown = renderBrief(preparation('needs_clarification'), [], {
+      ...controls,
+      locked: true,
+    });
+    expect(unknown).not.toContain('按最新资料重新整理');
+  });
+  it('preserves and renders the exact source snapshot, version and expiry through client validation', () => {
+    const result = preparation();
+    result.contextSources = [
+      {
+        kind: 'product',
+        id: randomUUID(),
+        label: '已确认产品',
+        version: 3,
+        updatedAt: '2026-11-13T12:00:00Z',
+        expiresAt: '2026-12-13T12:00:00Z',
+        content: '确认容量为30毫升。',
+      },
+    ];
+    result.omittedMemoryCount = 2;
+    const checked = checkCreativePreparation(result, input);
+    expect(checked.contextSources).toEqual(result.contextSources);
+    expect(checked.omittedMemoryCount).toBe(2);
+    const html = renderBrief(checked);
+    expect(html).toContain('本次采用的资料');
+    expect(html).toContain('确认容量为30毫升。');
+    expect(html).toContain('版本 3');
+    expect(html).toContain('当时有效至');
+    expect(html).toContain('本次未采用的记忆');
+  });
+  it('explicitly clears old plan lineage after a configuration change but preserves input identity', () => {
+    const record = {
+      version: 1 as const,
+      fingerprint: creativeInputFingerprint(input),
+      previousId: randomUUID(),
+      answers: [{ questionId: 'subject', answer: '猫' }],
+      pending: { requestId: randomUUID(), previousId: randomUUID(), answers: [] },
+    };
+    expect(resetCreativeBrief(record)).toEqual({
+      version: 1,
+      fingerprint: record.fingerprint,
+      answers: [],
+    });
+    expect(creativeConfigurationChanged('CREATIVE_CONFIGURATION_CHANGED')).toBe(true);
+    expect(creativeConfigurationChanged('MODEL_CONNECTION_CHANGED')).toBe(true);
+    expect(creativeConfigurationChanged('KNOWLEDGE_CONTEXT_EXPIRED')).toBe(true);
+    expect(creativeConfigurationChanged('CREATIVE_BRIEF_UNCERTAIN')).toBe(false);
+    expect(creativeConfigurationChanged('CAPABILITY_CHANGED')).toBe(false);
+    expect(creativePreparationNotStarted('INSUFFICIENT_CREDITS')).toBe(true);
+    expect(creativePreparationNotStarted('MEMBER_BUDGET_EXCEEDED')).toBe(true);
+    expect(creativePreparationNotStarted('BUDGET_NOT_ALLOCATED')).toBe(true);
+    expect(creativePreparationNotStarted('CREATIVE_BRIEF_UNCERTAIN')).toBe(false);
+  });
   it('provides reviewed English and Arabic copy for the new static clarification labels', () => {
-    for (const text of ['确认这一点', '确认这两点', '自己填写', '请先回答这一题。']) {
+    for (const text of [
+      '确认这一点',
+      '确认这两点',
+      '自己填写',
+      '请先回答这一题。',
+      '按最新资料重新整理',
+      '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。',
+      '原始需求与素材选择不变；旧方案的补充回答需要重新确认。',
+    ]) {
       expect(CREATIVE_BRIEF_TRANSLATIONS[text]?.en).toBeTruthy();
       expect(CREATIVE_BRIEF_TRANSLATIONS[text]?.ar).toBeTruthy();
     }

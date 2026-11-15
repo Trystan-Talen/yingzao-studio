@@ -1,0 +1,11 @@
+.background-review-submit .submit-row {
+  flex-wrap: wrap;
+}
+.background-review-submit .submit-row > .muted {
+  flex: 1 1 180px;
+}
+.background-review-submit .submit-row > .button {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+}

@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { jobInput } from '../lib/tasks';
 import { Palette, Plus, ShieldCheck, Trash2, UserRound } from 'lucide-react';
 import type { AssetDto, BrandDto, CharacterDto } from '../../contracts/core';
+import { BrandSchema } from '../../contracts/core';
 import { ApiError, api, patch, post, remove, qs, useApi, useRefresh, type Page } from '../lib/api';
 import { AssetPicker, AssetVisual } from '../components/AssetPicker';
+import { KnowledgeConflict } from '../components/KnowledgeConflict';
 import {
   Badge,
   Button,
@@ -23,6 +25,14 @@ import {
 } from '../components/ui';
 import { useStudio } from '../context';
 import { BrandQuotaSummary, type EntitlementsDto } from '../components/Entitlements';
+type BrandFormInput = Pick<
+  BrandDto,
+  'name' | 'description' | 'colors' | 'fonts' | 'visibility' | 'referenceAssetIds' | 'coverAssetId'
+>;
+function brandInput(item: BrandDto): BrandFormInput {
+  const { name, description, colors, fonts, visibility, referenceAssetIds, coverAssetId } = item;
+  return { name, description, colors, fonts, visibility, referenceAssetIds, coverAssetId };
+}
 export function Brands() {
   const { canEdit, workspace } = useStudio();
   const [q, setQ] = useState('');
@@ -36,8 +46,11 @@ export function Brands() {
   const [description, setDescription] = useState('');
   const [colors, setColors] = useState('#426856, #DDF3AD');
   const [fonts, setFonts] = useState('Inter, PingFang SC');
-  const [visibility, setVisibility] = useState('workspace');
+  const [visibility, setVisibility] = useState<BrandDto['visibility']>('workspace');
   const [references, setReferences] = useState<AssetDto[]>([]);
+  const [coverAssetId, setCoverAssetId] = useState<string | null>(null);
+  const [conflict, setConflict] = useState<BrandDto | null>(null);
+  const [savedWithDraft, setSavedWithDraft] = useState(false);
   const [deleting, setDeleting] = useState<BrandDto | null>(null);
   const action = useAction();
   const refresh = useRefresh();
@@ -45,10 +58,13 @@ export function Brands() {
   const [readError, setReadError] = useState<unknown>(null);
   const [unavailable, setUnavailable] = useState<string[]>([]);
   const readVersion = useRef(0);
+  const draftRevision = useRef(0);
   const blocked = reading || !!readError || unavailable.length > 0;
   function closeEditor() {
     readVersion.current++;
     setEditing(null);
+    setConflict(null);
+    setSavedWithDraft(false);
   }
   useEffect(() => {
     readVersion.current++;
@@ -81,11 +97,14 @@ export function Brands() {
   }
   async function open(item: BrandDto | 'new') {
     setEditing(item);
+    setConflict(null);
+    setSavedWithDraft(false);
     setName(item === 'new' ? '' : item.name);
     setDescription(item === 'new' ? '' : item.description);
     setColors(item === 'new' ? '#426856, #DDF3AD' : item.colors.join(', '));
     setFonts(item === 'new' ? 'Inter, PingFang SC' : item.fonts.join(', '));
     setVisibility(item === 'new' ? 'workspace' : item.visibility);
+    setCoverAssetId(item === 'new' ? null : item.coverAssetId);
     setReferences([]);
     setUnavailable([]);
     readVersion.current++;
@@ -94,29 +113,82 @@ export function Brands() {
     if (item !== 'new') await loadReferences(item);
   }
 
+  function change<T>(set: (value: T) => void, value: T) {
+    draftRevision.current++;
+    set(value);
+  }
+  function changeReferences(value: AssetDto[]) {
+    change(setReferences, value);
+    setCoverAssetId(value[0]?.id ?? null);
+  }
+  function currentInput(): BrandFormInput {
+    const list = (value: string) =>
+      value
+        .split(/[,，]/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    return {
+      name,
+      description,
+      colors: list(colors),
+      fonts: list(fonts),
+      visibility,
+      referenceAssetIds: [...references.map((asset) => asset.id), ...unavailable],
+      coverAssetId,
+    };
+  }
+  function recover(latest: BrandDto, input: BrandFormInput) {
+    setEditing(latest);
+    setConflict(null);
+    setSavedWithDraft(false);
+    setName(input.name);
+    setDescription(input.description);
+    setColors(input.colors.join(', '));
+    setFonts(input.fonts.join(', '));
+    setVisibility(input.visibility);
+    setCoverAssetId(input.coverAssetId);
+    setReferences([]);
+    setUnavailable([]);
+    void loadReferences({ ...latest, ...input });
+  }
+
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (blocked || !editing || !canEdit) return;
+    if (blocked || !editing || !canEdit || conflict) return;
     const editorEpoch = readVersion.current;
+    const submittedRevision = draftRevision.current;
     await action.run(async () => {
-      const payload = {
-        name,
-        description,
-        colors: colors
-          .split(/[,，]/)
-          .map((s) => s.trim())
-          .filter(Boolean),
-        fonts: fonts
-          .split(/[,，]/)
-          .map((s) => s.trim())
-          .filter(Boolean),
-        visibility,
-        referenceAssetIds: references.map((a) => a.id),
-        coverAssetId: references[0]?.id ?? null,
-      };
-      if (editing === 'new') await post('/brands', payload);
-      else if (editing) await patch(`/brands/${editing.id}`, payload);
-      if (readVersion.current === editorEpoch) closeEditor();
+      const payload = currentInput();
+      let saved: BrandDto;
+      try {
+        saved =
+          editing === 'new'
+            ? await post<BrandDto>('/brands', payload)
+            : await patch<BrandDto>(`/brands/${editing.id}`, {
+                ...payload,
+                expectedUpdatedAt: editing.updatedAt,
+              });
+      } catch (error) {
+        if (
+          error instanceof ApiError &&
+          error.code === 'BRAND_VERSION_CONFLICT' &&
+          readVersion.current === editorEpoch
+        ) {
+          const latest = BrandSchema.safeParse(error.details?.current);
+          if (latest.success && editing !== 'new' && latest.data.id === editing.id)
+            setConflict(latest.data);
+        }
+        throw error;
+      }
+      if (readVersion.current === editorEpoch) {
+        if (draftRevision.current === submittedRevision) closeEditor();
+        else {
+          // Keep later local edits, but use the successful response as the next
+          // baseline so a second save updates this brand rather than recreating it.
+          setEditing(saved);
+          setSavedWithDraft(true);
+        }
+      }
       await refresh();
     }, '品牌参考已保存');
   }
@@ -297,7 +369,15 @@ export function Brands() {
         {unavailable.length > 0 && (
           <Notice tone="warning">
             {t('部分引用素材已删除。请明确移除失效引用后再保存。')}
-            <Button type="button" variant="secondary" onClick={() => setUnavailable([])}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                change(setUnavailable, []);
+                if (coverAssetId && unavailable.includes(coverAssetId))
+                  setCoverAssetId(references[0]?.id ?? null);
+              }}
+            >
               {t('移除失效引用')} · {unavailable.length}
             </Button>
           </Notice>
@@ -307,7 +387,7 @@ export function Brands() {
             <Field label={t('品牌名称')}>
               <input
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => change(setName, e.target.value)}
                 required
                 maxLength={120}
                 disabled={!canEdit}
@@ -316,7 +396,7 @@ export function Brands() {
             <Field label={t('可见范围')}>
               <select
                 value={visibility}
-                onChange={(e) => setVisibility(e.target.value)}
+                onChange={(e) => change(setVisibility, e.target.value as BrandDto['visibility'])}
                 disabled={!canEdit}
               >
                 <option value="workspace">{t('工作空间成员')}</option>
@@ -327,7 +407,7 @@ export function Brands() {
           <Field label={t('品牌描述')}>
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => change(setDescription, e.target.value)}
               maxLength={4000}
               rows={3}
               disabled={!canEdit}
@@ -337,30 +417,53 @@ export function Brands() {
             <Field label={t('品牌颜色')} hint={t('使用HEX色值，以逗号分隔')}>
               <input
                 value={colors}
-                onChange={(e) => setColors(e.target.value)}
+                onChange={(e) => change(setColors, e.target.value)}
                 disabled={!canEdit}
               />
             </Field>
             <Field label={t('偏好字体')} hint={t('字体名称，以逗号分隔')}>
-              <input value={fonts} onChange={(e) => setFonts(e.target.value)} disabled={!canEdit} />
+              <input
+                value={fonts}
+                onChange={(e) => change(setFonts, e.target.value)}
+                disabled={!canEdit}
+              />
             </Field>
           </div>
           <AssetPicker
             key={editing === 'new' ? 'new' : editing?.id}
             value={references}
-            onChange={setReferences}
+            onChange={changeReferences}
             label={t('品牌参考图 · 第一张作为封面')}
             max={20}
           />
           <Notice>
             {t('参考图用于为创作提供视觉风格。保存品牌不会训练模型，也不会调用付费生成。')}
           </Notice>
+          {savedWithDraft && <Notice>{t('提交内容已保存，之后的修改仍未保存。')}</Notice>}
+          {conflict && editing && editing !== 'new' && (
+            <KnowledgeConflict<BrandFormInput>
+              base={brandInput(editing)}
+              draft={currentInput()}
+              current={conflict}
+              busy={action.busy || reading}
+              fieldLabels={{
+                name: '品牌名称',
+                description: '品牌描述',
+                colors: '品牌颜色',
+                fonts: '偏好字体',
+                referenceAssetIds: '品牌参考图 · 第一张作为封面',
+                coverAssetId: '封面图片',
+              }}
+              onMerge={(merged) => recover(conflict, merged)}
+              onReload={() => recover(conflict, brandInput(conflict))}
+            />
+          )}
           <div className="modal-actions">
             <Button variant="secondary" type="button" onClick={closeEditor}>
               {t('关闭')}
             </Button>
             {canEdit && (
-              <Button type="submit" busy={action.busy} disabled={blocked}>
+              <Button type="submit" busy={action.busy} disabled={blocked || !!conflict}>
                 {t('保存品牌')}
               </Button>
             )}

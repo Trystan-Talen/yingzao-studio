@@ -1,0 +1,1069 @@
+{
+  "recordedAt": "2026-11-12T06:12:41.236Z",
+  "historicalPassesInherited": false,
+  "counts": {
+    "features": 54,
+    "unitFiles": 125,
+    "browserSpecFiles": 49,
+    "browserCases": 330
+  },
+  "features": [
+    {
+      "id": "F01",
+      "name": "灵感分类",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "无",
+      "priorRemaining": [
+        "原站推荐/排序及素材覆盖仍未知，不复制第三方内容或伪造目录。"
+      ],
+      "candidateTests": [
+        "tests/inspiration-replica.test.ts",
+        "tests/e2e/inspiration-categories.spec.ts",
+        "tests/e2e/inspiration-studio.spec.ts",
+        "tests/e2e/media.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F02",
+      "name": "复用收藏",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "无",
+      "priorRemaining": [
+        "图片与视频复用的原子保存/重放、素材槽位和刷新已验证；视频缺主体/授权时不能提交。",
+        "保留通用视频创作与人物动作复刻两个明确意图，后者真实模型效果仍未验证。"
+      ],
+      "candidateTests": [
+        "tests/inspiration-replica.test.ts",
+        "tests/e2e/inspiration-categories.spec.ts",
+        "tests/e2e/inspiration-studio.spec.ts",
+        "tests/e2e/media.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F03",
+      "name": "引导偏好",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "完整引导与本地新旧项目默认值边界已验；原站引导当前字段与推荐规则仍未观察，不宣称等价。",
+        "本地偏好扩展不称为原站最近参数云端模板。"
+      ],
+      "candidateTests": [
+        "tests/e2e/onboarding-defaults.spec.ts",
+        "tests/creation-recovery.test.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F04",
+      "name": "电商图片",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "当前保存、刷新和素材缺失处理已有本地与浏览器验证；真实主体一致性、画面文字和各电商模块成图质量仍待外部验收。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+      ],
+      "candidateTests": [
+        "tests/native-integration.test.ts",
+        "tests/native-generation.test.ts",
+        "tests/creative-briefs.test.ts",
+        "tests/tasks.test.ts",
+        "tests/e2e/experience-journeys.spec.ts",
+        "tests/e2e/creative-brief.spec.ts",
+        "tests/e2e/quote-confirmation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F05",
+      "name": "营销/自由创作",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "营销模块与自由创作草稿已真实浏览器验证，模板内容及各模块真实成图质量仍未验证。",
+        "本机三模块与专属参考规则有明确合同，不由入口观察推断原站全部模板/编辑语义等价。"
+      ],
+      "candidateTests": [
+        "tests/design-plan.test.ts",
+        "tests/e2e/material-designs.spec.ts",
+        "tests/e2e/unified-creation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F06",
+      "name": "视频生成",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "真实视频、音乐截断/静音尾部、生成音轨、精确字幕和口播效果未验证。",
+        "Wan音乐槽位不等于O3语音主体绑定或声音克隆；O3最多一个视频元素，更多主体/声音控制尚待正式协议与界面对照。"
+      ],
+      "candidateTests": [
+        "tests/native-integration.test.ts",
+        "tests/native-generation.test.ts",
+        "tests/creative-briefs.test.ts",
+        "tests/tasks.test.ts",
+        "tests/e2e/experience-journeys.spec.ts",
+        "tests/e2e/creative-brief.spec.ts",
+        "tests/e2e/quote-confirmation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F07",
+      "name": "多模态/@引用",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "素材缺失逐项恢复、响应丢失及长历史恢复已有浏览器夹具；真实多模态模型效果未验。"
+      ],
+      "candidateTests": [
+        "tests/provider-reference.test.ts",
+        "tests/e2e/capability-input-snapshot.spec.ts",
+        "tests/e2e/upload-context-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F08",
+      "name": "AI帮写/报价",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "帮写任务不污染媒体草稿；免费次数原子约束和请求身份持久恢复有回归。",
+        "真实帮写质量、供应商价格与原站免费运营规则等价性仍未验证。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+      ],
+      "candidateTests": [
+        "tests/native-integration.test.ts",
+        "tests/native-generation.test.ts",
+        "tests/creative-briefs.test.ts",
+        "tests/tasks.test.ts",
+        "tests/e2e/experience-journeys.spec.ts",
+        "tests/e2e/creative-brief.spec.ts",
+        "tests/e2e/quote-confirmation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F09",
+      "name": "会话/方案",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "原站已存在项目显示七段长文和复制；本地结构化编辑/应用是体验改进，不能反推原站具备该操作。",
+        "真实图像分析、多轮质量与新方案生成效果仍未验证。",
+        "技术流程仅覆盖本次单参考商品、6屏3:4；第6屏“留白处”错成“留白外”、第5屏标签下缘被裁、构图重复仍不符合商业质量要求。授权调用已用完，不追加；其他比例、多参考图与其他商品不继承通过。"
+      ],
+      "candidateTests": [
+        "tests/native-integration.test.ts",
+        "tests/native-generation.test.ts",
+        "tests/creative-briefs.test.ts",
+        "tests/tasks.test.ts",
+        "tests/e2e/experience-journeys.spec.ts",
+        "tests/e2e/creative-brief.spec.ts",
+        "tests/e2e/quote-confirmation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F10",
+      "name": "任务生命周期",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "本机响应丢失后刷新找回同一任务、单份预留及结算已有真实浏览器和数据库证据。",
+        "远端未知终态、真实供应商取消和供应商控制台核对仍需外部验证。"
+      ],
+      "candidateTests": [
+        "tests/native-integration.test.ts",
+        "tests/native-generation.test.ts",
+        "tests/creative-briefs.test.ts",
+        "tests/tasks.test.ts",
+        "tests/e2e/experience-journeys.spec.ts",
+        "tests/e2e/creative-brief.spec.ts",
+        "tests/e2e/quote-confirmation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F11",
+      "name": "智能延展",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "主体保留、延展区域与像素效果未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F12",
+      "name": "局部重绘",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "跨供应商协议分离；EXIF原件保留/模型坐标归一；实际模型效果未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F13",
+      "name": "放大/超清",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "放大前64,000,000输出像素预算阻止先付费后本地超限；真实放大质量未验。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F14",
+      "name": "抠图",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "真实alpha与边缘质量未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F15",
+      "name": "图片翻译",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "适配及输入路径存在，不等于专用业务语义或真实效果通过。",
+        "免平台费不代表供应商预检免费；仍需提交预留余额；识别漏字可强制，真实版式质量未验",
+        "按当前原站补原子验收；真实主体、透明边缘、文字/版式与参考保持待获准联调。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F16",
+      "name": "替换/换色",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "笛卡尔组合与20输出上限是明确的本地产品规则，原站是否同规则未知。",
+        "参考保持、商品保持与换色真实视觉质量未验证。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F17",
+      "name": "图片复刻",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "新广告参考生成不保证逐像素一致；当前已有输入原图与产物对比器及作为参考继续创作入口，真实复刻视觉质量未验证。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F18",
+      "name": "创意视频复刻",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "已实现人物图+参考视频选段动作复刻、本机裁剪、真实原声开关与按片段报价；真实动作保真效果未验证。",
+        "创意视频编辑与人物动作复刻是独立合同；不冒称Dance、逐像素1:1或原视频背景保持。",
+        "服装、人脸、商品精准替换仍未实现；原站对应模型完整语义待外部协议及效果验收。"
+      ],
+      "candidateTests": [
+        "tests/fal-motion.test.ts",
+        "tests/character-video.test.ts",
+        "tests/takeover-motion.test.ts",
+        "tests/e2e/character-video.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F19",
+      "name": "1:1视频/裁剪",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "已实现人物图+参考视频选段动作复刻、本机裁剪、真实原声开关与按片段报价；真实动作保真效果未验证。",
+        "创意视频编辑与人物动作复刻是独立合同；不冒称Dance、逐像素1:1或原视频背景保持。",
+        "服装、人脸、商品精准替换仍未实现；原站对应模型完整语义待外部协议及效果验收。"
+      ],
+      "candidateTests": [
+        "tests/fal-motion.test.ts",
+        "tests/character-video.test.ts",
+        "tests/takeover-motion.test.ts",
+        "tests/e2e/character-video.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F20",
+      "name": "社交链接导入",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "抖音与国际版抖音真实平台返回、下载可用性与服务商收费尚未外部验证。",
+        "小红书没有可核验视频响应结构，付费前明确拒绝；仍缺正式协议与真实效果验收。"
+      ],
+      "candidateTests": [
+        "tests/social-import.test.ts",
+        "tests/commercial-download-timeout.test.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F21",
+      "name": "主图打标",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "本地专用字段/结果解析已有合同；真实文字可读性、位置与字符准确性及原站等价性未验。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F22",
+      "name": "AI洗图",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "通用自然化/图像编辑路径存在；本项未找到独立当前专项回归，仍未验证。",
+        "不承诺隐藏AI来源或原站算法效果等价。"
+      ],
+      "candidateTests": [
+        "tests/naturalize-contract.test.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending",
+      "currentEvidence": "2 targeted contract tests passed; full candidate03 run pending; real model quality not verified"
+    },
+    {
+      "id": "F23",
+      "name": "多图融合",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "专用字段与真实本机拼接/面积边界已测；真实融合视觉质量及原站效果未验。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F24",
+      "name": "工具历史",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "普通工具读取中/失败时禁止编辑保存提交，失败重试后恢复原参数，桌面手机已验；旧会话逐页寻找。",
+        "未完成上传二进制不属于草稿，刷新需重选；下载标记不证明最终磁盘写入，外部工具效果未验。"
+      ],
+      "candidateTests": [
+        "tests/tool-recovery.test.ts",
+        "tests/e2e/media.spec.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F25",
+      "name": "画布对象",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "真实PNG导出尺寸与像素已验；视频导出为静态帧、原件下载保持原文件。",
+        "复杂对象与原站完整排版语义仍待独立对照，不称完整排版软件。"
+      ],
+      "candidateTests": [
+        "src/web/editor/scene.test.ts",
+        "src/web/editor/export-bundle.test.ts",
+        "tests/export-policy.test.ts",
+        "tests/e2e/canvas.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F26",
+      "name": "图层/撤销",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "两对象分组/锁定/解锁/解组、禁删除/移动、位移、撤销重做与刷新已在桌面/手机专项通过；任意深度嵌套分组未穷尽。",
+        "层数与深度预算保留；原站复杂图层语义仍未知。"
+      ],
+      "candidateTests": [
+        "src/web/editor/scene.test.ts",
+        "src/web/editor/export-bundle.test.ts",
+        "tests/export-policy.test.ts",
+        "tests/e2e/canvas.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F27",
+      "name": "OCR/拆层",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "结构坐标校验与固定层数拆分路径存在；视觉估计坐标、透明层重组、真实可编辑语义分别验收。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/advanced-recovery.test.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F28",
+      "name": "视频后处理",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "编辑/延长/超清/口播翻译/短片擦除须分项验收。",
+        "短于5秒通用擦除不等于专用无痕字幕去除；真实输出均未验。"
+      ],
+      "candidateTests": [
+        "tests/video-audio-options.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/e2e/media.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F29",
+      "name": "待应用",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "无",
+      "priorRemaining": [
+        "本机真实产物在晚到版本冲突、刷新恢复、仅应用一次和重复请求拒绝场景已在桌面/手机通过。",
+        "真实模型拆层输出与完整原站待应用语义仍需独立验证。"
+      ],
+      "candidateTests": [
+        "src/web/editor/scene.test.ts",
+        "src/web/editor/export-bundle.test.ts",
+        "tests/export-policy.test.ts",
+        "tests/e2e/canvas.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F30",
+      "name": "版本",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "真实编辑/刷新/恢复旧版已验；原件保留不等于无限永久版本运营承诺。"
+      ],
+      "candidateTests": [
+        "src/web/editor/scene.test.ts",
+        "src/web/editor/export-bundle.test.ts",
+        "tests/export-policy.test.ts",
+        "tests/e2e/canvas.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F31",
+      "name": "导出下载",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "四尺寸画布真实PNG像素、保存刷新与原件下载已验证；原站实际下载、亚马逊元信息写入及所有导出组合仍未对照。",
+        "本地来源附属文件不能冒充图片内嵌元信息；应用水印不承诺防绕过。"
+      ],
+      "candidateTests": [
+        "src/web/editor/scene.test.ts",
+        "src/web/editor/export-bundle.test.ts",
+        "tests/export-policy.test.ts",
+        "tests/e2e/canvas.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F32",
+      "name": "分享",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "默认原件403、预览200及撤销后不可访问已真实验证；预览本身可截图/保存。",
+        "当前原站完整分享交互未独立观察，不由本地测试推断等价。"
+      ],
+      "candidateTests": [
+        "src/web/editor/scene.test.ts",
+        "src/web/editor/export-bundle.test.ts",
+        "tests/export-policy.test.ts",
+        "tests/e2e/canvas.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F33",
+      "name": "项目/收藏",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "本地名称、类型、个人收藏组合筛选及回收恢复已有桌面/手机实际通过；日期查询仅有接口合同，当前界面没有日期/作者筛选。",
+        "原站作者筛选及全部归档规则仍未知，不把旧文档要求自动当成已确认范围。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/e2e/library-batch-recovery.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts",
+        "tests/e2e/product-experience.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F34",
+      "name": "素材/集合",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "命名集合新建/改名/关联/移除/组合搜索/删除集合保留原件已有桌面/手机实际通过；手机搜索压缩缺陷已真实红绿修复。",
+        "集合删除为软删除并保留历史关联；不声称跨空间物理去重。",
+        "原站公共模特库与人像视频语义另归F36；未复制第三方公共模特原件。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/e2e/library-batch-recovery.spec.ts",
+        "tests/e2e/library-canvas-review.spec.ts",
+        "tests/e2e/product-experience.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F35",
+      "name": "人脸授权认证",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "当前人物素材上传界面不能证明历史认证已下线，也不能证明原站采用身份证实名或活体。",
+        "现有本地人物授权声明/素材版本与认证状态机不等于正式核验；无明确供应商/业务协议前不得用政府实名适配冒充人物使用授权。"
+      ],
+      "candidateTests": [
+        "tests/character-video.test.ts",
+        "tests/e2e/character-video.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F36",
+      "name": "人物素材组",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "本机视频人物管理与预览已验；供应商人物视频参考仅在专用能力协议明确支持时可启用，当前模型明确拒绝。",
+        "原站10个公共模特素材未复制，公共库内容与使用权需独立确定；真实模型效果未外呼验证。"
+      ],
+      "candidateTests": [
+        "tests/character-video.test.ts",
+        "tests/e2e/character-video.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F37",
+      "name": "个人品牌参考与品牌模型入口",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "品牌参考资料管理与配额合同已实现，真实生成一致性未外呼验证；不能称模型训练。",
+        "原站套餐价格与10/15/20数值未复制，新合同需实例负责人明确批准配置。"
+      ],
+      "candidateTests": [
+        "tests/brand-quota.test.ts",
+        "tests/brand-quotas.test.ts",
+        "tests/e2e/brand-quota.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F38",
+      "name": "预设品牌模板与订阅（范围待确认）",
+      "currentVerification": "not-implemented-scope-unconfirmed",
+      "priorImplementationStatus": "未实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "当前个人品牌模型存在，不能推出旧预设模板订阅存在或下线。",
+        "保留范围未知；不因旧文档“非强制”而删项。"
+      ],
+      "candidateTests": [],
+      "evidenceBoundary": "unimplemented / requested scope requires clarification; no inherited pass"
+    },
+    {
+      "id": "F39",
+      "name": "空间切换",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "正式启用需已批准team固定期会员合同；真实支付未执行，当前原站账号无现有团队，不能声称真实团队切换等价。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/team-creation.test.ts",
+        "tests/team-creation-review.test.ts",
+        "tests/concurrency-limit.test.ts",
+        "tests/e2e/team-creation.spec.ts",
+        "tests/e2e/notifications-team.spec.ts",
+        "tests/e2e/library-batch-recovery.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F40",
+      "name": "成员角色",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "本地成员权限与邀请/撤销存在合同，角色英阿真实浏览器已验；原站详细角色矩阵仍未知。",
+        "邀请邮件默认关闭，排队和SMTP接受均不等于收件；真实外部送达未验。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/team-creation.test.ts",
+        "tests/team-creation-review.test.ts",
+        "tests/concurrency-limit.test.ts",
+        "tests/e2e/team-creation.spec.ts",
+        "tests/e2e/notifications-team.spec.ts",
+        "tests/e2e/library-batch-recovery.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F41",
+      "name": "团队额度",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "平台预算单位是额度，不是供应商余额或现金。",
+        "本地事务和来源隔离已有回归；原站团队预算、回收和分配规则仍待有权限时核对。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/team-creation.test.ts",
+        "tests/team-creation-review.test.ts",
+        "tests/concurrency-limit.test.ts",
+        "tests/e2e/team-creation.spec.ts",
+        "tests/e2e/notifications-team.spec.ts",
+        "tests/e2e/library-batch-recovery.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F42",
+      "name": "导入统计审计",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "当前协调世界时日期的起日/末日边界及统计导出已有桌面/手机实际通过；当前界面没有自定义统计时区选项。",
+        "原站团队管理受会员门禁；导入、导出及审计的其余语义仍以各自合同和台账为准。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/team-creation.test.ts",
+        "tests/team-creation-review.test.ts",
+        "tests/concurrency-limit.test.ts",
+        "tests/e2e/team-creation.spec.ts",
+        "tests/e2e/notifications-team.spec.ts",
+        "tests/e2e/library-batch-recovery.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F43",
+      "name": "团队退出解散",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "本地解散以归档保留数据；新一队永久占用与转让兼容已独审并有重复/归档/转让回归。",
+        "真实付费席位/原站退出结算细则未联调，不宣称现金或套餐自动退还。"
+      ],
+      "candidateTests": [
+        "tests/core.test.ts",
+        "tests/team-creation.test.ts",
+        "tests/team-creation-review.test.ts",
+        "tests/concurrency-limit.test.ts",
+        "tests/e2e/team-creation.spec.ts",
+        "tests/e2e/notifications-team.spec.ts",
+        "tests/e2e/library-batch-recovery.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F44",
+      "name": "登录会话",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "阿里云签名、模板、最小权限密钥及已审核微信网站应用和固定回调域名需正式配置并显式开启。",
+        "真实短信送达、真实微信扫码和应用审核、正式邮件送达和谷歌授权均未外部联调。",
+        "最终完整报告已包含账户与身份分支；真实谷歌、微信及外部短信/邮件送达仍未联调。"
+      ],
+      "candidateTests": [
+        "tests/identity-auth.test.ts",
+        "tests/google-oidc.test.ts",
+        "tests/password-recovery.test.ts",
+        "tests/e2e/account.spec.ts",
+        "tests/e2e/identities.spec.ts",
+        "tests/e2e/production-security.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F45",
+      "name": "资料主题语言",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "当前账户、帮助、创作、工具、额度的已覆盖分支已真实浏览器验证；未做母语审校或所有动态错误穷尽测试。",
+        "用户提示词、名称、资料与模型正文保留原值；原站语言菜单存在不证明全部翻译等价。"
+      ],
+      "candidateTests": [
+        "tests/e2e/locale.spec.ts",
+        "tests/e2e/home-appearance.spec.ts",
+        "tests/e2e/creation-locale.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F46",
+      "name": "套餐账本兑换",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "同档会员3个月封存、续费恢复和重算已实现并独立验证，旧无封存合同仅兼容明确旧条款。",
+        "跨档期限/权益换算和原站充值转换价表仍未知且混购明确阻止；旧初始余额期限不作历史猜测。"
+      ],
+      "candidateTests": [
+        "tests/billing.test.ts",
+        "tests/billing-channel.test.ts",
+        "tests/billing-periods.test.ts",
+        "tests/prepaid-credit-validity.test.ts",
+        "tests/credit-lots.test.ts",
+        "tests/e2e/credits-locale.spec.ts",
+        "tests/e2e/team-creation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F47",
+      "name": "支付订阅",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "网页/接口独立平台额度全链路已实现，非独立现金账户或原站换算等价。",
+        "旧资料缺付款周期/退款成功时间时保留未知并核对；真实支付未获授权、未执行。",
+        "固定期同档叠加、3个月封存和定时/首购活动已定向回归及本机目录订单浏览器验证；跨档换算仍未知。"
+      ],
+      "candidateTests": [
+        "tests/billing.test.ts",
+        "tests/billing-channel.test.ts",
+        "tests/billing-periods.test.ts",
+        "tests/prepaid-credit-validity.test.ts",
+        "tests/credit-lots.test.ts",
+        "tests/e2e/credits-locale.spec.ts",
+        "tests/e2e/team-creation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F48",
+      "name": "发票抬头",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "外部服务限制",
+      "priorRemaining": [
+        "本地发票抬头、申请、金额占用、撤回、退款复核已实现；正式开票、取票与状态供应商适配缺失。",
+        "用户未提供开票供应商或正式协议，现阶段真实阻塞是协议和配置；不能把本地登记或Stripe账单冒称正式发票。",
+        "原站2026-05-16起自助开票界面已观察；无订单，真实开票未验证。"
+      ],
+      "candidateTests": [
+        "tests/billing.test.ts",
+        "tests/billing-channel.test.ts",
+        "tests/billing-periods.test.ts",
+        "tests/prepaid-credit-validity.test.ts",
+        "tests/credit-lots.test.ts",
+        "tests/e2e/credits-locale.spec.ts",
+        "tests/e2e/team-creation.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F49",
+      "name": "开放平台",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "使用独立平台额度账户，非独立现金账户；原站金额转算力规则和价表仍未知。",
+        "真实支付、真实接口模型调用以及原站账户等价性未验证。"
+      ],
+      "candidateTests": [
+        "tests/api-billing.test.ts",
+        "tests/api-billing-ui.test.ts",
+        "tests/core.test.ts",
+        "tests/production-http.test.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F50",
+      "name": "通知工单申诉",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "配置缺失",
+      "priorRemaining": [
+        "通知分类与计数以本地真实事件为准，不复制原站7条未读异常或伪造消息。",
+        "客服/问卷真实资料须实例负责人配置，本机地址与二维码夹具不等于外部客服接入。",
+        "邮件accepted仅表示SMTP接受，未知结果不盲发；平台额度退款不等于现金退款。"
+      ],
+      "candidateTests": [
+        "tests/notifications.test.ts",
+        "tests/notifications-http.test.ts",
+        "tests/support-channels.test.ts",
+        "tests/entitlements-appeals.test.ts",
+        "tests/mail-outbox.test.ts",
+        "tests/e2e/notifications-team.spec.ts",
+        "tests/e2e/support-channels.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F51",
+      "name": "邀请渠道",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "取整和资格中套餐过期主语未明，默认显式未配置并阻止返奖；运营须留审计证据后启用。",
+        "历史会员资格使用真实付款周期与退款时间证据，旧资料不足时须人工核对；真实付款未验。"
+      ],
+      "candidateTests": [
+        "tests/referral-policy.test.ts",
+        "tests/referral-admin-policy.test.ts",
+        "tests/member-promotions.test.ts",
+        "tests/member-promotions-review.test.ts",
+        "tests/e2e/credits-locale.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F52",
+      "name": "营销活动（当前会员促销与历史抽奖）",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "部分实现",
+      "priorBlocker": "原站证据不足",
+      "priorRemaining": [
+        "历史抽奖是否仍可用保持未知，当前促销不能代替其范围。",
+        "当前同档固定期与3个月封存已实现；跨档叠加存在但换算/权益规则未知，本地明确阻止混购。",
+        "活动资格采用明示本地结账发起时确认合同，未声称与原站截止付款语义完全等价；真实支付未执行。"
+      ],
+      "candidateTests": [
+        "tests/referral-policy.test.ts",
+        "tests/referral-admin-policy.test.ts",
+        "tests/member-promotions.test.ts",
+        "tests/member-promotions-review.test.ts",
+        "tests/e2e/credits-locale.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F53",
+      "name": "魔法消除",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "独立操作、角色、蒙版与供应商协议已有本地合同；真实生成效果未验证。",
+        "原图本地64MP安全上限、fal消除25MP保守上限、fal模特替换不支持背景/提示词均明确展示，与原站输入上限不完全等价。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    },
+    {
+      "id": "F54",
+      "name": "模特替换",
+      "currentVerification": "pending",
+      "priorImplementationStatus": "已实现",
+      "priorBlocker": "预算授权",
+      "priorRemaining": [
+        "独立操作、角色、蒙版与供应商协议已有本地合同；真实生成效果未验证。",
+        "原图本地64MP安全上限、fal消除25MP保守上限、fal模特替换不支持背景/提示词均明确展示，与原站输入上限不完全等价。"
+      ],
+      "candidateTests": [
+        "tests/takeover-tools.test.ts",
+        "tests/quality-workflows.test.ts",
+        "tests/provider-reference.test.ts",
+        "tests/openai-provider.test.ts",
+        "tests/flyelep-provider.test.ts",
+        "tests/e2e/tool-draft-loading.spec.ts"
+      ],
+      "evidenceBoundary": "local behavior / synthetic external protocol only; final snapshot result pending"
+    }
+  ],
+  "coverageNote": "Candidate test-file mapping guides review; it is not a claim that every business behavior is covered. External live outcomes are recorded separately.",
+  "currentInventory": {
+    "browserFiles": 51,
+    "browserCases": 352,
+    "sourceSnapshot": "candidate05",
+    "treeSha256": "1c6c85e96e1d1091230fc0a03f42ad5551004ec2922aff9b5c9fa785c9719ff9",
+    "status": "engineering-acceptance-passed-with-external-scope-limits",
+    "unitFiles": 132,
+    "unitCases": 2101,
+    "affectedBrowserCases": 34,
+    "unchangedSourceFilesFromCandidate03": 585,
+    "completeBrowserBaseline": {
+      "snapshot": "candidate03",
+      "passed": 342,
+      "total": 342,
+      "retries": 0,
+      "skipped": 0
+    },
+    "affectedBrowserFinal": {
+      "snapshot": "candidate05",
+      "passed": 34,
+      "total": 34,
+      "retries": 0,
+      "skipped": 0
+    },
+    "evidence": "platform/var/final-acceptance-20261111/final-engineering-summary.json"
+  },
+  "featureStatusMeaning": "currentVerification is whole-feature acceptance, not automatically promoted by mapped tests passing; external live scope and F38 remain separate."
+}

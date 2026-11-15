@@ -7,7 +7,7 @@ import {
 import type { Actor } from '../../contracts/core';
 import { resolveExportPolicy } from '../../contracts/export-policy';
 import { AppError } from '../errors';
-import { CoreContext, str, num, now, json } from './shared';
+import { type CoreContext, str, num, now, json } from './shared';
 import { readBrandQuota } from './brand-quota';
 /** All mutations call these guards under the same SQLite write transaction as their insert. */
 export class EntitlementService {

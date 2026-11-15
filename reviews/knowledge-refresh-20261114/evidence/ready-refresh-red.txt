@@ -1,0 +1,51 @@
+Running 1 test using 1 worker
+
+(node:20394) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [desktop] › tests/e2e/knowledge-refresh.spec.ts:11:1 › explicitly refreshes updated library sources without changing the request or reusing the previous quote (9.5s)
+
+
+  1) [desktop] › tests/e2e/knowledge-refresh.spec.ts:11:1 › explicitly refreshes updated library sources without changing the request or reusing the previous quote 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.composer').getByRole('button', { name: '按最新资料重新整理', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.composer').getByRole('button', { name: '按最新资料重新整理', exact: true }) with timeout 5000ms
+      - waiting for locator('.composer').getByRole('button', { name: '按最新资料重新整理', exact: true })
+
+
+      74 |   });
+      75 |   const refresh = composer.getByRole('button', { name: '按最新资料重新整理', exact: true });
+    > 76 |   await expect(refresh).toBeVisible();
+         |                         ^
+      77 |   await refresh.click();
+      78 |   await expect(prompt).toHaveValue(original);
+      79 |   await expect(refresh).toHaveCount(0);
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-refresh.spec.ts:76:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-zHf7pn/results/knowledge-refresh-explicit-b9a56--reusing-the-previous-quote-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-zHf7pn/results/knowledge-refresh-explicit-b9a56--reusing-the-previous-quote-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-zHf7pn/results/knowledge-refresh-explicit-b9a56--reusing-the-previous-quote-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-zHf7pn/results/knowledge-refresh-explicit-b9a56--reusing-the-previous-quote-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-zHf7pn/results/knowledge-refresh-explicit-b9a56--reusing-the-previous-quote-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › tests/e2e/knowledge-refresh.spec.ts:11:1 › explicitly refreshes updated library sources without changing the request or reusing the previous quote 
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-zHf7pn

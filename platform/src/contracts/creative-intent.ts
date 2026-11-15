@@ -1,4 +1,33 @@
 import { z } from 'zod';
+import { nativeCameraControlSchema, nativeFirstFrameSchema } from './native-plan';
+import { nativeImageEditSchema } from './native-image-edit';
+import { nativeReplicaSchema } from './native-replica';
+
+/** Shared by the strict result contract and native planner instructions. */
+export const CREATIVE_INTENT_LIMITS = {
+  subject: 300,
+  goal: 500,
+  platform: 80,
+  market: 20,
+  facts: 16,
+  sourceId: 100,
+  quote: 500,
+  constraints: 8,
+  constraint: 300,
+  summary: 800,
+  assumptions: 5,
+  assumption: 240,
+  questions: 2,
+  questionId: 60,
+  question: 240,
+  reason: 240,
+  options: 3,
+  option: 100,
+  prompt: 5000,
+  reviewChecklist: 6,
+  reviewItem: 240,
+} as const;
+const limits = CREATIVE_INTENT_LIMITS;
 
 export const CREATIVE_PLACEMENTS = [
   'general',
@@ -36,13 +65,54 @@ export const creativeAnswerSchema = z
   .strict();
 export const creativeQuestionSchema = z
   .object({
-    id: z.string().regex(/^[a-z][a-z0-9_-]{0,59}$/),
+    id: z
+      .string()
+      .regex(/^[a-z][a-z0-9_-]*$/)
+      .max(limits.questionId),
     field: z.enum(['subject', 'reference', 'conflict', 'claim', 'delivery', 'capability']),
-    question: z.string().trim().min(1).max(240),
-    reason: z.string().trim().min(1).max(240),
-    options: z.array(z.string().trim().min(1).max(100)).max(3),
+    question: z.string().trim().min(1).max(limits.question),
+    reason: z.string().trim().min(1).max(limits.reason),
+    options: z.array(z.string().trim().min(1).max(limits.option)).max(limits.options),
   })
   .strict();
+export const creativeContextSourceSchema = z
+  .object({
+    kind: z.enum(['brand', 'product', 'memory']),
+    id: z.string().uuid(),
+    label: z.string().min(1).max(300),
+    version: z.number().int().positive().optional(),
+    updatedAt: z.string().datetime().optional(),
+    expiresAt: z.string().datetime().nullable().optional(),
+    content: z.string().max(20000),
+  })
+  .strict();
+export const creativeMemoryContextSchema = z
+  .object({
+    items: z
+      .array(
+        z
+          .object({
+            id: z.string().uuid(),
+            topic: z.string().min(1).max(80),
+            kind: z.enum(['profile', 'preference', 'temporary']),
+            content: z.string().min(1).max(2000),
+            version: z.number().int().positive(),
+            updatedAt: z.string().datetime(),
+            confirmedAt: z.string().datetime().optional(),
+            expiresAt: z.string().datetime().nullable().optional(),
+            halfLifeDays: z.number().int().min(1).max(3650).nullable().optional(),
+            weight: z.number().min(0).max(1),
+          })
+          .strict(),
+      )
+      .max(8),
+    omitted: z.number().int().nonnegative(),
+  })
+  .strict()
+  .refine(
+    (value) => value.items.reduce((sum, item) => sum + item.content.length, 0) <= 6000,
+    '本次记忆上下文过长',
+  );
 export const creativeIntentRequestSchema = z
   .object({
     version: z.literal(1),
@@ -60,7 +130,10 @@ export const creativeIntentRequestSchema = z
             id: z.string().uuid(),
             name: z.string().max(300),
             kind: z.enum(['image', 'video', 'audio', 'document']),
-            role: z.enum(['reference', 'input', 'background', 'audio']),
+            role: z.enum(['reference', 'input', 'background', 'audio', 'mask']),
+            width: z.number().int().positive().optional(),
+            height: z.number().int().positive().optional(),
+            byteSize: z.number().int().positive().optional(),
           })
           .strict(),
       )
@@ -77,11 +150,24 @@ export const creativeIntentRequestSchema = z
         resolution: z.string().max(20),
         duration: z.number().optional(),
         supportsReference: z.boolean(),
+        supportsMotionEndpoints: z.boolean().optional(),
+        supportsBackgroundMask: z.boolean().optional(),
+        imageEditSize: z
+          .object({ width: z.number().int().positive(), height: z.number().int().positive() })
+          .strict()
+          .optional(),
+        videoOutputSize: z
+          .object({ width: z.number().int().positive(), height: z.number().int().positive() })
+          .strict()
+          .optional(),
         supportsAudio: z.boolean(),
         supportsText: z.boolean(),
       })
       .strict(),
     strategy: z.object({ id: z.string().max(160), guidance: z.string().max(16000) }).strict(),
+    replica: nativeReplicaSchema.optional(),
+    memoryContext: creativeMemoryContextSchema.optional(),
+    contextSources: z.array(creativeContextSourceSchema).max(10).optional(),
   })
   .strict();
 const strictCreativeIntentResultSchema = z
@@ -93,31 +179,41 @@ const strictCreativeIntentResultSchema = z
     brief: z
       .object({
         scope: z.enum(['general', 'product']),
-        subject: z.string().max(300),
-        goal: z.string().max(500),
+        subject: z.string().max(limits.subject),
+        goal: z.string().max(limits.goal),
         mediaType: z.enum(['image', 'video']),
-        platform: z.string().max(80),
+        platform: z.string().max(limits.platform),
         placement: creativePlacementSchema,
-        market: z.string().max(20).optional(),
+        market: z.string().max(limits.market).optional(),
         productMode: z.enum(['not-applicable', 'concept', 'reference']),
         facts: z
           .array(
             z
               .object({
-                sourceId: z.string().min(1).max(100),
-                quote: z.string().trim().min(1).max(500),
+                sourceId: z.string().min(1).max(limits.sourceId),
+                quote: z.string().trim().min(1).max(limits.quote),
               })
               .strict(),
           )
-          .max(16),
-        constraints: z.array(z.string().min(1).max(300)).max(8),
+          .max(limits.facts),
+        constraints: z.array(z.string().min(1).max(limits.constraint)).max(limits.constraints),
       })
       .strict(),
-    summary: z.string().trim().min(1).max(800),
-    assumptions: z.array(z.string().min(1).max(240)).max(5),
-    questions: z.array(creativeQuestionSchema).max(2),
-    prompt: z.string().max(5000),
-    reviewChecklist: z.array(z.string().min(1).max(240)).max(6),
+    summary: z.string().trim().min(1).max(limits.summary),
+    assumptions: z.array(z.string().min(1).max(limits.assumption)).max(limits.assumptions),
+    questions: z.array(creativeQuestionSchema).max(limits.questions),
+    prompt: z.string().max(limits.prompt),
+    generationPlan: z
+      .object({
+        imagePrompt: z.string().trim().min(1).max(limits.prompt),
+        videoPrompt: z.string().trim().min(1).max(limits.prompt),
+        firstFrame: nativeFirstFrameSchema.optional(),
+        cameraControl: nativeCameraControlSchema.optional(),
+      })
+      .strict()
+      .optional(),
+    imageEdit: nativeImageEditSchema.optional(),
+    reviewChecklist: z.array(z.string().min(1).max(limits.reviewItem)).max(limits.reviewChecklist),
   })
   .strict()
   .superRefine((value, ctx) => {
@@ -130,6 +226,10 @@ const strictCreativeIntentResultSchema = z
       ctx.addIssue({ code: 'custom', message: '需要补充时必须提供关键问题' });
     if (value.status === 'needs_clarification' && value.prompt.trim())
       ctx.addIssue({ code: 'custom', message: '待补充需求不能携带可执行提示词' });
+    if (value.generationPlan && (value.status !== 'ready' || value.brief.mediaType !== 'video'))
+      ctx.addIssue({ code: 'custom', message: '首帧与运镜方案仅用于已就绪的视频创作' });
+    if (value.imageEdit && (value.status !== 'ready' || value.brief.mediaType !== 'image'))
+      ctx.addIssue({ code: 'custom', message: '局部背景方案仅用于已就绪的图片创作' });
     if (new Set(value.questions.map((q) => q.id)).size !== value.questions.length)
       ctx.addIssue({ code: 'custom', message: '问题编号不可重复' });
   });
@@ -201,6 +301,9 @@ export function validateCreativeIntent(
 }
 
 export interface CreativePreparation {
+  contextSources?: z.infer<typeof creativeContextSourceSchema>[];
+  omittedMemoryCount?: number;
+  referenceStudy?: import('./reference-study').ReferenceStudyResult;
   id: string;
   status: 'ready' | 'needs_clarification';
   result: CreativeIntentResult;

@@ -1,0 +1,29 @@
+{
+  "unit": {
+    "files": 156,
+    "passed": 2387,
+    "failed": 0,
+    "skipped": 0,
+    "log": "platform/var/quality-audit-20261114/final-quality.log"
+  },
+  "browser": {
+    "passed": 38,
+    "failed": 0,
+    "skipped": 0,
+    "retries": 0,
+    "projects": {
+      "desktop": 19,
+      "mobile": 19
+    },
+    "scope": "9 related browser files; not full browser suite"
+  },
+  "qualityGate": "reviews/code-quality-20261114/evidence/quality-release.json",
+  "sourceFiles": 653,
+  "sourceSha256": "e553e5b63e3ebce669b8e313dae29b052881bfa7b62f692475f00e1c513e3939",
+  "sourceUnchanged": true,
+  "paidExternalCalls": 0,
+  "productionDataWriteOperations": 0,
+  "newDatabaseMigrations": 0,
+  "newDependencies": 0,
+  "productionDeployment": false
+}

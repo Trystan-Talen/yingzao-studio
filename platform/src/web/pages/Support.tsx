@@ -1,7 +1,7 @@
 import { ReferralDetails, type ReferralSummary } from '../components/ReferralDetails';
 import { SupportChannels } from '../components/SupportChannels';
 import { t } from '../lib/i18n';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   BookOpen,
   ChevronDown,
@@ -77,8 +77,15 @@ export function Support() {
   const [category, setCategory] = useState('support');
   const [message, setMessage] = useState('');
   const [jobId, setJobId] = useState('');
+  const creationSession = useRef(0);
+  const creationRevision = useRef(0);
+  const changeCreationOpen = (open: boolean) => {
+    creationSession.current += 1;
+    setCreating(open);
+  };
   const [detail, setDetail] = useState<string | null>(null);
-  const [reply, setReply] = useState('');
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
+  const reply = detail ? (replyDrafts[detail] ?? '') : '';
   const [ticketPage, setTicketPage] = useState(1);
   const tickets = useApi<Page<Ticket>>(
     `/support/tickets?pageSize=100&page=${ticketPage}`,
@@ -94,7 +101,7 @@ export function Support() {
         title={t('帮助与支持')}
         description={t('让每一次创作都走得更顺畅。')}
         action={
-          <Button onClick={() => setCreating(true)}>
+          <Button onClick={() => changeCreationOpen(true)}>
             <Plus size={17} />
             {t('提交工单')}
           </Button>
@@ -131,8 +138,9 @@ export function Support() {
             </Link>
             <button
               onClick={() => {
+                creationRevision.current += 1;
                 setCategory('feedback');
-                setCreating(true);
+                changeCreationOpen(true);
               }}
             >
               <span className="feature-symbol">
@@ -184,8 +192,10 @@ export function Support() {
                         <strong>{item.subject}</strong>
                       </td>
                       <td>
-                        {{ feedback: '反馈', appeal: '申诉', support: '支持' }[item.category] ??
-                          item.category}
+                        {t(
+                          { feedback: '反馈', appeal: '申诉', support: '支持' }[item.category] ??
+                            item.category,
+                        )}
                       </td>
                       <td>
                         <Badge>
@@ -217,7 +227,7 @@ export function Support() {
               icon={<MessageSquare size={32} />}
               title={t('暂时没有工单')}
               description={t('可以提交反馈、支持请求，或关联任务发起申诉。')}
-              action={<Button onClick={() => setCreating(true)}>{t('提交工单')}</Button>}
+              action={<Button onClick={() => changeCreationOpen(true)}>{t('提交工单')}</Button>}
             />
           )}
         </section>
@@ -277,13 +287,15 @@ export function Support() {
       )}
       <Modal
         open={creating}
-        onClose={() => setCreating(false)}
+        onClose={() => changeCreationOpen(false)}
         title={t('提交工单')}
         description={t('记录保存在当前工作空间。未接入客服渠道时，提交不代表已发送给外部客服。')}
       >
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            const submittedSession = creationSession.current;
+            const submittedRevision = creationRevision.current;
             void action.run(async () => {
               await post('/support/tickets', {
                 subject,
@@ -292,17 +304,28 @@ export function Support() {
                 ...(jobId.trim() ? { jobId: jobId.trim() } : {}),
                 assetIds: [],
               });
-              setCreating(false);
-              setSubject('');
-              setMessage('');
-              setJobId('');
-              setTab('tickets');
+              if (
+                creationSession.current === submittedSession &&
+                creationRevision.current === submittedRevision
+              ) {
+                changeCreationOpen(false);
+                setSubject('');
+                setMessage('');
+                setJobId('');
+                setTab('tickets');
+              }
               await refresh();
             }, '工单已保存，状态为待处理');
           }}
         >
           <Field label={t('问题类型')}>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <select
+              value={category}
+              onChange={(e) => {
+                creationRevision.current += 1;
+                setCategory(e.target.value);
+              }}
+            >
               <option value="support">{t('使用支持')}</option>
               <option value="feedback">{t('产品反馈')}</option>
               <option value="appeal">{t('任务申诉')}</option>
@@ -313,7 +336,10 @@ export function Support() {
               required
               maxLength={120}
               value={subject}
-              onChange={(e) => setSubject(e.target.value)}
+              onChange={(e) => {
+                creationRevision.current += 1;
+                setSubject(e.target.value);
+              }}
             />
           </Field>
           <Field label={t('详细说明')}>
@@ -322,7 +348,10 @@ export function Support() {
               rows={5}
               maxLength={10000}
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                creationRevision.current += 1;
+                setMessage(e.target.value);
+              }}
             />
           </Field>
           <Field
@@ -331,7 +360,10 @@ export function Support() {
             <input
               required={category === 'appeal'}
               value={jobId}
-              onChange={(e) => setJobId(e.target.value)}
+              onChange={(e) => {
+                creationRevision.current += 1;
+                setJobId(e.target.value);
+              }}
               placeholder={t('可从任务详情复制')}
             />
           </Field>
@@ -347,7 +379,7 @@ export function Support() {
         open={!!detail}
         onClose={() => setDetail(null)}
         title={ticket.data?.subject ?? '工单详情'}
-        description={ticket.data ? `创建于 ${dateTime(ticket.data.createdAt)}` : undefined}
+        description={ticket.data ? `${t('创建于')} ${dateTime(ticket.data.createdAt)}` : undefined}
       >
         {ticket.isLoading ? (
           <Loading />
@@ -388,9 +420,18 @@ export function Support() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  if (!detail) return;
+                  const submittedTicket = detail;
+                  const submittedReply = reply;
                   void action.run(async () => {
-                    await post(`/support/tickets/${detail}/replies`, { message: reply });
-                    setReply('');
+                    await post(`/support/tickets/${submittedTicket}/replies`, {
+                      message: submittedReply,
+                    });
+                    setReplyDrafts((drafts) =>
+                      drafts[submittedTicket] === submittedReply
+                        ? { ...drafts, [submittedTicket]: '' }
+                        : drafts,
+                    );
                     await refresh();
                   }, '补充说明已保存');
                 }}
@@ -399,7 +440,10 @@ export function Support() {
                   <textarea
                     disabled={['withdrawn', 'resolved', 'closed'].includes(ticket.data.status)}
                     value={reply}
-                    onChange={(e) => setReply(e.target.value)}
+                    onChange={(e) => {
+                      if (detail)
+                        setReplyDrafts((drafts) => ({ ...drafts, [detail]: e.target.value }));
+                    }}
                     required
                     rows={3}
                   />
@@ -408,17 +452,20 @@ export function Support() {
                   <Button
                     type="button"
                     variant="ghost"
+                    busy={action.busy}
                     disabled={
                       !!ticket.data.resolution ||
                       ['withdrawn', 'resolved', 'closed'].includes(ticket.data.status)
                     }
-                    onClick={() =>
+                    onClick={() => {
+                      if (!detail) return;
+                      const submittedTicket = detail;
                       void action.run(async () => {
-                        await post(`/support/tickets/${detail}/withdraw`);
-                        setDetail(null);
+                        await post(`/support/tickets/${submittedTicket}/withdraw`);
+                        setDetail((current) => (current === submittedTicket ? null : current));
                         await refresh();
-                      }, '工单已撤回')
-                    }
+                      }, '工单已撤回');
+                    }}
                   >
                     {t('撤回工单')}
                   </Button>

@@ -31,11 +31,13 @@ test('persists real background music and the generated audio choice across save,
   const headers = await register(page, studio);
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   await composer.getByRole('button', { name: '视频创作', exact: true }).click();
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  await composer
+  await settings
     .getByRole('combobox', { name: '生成模型', exact: true })
     .selectOption('video.generate|fal|wan-2.6');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   const picker = composer
     .locator('.asset-picker')
     .filter({ has: page.getByText('背景音乐（可选）', { exact: true }) });
@@ -64,17 +66,18 @@ test('persists real background music and the generated audio choice across save,
   await page.reload();
   await expect(picker.locator('.asset-chip')).toContainText('background.wav');
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  await composer
+  await settings
     .getByRole('combobox', { name: '生成模型', exact: true })
     .selectOption('video.generate|fal|kling-o3-4k-reference');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
+  const sound = composer.getByRole('checkbox', { name: '生成视频音轨', exact: true });
+  await sound.check();
   await expect(
     composer.getByText('当前模型不支持背景音乐。原音频已保留，请移除音频或切换支持的模型后提交。', {
       exact: true,
     }),
   ).toBeVisible();
   await expect(picker.locator('.asset-chip')).toContainText('background.wav');
-  const sound = composer.getByRole('checkbox', { name: '生成视频音轨', exact: true });
-  await sound.check();
   await picker.getByRole('button', { name: '移除background.wav', exact: true }).click();
   const saved = page.waitForResponse(
     (response) =>
@@ -84,7 +87,6 @@ test('persists real background music and the generated audio choice across save,
   await composer.getByRole('button', { name: '保存草稿', exact: true }).click();
   expect((await saved).status()).toBe(200);
   await page.reload();
-  await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   await expect(sound).toBeChecked();
   const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
   const response = await page.request.get(

@@ -1,0 +1,75 @@
+{
+  "scope": "用量、兑换、订单草稿、本地开票申请、抬头及订单分页；无真实付款或开票外呼",
+  "changedProductFiles": [
+    "platform/src/web/pages/Usage.tsx",
+    "platform/src/server/core/business.ts",
+    "platform/src/web/lib/i18n.ts"
+  ],
+  "red": [
+    {
+      "run": "platform/var/e2e/run-j5Ve2K",
+      "confirmedProductFailures": 4,
+      "problems": [
+        "抬头新建后继续输入丢失",
+        "抬头编辑后继续输入丢失",
+        "旧抬头编辑完成误关新编辑器",
+        "兑换成功清除下一兑换码"
+      ],
+      "excludedFailure": "新写开票测试使用getByLabel精确匹配包裹选项文字，改用combobox语义定位；不计产品缺陷"
+    },
+    {
+      "run": "platform/var/e2e/run-0gCD8m",
+      "confirmedProductFailures": 1,
+      "problem": "101条订单中后页订单没有实际翻页选择入口"
+    },
+    {
+      "file": "invoice-amount-red.json",
+      "confirmedProductFailures": 1,
+      "problem": "未支付订单错误返回正的可开票金额"
+    },
+    {
+      "run": "platform/var/e2e/run-cCQ0qa",
+      "confirmedProductFailures": 2,
+      "problems": [
+        "旧开票请求已成功占用金额，重开选单仍呈现已占用订单",
+        "第一笔撤回原因串入第二笔撤回表单"
+      ],
+      "assertionBoundary": "两项均在释放旧响应前失败；后续迟到响应守卫由完整绿测继续验证，不把未执行到的断言写成独立失败证据"
+    }
+  ],
+  "regressionAssertions": [
+    "抬头续写仍更新原ID、关闭重开保留新草稿",
+    "两兑换码分别仅入账一次，接口额度不变，重复兑换拒绝",
+    "未付订单关闭后保持未充值，支付会话数0",
+    "申请快照不受抬头修改删除影响；仅净已支付金额可申请",
+    "本地登记标记未发送，撤回释放金额并能再次申请",
+    "101条订单跨页选择保留，已占用金额不再可选，单次上限100",
+    "新开票会话与撤回原因隔离；迟到响应不能关闭后续表单",
+    "撤回提交中的同会话理由锁定，另一会话仍可输入；异常后解除锁定"
+  ],
+  "stagedRuns": [
+    {
+      "run": "platform/var/e2e/run-XLuMQX",
+      "passed": 12
+    },
+    {
+      "run": "platform/var/e2e/run-joxe0C",
+      "passed": 14
+    },
+    {
+      "run": "platform/var/e2e/run-yyck7J",
+      "passed": 18
+    },
+    {
+      "run": "platform/var/e2e/run-YdDMR0",
+      "passed": 30,
+      "note": "构建早于最后撤回理由锁定增量，只算阶段关联验证"
+    }
+  ],
+  "unitRegression": {
+    "report": "commerce-unit-green.json",
+    "passed": 45,
+    "failed": 0
+  },
+  "finalRunPolicy": "以上阶段数字不相加；最终冻结源码的全量浏览器与统一质量检查另记录。抬头分页独立审查见invoice-title-pagination.json。"
+}

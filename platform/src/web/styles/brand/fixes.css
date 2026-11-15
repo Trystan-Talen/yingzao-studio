@@ -1,0 +1,856 @@
+/* ==========================================================================
+   映造 · Review fixes (2026-11-10 audit)
+   Brand gaps in legacy surfaces: usage stat card, canvas editor, detail-page
+   wizard, workbench composer, task drawer, duplicate service notices.
+   `:root:root` lifts specificity above lazily-loaded legacy page stylesheets.
+   ========================================================================== */
+
+/* ---------- P0-1 · Usage: primary credit card must be readable ---------- */
+:root:root .stat-card.primary-stat {
+  position: relative;
+  overflow: hidden;
+  color: var(--yz-text);
+  border-color: color-mix(in srgb, var(--yz-vermilion) 34%, var(--yz-line));
+  background:
+    radial-gradient(
+      90% 130% at 100% 0%,
+      color-mix(in srgb, var(--yz-vermilion) 34%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      80% 120% at 0% 100%,
+      color-mix(in srgb, var(--yz-violet) 22%, transparent),
+      transparent 60%
+    ),
+    var(--yz-ink-2);
+}
+:root:root .primary-stat > span,
+:root:root .primary-stat small {
+  color: var(--yz-text-2);
+  opacity: 1;
+}
+:root:root .stat-card.primary-stat strong {
+  font-size: 40px;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  color: var(--yz-text);
+}
+:root:root .stat-card strong {
+  font-family: var(--yz-font-display);
+}
+:root:root .stat-card small {
+  font-size: 11.5px;
+}
+:root:root .stat-card > span {
+  font-size: 12px;
+}
+
+/* ---------- P0-2 · Canvas editor in brand colours, fits the viewport ---------- */
+:root:root .ce-editor,
+:root:root .ce-dialog {
+  --ce-panel: var(--yz-ink-1);
+  --ce-text: var(--yz-text);
+  --ce-muted: var(--yz-muted);
+  --ce-border: var(--yz-line-strong);
+  --ce-primary: var(--yz-text);
+  --ce-primary-text: var(--yz-ink-0);
+  --ce-tint: color-mix(in srgb, var(--yz-text) 9%, transparent);
+  --ce-field: var(--yz-ink-0);
+  --ce-danger: var(--danger);
+}
+:root:root .ce-editor {
+  height: calc(100dvh - 236px);
+  min-height: 480px;
+  border-radius: var(--yz-r-lg);
+  border-color: var(--yz-line-strong);
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.6);
+}
+:root:root .ce-toolbar {
+  background: var(--yz-ink-2);
+  border-bottom-color: var(--yz-line);
+}
+:root:root .ce-canvas-area {
+  background:
+    radial-gradient(
+        circle at 1px 1px,
+        color-mix(in srgb, var(--yz-text) 9%, transparent) 1px,
+        transparent 0
+      )
+      0 0 / 22px 22px,
+    var(--yz-ink-0);
+}
+:root:root .ce-sidebar {
+  background: var(--yz-ink-1);
+  border-inline-start-color: var(--yz-line);
+}
+:root:root .ce-panel-tabs button[aria-selected='true'],
+:root:root .ce-panel-tabs button.active {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+}
+:root:root .ce-export-button {
+  border-radius: var(--yz-r-pill);
+  background: var(--yz-aurora-action);
+  color: #fff;
+}
+:root:root .ce-empty-canvas .ce-empty-icon {
+  background: var(--tint);
+  color: var(--yz-vermilion);
+}
+:root:root .ce-empty-canvas button {
+  border-radius: var(--yz-r-pill);
+}
+:root:root .ce-zoom-controls {
+  border-radius: var(--yz-r-pill);
+  background: var(--yz-glass);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--yz-line-strong);
+}
+:root[data-theme='light'] .ce-editor,
+:root[data-theme='light'] .ce-dialog {
+  --ce-field: var(--yz-ink-3);
+}
+
+/* ---------- P0-6 · Detail-page wizard: brand step rail ---------- */
+:root:root .detail-flow {
+  position: relative;
+  border-radius: var(--yz-r-lg);
+  border: 1px solid var(--yz-line);
+  background: var(--yz-ink-1);
+  overflow: hidden;
+}
+:root:root .detail-flow > button.current,
+:root:root .detail-flow > button.current:hover {
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--yz-vermilion) 14%, transparent),
+      transparent 70%
+    ),
+    var(--yz-ink-2);
+  color: var(--yz-text);
+  box-shadow: inset 0 -2px 0 var(--yz-vermilion);
+}
+:root:root .detail-flow .current .detail-flow-number {
+  background: var(--yz-text);
+  border-color: var(--yz-text);
+  color: var(--yz-ink-0);
+}
+:root:root .detail-flow .done .detail-flow-number {
+  background: transparent;
+  border-color: var(--yz-vermilion);
+  color: var(--yz-vermilion);
+}
+:root:root .detail-flow > button + button {
+  border-inline-start-color: var(--yz-line);
+}
+:root:root .detail-brief-panel,
+:root:root .detail-delivery-panel {
+  border-radius: var(--yz-r-lg);
+  border-color: var(--yz-line);
+  background: var(--yz-ink-1);
+}
+
+/* other legacy lime leftovers */
+:root:root .tools-feature .eyebrow {
+  color: var(--yz-vermilion);
+}
+:root:root .tools-feature .button {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+}
+:root:root .save-inspiration,
+:root:root .ocr-preview > button {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+}
+
+/* ---------- P0-4 · Service-not-connected: say it once ---------- */
+/* The collapsed capability summary repeats the notice that sits above the generate button. */
+:root:root .model-capability-status:has(~ .submit-block > .notice) {
+  display: none;
+}
+:root:root .submit-block > .notice {
+  align-self: flex-start;
+  margin: 0 0 4px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--yz-r-pill);
+  background: color-mix(in srgb, var(--yz-text) 6%, transparent);
+  color: var(--yz-text-2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+:root:root .submit-block > .notice svg {
+  color: var(--muted);
+}
+:root:root .submit-block > .notice a {
+  color: var(--yz-vermilion);
+  font-weight: 600;
+}
+
+/* ---------- P0-5 · Model info card in the settings popover ---------- */
+.composer-model-card {
+  margin-top: 10px;
+  padding: 14px 16px;
+  border-radius: var(--yz-r-md);
+  border: 1px solid var(--yz-line);
+  background:
+    radial-gradient(
+      100% 120% at 100% 0%,
+      color-mix(in srgb, var(--yz-violet) 14%, transparent),
+      transparent 60%
+    ),
+    var(--yz-ink-1);
+}
+.composer-model-card.is-connected {
+  border-color: color-mix(in srgb, var(--yz-lumen) 28%, var(--yz-line));
+}
+.composer-model-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.composer-model-card-head strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+.composer-model-card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: var(--yz-r-pill);
+  background: color-mix(in srgb, var(--yz-text) 7%, transparent);
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.composer-model-card-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.composer-model-card.is-connected .composer-model-card-status {
+  color: var(--yz-text);
+}
+.composer-model-card.is-connected .composer-model-card-status::before {
+  background: var(--yz-lumen);
+  box-shadow: 0 0 8px var(--yz-lumen);
+}
+.composer-model-card dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 0;
+}
+.composer-model-card dl > div {
+  min-width: 0;
+}
+.composer-model-card dt {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.composer-model-card dd {
+  margin: 2px 0 0;
+  overflow: hidden;
+  font-family: var(--yz-font-mono);
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .composer-model-card dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- P1 · Workbench composer matches the home composer ---------- */
+:root:root .workbench-body {
+  align-items: stretch;
+}
+:root:root .creation-sidebar {
+  align-self: flex-start;
+}
+/* The single-column workspace must scroll the composer past the result actions. */
+@media (min-width: 961px) {
+  :root:root .creation-sidebar {
+    position: sticky;
+    top: calc(var(--yz-topbar) + 12px);
+  }
+}
+:root:root .creation-sidebar .composer.composer-studio {
+  padding: 14px;
+  border-radius: var(--yz-r-xl);
+  border: 1px solid var(--yz-line-strong);
+  background: var(--yz-ink-1);
+  box-shadow: 0 30px 80px -40px rgb(0 0 0 / 0.7);
+}
+:root:root .creation-sidebar .composer-studio:focus-within {
+  border-color: color-mix(in srgb, var(--yz-vermilion) 50%, var(--yz-line-strong));
+}
+:root:root .creation-sidebar .composer-studio .composer-top {
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+:root:root .creation-sidebar .composer-studio .composer-top .segments {
+  width: auto;
+  padding: 3px;
+  border-radius: var(--yz-r-pill);
+  border: 1px solid var(--yz-line);
+  background: color-mix(in srgb, var(--yz-text) 6%, transparent);
+}
+:root:root .creation-sidebar .composer-studio .composer-top .segments button {
+  flex: none;
+  min-height: 32px;
+  padding: 5px 16px;
+  border-radius: var(--yz-r-pill);
+  font-weight: 650;
+}
+:root:root .creation-sidebar .composer-studio .composer-top .segments button.active {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+}
+:root:root .creation-sidebar .composer-studio textarea.prompt-input {
+  min-height: 140px;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 15px;
+  line-height: 1.7;
+}
+:root:root .creation-sidebar .composer-studio .submit-block {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--yz-line);
+}
+:root:root .creation-sidebar .composer-studio .composer-toolbar {
+  flex-wrap: wrap;
+}
+:root:root .composer-studio .composer-settings-toggle,
+:root:root .composer-studio .composer-platform-field select {
+  border-radius: var(--yz-r-pill);
+  white-space: nowrap;
+}
+:root:root .creation-sidebar .composer-studio .composer-settings-toggle {
+  max-width: 100%;
+}
+:root:root .creation-sidebar .composer-studio .submit-row > .button.primary {
+  min-height: 46px;
+  border-radius: var(--yz-r-pill);
+  background: var(--yz-aurora-action);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 14px 34px -14px color-mix(in srgb, var(--yz-vermilion) 80%, transparent);
+}
+:root:root .creation-sidebar .composer-studio .submit-row > .button.primary:disabled {
+  opacity: 0.38;
+  box-shadow: none;
+}
+:root:root .creation-sidebar .composer-studio .asset-add {
+  border-radius: var(--yz-r-md);
+  border: 1px dashed var(--yz-line-strong);
+  background: color-mix(in srgb, var(--yz-text) 3%, transparent);
+}
+/* the results / canvas switch is the stage's primary navigation */
+:root:root .project-stage-heading {
+  align-items: center;
+}
+:root:root .project-stage-actions .segments button {
+  min-height: 36px;
+  padding: 7px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+:root:root .project-results > .empty {
+  min-height: 420px;
+}
+
+/* ---------- P1 · Task drawer: what's running now, not the whole task centre ---------- */
+:root:root .drawer:has(.task-drawer-intro) .task-history-toolbar,
+:root:root .drawer:has(.task-drawer-intro) .task-filters {
+  display: none;
+}
+:root:root .drawer:has(.task-drawer-intro) .task-status-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+:root:root .drawer:has(.task-drawer-intro) .task-status-tabs > * {
+  flex: none;
+}
+:root:root .task-drawer-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+:root:root .task-status-tabs .button,
+:root:root .tools-page .category-tabs button {
+  border-radius: var(--yz-r-pill);
+}
+:root:root .task-status-tabs .button[aria-pressed='true'],
+:root:root .task-status-tabs .button.active,
+:root:root .tools-page .category-tabs button[aria-pressed='true'] {
+  background: var(--yz-text);
+  color: var(--yz-ink-0);
+  border-color: var(--yz-text);
+}
+
+/* empty artboard: the artboard itself is always white, so its CTA uses the brand gradient */
+:root:root .ce-empty-canvas {
+  color: #141310;
+}
+:root:root .ce-empty-canvas .ce-empty-icon {
+  background: #fff1ec;
+  color: #e2401c;
+}
+:root:root .ce-empty-canvas > span {
+  color: #66625a;
+}
+:root:root .ce-empty-canvas button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--yz-aurora-action);
+  color: #fff;
+  font-weight: 650;
+  box-shadow: 0 12px 28px -12px rgb(255 61 95 / 0.7);
+}
+:root:root .ce-empty-canvas button:hover:not(:disabled) {
+  background: var(--yz-aurora-action);
+  filter: brightness(1.06);
+}
+
+/* ---------- P1 · Notices: information must not look like an error ---------- */
+:root:root .notice {
+  color: var(--yz-text-2);
+  font-size: 13px;
+  line-height: 1.7;
+}
+:root:root .notice.info,
+:root:root .notice:not(.warning):not(.success) {
+  background: color-mix(in srgb, var(--yz-text) 4%, var(--yz-ink-1));
+  border-color: var(--yz-line);
+}
+:root:root .notice.info > svg,
+:root:root .notice:not(.warning):not(.success) > svg {
+  color: color-mix(in srgb, var(--yz-violet) 75%, var(--yz-text));
+}
+:root:root .notice.warning > svg {
+  color: var(--warning);
+}
+:root:root .notice.success {
+  background: color-mix(in srgb, var(--yz-lumen) 8%, var(--yz-ink-1));
+  border-color: color-mix(in srgb, var(--yz-lumen) 24%, transparent);
+}
+:root:root .notice a {
+  color: var(--yz-vermilion);
+}
+/* consecutive notices under a page header read as one block */
+:root:root .page-heading ~ .notice + .notice {
+  margin-top: -10px;
+}
+
+/* ---------- P1 · Every primary submit uses the brand gradient ---------- */
+:root:root .submit-row > .button.primary {
+  border-radius: var(--yz-r-pill);
+  background: var(--yz-aurora-action);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 14px 34px -14px color-mix(in srgb, var(--yz-vermilion) 80%, transparent);
+}
+:root:root .submit-row > .button.primary:hover:not(:disabled) {
+  background: var(--yz-aurora-action);
+  filter: brightness(1.07);
+}
+:root:root .submit-row > .button.primary:disabled {
+  opacity: 0.38;
+  box-shadow: none;
+  filter: saturate(0.6);
+}
+
+/* ---------- P1 · Home: highlight the composer while a file is dragged onto the reference tile ---------- */
+.yz-create .yz-compose-shell:has(.asset-chips.dragging) {
+  outline: 2px dashed var(--yz-vermilion);
+  outline-offset: 6px;
+}
+.yz-result-hint {
+  max-width: 1040px;
+  margin: 12px auto 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+.yz-result-hint a {
+  color: var(--yz-text-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- P1 · Brand quota: one compact strip instead of a full-width stat block ---------- */
+:root:root .stat-card.brand-quota-strip {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin-bottom: 18px;
+  padding: 12px 18px;
+  border-radius: var(--yz-r-pill);
+}
+:root:root .brand-quota-strip strong {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+:root:root .brand-quota-strip p {
+  margin: 0;
+  color: var(--yz-text-2);
+  font-size: 12.5px;
+}
+:root:root .brand-quota-strip > small:last-child {
+  flex-basis: 100%;
+}
+
+/* ==========================================================================
+   P2 · Polish
+   ========================================================================== */
+
+/* -- type floor: Chinese UI text never below 12px; 11px only for latin/mono labels -- */
+.yz-rail-link {
+  font-size: 12px;
+}
+.yz-rail-link.is-compact {
+  font-size: 11.5px;
+}
+:root:root .composer-studio .composer-note {
+  font-family: var(--yz-font-sans);
+  font-size: 12px;
+}
+:root:root .credit-estimate-note {
+  font-size: 11.5px;
+}
+:root:root .field-hint {
+  font-size: 12px;
+}
+:root:root .badge {
+  font-size: 11.5px;
+}
+
+/* -- CJK display tracking: negative tracking is for latin; keep Chinese headings breathable -- */
+:root:root h1,
+:root:root .page-heading h1,
+:root:root .page.inspiration-studio .inspiration-studio-title h1,
+.yz-create .yz-hero h1,
+.yz-section-title h2,
+:root .yz-login-copy h1 {
+  letter-spacing: -0.02em;
+}
+:root:root .yz-signature span:first-child {
+  letter-spacing: -0.06em;
+}
+
+/* -- two header levels: management pages are tools, not editorials -- */
+.yz-content.is-management .page-heading {
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+}
+.yz-content.is-management .page-heading h1 {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.yz-content.is-management .page-heading .eyebrow {
+  display: none;
+}
+.yz-content.is-management .page-description {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+/* -- project / asset cards: selection appears on hover or once selecting -- */
+:root:root .project-select-control {
+  opacity: 0;
+  transition: opacity 0.2s var(--yz-ease);
+}
+:root:root .project-card:hover .project-select-control,
+:root:root .project-card:focus-within .project-select-control,
+:root:root .project-card.is-selected .project-select-control,
+:root:root .library-page:has(.selection-bar) .project-select-control {
+  opacity: 1;
+}
+:root:root .project-select-control span {
+  font-size: 12px;
+}
+@media (hover: none) {
+  :root:root .project-select-control {
+    opacity: 1;
+  }
+}
+:root:root .project-cover {
+  background:
+    radial-gradient(
+      80% 90% at 85% 10%,
+      color-mix(in srgb, var(--yz-vermilion) 22%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      70% 80% at 10% 100%,
+      color-mix(in srgb, var(--yz-violet) 20%, transparent),
+      transparent 60%
+    ),
+    var(--yz-ink-3);
+}
+
+/* -- custom checkbox -- */
+:root:root input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border-radius: 6px;
+  border: 1.5px solid color-mix(in srgb, var(--yz-text) 35%, transparent);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s var(--yz-ease),
+    border-color 0.15s var(--yz-ease);
+}
+:root:root input[type='checkbox']::after {
+  content: '';
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--yz-ink-0);
+  border-bottom: 2px solid var(--yz-ink-0);
+  transform: translateY(-1px) rotate(-45deg) scale(0);
+  transition: transform 0.15s var(--yz-ease-spring);
+}
+:root:root input[type='checkbox']:checked {
+  background: var(--yz-text);
+  border-color: var(--yz-text);
+}
+:root:root input[type='checkbox']:checked::after {
+  transform: translateY(-1px) rotate(-45deg) scale(1);
+}
+:root:root input[type='checkbox']:hover:not(:disabled) {
+  border-color: var(--yz-text);
+}
+:root:root input[type='checkbox']:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+:root:root input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--yz-vermilion);
+  outline-offset: 2px;
+}
+
+/* -- motion: the composer is usable immediately; entrance motion is short -- */
+.yz-create .yz-launch,
+.yz-create .yz-capabilities {
+  animation: none !important;
+}
+.yz-greeting,
+.yz-create .yz-hero h1 {
+  animation-duration: 0.35s !important;
+  animation-delay: 0s !important;
+}
+.yz-create .yz-idea {
+  animation-duration: 0.4s !important;
+  animation-delay: calc(var(--i, 0) * 30ms) !important;
+}
+
+/* -- contrast: placeholders reach readable contrast -- */
+:root:root input::placeholder,
+:root:root textarea::placeholder,
+.yz-create .composer-studio textarea.prompt-input::placeholder {
+  color: var(--yz-muted);
+  opacity: 1;
+}
+
+/* -- focus inside horizontally scrolling chip rows is not clipped -- */
+:root:root .composer-directions > *:focus-visible,
+:root:root .yz-chips button:focus-visible,
+:root:root .inspiration-studio-categories button:focus-visible {
+  outline-offset: -2px;
+}
+
+/* -- light theme pass -- */
+:root[data-theme='light'] .yz-aurora span {
+  opacity: 0.18;
+  filter: blur(110px) saturate(0.8);
+}
+:root[data-theme='light'] .yz-credit {
+  border-color: rgb(20 18 14 / 0.12);
+  background: rgb(255 255 255 / 0.7);
+}
+:root[data-theme='light'] .yz-credit svg {
+  color: #c9330f;
+}
+:root[data-theme='light'] .yz-create .yz-compose-shell {
+  box-shadow:
+    0 30px 80px -30px rgb(80 50 20 / 0.22),
+    0 0 0 8px rgb(255 255 255 / 0.6);
+}
+:root[data-theme='light'] .stat-card,
+:root[data-theme='light'] .panel,
+:root[data-theme='light'] .tool-card,
+:root[data-theme='light'] .project-card,
+:root[data-theme='light'] .asset-card {
+  box-shadow:
+    0 1px 2px rgb(40 30 10 / 0.05),
+    0 8px 24px -16px rgb(40 30 10 / 0.18);
+}
+
+/* ==========================================================================
+   Mobile
+   ========================================================================== */
+@media (max-width: 767px) {
+  /* inspiration: categories on one scrolling line, selects side by side */
+  :root:root .page.inspiration-studio .inspiration-studio-toolbar {
+    padding-bottom: 18px;
+    margin-bottom: 14px;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-title h1 {
+    font-size: 36px;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-subtitle {
+    display: none;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-categories {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: -16px;
+    padding-inline: 16px;
+    scrollbar-width: none;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-categories button {
+    flex: none;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-selects {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  :root:root .page.inspiration-studio .inspiration-studio-selects select {
+    flex: 1 0 auto;
+    width: auto;
+  }
+
+  /* library pages: compact header + one-line toolbar */
+  :root:root .page-heading {
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    gap: 14px;
+  }
+  :root:root .page-heading h1 {
+    font-size: 32px;
+  }
+  :root:root .page-description {
+    font-size: 13px;
+  }
+  :root:root .library-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  :root:root .library-toolbar > * {
+    flex: none;
+  }
+  :root:root .library-toolbar .library-search {
+    /* A percentage basis cycles against the group's intrinsic width and lets
+       later controls overlap it. Keep the same single scrolling toolbar. */
+    flex: 0 0 240px;
+    min-width: 0;
+  }
+  :root:root .library-toolbar .filter-group {
+    flex: 0 0 max-content;
+    width: max-content;
+    min-width: max-content;
+    flex-wrap: nowrap;
+  }
+  :root:root .library-toolbar .filter-group > * {
+    flex-shrink: 0;
+  }
+
+  /* composer chips: show there is more to the right */
+  .yz-create .composer-studio .composer-footer-tools {
+    mask-image: linear-gradient(to right, #000 86%, transparent);
+    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent);
+  }
+
+  :root:root .page.inspiration-studio .inspiration-studio-selects .checkbox-label {
+    flex: none;
+    white-space: nowrap;
+  }
+  /* assets: two columns of compact cards */
+  :root:root .asset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  :root:root .asset-grid .asset-info {
+    min-height: 0;
+    flex-grow: 0;
+    padding: 10px 10px 4px;
+  }
+  :root:root .asset-grid .asset-info h3 {
+    font-size: 13px;
+  }
+  :root:root .asset-grid .asset-info p,
+  :root:root .asset-grid .tag-list {
+    display: none;
+  }
+  :root:root .asset-grid .card-actions {
+    flex-wrap: nowrap;
+    gap: 2px;
+    min-height: 0;
+    margin: auto 0 0;
+    padding: 4px 8px 10px;
+    justify-content: flex-start;
+  }
+  :root:root .asset-grid .card-actions .button {
+    min-height: 32px;
+    margin: 0 auto 0 0;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  :root:root .asset-grid .card-actions .icon-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* the floating dock never covers the last content */
+  .yz-content > * {
+    scroll-margin-bottom: 96px;
+  }
+}
+
+/* The legacy sticky generate bar overlaps the prompt on short viewports on the home page,
+   where the composer already sits in the first screen. Keep it sticky only in the workbench. */
+:root:root .yz-create .composer .submit-block {
+  position: static;
+  box-shadow: none;
+  background: transparent;
+}
+:root:root .creation-sidebar .composer .submit-block {
+  background: var(--yz-ink-1);
+  box-shadow: 0 -12px 16px var(--yz-ink-1);
+}

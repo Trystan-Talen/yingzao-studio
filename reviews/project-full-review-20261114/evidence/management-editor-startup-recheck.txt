@@ -1,0 +1,8 @@
+Running 1 test using 1 worker
+
+(node:79344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [mobile] › tests/e2e/library-batch-recovery.spec.ts:175:1 › reports an unavailable project library and restores saved work through an explicit retry (4.1s)
+
+  1 passed (7.5s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-5W7ylH

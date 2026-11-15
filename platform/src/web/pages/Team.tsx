@@ -90,8 +90,13 @@ export function Team() {
   const [role, setRole] = useState('member');
   const [expires, setExpires] = useState(7);
   const [inviteUrl, setInviteUrl] = useState('');
+  const [invitedEmail, setInvitedEmail] = useState('');
   const [inviteDelivery, setInviteDelivery] = useState<InvitationMailDelivery | null>(null);
+  const inviteSession = useRef(0);
+  const inviteRevision = useRef(0);
   const [editing, setEditing] = useState<Member | null>(null);
+  const memberSession = useRef(0);
+  const memberRevision = useRef(0);
   const [nickname, setNickname] = useState('');
   const [creditLimit, setCreditLimit] = useState('');
   const [deleting, setDeleting] = useState<Member | null>(null);
@@ -158,6 +163,7 @@ export function Team() {
               </Button>
               <Button
                 onClick={() => {
+                  inviteSession.current += 1;
                   setInvite(true);
                   setRole('member');
                 }}
@@ -319,6 +325,7 @@ export function Team() {
                                 <Button
                                   variant="ghost"
                                   onClick={() => {
+                                    memberSession.current += 1;
                                     setEditing(member);
                                     setRole(member.role);
                                     setNickname(member.nickname);
@@ -548,7 +555,10 @@ export function Team() {
       <TeamCreation open={create} onClose={() => setCreate(false)} />
       <Modal
         open={invite}
-        onClose={() => setInvite(false)}
+        onClose={() => {
+          inviteSession.current += 1;
+          setInvite(false);
+        }}
         title={t('邀请团队成员')}
         description={
           mailStatus.data?.enabled
@@ -559,6 +569,9 @@ export function Team() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            const submittedSession = inviteSession.current;
+            const submittedRevision = inviteRevision.current;
+            const submittedEmail = email;
             void action.run(async () => {
               const result = await post<{
                 inviteUrl: string;
@@ -569,26 +582,53 @@ export function Team() {
                 expiresInDays: expires,
               });
               setInviteUrl(result.inviteUrl);
+              setInvitedEmail(submittedEmail);
               setInviteDelivery(result.mailDelivery ?? null);
-              setInvite(false);
-              setEmail('');
+              if (
+                inviteSession.current === submittedSession &&
+                inviteRevision.current === submittedRevision
+              ) {
+                inviteSession.current += 1;
+                setInvite(false);
+                setEmail('');
+              }
               await refresh();
             });
           }}
         >
           <Field label={t('成员邮箱')}>
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => {
+                inviteRevision.current += 1;
+                setEmail(e.target.value);
+              }}
+            />
           </Field>
           <div className="form-grid">
             <Field label={t('加入角色')}>
-              <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <select
+                value={role}
+                onChange={(e) => {
+                  inviteRevision.current += 1;
+                  setRole(e.target.value);
+                }}
+              >
                 <option value="member">{t('成员')}</option>
                 <option value="admin">{t('管理员')}</option>
                 <option value="viewer">{t('只读成员')}</option>
               </select>
             </Field>
             <Field label={t('有效期')}>
-              <select value={expires} onChange={(e) => setExpires(Number(e.target.value))}>
+              <select
+                value={expires}
+                onChange={(e) => {
+                  inviteRevision.current += 1;
+                  setExpires(Number(e.target.value));
+                }}
+              >
                 {[1, 3, 7].map((value) => (
                   <option key={value} value={value}>
                     {value}
@@ -618,6 +658,9 @@ export function Team() {
               ? t('此邀请已有邮件投递记录，未重复排队。请在设置中核对实际状态。')
               : t('当前未自动发送邮件，请复制链接后自行发送给成员。')}
         </Notice>
+        <Field label={t('成员邮箱')}>
+          <input readOnly value={invitedEmail} />
+        </Field>
         <Field label={t('专属邀请链接')}>
           <input readOnly value={inviteUrl} />
         </Field>
@@ -631,10 +674,19 @@ export function Team() {
           </Button>
         </div>
       </Modal>
-      <Modal open={!!editing} onClose={() => setEditing(null)} title={t('管理成员')}>
+      <Modal
+        open={!!editing}
+        onClose={() => {
+          memberSession.current += 1;
+          setEditing(null);
+        }}
+        title={t('管理成员')}
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            const submittedSession = memberSession.current;
+            const submittedRevision = memberRevision.current;
             void action.run(async () => {
               if (!editing) return;
               await patch(`/members/${editing.id}`, {
@@ -642,27 +694,49 @@ export function Team() {
                 nickname,
                 creditLimit: creditLimit === '' ? null : Number(creditLimit),
               });
-              setEditing(null);
+              if (
+                memberSession.current === submittedSession &&
+                memberRevision.current === submittedRevision
+              ) {
+                memberSession.current += 1;
+                setEditing(null);
+              }
               await refresh();
             }, '成员设置已保存');
           }}
         >
           <Field label={t('成员角色')}>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <select
+              value={role}
+              onChange={(e) => {
+                memberRevision.current += 1;
+                setRole(e.target.value);
+              }}
+            >
               <option value="member">{t('成员')}</option>
               <option value="admin">{t('管理员')}</option>
               <option value="viewer">{t('只读成员')}</option>
             </select>
           </Field>
           <Field label={t('备注名称')}>
-            <input value={nickname} maxLength={100} onChange={(e) => setNickname(e.target.value)} />
+            <input
+              value={nickname}
+              maxLength={100}
+              onChange={(e) => {
+                memberRevision.current += 1;
+                setNickname(e.target.value);
+              }}
+            />
           </Field>
           <Field label={t('额度上限')} hint={t('留空使用共享额度；不能低于已使用与预留的额度。')}>
             <input
               type="number"
               min={0}
               value={creditLimit}
-              onChange={(e) => setCreditLimit(e.target.value)}
+              onChange={(e) => {
+                memberRevision.current += 1;
+                setCreditLimit(e.target.value);
+              }}
             />
           </Field>
           <div className="modal-actions">

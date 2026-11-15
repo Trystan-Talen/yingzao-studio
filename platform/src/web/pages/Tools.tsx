@@ -621,7 +621,11 @@ function ToolForm({ id, tool }: { id: string; tool: (typeof TOOLS)[number] | und
         </div>
       )}
       <div className="tool-workspace">
-        <section className="tool-form panel" inert={!projectRecoveryReady}>
+        <section
+          className="tool-form panel"
+          inert={!projectRecoveryReady || restoringAssets}
+          aria-busy={!projectRecoveryReady || restoringAssets}
+        >
           <div className="panel-heading">
             <h2>{t('输入与参数')}</h2>
             <Badge tone={actualOperation.startsWith('local.') ? 'green' : 'neutral'}>

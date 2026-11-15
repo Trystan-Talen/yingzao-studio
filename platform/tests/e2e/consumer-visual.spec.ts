@@ -25,18 +25,18 @@ async function unobstructed(control: Locator) {
 }
 
 async function shell(page: Page, width: number, mobile = false) {
-  const header = page.locator('.studio-header');
+  const header = page.locator('.yz-topbar');
   await expect(header).toBeVisible();
   const headerBounds = await header.boundingBox();
-  const mainBounds = await page.locator('.studio-main').boundingBox();
-  const rail = page.locator('.studio-navigation-rail');
-  expect(headerBounds!.height).toBeCloseTo(mobile ? 64 : 56, 0);
-  expect(mainBounds!.x).toBeCloseTo(mobile ? 0 : 72, 0);
-  expect(mainBounds!.width).toBeCloseTo(width - (mobile ? 0 : 72), 0);
+  const mainBounds = await page.locator('.yz-main').boundingBox();
+  const rail = page.locator('.yz-rail');
+  expect(headerBounds!.height).toBeCloseTo(64, 0);
+  expect(mainBounds!.x).toBeCloseTo(mobile ? 0 : 88, 0);
+  expect(mainBounds!.width).toBeCloseTo(width - (mobile ? 0 : 88), 0);
   if (mobile) await expect(rail).toBeHidden();
   else {
     await expect(rail).toBeVisible();
-    expect((await rail.boundingBox())!.width).toBeCloseTo(72, 0);
+    expect((await rail.boundingBox())!.width).toBeCloseTo(88, 0);
   }
   await expectNoHorizontalOverflow(page);
 }
@@ -61,19 +61,18 @@ test('desktop studio visual states keep normal-flow creation above unobstructed 
   page,
   studio,
 }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
   const { account, composer, prompt, writes, headers } = await openCreationRedesign(page, studio);
-  await expect(
-    page.getByRole('heading', { name: '好作品，从一个想法开始', exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: '今天想映造什么？', exact: true })).toBeVisible();
   await expect(page.locator('.studio-idea-card')).toHaveCount(8);
   await expect(
-    page.locator('.studio-shortcuts').getByRole('link', { name: '商品详情页', exact: true }),
+    page.locator('.studio-shortcuts').getByRole('link', { name: /^商品详情页/ }),
   ).toHaveAttribute('href', '/detail-pages');
-  await expect(composer.getByRole('group', { name: '创作方向', exact: true })).toBeHidden();
+  await expect(composer.getByRole('group', { name: '创作方向', exact: true })).toBeVisible();
   await expect(composer.locator('.credit-estimate-value')).toHaveText(/预计 \d+ 积分/);
   const credit = await page.request.get(`${studio.origin}/api/v1/credits`, { headers });
   expect(credit.status()).toBe(200);
-  await expect(page.locator('.studio-header-credit strong')).toHaveText(
+  await expect(page.locator('.yz-credit strong')).toHaveText(
     (await credit.json()).data.available.toLocaleString(),
   );
   await shell(page, page.viewportSize()!.width);
@@ -88,11 +87,12 @@ test('desktop studio visual states keep normal-flow creation above unobstructed 
   });
 
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  const settings = composer.getByRole('region', { name: '创作设置', exact: true });
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   await expect(settings.getByRole('combobox', { name: '创作类型', exact: true })).toBeVisible();
-  const controls = await composer.locator('select:visible').all();
+  await settings.getByText('更多偏好', { exact: true }).click();
+  const controls = await settings.locator('select:visible').all();
   const reached = new Set<number>();
-  await composer.getByRole('button', { name: '收起高级设置', exact: true }).focus();
+  await settings.getByRole('button', { name: '完成', exact: true }).focus();
   for (let step = 0; step < 36 && reached.size < controls.length; step++) {
     await page.keyboard.press('Shift+Tab');
     for (let index = 0; index < controls.length; index++) {
@@ -104,8 +104,6 @@ test('desktop studio visual states keep normal-flow creation above unobstructed 
   }
   expect(reached.size).toBe(controls.length);
   expect(controls.length).toBeGreaterThanOrEqual(5);
-  await unobstructed(composer.getByRole('button', { name: '生成图片', exact: true }));
-  await normalFlowCreation(page);
   await writeFile(
     join(studio.folder, 'consumer-keyboard-controls.json'),
     JSON.stringify(
@@ -123,7 +121,9 @@ test('desktop studio visual states keep normal-flow creation above unobstructed 
       2,
     ),
   );
-  await composer.getByRole('button', { name: '收起高级设置', exact: true }).click();
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
+  await unobstructed(composer.getByRole('button', { name: '生成图片', exact: true }));
+  await normalFlowCreation(page);
   await composer.getByRole('button', { name: '视频创作', exact: true }).click();
   await expect(page).toHaveURL(/kind=video$/);
   await expect(composer.locator('.credit-estimate-value')).toHaveText(/预计 \d+ 积分/);
@@ -177,10 +177,9 @@ test('mobile studio home keeps normal-flow creation, dark artwork, header credit
   page,
   studio,
 }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   const { account, composer, prompt, writes, headers } = await openCreationRedesign(page, studio);
-  await expect(
-    page.getByRole('heading', { name: '好作品，从一个想法开始', exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: '今天想映造什么？', exact: true })).toBeVisible();
   await expect(composer.locator('.credit-estimate-value')).toHaveText(/预计 \d+ 积分/);
   await shell(page, page.viewportSize()!.width, true);
   await normalFlowCreation(page);
@@ -202,7 +201,7 @@ test('mobile studio home keeps normal-flow creation, dark artwork, header credit
   expect(credit.status()).toBe(200);
   await page.getByRole('button', { name: '展开导航', exact: true }).click();
   const navigation = page.getByRole('dialog', { name: '导航', exact: true });
-  await expect(navigation.locator('.studio-credit-summary strong')).toHaveText(
+  await expect(navigation.locator('.yz-panel-credit strong')).toHaveText(
     (await credit.json()).data.available.toLocaleString(),
   );
   await expect(

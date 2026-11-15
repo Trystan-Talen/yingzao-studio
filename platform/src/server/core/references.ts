@@ -12,7 +12,13 @@ import {
   type CharacterDto,
 } from '../../contracts/core';
 import { AppError } from '../errors';
-import { CoreContext, type Row, type ListQuery, str, nullable, json, id, now } from './shared';
+import { type CoreContext, type Row, type ListQuery, str, nullable, json, id, now } from './shared';
+
+// Brand edits use their existing timestamp as a revision token. Multiple writes
+// in one clock tick (including delete/restore) must never reuse that token.
+const nextBrandUpdate = (previous: string) =>
+  new Date(Math.max(Date.now(), Date.parse(previous) + 1)).toISOString();
+
 export class ReferenceService {
   constructor(private c: CoreContext) {}
   private images(wid: string, ids: string[]): void {
@@ -106,6 +112,10 @@ export class ReferenceService {
     return this.c.transaction(() => {
       this.c.requireAccess(actor, wid, 'write');
       const old = this.getBrand(actor, wid, bid);
+      if (input.expectedUpdatedAt !== undefined && input.expectedUpdatedAt !== old.updatedAt)
+        throw new AppError(409, 'BRAND_VERSION_CONFLICT', '记录已被修改，请刷新后再保存', {
+          current: old,
+        });
       const refs = input.referenceAssetIds ?? old.referenceAssetIds;
       this.images(wid, [...refs, ...(input.coverAssetId ? [input.coverAssetId] : [])]);
       this.c.run(
@@ -120,7 +130,7 @@ export class ReferenceService {
             : old.coverAssetId
           : input.coverAssetId,
         input.visibility ?? old.visibility,
-        now(),
+        nextBrandUpdate(old.updatedAt),
         bid,
       );
       if (input.referenceAssetIds) {
@@ -133,11 +143,13 @@ export class ReferenceService {
     });
   }
   removeBrand(actor: Actor, wid: string, bid: string) {
-    this.c.requireAccess(actor, wid, 'write');
-    this.brandRow(actor, wid, bid);
-    const date = now();
-    this.c.run('UPDATE brands SET deleted_at=?,updated_at=? WHERE id=?', date, date, bid);
-    return { id: bid, deletedAt: date };
+    return this.c.transaction(() => {
+      this.c.requireAccess(actor, wid, 'write');
+      const old = this.brandRow(actor, wid, bid);
+      const date = nextBrandUpdate(str(old, 'updated_at'));
+      this.c.run('UPDATE brands SET deleted_at=?,updated_at=? WHERE id=?', date, date, bid);
+      return { id: bid, deletedAt: date };
+    });
   }
   restoreBrand(actor: Actor, wid: string, bid: string): BrandDto {
     return this.c.transaction(() => {
@@ -145,7 +157,11 @@ export class ReferenceService {
       const brand = this.brandRow(actor, wid, bid, true);
       if (brand.deleted_at)
         new EntitlementService(this.c).assertCreateBrand(wid, str(brand, 'created_by'));
-      this.c.run('UPDATE brands SET deleted_at=NULL,updated_at=? WHERE id=?', now(), bid);
+      this.c.run(
+        'UPDATE brands SET deleted_at=NULL,updated_at=? WHERE id=?',
+        nextBrandUpdate(str(brand, 'updated_at')),
+        bid,
+      );
       return this.getBrand(actor, wid, bid);
     });
   }
@@ -322,6 +338,42 @@ export class ReferenceService {
       this.c.run('DELETE FROM asset_collections WHERE collection_id=?', cid);
       ids.forEach((aid) => this.c.run('INSERT INTO asset_collections VALUES (?,?)', cid, aid));
       return { id: cid, assetIds: ids };
+    });
+  }
+  patchCollectionAssets(actor: Actor, wid: string, cid: string, raw: unknown) {
+    const input = inputs.PatchCollectionAssetsInputSchema.parse(raw);
+    return this.c.transaction(() => {
+      this.c.requireAccess(actor, wid, 'write');
+      this.c.resource('collections', wid, cid);
+      const added = [...new Set(input.addAssetIds)];
+      const removed = [...new Set(input.removeAssetIds)];
+      added.forEach((aid) => this.c.resource('assets', wid, aid));
+      removed.forEach((aid) => this.c.resource('assets', wid, aid, true));
+      const membership = new Set(
+        this.c
+          .all('SELECT asset_id FROM asset_collections WHERE collection_id=?', cid)
+          .map((row) => str(row, 'asset_id')),
+      );
+      removed.forEach((aid) => membership.delete(aid));
+      added.forEach((aid) => membership.add(aid));
+      if (membership.size > 500)
+        throw new AppError(
+          409,
+          'COLLECTION_ASSET_LIMIT',
+          '每个集合最多保存500个素材，请先移出部分素材',
+        );
+      // Apply the caller's delta to the current membership, never a visible-list snapshot.
+      // Recycled assets and concurrent changes to unrelated assets remain intact.
+      removed.forEach((aid) =>
+        this.c.run('DELETE FROM asset_collections WHERE collection_id=? AND asset_id=?', cid, aid),
+      );
+      added.forEach((aid) =>
+        this.c.run('INSERT OR IGNORE INTO asset_collections VALUES (?,?)', cid, aid),
+      );
+      return {
+        id: cid,
+        assetIds: [...membership].sort(),
+      };
     });
   }
 }

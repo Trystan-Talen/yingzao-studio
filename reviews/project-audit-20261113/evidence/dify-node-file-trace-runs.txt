@@ -1,0 +1,112 @@
+{"run": 1, "exitCode": 0, "elapsedSeconds": 3.864}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:49:46
+   Duration  3.69s (tests 97%, import 2%, transform 1%)
+
+
+{"run": 2, "exitCode": 0, "elapsedSeconds": 3.853}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:49:49
+   Duration  3.69s (tests 98%, import 2%)
+
+
+{"run": 3, "exitCode": 0, "elapsedSeconds": 3.819}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:49:53
+   Duration  3.65s (tests 98%, import 2%)
+
+
+{"run": 4, "exitCode": 0, "elapsedSeconds": 3.815}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:49:57
+   Duration  3.63s (tests 98%, import 2%)
+
+
+{"run": 5, "exitCode": 0, "elapsedSeconds": 4.04}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:50:01
+   Duration  3.88s (tests 98%, import 2%)
+
+
+{"run": 6, "exitCode": 0, "elapsedSeconds": 4.122}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:50:05
+   Duration  3.95s (tests 98%, import 2%)
+
+
+{"run": 7, "exitCode": 0, "elapsedSeconds": 3.732}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:50:09
+   Duration  3.56s (tests 98%, import 2%)
+
+
+{"run": 8, "exitCode": 0, "elapsedSeconds": 3.882}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+   Start at  07:50:13
+   Duration  3.73s (tests 98%, import 2%)
+
+
+{"run": 9, "exitCode": 1, "elapsedSeconds": 13.871}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ❯ tests/dify-workflow-nodes.test.ts (57 tests | 1 failed) 13539ms
+   × accepts a complete 10-screen maximum-length node output in the actual backend parser 10006ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 56 passed (57)
+   Start at  07:50:17
+   Duration  13.68s (tests 99%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/dify-workflow-nodes.test.ts > accepts a complete 10-screen maximum-length node output in the actual backend parser
+Error: spawnSync python3 ETIMEDOUT
+ ❯ run tests/dify-workflow-nodes.test.ts:85:5
+
+ ❯ tests/dify-workflow-nodes.test.ts:330:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+

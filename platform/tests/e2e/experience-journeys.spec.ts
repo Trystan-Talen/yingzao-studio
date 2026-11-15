@@ -21,12 +21,22 @@ async function openExperience(page: Page, studio: Studio) {
     },
   ]);
   await page.goto(studio.origin);
-  await expect(page.getByRole('heading', { name: '让商品成为主角', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '今天想映造什么？', exact: true })).toBeVisible();
+  return { ...account, headers: { 'x-workspace-id': account.workspace.id } };
+}
+
+async function openSettings(page: Page) {
   await page
     .locator('.composer')
     .getByRole('button', { name: '更多创作设置', exact: true })
     .click();
-  return { ...account, headers: { 'x-workspace-id': account.workspace.id } };
+  return page.getByRole('dialog', { name: '创作设置', exact: true });
+}
+
+async function openAssistant(page: Page) {
+  const settings = await openSettings(page);
+  await settings.getByText('更多偏好', { exact: true }).click();
+  await settings.getByRole('button', { name: 'AI 帮我写', exact: true }).click();
 }
 
 async function confirmSubmission(page: Page) {
@@ -65,7 +75,7 @@ test('explains the planning service input limit, preserves all text and accepts 
   studio,
 }) => {
   await openExperience(page, studio);
-  await page.locator('.composer').getByRole('button', { name: 'AI 帮我写', exact: true }).click();
+  await openAssistant(page);
   const assistant = page.getByRole('dialog', { name: 'AI 创作助手', exact: true });
   await assistant.getByRole('combobox', { name: '文案服务', exact: true }).selectOption('dify');
   const request = assistant.getByRole('textbox', { name: '你的需求', exact: true });
@@ -113,8 +123,7 @@ test.describe('native text planning capabilities', () => {
     await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
     const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
     await expect(composer).not.toHaveAttribute('data-presentation', 'quick');
-    await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-    await composer.getByRole('button', { name: 'AI 帮我写', exact: true }).click();
+    await openAssistant(page);
     const assistant = page.getByRole('dialog', { name: 'AI 创作助手', exact: true });
     await assistant.getByRole('button', { name: '完整设计方案', exact: true }).click();
     await assistant.getByRole('button', { name: '生成设计方案', exact: true }).click();
@@ -164,7 +173,7 @@ test('creates an image from the home entry, preserves its task after refresh and
   await composer
     .getByRole('textbox', { name: '创作需求', exact: true })
     .fill('植物精华主图，浅绿色背景，自然晨光。');
-  await composer.getByRole('button', { name: 'AI 帮我写', exact: true }).click();
+  await openAssistant(page);
   const assistant = page.getByRole('dialog', { name: 'AI 创作助手', exact: true });
   await expect(assistant.getByText('完整设计方案暂不可用', { exact: false })).toBeVisible();
   await expect(assistant.getByRole('button', { name: '完整设计方案', exact: true })).toBeDisabled();
@@ -173,9 +182,11 @@ test('creates an image from the home entry, preserves its task after refresh and
   await textService.selectOption('dify');
   await expect(textService).toHaveValue('dify');
   await assistant.getByRole('button', { name: '关闭', exact: true }).click();
-  await expect(composer.getByRole('combobox', { name: '生成模型', exact: true })).toHaveValue(
+  const settings = await openSettings(page);
+  await expect(settings.getByRole('combobox', { name: '生成模型', exact: true })).toHaveValue(
     'image.generate|openai|doubao-seedream-5.0-lite',
   );
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await composer.getByRole('button', { name: '生成图片', exact: true }).click();
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM jobs').get()).toEqual({ n: 0 });
   const accepted = await confirmSubmission(page);
@@ -236,14 +247,16 @@ test('creates a video, plays the saved media and restores the same output after 
   await expect(composer.getByRole('button', { name: '视频创作', exact: true })).toHaveClass(
     /active/,
   );
-  const models = composer.getByRole('combobox', { name: '生成模型', exact: true });
+  const settings = await openSettings(page);
+  const models = settings.getByRole('combobox', { name: '生成模型', exact: true });
   const option = await models
     .locator('option[value^="video.generate|seedance|"]')
     .first()
     .getAttribute('value');
   expect(option).toBeTruthy();
   await models.selectOption(option!);
-  await composer.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+  await settings.getByRole('combobox', { name: '比例', exact: true }).selectOption('9:16');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await composer
     .getByRole('textbox', { name: '创作需求', exact: true })
     .fill('植物精华短片，镜头缓缓推进，突出瓶身质感。');

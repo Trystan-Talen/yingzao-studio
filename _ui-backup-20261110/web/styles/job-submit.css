@@ -1,0 +1,251 @@
+/* Media confirmation only; tools keep their existing confirmation layouts. */
+.modal:has(.studio-quote-summary) {
+  width: min(580px, calc(100vw - 32px));
+  max-width: none;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--text);
+}
+.modal:has(.studio-quote-summary) .modal-heading {
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+.modal:has(.studio-quote-summary) .modal-heading > div {
+  flex: 1;
+  min-width: 0;
+}
+.modal:has(.studio-quote-summary) .modal-heading h2 {
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+.modal:has(.studio-quote-summary) .modal-heading p {
+  margin-top: 5px;
+  max-width: none;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.studio-quote-summary.media-quote-summary {
+  display: grid;
+  gap: 16px;
+  padding: 0 0 12px;
+}
+.studio-quote-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.studio-quote-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: var(--tint);
+  color: var(--primary);
+}
+.studio-quote-heading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.studio-quote-count {
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.studio-quote-count strong {
+  color: var(--text);
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.studio-quote-summary .media-quote-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+.studio-quote-summary .media-quote-specs > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--field);
+}
+.studio-quote-summary .media-quote-specs small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.studio-quote-summary .media-quote-specs strong {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.studio-quote-request > span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.studio-quote-request p {
+  margin: 5px 0 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.studio-quote-audio {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.studio-quote-cost {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.studio-quote-cost > span {
+  color: var(--text);
+  font-size: 14px;
+}
+.studio-quote-cost .media-quote-price {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  color: var(--primary);
+  white-space: nowrap;
+}
+.studio-quote-cost .media-quote-price strong {
+  color: var(--primary);
+  font-size: 32px;
+  font-weight: 650;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.studio-quote-cost .media-quote-price span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.modal:has(.studio-quote-summary) .media-quote-details > summary {
+  padding: 12px 0;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.modal:has(.studio-quote-summary) .media-quote-details > summary:hover {
+  color: var(--text);
+}
+.modal:has(.studio-quote-summary) .media-quote-details .detail-list {
+  font-size: 13px;
+}
+.studio-quote-original {
+  margin-block: 14px;
+}
+.studio-quote-original h4 {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.studio-quote-original p {
+  max-height: 180px;
+  margin: 0;
+  padding: 10px 12px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--field);
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.modal:has(.studio-quote-summary) .media-quote-details ol {
+  padding-inline-start: 22px;
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.modal:has(.studio-quote-summary) .media-quote-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.modal:has(.studio-quote-summary) .modal-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.modal:has(.studio-quote-summary) .modal-actions .button {
+  width: 100%;
+  min-height: 44px;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: normal;
+}
+.modal:has(.studio-quote-summary) .modal-actions .button.primary {
+  color: var(--primary-text);
+  border-color: var(--primary);
+  background: var(--primary);
+}
+.modal:has(.studio-quote-summary) .modal-actions .button.primary:hover:not(:disabled) {
+  border-color: var(--primary-hover);
+  background: var(--primary-hover);
+}
+.modal:has(.studio-quote-summary) .notice,
+.submit-block.studio-media-submit .notice {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.submit-block.studio-media-submit .notice p {
+  margin-block: 6px;
+}
+@media (max-width: 600px) {
+  .modal:has(.studio-quote-summary) {
+    width: calc(100vw - 20px);
+    padding: 20px 18px;
+  }
+  .modal:has(.studio-quote-summary) .modal-heading {
+    margin-bottom: 18px;
+  }
+  .modal:has(.studio-quote-summary) .modal-heading h2 {
+    font-size: 20px;
+  }
+  .studio-quote-summary .media-quote-specs {
+    grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  }
+  .studio-quote-summary .media-quote-specs > span {
+    padding: 10px;
+  }
+  .studio-quote-cost {
+    gap: 12px;
+  }
+  .studio-quote-cost .media-quote-price strong {
+    font-size: 28px;
+  }
+}

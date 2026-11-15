@@ -1,0 +1,24 @@
+{"run": 1, "exitCode": 1, "elapsedSeconds": 13.261}
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ❯ tests/dify-workflow-nodes.test.ts (57 tests | 1 failed) 12971ms
+   × accepts a complete 10-screen maximum-length node output in the actual backend parser 10009ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 56 passed (57)
+   Start at  07:46:56
+   Duration  13.10s (tests 99%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/dify-workflow-nodes.test.ts > accepts a complete 10-screen maximum-length node output in the actual backend parser
+Error: spawnSync python3 ETIMEDOUT
+ ❯ run tests/dify-workflow-nodes.test.ts:86:5
+
+ ❯ tests/dify-workflow-nodes.test.ts:331:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+

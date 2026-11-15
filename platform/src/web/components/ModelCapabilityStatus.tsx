@@ -15,6 +15,7 @@ export function ModelCapabilityStatus({
   const { data, error, isFetching, isExpired, canGenerate } = capability;
   const needsConnection = data?.reasonCode === 'NOT_CONFIGURED';
   const documented = data?.source === 'provider-documentation';
+  const configuredPipeline = data?.providerId === 'native' && data.source === 'local-adapter';
   const summary = isFetching
     ? '正在核查当前模型…'
     : error
@@ -27,22 +28,26 @@ export function ModelCapabilityStatus({
             ? '请先选择可用的服务和模型。'
             : !canGenerate
               ? '当前模型暂不可用，请刷新或更换模型。'
-              : documented
-                ? '模型可用性已实时核查；参数范围来自已核对的原厂文档。'
-                : data.parametersVerified
-                  ? '可查询的模型参数已更新'
-                  : '当前接入未取得完整参数结构，使用已接入的选项。';
+              : configuredPipeline
+                ? '编排配置已就绪；使用当前协议支持的参数，尚未验证远端生成。'
+                : documented
+                  ? '模型可用性已实时核查；参数范围来自已核对的原厂文档。'
+                  : data.parametersVerified
+                    ? '可查询的模型参数已更新'
+                    : '当前接入未取得完整参数结构，使用已接入的选项。';
   return (
     <div className="model-capability-status" aria-live="polite">
       <details>
         <summary className="field-hint">
           {t(
             canGenerate && !isExpired && !error && !isFetching
-              ? documented
-                ? '参数已补齐 · 查看文档来源'
-                : data?.parametersVerified
-                  ? '参数已更新 · 查看来源'
-                  : '模型可用 · 使用已接入参数'
+              ? configuredPipeline
+                ? '配置已就绪 · 查看生成链路'
+                : documented
+                  ? '参数已补齐 · 查看文档来源'
+                  : data?.parametersVerified
+                    ? '参数已更新 · 查看来源'
+                    : '模型可用 · 使用已接入参数'
               : summary,
           )}
         </summary>

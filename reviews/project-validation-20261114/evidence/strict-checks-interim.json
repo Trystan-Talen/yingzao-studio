@@ -1,0 +1,25 @@
+{
+  "typecheck": {
+    "exitCode": 0,
+    "scope": "full project, repeated after browser-only assertion update"
+  },
+  "lint": {
+    "exitCode": 0,
+    "scope": "full src/scripts/tests, plus final browser file"
+  },
+  "format": {
+    "exitCode": 0,
+    "scope": "full src/scripts/tests and root ts/json, plus final browser file"
+  },
+  "build": {
+    "exitCode": 0,
+    "scope": "isolated Vite, server and worker production outputs"
+  },
+  "runtime": {
+    "exitCode": 0,
+    "scope": "isolated actual API/worker processes, temporary database, secure registration and concurrent migrations"
+  },
+  "externalServices": "not contacted",
+  "formalDataTouched": false,
+  "pendingAdditionalSupportReview": true
+}

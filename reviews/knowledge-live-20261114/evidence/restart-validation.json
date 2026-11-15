@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "at": "2026-11-14T15:59:09.488Z",
+  "latestWebBundle": true,
+  "checked": [
+    {
+      "label": "A",
+      "jobId": "42d6e40a-cb6e-40b3-bb44-0b277a008aec",
+      "assetId": "88a790a9-7a19-46bf-9ea9-9a7d6d1f48eb",
+      "sha256": "5c9f69831b5ccfb02d9f715496e5190d53f16f51f9391267ede1e1659012ea87",
+      "dark": true,
+      "previewAndOriginalAfterRestart": true
+    },
+    {
+      "label": "B",
+      "jobId": "40bd0a66-15b2-4672-8c9c-b0dac67dac6f",
+      "assetId": "4b0b932d-9af7-45d3-bfb0-fa6e907c3ea2",
+      "sha256": "7d30e57d1429e66d293e3b47c3140451fe77fdd71152d41cf229d9e5496135d7",
+      "dark": true,
+      "previewAndOriginalAfterRestart": true
+    }
+  ],
+  "paidRequestsBefore": 6,
+  "paidRequestsAfter": 6,
+  "newPaidRequests": 0
+}

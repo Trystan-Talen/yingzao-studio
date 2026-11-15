@@ -1,0 +1,336 @@
+[
+  {
+    "theme": "light",
+    "measurements": [
+      {
+        "selector": ".yz-create textarea.prompt-input",
+        "pseudo": "::placeholder",
+        "text": "比如：给这款精华瓶做一张小红书氛围图，清晨窗边，干净自然。",
+        "color": "color(srgb 0.4 0.384314 0.352941 / 0.78)",
+        "opacity": "0.8",
+        "foreground": [
+          160.1043137254902,
+          156.358431372549,
+          151.98823529411763
+        ],
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 2.7168033618416474
+      },
+      {
+        "selector": ".yz-result-hint",
+        "pseudo": "",
+        "text": "参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在 任务 中查看",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          243,
+          240,
+          233
+        ],
+        "contrast": 5.333350138497028
+      },
+      {
+        "selector": ".credit-estimate-note",
+        "pseudo": "",
+        "text": "空间积分 · 供应商费用另计",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 6.069949817627678
+      },
+      {
+        "selector": ".composer-note",
+        "pseudo": "",
+        "text": "草稿已保存在本机",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 6.069949817627678
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "整套长图",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          247.21176470588236,
+          245.6156862745098,
+          240.72156862745095
+        ],
+        "contrast": 5.597355239688646
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "抠图 · 扩图 · 高清",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          247.21176470588236,
+          245.6156862745098,
+          240.72156862745095
+        ],
+        "contrast": 5.597355239688646
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "上传与复用",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          247.21176470588236,
+          245.6156862745098,
+          240.72156862745095
+        ],
+        "contrast": 5.597355239688646
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "海量案例",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          247.21176470588236,
+          245.6156862745098,
+          240.72156862745095
+        ],
+        "contrast": 5.597355239688646
+      },
+      {
+        "selector": ".yz-note",
+        "pseudo": "",
+        "text": "原创画面示例 · 点击预览，选择后再填入想法",
+        "color": "rgb(102, 98, 90)",
+        "opacity": "1",
+        "foreground": [
+          102,
+          98,
+          90
+        ],
+        "background": [
+          243,
+          240,
+          233
+        ],
+        "contrast": 5.333350138497028
+      }
+    ]
+  },
+  {
+    "theme": "dark",
+    "measurements": [
+      {
+        "selector": ".yz-create textarea.prompt-input",
+        "pseudo": "::placeholder",
+        "text": "比如：给这款精华瓶做一张小红书氛围图，清晨窗边，干净自然。",
+        "color": "color(srgb 0.607843 0.592157 0.552941 / 0.78)",
+        "opacity": "0.8",
+        "foreground": [
+          102.02823529411766,
+          99.53098039215688,
+          94.41490196078432
+        ],
+        "background": [
+          14,
+          14,
+          17
+        ],
+        "contrast": 3.2428365042061675
+      },
+      {
+        "selector": ".yz-result-hint",
+        "pseudo": "",
+        "text": "参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在 任务 中查看",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          7,
+          7,
+          8
+        ],
+        "contrast": 6.908382281970086
+      },
+      {
+        "selector": ".credit-estimate-note",
+        "pseudo": "",
+        "text": "空间积分 · 供应商费用另计",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          14,
+          14,
+          17
+        ],
+        "contrast": 6.612604528063472
+      },
+      {
+        "selector": ".composer-note",
+        "pseudo": "",
+        "text": "草稿已保存在本机",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          14,
+          14,
+          17
+        ],
+        "contrast": 6.612604528063472
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "整套长图",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          11.913725490196079,
+          11.913725490196079,
+          14.317647058823528
+        ],
+        "contrast": 6.707324431300256
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "抠图 · 扩图 · 高清",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          11.913725490196079,
+          11.913725490196079,
+          14.317647058823528
+        ],
+        "contrast": 6.707324431300256
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "上传与复用",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          11.913725490196079,
+          11.913725490196079,
+          14.317647058823528
+        ],
+        "contrast": 6.707324431300256
+      },
+      {
+        "selector": ".yz-capability-text small",
+        "pseudo": "",
+        "text": "海量案例",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          11.913725490196079,
+          11.913725490196079,
+          14.317647058823528
+        ],
+        "contrast": 6.707324431300256
+      },
+      {
+        "selector": ".yz-note",
+        "pseudo": "",
+        "text": "原创画面示例 · 点击预览，选择后再填入想法",
+        "color": "rgb(155, 151, 141)",
+        "opacity": "1",
+        "foreground": [
+          155,
+          151,
+          141
+        ],
+        "background": [
+          7,
+          7,
+          8
+        ],
+        "contrast": 6.908382281970086
+      }
+    ]
+  }
+]

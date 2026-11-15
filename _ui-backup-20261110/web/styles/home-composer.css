@@ -1,0 +1,418 @@
+.composer.composer-home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0 14px;
+  padding: 17px 22px 16px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow:
+    0 4px 8px #29251d03,
+    0 16px 46px #29251d08;
+  overflow: visible;
+  text-align: start;
+  transition:
+    border-color 180ms,
+    box-shadow 180ms;
+}
+.composer-home:focus-within {
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  box-shadow:
+    0 4px 8px #29251d03,
+    0 16px 46px #29251d08,
+    0 0 0 3px color-mix(in srgb, var(--primary) 7%, transparent);
+}
+.composer-home > * {
+  grid-column: 1 / -1;
+}
+.composer-home > [hidden],
+.composer-home [hidden] {
+  display: none;
+}
+.composer-home .composer-top .segments {
+  background: transparent;
+  padding: 0;
+  gap: 5px;
+}
+.composer-home .composer-top .segments button {
+  padding: 6px 13px;
+  min-height: 34px;
+  font-size: 12px;
+  border-radius: 8px;
+  color: var(--muted);
+}
+.composer-home .composer-top .segments button.active {
+  background: var(--text);
+  color: var(--panel);
+}
+.composer-home .composer-note {
+  font-size: 10px;
+  max-width: 45%;
+  text-align: end;
+}
+.composer-home textarea.prompt-input {
+  padding: 18px 2px 14px;
+  min-height: 106px;
+  width: 100%;
+  line-height: 1.8;
+  font-size: 15px;
+  resize: vertical;
+}
+.composer-home textarea.prompt-input::placeholder {
+  color: var(--muted);
+  opacity: 0.85;
+}
+.composer-home > .composer-materials {
+  grid-column: 1;
+  margin: 0;
+  min-width: 0;
+}
+.composer-home > .composer-options {
+  grid-column: 2;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 0;
+}
+.composer-home > .composer-materials:has(.asset-chip),
+.composer-home > .composer-materials:has(> .notice),
+.composer-home > details.composer-materials {
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
+}
+.composer-home > .composer-materials:has(.asset-chip) + .composer-options,
+.composer-home > .composer-materials:has(> .notice) + .composer-options {
+  grid-column: 1 / -1;
+}
+.composer-home .compact-select select {
+  min-height: 34px;
+  border-radius: 8px;
+  font-size: 12px;
+  background-color: var(--field);
+}
+.composer-home .composer-options > .text-button {
+  min-height: 34px;
+  margin: 0 0 0 2px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.composer-home .asset-picker-inline {
+  margin-bottom: 0;
+}
+.asset-picker-inline > .upload-drop-zone {
+  display: none;
+}
+.asset-picker-inline .asset-chips {
+  align-items: center;
+}
+.asset-picker-inline .asset-chips.dragging {
+  outline: 2px dashed var(--primary);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+.asset-picker-inline .asset-add {
+  flex-direction: row;
+  width: auto;
+  min-height: 34px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: transparent;
+  font-size: 12px;
+  border-radius: 8px;
+}
+.asset-picker-inline > .upload-queue {
+  margin-top: 8px;
+}
+.composer-home .composer-bottom {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  gap: 14px;
+  justify-content: flex-start;
+}
+.composer-home .composer-bottom .button {
+  min-height: 40px;
+  gap: 5px;
+  padding: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+.composer-home .submit-block {
+  margin-top: 13px;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+}
+.composer-home .submit-block > .notice {
+  margin: 5px 0 6px;
+  border-radius: 8px;
+}
+.composer-home .submit-row {
+  gap: 12px;
+  margin-top: 6px;
+}
+.composer-home .submit-row > .muted {
+  margin-inline-start: auto;
+  font-size: 9px;
+}
+.composer-home .submit-row > .button {
+  min-height: 42px;
+  min-width: 126px;
+  margin-inline-start: auto;
+  padding-inline: 18px;
+  border-radius: 11px;
+  font-size: 13px;
+}
+.composer-home .composer-advanced {
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.composer-home .composer-advanced .composer-basics {
+  margin-top: 0;
+}
+.home-prompt-starts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.home-prompt-starts > span {
+  margin-inline-end: 4px;
+}
+.home-prompt-starts button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--muted);
+  padding: 4px 11px;
+  font-size: 11px;
+  transition:
+    color 150ms,
+    border-color 150ms,
+    background 150ms;
+}
+.home-prompt-starts button:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--panel);
+}
+@media (min-width: 768px) and (max-height: 850px) {
+  .composer.composer-home {
+    padding-block: 14px;
+  }
+  .composer-home textarea.prompt-input {
+    min-height: 86px;
+    height: 86px;
+    padding-top: 14px;
+  }
+  .home-prompt-starts {
+    margin-top: 11px;
+  }
+}
+@media (max-width: 600px) {
+  .composer.composer-home {
+    padding: 12px 14px;
+    border-radius: 18px;
+    gap: 0 6px;
+  }
+  .composer-home .composer-top {
+    gap: 8px;
+  }
+  .composer-home .composer-note {
+    font-size: 9px;
+  }
+  .composer-home .composer-top .segments button {
+    padding-inline: 10px;
+    min-height: 36px;
+    font-size: 11px;
+  }
+  .composer-home textarea.prompt-input {
+    min-height: 90px;
+    height: 90px;
+    font-size: 14px;
+    padding-top: 16px;
+  }
+  .composer-home > .composer-materials,
+  .composer-home > .composer-options {
+    grid-column: 1 / -1;
+  }
+  .composer-home > .composer-options {
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+  .composer-home .composer-options > .text-button {
+    margin-inline-start: auto;
+  }
+  .composer-home .submit-row {
+    flex-wrap: wrap;
+    column-gap: 8px;
+    row-gap: 0;
+  }
+  .composer-home .submit-row > .muted {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-end;
+    margin-top: 5px;
+  }
+  .composer-home .submit-row > .button {
+    min-width: 110px;
+    font-size: 12px;
+    padding-inline: 12px;
+  }
+  .composer-home .composer-bottom {
+    gap: 9px;
+  }
+  .composer-home .composer-bottom .button {
+    font-size: 10px;
+  }
+  .home-prompt-starts {
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .home-prompt-starts > span {
+    display: none;
+  }
+  .home-prompt-starts button {
+    font-size: 10px;
+    padding-inline: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .composer-home,
+  .home-prompt-starts button {
+    transition: none;
+  }
+}
+
+/* A single calm panel replaces the old stacked form treatment. */
+.composer.composer-home {
+  padding: 18px 26px 18px;
+  border-radius: 18px;
+  background: var(--home-surface, var(--panel));
+  border-color: var(--home-line, var(--border));
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--home-ink, var(--text)) 8%, transparent);
+}
+
+.composer-home .composer-top {
+  padding-bottom: 5px;
+  border-bottom: 0;
+}
+
+.composer-home textarea.prompt-input {
+  min-height: 104px;
+  padding: 16px 5px 14px;
+  font-size: 16px;
+}
+
+.composer-home .composer-materials {
+  align-self: center;
+}
+
+.composer-home .composer-options {
+  align-self: center;
+}
+
+.composer-home .submit-block-home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 0;
+  min-height: 44px;
+  border-top: 0;
+}
+
+.composer-home .submit-block-home > .notice {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 8%, var(--panel));
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.composer-home .submit-block-home > .notice svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+
+.composer-home .submit-block-home .submit-row {
+  grid-column: 2;
+  grid-row: 1;
+  align-items: center;
+  min-height: 42px;
+  margin-top: 0;
+}
+
+.composer-home .submit-block-home .submit-row > .button {
+  margin-inline-start: 0;
+}
+
+.composer-home .submit-block-home .submit-row > .muted {
+  display: none;
+}
+
+@media (min-width: 701px) {
+  .composer.composer-home {
+    min-height: 294px;
+  }
+}
+
+@media (max-width: 700px) {
+  .composer.composer-home {
+    padding: 14px 16px 15px;
+    border-radius: 16px;
+  }
+
+  .composer-home textarea.prompt-input {
+    min-height: 94px;
+    height: 94px;
+    padding: 17px 2px 13px;
+    font-size: 15px;
+  }
+
+  .composer-home .submit-block-home > .notice {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    align-self: stretch;
+    border-radius: 10px;
+    margin: 0 0 8px;
+  }
+
+  .composer-home .submit-block-home .submit-row > .button {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-inline-start: auto;
+  }
+
+  .composer-home .submit-block-home {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: 0;
+    gap: 0;
+  }
+
+  .composer-home .submit-block-home .submit-row {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .home-prompt-starts {
+    margin-top: 10px;
+  }
+}

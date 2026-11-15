@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "name": "production-build",
+      "started": "2026-11-14T15:56:33.346Z",
+      "finished": "2026-11-14T15:56:36.121Z",
+      "args": [
+        "--import",
+        "tsx",
+        "var/project-dependency-build.mts"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "production-runtime",
+      "started": "2026-11-14T15:56:36.122Z",
+      "finished": "2026-11-14T15:56:42.017Z",
+      "args": [
+        "--import",
+        "tsx",
+        "scripts/verify-runtime.ts"
+      ],
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "source": {
+    "files": 650,
+    "before": "ce715688a00fd715eedfc0536266dfc7f8909382066967d2fa4ee870e561bad5",
+    "after": "ce715688a00fd715eedfc0536266dfc7f8909382066967d2fa4ee870e561bad5",
+    "unchanged": true
+  },
+  "isolation": {
+    "dotenv": "/dev/null",
+    "viteEnvDir": false,
+    "inheritedProviderCredentials": false,
+    "runtime": "disposable production SQLite and media; API and worker stopped; temporary data removed",
+    "paidProviderCalls": 0
+  },
+  "artifactCount": 1031
+}

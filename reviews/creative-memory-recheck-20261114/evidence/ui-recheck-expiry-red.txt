@@ -1,0 +1,102 @@
+Running 3 tests using 1 worker
+
+(node:80647) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/knowledge-recheck.spec.ts:12:1 › retains single-creation memory and product-image choices after refreshing a grouped draft (3.2s)
+  ✘  2 [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields (2.6s)
+(node:80750) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields (2.8s)
+
+
+  1) [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "content": "当前窗口的修改",
+    -   "expiresAt": "2099-05-10T19:01:00.000Z",
+    +   "expiresAt": "2099-05-10T19:01:40.000Z",
+        "topic": "另一窗口更新主题",
+        "version": 3,
+      }
+
+      152 |     await expect(editor).toHaveCount(0);
+      153 |     if (memory)
+    > 154 |       expect(service.getMemory(actor, account.workspace.id, memory.id)).toMatchObject({
+          |                                                                         ^
+      155 |         topic: '另一窗口更新主题',
+      156 |         content: '当前窗口的修改',
+      157 |         version: 3,
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-recheck.spec.ts:154:73
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-d6ecf-r-editor-s-untouched-fields-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "facts": Array [
+          "另一窗口更新规格",
+        ],
+        "name": "当前窗口的修改",
+    -   "validUntil": "2099-05-10T19:01:00.000Z",
+    +   "validUntil": "2099-05-10T19:01:40.000Z",
+        "version": 3,
+      }
+
+      159 |       });
+      160 |     if (product)
+    > 161 |       expect(service.getProduct(actor, account.workspace.id, product.id)).toMatchObject({
+          |                                                                           ^
+      162 |         name: '当前窗口的修改',
+      163 |         facts: ['另一窗口更新规格'],
+      164 |         version: 3,
+        at /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/knowledge-recheck.spec.ts:161:75
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-jrQpG3/results/knowledge-recheck-recovers-ad0e3-r-editor-s-untouched-fields-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields 
+    [desktop] › tests/e2e/knowledge-recheck.spec.ts:56:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields 
+  1 passed (11.4s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-jrQpG3

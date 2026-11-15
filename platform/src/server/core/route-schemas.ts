@@ -2,6 +2,7 @@ import { z } from 'zod';
 import * as c from '../../contracts/core';
 import { TeamReservationInputSchema } from '../../contracts/team-creation';
 import { EntitlementsSchema } from '../../contracts/entitlements';
+import * as knowledge from '../../contracts/knowledge';
 import {
   notificationPageSchema,
   notificationQuerySchema,
@@ -18,6 +19,10 @@ const page = (schema: z.ZodType) =>
     }),
   );
 const bodySchemas: Record<string, z.ZodType> = {
+  'POST /memories': knowledge.MemoryInputSchema,
+  'PATCH /memories/:id': knowledge.MemoryPatchSchema,
+  'POST /products': knowledge.ProductInputSchema,
+  'PATCH /products/:id': knowledge.ProductPatchSchema,
   'POST /team-creation': TeamReservationInputSchema,
   'POST /auth/register': c.RegisterInputSchema,
   'POST /auth/login': c.LoginInputSchema,
@@ -37,6 +42,7 @@ const bodySchemas: Record<string, z.ZodType> = {
   'POST /collections': c.WorkspaceInputSchema,
   'PATCH /collections/:id': c.WorkspaceInputSchema,
   'PUT /collections/:id/assets': c.SetCollectionAssetsInputSchema,
+  'PATCH /collections/:id/assets': c.PatchCollectionAssetsInputSchema,
   'POST /brands': c.BrandInputSchema,
   'PATCH /brands/:id': c.BrandPatchSchema,
   'POST /characters': c.CharacterInputSchema,
@@ -62,6 +68,8 @@ const bodySchemas: Record<string, z.ZodType> = {
   'POST /public/shares/asset': c.ShareMediaInputSchema,
 };
 const entitySchemas: Record<string, z.ZodType> = {
+  memories: knowledge.MemorySchema,
+  products: knowledge.ProductSchema,
   projects: c.ProjectSchema,
   assets: c.AssetSchema,
   brands: c.BrandSchema,

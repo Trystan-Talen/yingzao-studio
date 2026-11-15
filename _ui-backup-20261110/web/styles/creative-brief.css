@@ -1,0 +1,253 @@
+.composer-selection-controls {
+  display: contents;
+}
+.composer-home:not(.composer-quick) > .composer-selection-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 10px;
+}
+.new-workspace-compose .composer .composer-selection-controls > .field {
+  min-width: 0;
+  margin: 0;
+}
+/* Only the preparation panel and its reusable summary are styled here. */
+.creative-brief.studio-creative-brief {
+  margin-block: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 0;
+  color: var(--text);
+  background: var(--panel);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.creative-brief.studio-creative-brief p {
+  margin: 6px 0;
+}
+.creative-brief.studio-creative-brief.creative-brief-questions {
+  border-inline-start: 3px solid var(--primary);
+  padding: 16px;
+  background: var(--panel);
+}
+.studio-creative-brief .studio-brief-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.studio-brief-heading > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--primary);
+}
+.studio-creative-brief .creative-brief-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.studio-creative-brief .studio-brief-heading p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.studio-creative-brief .creative-brief-title:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+.studio-creative-brief .studio-brief-progress,
+.studio-creative-brief .creative-brief-ready > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.studio-creative-brief .creative-brief-ready > summary {
+  cursor: pointer;
+}
+.studio-creative-brief .creative-brief-ready > summary::after {
+  content: '+';
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 16px;
+}
+.studio-creative-brief .creative-brief-ready[open] > summary::after {
+  content: '−';
+}
+.studio-creative-brief .creative-brief-ready > summary > svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.studio-creative-brief summary {
+  cursor: pointer;
+}
+.creative-summary {
+  margin-block: 10px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.creative-summary .creative-brief-summary {
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+.creative-summary details {
+  margin-top: 6px;
+}
+.creative-summary summary {
+  cursor: pointer;
+  font-size: 13px;
+}
+.creative-summary ul {
+  margin-block: 8px;
+  padding-inline-start: 20px;
+}
+.studio-creative-brief fieldset {
+  margin: 16px 0 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
+.studio-creative-brief fieldset + fieldset {
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.studio-creative-brief legend {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  max-width: 100%;
+  padding: 0;
+  color: var(--text);
+  font-weight: 550;
+  font-size: 14px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.studio-question-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 20px;
+  height: 20px;
+  border-radius: 5px;
+  color: var(--primary);
+  background: var(--tint);
+  font-size: 12px;
+}
+.studio-creative-brief textarea {
+  width: 100%;
+  min-height: 72px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--field);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.studio-creative-brief .creative-brief-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+.creative-brief.studio-creative-brief .studio-question-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--field);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.creative-brief.studio-creative-brief .studio-question-option:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+.creative-brief.studio-creative-brief .studio-question-option[aria-pressed='true'] {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--tint);
+  outline: none;
+}
+.studio-question-option-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 17px;
+  height: 17px;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+}
+.studio-question-option[aria-pressed='true'] .studio-question-option-mark {
+  border-color: var(--primary);
+  color: var(--primary-text);
+  background: var(--primary);
+}
+.creative-brief.studio-creative-brief .text-button {
+  min-height: 36px;
+  padding: 6px 0;
+  color: var(--primary);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: start;
+  white-space: normal;
+}
+.studio-creative-brief .creative-brief-options .creative-custom-answer {
+  padding-inline: 6px;
+}
+.creative-brief.studio-creative-brief :is(button, textarea, summary):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+.studio-creative-brief .creative-question-reason {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.studio-creative-brief .creative-question-reason p {
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+.studio-creative-brief .creative-question-error,
+.studio-creative-brief .creative-question-missing legend {
+  color: var(--danger);
+}
+.studio-creative-brief .creative-question-error {
+  font-size: 13px;
+  font-weight: 600;
+}
+.studio-creative-brief .notice {
+  font-size: 14px;
+  line-height: 1.6;
+}
+@media (max-width: 600px) {
+  .creative-brief.studio-creative-brief.creative-brief-questions {
+    padding: 14px;
+  }
+  .studio-creative-brief .creative-brief-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .creative-brief.studio-creative-brief .studio-question-option {
+    width: 100%;
+  }
+  .studio-creative-brief .creative-brief-options .creative-custom-answer {
+    align-self: flex-start;
+    padding-inline: 0;
+  }
+}

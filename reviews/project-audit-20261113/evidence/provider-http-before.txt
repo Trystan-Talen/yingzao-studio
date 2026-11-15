@@ -1,0 +1,86 @@
+
+ RUN  v5.0.4 /Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform
+
+ ❯ tests/provider-http.test.ts (7 tests | 7 failed) 13ms
+   ❯ provider response cleanup (7)
+     × cancels rejected HTTP 401 bodies without consuming their content 9ms
+     × cancels rejected HTTP 429 bodies without consuming their content 0ms
+     × cancels rejected HTTP 503 bodies without consuming their content 0ms
+     × cancels an oversized declared body before reading it 1ms
+     × releases the reader after a complete response: {"ok":true} 2ms
+     × releases the reader after a complete response: invalid-json 0ms
+     × releases the reader after a stream failure and keeps uncertain submissions marked for reconciliation 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/provider-http.test.ts > provider response cleanup > cancels rejected HTTP 401 bodies without consuming their content
+ FAIL  tests/provider-http.test.ts > provider response cleanup > cancels rejected HTTP 429 bodies without consuming their content
+ FAIL  tests/provider-http.test.ts > provider response cleanup > cancels rejected HTTP 503 bodies without consuming their content
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/provider-http.test.ts:14:20
+     12|     await expect(providerJson('https://provider.example.test/run', { s…
+     13|       .rejects.toMatchObject({ code: `PROVIDER_HTTP_${status}`, ambigu…
+     14|     expect(cancel).toHaveBeenCalledOnce();
+       |                    ^
+     15|     expect(body.locked).toBe(false);
+     16|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/provider-http.test.ts > provider response cleanup > cancels an oversized declared body before reading it
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/provider-http.test.ts:27:20
+     25|     await expect(providerJson('https://provider.example.test/run', { s…
+     26|       .rejects.toThrow('大小限制');
+     27|     expect(cancel).toHaveBeenCalledOnce();
+       |                    ^
+     28|     expect(body.locked).toBe(false);
+     29|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/provider-http.test.ts > provider response cleanup > releases the reader after a complete response: {"ok":true}
+ FAIL  tests/provider-http.test.ts > provider response cleanup > releases the reader after a complete response: invalid-json
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/provider-http.test.ts:40:35
+     38|       await expect(providerJson('https://provider.example.test/run')).…
+     39|     }
+     40|     expect(response.body?.locked).toBe(false);
+       |                                   ^
+     41|   });
+     42|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/provider-http.test.ts > provider response cleanup > releases the reader after a stream failure and keeps uncertain submissions marked for reconciliation
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/provider-http.test.ts:51:25
+     49|     await expect(providerJson('https://provider.example.test/run', { s…
+     50|       .rejects.toMatchObject({ ambiguous: true, message: '服务商返回无法解析的响应…
+     51|     expect(body.locked).toBe(false);
+       |                         ^
+     52|   });
+     53| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  07:44:23
+   Duration  124ms (import 48%, transform 28%, tests 21%, worker 3%)
+

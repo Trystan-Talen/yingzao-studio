@@ -90,6 +90,7 @@
 | GET/POST `/collections` | 列表分页；创建`{name}` | 标准列表 / `{id,workspaceId,name,createdAt,updatedAt}` |
 | PATCH/DELETE `/collections/:id` | 改名`{name}`或软删 | CollectionDto / `{id,deletedAt}` |
 | PUT `/collections/:id/assets` | `{assetIds:string[]}`，按该集合完整替换、上限500 | `{id,assetIds}`；全量同租户校验，一项无权则整体拒绝 |
+| PATCH（局部更新） `/collections/:id/assets` | `addAssetIds`（加入素材标识）与 `removeAssetIds`（移出素材标识）均为可选字符串数组，每批各最多500项，至少一项非空且不可重叠 | `{id,assetIds}`（集合标识与最终素材标识）；事务内增删、集合总数最多500，保留未指定关联及回收站关联，越限409且整批回滚，重复增删幂等 |
 | GET/POST `/brands` | 列表`q?,visibility?,page?,pageSize?`；创建Brand可写字段 | 标准BrandDto列表 / BrandDto |
 | GET/PATCH/DELETE `/brands/:id` | Patch只允许品牌可写字段 | BrandDto / `{id,deletedAt}` |
 | POST `/brands/:id/restore` | 无 | BrandDto |

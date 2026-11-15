@@ -1,0 +1,48 @@
+{
+  "scope": "隔离数据库和合成账号的系统 Chrome（浏览器）桌面/手机专项；没有访问正式库或外部模型",
+  "fixed": [
+    {
+      "case": "创建成功响应迟到",
+      "behavior": "提交时弹窗会话与草稿修订都一致才清空并关闭；字段变化或关闭重开后保留当前草稿",
+      "redEvidence": "support-create-race-independent-red.json",
+      "redRun": "platform/var/e2e/run-3qlLBF"
+    },
+    {
+      "case": "撤回成功响应迟到",
+      "behavior": "提交时捕获工单标识，只关闭仍对应该工单的详情；请求中禁用重复撤回",
+      "redEvidence": "support-withdraw-race-red.txt",
+      "redRun": "platform/var/e2e/run-KvNxqb"
+    }
+  ],
+  "green": {
+    "run": "platform/var/e2e/run-VkKLHX",
+    "passed": 16,
+    "failed": 0,
+    "projects": [
+      "desktop",
+      "mobile"
+    ],
+    "perProject": 8,
+    "newRegressionCasesPerProject": 3,
+    "command": "node --import tsx scripts/e2e.ts --config=var/knowledge-chrome.config.ts management-lifecycle.spec.ts --project=desktop --project=mobile",
+    "checks": [
+      "请求中编辑同一个创建弹窗，新草稿保留；显式再次提交后数据库保存两条正确记录",
+      "关闭重新打开创建弹窗并编辑，新草稿保留且后续提交正常",
+      "旧工单撤回响应不关闭另一工单；另一工单草稿与状态不变，旧工单真实撤回",
+      "先前管理专项五条每个设备重复验证：密钥权限/撤销、工单保存/补充/撤回及英文阿文原文、回复草稿隔离、迟到回复保存、团队角色与跨空间隔离"
+    ]
+  },
+  "staticChecks": {
+    "typescript": "passed: node node_modules/typescript/bin/tsc --noEmit",
+    "eslint": "passed: Support.tsx + management-lifecycle.spec.ts",
+    "prettier": "passed: Support.tsx + management-lifecycle.spec.ts"
+  },
+  "frozenFiles": {
+    "platform/src/web/pages/Support.tsx": "01544620d19197aaa0634c5c391d4ac22fe868cfef2169f669546957ad6047d9",
+    "platform/tests/e2e/management-lifecycle.spec.ts": "94fdadab6b7fa168899960060f08270b1d6e3d10c8670be78e24688b64a760da"
+  },
+  "limitations": [
+    "本专项不代替整个浏览器套件；主代理将以冻结后的源码重新全量验收",
+    "真实外部客服发送能力未连接；断言针对本地真实工单存储与权限"
+  ]
+}

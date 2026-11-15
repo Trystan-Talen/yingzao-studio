@@ -1,0 +1,79 @@
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+.knowledge-card {
+  padding: 20px;
+  min-width: 0;
+}
+.knowledge-card h2,
+.knowledge-card h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.knowledge-card p,
+.knowledge-source p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.knowledge-fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.knowledge-selector {
+  min-width: 0;
+}
+.knowledge-selector details {
+  margin: 4px 0 12px;
+  font-size: 13px;
+}
+.knowledge-selector summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.knowledge-selector details input {
+  margin-top: 8px;
+  width: 100%;
+}
+.knowledge-memory-controls {
+  display: grid;
+  gap: 10px;
+  margin-block: 16px;
+}
+.knowledge-sources {
+  margin-block: 16px;
+}
+.knowledge-source {
+  padding-block: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.knowledge-thumbnails {
+  display: flex;
+  gap: 8px;
+  max-height: 100px;
+  overflow: hidden;
+}
+.knowledge-thumbnails > * {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+.knowledge-preview {
+  max-height: 240px;
+  overflow: auto;
+  padding-inline-start: 20px;
+}
+.knowledge-page .toolbar input {
+  min-width: 0;
+}
+@media (max-width: 640px) {
+  .knowledge-page .toolbar {
+    flex-wrap: wrap;
+  }
+  .knowledge-page .toolbar input {
+    width: 100%;
+  }
+}

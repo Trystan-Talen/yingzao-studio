@@ -1,0 +1,204 @@
+--- before/platform/src/web/lib/use-creative-brief.ts
++++ after/platform/src/web/lib/use-creative-brief.ts
+@@ -52,6 +52,7 @@
+   const entries = useRef(new Map<string, Entry>());
+   const mounted = useRef(true);
+   const [, redraw] = useState(0);
++  const [sourceRevision, setSourceRevision] = useState(0);
+   const [loadError, setLoadError] = useState<{ key: string; message: string }>();
+   const notify = () => {
+     if (mounted.current) redraw((value) => value + 1);
+@@ -326,6 +327,31 @@
+     notify();
+   }
+ 
++  function refreshSources() {
++    const entry = entries.current.get(cacheKey);
++    if (
++      !entry ||
++      entry.busy ||
++      entry.record.pending ||
++      entry.error ||
++      entry.preparation?.status !== 'ready'
++    )
++      return;
++    try {
++      // Explicitly start a new lineage, preserving the old server-owned plan and quote.
++      // Persist before changing the UI; an unresolved paid request can never enter here.
++      persist(entry, resetCreativeBrief(entry.record));
++      entry.preparation = undefined;
++      entry.errorCode = undefined;
++      entry.missingQuestionId = undefined;
++      // The unchanged user input must not reuse a quote compiled from the old plan.
++      setSourceRevision((revision) => revision + 1);
++    } catch (error) {
++      entry.error = errorMessage(error);
++    }
++    notify();
++  }
++
+   function invalidatePreparation(error: ApiError) {
+     if (!creativeConfigurationChanged(error.code)) return;
+     const entry = entries.current.get(cacheKey);
+@@ -351,6 +377,13 @@
+     prepare,
+     bindProject,
+     restart,
++    refreshSources,
++    sourceRevision,
++    canRefreshSources:
++      current?.preparation?.status === 'ready' &&
++      !current.busy &&
++      !current.record.pending &&
++      !current.error,
+     invalidatePreparation,
+     canRestart:
+       creativeConfigurationChanged(current?.errorCode) ||
+--- before/platform/src/web/components/CreativeBrief.tsx
++++ after/platform/src/web/components/CreativeBrief.tsx
+@@ -144,6 +144,8 @@
+   error,
+   canRestart,
+   onRestart,
++  canRefreshSources = false,
++  onRefreshSources,
+   onAnswer,
+   missingQuestionId,
+   focusRequest = 0,
+@@ -157,6 +159,8 @@
+   error?: string;
+   canRestart: boolean;
+   onRestart: () => void;
++  canRefreshSources?: boolean;
++  onRefreshSources?: () => void;
+   onAnswer: (questionId: string, answer: string) => void;
+   mediaType: 'image' | 'video';
+   missingQuestionId?: string;
+@@ -219,6 +223,25 @@
+         </Notice>
+       )}
+       {preparation && <CreativeContextSources preparation={preparation} />}
++      {preparation?.status === 'ready' && onRefreshSources && (
++        <div>
++          <Button
++            variant="secondary"
++            disabled={!canRefreshSources || busy || locked}
++            onClick={onRefreshSources}
++          >
++            {t('按最新资料重新整理')}
++          </Button>
++          <p className="field-hint">
++            {t(
++              '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。',
++            )}
++          </p>
++          <p className="field-hint">
++            {t('原始需求与素材选择不变；旧方案的补充回答需要重新确认。')}
++          </p>
++        </div>
++      )}
+       {preparation?.status === 'ready' && (
+         <details className="creative-brief-ready">
+           <summary>
+--- before/platform/src/web/components/Composer.tsx
++++ after/platform/src/web/components/Composer.tsx
+@@ -497,6 +497,7 @@
+     userId: session!.user.id,
+     workspaceId: workspace!.id,
+   });
++  const [preparationSubmissionLocked, setPreparationSubmissionLocked] = useState(false);
+   const referenceModeIssue =
+     kind === 'video' &&
+     currentModel &&
+@@ -2169,6 +2170,16 @@
+           error={creativeBrief.error}
+           canRestart={creativeBrief.canRestart && canEdit}
+           onRestart={creativeBrief.restart}
++          canRefreshSources={
++            creativeBrief.canRefreshSources && canEdit && !preparationSubmissionLocked
++          }
++          onRefreshSources={
++            input.productId || input.brandId || input.useMemory
++              ? () => {
++                  if (canEdit && !preparationSubmissionLocked) creativeBrief.refreshSources();
++                }
++              : undefined
++          }
+           onAnswer={creativeBrief.answer}
+           mediaType={kind}
+           missingQuestionId={creativeBrief.missingQuestionId}
+@@ -2222,6 +2233,8 @@
+           recoveryScope={`composer:${projectId ?? 'new'}`}
+           beforePrepareInput={creativeBrief.prepare}
+           onPreparationInvalid={creativeBrief.invalidatePreparation}
++          preparationRevision={creativeBrief.sourceRevision}
++          onPreparationLockChange={setPreparationSubmissionLocked}
+           prepareInput={prepareSubmission}
+           onCapabilityChanged={async () => {
+             const result = await modelCapability.refresh();
+--- before/platform/src/web/components/JobSubmit.tsx
++++ after/platform/src/web/components/JobSubmit.tsx
+@@ -61,6 +61,8 @@
+   onRequestPrompt,
+   onCapabilityChanged,
+   onPreparationInvalid,
++  preparationRevision,
++  onPreparationLockChange,
+ }: {
+   input: JobInput;
+   operation: Operation | undefined;
+@@ -83,6 +85,10 @@
+   onCapabilityChanged?: () => Promise<boolean>;
+   /** A changed connection invalidates the old plan; never starts a new model call. */
+   onPreparationInvalid?: (error: ApiError) => void;
++  /** Explicitly choosing fresh sources invalidates quote reuse, without changing user input. */
++  preparationRevision?: number;
++  /** Prevent fresh-source preparation while a submission is running or awaiting reconciliation. */
++  onPreparationLockChange?: (locked: boolean) => void;
+ }) {
+   const { canEdit, session, workspace } = useStudio();
+   const mounted = useRef(true);
+@@ -184,7 +190,10 @@
+   const requestId = useRef<string | null>(null);
+   const validated = jobInputSchema.safeParse(input);
+   const requestPrompt = !input.prompt.trim() && onRequestPrompt;
+-  const formFingerprint = quoteFormFingerprint(input);
++  const formFingerprint =
++    preparationRevision === undefined
++      ? quoteFormFingerprint(input)
++      : JSON.stringify([quoteFormFingerprint(input), preparationRevision]);
+   const latestForm = useRef({
+     valid,
+     canEdit,
+@@ -208,6 +217,9 @@
+     );
+   const quoteExpired = !!quote && !(Date.parse(quote.expiresAt) > Date.now());
+   const action = useAction();
++  useEffect(() => {
++    onPreparationLockChange?.(action.busy || !!recovery || !!journal.error);
++  }, [action.busy, recovery, journal.error, onPreparationLockChange]);
+   const refresh = useRefresh();
+   async function recoverCapability(error: unknown) {
+     if (error instanceof ApiError && creativeConfigurationChanged(error.code) && mounted.current) {
+--- before/platform/src/web/lib/creative-brief-translations.ts
++++ after/platform/src/web/lib/creative-brief-translations.ts
+@@ -1,6 +1,19 @@
+ export const CREATIVE_BRIEF_TRANSLATIONS: Readonly<
+   Record<string, Readonly<{ en: string; ar: string }>>
+ > = {
++  按最新资料重新整理: {
++    en: 'Replan with the latest information',
++    ar: 'إعادة التخطيط بأحدث المعلومات',
++  },
++  '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。':
++    {
++      en: 'Discard the current unconfirmed quote; saved plans and submitted tasks stay unchanged. Click Generate again to read the latest information and replan, which may incur planning fees.',
++      ar: 'تجاهل عرض السعر الحالي غير المؤكد؛ تبقى الخطط المحفوظة والمهام المرسلة دون تغيير. انقر على إنشاء مرة أخرى لقراءة أحدث المعلومات وإعادة التخطيط، وقد تُفرض رسوم للتخطيط.',
++    },
++  '原始需求与素材选择不变；旧方案的补充回答需要重新确认。': {
++    en: 'Your original request and selected assets stay unchanged. Follow-up answers from the old plan need to be confirmed again.',
++    ar: 'يبقى طلبك الأصلي والمواد المحددة دون تغيير. يجب تأكيد الإجابات الإضافية من الخطة القديمة من جديد.',
++  },
+   首帧画面: { en: 'First frame', ar: 'الإطار الأول' },
+   镜头与动作: { en: 'Camera and motion', ar: 'الكاميرا والحركة' },
+   '选好或填好答案，再点击继续。': {

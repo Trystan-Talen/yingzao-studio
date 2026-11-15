@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-11-14",
+  "authority": "当前源码与本轮隔离回归；历史外部报告只作范围说明",
+  "formalConfigurationInspected": false,
+  "liveExternalCalls": 0,
+  "productSourceChanged": false,
+  "findings": [
+    {
+      "featureId": "F17",
+      "name": "图片复刻",
+      "differenceType": "当前逐项摘要过时",
+      "staleFields": [
+        "verificationStatus",
+        "assessmentBasis",
+        "remaining"
+      ],
+      "staleClaim": "未验证；只有共享对比组件，图片复刻专用表单/提交尚未独立执行。",
+      "currentImplementation": "已实现主体与参考作品分槽、实际参考图/视频有限帧分析、可确认复刻计划及主体图编辑执行；本轮已重新执行10项原生复刻合同。不能再概括为只有共享对比组件。",
+      "currentVerification": {
+        "kind": "本轮隔离合同",
+        "report": "reviews/project-validation-20261114/evidence/scope-implementation.json",
+        "testFile": "platform/tests/native-replica.test.ts",
+        "passed": 10
+      },
+      "externalPending": "当前真实模型全链未重测。历史两种图片复刻仅当时样例通过；真实视频复刻成片仍未验收，任意商品保真不承诺。",
+      "sources": [
+        "platform/src/contracts/native-replica.ts",
+        "platform/src/server/providers/native-replica.ts",
+        "platform/src/server/providers/native-reference-study.ts",
+        "platform/src/server/tasks/creative-briefs.ts",
+        "platform/tests/e2e/reference-recreation.spec.ts"
+      ],
+      "historicalEvidence": [
+        "reviews/reference-recreation-20261112/DELIVERY.md"
+      ],
+      "recommendedAction": "更新当前判定为本地实现及自动化验证；由本轮完整浏览器报告另行更新浏览器状态。保留旧阶段未验记录。"
+    },
+    {
+      "featureId": "F20",
+      "name": "社交链接导入",
+      "differenceType": "历史描述不可提升为当前结论",
+      "staleFields": [
+        "historicalEvidence[*].externalClaim",
+        "historicalEvidence[*].boundaryClaim"
+      ],
+      "staleClaim": "TikTok/抖音/小红书抓取未实现。",
+      "currentImplementation": "抖音与国际版抖音解析适配和持久任务已实现；小红书在解析前明确拒绝，缺少协议适配。当前assessmentBasis和remaining已经正确。",
+      "currentVerification": {
+        "kind": "本轮隔离合同及本机媒体",
+        "report": "reviews/project-validation-20261114/evidence/scope-implementation.json",
+        "testFile": "platform/tests/social-import.test.ts",
+        "passed": 5
+      },
+      "externalPending": "抖音/国际版抖音真实响应、下载与收费待联调；小红书需要实现适配，不是仅配置密钥。",
+      "sources": [
+        "platform/src/contracts/social-import.ts",
+        "platform/src/server/providers/tikhub.ts",
+        "platform/src/server/tasks/settings.ts"
+      ],
+      "recommendedAction": "历史原文保留；当前新增本轮证据和分平台分类，禁止总括为全部未实现。"
+    },
+    {
+      "featureId": "F44",
+      "name": "登录会话",
+      "differenceType": "历史描述不可提升为当前结论",
+      "staleFields": [
+        "historicalEvidence[*].externalClaim"
+      ],
+      "staleClaim": "微信/短信未实现。",
+      "currentImplementation": "短信与微信登录、绑定/解绑、身份冲突和状态链已有实现；阿里云签名与微信网关均有具体适配。当前摘要已正确说明默认关闭。",
+      "currentVerification": {
+        "kind": "本轮隔离协议和安全回归",
+        "report": "reviews/project-validation-20261114/evidence/scope-implementation.json",
+        "tests": [
+          {
+            "file": "platform/tests/identity-auth.test.ts",
+            "passed": 27
+          },
+          {
+            "file": "platform/tests/aliyun-sms.test.ts",
+            "passed": 42
+          },
+          {
+            "file": "platform/tests/wechat-gateway.test.ts",
+            "passed": 52
+          }
+        ]
+      },
+      "externalPending": "正式应用审核、域名、密钥权限、短信/邮件真实送达及微信/谷歌实际授权未核验；本轮未读取正式配置。",
+      "sources": [
+        "platform/src/server/auth/identity/service.ts",
+        "platform/src/server/auth/identity/aliyun.ts",
+        "platform/src/server/auth/identity/wechat.ts",
+        "platform/src/server/config.ts"
+      ],
+      "recommendedAction": "保留历史；当前增加本轮测试证据，分类为适配已实现、配置和外部联调待验。"
+    },
+    {
+      "featureId": "F34",
+      "name": "素材/集合",
+      "differenceType": "当前逐项摘要过时",
+      "staleFields": [
+        "assessmentBasis"
+      ],
+      "staleClaim": "集合完整管理界面未在96项中执行。",
+      "currentImplementation": "集合成员事务增量、软删关联保留、并发编辑与总成员限额已有实现；对应独立浏览器用例存在。历史96项没有执行不是当前实现缺口。",
+      "currentVerification": {
+        "kind": "本轮隔离服务合同",
+        "report": "reviews/project-validation-20261114/evidence/scope-implementation.json",
+        "testFile": "platform/tests/collection-membership.test.ts",
+        "passed": 8
+      },
+      "externalPending": "不涉及外部模型；公共素材内容授权另行确定。当前完整浏览器结果由主验收统一记录。",
+      "sources": [
+        "platform/src/server/core/references.ts",
+        "platform/src/web/pages/Library.tsx",
+        "platform/tests/e2e/collection-membership-review.spec.ts"
+      ],
+      "recommendedAction": "替换当前assessmentBasis的旧轮次数量叙述；历史96项证据及其边界保留。"
+    },
+    {
+      "featureId": "F47",
+      "name": "支付订阅",
+      "differenceType": "历史描述概念混合",
+      "staleFields": [
+        "historicalEvidence[*].boundaryClaim"
+      ],
+      "staleClaim": "API前台独立现金账户未实现双账本。",
+      "currentImplementation": "网页和开放接口独立平台额度账户、报价/任务/账本渠道隔离已实现。独立现金钱包仍非现成功能，不能将其与额度双账本混称。当前remaining已经正确。",
+      "currentVerification": {
+        "kind": "本轮隔离账务合同",
+        "report": "reviews/project-validation-20261114/evidence/business-boundaries.json",
+        "tests": [
+          {
+            "file": "platform/tests/billing-channel.test.ts",
+            "passed": 6
+          },
+          {
+            "file": "platform/tests/billing.test.ts",
+            "passed": 32
+          },
+          {
+            "file": "platform/tests/billing-environment.test.ts",
+            "passed": 4
+          }
+        ]
+      },
+      "externalPending": "真实商户支付/退款、原站金额换算和现金账户等价性仍未验证。",
+      "sources": [
+        "platform/src/server/tasks/credits.ts",
+        "platform/src/server/tasks/credit-lots.ts",
+        "platform/src/server/billing/index.ts",
+        "platform/src/contracts/billing-channel.ts"
+      ],
+      "recommendedAction": "历史保留；当前分类必须分别写平台额度账本已实现、现金钱包未提供、商户真实联调待验。"
+    },
+    {
+      "featureId": "F35",
+      "name": "人物真实性与使用授权核验",
+      "differenceType": "澄清真实实现缺口",
+      "currentImplementation": "有本地人物授权声明、版本与可注入核验状态机；createCoreServices当前实例化IdentityService时未传入提供方，也未找到正式人物核验适配。",
+      "externalPending": "需先确定核验业务协议并实现正式适配；不是只填已有环境变量即可启用。真实性核验与素材使用授权不能混用。",
+      "sources": [
+        "platform/src/server/core/identity.ts",
+        "platform/src/server/core/index.ts"
+      ],
+      "recommendedAction": "保持部分实现，明确子项“本地授权已实现；正式核验适配未实现”。"
+    },
+    {
+      "featureId": "F48",
+      "name": "正式税务开票",
+      "differenceType": "澄清真实实现缺口",
+      "currentImplementation": "submitInvoice只登记pending与local-requested事件，delivery为not-sent；正式开具、取票及供应商状态适配没有实现。",
+      "externalPending": "先确定开票协议和适配，之后才能验真实开票；支付服务商账单不替代正式税务发票。",
+      "sources": [
+        "platform/src/server/core/business.ts",
+        "platform/src/server/billing/index.ts"
+      ],
+      "recommendedAction": "保持部分实现，缺口列为适配未实现，不能总括为仅配置缺失。"
+    },
+    {
+      "featureId": null,
+      "name": "私有创作记忆与产品资料库",
+      "differenceType": "新增功能缺少逐项条目",
+      "currentImplementation": "当前54个features条目未单列创作记忆/产品库；事实只在latestCreativeKnowledge和latestCreativeKnowledgeRecheck总括。已实现私有记忆、生命周期、产品事实与限制、产品/品牌关联、可审计规划快照和冻结执行。",
+      "currentVerification": {
+        "kind": "本次前一专项的隔离回归，不充作本次全仓结果",
+        "report": "reviews/creative-memory-recheck-20261114/evidence/planning-green.json"
+      },
+      "externalPending": "真实模型应用记忆与事实限制的效果未验证；分组、工具、详情页明确未接入。",
+      "sources": [
+        "platform/src/contracts/knowledge.ts",
+        "platform/src/server/core/knowledge.ts",
+        "platform/src/server/tasks/creative-knowledge.ts",
+        "platform/src/server/tasks/creative-briefs.ts",
+        "platform/src/web/pages/Products.tsx"
+      ],
+      "recommendedAction": "由主任务分配新的功能ID，记忆/产品库各建原子条目；不要只更新总括，也不要把F37品牌库整体改写成新功能。"
+    }
+  ]
+}

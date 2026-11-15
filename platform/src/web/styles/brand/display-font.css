@@ -1,0 +1,56 @@
+/* ==========================================================================
+   映造 · Display typography
+   Display headlines use a bundled, subset ZCOOL QingKe HuangYou ("YZ Display Brand",
+   站酷庆科黄油体, OFL). UI text stays sans. Glyphs missing from the subset (latin, dynamic text)
+   fall through to the display sans stack, so nothing ever renders as tofu.
+   ========================================================================== */
+@font-face {
+  font-family: 'YZ Display Brand';
+  src: url('/fonts/yz-display-brand.woff') format('woff');
+  /* single-weight face: claim the full range so browsers never synthesise a faux bold */
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --yz-font-brand: 'YZ Display Brand', var(--yz-font-display);
+}
+
+/* the editorial moments: home greeting, login, content-page titles, section titles */
+:root:root .yz-create .yz-hero h1,
+:root:root .yz-login-copy h1,
+:root:root .page-heading h1,
+:root:root .page.inspiration-studio .inspiration-studio-title h1,
+:root:root .yz-section-title h2 {
+  font-family: var(--yz-font-brand);
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0.02em;
+}
+:root:root .yz-create .yz-hero h1 {
+  font-size: clamp(38px, 4vw, 62px);
+  line-height: 1.16;
+}
+/* keep the gradient brand word from touching its neighbours */
+:root:root .yz-create .yz-hero h1 em,
+:root:root .yz-login-copy h1 em {
+  padding-inline: 0.02em;
+}
+.yz-rotator-word {
+  text-decoration-thickness: 0.045em;
+  text-underline-offset: 0.18em;
+}
+.yz-caret {
+  width: 0.05em;
+}
+/* compact management headers keep the brand face but at tool scale */
+:root:root .yz-content.is-management .page-heading h1 {
+  font-size: 30px;
+  font-weight: 400;
+}
+/* the vertical seal in the home signature */
+:root:root .yz-signature span:last-child {
+  font-family: var(--yz-font-brand);
+  font-weight: 900;
+}

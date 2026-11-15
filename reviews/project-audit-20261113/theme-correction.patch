@@ -1,0 +1,47 @@
+--- a/platform/src/web/context.tsx
++++ b/platform/src/web/context.tsx
+@@ -113,17 +113,9 @@
+     const locale = session?.user.preferences.locale ?? 'zh-CN';
+     document.documentElement.lang = locale;
+     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
+-    if (theme !== 'system') {
+-      document.documentElement.dataset.theme = theme;
+-      return;
+-    }
+-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+-    const apply = () => {
+-      document.documentElement.dataset.theme = mq.matches ? 'dark' : 'light';
+-    };
+-    apply();
+-    mq.addEventListener('change', apply);
+-    return () => mq.removeEventListener('change', apply);
++    // The brand default, including the legacy `system` preference, is always dark.
++    // Light is an explicit user choice; OS appearance must not change the product style.
++    document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+   }, [session?.user.preferences]);
+   async function switchWorkspace(id: string) {
+     if (id === workspace?.id) return true;
+--- a/platform/src/web/pages/Settings.tsx
++++ b/platform/src/web/pages/Settings.tsx
+@@ -111,7 +111,7 @@
+           <div className="form-grid">
+             <Field label={t('界面主题')}>
+               <select value={theme} onChange={(e) => setTheme(e.target.value as typeof theme)}>
+-                <option value="system">{t('跟随系统')}</option>
++                <option value="system">{t('默认（深色）')}</option>
+                 <option value="light">{t('浅色')}</option>
+                 <option value="dark">{t('深色')}</option>
+               </select>
+--- a/platform/src/web/lib/i18n.ts
++++ b/platform/src/web/lib/i18n.ts
+@@ -3022,6 +3022,10 @@
+     en: 'Theme',
+     ar: 'المظهر',
+   },
++  '默认（深色）': {
++    en: 'Default (dark)',
++    ar: 'الافتراضي (داكن)',
++  },
+   跟随系统: {
+     en: 'System',
+     ar: 'حسب النظام',

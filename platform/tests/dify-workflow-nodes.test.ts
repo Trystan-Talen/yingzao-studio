@@ -1,7 +1,9 @@
 import { expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { closeSync, mkdtempSync, openSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { z } from 'zod';
 import JSZip from 'jszip';
 import { createHash } from 'node:crypto';
@@ -82,13 +84,25 @@ function run(
   if (!code) throw new Error('Missing code node');
   const script =
     'import sys,json\np=json.load(sys.stdin)\nscope={}\nexec(compile(p["code"],"dify-node","exec"),scope)\ntry:\n print(json.dumps({"ok":True,"result":scope[p["entryPoint"]](**p["args"])}))\nexcept Exception as error:\n print(json.dumps({"ok":False,"error":str(error)}))\n';
-  return JSON.parse(
-    execFileSync('python3', ['-c', script], {
-      input: JSON.stringify({ code, args, entryPoint }),
-      encoding: 'utf8',
-      timeout: 10000,
-    }),
-  ) as { ok: boolean; result: Record<string, string | number>; error?: string };
+  // Large synchronous stdin pipes can stall before Python reads the complete payload.
+  // A file descriptor preserves the exact stdin contract without relaxing execution bounds.
+  const folder = mkdtempSync(join(tmpdir(), 'yingzao-dify-node-'));
+  let input: number | undefined;
+  try {
+    const payload = join(folder, 'input.json');
+    writeFileSync(payload, JSON.stringify({ code, args, entryPoint }), { mode: 0o600 });
+    input = openSync(payload, 'r');
+    return JSON.parse(
+      execFileSync('python3', ['-c', script], {
+        stdio: [input, 'pipe', 'pipe'],
+        encoding: 'utf8',
+        timeout: 10000,
+      }),
+    ) as { ok: boolean; result: Record<string, string | number>; error?: string };
+  } finally {
+    if (input !== undefined) closeSync(input);
+    rmSync(folder, { recursive: true, force: true });
+  }
 }
 const finalArgs = () => ({
   body: response(screens()),

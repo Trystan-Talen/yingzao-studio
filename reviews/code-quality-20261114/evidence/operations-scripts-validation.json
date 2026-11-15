@@ -1,0 +1,194 @@
+{
+  "scope": "兑换码管理与健康检查脚本；不修改应用运行入口、正式数据库或正式服务",
+  "red": {
+    "redemption": {
+      "source": "运行修前入口，工作目录为临时合成目录，实际有效目标基线通过",
+      "cases": [
+        {
+          "name": "requires an explicit nonempty database before creating a redemption (undefined)",
+          "status": "failed"
+        },
+        {
+          "name": "requires an explicit nonempty database before creating a redemption (\"\")",
+          "status": "failed"
+        },
+        {
+          "name": "requires an explicit nonempty database before creating a redemption (\"   \")",
+          "status": "failed"
+        },
+        {
+          "name": "creates one redemption only in the explicitly selected disposable database",
+          "status": "passed"
+        },
+        {
+          "name": "shows create-redemption.ts help without application initialization",
+          "status": "failed"
+        }
+      ]
+    },
+    "health": {
+      "source": "修前 5 行健康脚本的独立副本，唯一调整为导入路径；共享产品源码不回退",
+      "failed": 8,
+      "passed": 0,
+      "excludedByFilter": 5,
+      "cases": [
+        {
+          "name": "checks health without creating installation keys or application data",
+          "status": "failed"
+        },
+        {
+          "name": "supports IPv6 and wildcard health listener ::1",
+          "status": "failed"
+        },
+        {
+          "name": "supports IPv6 and wildcard health listener [::1]",
+          "status": "failed"
+        },
+        {
+          "name": "supports IPv6 and wildcard health listener ::",
+          "status": "failed"
+        },
+        {
+          "name": "supports IPv6 and wildcard health listener [::]",
+          "status": "failed"
+        },
+        {
+          "name": "reads configured IPv4 wildcard health settings without loading an installation",
+          "status": "failed"
+        },
+        {
+          "name": "fails a hanging health endpoint within its own bounded timeout",
+          "status": "failed"
+        },
+        {
+          "name": "shows health.ts help without application initialization",
+          "status": "failed"
+        }
+      ],
+      "allTargetsDedicatedTemporaryLoopback": true
+    },
+    "notCountedAsProductFailures": [
+      "初轮沙箱拒绝本机回环监听，已排除该基础设施失败",
+      "一次旧帮助用例未指定端口而只读探测默认 4310 健康接口；未触及业务记录，修正夹具后已重录为专属临时端口且帮助须零请求"
+    ]
+  },
+  "fixes": [
+    "创建兑换码先校验单个有效额度参数及非空显式 DATABASE_PATH（数据库路径），然后才加载配置、打开数据库；帮助不初始化服务",
+    "健康检查仅解析 HOST（监听地址）/PORT（端口），保留环境文件设置，忽略无关应用配置，不生成安装密钥或数据库",
+    "IPv4（网络地址）0.0.0.0 与 IPv6（网络地址）:: 通配监听转为对应回环地址；IPv6 字面量正确加方括号",
+    "健康请求含响应体读取的整体等待受 5 秒终止信号限制；失败返回非零退出状态；帮助无网络请求"
+  ],
+  "green": {
+    "files": 4,
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0,
+    "operationsCases": [
+      {
+        "name": "requires an explicit nonempty database before creating a redemption (undefined)",
+        "status": "passed"
+      },
+      {
+        "name": "requires an explicit nonempty database before creating a redemption (\"\")",
+        "status": "passed"
+      },
+      {
+        "name": "requires an explicit nonempty database before creating a redemption (\"   \")",
+        "status": "passed"
+      },
+      {
+        "name": "creates one redemption only in the explicitly selected disposable database",
+        "status": "passed"
+      },
+      {
+        "name": "checks health without creating installation keys or application data",
+        "status": "passed"
+      },
+      {
+        "name": "supports IPv6 and wildcard health listener ::1",
+        "status": "passed"
+      },
+      {
+        "name": "supports IPv6 and wildcard health listener [::1]",
+        "status": "passed"
+      },
+      {
+        "name": "supports IPv6 and wildcard health listener ::",
+        "status": "passed"
+      },
+      {
+        "name": "supports IPv6 and wildcard health listener [::]",
+        "status": "passed"
+      },
+      {
+        "name": "reads configured IPv4 wildcard health settings without loading an installation",
+        "status": "passed"
+      },
+      {
+        "name": "fails a hanging health endpoint within its own bounded timeout",
+        "status": "passed"
+      },
+      {
+        "name": "shows health.ts help without application initialization",
+        "status": "passed"
+      },
+      {
+        "name": "shows create-redemption.ts help without application initialization",
+        "status": "passed"
+      },
+      {
+        "name": "lets direct Vitest workers encode and probe a real video without a caller-supplied media PATH",
+        "status": "passed"
+      },
+      {
+        "name": "loads the real config in a child without inherited provider credentials or local dotenv settings",
+        "status": "passed"
+      },
+      {
+        "name": "finds bundled media commands with an otherwise minimal PATH and prefers the current installation",
+        "status": "passed"
+      },
+      {
+        "name": "makes stale dependencies an explicit error for both pnpm run and exec preflight",
+        "status": "passed"
+      },
+      {
+        "name": "launches selected tests without inherited credentials, data paths, or build variables",
+        "status": "passed"
+      },
+      {
+        "name": "preserves the nonzero exit status of failing tests",
+        "status": "passed"
+      },
+      {
+        "name": "forwards termination to the test process group and preserves the interruption result",
+        "status": "passed"
+      },
+      {
+        "name": "keeps an interrupted tool nonzero even when it handles the signal with a clean exit",
+        "status": "passed"
+      },
+      {
+        "name": "keeps both Vite environment loading and application dotenv imports away from local settings",
+        "status": "passed"
+      }
+    ],
+    "typecheck": true,
+    "ownedFilesLint": true,
+    "ownedFilesFormat": true
+  },
+  "sourceSha256": {
+    "scripts/health.ts": "52454d868775a7d6745164ff94013db05ee5bf35cbb7059771d7f02aef4090f8",
+    "scripts/create-redemption.ts": "49f652a6dffd942baf5af8d162c18755840f03b7c17906947b59c95e681d7754",
+    "tests/operations-scripts.test.ts": "8cb1fd1991591b8d3196510b0dde2dd7777d1b118b671fa0009dfe5944790374"
+  },
+  "limits": {
+    "noExternalModelCalls": true,
+    "noProductionDatabaseReadOrWrite": true,
+    "noProductionProcessStartOrStop": true,
+    "temporarySyntheticKeysOnly": true,
+    "notFullRepositoryTestRun": true,
+    "oneEarlierReadOnlyDefaultHealthProbeDisclosed": true,
+    "commonToolOwnershipNowLibraryAgent": true
+  }
+}

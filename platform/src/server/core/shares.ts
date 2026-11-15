@@ -2,9 +2,19 @@ import * as inputs from '../../contracts/core';
 import { getSceneAssetIds } from '../../contracts/scene';
 import { type Actor } from '../../contracts/core';
 import { AppError } from '../errors';
-import { CoreContext, type ListQuery, str, num, nullable, id, now, token, hash } from './shared';
-import { DocumentService } from './projects';
-import { AssetService } from './assets';
+import {
+  type CoreContext,
+  type ListQuery,
+  str,
+  num,
+  nullable,
+  id,
+  now,
+  token,
+  hash,
+} from './shared';
+import { type DocumentService } from './projects';
+import { type AssetService } from './assets';
 import { EntitlementService } from './entitlements';
 export class ShareService {
   constructor(

@@ -104,11 +104,12 @@ test('reuses an inspiration with its actual reference image and restores the per
 }) => {
   const headers = await register(page, studio);
   await page.goto(`${studio.origin}/inspiration`);
-  await page.getByRole('button', { name: '把清晨，装进一滴精华 · 以此创作', exact: true }).click();
+  await page.getByRole('button', { name: '把清晨，装进一滴精华 · 预览灵感', exact: true }).click();
   const prompt = '为隔离验收保留植物精华参考图和竖向构图，不调用外部模型。';
   const detail = page.getByRole('dialog', { name: '把清晨，装进一滴精华', exact: true });
+  await detail.locator('summary').filter({ hasText: '查看或调整提示词' }).click();
   await detail.getByLabel(/^创作提示词/).fill(prompt);
-  await detail.getByRole('button', { name: '以此创作', exact: true }).click();
+  await detail.getByRole('button', { name: '使用此灵感', exact: true }).click();
   await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
   const projectId = new URL(page.url()).pathname.split('/').at(-1)!;
   await expect(page.getByRole('textbox', { name: '创作需求', exact: true })).toHaveValue(prompt);
@@ -120,7 +121,10 @@ test('reuses an inspiration with its actual reference image and restores the per
       .locator('img')
       .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
   ).toBe(true);
-  await expect(page.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('2:3');
+  await page.getByRole('button', { name: '更多创作设置', exact: true }).click();
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
+  await expect(settings.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('2:3');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   const messages = await page.request.get(
     `${studio.origin}/api/v1/projects/${projectId}/messages?pageSize=100`,
     { headers },
@@ -150,7 +154,10 @@ test('reuses an inspiration with its actual reference image and restores the per
   await page.reload();
   await expect(page.getByRole('textbox', { name: '创作需求', exact: true })).toHaveValue(prompt);
   await expect(reference).toContainText(assetData.name);
-  await expect(page.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('2:3');
+  await page.getByRole('button', { name: '更多创作设置', exact: true }).click();
+
+  await expect(settings.getByRole('combobox', { name: '比例', exact: true })).toHaveValue('2:3');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   expect(studio.services.db.sqlite.prepare('SELECT count(*) n FROM projects').get()).toEqual({
     n: 1,
   });

@@ -108,6 +108,17 @@ describe('informational creation credit estimates', () => {
     });
   });
 
+  it('includes the server-provided first-frame cost in video pipeline estimates', () => {
+    const { input, capability } = fixture('video.generate');
+    capability.priceCredits = 5;
+    capability.fixedCredits = 8;
+    expect(estimateCreationCredits(input, capability)).toMatchObject({ credits: 33, units: 5 });
+    input.options.duration = 10;
+    expect(estimateCreationCredits(input, capability)).toMatchObject({ credits: 58, units: 10 });
+    capability.fixedCredits = 12;
+    expect(estimateCreationCredits(input, capability)).toMatchObject({ credits: 62 });
+  });
+
   it.each([
     ['missing', undefined],
     ['disconnected', { available: false }],
@@ -115,6 +126,8 @@ describe('informational creation credit estimates', () => {
     ['wrong operation', { id: 'video.generate' }],
     ['invalid rate', { priceCredits: Number.NaN }],
     ['negative rate', { priceCredits: -1 }],
+    ['invalid fixed cost', { fixedCredits: Number.NaN }],
+    ['negative fixed cost', { fixedCredits: -1 }],
     ['overflow', { priceCredits: Number.MAX_SAFE_INTEGER }],
   ] as const)('does not turn %s pricing into zero credits', (_name, override) => {
     const { input, capability } = fixture();

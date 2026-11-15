@@ -1,9 +1,45 @@
+import type { ReferenceStudyResult } from '../../contracts/reference-study';
 import type { CreativeAnswer, CreativePreparation } from '../../contracts/creative-intent';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Check, CheckCircle2, HelpCircle, LoaderCircle } from 'lucide-react';
 import { t } from '../lib/i18n';
+import { dateTime } from '../lib/api';
 import { Button, Notice } from './ui';
 import '../styles/creative-brief.css';
+
+export function CreativeContextSources({ preparation }: { preparation: CreativePreparation }) {
+  if (!(preparation.contextSources?.length || preparation.omittedMemoryCount)) return null;
+  return (
+    <details className="knowledge-sources">
+      <summary>{t('本次采用的资料')}</summary>
+      <p className="field-hint">{t('以下为本次规划的资料快照；后续编辑不改变已确认方案。')}</p>
+      {preparation.contextSources?.map((source) => (
+        <div className="knowledge-source" key={`${source.kind}:${source.id}`}>
+          <strong>
+            {t(source.kind === 'brand' ? '品牌' : source.kind === 'product' ? '产品' : '创作记忆')}{' '}
+            · {source.label}
+          </strong>
+          <p className="field-hint">
+            {source.version !== undefined ? `${t('版本')} ${source.version} · ` : ''}
+            {dateTime(source.updatedAt)}
+          </p>
+          {source.expiresAt && (
+            <p className="field-hint">
+              {t('当时有效至')}：{dateTime(source.expiresAt)}
+            </p>
+          )}
+          <p>{source.content}</p>
+        </div>
+      ))}
+      {!!preparation.omittedMemoryCount && (
+        <p className="field-hint">
+          {t('本次未采用的记忆')}：{preparation.omittedMemoryCount} ·{' '}
+          {t('仅取适用且有效的有限资料，避免无关信息干扰。')}
+        </p>
+      )}
+    </details>
+  );
+}
 
 export function CreativeSummary({
   summary,
@@ -32,6 +68,74 @@ export function CreativeSummary({
   );
 }
 
+export function ReferenceStudyPreview({
+  value,
+  preparation,
+}: {
+  value: ReferenceStudyResult;
+  preparation: CreativePreparation;
+}) {
+  const { study, evidence } = value;
+  return (
+    <section className="creative-generation-plan" aria-label={t('参考复刻方案')}>
+      <h4>{t('参考要点')}</h4>
+      <ul>
+        {study.observations.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+      {study.referenceKind === 'video' && (
+        <>
+          <p className="field-hint">
+            {t('参考区间')}：{evidence.clipStartSeconds.toFixed(1)} –{' '}
+            {(evidence.clipStartSeconds + evidence.clipDurationSeconds).toFixed(1)} {t('秒')}
+          </p>
+          <p className="field-hint">
+            {t('根据抽帧分析迁移运镜与节奏，不直接传整段视频；未分析音轨，不保证逐帧复制。')}
+          </p>
+          <details>
+            <summary>{t('采样画面与运动判断')}</summary>
+            <ol>
+              {study.timeline.map((entry, index) => (
+                <li key={index}>
+                  {entry.timestampSeconds.toFixed(1)} {t('秒')} · {entry.description}
+                </li>
+              ))}
+            </ol>
+            <p>{study.motion?.description}</p>
+            <ul>
+              {study.motion?.uncertainties.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </details>
+        </>
+      )}
+      <h4>{t('主体与场景转化方案')}</h4>
+      <p>{study.transferGuidance}</p>
+      <h4>{t('本次参考的局限')}</h4>
+      <ul>
+        {study.limitations.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+      <details>
+        <summary>{t('查看生成方案')}</summary>
+        {preparation.result.generationPlan ? (
+          <>
+            <h4>{t('首帧画面')}</h4>
+            <p>{preparation.result.generationPlan.imagePrompt}</p>
+            <h4>{t('镜头与动作')}</h4>
+            <p>{preparation.result.generationPlan.videoPrompt}</p>
+          </>
+        ) : (
+          <p>{preparation.result.prompt}</p>
+        )}
+      </details>
+    </section>
+  );
+}
+
 export function CreativeBrief({
   preparation,
   answers,
@@ -40,6 +144,8 @@ export function CreativeBrief({
   error,
   canRestart,
   onRestart,
+  canRefreshSources = false,
+  onRefreshSources,
   onAnswer,
   missingQuestionId,
   focusRequest = 0,
@@ -53,6 +159,8 @@ export function CreativeBrief({
   error?: string;
   canRestart: boolean;
   onRestart: () => void;
+  canRefreshSources?: boolean;
+  onRefreshSources?: () => void;
   onAnswer: (questionId: string, answer: string) => void;
   mediaType: 'image' | 'video';
   missingQuestionId?: string;
@@ -114,6 +222,26 @@ export function CreativeBrief({
           )}
         </Notice>
       )}
+      {preparation && <CreativeContextSources preparation={preparation} />}
+      {preparation?.status === 'ready' && onRefreshSources && (
+        <div>
+          <Button
+            variant="secondary"
+            disabled={!canRefreshSources || busy || locked}
+            onClick={onRefreshSources}
+          >
+            {t('按最新资料重新整理')}
+          </Button>
+          <p className="field-hint">
+            {t(
+              '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。',
+            )}
+          </p>
+          <p className="field-hint">
+            {t('原始需求与素材选择不变；旧方案的补充回答需要重新确认。')}
+          </p>
+        </div>
+      )}
       {preparation?.status === 'ready' && (
         <details className="creative-brief-ready">
           <summary>
@@ -124,6 +252,17 @@ export function CreativeBrief({
             summary={preparation.result.summary}
             assumptions={preparation.result.assumptions}
           />
+          {preparation.referenceStudy && (
+            <ReferenceStudyPreview value={preparation.referenceStudy} preparation={preparation} />
+          )}
+          {!preparation.referenceStudy && preparation.result.generationPlan && (
+            <div className="creative-generation-plan">
+              <h4>{t('首帧画面')}</h4>
+              <p>{preparation.result.generationPlan.imagePrompt}</p>
+              <h4>{t('镜头与动作')}</h4>
+              <p>{preparation.result.generationPlan.videoPrompt}</p>
+            </div>
+          )}
         </details>
       )}
       {clarifying && (

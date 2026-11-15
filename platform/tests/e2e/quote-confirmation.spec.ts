@@ -33,14 +33,16 @@ test('shows separate music and generated sound choices in a real quote without s
   });
   await page.goto(`${studio.origin}/workbench`);
   const composer = page.locator('.composer');
+  const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   await composer.getByRole('button', { name: '视频创作', exact: true }).click();
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  await composer
+  await settings
     .getByRole('combobox', { name: '生成模型', exact: true })
     .selectOption('video.generate|fal|wan-2.6');
-  await composer.getByRole('combobox', { name: '时长', exact: true }).selectOption('5');
+  await settings.getByRole('combobox', { name: '时长', exact: true }).selectOption('5');
   // An explicit user choice must survive switching to a model that does not support it.
-  await composer.getByRole('combobox', { name: '清晰度', exact: true }).selectOption('720p');
+  await settings.getByRole('combobox', { name: '清晰度', exact: true }).selectOption('720p');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await composer
     .getByRole('textbox', { name: '创作需求', exact: true })
     .fill('核对文字与独立音轨，不调用外部模型');
@@ -88,9 +90,10 @@ test('shows separate music and generated sound choices in a real quote without s
   await expect(page).toHaveURL(/\/workbench\/[0-9a-f-]{36}$/);
   await expect(composer).not.toHaveAttribute('data-presentation', 'quick');
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-  await composer
+  await settings
     .getByRole('combobox', { name: '生成模型', exact: true })
     .selectOption('video.generate|fal|kling-o3-4k-reference');
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   const sound = composer.getByRole('checkbox', { name: '生成视频音轨', exact: true });
   await sound.check();
   const visualPicker = composer.locator('.asset-picker').filter({

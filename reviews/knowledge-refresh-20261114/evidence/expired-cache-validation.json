@@ -1,0 +1,44 @@
+{
+  "scope": "显式重整后刷新本地资料缓存，修复一直可见页面未接收其他客户端续期而继续禁用生成的问题",
+  "red": {
+    "run": "platform/var/e2e/run-CYuizr",
+    "failed": 1,
+    "reason": "点击按最新资料重新整理后生成按钮仍disabled；服务端产品已续期，客户端缓存仍旧到期时间",
+    "evidence": "expired-cache-red.txt"
+  },
+  "change": "Composer在受控重整和过期错误重新检查后，只使当前工作空间、当前用户的products/brands/memories查询失效并刷新；不触发模型，不修改服务端方案或报价",
+  "green": {
+    "run": "platform/var/e2e/run-x8k3jX",
+    "passed": 8,
+    "failed": 0,
+    "projects": {
+      "desktop": 4,
+      "mobile": 4
+    },
+    "duration": "34.0 seconds",
+    "file": "tests/e2e/knowledge-refresh.spec.ts",
+    "checks": [
+      "页面保持visible；浏览器时钟模拟缓存到期；另一客户端续期；不重载、不切换页面，重整后生成恢复",
+      "重整按钮自身未增加规划、报价和任务数；下一次生成取最新有效期、产品版本和事实",
+      "旧品牌产品更新、参考图更新及旧快照保持回归通过",
+      "过期错误后刷新恢复回归通过",
+      "提交中及未知结果恢复时，新入口保持禁用，核对仍找回原任务"
+    ]
+  },
+  "independentReview": "memory_audit只读确认当前缓存键为[api,workspaceId,path,userId]，查询过滤未越权，仅重发已启用读取请求，状态守卫不变",
+  "baseline": "此前46条关联浏览器与25条单元对应缓存增量前版本；最终缓存增量以本8条另计，不相加冒充全量",
+  "validationHandoff": "planning_audit负责两文件冻结后的统一类型、规范、格式、关联单元与摘要校验",
+  "testConstructionCorrection": {
+    "run": "platform/var/e2e/run-ZFX2dP",
+    "reason": "首次测试忘记展开更多偏好，过期提示存在但隐藏；仅修测试展开操作后获得正确产品缺陷红测"
+  },
+  "limitations": [
+    "全部隔离合成数据与本机模拟模型，无真实模型调用或正式库访问",
+    "到期只对浏览器测试时钟快进；真实自然到期验证由根代理独立记录",
+    "真实A/B模型流程使用本次缓存增量前冻结构建，和最终缓存增量分别验收"
+  ],
+  "frozenFiles": {
+    "platform/src/web/components/Composer.tsx": "32e39e1a6c83eb476746d085ae57ce97160d2dbca608d3d1796e6f15df4d98f6",
+    "platform/tests/e2e/knowledge-refresh.spec.ts": "50cee7ca6600f2866bcb27353982da34299c3aec3c0ff842a4021e73d5e0b2f4"
+  }
+}

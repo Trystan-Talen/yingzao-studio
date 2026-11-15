@@ -19,10 +19,12 @@ import { MODEL_CAPABILITY_TRANSLATIONS } from './model-capability-translations';
 import { CREATIVE_TRANSLATIONS } from './creative-translations';
 import { CREATIVE_BRIEF_TRANSLATIONS } from './creative-brief-translations';
 import { CREATION_REFRESH_TRANSLATIONS } from './creation-refresh-translations';
+import { KNOWLEDGE_TRANSLATIONS } from './knowledge-translations';
 export type Locale = 'zh-CN' | 'en' | 'ar';
 export const SUPPORTED_LOCALES: readonly Locale[] = ['zh-CN', 'en', 'ar'];
 export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: string }>>> = {
   ...HOME_TRANSLATIONS,
+  ...KNOWLEDGE_TRANSLATIONS,
   ...CREATIVE_BRIEF_TRANSLATIONS,
   ...CREATION_REFRESH_TRANSLATIONS,
   ...CREATIVE_STUDIO_TRANSLATIONS,
@@ -3022,6 +3024,10 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
     en: 'Theme',
     ar: 'المظهر',
   },
+  '默认（深色）': {
+    en: 'Default (dark)',
+    ar: 'الافتراضي (داكن)',
+  },
   跟随系统: {
     en: 'System',
     ar: 'حسب النظام',
@@ -3346,6 +3352,7 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
     en: 'Feedback',
     ar: 'ملاحظات',
   },
+  创建于: { en: 'Created on', ar: 'أُنشئ في' },
   申诉: {
     en: 'Appeal',
     ar: 'اعتراض',
@@ -4493,6 +4500,14 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
   暂无可开票的已支付订单: {
     en: 'No paid orders eligible for invoicing',
     ar: 'لا توجد طلبات مدفوعة مؤهلة للفوترة',
+  },
+  当前页没有可申请金额的已支付订单: {
+    en: 'No paid orders with invoiceable amounts on this page',
+    ar: 'لا توجد طلبات مدفوعة بمبالغ مؤهلة للفوترة في هذه الصفحة',
+  },
+  每次最多选择100笔订单: {
+    en: 'Select up to 100 orders per request',
+    ar: 'يمكن اختيار ما يصل إلى 100 طلب لكل طلب فاتورة',
   },
   保存发票申请: {
     en: 'Save invoice request',
@@ -6128,6 +6143,32 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
   ...EXPERIENCE_TRANSLATIONS,
   ...MODEL_CAPABILITY_TRANSLATIONS,
   ...CREATIVE_TRANSLATIONS,
+  种草海报: { en: 'Product showcase poster', ar: 'ملصق لعرض منتج' },
+  场景大片: { en: 'Cinematic scene', ar: 'مشهد سينمائي' },
+  营销物料: { en: 'Marketing assets', ar: 'مواد تسويقية' },
+  种草短片: { en: 'Product showcase clip', ar: 'مقطع لعرض منتج' },
+  产品广告: { en: 'Product ad', ar: 'إعلان منتج' },
+  开箱视频: { en: 'Unboxing video', ar: 'فيديو فتح العبوة' },
+  品牌短片: { en: 'Brand film', ar: 'فيلم قصير للعلامة التجارية' },
+  口播视频: { en: 'Talking-head video', ar: 'فيديو تقديم أمام الكاميرا' },
+  夜深了: { en: "It's late", ar: 'الوقت متأخر' },
+  整套长图: { en: 'Complete detail page', ar: 'صفحة منتج متكاملة' },
+  '抠图 · 扩图 · 高清': {
+    en: 'Cut out · Extend · Upscale',
+    ar: 'إزالة الخلفية · توسيع · تحسين الدقة',
+  },
+  上传与复用: { en: 'Upload and reuse', ar: 'رفع وإعادة استخدام' },
+  海量案例: { en: 'Explore examples', ar: 'استكشف الأمثلة' },
+  '今天想映造什么？': { en: 'What would you like to create today?', ar: 'ماذا تود أن تنشئ اليوم؟' },
+  '参考图可直接拖到「添加素材」 · 生成的作品自动保存到项目，进度可在': {
+    en: 'Drag references onto “Add assets” · Creations are saved to projects. Open',
+    ar: 'اسحب الصور المرجعية إلى «إضافة مواد» · تُحفظ الأعمال تلقائيًا في المشاريع. افتح',
+  },
+  中查看: { en: 'to check progress.', ar: 'لمتابعة التقدم.' },
+  服务商: { en: 'Provider', ar: 'مزوّد الخدمة' },
+  最高清晰度: { en: 'Max resolution', ar: 'أقصى دقة' },
+  可选比例: { en: 'Aspect ratios', ar: 'نسب الأبعاد المتاحة' },
+  种: { en: 'options', ar: 'خيارات' },
   '演示空间 · 测试数据': { en: 'Demo workspace · Test data', ar: 'مساحة تجريبية · بيانات اختبار' },
   '在首页的快速创作区选择图片、视频或商品详情页。填写需求、添加参考素材并确认费用后开始生成；也可以从灵感探索中选择画面继续创作。服务未连接时仍可保存草稿和整理素材。':
     {

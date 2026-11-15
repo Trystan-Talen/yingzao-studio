@@ -1,0 +1,70 @@
+Running 30 tests using 1 worker
+
+(node:74625) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [desktop] › tests/e2e/collection-membership-review.spec.ts:44:1 › adding an asset preserves collection membership of an item in the recycle bin (3.8s)
+  ✓   2 [desktop] › tests/e2e/collection-membership-review.spec.ts:78:1 › adding and removing selected assets preserves a concurrent collection addition (3.3s)
+  ✓   3 [desktop] › tests/e2e/collection-membership-review.spec.ts:117:1 › collection lookup failure offers retry instead of claiming the collection list is empty (3.9s)
+  ✓   4 [desktop] › tests/e2e/library-batch-recovery.spec.ts:33:1 › keeps every upload in its original workspace when switching spaces during a delayed batch (4.7s)
+  ✓   5 [desktop] › tests/e2e/library-batch-recovery.spec.ts:122:1 › refreshes successful batch deletions and retries only remaining assets after a partial failure (2.6s)
+  ✓   6 [desktop] › tests/e2e/library-batch-recovery.spec.ts:175:1 › reports an unavailable project library and restores saved work through an explicit retry (4.2s)
+  ✓   7 [desktop] › tests/e2e/management-editor-recovery.spec.ts:52:3 › a delayed project creation keeps later input attached to the created record (2.5s)
+  ✓   8 [desktop] › tests/e2e/management-editor-recovery.spec.ts:52:3 › a delayed collection creation keeps later input attached to the created record (2.9s)
+  ✓   9 [desktop] › tests/e2e/management-editor-recovery.spec.ts:106:1 › a delayed project update preserves fields typed after submission (3.6s)
+  ✓  10 [desktop] › tests/e2e/management-editor-recovery.spec.ts:142:1 › a delayed project creation does not navigate away from a newly opened project draft (4.1s)
+  ✓  11 [desktop] › tests/e2e/management-editor-recovery.spec.ts:178:1 › a delayed asset update does not close another asset or clear its draft (4.1s)
+  ✓  12 [desktop] › tests/e2e/management-editor-recovery.spec.ts:225:1 › a delayed asset update preserves later name and tag changes in the same editor (3.7s)
+  ✓  13 [desktop] › tests/e2e/management-editor-recovery.spec.ts:265:1 › a delayed collection creation preserves a newly reopened collection draft (3.8s)
+  ✓  14 [desktop] › tests/e2e/management-editor-recovery.spec.ts:304:1 › a delayed collection deletion preserves the next selected collection and its name draft (4.2s)
+  ✓  15 [desktop] › tests/e2e/management-editor-recovery.spec.ts:351:1 › reaches collection 101 for membership and keeps its selection while paging, renaming and deleting (5.3s)
+(node:75746) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  16 [mobile] › tests/e2e/collection-membership-review.spec.ts:44:1 › adding an asset preserves collection membership of an item in the recycle bin (5.8s)
+  ✓  17 [mobile] › tests/e2e/collection-membership-review.spec.ts:78:1 › adding and removing selected assets preserves a concurrent collection addition (5.3s)
+  ✓  18 [mobile] › tests/e2e/collection-membership-review.spec.ts:117:1 › collection lookup failure offers retry instead of claiming the collection list is empty (4.5s)
+  ✓  19 [mobile] › tests/e2e/library-batch-recovery.spec.ts:33:1 › keeps every upload in its original workspace when switching spaces during a delayed batch (4.6s)
+  ✓  20 [mobile] › tests/e2e/library-batch-recovery.spec.ts:122:1 › refreshes successful batch deletions and retries only remaining assets after a partial failure (4.1s)
+  ✘  21 [mobile] › tests/e2e/library-batch-recovery.spec.ts:175:1 › reports an unavailable project library and restores saved work through an explicit retry (5.3s)
+(node:77556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  22 [mobile] › tests/e2e/management-editor-recovery.spec.ts:52:3 › a delayed project creation keeps later input attached to the created record (3.4s)
+  ✓  23 [mobile] › tests/e2e/management-editor-recovery.spec.ts:52:3 › a delayed collection creation keeps later input attached to the created record (4.1s)
+  ✓  24 [mobile] › tests/e2e/management-editor-recovery.spec.ts:106:1 › a delayed project update preserves fields typed after submission (3.9s)
+  ✓  25 [mobile] › tests/e2e/management-editor-recovery.spec.ts:142:1 › a delayed project creation does not navigate away from a newly opened project draft (3.9s)
+  ✓  26 [mobile] › tests/e2e/management-editor-recovery.spec.ts:178:1 › a delayed asset update does not close another asset or clear its draft (4.3s)
+  ✓  27 [mobile] › tests/e2e/management-editor-recovery.spec.ts:225:1 › a delayed asset update preserves later name and tag changes in the same editor (3.8s)
+  ✓  28 [mobile] › tests/e2e/management-editor-recovery.spec.ts:265:1 › a delayed collection creation preserves a newly reopened collection draft (3.8s)
+  ✓  29 [mobile] › tests/e2e/management-editor-recovery.spec.ts:304:1 › a delayed collection deletion preserves the next selected collection and its name draft (4.3s)
+  ✓  30 [mobile] › tests/e2e/management-editor-recovery.spec.ts:351:1 › reaches collection 101 for membership and keeps its selection while paging, renaming and deleting (5.2s)
+
+
+  1) [mobile] › tests/e2e/library-batch-recovery.spec.ts:175:1 › reports an unavailable project library and restores saved work through an explicit retry 
+
+    Error: Isolated worker did not start: 
+
+       at fixtures.ts:156
+
+      154 |     await smtp.close();
+      155 |     await sms?.close();
+    > 156 |     throw new Error(`Isolated worker did not start: ${workerOutput}`);
+          |           ^
+      157 |   }
+      158 |   return {
+      159 |     ...application,
+        at harness (/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/fixtures.ts:156:11)
+        at Object.studio (/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/tests/e2e/fixtures.ts:322:20)
+
+    Error Context: var/e2e/run-pNrkeC/results/library-batch-recovery-rep-61838-k-through-an-explicit-retry-mobile/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    var/e2e/run-pNrkeC/results/library-batch-recovery-rep-61838-k-through-an-explicit-retry-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace var/e2e/run-pNrkeC/results/library-batch-recovery-rep-61838-k-through-an-explicit-retry-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [mobile] › tests/e2e/library-batch-recovery.spec.ts:175:1 › reports an unavailable project library and restores saved work through an explicit retry 
+  29 passed (2.1m)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-pNrkeC

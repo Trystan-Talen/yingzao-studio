@@ -1,0 +1,96 @@
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2299 modules transformed.
+rendering chunks...
+computing gzip size...
+var/e2e/run-Q3rI1L/web/index.html                                  0.61 kB │ gzip:   0.44 kB
+var/e2e/run-Q3rI1L/web/assets/knowledge-C1GF6EJk.css               1.12 kB │ gzip:   0.49 kB
+var/e2e/run-Q3rI1L/web/assets/Login-DikSd-tK.css                   3.38 kB │ gzip:   1.22 kB
+var/e2e/run-Q3rI1L/web/assets/Settings-Bxgqvs-8.css                4.04 kB │ gzip:   1.13 kB
+var/e2e/run-Q3rI1L/web/assets/Workbench-CTY2Adub.css               5.06 kB │ gzip:   1.28 kB
+var/e2e/run-Q3rI1L/web/assets/Inspiration-C0f5FocC.css            10.39 kB │ gzip:   2.16 kB
+var/e2e/run-Q3rI1L/web/assets/CanvasEditor-BcQQlAIU.css           12.37 kB │ gzip:   3.11 kB
+var/e2e/run-Q3rI1L/web/assets/CreationLanding-CSl8TV0k.css        42.56 kB │ gzip:   7.88 kB
+var/e2e/run-Q3rI1L/web/assets/index-DKXG2uJQ.css                 271.74 kB │ gzip:  47.41 kB
+var/e2e/run-Q3rI1L/web/assets/chevron-down-Mgwz_ZoG.js             0.21 kB │ gzip:   0.20 kB │ map:     0.99 kB
+var/e2e/run-Q3rI1L/web/assets/job-snapshot-0LKF8d_t.js             0.28 kB │ gzip:   0.22 kB │ map:     1.35 kB
+var/e2e/run-Q3rI1L/web/assets/lock-keyhole-BoK6oqXl.js             0.34 kB │ gzip:   0.28 kB │ map:     1.34 kB
+var/e2e/run-Q3rI1L/web/assets/mentions-DOj5GYvu.js                 0.38 kB │ gzip:   0.31 kB │ map:     1.08 kB
+var/e2e/run-Q3rI1L/web/assets/arrow-up-DxGl_8gl.js                 0.39 kB │ gzip:   0.27 kB │ map:     2.03 kB
+var/e2e/run-Q3rI1L/web/assets/shield-check-tq5GDAKJ.js             0.40 kB │ gzip:   0.31 kB │ map:     1.31 kB
+var/e2e/run-Q3rI1L/web/assets/trash-D4ajsG3R.js                    0.42 kB │ gzip:   0.28 kB │ map:     1.48 kB
+var/e2e/run-Q3rI1L/web/assets/key-round-v9BBDMYO.js                0.44 kB │ gzip:   0.32 kB │ map:     1.37 kB
+var/e2e/run-Q3rI1L/web/assets/expand-DtKVtC3L.js                   0.47 kB │ gzip:   0.28 kB │ map:     1.68 kB
+var/e2e/run-Q3rI1L/web/assets/CreateHome-DPOE2jPp.js               0.70 kB │ gzip:   0.42 kB │ map:     0.45 kB
+var/e2e/run-Q3rI1L/web/assets/undo-2-CHDQU675.js                   0.70 kB │ gzip:   0.37 kB │ map:     2.81 kB
+var/e2e/run-Q3rI1L/web/assets/text-align-start-BBdhXQW_.js         0.98 kB │ gzip:   0.50 kB │ map:     3.79 kB
+var/e2e/run-Q3rI1L/web/assets/export-policy-vsFEYtug.js            1.15 kB │ gzip:   0.62 kB │ map:     4.75 kB
+var/e2e/run-Q3rI1L/web/assets/Tasks-Crwdvzk9.js                    1.73 kB │ gzip:   1.04 kB │ map:     4.84 kB
+var/e2e/run-Q3rI1L/web/assets/IdentityRegistration-CE-o9Es7.js     2.50 kB │ gzip:   1.37 kB │ map:     7.47 kB
+var/e2e/run-Q3rI1L/web/assets/Entitlements-D_IvbRBB.js             2.65 kB │ gzip:   1.37 kB │ map:     6.22 kB
+var/e2e/run-Q3rI1L/web/assets/product-messages-BjqyiVKe.js         2.85 kB │ gzip:   1.05 kB │ map:     5.21 kB
+var/e2e/run-Q3rI1L/web/assets/PasswordRecovery-CC0Df0wO.js         3.08 kB │ gzip:   1.63 kB │ map:     9.40 kB
+var/e2e/run-Q3rI1L/web/assets/scene-DRSzKdMR.js                    3.09 kB │ gzip:   1.43 kB │ map:    12.45 kB
+var/e2e/run-Q3rI1L/web/assets/KnowledgeConflict-DLuJARMx.js        3.33 kB │ gzip:   1.85 kB │ map:     9.50 kB
+var/e2e/run-Q3rI1L/web/assets/inspirations-BL4Lia8i.js             3.70 kB │ gzip:   2.21 kB │ map:     7.41 kB
+var/e2e/run-Q3rI1L/web/assets/knowledge-CByNf2V1.js                3.77 kB │ gzip:   1.68 kB │ map:    11.39 kB
+var/e2e/run-Q3rI1L/web/assets/UsageStatistics-Cl2PP_fO.js          4.03 kB │ gzip:   1.85 kB │ map:    11.12 kB
+var/e2e/run-Q3rI1L/web/assets/Public-BA3JGoai.js                   4.06 kB │ gzip:   2.13 kB │ map:    11.66 kB
+var/e2e/run-Q3rI1L/web/assets/Login-DCyEtetq.js                    4.40 kB │ gzip:   2.27 kB │ map:    12.17 kB
+var/e2e/run-Q3rI1L/web/assets/GoogleAccount-CzbxA2dX.js            5.02 kB │ gzip:   2.32 kB │ map:    14.66 kB
+var/e2e/run-Q3rI1L/web/assets/ModelCapabilityStatus-zpxR1ruc.js    6.16 kB │ gzip:   3.02 kB │ map:    19.24 kB
+var/e2e/run-Q3rI1L/web/assets/MemorySettings-DIKFAc8D.js           7.35 kB │ gzip:   3.23 kB │ map:    23.01 kB
+var/e2e/run-Q3rI1L/web/assets/Developer-Bf4lGeD5.js                7.64 kB │ gzip:   3.19 kB │ map:    20.40 kB
+var/e2e/run-Q3rI1L/web/assets/IdentityAccounts-BUArpdGJ.js         7.72 kB │ gzip:   3.06 kB │ map:    23.36 kB
+var/e2e/run-Q3rI1L/web/assets/Products-DV6rayiC.js                 8.49 kB │ gzip:   3.64 kB │ map:    28.59 kB
+var/e2e/run-Q3rI1L/web/assets/core-DMOnUKyl.js                     8.58 kB │ gzip:   2.54 kB │ map:    28.75 kB
+var/e2e/run-Q3rI1L/web/assets/Inspiration-DFAWmGqM.js             13.88 kB │ gzip:   5.44 kB │ map:    44.74 kB
+var/e2e/run-Q3rI1L/web/assets/Team-CO--p_lj.js                    15.76 kB │ gzip:   5.36 kB │ map:    51.84 kB
+var/e2e/run-Q3rI1L/web/assets/Support-DqeCUQRF.js                 18.04 kB │ gzip:   6.95 kB │ map:    54.35 kB
+var/e2e/run-Q3rI1L/web/assets/Identities-CX4aa7pa.js              19.01 kB │ gzip:   6.93 kB │ map:    63.66 kB
+var/e2e/run-Q3rI1L/web/assets/AdvancedTools-Dq8FIthW.js           21.21 kB │ gzip:   8.28 kB │ map:    73.19 kB
+var/e2e/run-Q3rI1L/web/assets/Workbench-D6vbiQ2j.js               22.61 kB │ gzip:   8.38 kB │ map:    76.65 kB
+var/e2e/run-Q3rI1L/web/assets/Library-D_bAvZou.js                 25.73 kB │ gzip:   8.69 kB │ map:    80.72 kB
+var/e2e/run-Q3rI1L/web/assets/Settings-B8UOaJv3.js                25.92 kB │ gzip:   9.24 kB │ map:    75.89 kB
+var/e2e/run-Q3rI1L/web/assets/Tools-DujR3Y9z.js                   27.34 kB │ gzip:  10.24 kB │ map:    88.69 kB
+var/e2e/run-Q3rI1L/web/assets/Usage-CxRQXoqD.js                   30.86 kB │ gzip:  10.42 kB │ map:    95.29 kB
+var/e2e/run-Q3rI1L/web/assets/DetailPageStudio-glv4boXW.js        43.50 kB │ gzip:  14.11 kB │ map:   148.20 kB
+var/e2e/run-Q3rI1L/web/assets/CreationLanding-NzoVpvnn.js         73.09 kB │ gzip:  25.84 kB │ map:   247.04 kB
+var/e2e/run-Q3rI1L/web/assets/react-Iff1aU_1.js                  106.13 kB │ gzip:  35.89 kB │ map:   615.23 kB
+var/e2e/run-Q3rI1L/web/assets/CanvasEditor-BCPrRYgB.js           149.88 kB │ gzip:  48.87 kB │ map:   409.91 kB
+var/e2e/run-Q3rI1L/web/assets/editor-DERvKPwF.js                 282.01 kB │ gzip:  88.49 kB │ map:   635.79 kB
+var/e2e/run-Q3rI1L/web/assets/index-BixpkI_l.js                  962.43 kB │ gzip: 309.74 kB │ map: 3,017.92 kB
+
+(!) Some chunks are larger than 750 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.00s
+
+Running 6 tests using 1 worker
+
+(node:46846) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › tests/e2e/knowledge-recheck.spec.ts:13:1 › retains single-creation memory and product-image choices after refreshing a grouped draft (3.6s)
+  ✓  2 [desktop] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields (3.1s)
+  ✓  3 [desktop] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields (3.2s)
+(node:46937) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [mobile] › tests/e2e/knowledge-recheck.spec.ts:13:1 › retains single-creation memory and product-image choices after refreshing a grouped draft (4.1s)
+  ✓  5 [mobile] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent memory edit without discarding local input or another editor's untouched fields (10.8s)
+  ✓  6 [mobile] › tests/e2e/knowledge-recheck.spec.ts:57:3 › recovers a concurrent product edit without discarding local input or another editor's untouched fields (3.2s)
+
+  6 passed (30.6s)
+浏览器验收证据：/Users/xm-talen/Desktop/小明/coding/yingzao-studio-main1112/platform/var/e2e/run-Q3rI1L

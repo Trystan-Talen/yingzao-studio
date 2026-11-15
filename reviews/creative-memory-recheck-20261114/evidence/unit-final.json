@@ -1,0 +1,761 @@
+{
+  "success": true,
+  "numTotalTests": 2339,
+  "numPassedTests": 2339,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "startTime": 1794628683329,
+  "fileCount": 150,
+  "testFiles": [
+    {
+      "path": "tests/advanced-recovery.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/ai-writer-capabilities.test.ts",
+      "status": "passed",
+      "assertions": 13
+    },
+    {
+      "path": "tests/aliyun-sms.test.ts",
+      "status": "passed",
+      "assertions": 42
+    },
+    {
+      "path": "tests/api-billing-ui.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/api-billing.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/api-request-timeout.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/app.test.ts",
+      "status": "passed",
+      "assertions": 13
+    },
+    {
+      "path": "tests/background-mask-stroke.test.ts",
+      "status": "passed",
+      "assertions": 18
+    },
+    {
+      "path": "tests/background-review.test.ts",
+      "status": "passed",
+      "assertions": 14
+    },
+    {
+      "path": "tests/backup-integrity.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/billing-channel-migration.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/billing-channel.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/billing-environment.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/billing-periods.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/billing.test.ts",
+      "status": "passed",
+      "assertions": 32
+    },
+    {
+      "path": "tests/brand-quota.test.ts",
+      "status": "passed",
+      "assertions": 18
+    },
+    {
+      "path": "tests/brand-quotas.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/character-video.test.ts",
+      "status": "passed",
+      "assertions": 7
+    },
+    {
+      "path": "tests/collection-membership.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/commercial-assets.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/commercial-download-timeout.test.ts",
+      "status": "passed",
+      "assertions": 9
+    },
+    {
+      "path": "tests/commercial-worker-safety.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/concurrency-limit.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/concurrency-migration.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/core.test.ts",
+      "status": "passed",
+      "assertions": 17
+    },
+    {
+      "path": "tests/creation-recovery.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/creative-brief-ui.test.ts",
+      "status": "passed",
+      "assertions": 14
+    },
+    {
+      "path": "tests/creative-briefs.test.ts",
+      "status": "passed",
+      "assertions": 83
+    },
+    {
+      "path": "tests/creative-capture.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/creative-intent-simulation.test.ts",
+      "status": "passed",
+      "assertions": 9
+    },
+    {
+      "path": "tests/creative-placement.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/creative-quality.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/creative-strategy.test.ts",
+      "status": "passed",
+      "assertions": 47
+    },
+    {
+      "path": "tests/credit-estimate.test.ts",
+      "status": "passed",
+      "assertions": 23
+    },
+    {
+      "path": "tests/credit-grant-reversal.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/credit-lots.test.ts",
+      "status": "passed",
+      "assertions": 20
+    },
+    {
+      "path": "tests/delivery-regressions.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/design-plan.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/detail-page-ui-state.test.ts",
+      "status": "passed",
+      "assertions": 15
+    },
+    {
+      "path": "tests/detail-page-workflow.test.ts",
+      "status": "passed",
+      "assertions": 12
+    },
+    {
+      "path": "tests/detail-pages.test.ts",
+      "status": "passed",
+      "assertions": 16
+    },
+    {
+      "path": "tests/dify-clarification-style.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/dify-detail-page.test.ts",
+      "status": "passed",
+      "assertions": 79
+    },
+    {
+      "path": "tests/dify-intent-timeout.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/dify-intent.test.ts",
+      "status": "passed",
+      "assertions": 70
+    },
+    {
+      "path": "tests/dify-provider.test.ts",
+      "status": "passed",
+      "assertions": 50
+    },
+    {
+      "path": "tests/dify-workflow-nodes.test.ts",
+      "status": "passed",
+      "assertions": 57
+    },
+    {
+      "path": "tests/documented-model-capabilities.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/entitlements-appeals.test.ts",
+      "status": "passed",
+      "assertions": 7
+    },
+    {
+      "path": "tests/export-policy.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/fal-motion.test.ts",
+      "status": "passed",
+      "assertions": 19
+    },
+    {
+      "path": "tests/flyelep-provider.test.ts",
+      "status": "passed",
+      "assertions": 34
+    },
+    {
+      "path": "tests/gateway-integration.test.ts",
+      "status": "passed",
+      "assertions": 12
+    },
+    {
+      "path": "tests/generation-media-kind.test.ts",
+      "status": "passed",
+      "assertions": 9
+    },
+    {
+      "path": "tests/google-oidc.test.ts",
+      "status": "passed",
+      "assertions": 30
+    },
+    {
+      "path": "tests/identity-auth.test.ts",
+      "status": "passed",
+      "assertions": 27
+    },
+    {
+      "path": "tests/image-orientation.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/inspiration-replica.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/installation-owner.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/job-event-refresh.test.ts",
+      "status": "passed",
+      "assertions": 15
+    },
+    {
+      "path": "tests/job-events-auth.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/job-navigation.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/job-presentation.test.ts",
+      "status": "passed",
+      "assertions": 29
+    },
+    {
+      "path": "tests/job-snapshot.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/knowledge-edit.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/knowledge.test.ts",
+      "status": "passed",
+      "assertions": 21
+    },
+    {
+      "path": "tests/library-task-experience.test.ts",
+      "status": "passed",
+      "assertions": 15
+    },
+    {
+      "path": "tests/local-matting-build.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/local-matting-installation.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/local-matting-output.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/local-provider.test.ts",
+      "status": "passed",
+      "assertions": 7
+    },
+    {
+      "path": "tests/local-test-credits.test.ts",
+      "status": "passed",
+      "assertions": 15
+    },
+    {
+      "path": "tests/mail-outbox.test.ts",
+      "status": "passed",
+      "assertions": 23
+    },
+    {
+      "path": "tests/media-download-public-doh.test.ts",
+      "status": "passed",
+      "assertions": 36
+    },
+    {
+      "path": "tests/media-download.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/member-promotions-review.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/member-promotions.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/migrations.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/model-capabilities-api.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/model-capabilities.test.ts",
+      "status": "passed",
+      "assertions": 22
+    },
+    {
+      "path": "tests/model-capability-ui.test.ts",
+      "status": "passed",
+      "assertions": 12
+    },
+    {
+      "path": "tests/model-connections.test.ts",
+      "status": "passed",
+      "assertions": 20
+    },
+    {
+      "path": "tests/native-artifacts.test.ts",
+      "status": "passed",
+      "assertions": 28
+    },
+    {
+      "path": "tests/native-background-calibration-holdout.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/native-background-calibration.test.ts",
+      "status": "passed",
+      "assertions": 7
+    },
+    {
+      "path": "tests/native-background-study.test.ts",
+      "status": "passed",
+      "assertions": 22
+    },
+    {
+      "path": "tests/native-background.test.ts",
+      "status": "passed",
+      "assertions": 34
+    },
+    {
+      "path": "tests/native-capture.test.ts",
+      "status": "passed",
+      "assertions": 80
+    },
+    {
+      "path": "tests/native-configuration-boundaries.test.ts",
+      "status": "passed",
+      "assertions": 23
+    },
+    {
+      "path": "tests/native-exact-pan.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/native-frame-contract.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/native-generation.test.ts",
+      "status": "passed",
+      "assertions": 28
+    },
+    {
+      "path": "tests/native-http.test.ts",
+      "status": "passed",
+      "assertions": 18
+    },
+    {
+      "path": "tests/native-image-spec.test.ts",
+      "status": "passed",
+      "assertions": 36
+    },
+    {
+      "path": "tests/native-integration.test.ts",
+      "status": "passed",
+      "assertions": 23
+    },
+    {
+      "path": "tests/native-local-matting.test.ts",
+      "status": "passed",
+      "assertions": 14
+    },
+    {
+      "path": "tests/native-motion-frame.test.ts",
+      "status": "passed",
+      "assertions": 9
+    },
+    {
+      "path": "tests/native-plan-freeze.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/native-plan-quality.test.ts",
+      "status": "passed",
+      "assertions": 46
+    },
+    {
+      "path": "tests/native-planning-recovery.test.ts",
+      "status": "passed",
+      "assertions": 37
+    },
+    {
+      "path": "tests/native-reference-frame.test.ts",
+      "status": "passed",
+      "assertions": 17
+    },
+    {
+      "path": "tests/native-reference-media.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/native-reference-study.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/native-replica.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/native-semantic-mask.test.ts",
+      "status": "passed",
+      "assertions": 16
+    },
+    {
+      "path": "tests/native-video-artifact.test.ts",
+      "status": "passed",
+      "assertions": 31
+    },
+    {
+      "path": "tests/native-video-tail-hold.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/naturalize-contract.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/notifications-http.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/notifications.test.ts",
+      "status": "passed",
+      "assertions": 9
+    },
+    {
+      "path": "tests/openai-gateway.test.ts",
+      "status": "passed",
+      "assertions": 75
+    },
+    {
+      "path": "tests/openai-provider.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/password-recovery.test.ts",
+      "status": "passed",
+      "assertions": 17
+    },
+    {
+      "path": "tests/prepaid-credit-validity.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/product-errors.test.ts",
+      "status": "passed",
+      "assertions": 13
+    },
+    {
+      "path": "tests/product-messages.test.ts",
+      "status": "passed",
+      "assertions": 52
+    },
+    {
+      "path": "tests/production-config.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/production-http.test.ts",
+      "status": "passed",
+      "assertions": 3
+    },
+    {
+      "path": "tests/project-creation-workflow.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/project-workflow-navigation.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/provider-extra.test.ts",
+      "status": "passed",
+      "assertions": 22
+    },
+    {
+      "path": "tests/provider-http.test.ts",
+      "status": "passed",
+      "assertions": 7
+    },
+    {
+      "path": "tests/provider-reference.test.ts",
+      "status": "passed",
+      "assertions": 16
+    },
+    {
+      "path": "tests/quality-workflows.test.ts",
+      "status": "passed",
+      "assertions": 12
+    },
+    {
+      "path": "tests/real-launch-environment.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/real-launch-lifecycle.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "tests/referral-admin-policy.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/referral-policy.test.ts",
+      "status": "passed",
+      "assertions": 17
+    },
+    {
+      "path": "tests/restored-cache.test.ts",
+      "status": "passed",
+      "assertions": 11
+    },
+    {
+      "path": "tests/result-studio.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/script-test-environment.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/seedance-provider.test.ts",
+      "status": "passed",
+      "assertions": 69
+    },
+    {
+      "path": "tests/session-cache-isolation.test.ts",
+      "status": "passed",
+      "assertions": 4
+    },
+    {
+      "path": "tests/social-import.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/support-channels.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/takeover-backend.test.ts",
+      "status": "passed",
+      "assertions": 12
+    },
+    {
+      "path": "tests/takeover-migration.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/takeover-motion.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/takeover-tools.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/task-result-recovery.test.ts",
+      "status": "passed",
+      "assertions": 16
+    },
+    {
+      "path": "tests/tasks.test.ts",
+      "status": "passed",
+      "assertions": 37
+    },
+    {
+      "path": "tests/team-creation-review.test.ts",
+      "status": "passed",
+      "assertions": 10
+    },
+    {
+      "path": "tests/team-creation.test.ts",
+      "status": "passed",
+      "assertions": 8
+    },
+    {
+      "path": "tests/tool-recovery.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/ui-controls.test.ts",
+      "status": "passed",
+      "assertions": 2
+    },
+    {
+      "path": "tests/video-audio-options.test.ts",
+      "status": "passed",
+      "assertions": 5
+    },
+    {
+      "path": "tests/vitest-environment.test.ts",
+      "status": "passed",
+      "assertions": 1
+    },
+    {
+      "path": "tests/wechat-gateway.test.ts",
+      "status": "passed",
+      "assertions": 52
+    },
+    {
+      "path": "src/web/editor/export-bundle.test.ts",
+      "status": "passed",
+      "assertions": 6
+    },
+    {
+      "path": "src/web/editor/scene.test.ts",
+      "status": "passed",
+      "assertions": 11
+    }
+  ]
+}

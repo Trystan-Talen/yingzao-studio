@@ -1,0 +1,13 @@
+{
+  "mode": "green",
+  "status": 0,
+  "expectedStatus": 0,
+  "syntheticInputsOnly": true,
+  "appStarted": false,
+  "databaseOpened": false,
+  "networkCalls": 0,
+  "providerSentinelObserved": false,
+  "databaseSentinelObserved": false,
+  "buildSentinelObserved": false,
+  "assertions": 3
+}
