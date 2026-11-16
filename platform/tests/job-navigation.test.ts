@@ -113,6 +113,19 @@ describe('task destinations', () => {
   it('keeps standalone jobs accessible without inventing a project', () => {
     expect(jobDestination(job({ projectId: null }))).toBe('/tasks?job=target-job');
   });
+  it('opens reference recreation in its dedicated studio and keeps the exact result', () => {
+    const input = jobInputSchema.parse({
+      operation: 'image.generate',
+      providerId: 'native',
+      replica: {
+        subjectAssetId: '56e577e6-5abc-4c73-a5d0-290b32a28630',
+        referenceAssetId: '94c0619f-630b-41e5-b7fd-c528b4ba994a',
+        aspects: ['composition'],
+        trimStart: 0,
+      },
+    });
+    expect(jobDestination(job({ input }))).toBe('/replica/project-one?job=target-job');
+  });
   it('does not confuse a generic image kind with the dedicated detail-page workflow', () => {
     const input = jobInputSchema.parse({
       operation: 'image.generate',

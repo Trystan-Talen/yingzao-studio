@@ -110,7 +110,8 @@ describe('server-confirmed task progress', () => {
         job({ status: 'queued', stage: '等待执行' }, { status: 'queued', phase: 'queued' }),
       ),
     ).toMatchObject({
-      title: '任务已提交，等待处理',
+      title: '任务已提交，等待执行器',
+      description: '已保存在本机队列，尚未开始生成。无需重复提交。',
       step: 0,
       tone: 'active',
       animated: true,

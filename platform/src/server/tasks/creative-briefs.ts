@@ -1,3 +1,9 @@
+import {
+  runWithExecutionAudit,
+  emitExecutionAttempt,
+  withExecutionResource,
+} from '../providers/execution-audit';
+import { createBriefExecutionLogSink } from './execution-logs';
 import { createHash, createHmac, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import type { Actor, AssetDto } from '../../contracts/core';
@@ -24,6 +30,7 @@ import { analyzeNativeIntent, type NativePlannerObserver } from '../providers/na
 import { ProviderError, type ItemRow } from './types';
 import type { TaskServices } from './service';
 import { simulateCreativeIntent } from './creative-intent-simulation';
+import { compileDirectCreation } from './direct-creation';
 import { isFalReferenceModel } from '../providers/fal-reference';
 import { compileCapturePrompt } from './creative-capture';
 import {
@@ -120,7 +127,8 @@ export function approvedCreativePrompt(
   if (
     input.providerId === 'native' &&
     !(original.operation === 'image.generate' && original.imageEdit?.mask.mode === 'asset') &&
-    original.nativeRevision !== modelConnectionsRevision(db, wid, input.operation)
+    original.nativeRevision !==
+      modelConnectionsRevision(db, wid, input.operation, input.planningMode)
   )
     throw new AppError(
       409,
@@ -500,6 +508,7 @@ export function createCreativeBriefServices(
     // This is an eligibility floor, never a payable quote or a client-selected discount.
     const hasOriginalCandidate =
       input.operation === 'video.generate' &&
+      (input.planningMode !== 'direct' || input.nativePlan?.firstFrame?.mode === 'reference') &&
       request.materials.some((material) => {
         if (material.kind !== 'image' || !['input', 'reference'].includes(material.role))
           return false;
@@ -531,7 +540,8 @@ export function createCreativeBriefServices(
       );
     })();
     const requiredCredits =
-      hasLocalMaskCandidate || (hasOriginalCandidate && canPlanExactPan(request))
+      hasLocalMaskCandidate ||
+      (input.planningMode !== 'direct' && hasOriginalCandidate && canPlanExactPan(request))
         ? 0
         : hasOriginalCandidate
           ? estimate.credits - estimate.outputs * (capability.fixedCredits ?? 0)
@@ -607,7 +617,6 @@ export function createCreativeBriefServices(
     if (input.providerId === 'openai' && input.operation === 'image.generate') {
       // Documents become planner sources, while only actual images reach the image adapter.
       if (visual.some((item) => !['image', 'document'].includes(item.kind))) return false;
-      if (s.config.imageGateway && (input.brandId || input.characterId)) return false;
       const limit = s.config.imageGateway?.model === 'doubao-seedream-5.0-lite' ? 4 : 16;
       return visual.filter((item) => item.kind === 'image').length <= limit;
     }
@@ -682,7 +691,11 @@ export function createCreativeBriefServices(
           }
         : input;
       s.validate(actor, wid, validationInput);
-      input.nativeRevision = s.settings.connections.revision(wid, input.operation);
+      input.nativeRevision = s.settings.connections.revision(
+        wid,
+        input.operation,
+        input.planningMode,
+      );
     }
     if (input.projectId) s.core.projects.get(actor, wid, input.projectId);
     const fingerprint = creativeInputFingerprint(input);
@@ -745,6 +758,7 @@ export function createCreativeBriefServices(
       throw new AppError(400, 'CREATIVE_CONTEXT_LIMIT', '补充内容过多，请将已确认需求整理到输入框');
     if (
       input.providerId === 'native' &&
+      input.planningMode !== 'direct' &&
       input.operation === 'image.generate' &&
       !input.replica &&
       explicitNativeBackgroundColor(answers.at(-1)?.answer ?? input.prompt)
@@ -834,10 +848,17 @@ export function createCreativeBriefServices(
     answers.forEach((answer, index) =>
       sources.push({ id: `answer:${index}`, text: answer.answer }),
     );
-    if (input.includeProductImages && knowledge?.referenceAssetIds.length) {
+    if (
+      knowledge?.referenceAssetIds.length &&
+      (input.includeProductImages || (input.providerId === 'openai' && s.config.imageGateway))
+    ) {
       // Library images must pass the selected provider's actual limits before a text call.
       s.validate(actor, wid, {
         ...input,
+        // The selected records have been authorized above and are now explicit
+        // text and image evidence; adapters receive no raw library identifiers.
+        brandId: undefined,
+        characterId: undefined,
         referenceAssetIds: [
           ...new Set([
             ...input.referenceAssetIds,
@@ -921,6 +942,60 @@ export function createCreativeBriefServices(
     if (JSON.stringify(request).length > 120000)
       throw new AppError(400, 'CREATIVE_CONTEXT_LIMIT', '本次整理内容过长，请精简资料');
     assertCreativeKnowledgeFresh(request);
+    if (input.planningMode === 'direct') {
+      // Freeze the same owned evidence as assisted creation, without opening any text
+      // connection or calling visual analysis, planning, clarification or revision.
+      const direct = compileDirectCreation(input, request);
+      validateCreativeIntent(direct.result, request);
+      if (direct.nativePlan) input.nativePlan = direct.nativePlan;
+      checkNativePlanningBudget(actor, wid, input, request);
+      return s.transaction(() => {
+        const existing = sql
+          .prepare(
+            'SELECT * FROM creative_briefs WHERE workspace_id=? AND user_id=? AND request_id=?',
+          )
+          .get(wid, actor.userId, body.requestId) as BriefRow | undefined;
+        if (existing) {
+          if (existing.input_fingerprint !== fingerprint || existing.previous_id !== null)
+            throw new AppError(
+              409,
+              'CREATIVE_REQUEST_CHANGED',
+              '本次请求编号已用于其他需求，请重新确认。',
+            );
+          return dto(existing);
+        }
+        const id = randomUUID(),
+          at = new Date().toISOString();
+        sql
+          .prepare(
+            `INSERT INTO creative_briefs
+        (id,workspace_id,user_id,request_id,previous_id,input_fingerprint,input_json,request_json,state,result_json,compiled_prompt,strategy_json,created_at,updated_at,planner_revision)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          )
+          .run(
+            id,
+            wid,
+            actor.userId,
+            body.requestId,
+            null,
+            fingerprint,
+            JSON.stringify(input),
+            JSON.stringify(request),
+            'ready',
+            JSON.stringify(direct.result),
+            direct.prompt,
+            JSON.stringify(strategy),
+            at,
+            at,
+            'direct-v1',
+          );
+        s.core.context.audit(actor, wid, 'creative.direct-prepare', 'creative-brief', id, {
+          planningMode: 'direct',
+          textModelCalls: 0,
+        });
+        return dto(owned(s.db, actor, wid, id));
+      });
+    }
     checkNativePlanningBudget(actor, wid, input, request);
     const nativeText = s.settings.connections.runtime(wid, 'text');
     if (input.replica && (!nativeText?.visionModel || s.config.demoMode))
@@ -1024,289 +1099,384 @@ export function createCreativeBriefServices(
         at,
         plannerRevision,
       );
-    try {
-      if (input.replica && nativeText) {
-        // A clarification reuses the same owned, immutable analysis; user prose cannot replace it.
-        if (oldRequest?.replica || cachedReplica) {
-          request.replica = oldRequest?.replica ?? cachedReplica;
-          const [reference, subject] = await Promise.all([
-            s.core.assets.readOriginal(actor, wid, input.replica.referenceAssetId),
-            s.core.assets.readOriginal(actor, wid, input.replica.subjectAssetId),
-          ]);
-          const hash = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
+    const beforeFallback = () => {
+      s.core.requireAccess(actor, wid, 'write');
+      if (
+        nativeText?.revision !== s.settings.connections.runtime(wid, 'text')?.revision ||
+        (input.providerId === 'native' &&
+          input.nativeRevision !==
+            s.settings.connections.revision(wid, input.operation, input.planningMode))
+      )
+        throw new AppError(
+          409,
+          'CREATIVE_CONFIGURATION_CHANGED',
+          '模型配置已变更，尚未请求备用资源，请重新整理。',
+        );
+    };
+    return runWithExecutionAudit(
+      createBriefExecutionLogSink(s.db, {
+        workspaceId: wid,
+        briefId: id,
+        providerId: s.config.demoMode ? 'local' : nativeText ? 'native' : 'dify',
+      }),
+      async () => {
+        const plannerResource = { id: 'planner', name: '需求规划阶段' };
+        emitExecutionAttempt({
+          action: 'submit',
+          status: 'started',
+          resource: plannerResource,
+          stage: 'planning',
+          message: '开始整理需求及核对已有分析；实际模型调用另行记录。',
+        });
+        const difyPlan = () =>
+          withExecutionResource(
+            {
+              id: 'dify-intent',
+              name: 'Dify（工作流服务）需求规划',
+              kind: 'text',
+              baseUrl: s.config.dify?.baseUrl ?? 'https://api.dify.ai/v1',
+              protocol: 'dify-workflow',
+            },
+            async () => {
+              emitExecutionAttempt({ action: 'submit', status: 'started', stage: 'planning' });
+              try {
+                const response = await analyzeDifyIntent(request, secret!, {
+                  baseUrl: s.config.dify?.baseUrl,
+                  user: `yingzao_${createHash('sha256').update(`${wid}:${actor.userId}`).digest('hex').slice(0, 48)}`,
+                });
+                emitExecutionAttempt({
+                  action: 'submit',
+                  status: 'succeeded',
+                  stage: 'planning',
+                  metadata: { status: response.status },
+                  message: '工作流结果已通过解析；此适配器未采集原始接口响应元数据。',
+                });
+                return response;
+              } catch (error) {
+                emitExecutionAttempt(
+                  {
+                    action: 'submit',
+                    status:
+                      error instanceof ProviderError && error.ambiguous ? 'uncertain' : 'failed',
+                    stage: 'planning',
+                    message: error instanceof ProviderError ? error.message : '工作流规划失败。',
+                  },
+                  secret ? [secret] : [],
+                );
+                throw error;
+              }
+            },
+          );
+        try {
+          if (input.replica && nativeText) {
+            // A clarification reuses the same owned, immutable analysis; user prose cannot replace it.
+            if (oldRequest?.replica || cachedReplica) {
+              request.replica = oldRequest?.replica ?? cachedReplica;
+              const [reference, subject] = await Promise.all([
+                s.core.assets.readOriginal(actor, wid, input.replica.referenceAssetId),
+                s.core.assets.readOriginal(actor, wid, input.replica.subjectAssetId),
+              ]);
+              const hash = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
+              if (
+                hash(reference.buffer) !== request.replica!.evidence.referenceSha256 ||
+                hash(subject.buffer) !== request.replica!.evidence.subjectSha256
+              )
+                throw new AppError(
+                  409,
+                  'REPLICA_SOURCE_CHANGED',
+                  '原始素材与已保存分析不一致，已停止复用和模型调用。',
+                );
+            } else {
+              const [reference, subject] = await Promise.all([
+                s.core.assets.readOriginal(actor, wid, input.replica.referenceAssetId),
+                s.core.assets.readOriginal(actor, wid, input.replica.subjectAssetId),
+              ]);
+              const media = await prepareNativeReferenceMedia({
+                referenceKind: mediaType,
+                reference,
+                subject,
+                ...(mediaType === 'video'
+                  ? {
+                      trimStartSeconds: input.replica.trimStart,
+                      trimDurationSeconds: input.replica.trimDuration,
+                    }
+                  : {}),
+              });
+              const analyzed = await analyzeNativeReferenceStudy(
+                { prompt: input.prompt, media },
+                { ...nativeText, model: nativeText.visionModel! },
+                { onResponse: options.nativeReferenceObserver, beforeFallback },
+              );
+              request.replica = {
+                version: 1,
+                ...(mediaType === 'image' ? { renderStrategy: 'subject-edit-v1' as const } : {}),
+                intent: input.replica,
+                ...analyzed,
+              };
+            }
+            input.nativeReplica = request.replica;
+            // Pin the successfully received visual analysis before the next paid text call.
+            sql
+              .prepare(
+                'UPDATE creative_briefs SET request_json=?,input_json=?,updated_at=? WHERE id=?',
+              )
+              .run(JSON.stringify(request), JSON.stringify(input), new Date().toISOString(), id);
+          }
           if (
-            hash(reference.buffer) !== request.replica!.evidence.referenceSha256 ||
-            hash(subject.buffer) !== request.replica!.evidence.subjectSha256
+            input.providerId === 'native' &&
+            input.nativeRevision !==
+              s.settings.connections.revision(wid, input.operation, input.planningMode)
           )
             throw new AppError(
               409,
-              'REPLICA_SOURCE_CHANGED',
-              '原始素材与已保存分析不一致，已停止复用和模型调用。',
+              'CREATIVE_CONFIGURATION_CHANGED',
+              '模型配置在参考分析期间改变，尚未继续调用文本模型，请重新整理。',
             );
-        } else {
-          const [reference, subject] = await Promise.all([
-            s.core.assets.readOriginal(actor, wid, input.replica.referenceAssetId),
-            s.core.assets.readOriginal(actor, wid, input.replica.subjectAssetId),
-          ]);
-          const media = await prepareNativeReferenceMedia({
-            referenceKind: mediaType,
-            reference,
-            subject,
-            ...(mediaType === 'video'
-              ? {
-                  trimStartSeconds: input.replica.trimStart,
-                  trimDurationSeconds: input.replica.trimDuration,
-                }
-              : {}),
-          });
-          const analyzed = await analyzeNativeReferenceStudy(
-            { prompt: input.prompt, media },
-            { ...nativeText, model: nativeText.visionModel! },
-            { onResponse: options.nativeReferenceObserver },
+          const result = creativeIntentResultSchema.parse(
+            (cachedBackgroundPlan
+              ? { ...cachedBackgroundPlan, requestId: request.requestId }
+              : undefined) ??
+              (s.config.demoMode
+                ? simulateCreativeIntent(request)
+                : nativeText
+                  ? await analyzeNativeIntent(request, nativeText, {
+                      onResponse: options.nativePlannerObserver,
+                      beforeFallback,
+                    })
+                  : await difyPlan()),
           );
-          request.replica = {
-            version: 1,
-            ...(mediaType === 'image' ? { renderStrategy: 'subject-edit-v1' as const } : {}),
-            intent: input.replica,
-            ...analyzed,
-          };
-        }
-        input.nativeReplica = request.replica;
-        // Pin the successfully received visual analysis before the next paid text call.
-        sql
-          .prepare('UPDATE creative_briefs SET request_json=?,input_json=?,updated_at=? WHERE id=?')
-          .run(JSON.stringify(request), JSON.stringify(input), new Date().toISOString(), id);
-      }
-      if (
-        input.providerId === 'native' &&
-        input.nativeRevision !== s.settings.connections.revision(wid, input.operation)
-      )
-        throw new AppError(
-          409,
-          'CREATIVE_CONFIGURATION_CHANGED',
-          '模型配置在参考分析期间改变，尚未继续调用文本模型，请重新整理。',
-        );
-      const result = creativeIntentResultSchema.parse(
-        (cachedBackgroundPlan
-          ? { ...cachedBackgroundPlan, requestId: request.requestId }
-          : undefined) ??
-          (s.config.demoMode
-            ? simulateCreativeIntent(request)
-            : nativeText
-              ? await analyzeNativeIntent(request, nativeText, {
-                  onResponse: options.nativePlannerObserver,
-                })
-              : await analyzeDifyIntent(request, secret!, {
-                  baseUrl: s.config.dify?.baseUrl,
-                  user: `yingzao_${createHash('sha256').update(`${wid}:${actor.userId}`).digest('hex').slice(0, 48)}`,
-                })),
-      );
-      // A planner response cannot name internal immutable baseline assets.
-      if (result.imageEdit) delete result.imageEdit.mattingBaseline;
-      validateCreativeIntent(result, request);
-      const imageEditIssue = validateNativeImageEdit(result, request);
-      if (imageEditIssue)
-        throw new AppError(
-          400,
-          imageEditIssue.code,
-          '局部背景方案与已确认原图、颜色或尺寸不匹配，请重新整理。',
-        );
-      if (
-        input.providerId === 'native' &&
-        input.nativeRevision !== s.settings.connections.revision(wid, input.operation)
-      )
-        throw new AppError(
-          409,
-          'CREATIVE_CONFIGURATION_CHANGED',
-          '模型配置在整理期间改变，请重新整理创作方案。',
-        );
-      const selected = resolveCreativeStrategy({
-        platform: result.brief.platform,
-        placement: result.brief.placement,
-        market: result.brief.market,
-        mediaType,
-      });
-      if (
-        input.providerId === 'native' &&
-        result.status === 'ready' &&
-        result.imageEdit?.mask.mode === 'generate'
-      ) {
-        // Freeze algorithm selection on new preparations only. Existing tasks keep their version.
-        await probeLocalMatting(s.config.localMatting);
-        result.imageEdit.mask.calibration = 'local-matting-v2';
-        if (nativeText?.visionModel) {
-          // Retain the validated text stage before the next paid call. Failed/uncertain
-          // rows cannot be quoted; an explicit safe retry can reuse only this stage.
-          sql
-            .prepare('UPDATE creative_briefs SET result_json=?,updated_at=? WHERE id=?')
-            .run(JSON.stringify(result), new Date().toISOString(), id);
-          const source = await s.core.assets.readOriginal(
-            actor,
-            wid,
-            result.imageEdit.sourceAssetId,
-          );
-          const study = await analyzeNativeBackgroundStudy(
-            {
-              source: { buffer: source.buffer, mimeType: source.mimeType },
-              color: result.imageEdit.color,
-              regionDescription: result.imageEdit.regionDescription,
-              preserveDescription: result.imageEdit.preserveDescription,
-            },
-            { ...nativeText, model: nativeText.visionModel },
-            { onResponse: options.nativeBackgroundObserver },
-          );
-          try {
-            sql
-              .prepare('UPDATE creative_briefs SET background_study_json=?,updated_at=? WHERE id=?')
-              .run(
-                JSON.stringify({
-                  version: 1,
-                  sourceAssetId: result.imageEdit.sourceAssetId,
-                  color: result.imageEdit.color,
-                  nativeRevision: input.nativeRevision,
-                  study,
-                }),
-                new Date().toISOString(),
-                id,
-              );
-          } catch {
-            // A received paid observation must never become an ordinary retryable failure
-            // merely because its evidence could not be saved. No automatic second call.
-            throw new ProviderError(
-              '背景视觉分析已返回，但观察证据未能保存；请核对本次调用，不会自动重新提交。',
-              true,
-              'NATIVE_BACKGROUND_EVIDENCE_FAILED',
+          // A planner response cannot name internal immutable baseline assets.
+          if (result.imageEdit) delete result.imageEdit.mattingBaseline;
+          validateCreativeIntent(result, request);
+          const imageEditIssue = validateNativeImageEdit(result, request);
+          if (imageEditIssue)
+            throw new AppError(
+              400,
+              imageEditIssue.code,
+              '局部背景方案与已确认原图、颜色或尺寸不匹配，请重新整理。',
             );
-          }
-          result.imageEdit.visualGuidance = {
-            boundaryNotes: study.boundaryNotes,
-            uncertainties: study.uncertainties,
-            evidence: study.evidence,
-            ...(study.sceneBoundary ? { sceneBoundary: study.sceneBoundary } : {}),
-          };
-          if (input.nativeRevision !== s.settings.connections.revision(wid, input.operation))
+          if (
+            input.providerId === 'native' &&
+            input.nativeRevision !==
+              s.settings.connections.revision(wid, input.operation, input.planningMode)
+          )
             throw new AppError(
               409,
               'CREATIVE_CONFIGURATION_CHANGED',
-              '模型配置在视觉分析期间改变，请重新整理创作方案。',
+              '模型配置在整理期间改变，请重新整理创作方案。',
             );
-          if (study.scopeAmbiguity && study.scopeAmbiguity !== 'none') {
-            const surface = study.scopeAmbiguity === 'background-surface-boundary';
-            const color = result.imageEdit.color;
-            result.status = 'needs_clarification';
-            result.summary = surface
-              ? '原图的背景与要求保留的地面没有可辨认分界。请先明确编辑范围，避免自动添加错误的水平线；尚未生成蒙版或扣除生图积分。'
-              : '视觉分析无法将要求改色的区域与原图可靠对应。请先明确实际编辑区域；尚未生成蒙版或扣除生图积分。';
-            result.prompt = '';
-            delete result.imageEdit;
-            delete result.generationPlan;
-            result.questions = [
-              {
-                id: 'background_boundary',
-                field: 'reference',
-                question: surface
-                  ? '背景与地面分界不清：是否一起换色，还是保留地面并换用分界清楚的原图？'
-                  : '原图中具体哪部分需要换色？请说明可辨认的区域，或更换参考图。',
-                reason: '自动分割不能从不明确的范围中猜出新的编辑授权。',
-                options: surface
-                  ? [
-                      `仅把背景和地面一并改为${color}，保留主体与接触阴影。`,
-                      '保留地面，换用背景与地面分界清楚的原图。',
-                    ]
-                  : [],
-              },
-            ];
-            creativeIntentResultSchema.parse(result);
+          const selected = resolveCreativeStrategy({
+            platform: result.brief.platform,
+            placement: result.brief.placement,
+            market: result.brief.market,
+            mediaType,
+          });
+          if (
+            input.providerId === 'native' &&
+            result.status === 'ready' &&
+            result.imageEdit?.mask.mode === 'generate'
+          ) {
+            // Freeze algorithm selection on new preparations only. Existing tasks keep their version.
+            await probeLocalMatting(s.config.localMatting);
+            result.imageEdit.mask.calibration = 'local-matting-v2';
+            if (nativeText?.visionModel) {
+              // Retain the validated text stage before the next paid call. Failed/uncertain
+              // rows cannot be quoted; an explicit safe retry can reuse only this stage.
+              sql
+                .prepare('UPDATE creative_briefs SET result_json=?,updated_at=? WHERE id=?')
+                .run(JSON.stringify(result), new Date().toISOString(), id);
+              const source = await s.core.assets.readOriginal(
+                actor,
+                wid,
+                result.imageEdit.sourceAssetId,
+              );
+              const study = await analyzeNativeBackgroundStudy(
+                {
+                  source: { buffer: source.buffer, mimeType: source.mimeType },
+                  color: result.imageEdit.color,
+                  regionDescription: result.imageEdit.regionDescription,
+                  preserveDescription: result.imageEdit.preserveDescription,
+                },
+                { ...nativeText, model: nativeText.visionModel },
+                { onResponse: options.nativeBackgroundObserver, beforeFallback },
+              );
+              try {
+                sql
+                  .prepare(
+                    'UPDATE creative_briefs SET background_study_json=?,updated_at=? WHERE id=?',
+                  )
+                  .run(
+                    JSON.stringify({
+                      version: 1,
+                      sourceAssetId: result.imageEdit.sourceAssetId,
+                      color: result.imageEdit.color,
+                      nativeRevision: input.nativeRevision,
+                      study,
+                    }),
+                    new Date().toISOString(),
+                    id,
+                  );
+              } catch {
+                // A received paid observation must never become an ordinary retryable failure
+                // merely because its evidence could not be saved. No automatic second call.
+                throw new ProviderError(
+                  '背景视觉分析已返回，但观察证据未能保存；请核对本次调用，不会自动重新提交。',
+                  true,
+                  'NATIVE_BACKGROUND_EVIDENCE_FAILED',
+                );
+              }
+              result.imageEdit.visualGuidance = {
+                boundaryNotes: study.boundaryNotes,
+                uncertainties: study.uncertainties,
+                evidence: study.evidence,
+                ...(study.sceneBoundary ? { sceneBoundary: study.sceneBoundary } : {}),
+              };
+              if (
+                input.nativeRevision !==
+                s.settings.connections.revision(wid, input.operation, input.planningMode)
+              )
+                throw new AppError(
+                  409,
+                  'CREATIVE_CONFIGURATION_CHANGED',
+                  '模型配置在视觉分析期间改变，请重新整理创作方案。',
+                );
+              if (study.scopeAmbiguity && study.scopeAmbiguity !== 'none') {
+                const surface = study.scopeAmbiguity === 'background-surface-boundary';
+                const color = result.imageEdit.color;
+                result.status = 'needs_clarification';
+                result.summary = surface
+                  ? '原图的背景与要求保留的地面没有可辨认分界。请先明确编辑范围，避免自动添加错误的水平线；尚未生成蒙版或扣除生图积分。'
+                  : '视觉分析无法将要求改色的区域与原图可靠对应。请先明确实际编辑区域；尚未生成蒙版或扣除生图积分。';
+                result.prompt = '';
+                delete result.imageEdit;
+                delete result.generationPlan;
+                result.questions = [
+                  {
+                    id: 'background_boundary',
+                    field: 'reference',
+                    question: surface
+                      ? '背景与地面分界不清：是否一起换色，还是保留地面并换用分界清楚的原图？'
+                      : '原图中具体哪部分需要换色？请说明可辨认的区域，或更换参考图。',
+                    reason: '自动分割不能从不明确的范围中猜出新的编辑授权。',
+                    options: surface
+                      ? [
+                          `仅把背景和地面一并改为${color}，保留主体与接触阴影。`,
+                          '保留地面，换用背景与地面分界清楚的原图。',
+                        ]
+                      : [],
+                  },
+                ];
+                creativeIntentResultSchema.parse(result);
+              }
+            }
           }
-        }
-      }
-      let prompt = compileCapturePrompt(result, request, selected, input.options.needText);
-      if (request.replica && result.status === 'ready') {
-        if (
-          result.imageEdit ||
-          result.generationPlan?.cameraControl ||
-          result.generationPlan?.firstFrame?.mode === 'reference'
-        )
+          let prompt = compileCapturePrompt(result, request, selected, input.options.needText);
+          if (request.replica && result.status === 'ready') {
+            if (
+              result.imageEdit ||
+              result.generationPlan?.cameraControl ||
+              result.generationPlan?.firstFrame?.mode === 'reference'
+            )
+              throw new AppError(
+                400,
+                'REPLICA_PLAN_CONFLICT',
+                '复刻方案应生成自己的主体场景，不能改为局部背景替换或直接沿用参考作品。',
+              );
+            if (mediaType === 'image')
+              prompt = replicaImagePrompt(prompt ?? result.prompt, request.replica);
+          }
+          if (prompt && prompt.length > 11000)
+            throw new AppError(400, 'CREATIVE_PROMPT_LIMIT', '整理后的画面说明过长，请精简需求');
+          if (
+            input.providerId === 'native' &&
+            input.operation === 'video.generate' &&
+            result.status === 'ready'
+          ) {
+            const nativePlan = compileNativeVideoPlan(result, request);
+            if (
+              !nativePlan ||
+              nativePlan.imagePrompt.length > 11000 ||
+              nativePlan.videoPrompt.length > 11000
+            )
+              throw new AppError(
+                409,
+                'NATIVE_VIDEO_PLAN_INVALID',
+                '视频方案不完整或过长，请重新整理。',
+              );
+            input.nativePlan = nativePlan;
+            if (request.replica) {
+              input.nativePlan.imagePrompt = replicaImagePrompt(
+                nativePlan.imagePrompt,
+                request.replica,
+              );
+              input.nativePlan.videoPrompt = `${result.generationPlan!.videoPrompt}\n\n首帧已经由自己的主体与参考画面重新生成。保持首帧主体身份、结构与材质，按已确认的动作和镜头方案连续运动。参考视频只经过有限抽帧分析，未直接作为视频模型输入；不添加参考作品的品牌、人物或文字，不混入未经确认的运动。`;
+              input.nativePlan.firstFrame = { mode: 'generate' };
+            }
+          }
+          if (
+            input.providerId === 'native' &&
+            input.operation === 'image.generate' &&
+            result.status === 'ready' &&
+            result.imageEdit
+          )
+            input.imageEdit = result.imageEdit;
+          sql
+            .prepare(
+              'UPDATE creative_briefs SET state=?,result_json=?,compiled_prompt=?,strategy_json=?,input_json=?,updated_at=? WHERE id=?',
+            )
+            .run(
+              result.status,
+              JSON.stringify(result),
+              prompt,
+              JSON.stringify(selected),
+              JSON.stringify(input),
+              new Date().toISOString(),
+              id,
+            );
+          emitExecutionAttempt({
+            action: 'submit',
+            status: 'succeeded',
+            resource: plannerResource,
+            stage: 'planning',
+            metadata: { status: result.status },
+            message: '需求规划已校验并保存。',
+          });
+          return dto(owned(s.db, actor, wid, id));
+        } catch (error) {
+          const message =
+            error instanceof ProviderError
+              ? error.message
+              : error instanceof AppError
+                ? error.message
+                : '需求整理结果未通过校验，请重试或简化描述；尚未提交图片或视频生成。';
+          sql
+            .prepare('UPDATE creative_briefs SET state=?,error_message=?,updated_at=? WHERE id=?')
+            .run(
+              error instanceof ProviderError && error.ambiguous ? 'uncertain' : 'failed',
+              message,
+              new Date().toISOString(),
+              id,
+            );
+          emitExecutionAttempt(
+            {
+              action: 'submit',
+              status: error instanceof ProviderError && error.ambiguous ? 'uncertain' : 'failed',
+              resource: plannerResource,
+              stage: 'planning',
+              message,
+            },
+            [nativeText?.secret ?? '', secret ?? ''],
+          );
           throw new AppError(
-            400,
-            'REPLICA_PLAN_CONFLICT',
-            '复刻方案应生成自己的主体场景，不能改为局部背景替换或直接沿用参考作品。',
+            502,
+            error instanceof ProviderError && error.ambiguous
+              ? 'CREATIVE_BRIEF_UNCERTAIN'
+              : 'CREATIVE_BRIEF_FAILED',
+            message,
           );
-        if (mediaType === 'image')
-          prompt = replicaImagePrompt(prompt ?? result.prompt, request.replica);
-      }
-      if (prompt && prompt.length > 11000)
-        throw new AppError(400, 'CREATIVE_PROMPT_LIMIT', '整理后的画面说明过长，请精简需求');
-      if (
-        input.providerId === 'native' &&
-        input.operation === 'video.generate' &&
-        result.status === 'ready'
-      ) {
-        const nativePlan = compileNativeVideoPlan(result, request);
-        if (
-          !nativePlan ||
-          nativePlan.imagePrompt.length > 11000 ||
-          nativePlan.videoPrompt.length > 11000
-        )
-          throw new AppError(
-            409,
-            'NATIVE_VIDEO_PLAN_INVALID',
-            '视频方案不完整或过长，请重新整理。',
-          );
-        input.nativePlan = nativePlan;
-        if (request.replica) {
-          input.nativePlan.imagePrompt = replicaImagePrompt(
-            nativePlan.imagePrompt,
-            request.replica,
-          );
-          input.nativePlan.videoPrompt = `${result.generationPlan!.videoPrompt}\n\n首帧已经由自己的主体与参考画面重新生成。保持首帧主体身份、结构与材质，按已确认的动作和镜头方案连续运动。参考视频只经过有限抽帧分析，未直接作为视频模型输入；不添加参考作品的品牌、人物或文字，不混入未经确认的运动。`;
-          input.nativePlan.firstFrame = { mode: 'generate' };
         }
-      }
-      if (
-        input.providerId === 'native' &&
-        input.operation === 'image.generate' &&
-        result.status === 'ready' &&
-        result.imageEdit
-      )
-        input.imageEdit = result.imageEdit;
-      sql
-        .prepare(
-          'UPDATE creative_briefs SET state=?,result_json=?,compiled_prompt=?,strategy_json=?,input_json=?,updated_at=? WHERE id=?',
-        )
-        .run(
-          result.status,
-          JSON.stringify(result),
-          prompt,
-          JSON.stringify(selected),
-          JSON.stringify(input),
-          new Date().toISOString(),
-          id,
-        );
-      return dto(owned(s.db, actor, wid, id));
-    } catch (error) {
-      const message =
-        error instanceof ProviderError
-          ? error.message
-          : error instanceof AppError
-            ? error.message
-            : '需求整理结果未通过校验，请重试或简化描述；尚未提交图片或视频生成。';
-      sql
-        .prepare('UPDATE creative_briefs SET state=?,error_message=?,updated_at=? WHERE id=?')
-        .run(
-          error instanceof ProviderError && error.ambiguous ? 'uncertain' : 'failed',
-          message,
-          new Date().toISOString(),
-          id,
-        );
-      throw new AppError(
-        502,
-        error instanceof ProviderError && error.ambiguous
-          ? 'CREATIVE_BRIEF_UNCERTAIN'
-          : 'CREATIVE_BRIEF_FAILED',
-        message,
-      );
-    }
+      },
+    );
   }
   return {
     prepare,
@@ -1316,7 +1486,8 @@ export function createCreativeBriefServices(
       const input = jobInputSchema.parse(JSON.parse(row.input_json));
       if (
         input.providerId === 'native' &&
-        input.nativeRevision !== modelConnectionsRevision(s.db, wid, input.operation)
+        input.nativeRevision !==
+          modelConnectionsRevision(s.db, wid, input.operation, input.planningMode)
       )
         throw new AppError(
           409,

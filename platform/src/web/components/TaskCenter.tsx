@@ -5,6 +5,7 @@ import { BackgroundEditReview } from './BackgroundEditReview';
 import { t } from '../lib/i18n';
 import { OCRResultPanel } from './OCRResultPanel';
 import { TaskReconcile } from './TaskReconcile';
+import { TaskExecutionLogs } from './TaskExecutionLogs';
 import { useStudio } from '../context';
 import { useEffect, useState } from 'react';
 import {
@@ -75,6 +76,7 @@ export function JobCard({
   const action = useAction();
   const refresh = useRefresh();
   const [detail, setDetail] = useState(false);
+  const [logsOpen, setLogsOpen] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [backgroundItem, setBackgroundItem] = useState<string | null>(null);
   const backgroundCandidate = job.backgroundReview?.some((review) => review.state === 'candidate');
@@ -384,6 +386,11 @@ export function JobCard({
           <Button variant="ghost" onClick={() => setDetail(true)}>
             {t(plans.size ? '查看设计方案' : '参数与详情')}
           </Button>
+          {isAdmin && (
+            <Button variant="ghost" onClick={() => setLogsOpen(true)}>
+              {t('执行日志')}
+            </Button>
+          )}
           {['queued', 'running'].includes(job.status) && (
             <Button
               variant="ghost"
@@ -401,6 +408,17 @@ export function JobCard({
           )}
         </div>
       </div>
+      {isAdmin && (
+        <Modal
+          open={logsOpen}
+          onClose={() => setLogsOpen(false)}
+          title={t('管理员任务日志')}
+          description={`${t('任务')} ${job.id}`}
+          wide
+        >
+          {logsOpen && <TaskExecutionLogs key={job.id} jobId={job.id} active={logsOpen} />}
+        </Modal>
+      )}
       <Modal
         open={detail}
         onClose={() => setDetail(false)}

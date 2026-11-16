@@ -20,10 +20,14 @@ import { CREATIVE_TRANSLATIONS } from './creative-translations';
 import { CREATIVE_BRIEF_TRANSLATIONS } from './creative-brief-translations';
 import { CREATION_REFRESH_TRANSLATIONS } from './creation-refresh-translations';
 import { KNOWLEDGE_TRANSLATIONS } from './knowledge-translations';
+import { MODEL_DIRECTORY_TRANSLATIONS } from './model-directory-translations';
+import { DIRECT_GENERATION_TRANSLATIONS } from './direct-generation-translations';
 export type Locale = 'zh-CN' | 'en' | 'ar';
 export const SUPPORTED_LOCALES: readonly Locale[] = ['zh-CN', 'en', 'ar'];
 export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: string }>>> = {
   ...HOME_TRANSLATIONS,
+  ...DIRECT_GENERATION_TRANSLATIONS,
+  ...MODEL_DIRECTORY_TRANSLATIONS,
   ...KNOWLEDGE_TRANSLATIONS,
   ...CREATIVE_BRIEF_TRANSLATIONS,
   ...CREATION_REFRESH_TRANSLATIONS,
@@ -32,6 +36,18 @@ export const TRANSLATIONS: Readonly<Record<string, Readonly<{ en: string; ar: st
   ...RESULT_STUDIO_TRANSLATIONS,
   ...STUDIO_NAVIGATION_TRANSLATIONS,
   ...inspirationStudioTranslations,
+  '填写服务地址与密钥后将自动获取模型列表。': {
+    en: 'The model list loads automatically after you enter the service URL and API key.',
+    ar: 'تُحمّل قائمة النماذج تلقائيًا بعد إدخال عنوان الخدمة ومفتاح الواجهة.',
+  },
+  '填写地址与密钥后自动获取目录，选定模型后保存并启用。': {
+    en: 'Enter the URL and key to load the catalog, then choose a model, save and enable it.',
+    ar: 'أدخل العنوان والمفتاح لتحميل القائمة، ثم اختر نموذجًا واحفظه وفعّله.',
+  },
+  '正在自动获取模型列表…': {
+    en: 'Loading the model list automatically…',
+    ar: 'جارٍ تحميل قائمة النماذج تلقائيًا…',
+  },
   跳到主要内容: { en: 'Skip to main content', ar: 'انتقل إلى المحتوى الرئيسي' },
   '输入项目名称开始搜索。': {
     en: 'Enter a project name to start searching.',

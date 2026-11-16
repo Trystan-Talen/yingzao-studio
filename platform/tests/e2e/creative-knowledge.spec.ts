@@ -119,11 +119,11 @@ test('creates reusable memory and product, freezes reviewed sources and saves a 
   await composer
     .getByRole('textbox', { name: '创作需求' })
     .fill('青绿色香氛概念瓶，白色背景，完整瓶身，不添加文字。');
+  await composer.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
+  await composer.getByRole('checkbox', { name: '带入产品参考图', exact: true }).check();
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   await settings.getByText('更多偏好', { exact: true }).click();
-  await settings.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
-  await settings.getByRole('checkbox', { name: '带入产品参考图', exact: true }).check();
   await settings.getByRole('checkbox', { name: '使用创作记忆', exact: true }).check();
   await settings.locator('summary').filter({ hasText: '当前可用记忆' }).click();
   await expect(settings.getByText('画面留白', { exact: true })).toBeVisible();
@@ -209,6 +209,25 @@ test('creates reusable memory and product, freezes reviewed sources and saves a 
 
   const { creativeBriefId: _briefId, ...freshInput } = preparation.input;
   void _briefId;
+  // Entering the project refreshes the capability proof. A new creation uses that
+  // current proof rather than replaying the one frozen in the completed request.
+  const refreshCapability = async () => {
+    const response = await page.request.get(`${studio.origin}/api/v1/capabilities/model`, {
+      headers,
+      params: {
+        providerId: freshInput.providerId,
+        operation: freshInput.operation,
+        modelId: freshInput.options.model!,
+        inputMode: 'text',
+        refresh: 'true',
+      },
+    });
+    expect(response.status()).toBe(200);
+    const capability = (await response.json()).data as { revision: string; canGenerate: boolean };
+    expect(capability.canGenerate).toBe(true);
+    freshInput.capabilityRevision = capability.revision;
+  };
+  await refreshCapability();
   const fresh = await page.request.post(`${studio.origin}/api/v1/creative-briefs/prepare`, {
     headers,
     data: { requestId: randomUUID(), input: freshInput, answers: [] },
@@ -229,6 +248,7 @@ test('creates reusable memory and product, freezes reviewed sources and saves a 
       }),
     ]),
   );
+  await refreshCapability();
   const without = await page.request.post(`${studio.origin}/api/v1/creative-briefs/prepare`, {
     headers,
     data: { requestId: randomUUID(), input: { ...freshInput, useMemory: false }, answers: [] },

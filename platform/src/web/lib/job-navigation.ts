@@ -6,5 +6,6 @@ export function jobDestination(job: Pick<Job, 'id' | 'projectId' | 'input'>): st
   if (!job.projectId) return `/tasks${query}`;
   const detailPage =
     !!job.input.options.detailPagePlan || job.input.options.assistantMode === 'detail-page';
-  return `${detailPage ? '/detail-pages' : '/workbench'}/${encodeURIComponent(job.projectId)}${query}`;
+  const studio = detailPage ? '/detail-pages' : job.input.replica ? '/replica' : '/workbench';
+  return `${studio}/${encodeURIComponent(job.projectId)}${query}`;
 }

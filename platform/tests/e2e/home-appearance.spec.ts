@@ -181,9 +181,15 @@ for (const variant of [
     await horizontalBounds(page, quick.locator('button, select, textarea'));
     for (const control of [
       quick.getByRole('textbox', { name: variant.brief, exact: true }),
+      quick.getByRole('combobox', { name: t('参考品牌', variant.locale), exact: true }),
+      quick.getByRole('combobox', { name: t('参考产品', variant.locale), exact: true }),
+      quick.getByRole('switch', { name: t('思考模式', variant.locale), exact: true }),
       quick.getByRole('button', { name: t('生成图片', variant.locale), exact: true }),
       quick.locator('.credit-estimate'),
     ]) {
+      // Brand/product and planning controls stay visible in the main form. On a
+      // phone the form can exceed one viewport; every action must remain reachable.
+      await control.scrollIntoViewIfNeeded();
       const box = (await control.boundingBox())!;
       expect(box.y).toBeGreaterThanOrEqual(0);
       expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height);
@@ -221,9 +227,11 @@ for (const variant of [
       join(studio.folder, 'home-appearance.json'),
       JSON.stringify({ variant, bounds }, null, 2),
     );
-    for (const box of [bounds.brief, bounds.generate, bounds.save, bounds.estimate]) {
-      expect(box!.y).toBeGreaterThanOrEqual(0);
-      expect(box!.y + box!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+    for (const control of [brief, generate, save, composer.locator('.credit-estimate')]) {
+      await control.scrollIntoViewIfNeeded();
+      const box = (await control.boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height);
     }
     await horizontalBounds(page, composer.locator('button, select, textarea'));
     await localizedHomeCopy(page, variant.locale);
@@ -256,15 +264,9 @@ for (const variant of [
       expect.soft(await ratioDetails.innerText()).not.toMatch(/[\u4e00-\u9fff]/);
     }
     await advanced.getByText(t('更多偏好', variant.locale), { exact: true }).click();
-    const settings = [
-      '生成模型',
-      '比例',
-      '清晰度',
-      '创作类型',
-      '参考品牌',
-      '参考产品',
-      '画面文字语言',
-    ].map((name) => advanced.getByRole('combobox', { name: t(name, variant.locale), exact: true }));
+    const settings = ['生成模型', '比例', '清晰度', '创作类型', '画面文字语言'].map((name) =>
+      advanced.getByRole('combobox', { name: t(name, variant.locale), exact: true }),
+    );
     await expect(advanced.locator('select:not(:disabled)')).toHaveCount(settings.length);
     // Expanded controls are above the compact footer: navigate backward from its disclosure.
     const reached = new Set<number>();

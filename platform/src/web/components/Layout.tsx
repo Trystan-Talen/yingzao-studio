@@ -7,6 +7,7 @@ import {
   Check,
   Code2,
   Command,
+  Copy,
   FolderOpen,
   HelpCircle,
   Image,
@@ -48,6 +49,7 @@ const primaryNavigation = [
   { to: '/tools', label: '工具', icon: Wand2 },
 ];
 const studioNavigation = [
+  { to: '/replica', label: '爆款复刻', icon: Copy },
   { to: '/projects', label: '项目', icon: FolderOpen },
   { to: '/detail-pages', label: '详情页', icon: LayoutTemplate },
   { to: '/brands', label: '品牌', icon: Palette },
@@ -57,6 +59,7 @@ const moreNavigation = [
   {
     label: '创作与项目',
     items: [
+      { to: '/replica', label: '爆款复刻', icon: Copy },
       { to: '/projects', label: '项目', icon: FolderOpen },
       { to: '/detail-pages', label: '商品详情页', icon: LayoutTemplate },
     ],

@@ -582,6 +582,10 @@ textarea {
 .model-capability-status summary:hover {
   color: var(--text);
 }
+.model-capability-status summary .spin {
+  margin-inline-end: 6px;
+  vertical-align: -2px;
+}
 .model-capability-status details > div {
   padding: 10px 14px;
   margin-top: 7px;

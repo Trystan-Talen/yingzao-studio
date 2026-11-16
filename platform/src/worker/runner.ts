@@ -39,6 +39,8 @@ import { tikhubProvider } from '../server/providers/tikhub';
 import { downloadPublicMedia } from '../server/providers/http';
 import { composeErasureResult } from '../server/providers/erasure';
 import { AppError } from '../server/errors';
+import { runWithExecutionAudit, emitExecutionAttempt } from '../server/providers/execution-audit';
+import { createExecutionLogSink } from '../server/tasks/execution-logs';
 import { cleanupSucceededResults } from './result-cleanup';
 import { currentJobStage, taskStage } from '../server/tasks/progress';
 import {
@@ -207,10 +209,12 @@ export function createWorker(
             services.refresh(i.job_id);
             continue;
           }
+          // Reconciliation keeps its credit reservation and cannot be resubmitted,
+          // but has no active worker execution and must not deadlock the queue.
           const count = (
             sql
               .prepare(
-                "SELECT COUNT(*) AS n FROM job_items WHERE workspace_id=? AND status IN('running','reconciliation_required')",
+                "SELECT COUNT(*) AS n FROM job_items WHERE workspace_id=? AND status='running'",
               )
               .get(i.workspace_id) as { n: number }
           ).n;
@@ -227,7 +231,7 @@ export function createWorker(
           const providerCount = (
             sql
               .prepare(
-                "SELECT COUNT(*) AS n FROM job_items i JOIN jobs j ON j.id=i.job_id WHERE j.provider_id=? AND i.status IN('running','reconciliation_required')",
+                "SELECT COUNT(*) AS n FROM job_items i JOIN jobs j ON j.id=i.job_id WHERE j.provider_id=? AND i.status='running'",
               )
               .get(input.providerId) as { n: number }
           ).n;
@@ -791,7 +795,11 @@ export function createWorker(
         !hasNativeProcessingCheckpoint(db, i, input) &&
         (!input.nativeRevision ||
           input.nativeRevision !==
-            services.settings.connections.revision(i.workspace_id, input.operation))
+            services.settings.connections.revision(
+              i.workspace_id,
+              input.operation,
+              input.planningMode,
+            ))
       )
         throw new ProviderError('模型连接已变更，已停止生成；请检查配置后重新规划。');
       let result: ProviderResult;
@@ -903,13 +911,25 @@ export function createWorker(
                 .prepare('SELECT cancel_requested FROM job_items WHERE id=?')
                 .get(i.id) as { cancel_requested: number };
               if (live.cancel_requested)
-                throw new ProviderError('已取消后续视频生成，已完成的首帧仍保留。');
+                throw new ProviderError(
+                  input.operation === 'video.generate'
+                    ? '已取消后续视频生成，已完成的首帧仍保留。'
+                    : '已取消后续模型请求，不再尝试备用资源。',
+                );
               if (
                 input.providerId === 'native' &&
                 input.nativeRevision !==
-                  services.settings.connections.revision(i.workspace_id, input.operation)
+                  services.settings.connections.revision(
+                    i.workspace_id,
+                    input.operation,
+                    input.planningMode,
+                  )
               )
-                throw new ProviderError('模型连接已改变，已保留首帧并停止后续视频生成。');
+                throw new ProviderError(
+                  input.operation === 'video.generate'
+                    ? '模型连接已改变，已保留首帧并停止后续视频生成。'
+                    : '模型连接已改变，已停止请求备用资源。',
+                );
               authorizeUnsubmitted(i);
             },
             ...(input.providerId === 'native' &&
@@ -1197,7 +1217,66 @@ export function createWorker(
     while (!stopped && running.size < 2) {
       const item = claim();
       if (!item) break;
-      const promise = runItem(item);
+      const input = jobInputSchema.parse(JSON.parse(item.input_json));
+      const promise = runWithExecutionAudit(
+        createExecutionLogSink(db, {
+          workspaceId: item.workspace_id,
+          jobId: item.job_id,
+          itemId: item.id,
+          providerId: input.providerId,
+        }),
+        async () => {
+          const action = item.phase === 'polling' ? 'poll' : 'submit';
+          const resource = { id: 'worker', name: '任务执行器' };
+          emitExecutionAttempt({
+            action,
+            status: 'started',
+            resource,
+            stage: item.phase,
+            message:
+              item.phase === 'polling'
+                ? '查询已保存的上游任务。'
+                : '已领取任务，开始执行当前阶段。',
+          });
+          await runItem(item);
+          const current = sql
+            .prepare(
+              'SELECT status,phase,error_message,remote_id,recovery_failures,next_attempt_at FROM job_items WHERE id=?',
+            )
+            .get(item.id) as Pick<
+            ItemRow,
+            | 'status'
+            | 'phase'
+            | 'error_message'
+            | 'remote_id'
+            | 'recovery_failures'
+            | 'next_attempt_at'
+          >;
+          emitExecutionAttempt({
+            action: current.status === 'cancelled' ? 'cancel' : action,
+            status:
+              current.status === 'reconciliation_required'
+                ? 'uncertain'
+                : current.status === 'succeeded'
+                  ? 'succeeded'
+                  : current.status === 'failed' || current.status === 'cancelled'
+                    ? 'failed'
+                    : 'running',
+            resource,
+            stage: current.phase,
+            remoteId: current.remote_id ?? undefined,
+            message:
+              current.error_message ??
+              (current.status === 'succeeded'
+                ? '任务产物已保存。'
+                : '当前执行阶段结束，任务状态已持久化。'),
+            metadata: {
+              recoveryFailures: current.recovery_failures,
+              nextRetryAt: current.next_attempt_at,
+            },
+          });
+        },
+      );
       running.add(promise);
       void promise.then(
         () => running.delete(promise),

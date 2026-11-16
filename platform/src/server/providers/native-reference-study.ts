@@ -9,6 +9,7 @@ import {
 } from '../../contracts/reference-study';
 import { ProviderError } from '../tasks/types';
 import { nativeProviderJson } from './native-http';
+import { withModelFallback } from './native-fallback';
 import { nativeEndpoint, type NativePlannerConnection } from './native-planner';
 import type { NativeReferenceMedia } from './native-reference-media';
 
@@ -165,11 +166,14 @@ const instructions = `你是视觉参考分析师。只有实际附带的图片�
 只返回一个严格JSON对象，不要Markdown或额外字段：{"version":1,"referenceKind":"image或video，与输入一致","visualStatus":"readable或unreadable","observations":["1至6条，每条最多800字符"],"motion":null,"timeline":[],"anchorFrameIndex":0,"transferGuidance":"最多2000字符","limitations":["1至6条，每条最多800字符"]}。
 视频的motion结构为{"description":"最多800字符","uncertainties":["1至4条，每条最多800字符"]}，timeline为[{"timestampSeconds":实际相对秒数,"description":"该采样时刻可见的画面，最多800字符"}]，最多8项。不要返回素材哈希、模型名或其他证据字段；它们由服务端从实际文件计算。`;
 
-/** The caller must explicitly select the vision connection; no text-only fallback or retry. */
+/** The caller selects the primary vision model; backups must explicitly configure vision too. */
 export async function analyzeNativeReferenceStudy(
   input: { prompt: string; media: NativeReferenceMedia },
   connection: NativePlannerConnection,
-  options: { onResponse?: (raw: unknown) => void | Promise<void> } = {},
+  options: {
+    onResponse?: (raw: unknown) => void | Promise<void>;
+    beforeFallback?: () => void;
+  } = {},
 ): Promise<ReferenceStudyResult> {
   if (
     connection.protocol !== 'openai-chat' ||
@@ -234,12 +238,28 @@ export async function analyzeNativeReferenceStudy(
   };
   if (Buffer.byteLength(JSON.stringify(body)) >= 64 * 1024 * 1024)
     throw error('视觉分析请求超过大小限制，尚未提交模型。');
-  const raw = await nativeProviderJson(nativeEndpoint(connection.baseUrl, '/chat/completions'), {
-    headers: { Authorization: `Bearer ${connection.secret}` },
-    body,
-    submission: true,
-    timeoutMs: 300000,
-  });
+  const { raw, model } = await withModelFallback(
+    {
+      ...connection,
+      fallbackResources: connection.fallbackResources?.map((resource) => ({
+        ...resource,
+        model: resource.visionModel ?? '',
+      })),
+    },
+    async (resource) => ({
+      raw: await nativeProviderJson(nativeEndpoint(resource.baseUrl, '/chat/completions'), {
+        headers: { Authorization: `Bearer ${resource.secret}` },
+        body: { ...body, model: resource.model },
+        submission: true,
+        timeoutMs: 300000,
+      }),
+      model: resource.model,
+    }),
+    {
+      compatible: (resource) => resource.protocol === 'openai-chat' && !!resource.model.trim(),
+      beforeFallback: options.beforeFallback,
+    },
+  );
   if (options.onResponse) {
     try {
       await options.onResponse(raw);
@@ -253,6 +273,6 @@ export async function analyzeNativeReferenceStudy(
   }
   return {
     study: parseNativeReferenceStudy(raw, input.media),
-    evidence: { ...boundEvidence, analyzedAt: new Date().toISOString() },
+    evidence: { ...boundEvidence, model, analyzedAt: new Date().toISOString() },
   };
 }

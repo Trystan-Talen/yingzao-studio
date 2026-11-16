@@ -15,11 +15,14 @@ export function JobProgress({ job }: { job: Job }) {
     return () => clearInterval(timer);
   }, [waiting]);
   const elapsed = elapsedJobSeconds(job.createdAt, now);
-  const Icon = presentation.animated
-    ? LoaderCircle
-    : presentation.tone === 'success'
-      ? CheckCircle2
-      : AlertCircle;
+  const delayedQueue = job.status === 'queued' && elapsed !== null && elapsed >= 120;
+  const Icon = delayedQueue
+    ? Clock3
+    : presentation.animated
+      ? LoaderCircle
+      : presentation.tone === 'success'
+        ? CheckCircle2
+        : AlertCircle;
   const steps = [
     '任务已提交',
     job.providerId === 'local' ? '处理素材' : '模型处理',
@@ -28,19 +31,27 @@ export function JobProgress({ job }: { job: Job }) {
   ];
   return (
     <div
-      className={`result-progress tone-${presentation.tone}`}
+      className={`result-progress tone-${delayedQueue ? 'warning' : presentation.tone}`}
       data-job-phase={job.items.find((item) => item.phase)?.phase ?? job.status}
     >
       <div className="result-progress-heading">
         <span
-          className={`result-progress-icon${presentation.animated ? ' is-working' : ''}`}
+          className={`result-progress-icon${presentation.animated && !delayedQueue ? ' is-working' : ''}`}
           aria-hidden="true"
         >
           <Icon size={21} />
         </span>
         <div className="result-progress-copy" role="status" aria-live="polite">
-          <strong>{t(presentation.title)}</strong>
-          {job.status !== 'succeeded' && <p>{t(presentation.description)}</p>}
+          <strong>{t(delayedQueue ? '任务仍在排队，等待执行器' : presentation.title)}</strong>
+          {job.status !== 'succeeded' && (
+            <p>
+              {t(
+                delayedQueue
+                  ? '已等待较长时间，尚未开始处理。请管理员查看执行日志及执行器状态；不要重复提交。'
+                  : presentation.description,
+              )}
+            </p>
+          )}
         </div>
         {waiting && elapsed !== null && (
           <span className="result-elapsed" aria-label={`${t('提交至今')} ${elapsedLabel(elapsed)}`}>

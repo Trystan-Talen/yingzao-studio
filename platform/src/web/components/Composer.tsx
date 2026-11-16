@@ -5,7 +5,15 @@ import { DesignPlanner, createDesign, type MaterialDesign } from './DesignPlanne
 import { AIWriter } from './AIWriter';
 import { useEffect, useId, useImperativeHandle, useRef, useState, type Ref } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ChevronDown, ChevronUp, Save, SlidersHorizontal, Sparkles, Undo2 } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  Link2,
+  Save,
+  SlidersHorizontal,
+  Sparkles,
+  Undo2,
+} from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { AssetDto, BrandDto, ProjectDto } from '../../contracts/core';
 import type { MemoryDto, ProductDto } from '../../contracts/knowledge';
@@ -39,16 +47,22 @@ import {
 } from '../lib/creation-recovery';
 import type { DesignPlan } from '../../contracts/design-plan';
 import { buildPlanApplication } from '../lib/design-plan';
-import { resolveCreativePlacement } from '../../contracts/creative-intent';
+import {
+  resolveCreativePlacement,
+  type CreativePreparation,
+} from '../../contracts/creative-intent';
 import '../styles/composer-layout.css';
 export interface ComposerController {
   applyPlan: (plan: DesignPlan, index: number) => void;
   addReference: (asset: AssetDto) => void;
+  addReplicaReference: (asset: AssetDto) => void;
   setIdea: (prompt: string, mode?: 'replace' | 'append') => void;
   getPrompt: () => string;
   focusPrompt: () => void;
 }
 interface Props {
+  purpose?: 'creation' | 'replica';
+  onPreparationChange?: (preparation?: CreativePreparation) => void;
   controllerRef?: Ref<ComposerController>;
   initialWarnings?: string[];
   initialDraft?: JobInput;
@@ -71,6 +85,8 @@ interface Props {
   onSaved?: (project: ProjectDto) => void;
 }
 export function Composer({
+  purpose = 'creation',
+  onPreparationChange,
   initialDraft: serverDraft,
   initialRecovery,
   onRecoveryPersisted,
@@ -92,7 +108,10 @@ export function Composer({
   const isQuick = presentation === 'quick';
   const isHome = presentation === 'home' || isQuick;
   const { canEdit, session, workspace } = useStudio();
-  const storageKey = draftStorageKey(session!.user.id, workspace!.id, projectId);
+  const baseStorageKey = draftStorageKey(session!.user.id, workspace!.id, projectId);
+  const storageKeyFor = (project?: string) =>
+    `${draftStorageKey(session!.user.id, workspace!.id, project)}${purpose === 'replica' ? ':replica' : ''}`;
+  const storageKey = storageKeyFor(projectId);
   const [localDraft] = useState(() => {
     if (initialRecovery)
       return {
@@ -100,34 +119,53 @@ export function Composer({
         error: null,
       };
     try {
-      return readDraft(localStorage, storageKey);
+      const current = readDraft(localStorage, storageKey);
+      // Copy legacy replica drafts into the independent entry only on its first visit.
+      // Keep the original key untouched so the creation draft remains recoverable.
+      return purpose === 'replica' && !current.value && !current.error
+        ? readDraft(localStorage, baseStorageKey)
+        : current;
     } catch {
       return { value: null, error: '浏览器存储不可用，当前修改仅保留在此页面。' };
     }
   });
   const savedInput = localDraft.value?.input ?? serverDraft;
   const savedKind = savedInput?.operation === 'video.generate' ? 'video' : 'image';
-  const initialDraft = requestedKind
-    ? (localDraft.value?.drafts?.[requestedKind] ??
-      (savedKind === requestedKind ? savedInput : undefined))
-    : savedInput;
-  const draftKind = initialDraft
-    ? initialDraft.operation === 'video.generate'
-      ? 'video'
-      : 'image'
-    : (requestedKind ?? initialKind);
+  const draftKind = requestedKind ?? (savedInput ? savedKind : initialKind);
+  const creationMode: CreationMode = purpose === 'replica' ? 'replica' : 'original';
+  const legacyDraft =
+    localDraft.value?.drafts?.[draftKind] ?? (savedKind === draftKind ? savedInput : undefined);
+  const legacyMode =
+    localDraft.value?.activeModes?.[draftKind] ?? (legacyDraft?.replica ? 'replica' : 'original');
+  const initialModeDraft = localDraft.value?.modeDrafts?.[composerModeKey(draftKind, creationMode)];
+  const initialDraft =
+    initialModeDraft?.input ??
+    (legacyMode === creationMode ? legacyDraft : undefined) ??
+    (serverDraft &&
+    (serverDraft.operation === 'video.generate' ? 'video' : 'image') === draftKind &&
+    (serverDraft.replica ? 'replica' : 'original') === creationMode
+      ? serverDraft
+      : undefined);
+  const legacyReplicaPreserved = purpose === 'creation' && legacyMode === 'replica';
   const typeDrafts = useRef<CreationDraft['drafts']>(localDraft.value?.drafts ?? {});
-  const modeDrafts = useRef<NonNullable<CreationDraft['modeDrafts']>>(
-    localDraft.value?.modeDrafts ?? {},
-  );
+  const modeDrafts = useRef<NonNullable<CreationDraft['modeDrafts']>>({
+    ...(legacyDraft
+      ? {
+          [composerModeKey(draftKind, legacyMode)]: {
+            input: legacyDraft,
+            aspects: legacyDraft.replica?.aspects ?? defaultReplicaAspects(draftKind),
+            trimStart: legacyDraft.replica?.trimStart ?? 0,
+            trimDuration: legacyDraft.replica?.trimDuration,
+            defaultsPending: localDraft.value?.modelDefaultsPending?.[draftKind] ?? false,
+          },
+        }
+      : {}),
+    ...localDraft.value?.modeDrafts,
+  });
   const activeModes = useRef<NonNullable<CreationDraft['activeModes']>>(
     localDraft.value?.activeModes ?? {},
   );
-  const initialMode =
-    activeModes.current[draftKind] ?? (initialDraft?.replica ? 'replica' : 'original');
-  const initialModeDraft = modeDrafts.current[composerModeKey(draftKind, initialMode)];
-  const [creationMode, setCreationMode] = useState<CreationMode>(initialMode);
-  const isReplica = creationMode === 'replica';
+  const isReplica = purpose === 'replica';
   const [replicaAspects, setReplicaAspects] = useState<ReplicaAspect[]>(
     initialModeDraft?.aspects ?? initialDraft?.replica?.aspects ?? defaultReplicaAspects(draftKind),
   );
@@ -144,7 +182,9 @@ export function Composer({
     localDraft.value?.warnings ?? {},
   );
   const [planWarnings, setPlanWarnings] = useState<string[]>(
-    warningDrafts.current[draftKind] ?? initialDraft?.creationWarnings ?? initialWarnings,
+    initialDraft?.creationWarnings ??
+      (legacyMode === creationMode ? warningDrafts.current[draftKind] : undefined) ??
+      initialWarnings,
   );
   const finalized = useRef(false);
   const recoveryPersisted = useRef(false);
@@ -179,6 +219,9 @@ export function Composer({
   }, [kind]);
   const [prompt, setPrompt] = useState(initialDraft?.prompt ?? initialPrompt);
   const [expanded, setExpanded] = useState(false);
+  const [contextExpanded, setContextExpanded] = useState(false);
+  const contextSettingsId = useId();
+  const contextTrigger = useRef<HTMLButtonElement>(null);
   const [pendingIdea, setPendingIdea] = useState<string | null>(null);
   const [ideaError, setIdeaError] = useState('');
   const [ideaUndo, setIdeaUndo] = useState<{
@@ -210,7 +253,9 @@ export function Composer({
   const [duration, setDuration] = useState(initialDraft?.options.duration ?? 5);
   const [resolution, setResolution] = useState(initialDraft?.options.resolution ?? '1K');
   const pendingModelDefaults = useRef(localDraft.value?.modelDefaultsPending ?? {});
-  const initialDefaultsPending = !initialDraft || pendingModelDefaults.current[draftKind] === true;
+  const initialDefaultsPending =
+    !initialDraft ||
+    (initialModeDraft?.defaultsPending ?? pendingModelDefaults.current[draftKind]) === true;
   const defaultsPending = useRef(initialDefaultsPending);
   const needTextTouched = useRef(initialDraft?.options.needText !== undefined);
   const [defaultsReady, setDefaultsReady] = useState(!initialDefaultsPending);
@@ -218,6 +263,9 @@ export function Composer({
   const [designs, setDesigns] = useState<MaterialDesign[]>(initialDraft?.options.designs ?? []);
   const [brandId, setBrandId] = useState(initialDraft?.brandId ?? '');
   const [productId, setProductId] = useState(initialDraft?.productId ?? '');
+  const [planningMode, setPlanningMode] = useState<'assisted' | 'direct'>(
+    initialDraft?.planningMode ?? 'assisted',
+  );
   const [useMemory, setUseMemory] = useState<boolean | undefined>(
     initialDraft ? initialDraft.useMemory : true,
   );
@@ -296,16 +344,31 @@ export function Composer({
     capabilities.data?.operations.filter(
       (op) => op.id === `${kind}.generate` && (!isReplica || op.providerId === 'native'),
     ) ?? [];
-  const { operation, model: selectedModel } = resolveModelSelection(
-    operations,
-    operationKey,
-    model,
-  );
+  const {
+    operation,
+    model: selectedModel,
+    replacementModel,
+  } = resolveModelSelection(operations, operationKey, model);
+  const modelSelectionMissing =
+    !!capabilities.data && !!(operationKey || model) && (!operation || !selectedModel);
+  function selectGenerationModel(operationId: string, providerId: string, modelId: string) {
+    if (
+      operation?.id === operationId &&
+      operation?.providerId === providerId &&
+      selectedModel?.id === modelId
+    )
+      return;
+    defaultsPending.current = isQuick;
+    setDefaultsReady(!isQuick);
+    setOperationKey(`${operationId}:${providerId}`);
+    setModel(modelId);
+  }
   const modelCapability = useModelCapability({
     operation,
     model: selectedModel,
     inputMode:
       referenceIds.length ||
+      (includeProductImages === true && selectedProduct.data?.referenceAssetIds.length) ||
       (referenceMode === 'first-last' &&
         selectedModel?.id === 'kling-o3-4k-reference' &&
         extraReferenceIds.length)
@@ -436,6 +499,7 @@ export function Composer({
     operation: `${kind}.generate`,
     providerId: operation?.providerId ?? operationKey.split(':')[1] ?? 'openai',
     prompt,
+    ...(planningMode === 'direct' ? { planningMode } : {}),
     assetIds: referenceIds,
     referenceAssetIds: isReplica || (firstLast && isO3) ? extraReferenceIds : [],
     ...(isReplica &&
@@ -507,6 +571,11 @@ export function Composer({
     userId: session!.user.id,
     workspaceId: workspace!.id,
   });
+  const preparationListener = useRef(onPreparationChange);
+  preparationListener.current = onPreparationChange;
+  useEffect(() => {
+    preparationListener.current?.(creativeBrief.preparation);
+  }, [creativeBrief.preparation]);
   const [preparationSubmissionLocked, setPreparationSubmissionLocked] = useState(false);
   const referenceModeIssue =
     kind === 'video' &&
@@ -514,6 +583,13 @@ export function Composer({
     ((currentModel.id === 'kling-o1-first-last' && referenceMode !== 'first-last') ||
       (!acceptsFirstLast && referenceMode === 'first-last'));
   const textModeIssue = currentModel?.textOverlay?.mode === 'unsupported' && needText;
+  const directModeUnsupported = isReplica || multiple;
+  const planningIssue =
+    planningMode === 'direct' && directModeUnsupported
+      ? t('参考复刻与分组物料需要思考模式，请开启后继续。')
+      : planningMode !== 'direct' && operation?.planningAvailable === false
+        ? t('思考模式需要文本模型。可关闭思考直接生成，或前往模型配置。')
+        : null;
   const selectionIssue =
     (multiple && productId
       ? t('分组物料暂不支持关联产品与个人记忆，请切换单张创作或取消关联')
@@ -650,11 +726,7 @@ export function Composer({
   function transferDraft(project: string) {
     const recoveryDraft = currentRecovery(project);
     try {
-      writeDraft(
-        localStorage,
-        draftStorageKey(session!.user.id, workspace!.id, project),
-        recoveryDraft,
-      );
+      writeDraft(localStorage, storageKeyFor(project), recoveryDraft);
       localStorage.removeItem(storageKey);
       return {};
     } catch {
@@ -709,10 +781,7 @@ export function Composer({
     onboardingDefaultsReady,
   ]);
   function switchKind(next: 'image' | 'video') {
-    switchDraft(
-      next,
-      activeModes.current[next] ?? (typeDrafts.current[next]?.replica ? 'replica' : 'original'),
-    );
+    switchDraft(next, creationMode);
   }
   function switchDraft(next: 'image' | 'video', nextMode: CreationMode) {
     captureModeDraft();
@@ -725,7 +794,6 @@ export function Composer({
       ((legacyDraft?.replica ? 'replica' : 'original') === nextMode ? legacyDraft : undefined);
     setPlanWarnings(draft?.creationWarnings ?? []);
     activeModes.current[next] = nextMode;
-    setCreationMode(nextMode);
     setReplicaAspects(modeDraft?.aspects ?? draft?.replica?.aspects ?? defaultReplicaAspects(next));
     setReplicaTrimStart(modeDraft?.trimStart ?? draft?.replica?.trimStart ?? 0);
     setReplicaTrimDuration(modeDraft?.trimDuration ?? draft?.replica?.trimDuration);
@@ -749,6 +817,7 @@ export function Composer({
     setDesigns(draft?.options.designs ?? []);
     setBrandId(draft?.brandId ?? '');
     setProductId(draft?.productId ?? '');
+    setPlanningMode(draft?.planningMode ?? (draft ? 'assisted' : planningMode));
     setUseMemory(draft ? draft.useMemory : true);
     setIncludeProductImages(draft?.includeProductImages);
     setCharacter(
@@ -908,7 +977,7 @@ export function Composer({
       if (!projectId) {
         const state = transferDraft(project.id);
         finalized.current = true;
-        navigate(`/workbench/${project.id}`, { state });
+        navigate(`${isReplica ? '/replica' : '/workbench'}/${project.id}`, { state });
       }
       void refresh().catch(() => undefined);
     }, '草稿已保存');
@@ -956,6 +1025,12 @@ export function Composer({
     setReferences((assets) => [...assets, asset]);
     promptRef.current?.focus();
   }
+  function addReplicaReference(asset: AssetDto) {
+    if (!canEdit) throw new Error(t('当前角色不能编辑创作草稿。'));
+    if (!isReplica || asset.kind !== kind) throw new Error(t('参考素材类型须与当前复刻类型一致。'));
+    if (referenceIds.includes(asset.id)) throw new Error(t('参考素材与主体图片必须是不同素材。'));
+    changeAssets([asset], 'extra');
+  }
   function applyIdea(idea: string, mode?: 'replace' | 'append') {
     if (!canEdit) return;
     setIdeaError('');
@@ -989,6 +1064,7 @@ export function Composer({
   useImperativeHandle(controllerRef, () => ({
     applyPlan,
     addReference,
+    addReplicaReference,
     setIdea: applyIdea,
     getPrompt: () => prompt,
     focusPrompt: () => {
@@ -1299,6 +1375,7 @@ export function Composer({
     defaultsReady &&
     modelCapability.canGenerate &&
     !selectionIssue &&
+    !planningIssue &&
     referencesReady &&
     (!textOnly ||
       (!referenceIds.length &&
@@ -1410,7 +1487,10 @@ export function Composer({
         aria-label={t(expanded ? '收起高级设置' : '更多创作设置')}
         aria-expanded={expanded}
         aria-controls={settingsId}
-        onClick={() => setExpanded(!expanded)}
+        onClick={() => {
+          setContextExpanded(false);
+          setExpanded(!expanded);
+        }}
       >
         <SlidersHorizontal size={15} />
         {visualVariant === 'studio' && currentModel && (
@@ -1423,6 +1503,45 @@ export function Composer({
         <span>{t('设置')}</span>
         {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
+      <button
+        type="button"
+        ref={contextTrigger}
+        className="composer-context-toggle"
+        aria-label={t('关联配置')}
+        aria-haspopup="dialog"
+        aria-expanded={contextExpanded}
+        aria-controls={contextSettingsId}
+        onClick={() => {
+          setExpanded(false);
+          setContextExpanded(!contextExpanded);
+        }}
+      >
+        <Link2 size={15} />
+        <span>{t('关联配置')}</span>
+        {(brandId || productId) && (
+          <span className="composer-context-count">{Number(!!brandId) + Number(!!productId)}</span>
+        )}
+        <ChevronDown size={14} />
+      </button>
+      <label
+        className="composer-planning-toggle"
+        title={t(planningMode === 'direct' ? '已关闭 · 直接生成' : '已开启 · 先规划再生成')}
+      >
+        <input
+          type="checkbox"
+          role="switch"
+          aria-label={t('思考模式')}
+          checked={planningMode === 'assisted'}
+          disabled={
+            !canEdit || preparationSubmissionLocked || creativeBrief.busy || creativeBrief.locked
+          }
+          onChange={(event) => setPlanningMode(event.target.checked ? 'assisted' : 'direct')}
+        />
+        <span>{t('思考')}</span>
+        <span className="composer-planning-state">
+          {t(planningMode === 'direct' ? '关' : '开')}
+        </span>
+      </label>
     </div>
   );
   const generationControls = (
@@ -1439,16 +1558,8 @@ export function Composer({
             }
             onChange={(event) => {
               const [operationId, providerId, modelId] = event.target.value.split('|');
-              if (
-                operation?.id === operationId &&
-                operation?.providerId === providerId &&
-                selectedModel?.id === modelId
-              )
-                return;
-              defaultsPending.current = isQuick;
-              setDefaultsReady(!isQuick);
-              setOperationKey(`${operationId}:${providerId}`);
-              setModel(modelId ?? '');
+              if (operationId && providerId && modelId)
+                selectGenerationModel(operationId, providerId, modelId);
             }}
           >
             {(operationKey || model) && (!operation || !selectedModel) && (
@@ -1668,6 +1779,106 @@ export function Composer({
       </div>
     </>
   );
+  const creationContext = (
+    <section className="composer-creation-context" aria-label={t('关联品牌与产品')}>
+      <div className="composer-context-heading">
+        <h3 className="composer-context-title">{t('关联品牌与产品')}</h3>
+        <div className="composer-context-links">
+          <Link to="/brands">{t('管理品牌')}</Link>
+          <Link to="/products">{t('管理产品库')}</Link>
+        </div>
+      </div>
+      <div className="form-grid">
+        <KnowledgeSelect
+          type="brands"
+          label={t('参考品牌')}
+          value={firstLast && !isO3 ? '' : brandId}
+          emptyLabel={selectedProduct.data?.brandId ? t('采用产品所属品牌') : undefined}
+          onChange={setBrandId}
+          disabled={firstLast && !isO3}
+        />
+        <KnowledgeSelect
+          type="products"
+          label={t('参考产品')}
+          value={productId}
+          disabled={multiple}
+          onChange={(value) => {
+            setProductId(value);
+            setIncludeProductImages(undefined);
+          }}
+        />
+      </div>
+      {productId && (
+        <>
+          {selectedProduct.data?.brandId && (
+            <p className="field-hint">
+              {t('产品所属品牌')}：
+              {linkedBrand.data?.name ?? t(linkedBrand.error ? '关联品牌不可用' : '正在读取资料')} ·{' '}
+              {t('未另选品牌时会采用产品所属品牌。')}
+            </p>
+          )}
+          {linkedBrand.error && (
+            <Notice tone="warning">
+              <p>{t('关联品牌无法读取，请重试或在产品库修复关联。')}</p>
+              <Button variant="secondary" type="button" onClick={() => void linkedBrand.refetch()}>
+                {t('重试')}
+              </Button>
+            </Notice>
+          )}
+          {productConflict && (
+            <Notice tone="warning">
+              {t('所选品牌与产品所属品牌冲突，请改选品牌或产品。')}
+              <Button type="button" variant="secondary" onClick={() => setBrandId('')}>
+                {t('采用产品所属品牌')}
+              </Button>
+            </Notice>
+          )}
+          {selectedProduct.data?.validUntil &&
+            Date.parse(selectedProduct.data.validUntil) <= Date.now() && (
+              <Notice tone="warning">{t('产品资料已过期，请更新资料或重新选择。')}</Notice>
+            )}
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={!multiple && includeProductImages === true}
+              disabled={multiple}
+              onChange={(event) => setIncludeProductImages(event.target.checked)}
+            />
+            {t('带入产品参考图')}
+          </label>
+          <p className="field-hint">
+            {t('默认仅使用产品文字资料；参考图与本次素材共同受模型数量限制。')}
+          </p>
+        </>
+      )}
+      {multiple && (
+        <Notice tone="warning">
+          {t('分组物料暂不支持关联产品与个人记忆，请切换单张创作或取消关联')}
+          {productId && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setProductId('');
+                setIncludeProductImages(undefined);
+              }}
+            >
+              {t('取消产品关联')}
+            </Button>
+          )}
+        </Notice>
+      )}
+      <p className="field-hint">
+        {t(
+          planningMode === 'direct'
+            ? kind === 'video'
+              ? '直接使用需求与已选资料，跳过文本规划；视频仍可能需要生成首帧。'
+              : '直接使用需求与已选资料生成，跳过文本模型规划，减少规划费用。'
+            : '先由文本模型梳理需求，再调用生成模型；可关闭以跳过文本规划。',
+        )}
+      </p>
+    </section>
+  );
   const optionalPreferences = (
     <>
       <div className="knowledge-memory-controls">
@@ -1680,23 +1891,6 @@ export function Composer({
           />
           {t('使用创作记忆')}
         </label>
-        {multiple && (
-          <Notice tone="warning">
-            {t('分组物料暂不支持关联产品与个人记忆，请切换单张创作或取消关联')}
-            {productId && (
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  setProductId('');
-                  setIncludeProductImages(undefined);
-                }}
-              >
-                {t('取消产品关联')}
-              </Button>
-            )}
-          </Notice>
-        )}
         <p className="field-hint">
           {t('仅采用当前空间中你确认过且仍有效的记忆；本次明确要求优先。')}{' '}
           <Link to="/settings?tab=memory">{t('管理创作记忆')}</Link>
@@ -1726,74 +1920,8 @@ export function Composer({
             </p>
           </details>
         )}
-        {productId && (
-          <>
-            {selectedProduct.data?.brandId && (
-              <p className="field-hint">
-                {t('产品所属品牌')}：
-                {linkedBrand.data?.name ?? t(linkedBrand.error ? '关联品牌不可用' : '正在读取资料')}{' '}
-                · {t('未另选品牌时会采用产品所属品牌。')}
-              </p>
-            )}
-            {linkedBrand.error && (
-              <Notice tone="warning">
-                <p>{t('关联品牌无法读取，请重试或在产品库修复关联。')}</p>
-                <Button
-                  variant="secondary"
-                  type="button"
-                  onClick={() => void linkedBrand.refetch()}
-                >
-                  {t('重试')}
-                </Button>{' '}
-                <Link to="/products">{t('管理产品库')}</Link>
-              </Notice>
-            )}
-            {productConflict && (
-              <Notice tone="warning">
-                {t('所选品牌与产品所属品牌冲突，请改选品牌或产品。')}
-                <Button type="button" variant="secondary" onClick={() => setBrandId('')}>
-                  {t('采用产品所属品牌')}
-                </Button>
-              </Notice>
-            )}
-            {selectedProduct.data?.validUntil &&
-              Date.parse(selectedProduct.data.validUntil) <= Date.now() && (
-                <Notice tone="warning">{t('产品资料已过期，请更新资料或重新选择。')}</Notice>
-              )}
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={!multiple && includeProductImages === true}
-                disabled={multiple}
-                onChange={(event) => setIncludeProductImages(event.target.checked)}
-              />
-              {t('带入产品参考图')}
-            </label>
-            <p className="field-hint">
-              {t('默认仅使用产品文字资料；参考图与本次素材共同受模型数量限制。')}
-            </p>
-          </>
-        )}
-        <Link to="/products">{t('管理产品库')}</Link>
       </div>
       <div className="form-grid">
-        <KnowledgeSelect
-          type="brands"
-          label={t('参考品牌')}
-          value={firstLast && !isO3 ? '' : brandId}
-          onChange={setBrandId}
-          disabled={firstLast && !isO3}
-        />
-        <KnowledgeSelect
-          type="products"
-          label={t('参考产品')}
-          value={productId}
-          disabled={multiple}
-          onChange={(value) => {
-            setProductId(value);
-            setIncludeProductImages(undefined);
-          }}
-        />
         <Field label={t('画面文字语言')}>
           <select value={language} onChange={(e) => setLanguage(e.target.value)}>
             {LANGUAGES.map((value) => (
@@ -1852,7 +1980,7 @@ export function Composer({
           if (visualVariant === 'studio') setExpanded(false);
           setAssistantOpen(true);
         }}
-        disabled={!canEdit || !referencesReady}
+        disabled={!canEdit || !referencesReady || planningMode === 'direct'}
       >
         <Sparkles size={15} />
         {t('AI 帮我写')}
@@ -1878,6 +2006,7 @@ export function Composer({
     <>
       <div
         ref={composerRef}
+        data-purpose={purpose}
         data-presentation={presentation}
         data-media-kind={kind}
         className={
@@ -1945,7 +2074,7 @@ export function Composer({
         {!projectId && boundProjectId && (
           <Link
             className="text-button"
-            to={`/workbench/${boundProjectId}`}
+            to={`${isReplica ? '/replica' : '/workbench'}/${boundProjectId}`}
             state={{ recoveryDraft: currentRecovery(boundProjectId) }}
           >
             {t('继续此项目草稿')}
@@ -1993,19 +2122,28 @@ export function Composer({
             )}
           </Notice>
         )}
-        <div className="form-grid">
-          <Field label={t('创作模式')}>
-            <select
-              value={creationMode}
-              disabled={!canEdit}
-              onChange={(event) => switchDraft(kind, event.target.value as CreationMode)}
-            >
-              <option value="original">{t('原创')}</option>
-              <option value="replica">{t('参考复刻')}</option>
-            </select>
-          </Field>
-        </div>
+        {legacyReplicaPreserved && (
+          <p className="field-hint composer-legacy-replica">
+            <Link to={`${projectId ? `/replica/${projectId}` : '/replica'}?kind=${kind}`}>
+              {t('复刻草稿已保留，前往独立复刻页')}
+            </Link>
+          </p>
+        )}
         <div className="creative-prompt-surface">{promptEditor}</div>
+        {planningIssue && (
+          <Notice tone="warning">
+            {planningIssue}{' '}
+            {planningMode !== 'direct' && <Link to="/settings?tab=models">{t('模型配置')}</Link>}
+          </Notice>
+        )}
+        {!!productIssue && !contextExpanded && (
+          <Notice tone="warning">
+            {t('关联资料需要核对，请打开关联配置。')}
+            <Button variant="ghost" onClick={() => setContextExpanded(true)}>
+              {t('关联配置')}
+            </Button>
+          </Notice>
+        )}
         {ideaError && !pendingIdea && (
           <p className="field-error" role="alert">
             {ideaError}
@@ -2053,13 +2191,43 @@ export function Composer({
           </div>
         </Modal>
 
-        {!expanded && (!modelCapability.canGenerate || selectionIssue) && (
-          <ModelCapabilityStatus
-            capability={modelCapability}
-            selectionIssue={selectionIssue}
-            onUseFixed={useFixedParameters}
-          />
+        {modelSelectionMissing && (
+          <section aria-label={t('模型选择需要更新')}>
+            <Notice tone="warning">
+              <strong>{t('模型配置已更新，草稿中的模型已不可用。')}</strong>
+              <p>
+                {t(
+                  isQuick
+                    ? '采用新模型时将使用其默认参数，创作需求与素材会保留。'
+                    : '创作需求、素材与生成参数已保留，请选择模型并核对参数。',
+                )}
+              </p>
+              <Button
+                variant="secondary"
+                disabled={!canEdit || preparationSubmissionLocked}
+                onClick={() => {
+                  if (operation && replacementModel)
+                    selectGenerationModel(operation.id, operation.providerId, replacementModel.id);
+                  setExpanded(true);
+                  setSettingsFocusRequest((value) => value + 1);
+                }}
+              >
+                {replacementModel
+                  ? t('使用已配置模型（{model}）').replace('{model}', replacementModel.id)
+                  : t('重新选择模型')}
+              </Button>
+            </Notice>
+          </section>
         )}
+        {!modelSelectionMissing &&
+          !expanded &&
+          (!modelCapability.canGenerate || selectionIssue) && (
+            <ModelCapabilityStatus
+              capability={modelCapability}
+              selectionIssue={selectionIssue}
+              onUseFixed={useFixedParameters}
+            />
+          )}
         {outputKind === 'detail' && (
           <Notice>
             {t('这是旧版分组物料草稿。新的整套详情页请使用专用流程。')}{' '}
@@ -2086,6 +2254,16 @@ export function Composer({
             />
           </details>
         )}
+        <ComposerSettingsPopover
+          id={contextSettingsId}
+          title="关联配置"
+          open={contextExpanded}
+          onOpenChange={setContextExpanded}
+          anchorRef={contextTrigger}
+          focusRequest={0}
+        >
+          {creationContext}
+        </ComposerSettingsPopover>
         {visualVariant === 'studio' ? (
           <ComposerSettingsPopover
             id={settingsId}
@@ -2173,6 +2351,8 @@ export function Composer({
           <MemoryEditor initialContent={prompt} onClose={() => setRemembering(false)} />
         )}
         <CreativeBrief
+          reviewExpanded={isReplica}
+          planningMode={planningMode}
           preparation={creativeBrief.preparation}
           answers={creativeBrief.answers}
           busy={creativeBrief.busy}
@@ -2234,13 +2414,19 @@ export function Composer({
         <JobSubmit
           forceConfirmation={isReplica}
           label={
-            creativeBrief.preparation?.status === 'needs_clarification'
-              ? '补充完成，继续'
-              : kind === 'image'
-                ? '生成图片'
-                : '生成视频'
+            isReplica && creativeBrief.preparation?.status !== 'ready'
+              ? creativeBrief.preparation?.status === 'needs_clarification'
+                ? '补充完成，继续分析'
+                : '分析参考作品'
+              : creativeBrief.preparation?.status === 'needs_clarification'
+                ? '补充完成，继续'
+                : kind === 'image'
+                  ? '生成图片'
+                  : '生成视频'
           }
-          busyLabel={creativeBrief.busy ? '正在理解你的想法…' : '正在准备…'}
+          busyLabel={
+            creativeBrief.busy && planningMode !== 'direct' ? '正在理解你的想法…' : '正在准备…'
+          }
           estimateReady={defaultsReady && modelCapability.canGenerate && !selectionIssue}
           input={input}
           operation={operation}
@@ -2250,8 +2436,13 @@ export function Composer({
               {secondaryActions}
             </div>
           }
-          recoveryScope={`composer:${projectId ?? 'new'}`}
-          beforePrepareInput={creativeBrief.prepare}
+          recoveryScope={`${isReplica ? 'replica' : 'composer'}:${projectId ?? 'new'}`}
+          creationPurpose={purpose}
+          beforePrepareInput={async (value) => {
+            const requiresAnalysis = isReplica && creativeBrief.preparation?.status !== 'ready';
+            const prepared = await creativeBrief.prepare(value);
+            return requiresAnalysis ? null : prepared;
+          }}
           onPreparationInvalid={creativeBrief.invalidatePreparation}
           preparationRevision={creativeBrief.sourceRevision}
           onPreparationLockChange={setPreparationSubmissionLocked}

@@ -192,6 +192,229 @@ function generationCalls() {
 }
 
 describe('native durable pipeline integration', () => {
+  it('direct image needs no text connection, freezes selected knowledge and saves exact image bytes', async () => {
+    instance.services.db.sqlite
+      .prepare("DELETE FROM model_connections WHERE workspace_id=? AND kind='text'")
+      .run(wid);
+    const reference = await instance.services.core.assets.ingest(actor, wid, {
+      buffer: png,
+      name: '产品原图.png',
+      mimeType: 'image/png',
+    });
+    const brand = instance.services.core.references.createBrand(actor, wid, {
+      name: '雾岚',
+      description: '冷灰与湖蓝',
+      colors: ['#467a9c'],
+    });
+    const product = instance.services.core.knowledge.createProduct(actor, wid, {
+      name: '随行杯',
+      facts: ['容量450毫升'],
+      brandId: brand.id,
+      referenceAssetIds: [reference.id],
+    });
+    const value = {
+      ...input(),
+      planningMode: 'direct' as const,
+      productId: product.id,
+      includeProductImages: true,
+      options: {
+        ...input().options,
+        platform: '亚马逊',
+        creativePlacement: 'main-image' as const,
+        creativeMarket: '美国',
+      },
+    };
+    const briefs = createCreativeBriefServices(instance.services);
+    const requestId = randomUUID();
+    const preparation = await briefs.prepare(actor, wid, { requestId, input: value });
+    expect(preparation.contextSources?.map((source) => source.kind)).toEqual(['brand', 'product']);
+    expect(preparation.result.questions).toEqual([]);
+    expect(call).not.toHaveBeenCalled();
+    expect((await briefs.prepare(actor, wid, { requestId, input: value })).id).toBe(preparation.id);
+    instance.services.core.knowledge.updateProduct(actor, wid, product.id, {
+      expectedVersion: product.version,
+      facts: ['容量999毫升'],
+    });
+    const quote = instance.services.quote(actor, wid, preparation.input);
+    const job = instance.services.submit(actor, wid, preparation.input, quote.id, randomUUID());
+    await tick();
+    const saved = instance.services.get(actor, wid, job.id);
+    expect(saved.status).toBe('succeeded');
+    expect(saved.input.planningMode).toBe('direct');
+    expect(call).toHaveBeenCalledTimes(1);
+    const [url, payload] = call.mock.calls[0]!;
+    expect(url).toMatch(/\/images\/generations$/);
+    const body = payload?.body as { prompt: string; image: string[] };
+    expect(body.prompt).toContain(value.prompt);
+    expect(body.prompt).toContain('雾岚');
+    expect(body.prompt).toContain('已选发布平台：亚马逊');
+    expect(body.prompt).toContain('已选素材用途：商品主图');
+    expect(body.prompt).toContain('已选市场：美国');
+    expect(body.prompt).toContain('容量450毫升');
+    expect(body.prompt).not.toContain('容量999毫升');
+    expect(body.image).toHaveLength(1);
+    const output = await instance.services.core.assets.readOriginalForJob(
+      { workspaceId: wid, createdBy: actor.userId, projectId: null, jobId: job.id },
+      saved.outputAssets[0]!.id,
+    );
+    expect(output.buffer).toEqual(generatedPng);
+    expect(instance.services.credits.account(wid).reserved).toBe(0);
+  });
+  it('direct preparation, capability proof and execution ignore changed or unreadable text credentials', async () => {
+    instance.services.db.sqlite
+      .prepare(
+        "UPDATE model_connections SET encrypted_secret='invalid-fixture' WHERE workspace_id=? AND kind='text'",
+      )
+      .run(wid);
+    const metadata = await instance.services.settings.modelCapabilities.query(wid, {
+      providerId: 'native',
+      operation: 'image.generate',
+      modelId: 'fixture-image',
+      inputMode: 'text',
+      refresh: 'false',
+    });
+    expect(metadata.canGenerate).toBe(true);
+    const value = {
+      ...input(),
+      planningMode: 'direct' as const,
+      capabilityRevision: metadata.revision,
+    };
+    const briefs = createCreativeBriefServices(instance.services);
+    const requestId = randomUUID();
+    const preparation = await briefs.prepare(actor, wid, { requestId, input: value });
+    const quote = instance.services.quote(actor, wid, preparation.input);
+    instance.services.db.sqlite
+      .prepare(
+        "UPDATE model_connections SET revision=?,enabled=0 WHERE workspace_id=? AND kind='text'",
+      )
+      .run(randomUUID(), wid);
+    expect(briefs.get(actor, wid, preparation.id).id).toBe(preparation.id);
+    const job = instance.services.submit(actor, wid, preparation.input, quote.id, randomUUID());
+    await tick();
+    expect(instance.services.get(actor, wid, job.id).status).toBe('succeeded');
+    expect(call).toHaveBeenCalledTimes(1);
+    expect((call.mock.calls[0]![1]?.body as { prompt: string }).prompt).toBe(
+      `${value.prompt}\n\n画面不添加文字、字幕或水印。`,
+    );
+    await expect(
+      briefs.prepare(actor, wid, { requestId, input: { ...value, planningMode: 'assisted' } }),
+    ).rejects.toThrow();
+    expect(() =>
+      instance.services.quote(actor, wid, { ...preparation.input, planningMode: 'assisted' }),
+    ).toThrow();
+  });
+  it('concurrent direct preparation has one immutable snapshot and no provider calls', async () => {
+    const value = { ...input(), planningMode: 'direct' as const };
+    const briefs = createCreativeBriefServices(instance.services);
+    const requestId = randomUUID();
+    const [first, second] = await Promise.all([
+      briefs.prepare(actor, wid, { requestId, input: value }),
+      briefs.prepare(actor, wid, { requestId, input: value }),
+    ]);
+    expect(first.id).toBe(second.id);
+    const row = instance.services.db.sqlite
+      .prepare('SELECT count(*) n FROM creative_briefs WHERE request_id=?')
+      .get(requestId) as { n: number };
+    expect(row.n).toBe(1);
+    expect(call).not.toHaveBeenCalled();
+    await expect(
+      briefs.prepare(actor, wid, { requestId, input: { ...value, prompt: '另一个需求' } }),
+    ).rejects.toThrow('本次请求编号');
+  });
+  it('direct video generates a first frame and persists a video with zero text calls', async () => {
+    instance.services.db.sqlite
+      .prepare("DELETE FROM model_connections WHERE workspace_id=? AND kind='text'")
+      .run(wid);
+    const videoPath = join(dir, 'direct-fixture.mp4');
+    await exec('ffmpeg', [
+      '-y',
+      '-v',
+      'error',
+      '-f',
+      'lavfi',
+      '-i',
+      'color=c=blue:s=960x960:d=5:r=12',
+      '-c:v',
+      'libx264',
+      '-pix_fmt',
+      'yuv420p',
+      '-movflags',
+      '+faststart',
+      videoPath,
+    ]);
+    const mp4 = await readFile(videoPath);
+    download.mockResolvedValue(mp4);
+    const value = { ...input('video'), planningMode: 'direct' as const };
+    const preparation = await createCreativeBriefServices(instance.services).prepare(actor, wid, {
+      requestId: randomUUID(),
+      input: value,
+    });
+    expect(preparation.result.summary).toContain('费用包含首帧');
+    expect(call).not.toHaveBeenCalled();
+    const quote = instance.services.quote(actor, wid, preparation.input);
+    expect(quote.maxCredits).toBe(33);
+    const job = instance.services.submit(actor, wid, preparation.input, quote.id, randomUUID());
+    await tick();
+    await worker.stop();
+    worker = createWorker(instance.services);
+    await tick(job.id);
+    const saved = instance.services.get(actor, wid, job.id);
+    expect(saved.status).toBe('succeeded');
+    expect(saved.outputAssets[0]).toMatchObject({
+      kind: 'video',
+      width: 960,
+      height: 960,
+      durationMs: 5000,
+    });
+    const output = await instance.services.core.assets.readOriginalForJob(
+      { workspaceId: wid, createdBy: actor.userId, projectId: null, jobId: job.id },
+      saved.outputAssets[0]!.id,
+    );
+    expect(output.buffer).toEqual(mp4);
+    expect(call.mock.calls.filter(([url]) => url.endsWith('/chat/completions'))).toHaveLength(0);
+    expect(call.mock.calls.filter(([url]) => url.endsWith('/images/generations'))).toHaveLength(1);
+    expect(
+      call.mock.calls.filter(([url, options]) => url === taskBase && options?.method !== 'GET'),
+    ).toHaveLength(1);
+  });
+  it('direct video retains a selected original and retries without text or image generation', async () => {
+    instance.services.db.sqlite
+      .prepare("DELETE FROM model_connections WHERE workspace_id=? AND kind='text'")
+      .run(wid);
+    videoStatus = 'failed';
+    const value = { ...(await referenceInput()), planningMode: 'direct' as const };
+    const preparation = await createCreativeBriefServices(instance.services).prepare(actor, wid, {
+      requestId: randomUUID(),
+      input: value,
+    });
+    const quote = instance.services.quote(actor, wid, preparation.input);
+    expect(quote.maxCredits).toBe(25);
+    const job = instance.services.submit(actor, wid, preparation.input, quote.id, randomUUID());
+    await tick();
+    await tick(job.id);
+    expect(instance.services.get(actor, wid, job.id).status).toBe('failed');
+    const retryQuote = instance.services.retryQuote(actor, wid, job.id);
+    expect(retryQuote.maxCredits).toBe(25);
+    const retry = instance.services.submit(
+      actor,
+      wid,
+      preparation.input,
+      retryQuote.id,
+      randomUUID(),
+    );
+    await tick();
+    expect(instance.services.get(actor, wid, retry.id).status).toBe('running');
+    expect(
+      call.mock.calls.every(
+        ([url]) => !url.endsWith('/chat/completions') && !url.endsWith('/images/generations'),
+      ),
+    ).toBe(true);
+    const submissions = call.mock.calls.filter(
+      ([url, options]) => url === taskBase && options?.method !== 'GET',
+    );
+    expect(submissions).toHaveLength(2);
+    expect(submissions[0]![1]?.body).toEqual(submissions[1]![1]?.body);
+  });
   it('executes an image without decrypting an unrelated broken video connection', async () => {
     const preparation = await prepare();
     const quote = instance.services.quote(actor, wid, preparation.input);

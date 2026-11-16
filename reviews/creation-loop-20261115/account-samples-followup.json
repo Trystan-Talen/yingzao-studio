@@ -1,0 +1,12 @@
+{
+  "recordedDate": "2026-11-15",
+  "changedFiles": {
+    "platform/scripts/comparison-fixtures.ts": "b27de04303de0df526d1692dbee1e9e0c27c93b919f718af399c1b41cee453ac",
+    "platform/tests/comparison-fixtures.test.ts": "e874158490504cf8d73435341025eba09bd15f97dac425bdc6e49aa28a291543"
+  },
+  "targetedTestsPassed": 5,
+  "originalRowsPreserved": true,
+  "originalMediaPreserved": 351,
+  "destination": "current logged-in personal workspace",
+  "externalCalls": 0
+}

@@ -16,7 +16,7 @@ import {
 import { migrateDatabase } from '../src/server/db/migrate';
 import { createCreditService } from '../src/server/tasks/credits';
 import { createTaskServices, type TaskServices } from '../src/server/tasks/service';
-import type { ProviderAdapter } from '../src/server/tasks/types';
+import { ProviderError, type ProviderAdapter } from '../src/server/tasks/types';
 import { createWorker } from '../src/worker/runner';
 
 let directory: string, db: DatabaseContext, tasks: TaskServices, actor: Actor, wid: string;
@@ -64,14 +64,14 @@ afterEach(async () => {
   await rm(directory, { recursive: true, force: true });
 });
 
-function pendingJob() {
+function pendingJob(workspaceId = wid) {
   const input = jobInputSchema.parse({
     operation: 'image.generate',
     providerId: 'openai',
     prompt: 'Product fixture',
   });
-  const quote = tasks.quote(actor, wid, input);
-  return tasks.submit(actor, wid, input, quote.id, randomUUID());
+  const quote = tasks.quote(actor, workspaceId, input);
+  return tasks.submit(actor, workspaceId, input, quote.id, randomUUID());
 }
 
 function worker(execute: ProviderAdapter['execute']) {
@@ -127,6 +127,89 @@ it('retains the reservation when cancellation arrives after provider submission 
   expect(tasks.balance(actor, wid).reserved).toBe(8);
 });
 
+it('keeps uncertain reservations without blocking or resubmitting later workspace work', async () => {
+  const execute = vi.fn<ProviderAdapter['execute']>(async () => {
+    throw new ProviderError('Submission result is unknown', true);
+  });
+  const runner = worker(execute);
+  const uncertainIds: string[] = [];
+  for (let index = 0; index < 2; index++) {
+    const job = pendingJob();
+    uncertainIds.push(job.id);
+    await runner.runItem(runner.claim()!);
+    expect(tasks.get(actor, wid, job.id).status).toBe('reconciliation_required');
+  }
+  const next = pendingJob();
+  execute.mockImplementation(async () => ({
+    state: 'failed',
+    message: 'Definitive fixture rejection',
+  }));
+  const claimed = runner.claim();
+  expect(claimed?.job_id).toBe(next.id);
+  await runner.runItem(claimed!);
+  await runner.tick();
+  await runner.drain();
+  expect(execute).toHaveBeenCalledTimes(3);
+  expect(tasks.get(actor, wid, next.id).status).toBe('failed');
+  expect(tasks.balance(actor, wid)).toMatchObject({ balance: 500, reserved: 16 });
+  for (const id of uncertainIds) {
+    expect(tasks.get(actor, wid, id).status).toBe('reconciliation_required');
+    expect(() => tasks.retryQuote(actor, wid, id)).toThrow();
+    expect(
+      db.sqlite
+        .prepare('SELECT kind FROM credit_ledger WHERE job_id=? ORDER BY created_at')
+        .all(id),
+    ).toEqual([{ kind: 'reserve' }]);
+  }
+});
+
+it('does not let four uncertain submissions consume the shared provider execution slots', async () => {
+  const execute = vi.fn<ProviderAdapter['execute']>(async () => {
+    throw new ProviderError('Submission result is unknown', true);
+  });
+  const runner = worker(execute);
+  const uncertainJobs: Array<{ workspaceId: string; jobId: string }> = [];
+  for (let index = 0; index < 4; index++) {
+    const workspaceId = tasks.core.auth.createWorkspace(
+      actor.userId,
+      `Unknown ${index}`,
+      'personal',
+    ).id;
+    const job = pendingJob(workspaceId);
+    uncertainJobs.push({ workspaceId, jobId: job.id });
+    await runner.runItem(runner.claim()!);
+  }
+  const next = pendingJob();
+  execute.mockImplementation(async () => ({
+    state: 'failed',
+    message: 'Definitive fixture rejection',
+  }));
+  const claimed = runner.claim();
+  expect(claimed?.job_id).toBe(next.id);
+  await runner.runItem(claimed!);
+  await runner.tick();
+  await runner.drain();
+  expect(execute).toHaveBeenCalledTimes(5);
+  for (const { workspaceId, jobId } of uncertainJobs) {
+    expect(tasks.get(actor, workspaceId, jobId).status).toBe('reconciliation_required');
+    expect(tasks.balance(actor, workspaceId)).toMatchObject({ balance: 500, reserved: 8 });
+  }
+});
+
+it('still limits simultaneous running work to four shared provider slots', () => {
+  const runner = worker(async () => ({ state: 'failed', message: 'Unused fixture' }));
+  for (let index = 0; index < 5; index++) {
+    const workspaceId = tasks.core.auth.createWorkspace(
+      actor.userId,
+      `Running ${index}`,
+      'personal',
+    ).id;
+    pendingJob(workspaceId);
+  }
+  for (let index = 0; index < 4; index++) expect(runner.claim()).toBeDefined();
+  expect(runner.claim()).toBeUndefined();
+});
+
 it('does not starve another workspace behind a full page of concurrency-blocked jobs', () => {
   tasks.credits.grant({
     workspaceId: wid,
@@ -138,12 +221,7 @@ it('does not starve another workspace behind a full page of concurrency-blocked 
   });
   const runner = worker(async () => ({ state: 'submitted', remote: { id: 'local-fixture' } }));
   pendingJob();
-  const held = runner.claim()!;
-  db.sqlite
-    .prepare(
-      "UPDATE job_items SET status='reconciliation_required',lease_owner=NULL,lease_until=NULL WHERE id=?",
-    )
-    .run(held.id);
+  expect(runner.claim()).toBeDefined();
   db.sqlite
     .prepare('UPDATE workspace_billing SET concurrency_limit=1 WHERE workspace_id=?')
     .run(wid);

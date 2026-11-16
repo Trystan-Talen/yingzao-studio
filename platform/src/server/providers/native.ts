@@ -16,6 +16,8 @@ import {
 } from '../tasks/types';
 import { downloadPublicMedia } from './http';
 import { nativeProviderJson } from './native-http';
+import { withModelFallback } from './native-fallback';
+import { withExecutionResource } from './execution-audit';
 import { nativeEndpoint } from './native-planner';
 import { nativeVideoSubmission } from './native-video-route';
 import { nativeMotionEndFrame } from './native-motion-frame';
@@ -210,6 +212,40 @@ function nativeMediaUrl(value: string): string {
 }
 
 async function generateImage(
+  context: ExecutionContext,
+  connection: RuntimeModelConnection,
+  prompt: string,
+  forVideo: boolean,
+): Promise<ProviderOutput> {
+  const confirmed = nativeImageSpecification(context.input, connection.protocol, forVideo);
+  return withModelFallback(
+    connection,
+    (resource) => generateImageOnce(context, resource, prompt, forVideo),
+    {
+      beforeFallback: context.beforeAdditionalSubmission,
+      compatible: (resource) => {
+        try {
+          if (
+            !['openai-images', 'seedream-images'].includes(resource.protocol) ||
+            (isKnownSeedreamModel(resource.model) && resource.protocol !== 'seedream-images')
+          )
+            return false;
+          const spec = nativeImageSpecification(context.input, resource.protocol, forVideo);
+          return (
+            spec.width === confirmed.width &&
+            spec.height === confirmed.height &&
+            (!context.input.imageEdit ||
+              (resource.protocol === 'seedream-images' && isKnownSeedreamModel(resource.model)))
+          );
+        } catch {
+          return false;
+        }
+      },
+    },
+  );
+}
+
+async function generateImageOnce(
   context: ExecutionContext,
   connection: RuntimeModelConnection,
   prompt: string,
@@ -526,49 +562,84 @@ export function createNativeProvider(resources: NativeResources): ProviderAdapte
         throw new ProviderError('运镜尾帧超过30MB（兆字节）；已保留首帧，未提交视频。');
       context.beforeAdditionalSubmission?.();
       context.onStage?.('首帧已保存，正在提交视频');
-      const video = resources.video!;
-      const endpoint = nativeEndpoint(video.baseUrl);
-      const submission = nativeVideoSubmission(endpoint, {
-        model: video.model,
-        prompt: plan.videoPrompt,
-        frameUrl: `data:${normalized.mimeType};base64,${normalized.buffer.toString('base64')}`,
-        ...(endFrame
-          ? { lastFrameUrl: `data:image/png;base64,${endFrame.toString('base64')}` }
-          : {}),
-        resolution: context.input.options.resolution,
-        ratio: context.input.options.ratio,
-        duration: context.input.options.duration,
-      });
-      const response = submissionSchema.safeParse(
-        await nativeProviderJson(submission.url, {
-          headers: { Authorization: `Bearer ${video.secret}` },
-          body: submission.body,
-          submission: true,
-          timeoutMs: 120000,
-        }),
+      const remote = await withModelFallback(
+        resources.video!,
+        async (video) => {
+          const endpoint = nativeEndpoint(video.baseUrl);
+          const submission = nativeVideoSubmission(endpoint, {
+            model: video.model,
+            prompt: plan.videoPrompt,
+            frameUrl: `data:${normalized.mimeType};base64,${normalized.buffer.toString('base64')}`,
+            ...(endFrame
+              ? { lastFrameUrl: `data:image/png;base64,${endFrame.toString('base64')}` }
+              : {}),
+            resolution: context.input.options.resolution,
+            ratio: context.input.options.ratio,
+            duration: context.input.options.duration,
+          });
+          const response = submissionSchema.safeParse(
+            await nativeProviderJson(submission.url, {
+              headers: { Authorization: `Bearer ${video.secret}` },
+              body: submission.body,
+              submission: true,
+              timeoutMs: 120000,
+            }),
+          );
+          if (!response.success)
+            throw new ProviderError('视频模型没有返回任务编号，请核对提交；首帧已保存。', true);
+          return {
+            id: response.data.id,
+            endpoint,
+            nativeModel: video.model,
+            nativeResourceId: video.id,
+            nativeResourceRevision: video.executionRevision ?? video.revision,
+          };
+        },
+        {
+          beforeFallback: context.beforeAdditionalSubmission,
+          compatible: (video) =>
+            video.protocol === 'seedance-native' &&
+            (!plan.cameraControl || supportsNativeMotionEndpoints(video.model)),
+        },
       );
-      if (!response.success)
-        throw new ProviderError('视频模型没有返回任务编号，请核对提交；首帧已保存。', true);
-      const remote = { id: response.data.id, endpoint, nativeModel: video.model };
       await context.onRemoteAccepted?.(remote);
       return { state: 'submitted', remote };
     },
     async poll(remote) {
-      const video = resources.video;
+      const video = [resources.video, ...(resources.video?.fallbackResources ?? [])].find(
+        (resource) =>
+          resource &&
+          (remote.nativeResourceId
+            ? resource.id === remote.nativeResourceId
+            : resource === resources.video),
+      );
       if (
         !video ||
         video.protocol !== 'seedance-native' ||
         !taskIdSchema.safeParse(remote.id).success ||
         remote.endpoint !== nativeEndpoint(video.baseUrl) ||
-        remote.nativeModel !== video.model
+        remote.nativeModel !== video.model ||
+        (remote.nativeResourceRevision &&
+          remote.nativeResourceRevision !== (video.executionRevision ?? video.revision))
       )
         throw new ProviderError('视频任务与当前配置不匹配，已停止查询，请核对原模型连接。', true);
       const response = statusSchema.safeParse(
-        await nativeProviderJson(`${remote.endpoint}/${encodeURIComponent(remote.id)}`, {
-          method: 'GET',
-          headers: { Authorization: `Bearer ${video.secret}` },
-          timeoutMs: 30000,
-        }),
+        await withExecutionResource(
+          {
+            id: video.id,
+            name: video.name ?? '首选资源',
+            kind: video.kind,
+            baseUrl: video.baseUrl,
+            model: video.model,
+            protocol: video.protocol,
+          },
+          () =>
+            nativeProviderJson(`${remote.endpoint}/${encodeURIComponent(remote.id)}`, {
+              method: 'GET',
+              headers: { Authorization: `Bearer ${video.secret}` },
+              timeoutMs: 30000,
+            }),
+        ),
       );
       if (!response.success || response.data.id !== remote.id)
         throw new ProviderError('视频查询结果与已保存任务不一致，请核对服务商记录。', true);

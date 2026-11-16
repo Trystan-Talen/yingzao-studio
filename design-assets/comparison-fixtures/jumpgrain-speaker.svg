@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="orange" x1="0" x2="1"><stop stop-color="#ff8b42"/><stop offset=".54" stop-color="#ff6b2b"/><stop offset="1" stop-color="#df471b"/></linearGradient>
+    <linearGradient id="grille" x1="0" x2="1" y2="1"><stop stop-color="#383b3f"/><stop offset="1" stop-color="#15181b"/></linearGradient>
+    <pattern id="holes" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="5" fill="#06080a"/><circle cx="12" cy="13" r="4" fill="#111416"/></pattern>
+    <filter id="shadow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="21"/></filter>
+  </defs>
+  <rect width="1200" height="1200" fill="#f5f5f3"/>
+  <g transform="translate(0 150) scale(1 .8)">
+  <ellipse cx="600" cy="963" rx="285" ry="40" fill="#202326" opacity=".17" filter="url(#shadow)"/>
+  <path d="M804 407 C1061 401 1052 117 873 180 C825 198 818 243 831 287" fill="none" stroke="#d0c9ae" stroke-width="35" stroke-linecap="round"/>
+  <path d="M804 407 C1061 401 1052 117 873 180 C825 198 818 243 831 287" fill="none" stroke="#f6efd9" stroke-width="21" stroke-linecap="round"/>
+  <path d="M345 313 Q345 276 390 269 L809 269 Q852 278 852 321 L852 852 Q852 902 808 916 L390 916 Q345 904 345 859 Z" fill="#f04f20"/>
+  <path d="M345 330 L852 330 L852 852 Q852 902 808 916 L390 916 Q345 904 345 859 Z" fill="url(#orange)"/>
+  <path d="M354 308 Q354 276 390 269 L809 269 Q843 276 843 308 Q609 346 354 308" fill="#ff9960"/>
+  <g fill="#26292d"><ellipse cx="500" cy="293" rx="24" ry="10"/><ellipse cx="598" cy="293" rx="24" ry="10"/><ellipse cx="696" cy="293" rx="24" ry="10"/></g>
+  <g stroke="#f7f3e8" stroke-width="3" stroke-linecap="round"><path d="M490 293 H510"/><path d="M592 290 L604 293 L592 296 Z" fill="#f7f3e8"/><path d="M686 293 H706 M696 288 V298"/></g>
+  <rect x="383" y="376" width="431" height="472" rx="35" fill="url(#grille)" stroke="#cf471f" stroke-width="5"/>
+  <rect x="401" y="394" width="395" height="436" rx="25" fill="url(#holes)"/>
+  <rect x="555" y="722" width="88" height="57" rx="15" fill="#ff6b2b"/>
+  <g fill="#fff2d8"><circle cx="578" cy="753" r="7"/><circle cx="599" cy="740" r="7"/><circle cx="620" cy="753" r="7"/></g>
+  </g>
+  <text x="62" y="1094" font-family="sans-serif" font-size="24" fill="#6e7377">跃粒 · 方糖便携音箱 · 虚构测试样品</text>
+  <text x="62" y="1135" font-family="sans-serif" font-size="19" fill="#969c9f">原创矢量示意图 · 非实物照片 · 图中文字不作为成品水印</text>
+</svg>

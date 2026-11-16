@@ -1,8 +1,11 @@
 import { lookup } from 'node:dns/promises';
 import { request } from 'node:https';
 import { isIP } from 'node:net';
+import { randomUUID } from 'node:crypto';
 import { isPublicAddress } from './http';
 import { ProviderError } from '../tasks/types';
+import { emitExecutionAttempt } from './execution-audit';
+import { isExplicitNativeNonExecution } from './native-rejection';
 
 export interface NativeJsonOptions {
   method?: string;
@@ -47,6 +50,28 @@ export async function nativeProviderJson(
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   timer.unref();
   let submitted = false;
+  const startedAt = Date.now();
+  const attemptId = randomUUID();
+  const action =
+    options.method === 'GET' ? 'poll' : options.method === 'DELETE' ? 'cancel' : 'submit';
+  const sensitiveValues = Object.values(options.headers ?? {}).flatMap((value) => [
+    value,
+    value.replace(/^Bearer\s+/i, ''),
+  ]);
+  let httpStatus: number | undefined;
+  let requestId: string | undefined;
+  let metadata: unknown;
+  const record = (event: Parameters<typeof emitExecutionAttempt>[0]) => {
+    try {
+      emitExecutionAttempt(event, sensitiveValues);
+    } catch {
+      throw new ProviderError(
+        '模型调用日志未能保存，请核对本次请求。',
+        submitted && options.submission === true,
+        'PROVIDER_AUDIT_FAILED',
+      );
+    }
+  };
   let abort!: () => void;
   const interrupted = new Promise<never>((_resolve, reject) => {
     abort = () =>
@@ -62,7 +87,8 @@ export async function nativeProviderJson(
     controller.signal.addEventListener('abort', abort, { once: true });
   });
   try {
-    return await Promise.race([
+    record({ attemptId, action, status: 'started' });
+    const result = await Promise.race([
       interrupted,
       (async () => {
         const family = isIP(hostname);
@@ -76,7 +102,6 @@ export async function nativeProviderJson(
         const pinned = addresses[0]!;
         const body = options.body === undefined ? undefined : JSON.stringify(options.body);
         const buffer = await new Promise<Buffer>((resolve, reject) => {
-          const maximum = 160 * 1024 * 1024;
           const req = request(
             url,
             {
@@ -91,39 +116,72 @@ export async function nativeProviderJson(
               },
             },
             (res) => {
-              res.on('error', () =>
+              let responseEnded = false;
+              const responseInterrupted = () =>
                 reject(
                   new ProviderError(
                     '模型服务响应中断，请核对本次请求。',
                     options.submission === true,
                     'PROVIDER_CONNECTION',
                   ),
-                ),
-              );
+                );
+              res.on('error', responseInterrupted);
+              res.once('aborted', responseInterrupted);
               const status = res.statusCode ?? 0;
-              if (status < 200 || status >= 300) {
+              httpStatus = status;
+              const upstreamRequestId =
+                res.headers['x-request-id'] ??
+                res.headers['request-id'] ??
+                res.headers['x-trace-id'];
+              requestId = typeof upstreamRequestId === 'string' ? upstreamRequestId : undefined;
+              const failed = status < 200 || status >= 300;
+              const maximum = failed ? 65536 : 160 * 1024 * 1024;
+              const rejection = (completeBody?: unknown) => {
+                if (
+                  options.submission === true &&
+                  action === 'submit' &&
+                  isExplicitNativeNonExecution(status, completeBody)
+                )
+                  return new ProviderError(
+                    '当前模型没有可用通道，服务商确认未执行本次请求。',
+                    false,
+                    'PROVIDER_NOT_EXECUTED',
+                  );
                 const ambiguous = Boolean(
                   options.submission && (status >= 500 || (status >= 300 && status < 400)),
                 );
-                reject(
-                  new ProviderError(
-                    status === 401 || status === 403
-                      ? '服务密钥无效或账户没有该模型权限。'
-                      : status === 429
-                        ? '服务商请求过于频繁，请稍后重试。'
-                        : status >= 300 && status < 400
-                          ? '模型服务要求跳转，已停止请求，请核对接口地址。'
-                          : `服务商返回错误（${status}）。`,
-                    ambiguous,
-                    `PROVIDER_HTTP_${status}`,
-                  ),
+                return new ProviderError(
+                  status === 401 || status === 403
+                    ? '服务密钥无效或账户没有该模型权限。'
+                    : status === 429
+                      ? '服务商请求过于频繁，请稍后重试。'
+                      : status >= 300 && status < 400
+                        ? '模型服务要求跳转，已停止请求，请核对接口地址。'
+                        : `服务商返回错误（${status}）。`,
+                  ambiguous,
+                  `PROVIDER_HTTP_${status}`,
                 );
-                res.destroy();
-                return;
-              }
+              };
+              // Once rejected, collect only a short bounded diagnostic body. A stalled
+              // error stream must not occupy the full image-generation deadline.
+              const errorBodyTimer = failed
+                ? setTimeout(() => {
+                    metadata = { bodyTruncated: true, contentType: res.headers['content-type'] };
+                    reject(rejection());
+                    res.destroy();
+                  }, 5000)
+                : undefined;
+              errorBodyTimer?.unref();
+              res.once('close', () => {
+                clearTimeout(errorBodyTimer);
+                if (!responseEnded) responseInterrupted();
+              });
               if (Number(res.headers['content-length'] || 0) > maximum) {
+                metadata = { bodyTruncated: true, contentType: res.headers['content-type'] };
                 reject(
-                  new ProviderError('模型服务响应超过大小限制。', options.submission === true),
+                  failed
+                    ? rejection()
+                    : new ProviderError('模型服务响应超过大小限制。', options.submission === true),
                 );
                 res.destroy();
                 return;
@@ -133,13 +191,35 @@ export async function nativeProviderJson(
               res.on('data', (chunk: Buffer) => {
                 size += chunk.length;
                 if (size > maximum) {
+                  metadata = { bodyTruncated: true, contentType: res.headers['content-type'] };
                   reject(
-                    new ProviderError('模型服务响应超过大小限制。', options.submission === true),
+                    failed
+                      ? rejection()
+                      : new ProviderError(
+                          '模型服务响应超过大小限制。',
+                          options.submission === true,
+                        ),
                   );
                   res.destroy();
                 } else chunks.push(chunk);
               });
-              res.on('end', () => resolve(Buffer.concat(chunks)));
+              res.on('end', () => {
+                responseEnded = true;
+                clearTimeout(errorBodyTimer);
+                if (res.complete === false || res.aborted === true) {
+                  responseInterrupted();
+                  return;
+                }
+                const response = Buffer.concat(chunks);
+                if (failed) {
+                  try {
+                    metadata = JSON.parse(response.toString('utf8')) as unknown;
+                  } catch {
+                    metadata = { bodyFormat: 'non-json', contentType: res.headers['content-type'] };
+                  }
+                  reject(rejection(metadata));
+                } else resolve(response);
+              });
             },
           );
           req.on('error', () =>
@@ -157,13 +237,47 @@ export async function nativeProviderJson(
           req.end(body);
         });
         try {
-          return JSON.parse(buffer.toString('utf8')) as unknown;
+          metadata = JSON.parse(buffer.toString('utf8')) as unknown;
+          return metadata;
         } catch {
           throw new ProviderError('模型服务返回无法解析的响应。', options.submission === true);
         }
       })(),
     ]);
+    const body =
+      result && typeof result === 'object' ? (result as Record<string, unknown>) : undefined;
+    const remoteId = typeof body?.id === 'string' ? body.id : undefined;
+    const status = body?.status;
+    record({
+      attemptId,
+      action,
+      status: ['failed', 'expired', 'cancelled'].includes(String(status))
+        ? 'failed'
+        : ['pending', 'queued', 'running', 'processing'].includes(String(status))
+          ? 'running'
+          : options.submission && remoteId && !body?.choices
+            ? 'submitted'
+            : 'succeeded',
+      httpStatus,
+      requestId,
+      remoteId,
+      metadata,
+      durationMs: Date.now() - startedAt,
+    });
+    return result;
   } catch (error) {
+    record({
+      attemptId,
+      action,
+      status: error instanceof ProviderError && error.ambiguous ? 'uncertain' : 'rejected',
+      httpStatus,
+      requestId,
+      metadata,
+      errorCode: error instanceof ProviderError ? error.code : 'PROVIDER_CONNECTION',
+      message:
+        error instanceof ProviderError ? error.message : '模型服务连接失败，请核对服务地址。',
+      durationMs: Date.now() - startedAt,
+    });
     if (error instanceof ProviderError) throw error;
     throw new ProviderError(
       '模型服务连接失败，请核对服务地址。',

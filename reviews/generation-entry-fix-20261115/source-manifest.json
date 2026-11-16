@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-11-15T14:37:36.053Z",
+  "files": [
+    {
+      "path": "src/server/tasks/model-capabilities.ts",
+      "sha256": "18625fbf629366a0ffd5942cd1cc069d4fd9c21bad41fcedfa24b2afc843505e"
+    },
+    {
+      "path": "src/web/components/ModelCapabilityStatus.tsx",
+      "sha256": "7525b11dce7f0bf6506e39732886e1b0767fa65027f61504df650712f28ba330"
+    },
+    {
+      "path": "src/web/components/JobSubmit.tsx",
+      "sha256": "e84dbcacc811eed6fae43b63c1cc982fbf9544c03ef18a36a2f359c415377eb7"
+    },
+    {
+      "path": "src/web/components/DemoModeGenerationNotice.tsx",
+      "sha256": "13839eedfedfd1f0b2bec9aa397d78d15aae29b5f43b6a1c640c9deec99374a5"
+    },
+    {
+      "path": "src/web/components/ModelConnections.tsx",
+      "sha256": "e422643d2976a35149ffd529aefd33075f97ab615ab67e08c22068a09ba06127"
+    },
+    {
+      "path": "src/web/components/Composer.tsx",
+      "sha256": "2c3934ef124c7ff22fa883204676bb2a9b9036fb4c3f63ebbaa3db9ed78c9560"
+    },
+    {
+      "path": "src/web/lib/model-selection.ts",
+      "sha256": "fa19e6ef8122d6d733e2b2483d22e213b1efa5ab2d62515b8a9a366f16d99566"
+    },
+    {
+      "path": "src/web/lib/model-directory-translations.ts",
+      "sha256": "61e3891e35d3212669b2778caa2ed402fa43dceba1a4ecb3d8dd8af8f268ac4b"
+    },
+    {
+      "path": "tests/model-capabilities.test.ts",
+      "sha256": "a4712537bf626d47030fd1f4bdb47ffc077f99e50517b72978c9147d959c0e0e"
+    },
+    {
+      "path": "tests/model-capability-ui.test.ts",
+      "sha256": "ee68867bc1eca9fa88ad86def02e41536a5595b58f008472c2c423749477350c"
+    },
+    {
+      "path": "tests/demo-mode-generation-notice.test.ts",
+      "sha256": "6cc619ac1ffc52cd23d23f27674226b6a19c93a9b58a1c37c07d4408586ecd74"
+    },
+    {
+      "path": "tests/e2e/model-connections.spec.ts",
+      "sha256": "2faedbd66d3fdd8cdf39ceb52e7dc97ef9f612a436a01a1d0094cea4c86d83f5"
+    }
+  ]
+}

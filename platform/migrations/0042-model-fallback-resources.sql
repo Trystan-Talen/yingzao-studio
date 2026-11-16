@@ -1,0 +1,22 @@
+CREATE TABLE model_connection_resources (
+  workspace_id TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK(kind IN ('text','image','video')),
+  id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  priority INTEGER NOT NULL,
+  protocol TEXT NOT NULL,
+  base_url TEXT NOT NULL,
+  models_url TEXT NOT NULL DEFAULT '',
+  model TEXT NOT NULL,
+  vision_model TEXT NOT NULL DEFAULT '',
+  encrypted_secret TEXT,
+  key_hint TEXT,
+  enabled INTEGER NOT NULL CHECK(enabled IN (0,1)),
+  revision TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  models_json TEXT NOT NULL DEFAULT '[]',
+  models_checked_at TEXT,
+  discovery_status TEXT NOT NULL DEFAULT 'never',
+  PRIMARY KEY(workspace_id,kind,id),
+  FOREIGN KEY(workspace_id,kind) REFERENCES model_connections(workspace_id,kind) ON DELETE CASCADE
+);

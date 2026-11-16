@@ -272,6 +272,109 @@ it('freezes actual visual evidence, strips client snapshots, and edits only the 
   const output = app.services.get(actor, wid, job.id).outputAssets[0]!;
   expect(output).toMatchObject({ kind: 'image', width: 2048, height: 2048 });
 });
+
+it('freezes selected brand and product text without adding their images to the two replica roles', async () => {
+  const unrelated = await app.services.core.assets.ingest(actor, wid, {
+    buffer: await sharp({ create: { width: 512, height: 512, channels: 3, background: '#0000ff' } })
+      .png()
+      .toBuffer(),
+    name: '品牌与产品资料图.png',
+    mimeType: 'image/png',
+  });
+  const brand = app.services.core.references.createBrand(actor, wid, {
+    name: '复刻测试品牌',
+    description: '原品牌青绿背景',
+    referenceAssetIds: [unrelated.id],
+  });
+  const product = app.services.core.knowledge.createProduct(actor, wid, {
+    name: '自己的商品',
+    facts: ['容量450毫升'],
+    brandId: brand.id,
+    referenceAssetIds: [unrelated.id],
+  });
+  const implementation = call.getMockImplementation()!;
+  call.mockImplementation(async (url, options) => {
+    const response = await implementation(url, options);
+    if ((options?.body as { model?: string })?.model === 'fixture-text') {
+      const envelope = response as { choices: { message: { content: string } }[] };
+      const plan = JSON.parse(envelope.choices[0]!.message.content);
+      plan.prompt += ' 使用原品牌青绿背景；自己的商品容量450毫升。';
+      envelope.choices[0]!.message.content = JSON.stringify(plan);
+    }
+    return response;
+  });
+  const raw = { ...input(), brandId: brand.id, productId: product.id };
+  const prepared = await prepare(raw);
+  expect(prepared.contextSources).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        kind: 'brand',
+        id: brand.id,
+        content: expect.stringContaining('原品牌青绿背景'),
+      }),
+      expect.objectContaining({
+        kind: 'product',
+        id: product.id,
+        content: expect.stringContaining('容量450毫升'),
+      }),
+    ]),
+  );
+  expect(prepared.referenceStudy?.evidence).toMatchObject({
+    referenceSha256: hash(reference.buffer),
+    subjectSha256: hash(subject.buffer),
+    audioAnalyzed: false,
+  });
+  const planning = call.mock.calls.find(
+    ([, options]) => (options?.body as { model?: string })?.model === 'fixture-text',
+  )!;
+  const messages = (planning[1]!.body as { messages: { content: string }[] }).messages;
+  const request = creativeIntentRequestSchema.parse(JSON.parse(messages[1]!.content));
+  expect(request.materials.map((material) => material.id)).toEqual([subject.id, reference.id]);
+  expect(request.sourceTexts).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ id: 'brand', text: expect.stringContaining('原品牌青绿背景') }),
+      expect.objectContaining({ text: expect.stringContaining('容量450毫升') }),
+    ]),
+  );
+  app.services.core.references.updateBrand(actor, wid, brand.id, {
+    description: '后来改为红色背景',
+  });
+  app.services.core.knowledge.updateProduct(actor, wid, product.id, {
+    expectedVersion: product.version,
+    facts: ['容量999毫升'],
+  });
+  const quotation = app.services.quote(actor, wid, prepared.input);
+  const job = app.services.submit(actor, wid, prepared.input, quotation.id, randomUUID());
+  await tick();
+  expect(app.services.get(actor, wid, job.id).status).toBe('succeeded');
+  const image = call.mock.calls.find(([url]) => url.endsWith('/images/generations'))!;
+  const body = image[1]!.body as { image: string[]; prompt: string };
+  expect(body.image).toHaveLength(1);
+  expect(Buffer.from(body.image[0]!.split(',')[1]!, 'base64')).toEqual(subject.buffer);
+  expect(body.prompt).toContain('原品牌青绿背景');
+  expect(body.prompt).toContain('容量450毫升');
+  expect(body.prompt).not.toMatch(/后来改为红色背景|容量999毫升/);
+});
+
+it('rejects mismatched brands and implicit product-image expansion before replica model calls', async () => {
+  const brand = app.services.core.references.createBrand(actor, wid, { name: '所属品牌' });
+  const other = app.services.core.references.createBrand(actor, wid, { name: '另一品牌' });
+  const product = app.services.core.knowledge.createProduct(actor, wid, {
+    name: '自己的商品',
+    brandId: brand.id,
+    referenceAssetIds: [subject.id],
+  });
+  await expect(
+    prepare({ ...input(), brandId: other.id, productId: product.id }),
+  ).rejects.toMatchObject({ code: 'PRODUCT_BRAND_CONFLICT' });
+  await expect(
+    prepare({ ...input(), brandId: brand.id, productId: product.id, includeProductImages: true }),
+  ).rejects.toMatchObject({ code: 'REPLICA_INPUT_INVALID' });
+  await expect(prepare({ ...input(), brandId: randomUUID() })).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  expect(call).not.toHaveBeenCalled();
+});
 it('retains two-image execution for a previously frozen replica without a new rendering strategy', async () => {
   const prepared = await prepare();
   const input = frozen(prepared.id);

@@ -139,6 +139,8 @@ export const jobInputSchema = z
     replica: replicaInputSchema.optional(),
     nativeReplica: nativeReplicaSchema.optional(),
     creativeBriefId: z.string().uuid().optional(),
+    /** Omitted legacy inputs keep assisted planning and their existing fingerprints. */
+    planningMode: z.enum(['assisted', 'direct']).optional(),
     projectId: z.string().uuid().optional(),
     documentId: z.string().uuid().optional(),
     baseRevision: z.number().int().positive().optional(),
@@ -277,6 +279,8 @@ export interface ModelCapability {
   };
 }
 export interface OperationCapability {
+  planningAvailable?: boolean;
+  planningReason?: string | null;
   replicaAvailable?: boolean;
   replicaReason?: string | null;
   inputMode?: 'text-only';

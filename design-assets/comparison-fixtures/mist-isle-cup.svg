@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="body" x1="0" x2="1"><stop stop-color="#d8d4c8"/><stop offset=".36" stop-color="#f4f0e4"/><stop offset=".72" stop-color="#ede8da"/><stop offset="1" stop-color="#c8c5b8"/></linearGradient>
+    <linearGradient id="lid" x1="0" x2="1"><stop stop-color="#536950"/><stop offset=".5" stop-color="#8c9b7c"/><stop offset="1" stop-color="#52674d"/></linearGradient>
+    <filter id="shadow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1200" height="1200" fill="#f7f6f2"/>
+  <ellipse cx="610" cy="1000" rx="226" ry="34" fill="#28382a" opacity=".15" filter="url(#shadow)"/>
+  <path d="M754 242 C932 246 926 480 788 506" fill="none" stroke="#4e654d" stroke-width="38" stroke-linecap="round"/>
+  <path d="M755 243 C890 262 884 449 785 477" fill="none" stroke="#879878" stroke-width="12" stroke-linecap="round"/>
+  <path d="M412 320 L788 320 L774 930 Q770 983 720 990 L480 990 Q430 983 426 930 Z" fill="url(#body)" stroke="#c9c5b9" stroke-width="3"/>
+  <ellipse cx="600" cy="321" rx="188" ry="35" fill="#ebe7d9"/>
+  <path d="M410 242 Q410 209 443 202 L757 202 Q790 209 790 242 L790 326 Q600 367 410 326 Z" fill="url(#lid)" stroke="#627659" stroke-width="3"/>
+  <ellipse cx="600" cy="205" rx="157" ry="26" fill="#91a181"/>
+  <path d="M417 298 Q600 329 783 298" fill="none" stroke="#334e39" stroke-opacity=".42" stroke-width="4"/>
+  <path d="M449 392 L459 900" stroke="#fffdf6" opacity=".42" stroke-width="11" stroke-linecap="round"/>
+  <g fill="none" stroke="#6f8168" stroke-width="7" stroke-linecap="round"><path d="M556 665 Q580 624 604 665 Q625 701 649 658"/><path d="M555 687 Q603 721 650 688"/></g>
+  <text x="600" y="771" text-anchor="middle" font-family="sans-serif" font-size="28" letter-spacing="3" fill="#6f8168">450毫升</text>
+  <text x="62" y="1094" font-family="sans-serif" font-size="24" fill="#7c8377">雾屿 · 岩白随行杯 · 虚构测试样品</text>
+  <text x="62" y="1135" font-family="sans-serif" font-size="19" fill="#969c92">原创矢量示意图 · 非实物照片 · 图中文字不作为成品水印</text>
+</svg>

@@ -20,7 +20,11 @@ import { ProviderError } from './types';
 import { createModelCapabilityService } from './model-capabilities';
 import { createModelConnectionsService } from './model-connections';
 import { nativeImageModel, nativeVideoModel, validateNativeInput } from '../providers/native';
-import { frozenCreativeContext, frozenNativeImageEdit } from './creative-briefs';
+import {
+  approvedCreativePrompt,
+  frozenCreativeContext,
+  frozenNativeImageEdit,
+} from './creative-briefs';
 interface Setting {
   provider_id: ProviderId;
   encrypted_secret: string | null;
@@ -181,6 +185,14 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
     return list(wid).find((p) => p.providerId === input.providerId)!;
   }
   function capabilities(wid: string): CapabilitiesDto {
+    // Capability discovery uses metadata, never decrypts unrelated planner credentials.
+    const configuredConnection = (kind: 'text' | 'image' | 'video') => {
+      const connection = connections.get(wid, kind);
+      return connection.configured && connection.enabled ? connection : undefined;
+    };
+    const image = configuredConnection('image');
+    const video = configuredConnection('video');
+    const text = configuredConnection('text');
     const providers = PROVIDERS.map((p) => ({
       ...p,
       name:
@@ -188,10 +200,7 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
           ? 'Seedream（豆包生图）'
           : p.name,
       configured:
-        p.id === 'local' ||
-        (p.id === 'native'
-          ? Boolean(connections.runtime(wid, 'text') && connections.runtime(wid, 'image'))
-          : Boolean(secret(wid, p.id))),
+        p.id === 'local' || (p.id === 'native' ? Boolean(image) : Boolean(secret(wid, p.id))),
     }));
     const operations: OperationCapability[] = [];
     const add = (
@@ -243,9 +252,6 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
           : {}),
       });
     };
-    const image = connections.runtime(wid, 'image');
-    const video = connections.runtime(wid, 'video');
-    const text = connections.runtime(wid, 'text');
     add(
       'image.generate',
       'native',
@@ -254,9 +260,9 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       'image',
       config.demoMode
         ? '演示模式不调用自定义模型，请在正式模式配置并生成'
-        : text && image
+        : image
           ? null
-          : '请在模型配置中启用文本与图片服务',
+          : '请在模型配置中启用图片服务',
     );
     add(
       'video.generate',
@@ -268,12 +274,14 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
         ? '演示模式不调用自定义模型，请在正式模式配置并生成'
         : !ffmpeg || !ffprobe
           ? '请先安装 FFmpeg（媒体处理工具）与 ffprobe（媒体探测工具），再生成视频'
-          : text && image && video
+          : image && video
             ? null
-            : '请在模型配置中启用文本、图片与视频服务',
+            : '请在模型配置中启用图片与视频服务',
     );
     for (const operation of operations) {
       if (operation.providerId === 'native') {
+        operation.planningAvailable = Boolean(text);
+        operation.planningReason = text ? null : '思考模式需要文本服务；可关闭思考模式直接生成。';
         operation.maxCount = 1;
         operation.replicaReason = !operation.available
           ? operation.reason
@@ -584,13 +592,16 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
       throw new AppError(503, 'CAPABILITY_UNAVAILABLE', c?.reason || '此服务不支持所选操作');
     try {
       if (input.providerId === 'native') {
+        if (input.planningMode !== 'direct' && !c.planningAvailable)
+          throw new AppError(503, 'CREATIVE_PLANNER_UNAVAILABLE', c.planningReason!);
         validateNativeInput(input, {
           image: connections.runtime(wid, 'image'),
-          video: connections.runtime(wid, 'video'),
+          video:
+            input.operation === 'video.generate' ? connections.runtime(wid, 'video') : undefined,
         });
         if (
           input.nativeRevision &&
-          input.nativeRevision !== connections.revision(wid, input.operation)
+          input.nativeRevision !== connections.revision(wid, input.operation, input.planningMode)
         )
           throw new AppError(
             409,
@@ -599,8 +610,31 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
           );
       }
       if (input.providerId === 'seedance') validateSeedanceInput(input);
-      if (input.providerId === 'openai' && config.imageGateway)
-        validateImageGatewayInput(input, config.imageGateway);
+      if (input.providerId === 'openai' && config.imageGateway) {
+        let gatewayInput = input;
+        if (actor && input.creativeBriefId) {
+          const prompt = approvedCreativePrompt(db, actor, wid, input);
+          const context = frozenCreativeContext(db, actor, wid, input);
+          if (prompt && context)
+            gatewayInput = {
+              ...input,
+              prompt,
+              brandId: undefined,
+              characterId: undefined,
+              referenceAssetIds: [
+                ...new Set([
+                  ...input.referenceAssetIds,
+                  ...context.materials
+                    .filter(
+                      (material) => material.kind === 'image' && material.role === 'reference',
+                    )
+                    .map((material) => material.id),
+                ]),
+              ],
+            };
+        }
+        validateImageGatewayInput(gatewayInput, config.imageGateway);
+      }
       if (
         input.providerId === 'dify' &&
         (!['ideas', 'detail-page'].includes(input.options.assistantMode) ||
@@ -644,7 +678,7 @@ export function createSettingsService(db: DatabaseContext, config: AppConfig) {
     secret,
     capabilities,
     configurationRevision: (wid, provider, operation) =>
-      provider === 'native' ? connections.revision(wid, operation) : '',
+      provider === 'native' ? connections.revision(wid, operation, 'direct') : '',
   });
   return {
     secret,

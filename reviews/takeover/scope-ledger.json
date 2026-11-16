@@ -1,7 +1,142 @@
 {
   "schemaVersion": 1,
   "recordedDate": "2026-10-16",
-  "phase": "全项目完整复查完成：最终冻结源码156文件2394项单元／集成，全部72文件510项浏览器（桌面252、手机252、笔记本5、平板1），均零失败／跳过／重试；生产构建及隔离运行通过。真实外部效果与原未实现／范围未知项保留。",
+  "phase": "品牌／产品与思考开关已在主创作区常显，关闭思考直接生成；两品牌两产品按用户后续明确要求已导入当前登录账号原空间（5176入口），保留对比测试标记，既有记录与媒体保持。功能验收及当前账号导入增量分别记录。",
+  "latestCapabilityExpirationRepair": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/capability-expiry-fix-20261115/DELIVERY.md",
+    "rootCauses": [
+      "模型信息5分钟到期后只重算禁用状态，没有自动续期",
+      "首页样式隐藏阻塞原因与重试入口"
+    ],
+    "verification": {
+      "unitFiles": 158,
+      "unitPassed": 2429,
+      "browserDesktopPassed": 20,
+      "browserMobilePassed": 20,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "webBuild": true,
+      "serverBuild": true,
+      "isolatedRuntime": true,
+      "qualityEvidence": "platform/var/quality/run-kN06Pt",
+      "browserEvidence": "platform/var/e2e/run-CEPk9m",
+      "stageRunsNotSummed": true,
+      "changedFileHashesUnchanged": 7
+    },
+    "localObservation": {
+      "baselineAt": "2026-11-15T15:01:44.198Z",
+      "observedAt": "2026-11-15T15:07:16.333Z",
+      "elapsedMs": 332135,
+      "generateEnabled": true,
+      "promptPreserved": true,
+      "pageReloadedDuringWindow": false,
+      "evidence": "platform/var/capability-expiry-fix-20261115/live-final-after-expiry.json"
+    },
+    "boundaries": [
+      "本轮只修改前端与回归测试，运行数据库、配置、密码及媒体不变，未重启服务",
+      "浏览器点击验证在准备接口拦截，未创建报价或生成任务",
+      "未调用真实收费模型，不代表真实中转站生图验收",
+      "较早后台快照不能证明标签页实际激活；该次过期观察保留，不归因于单一事件",
+      "未推送、合并或上线"
+    ]
+  },
+  "latestGenerationEntryRepair": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/generation-entry-fix-20261115/DELIVERY.md",
+    "rootCauses": [
+      "本机演示运行模式禁止自定义生成，实际原因却被覆盖为未配置",
+      "草稿保留旧图片型号，首页未显示有效恢复入口"
+    ],
+    "verification": {
+      "unitFiles": 157,
+      "unitPassed": 2419,
+      "browserDesktopPassed": 16,
+      "browserMobilePassed": 16,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "webBuild": true,
+      "serverBuild": true,
+      "isolatedRuntime": true,
+      "qualityEvidence": "platform/var/quality/run-K0eAHn",
+      "browserEvidence": "platform/var/e2e/run-cPQWhX",
+      "stageRunsNotSummed": true
+    },
+    "localRepair": {
+      "onlineBackupAndRestoreVerified": true,
+      "changedConnectionKinds": [
+        "image"
+      ],
+      "retainedJobs": 52,
+      "retainedAssets": 123,
+      "retainedMediaVariants": 341,
+      "unchangedMediaFiles": 341,
+      "passwordUnchanged": true,
+      "creditsUnchanged": true,
+      "apiRestarted": true,
+      "browserGenerateEnabled": true
+    },
+    "boundaries": [
+      "真实生成入口仍位于本机，不是线上部署",
+      "未调用收费模型；隔离完整链路使用模拟上游",
+      "图片配置同步也用于以后新建视频的首帧",
+      "原账户密码由用户自行输入，未重置",
+      "未推送、合并或上线"
+    ]
+  },
+  "latestModelSelectionFeedback": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/model-directory-auto-20261115/INTERACTION-FIX.md",
+    "observedDirectoryCount": 41,
+    "verification": {
+      "unitFiles": 2,
+      "unitPassed": 26,
+      "browserDesktopPassed": 12,
+      "browserMobilePassed": 12,
+      "additionalVisualPassed": 4,
+      "stageRunsNotSummed": true,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "webBuild": true,
+      "browserEvidence": "platform/var/e2e/run-IJB4lX",
+      "visualEvidence": "platform/var/e2e/run-brKaqM"
+    },
+    "boundaries": [
+      "只读观察真实页面已有目录，不代表真实生图验收通过",
+      "自动化使用模拟目录，无真实生成或收费调用",
+      "界面热更新重置未保存图片草稿，已告知用户重填；已保存配置未变"
+    ]
+  },
+  "latestAutomaticModelDiscovery": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/model-directory-auto-20261115/DELIVERY.md",
+    "features": [
+      "填写服务地址与密钥后600毫秒自动预览模型目录",
+      "读取不保存草稿、不启用服务、不创建生成任务",
+      "切换地址、密钥与用途时隔离旧结果，支持手动填写和重试",
+      "管理员权限、同源目录及已保存密钥的站点约束"
+    ],
+    "verification": {
+      "unitFiles": 156,
+      "unitPassed": 2398,
+      "browserDesktopPassed": 9,
+      "browserMobilePassed": 9,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "webBuild": true,
+      "qualityEvidence": "platform/var/quality/run-XAP86q",
+      "browserEvidence": "platform/var/e2e/run-UfpR1a"
+    },
+    "boundaries": [
+      "本轮目录响应为模拟，未新增真实供应商或收费模型调用",
+      "视频目录须显式填写；未提供兼容目录时手动指定模型",
+      "未修改正式库、媒体、服务或部署；未新增依赖或迁移"
+    ]
+  },
   "latestCreativeKnowledgeRecheck": {
     "recordedAt": "2026-11-14T04:04:27.426736+00:00",
     "unitTests": {
@@ -7340,5 +7475,196 @@
     "stageRunsNotSummed": true,
     "report": "reviews/project-full-review-20261114/DELIVERY.md",
     "evidenceRoot": "reviews/project-full-review-20261114/evidence"
+  },
+  "latestTaskResourceRepair": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/task-resource-repair-20261115/DELIVERY.md",
+    "runtimeApplied": true,
+    "approvalPending": false,
+    "verification": {
+      "unitFiles": 160,
+      "unitPassed": 2467,
+      "qualityEvidence": "platform/var/quality/run-HSR1L6",
+      "browserInitialPassed": 86,
+      "browserInitialFailed": 2,
+      "browserInitialEvidence": "platform/var/e2e/run-C8j8NC",
+      "browserFixtureCorrectedPassed": 4,
+      "browserFixtureCorrectedEvidence": "platform/var/e2e/run-CXxtQQ",
+      "browserUniqueCoverage": 88,
+      "stageRunsNotSummed": true,
+      "sourceManifestFiles": 647
+    },
+    "recoveryBackupVerified": true,
+    "queuedTaskCountObserved": 1,
+    "queuedTaskCredits": 33,
+    "realModelCallsThisTurn": 2,
+    "boundaries": [
+      "当前链路本地编排，直接调用外部模型，未经过Dify",
+      "只恢复用户已授权的原任务，图片首帧与视频各提交1次，无新任务或文本规划",
+      "两条历史503已后续核对服务商原始日志，确认无可用通道且未生成，标记失败、释放16积分，未重发",
+      "备用资源尚需填写实际连接；供应商现金账单未逐项核对",
+      "Dify原始HTTP元数据未全部采集，只明确记录实际调用阶段",
+      "未推送、合并或上线"
+    ],
+    "userAuthorizedResume": true,
+    "runtimeEvidence": "platform/var/task-resource-repair-20261115/restart-result.json",
+    "runtimeState": "原视频已成功，首帧与成片保存及浏览器播放通过",
+    "runtimeFinalEvidence": "platform/var/task-resource-repair-20261115/runtime-final.json",
+    "preservationEvidence": "platform/var/task-resource-repair-20261115/preservation-final.json",
+    "settledCredits": 33,
+    "video": {
+      "width": 1280,
+      "height": 720,
+      "durationMs": 5042,
+      "byteSize": 1714226,
+      "decodePassed": true,
+      "browserPlaybackPassed": true
+    },
+    "preservedOriginalMediaFiles": 341,
+    "oldUncertainImagesResubmitted": false
+  },
+  "latestImageReconciliation": {
+    "recordedDate": "2026-11-15",
+    "userAuthorized": true,
+    "jobIds": [
+      "66558558-0120-4a2b-b132-af0c3e27b2ef",
+      "d64675c8-6554-4536-8fad-2a4c32a65a53"
+    ],
+    "upstreamSource": "https://vip.yinli.one/usage-logs/common",
+    "evidenceBasis": "同令牌及型号、请求编号时间在本机调用窗口内；上游明确分组无可用模型通道、两条费用均0、当日日志无对应成功重试",
+    "outcome": "failed",
+    "releasedCredits": 16,
+    "reservedCreditsBefore": 16,
+    "reservedCreditsAfter": 0,
+    "availableCreditsBefore": 501,
+    "availableCreditsAfter": 517,
+    "backupAndRestoreVerified": true,
+    "auditEvidenceSaved": true,
+    "newGenerationRequests": 0,
+    "evidenceRoot": "platform/var/image-reconciliation-20261115",
+    "browserEvidence": "platform/var/image-reconciliation-20261115/local-final.png",
+    "verification": "现成失败核对隔离回归1项通过（5项非目标未运行）；真实界面已确认两条终态和517可用积分；详细数据库核验见verification-final.json"
+  },
+  "latestExplicitRejectionRepair": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/explicit-rejection-20261115/DELIVERY.md",
+    "runtimeApplied": true,
+    "runtimeEvidence": "platform/var/explicit-rejection-20261115/restart-result.json",
+    "behavior": [
+      "完整已知无通道提交拒绝按已启用备用顺序切换",
+      "无备用或所有资源明确拒绝时失败且仅释放一次预留",
+      "普通503、响应中断、受理编号及冲突元数据继续待核对",
+      "已受理视频只查询原任务，不因轮询失败重新提交"
+    ],
+    "verification": {
+      "targetedPassed": 78,
+      "unitFiles": 162,
+      "unitPassed": 2525,
+      "qualityEvidence": "platform/var/quality/run-hET6T5",
+      "browserPassed": 8,
+      "browserFullSuite": false,
+      "browserEvidence": "platform/var/e2e/run-M9iBgo",
+      "typecheckAfterConcurrentUiChange": true,
+      "changedTaskFilesUnchanged": 5,
+      "backendManifestUnchanged": true,
+      "concurrentUiFinalFreezeClaimed": false,
+      "postRestartDataChecksPassed": 21
+    },
+    "existingTaskReconciliation": {
+      "jobIds": [
+        "5d651039-2799-42bd-b43e-035d3068df72",
+        "c7ca56dd-885e-45da-a34f-a01e2ca5416c"
+      ],
+      "evidenceBasis": "服务商原始详情的请求编号与本机记录精确匹配，明确无可用通道且费用0",
+      "outcome": "failed",
+      "releasedCredits": 16,
+      "availableBefore": 485,
+      "availableAfter": 501,
+      "reservedAfter": 0,
+      "remainingUncertain": 0,
+      "manualHistoricalReconciliation": true,
+      "backupAndIndependentRestoreVerified": true,
+      "verifiedOriginalMediaCount": 351,
+      "totalJobsUnchanged": 59,
+      "newGenerationRequests": 0
+    },
+    "boundaries": [
+      "本轮仅模拟底层网络验证完整适配器、执行器、数据库、积分及产物链路，未新增付费模型调用",
+      "并行品牌产品工作修改两份界面组件及外观测试，不扩大为其最终界面验收",
+      "未新增依赖或数据库迁移，未推送或上线"
+    ]
+  },
+  "latestCreationLoop": {
+    "recordedDate": "2026-11-15",
+    "delivery": "reviews/creation-loop-20261115/DELIVERY.md",
+    "modes": [
+      "assisted",
+      "direct"
+    ],
+    "samples": {
+      "brands": 2,
+      "products": 2,
+      "referenceImages": 2,
+      "isolatedOrigin": "http://127.0.0.1:5188",
+      "realModelCalls": 0,
+      "currentOrigin": "http://127.0.0.1:5176",
+      "destination": "用户明确选择当前登录账号的原个人空间"
+    },
+    "verification": {
+      "unitFiles": 162,
+      "unitPassed": 2525,
+      "qualityEvidence": "platform/var/quality/run-9JUnDh",
+      "browserBaseline": {
+        "total": 74,
+        "passed": 71,
+        "legacyMobileAssertionsFailed": 3,
+        "evidence": "platform/var/e2e/run-kE4VZ0"
+      },
+      "browserAssertionRecovery": {
+        "passed": 6,
+        "evidence": "platform/var/e2e/run-CamtuB"
+      },
+      "browserFinalIncrement": {
+        "passed": 12,
+        "evidence": "platform/var/e2e/run-8jA0A2"
+      },
+      "stagesNotSummed": true,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "webBuild": true,
+      "serverBuild": true,
+      "isolatedRuntime": true,
+      "originalTablesUnchanged": 110,
+      "originalMediaUnchanged": 351,
+      "sourceManifest": "reviews/creation-loop-20261115/source-manifest.json",
+      "lateBrowserAssertionOnly": "platform/tests/e2e/home-appearance.spec.ts"
+    },
+    "boundaries": [
+      "单项图片／视频；参考复刻、精确蒙版、分组方案仍需思考",
+      "视频仍需图片和视频连接；新首帧可能产生图片费用",
+      "对比样例是虚构资料与原创矢量示意，未进行收费生成或真实效果评估",
+      "未推送、合并或公网部署"
+    ],
+    "currentAccountImport": {
+      "recordedDate": "2026-11-15",
+      "explicitUserChoice": true,
+      "backupRestoreVerified": true,
+      "brands": 2,
+      "products": 2,
+      "assets": 2,
+      "variants": 6,
+      "auditEvents": 7,
+      "originalTablesRowsPreserved": 110,
+      "originalMediaPreserved": 351,
+      "targetedTestsPassed": 5,
+      "typecheck": true,
+      "lint": true,
+      "format": true,
+      "fullSuiteRerun": false,
+      "realModelCalls": 0,
+      "browserSelectionVerified": true,
+      "privateEvidence": "platform/var/account-samples-20261115"
+    }
   }
 }

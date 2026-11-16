@@ -346,6 +346,45 @@ it('rejects a configuration changed while the planning response was pending', as
     state: 'failed',
   });
 });
+
+it.each(['permission', 'text-configuration', 'image-configuration'] as const)(
+  'rechecks %s before a planning fallback can submit a second request',
+  async (change) => {
+    let submitted = 0;
+    analyze.mockImplementation(async (request, _connection, options) => {
+      submitted++;
+      if (change === 'permission')
+        app.services.db.sqlite
+          .prepare("UPDATE memberships SET role='viewer' WHERE workspace_id=? AND user_id=?")
+          .run(wid, actor.userId);
+      else
+        app.services.settings.connections.update(wid, {
+          kind: change === 'text-configuration' ? 'text' : 'image',
+          protocol: change === 'text-configuration' ? 'openai-chat' : 'seedream-images',
+          baseUrl: 'https://changed.example/v1',
+          modelsUrl: '',
+          model: change === 'text-configuration' ? 'text-fixture' : 'image-fixture',
+          enabled: true,
+          secret: 'changed-fixture-key',
+        });
+      expect(options?.beforeFallback).toBeTypeOf('function');
+      options?.beforeFallback?.();
+      submitted++;
+      return result(request);
+    });
+    await expect(prepare()).rejects.toThrow(
+      change === 'permission' ? '当前角色无权执行此操作' : '模型配置已变更',
+    );
+    expect(submitted).toBe(1);
+    const records = app.services.db.sqlite
+      .prepare('SELECT event_json FROM brief_execution_logs')
+      .all() as { event_json: string }[];
+    expect(records.map((record) => JSON.parse(record.event_json).status)).toEqual([
+      'started',
+      'failed',
+    ]);
+  },
+);
 it('requires both local video tools before charging for text planning', async () => {
   vi.mocked(hasFfprobe).mockReturnValue(false);
   const guarded = await createApp(config, { serveWeb: false });

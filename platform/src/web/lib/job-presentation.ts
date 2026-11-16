@@ -90,8 +90,11 @@ export function presentJob(job: Job): JobPresentation {
   if (job.status === 'queued')
     return {
       ...base,
-      title: '任务已提交，等待处理',
-      description: '已保存本次需求，开始处理后会自动更新。',
+      title: '任务已提交，等待执行器',
+      description:
+        job.providerId === 'local'
+          ? '已保存在本机队列，尚未开始处理素材。无需重复提交。'
+          : '已保存在本机队列，尚未开始生成。无需重复提交。',
       step: 0,
       tone: 'active',
       animated: true,

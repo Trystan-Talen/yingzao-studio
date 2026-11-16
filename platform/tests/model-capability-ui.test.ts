@@ -106,6 +106,24 @@ describe('model capability boundaries', () => {
       resolveModelSelection([operation], 'video.generate:fal', 'retired').model,
     ).toBeUndefined();
   });
+  it('offers a replacement for a retired draft model without changing the active selection', () => {
+    const selection = resolveModelSelection([operation], 'video.generate:fal', 'retired');
+    expect(selection).toMatchObject({ model: undefined, replacementModel: model });
+    expect(resolveModelSelection([operation], 'video.generate:fal', model.id)).toMatchObject({
+      model,
+      replacementModel: undefined,
+    });
+  });
+  it('never offers another provider or an unavailable service as a draft-model replacement', () => {
+    expect(resolveModelSelection([operation], 'video.generate:native', 'retired')).toMatchObject({
+      operation: undefined,
+      model: undefined,
+      replacementModel: undefined,
+    });
+    expect(
+      resolveModelSelection([{ ...operation, available: false }], 'video.generate:fal', 'retired'),
+    ).toMatchObject({ model: undefined, replacementModel: undefined });
+  });
   it('requires re-quoting changed creative settings while allowing project creation during preparation', () => {
     const input = jobInput({
       operation: 'video.generate',
@@ -260,6 +278,24 @@ describe('model capability boundaries', () => {
     unsubscribe();
     client.clear();
   });
+  it.each(['演示模式不调用自定义模型，请在正式模式配置并生成', '请在模型配置中启用文本与图片服务'])(
+    'shows the actual unavailable-model reason: %s',
+    (reason) => {
+      const state = {
+        data: dto({ canGenerate: false, reasonCode: 'NOT_CONFIGURED', reason }),
+        canGenerate: false,
+        canRefresh: true,
+        fixedOptions: {},
+        refresh: vi.fn(),
+        isFetching: false,
+      } as unknown as ModelCapabilityState;
+      const html = renderToStaticMarkup(
+        createElement(ModelCapabilityStatus, { capability: state }),
+      );
+      expect(html).toContain(reason);
+      expect(html).not.toContain('请在设置中连接服务');
+    },
+  );
   it.each(['en', 'ar'] as const)('localizes status and parameter failures in %s', (locale) => {
     setLocale(locale);
     for (const key of Object.keys(MODEL_CAPABILITY_TRANSLATIONS)) {

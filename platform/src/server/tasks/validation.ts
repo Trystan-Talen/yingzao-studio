@@ -51,7 +51,6 @@ export function validateInput(
       i.assetIds[0] !== intent.subjectAssetId ||
       i.referenceAssetIds.length !== 1 ||
       i.referenceAssetIds[0] !== intent.referenceAssetId ||
-      i.brandId ||
       i.includeProductImages ||
       i.characterId ||
       i.maskAssetId ||

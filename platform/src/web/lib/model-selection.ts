@@ -31,5 +31,8 @@ export function resolveModelSelection(
   const model = modelId
     ? operation?.models.find((item) => item.id === modelId)
     : operation?.models[0];
-  return { operation, model };
+  // A changed configuration is a recovery choice, never an automatic provider switch.
+  const replacementModel =
+    modelId && !model && operation?.available ? operation.models[0] : undefined;
+  return { operation, model, replacementModel };
 }

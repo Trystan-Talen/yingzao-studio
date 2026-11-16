@@ -1,5 +1,6 @@
 import { channelForActor, type BillingChannel } from '../../contracts/billing-channel';
 import { registerInspirationRoutes } from './inspirations';
+import { registerExecutionLogRoutes } from './execution-logs';
 import JSZip from 'jszip';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { createHash, randomUUID } from 'node:crypto';
@@ -13,6 +14,7 @@ import { createLocalTestCreditService } from './local-test-credits';
 import {
   modelConnectionInputSchema,
   modelConnectionKindSchema,
+  modelDiscoveryInputSchema,
 } from '../../contracts/model-connections';
 import { capabilityInputMode } from './model-capabilities';
 import {
@@ -65,6 +67,7 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
   registerDetailPageRoutes(app, s, access);
   registerCreativeBriefRoutes(app, s, access);
   registerBackgroundReviewRoutes(app, s, access);
+  registerExecutionLogRoutes(app, s, access);
   const page = (items: unknown[]) => ({
     items,
     total: items.length,
@@ -126,6 +129,23 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     },
   );
   app.post(
+    '/api/v1/model-connections/discover',
+    {
+      schema: { body: modelDiscoveryInputSchema },
+      config: { rateLimit: { max: 30, timeWindow: '1 minute' } },
+    },
+    async (req, reply) => {
+      const { actor, wid } = await access(req, 'manage');
+      const result = await s.settings.connections.previewModels(
+        wid,
+        modelDiscoveryInputSchema.parse(req.body),
+      );
+      core.requireAccess(actor, wid, 'manage');
+      reply.header('Cache-Control', 'private, no-store');
+      return response(result);
+    },
+  );
+  app.post(
     '/api/v1/model-connections/:kind/models',
     {
       schema: { params: z.object({ kind: modelConnectionKindSchema }) },
@@ -134,7 +154,16 @@ export async function registerTaskRoutes(app: FastifyInstance, s: TaskServices) 
     async (req, reply) => {
       const { actor, wid } = await access(req, 'manage');
       const { kind } = z.object({ kind: modelConnectionKindSchema }).parse(req.params);
-      const result = await s.settings.connections.refreshModels(wid, kind);
+      const { resourceId } = z
+        .object({
+          resourceId: z
+            .string()
+            .regex(/^[A-Za-z0-9_-]{1,64}$/)
+            .optional(),
+        })
+        .strict()
+        .parse(req.body ?? {});
+      const result = await s.settings.connections.refreshModels(wid, kind, resourceId);
       core.requireAccess(actor, wid, 'manage');
       reply.header('Cache-Control', 'private, no-store');
       return response(result);

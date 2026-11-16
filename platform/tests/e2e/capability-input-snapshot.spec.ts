@@ -56,12 +56,9 @@ for (const scenario of ['brand', 'document', 'design-module'] as const) {
     let referenceId = account.reference.id;
     const documentText = '产品：植物精华。容量：30毫升。卖点：轻盈质地和透明玻璃瓶。';
     if (scenario === 'brand') {
-      await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
-      await settings.getByText('更多偏好', { exact: true }).click();
-      await settings
+      await composer
         .getByRole('combobox', { name: '参考品牌', exact: true })
         .selectOption(brandId!);
-      await settings.getByRole('button', { name: '完成', exact: true }).click();
     } else if (scenario === 'document') {
       await composer.getByRole('button', { name: '添加素材', exact: true }).click();
       const picker = page.getByRole('dialog', { name: '参考图片、视频或文档', exact: true });

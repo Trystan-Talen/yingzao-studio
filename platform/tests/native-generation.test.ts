@@ -112,6 +112,52 @@ function context(kind: 'image' | 'video' = 'video'): ExecutionContext {
 }
 
 describe('native planning', () => {
+  it('stops a text fallback when the caller revokes its authorization between attempts', async () => {
+    call.mockRejectedValue(new ProviderError('拒绝', false, 'PROVIDER_HTTP_403'));
+    const primary = {
+      ...image,
+      protocol: 'openai-chat',
+      fallbackResources: [{ ...image, id: 'backup-text', protocol: 'openai-chat' }],
+    };
+    await expect(
+      analyzeNativeIntent(request(), primary, {
+        beforeFallback: () => {
+          throw new ProviderError('配置或权限已改变');
+        },
+      }),
+    ).rejects.toThrow('配置或权限已改变');
+    expect(call).toHaveBeenCalledTimes(1);
+  });
+  it('uses the configured text fallback only after a definite refusal', async () => {
+    const input = request();
+    const expected = simulateCreativeIntent(input);
+    call
+      .mockRejectedValueOnce(new ProviderError('拒绝', false, 'PROVIDER_HTTP_403'))
+      .mockResolvedValueOnce(response(expected));
+    const primary = {
+      ...image,
+      protocol: 'openai-chat',
+      fallbackResources: [
+        {
+          ...image,
+          id: 'backup-text',
+          protocol: 'openai-chat',
+          baseUrl: 'https://backup.example/v1',
+          model: 'backup-text-model',
+          secret: 'synthetic-text-backup',
+        },
+      ],
+    };
+    await expect(analyzeNativeIntent(input, primary)).resolves.toEqual(expected);
+    expect(call).toHaveBeenCalledTimes(2);
+    expect(call.mock.calls[1]).toEqual([
+      'https://backup.example/v1/chat/completions',
+      expect.objectContaining({
+        headers: { Authorization: 'Bearer synthetic-text-backup' },
+        body: expect.objectContaining({ model: 'backup-text-model' }),
+      }),
+    ]);
+  });
   it('accepts a null optional market only as an omitted market when none was requested', async () => {
     const input = request();
     const expected = simulateCreativeIntent(input);
@@ -387,12 +433,20 @@ describe('native image-to-video orchestration', () => {
     const result = await provider.execute(ctx);
     expect(result).toEqual({
       state: 'submitted',
-      remote: { id: 'video-123', endpoint: video.baseUrl, nativeModel: video.model },
+      remote: {
+        id: 'video-123',
+        endpoint: video.baseUrl,
+        nativeModel: video.model,
+        nativeResourceId: video.id,
+        nativeResourceRevision: video.revision,
+      },
     });
     expect(accepted).toHaveBeenCalledExactlyOnceWith({
       id: 'video-123',
       endpoint: video.baseUrl,
       nativeModel: video.model,
+      nativeResourceId: video.id,
+      nativeResourceRevision: video.revision,
     });
     expect(call).toHaveBeenCalledTimes(2);
   });
@@ -450,7 +504,13 @@ describe('native image-to-video orchestration', () => {
     });
     expect(result).toEqual({
       state: 'submitted',
-      remote: { id: 'xingyun-task', endpoint: connection.baseUrl, nativeModel: connection.model },
+      remote: {
+        id: 'xingyun-task',
+        endpoint: connection.baseUrl,
+        nativeModel: connection.model,
+        nativeResourceId: connection.id,
+        nativeResourceRevision: connection.revision,
+      },
     });
     call.mockResolvedValueOnce({ id: 'xingyun-task', status: 'pending' });
     expect(

@@ -15,6 +15,7 @@ type Placement = {
 
 export function ComposerSettingsPopover({
   id,
+  title = '创作设置',
   open,
   onOpenChange,
   anchorRef,
@@ -23,6 +24,7 @@ export function ComposerSettingsPopover({
   children,
 }: {
   id: string;
+  title?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   anchorRef: RefObject<HTMLButtonElement | null>;
@@ -148,7 +150,7 @@ export function ComposerSettingsPopover({
           }}
         >
           <header className="composer-settings-heading">
-            <Dialog.Title>{t('创作设置')}</Dialog.Title>
+            <Dialog.Title>{t(title)}</Dialog.Title>
             <Dialog.Close asChild>
               <IconButton label={t('关闭')}>
                 <X size={18} />

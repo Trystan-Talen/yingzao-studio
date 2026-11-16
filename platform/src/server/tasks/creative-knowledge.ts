@@ -5,6 +5,20 @@ import type { CoreServices } from '../core';
 import { AppError } from '../errors';
 
 export function validateCreativeKnowledgeInput(actor: Actor, input: JobInput) {
+  if (
+    input.planningMode === 'direct' &&
+    (!['image.generate', 'video.generate'].includes(input.operation) ||
+      input.replica ||
+      input.maskAssetId ||
+      input.options.designs?.length ||
+      input.options.detailPagePlan ||
+      input.options.assistantMode !== 'ideas')
+  )
+    throw new AppError(
+      400,
+      'DIRECT_GENERATION_UNSUPPORTED',
+      '直接生成用于普通图片与视频；复刻、蒙版和分组方案请开启思考模式。',
+    );
   // Grouped legacy designs append their own module prose after planning. Until each
   // module has an approved plan, never claim new knowledge governs those prompts.
   if (
@@ -101,9 +115,10 @@ export function resolveCreativeKnowledge(
       updatedAt: brand.updatedAt,
       content,
     });
-    // A product association supplies brand guidance. Images remain an explicit choice:
-    // the existing brand picker keeps its established reference-image behavior.
-    if (input.brandId) referenceAssetIds.push(...brand.referenceAssetIds);
+    // Replica keeps exactly the explicitly selected work and own subject. A selected
+    // brand supplies text guidance without silently adding a third visual identity.
+    // Other creation keeps the brand picker's established reference-image behavior.
+    if (input.brandId && !input.replica) referenceAssetIds.push(...brand.referenceAssetIds);
   }
   if (product) {
     const content = [

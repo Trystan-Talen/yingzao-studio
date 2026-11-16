@@ -72,7 +72,7 @@ async function stop(child: ChildProcess) {
   }
 }
 
-it('upgrades a populated 0039 backup and preserves new knowledge, planner revisions and media through restore and real API/worker restarts', async () => {
+it('upgrades a populated 0039 backup with resource and execution-log tables while preserving data, credits and media through restore and real API/worker restarts', async () => {
   const port = await unusedPort();
   const folder = await mkdtemp(join(tmpdir(), 'yingzao-persistence-upgrade-'));
   const config: AppConfig = {
@@ -177,6 +177,12 @@ it('upgrades a populated 0039 backup and preserves new knowledge, planner revisi
     const before = snapshot(db);
     expect(before.schema_migrations).toHaveLength((await readdir(oldMigrations)).length);
     expect(before).not.toHaveProperty('creative_memories');
+    for (const table of [
+      'model_connection_resources',
+      'job_execution_logs',
+      'brief_execution_logs',
+    ])
+      expect(before).not.toHaveProperty(table);
     const legacyBundle = await backup(config, join(folder, 'backup-0039'));
     const legacyDigests = await collectDigests(legacyBundle);
     const upgradedRoot = await restore(legacyBundle, join(folder, 'upgraded'));
@@ -202,7 +208,26 @@ it('upgrades a populated 0039 backup and preserves new knowledge, planner revisi
         );
       else expect(after[table], table).toEqual(rows);
     }
-    expect(after.schema_migrations).toHaveLength((await readdir(oldMigrations)).length + 2);
+    const currentMigrations = (await readdir(resolve('migrations')))
+      .filter((name) => /^\d+.*\.sql$/.test(name))
+      .sort();
+    expect((after.schema_migrations as { name: string }[]).map((row) => row.name).sort()).toEqual(
+      currentMigrations,
+    );
+    expect(currentMigrations).toEqual(
+      expect.arrayContaining(['0042-model-fallback-resources.sql', '0043-job-execution-logs.sql']),
+    );
+    for (const table of [
+      'model_connection_resources',
+      'job_execution_logs',
+      'brief_execution_logs',
+    ])
+      expect(after[table], table).toEqual([]);
+    expect(after.credit_accounts_channel).toEqual(before.credit_accounts_channel);
+    expect(after.credit_lots).toEqual(before.credit_lots);
+    expect(
+      (await collectDigests(upgradedRoot)).filter((file) => file.path.startsWith('media/')),
+    ).toEqual(legacyDigests.filter((file) => file.path.startsWith('media/')));
     expect(db.sqlite.pragma('foreign_key_check')).toEqual([]);
     expect(db.sqlite.pragma('integrity_check')).toEqual([{ integrity_check: 'ok' }]);
     closeDatabase(db);
@@ -411,6 +436,11 @@ it('upgrades a populated 0039 backup and preserves new knowledge, planner revisi
     db = createDatabaseContext(restoredConfig.databasePath);
     expect(db.sqlite.prepare('SELECT * FROM creative_briefs ORDER BY id').all()).toEqual(briefRows);
     expect(db.sqlite.prepare('SELECT COUNT(*) AS n FROM jobs').get()).toEqual({ n: 0 });
+    for (const table of ['model_connection_resources', 'job_execution_logs'])
+      expect(db.sqlite.prepare(`SELECT COUNT(*) AS n FROM ${table}`).get()).toEqual({ n: 0 });
+    expect(
+      (await collectDigests(restoredRoot)).filter((file) => file.path.startsWith('media/')),
+    ).toEqual(legacyDigests.filter((file) => file.path.startsWith('media/')));
     expect(db.sqlite.pragma('foreign_key_check')).toEqual([]);
     expect(db.sqlite.pragma('integrity_check')).toEqual([{ integrity_check: 'ok' }]);
     expect(await collectDigests(legacyBundle)).toEqual(legacyDigests);

@@ -12,7 +12,13 @@ export function CreativeContextSources({ preparation }: { preparation: CreativeP
   return (
     <details className="knowledge-sources">
       <summary>{t('本次采用的资料')}</summary>
-      <p className="field-hint">{t('以下为本次规划的资料快照；后续编辑不改变已确认方案。')}</p>
+      <p className="field-hint">
+        {t(
+          preparation.input.planningMode === 'direct'
+            ? '以下为本次直接生成的资料快照；后续编辑不改变已确认内容。'
+            : '以下为本次规划的资料快照；后续编辑不改变已确认方案。',
+        )}
+      </p>
       {preparation.contextSources?.map((source) => (
         <div className="knowledge-source" key={`${source.kind}:${source.id}`}>
           <strong>
@@ -44,14 +50,16 @@ export function CreativeContextSources({ preparation }: { preparation: CreativeP
 export function CreativeSummary({
   summary,
   assumptions,
+  direct = false,
 }: {
+  direct?: boolean;
   summary: string;
   assumptions: string[];
 }) {
   return (
     <div className="creative-summary">
       <p className="creative-brief-summary">
-        <strong>{t('创作理解')}：</strong>
+        <strong>{t(direct ? '生成内容' : '创作理解')}：</strong>
         {summary}
       </p>
       {!!assumptions.length && (
@@ -137,6 +145,8 @@ export function ReferenceStudyPreview({
 }
 
 export function CreativeBrief({
+  planningMode = 'assisted',
+  reviewExpanded = false,
   preparation,
   answers,
   busy,
@@ -152,6 +162,8 @@ export function CreativeBrief({
   onAddReference,
   onEditSettings,
 }: {
+  planningMode?: 'assisted' | 'direct';
+  reviewExpanded?: boolean;
   preparation?: CreativePreparation;
   answers: CreativeAnswer[];
   busy: boolean;
@@ -186,6 +198,7 @@ export function CreativeBrief({
   }, [missingQuestionId, focusRequest, busy]);
   if (!preparation && !busy && !error) return null;
   const clarifying = preparation?.status === 'needs_clarification';
+  const direct = planningMode === 'direct';
   return (
     <section
       ref={section}
@@ -196,12 +209,12 @@ export function CreativeBrief({
       {busy && (
         <p className="studio-brief-progress" role="status">
           <LoaderCircle size={17} aria-hidden="true" />
-          {t('正在整理你的想法…')}
+          {t(direct ? '正在准备直接生成…' : '正在整理你的想法…')}
         </p>
       )}
       {error && (
         <Notice tone="warning">
-          <strong>{t('这次理解还没完成')}</strong>
+          <strong>{t(direct ? '生成准备还没完成' : '这次理解还没完成')}</strong>
           <p>
             {t(
               canRestart
@@ -230,25 +243,32 @@ export function CreativeBrief({
             disabled={!canRefreshSources || busy || locked}
             onClick={onRefreshSources}
           >
-            {t('按最新资料重新整理')}
+            {t(direct ? '按最新资料更新' : '按最新资料重新整理')}
           </Button>
           <p className="field-hint">
             {t(
-              '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。',
+              direct
+                ? '取消当前待确认报价。再次点击生成时读取最新资料，不调用文本规划模型。'
+                : '取消当前待确认报价，保留已保存的方案和已提交任务。再次点击生成才会读取最新资料并重新整理，可能产生策划费用。',
             )}
           </p>
           <p className="field-hint">
-            {t('原始需求与素材选择不变；旧方案的补充回答需要重新确认。')}
+            {t(
+              direct
+                ? '原始需求与素材选择不变。'
+                : '原始需求与素材选择不变；旧方案的补充回答需要重新确认。',
+            )}
           </p>
         </div>
       )}
       {preparation?.status === 'ready' && (
-        <details className="creative-brief-ready">
+        <details className="creative-brief-ready" open={reviewExpanded || undefined}>
           <summary>
             <CheckCircle2 size={17} aria-hidden="true" />
-            {t('需求已整理，查看详情')}
+            {t(direct ? '直接生成已准备，查看内容' : '需求已整理，查看详情')}
           </summary>
           <CreativeSummary
+            direct={direct}
             summary={preparation.result.summary}
             assumptions={preparation.result.assumptions}
           />

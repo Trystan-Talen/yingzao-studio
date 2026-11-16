@@ -22,6 +22,9 @@ const Inspiration = lazy(() =>
 const Workbench = lazy(() =>
   import('./pages/Workbench').then((module) => ({ default: module.Workbench })),
 );
+const ReplicaStudio = lazy(() =>
+  import('./pages/ReplicaStudio').then((module) => ({ default: module.ReplicaStudio })),
+);
 const Tasks = lazy(() => import('./pages/Tasks').then((module) => ({ default: module.Tasks })));
 const DetailPageStudio = lazy(() =>
   import('./pages/DetailPageStudio').then((module) => ({ default: module.DetailPageStudio })),
@@ -121,6 +124,8 @@ export function App() {
           <Route path="inspiration" element={page(<Inspiration />)} />
           <Route path="workbench" element={page(<Workbench />)} />
           <Route path="workbench/:projectId" element={page(<Workbench />)} />
+          <Route path="replica" element={page(<ReplicaStudio />)} />
+          <Route path="replica/:projectId" element={page(<ReplicaStudio />)} />
           <Route path="tasks" element={page(<Tasks />)} />
           <Route path="detail-pages" element={page(<DetailPageStudio />)} />
           <Route path="detail-pages/:projectId" element={page(<DetailPageStudio />)} />

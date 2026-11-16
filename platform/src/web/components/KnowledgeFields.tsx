@@ -21,12 +21,14 @@ export function KnowledgeSelect({
   value,
   onChange,
   disabled = false,
+  emptyLabel,
 }: {
   type: 'brands' | 'products';
   label: string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  emptyLabel?: string;
 }) {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -44,7 +46,9 @@ export function KnowledgeSelect({
           onChange={(event) => onChange(event.target.value)}
           disabled={disabled}
         >
-          <option value="">{t(type === 'brands' ? '不使用品牌' : '不使用产品')}</option>
+          <option value="">
+            {emptyLabel ?? t(type === 'brands' ? '不使用品牌' : '不使用产品')}
+          </option>
           {selectedOutside && (
             <option value={value}>
               {selected.data?.name ??

@@ -343,6 +343,21 @@ describe('read-only model metadata and adapter intersection', () => {
     });
     expect(network).not.toHaveBeenCalled();
   });
+  it.each([
+    '演示模式不调用自定义模型，请在正式模式配置并生成',
+    '请在模型配置中启用文本与图片服务',
+    '请先安装 FFmpeg（媒体处理工具）与 ffprobe（媒体探测工具），再生成视频',
+  ])('preserves the actual generation restriction: %s', async (reason) => {
+    configured = false;
+    operations[1] = { ...operations[1]!, providerId: 'native', reason };
+    const result = await service.query('workspace-a', { ...image(), providerId: 'native' });
+    expect(result).toMatchObject({
+      status: 'unavailable',
+      canGenerate: false,
+      reason,
+    });
+    expect(network).not.toHaveBeenCalled();
+  });
   it('does not advertise an adjustable batch count for operations that derive results from assets', async () => {
     operations[0] = {
       ...operations[0]!,

@@ -26,6 +26,9 @@ test('retains single-creation memory and product-image choices after refreshing 
     name: '保留单张选择',
     referenceAssetIds: [account.reference.id],
   });
+  await page.reload();
+  await composer.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
+  await composer.getByRole('checkbox', { name: '带入产品参考图', exact: true }).check();
   await prompt.fill('刷新后仍保留用户明确勾选，仅单张创作采用。');
   const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   const open = async () => {
@@ -34,8 +37,6 @@ test('retains single-creation memory and product-image choices after refreshing 
       await settings.getByText('更多偏好', { exact: true }).click();
   };
   await open();
-  await settings.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
-  await settings.getByRole('checkbox', { name: '带入产品参考图', exact: true }).check();
   await settings.getByRole('checkbox', { name: '使用创作记忆', exact: true }).check();
   await settings
     .getByRole('combobox', { name: '创作类型', exact: true })
@@ -48,8 +49,9 @@ test('retains single-creation memory and product-image choices after refreshing 
   ).not.toBeChecked();
   await settings.getByRole('combobox', { name: '创作类型', exact: true }).selectOption('single');
   await expect(settings.getByRole('checkbox', { name: '使用创作记忆', exact: true })).toBeChecked();
+  await settings.getByRole('button', { name: '完成', exact: true }).click();
   await expect(
-    settings.getByRole('checkbox', { name: '带入产品参考图', exact: true }),
+    composer.getByRole('checkbox', { name: '带入产品参考图', exact: true }),
   ).toBeChecked();
 });
 

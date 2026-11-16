@@ -167,7 +167,7 @@
 
 /* ---------- P0-4 · Service-not-connected: say it once ---------- */
 /* The collapsed capability summary repeats the notice that sits above the generate button. */
-:root:root .model-capability-status:has(~ .submit-block > .notice) {
+:root:root .model-capability-status:not([data-blocking='true']):has(~ .submit-block > .notice) {
   display: none;
 }
 :root:root .submit-block > .notice {

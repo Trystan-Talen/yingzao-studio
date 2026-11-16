@@ -3,6 +3,7 @@ import sharp from 'sharp';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { referenceStudySchema } from '../src/contracts/reference-study';
 import { nativeProviderJson } from '../src/server/providers/native-http';
+import { ProviderError } from '../src/server/tasks/types';
 import {
   prepareNativeReferenceMedia,
   type NativeReferenceMedia,
@@ -73,6 +74,59 @@ beforeEach(() => {
   json.mockReset();
 });
 describe('reference visual study', () => {
+  it('uses only an explicit fallback vision model and binds evidence to the resource that succeeded', async () => {
+    const input = await media();
+    json
+      .mockRejectedValueOnce(new ProviderError('拒绝', false, 'PROVIDER_HTTP_401'))
+      .mockResolvedValueOnce(response(study()));
+    const result = await analyzeNativeReferenceStudy(
+      { prompt: '分析参考', media: input.prepared },
+      {
+        ...connection,
+        fallbackResources: [
+          {
+            ...connection,
+            id: 'text-only',
+            model: 'text-only-model',
+            baseUrl: 'https://text-only.example/v1',
+          },
+          {
+            ...connection,
+            id: 'vision-backup',
+            model: 'backup-text-model',
+            visionModel: 'explicit-backup-vision',
+            baseUrl: 'https://vision-backup.example/v1',
+            secret: 'backup-vision-key',
+          },
+        ],
+      },
+    );
+    expect(json).toHaveBeenCalledTimes(2);
+    expect(json.mock.calls[1]).toEqual([
+      'https://vision-backup.example/v1/chat/completions',
+      expect.objectContaining({
+        headers: { Authorization: 'Bearer backup-vision-key' },
+        body: expect.objectContaining({ model: 'explicit-backup-vision' }),
+      }),
+    ]);
+    expect(result.evidence.model).toBe('explicit-backup-vision');
+  });
+  it('stops fallback vision work after the caller revokes authorization', async () => {
+    const input = await media();
+    json.mockRejectedValue(new ProviderError('拒绝', false, 'PROVIDER_HTTP_401'));
+    await expect(
+      analyzeNativeReferenceStudy(
+        { prompt: '分析参考', media: input.prepared },
+        { ...connection, fallbackResources: [{ ...connection, visionModel: 'backup-vision' }] },
+        {
+          beforeFallback: () => {
+            throw new ProviderError('权限已撤销');
+          },
+        },
+      ),
+    ).rejects.toThrow('权限已撤销');
+    expect(json).toHaveBeenCalledTimes(1);
+  });
   it('sends real subject/reference pixels in separate roles and binds local evidence, including custom configured aliases', async () => {
     const input = await media();
     json.mockResolvedValue(response(study()));

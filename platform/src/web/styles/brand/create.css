@@ -409,9 +409,20 @@
   background: var(--tint);
   transform: rotate(0deg);
 }
-/* the capability summary repeats the submit notice; full details live in the settings popover */
-.yz-create .composer-studio > .model-capability-status {
+/* Quiet provenance lives in settings; loading and blockers stay visible beside creation. */
+.yz-create .composer-studio > .model-capability-status:not([data-blocking='true']) {
   display: none;
+}
+.yz-create .composer-studio > .model-capability-status[data-blocking='true'] {
+  align-self: stretch;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--field);
+}
+.yz-create .composer-studio > .model-capability-status[data-blocking='true'] > details > summary {
+  color: var(--text);
+  font-size: 12px;
 }
 
 /* row 3 — toolbar */

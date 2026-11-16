@@ -16,13 +16,19 @@ import {
   usesModelVideoTailHold,
 } from '../tasks/native-capture';
 import { nativeProviderJson } from './native-http';
+import { withModelFallback } from './native-fallback';
 import { validateNativeImageEdit } from './native-background';
 
 export interface NativePlannerConnection {
+  id?: string;
+  name?: string;
+  kind?: string;
   baseUrl: string;
   model: string;
+  visionModel?: string;
   secret: string;
   protocol: string;
+  fallbackResources?: NativePlannerConnection[];
 }
 
 export interface NativePlanDiagnostic {
@@ -420,7 +426,7 @@ ready 的视频结果还必须包含 generationPlan:{"imagePrompt":"只描述视
 export async function analyzeNativeIntent(
   request: CreativeIntentRequest,
   connection: NativePlannerConnection,
-  options: { onResponse?: NativePlannerObserver } = {},
+  options: { onResponse?: NativePlannerObserver; beforeFallback?: () => void } = {},
 ): Promise<CreativeIntentResult> {
   const input = creativeIntentRequestSchema.parse(request);
   const serialized = JSON.stringify(input);
@@ -432,21 +438,26 @@ export async function analyzeNativeIntent(
     new Set(input.sourceTexts.map((source) => source.id)).size !== input.sourceTexts.length
   )
     throw new ProviderError('文本规划配置或输入无效，请检查模型连接与资料。');
-  const response = await nativeProviderJson(
-    nativeEndpoint(connection.baseUrl, '/chat/completions'),
+  const response = await withModelFallback(
+    connection,
+    (resource) =>
+      nativeProviderJson(nativeEndpoint(resource.baseUrl, '/chat/completions'), {
+        headers: { Authorization: `Bearer ${resource.secret}` },
+        body: {
+          model: resource.model,
+          messages: [
+            { role: 'system', content: instructions },
+            { role: 'user', content: serialized },
+          ],
+          response_format: { type: 'json_object' },
+          stream: false,
+        },
+        submission: true,
+        timeoutMs: CREATIVE_INTENT_SERVER_TIMEOUT_MS,
+      }),
     {
-      headers: { Authorization: `Bearer ${connection.secret}` },
-      body: {
-        model: connection.model,
-        messages: [
-          { role: 'system', content: instructions },
-          { role: 'user', content: serialized },
-        ],
-        response_format: { type: 'json_object' },
-        stream: false,
-      },
-      submission: true,
-      timeoutMs: CREATIVE_INTENT_SERVER_TIMEOUT_MS,
+      compatible: (resource) => resource.protocol === 'openai-chat',
+      beforeFallback: options.beforeFallback,
     },
   );
   if (options.onResponse) {

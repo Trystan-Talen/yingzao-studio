@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { nativeProviderJson } from '../src/server/providers/native-http';
+import { ProviderError } from '../src/server/tasks/types';
 import {
   analyzeNativeBackgroundStudy,
   type NativeBackgroundStudyInput,
@@ -43,6 +44,34 @@ beforeEach(() => {
   call.mockReset();
 });
 describe('native background visual study', () => {
+  it('uses the fallback visual model rather than its text model and records the actual evidence model', async () => {
+    call
+      .mockRejectedValueOnce(new ProviderError('拒绝', false, 'PROVIDER_HTTP_403'))
+      .mockResolvedValueOnce(response(observation()));
+    const result = await analyzeNativeBackgroundStudy(await input(), {
+      ...connection,
+      fallbackResources: [
+        { ...connection, id: 'text-only', model: 'text-only-model' },
+        {
+          ...connection,
+          id: 'backup-vision',
+          model: 'backup-text-model',
+          visionModel: 'backup-visual-model',
+          baseUrl: 'https://backup.example/v1',
+          secret: 'backup-visual-key',
+        },
+      ],
+    });
+    expect(call).toHaveBeenCalledTimes(2);
+    expect(call.mock.calls[1]).toEqual([
+      'https://backup.example/v1/chat/completions',
+      expect.objectContaining({
+        headers: { Authorization: 'Bearer backup-visual-key' },
+        body: expect.objectContaining({ model: 'backup-visual-model' }),
+      }),
+    ]);
+    expect(result.evidence.model).toBe('backup-visual-model');
+  });
   it.each([
     [true, true, false, 'none', true],
     [false, true, false, 'none', false],

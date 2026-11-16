@@ -125,6 +125,8 @@ export interface RemoteTask {
   cancelUrl?: string;
   endpoint?: string;
   nativeModel?: string;
+  nativeResourceId?: string;
+  nativeResourceRevision?: string;
 }
 export type ProviderResult =
   | {

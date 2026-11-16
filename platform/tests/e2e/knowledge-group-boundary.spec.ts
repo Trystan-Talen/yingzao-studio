@@ -98,21 +98,22 @@ test('requires explicit product unlinking for groups and preserves single-creati
   };
   const close = () => settings.getByRole('button', { name: '完成', exact: true }).click();
   const memory = settings.getByRole('checkbox', { name: '使用创作记忆', exact: true });
-  const images = settings.getByRole('checkbox', { name: '带入产品参考图', exact: true });
-  const selected = settings.getByRole('combobox', { name: '参考产品', exact: true });
+  const images = composer.getByRole('checkbox', { name: '带入产品参考图', exact: true });
+  const selected = composer.getByRole('combobox', { name: '参考产品', exact: true });
   const kind = settings.getByRole('combobox', { name: '创作类型', exact: true });
-  await open();
+  await page.reload();
   await selected.selectOption(product.id);
   await images.check();
+  await open();
   await expect(memory).toBeChecked();
   await kind.selectOption('main-secondary');
   await expect(memory).toBeDisabled();
   await expect(memory).not.toBeChecked();
+  await close();
   await expect(images).toBeDisabled();
   await expect(images).not.toBeChecked();
   await expect(selected).toBeDisabled();
   await expect(selected).toHaveValue(product.id);
-  await close();
   await expect(composer.getByRole('button', { name: '生成图片', exact: true })).toBeDisabled();
   await expect(composer).toContainText('分组物料暂不支持关联产品与个人记忆');
   expect(writes.filter((path) => /creative-briefs|quotes|jobs/.test(path))).toEqual([]);
@@ -120,13 +121,15 @@ test('requires explicit product unlinking for groups and preserves single-creati
   await kind.selectOption('single');
   await expect(memory).toBeEnabled();
   await expect(memory).toBeChecked();
+  await close();
   await expect(images).toBeChecked();
   await expect(selected).toHaveValue(product.id);
+  await open();
   await kind.selectOption('main-secondary');
-  await settings.getByRole('button', { name: '取消产品关联', exact: true }).click();
+  await close();
+  await composer.getByRole('button', { name: '取消产品关联', exact: true }).click();
   await expect(selected).toHaveValue('');
   await expectNoHorizontalOverflow(page);
-  await close();
   await expect(composer.getByRole('button', { name: '生成图片', exact: true })).toBeEnabled();
   const quoted = page.waitForResponse(
     (item) =>

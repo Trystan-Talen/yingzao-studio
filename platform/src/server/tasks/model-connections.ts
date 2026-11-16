@@ -1,15 +1,26 @@
-import { createCipheriv, createDecipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
+import {
+  createCipheriv,
+  createDecipheriv,
+  createHash,
+  createHmac,
+  randomBytes,
+  randomUUID,
+} from 'node:crypto';
 import { lookup } from 'node:dns/promises';
 import { request } from 'node:https';
 import { isIP } from 'node:net';
 import {
   MODEL_CONNECTION_PROTOCOLS,
   modelConnectionInputSchema,
+  modelDiscoveryInputSchema,
   type ModelConnectionDto,
   type ModelConnectionInput,
   type ModelConnectionKind,
   type ModelConnectionProtocol,
   type ModelDiscoveryStatus,
+  type ModelDiscoveryInput,
+  type ModelDirectoryDto,
+  type ModelFallbackResourceDto,
 } from '../../contracts/model-connections';
 import type { AppConfig } from '../config';
 import type { DatabaseContext } from '../db/connection';
@@ -17,7 +28,8 @@ import { AppError } from '../errors';
 import { isPublicAddress } from '../providers/http';
 
 export interface RuntimeModelConnection {
-  id: ModelConnectionKind;
+  id: string;
+  name?: string;
   kind: ModelConnectionKind;
   protocol: ModelConnectionProtocol;
   baseUrl: string;
@@ -25,6 +37,9 @@ export interface RuntimeModelConnection {
   visionModel?: string;
   secret: string;
   revision: string;
+  /** Stable endpoint/model identity for polling; same-resource credential rotation remains possible. */
+  executionRevision?: string;
+  fallbackResources?: RuntimeModelConnection[];
 }
 interface ConnectionRow {
   kind: ModelConnectionKind;
@@ -42,11 +57,17 @@ interface ConnectionRow {
   models_checked_at: string | null;
   discovery_status: ModelDiscoveryStatus;
 }
+interface ResourceRow extends ConnectionRow {
+  id: string;
+  name: string;
+  priority: number;
+}
 const kinds: ModelConnectionKind[] = ['text', 'image', 'video'];
 export function modelConnectionsRevision(
   db: DatabaseContext,
   wid: string,
   operation: string,
+  planningMode?: 'assisted' | 'direct',
 ): string {
   const required =
     operation === 'text.assist'
@@ -57,14 +78,16 @@ export function modelConnectionsRevision(
   return createHash('sha256')
     .update(
       JSON.stringify(
-        required.map((kind) => {
-          const saved = db.sqlite
-            .prepare(
-              'SELECT revision,enabled FROM model_connections WHERE workspace_id=? AND kind=?',
-            )
-            .get(wid, kind) as { revision: string; enabled: number } | undefined;
-          return [kind, saved?.revision || null, saved?.enabled || 0];
-        }),
+        required
+          .filter((kind) => planningMode !== 'direct' || kind !== 'text')
+          .map((kind) => {
+            const saved = db.sqlite
+              .prepare(
+                'SELECT revision,enabled FROM model_connections WHERE workspace_id=? AND kind=?',
+              )
+              .get(wid, kind) as { revision: string; enabled: number } | undefined;
+            return [kind, saved?.revision || null, saved?.enabled || 0];
+          }),
       ),
     )
     .digest('hex');
@@ -103,6 +126,24 @@ export function validateModelServiceUrl(value: string): URL {
       '服务地址须为公开 HTTPS（安全超文本传输协议）地址，不能包含凭据、查询参数或非标准端口。',
     );
   url.pathname = url.pathname.replace(/\/+$/, '');
+  return url;
+}
+function connectionUrl(input: Pick<ModelDiscoveryInput, 'kind' | 'baseUrl' | 'modelsUrl'>) {
+  const url = validateModelServiceUrl(input.baseUrl);
+  if (input.kind !== 'video' && url.hostname === 'xingyunyinli.com' && url.pathname === '/')
+    url.pathname = '/v1';
+  if (input.kind === 'video' && !url.pathname.endsWith('/api/v3/contents/generations/tasks'))
+    throw new AppError(
+      400,
+      'MODEL_PROTOCOL_URL_INVALID',
+      '视频服务请填写完整的原生任务集合地址，以 /api/v3/contents/generations/tasks 结尾。',
+    );
+  if (input.modelsUrl && validateModelServiceUrl(input.modelsUrl).origin !== url.origin)
+    throw new AppError(
+      400,
+      'MODEL_DIRECTORY_ORIGIN_INVALID',
+      '模型目录必须与服务地址同源，避免将密钥发送到其他站点。',
+    );
   return url;
 }
 class DiscoveryError extends Error {
@@ -233,8 +274,19 @@ export function createModelConnectionsService(
       .prepare('SELECT * FROM model_connections WHERE workspace_id=? AND kind=?')
       .get(wid, kind) as ConnectionRow | undefined;
   }
-  function get(wid: string, kind: ModelConnectionKind): ModelConnectionDto {
-    const saved = row(wid, kind);
+  function resourceRow(wid: string, kind: ModelConnectionKind, id: string) {
+    return sql
+      .prepare('SELECT * FROM model_connection_resources WHERE workspace_id=? AND kind=? AND id=?')
+      .get(wid, kind, id) as ResourceRow | undefined;
+  }
+  function resources(wid: string, kind: ModelConnectionKind) {
+    return sql
+      .prepare(
+        'SELECT * FROM model_connection_resources WHERE workspace_id=? AND kind=? ORDER BY priority,id',
+      )
+      .all(wid, kind) as ResourceRow[];
+  }
+  function dto(kind: ModelConnectionKind, saved?: ConnectionRow): ModelConnectionDto {
     const status = saved?.discovery_status || 'never';
     return {
       kind,
@@ -263,41 +315,55 @@ export function createModelConnectionsService(
           : messages[status],
     };
   }
-  function runtime(wid: string, kind: ModelConnectionKind): RuntimeModelConnection | undefined {
-    const saved = row(wid, kind);
-    if (!saved?.enabled || !saved.encrypted_secret) return undefined;
+  function get(wid: string, kind: ModelConnectionKind): ModelConnectionDto {
     return {
-      id: kind,
-      kind,
+      ...dto(kind, row(wid, kind)),
+      fallbackResources: resources(wid, kind).map((saved): ModelFallbackResourceDto => ({
+        ...dto(kind, saved),
+        id: saved.id,
+        name: saved.name,
+      })),
+    };
+  }
+  function runtimeResource(
+    saved: ConnectionRow,
+    id: string,
+    name?: string,
+  ): RuntimeModelConnection | undefined {
+    if (!saved.enabled || !saved.encrypted_secret) return undefined;
+    const secret = decrypt(saved.encrypted_secret);
+    return {
+      id,
+      ...(name ? { name } : {}),
+      kind: saved.kind,
       protocol: saved.protocol,
       baseUrl: saved.base_url,
       model: saved.model,
       visionModel: saved.vision_model || '',
-      secret: decrypt(saved.encrypted_secret),
+      secret,
       revision: saved.revision,
+      executionRevision: createHmac('sha256', key)
+        .update(JSON.stringify([saved.protocol, saved.base_url, saved.model]))
+        .digest('hex'),
     };
   }
-  function revision(wid: string, operation: string): string {
-    return modelConnectionsRevision(db, wid, operation);
+  function runtime(wid: string, kind: ModelConnectionKind): RuntimeModelConnection | undefined {
+    const saved = row(wid, kind);
+    if (!saved?.enabled || !saved.encrypted_secret) return undefined;
+    const active = runtimeResource(saved, kind)!;
+    active.fallbackResources = resources(wid, kind).flatMap((resource) => {
+      const item = runtimeResource(resource, resource.id, resource.name);
+      return item ? [item] : [];
+    });
+    return active;
+  }
+  function revision(wid: string, operation: string, planningMode?: 'assisted' | 'direct'): string {
+    return modelConnectionsRevision(db, wid, operation, planningMode);
   }
   function update(wid: string, raw: ModelConnectionInput) {
     const input = modelConnectionInputSchema.parse(raw);
-    const url = validateModelServiceUrl(input.baseUrl);
-    if (input.kind !== 'video' && url.hostname === 'xingyunyinli.com' && url.pathname === '/')
-      url.pathname = '/v1';
+    const url = connectionUrl(input);
     const baseUrl = url.href.replace(/\/$/, '');
-    if (input.kind === 'video' && !url.pathname.endsWith('/api/v3/contents/generations/tasks'))
-      throw new AppError(
-        400,
-        'MODEL_PROTOCOL_URL_INVALID',
-        '视频服务请填写完整的原生任务集合地址，以 /api/v3/contents/generations/tasks 结尾。',
-      );
-    if (input.modelsUrl && validateModelServiceUrl(input.modelsUrl).origin !== url.origin)
-      throw new AppError(
-        400,
-        'MODEL_DIRECTORY_ORIGIN_INVALID',
-        '模型目录必须与服务地址同源，避免将密钥发送到其他站点。',
-      );
     const previous = row(wid, input.kind);
     const encrypted = input.removeSecret
       ? null
@@ -320,37 +386,142 @@ export function createModelConnectionsService(
           ? `…${input.secret.slice(-4)}`
           : '已设置'
         : previous?.key_hint || null;
-    sql
-      .prepare(
-        `INSERT INTO model_connections(workspace_id,kind,protocol,base_url,models_url,model,vision_model,encrypted_secret,key_hint,enabled,revision,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
-      ON CONFLICT(workspace_id,kind) DO UPDATE SET protocol=excluded.protocol,base_url=excluded.base_url,models_url=excluded.models_url,model=excluded.model,vision_model=excluded.vision_model,encrypted_secret=excluded.encrypted_secret,key_hint=excluded.key_hint,enabled=excluded.enabled,revision=excluded.revision,updated_at=excluded.updated_at,models_json='[]',models_checked_at=NULL,discovery_status='never'`,
+    const backups = input.fallbackResources?.map((resource, priority) => {
+      const resourceUrl = connectionUrl({ ...resource, kind: input.kind });
+      const old = resourceRow(wid, input.kind, resource.id);
+      if (
+        old &&
+        new URL(old.base_url).origin !== resourceUrl.origin &&
+        old.encrypted_secret &&
+        !resource.secret &&
+        !resource.removeSecret
       )
-      .run(
-        wid,
-        input.kind,
-        input.protocol,
-        baseUrl,
-        input.modelsUrl,
-        input.model,
-        input.kind === 'text' ? (input.visionModel ?? previous?.vision_model ?? '') : '',
-        encrypted,
-        hint,
-        input.enabled ? 1 : 0,
-        randomUUID(),
-        new Date().toISOString(),
-      );
+        throw new AppError(
+          400,
+          'MODEL_CONNECTION_KEY_REQUIRED',
+          '更换备用资源站点时请重新填写该资源密钥。',
+        );
+      return { resource, priority, baseUrl: resourceUrl.href.replace(/\/$/, ''), old };
+    });
+    sql.transaction(() => {
+      sql
+        .prepare(
+          `INSERT INTO model_connections(workspace_id,kind,protocol,base_url,models_url,model,vision_model,encrypted_secret,key_hint,enabled,revision,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+      ON CONFLICT(workspace_id,kind) DO UPDATE SET protocol=excluded.protocol,base_url=excluded.base_url,models_url=excluded.models_url,model=excluded.model,vision_model=excluded.vision_model,encrypted_secret=excluded.encrypted_secret,key_hint=excluded.key_hint,enabled=excluded.enabled,revision=excluded.revision,updated_at=excluded.updated_at,models_json='[]',models_checked_at=NULL,discovery_status='never'`,
+        )
+        .run(
+          wid,
+          input.kind,
+          input.protocol,
+          baseUrl,
+          input.modelsUrl,
+          input.model,
+          input.kind === 'text' ? (input.visionModel ?? previous?.vision_model ?? '') : '',
+          encrypted,
+          hint,
+          input.enabled ? 1 : 0,
+          randomUUID(),
+          new Date().toISOString(),
+        );
+      if (backups) {
+        for (const { resource, priority, baseUrl: resourceBaseUrl, old } of backups) {
+          const resourceEncrypted = resource.removeSecret
+            ? null
+            : resource.secret
+              ? encrypt(resource.secret)
+              : old?.encrypted_secret || null;
+          const resourceHint = resource.removeSecret
+            ? null
+            : resource.secret
+              ? resource.secret.length >= 8
+                ? `…${resource.secret.slice(-4)}`
+                : '已设置'
+              : old?.key_hint || null;
+          sql
+            .prepare(
+              `INSERT INTO model_connection_resources(workspace_id,kind,id,name,priority,protocol,base_url,models_url,model,vision_model,encrypted_secret,key_hint,enabled,revision,updated_at)
+          VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          ON CONFLICT(workspace_id,kind,id) DO UPDATE SET name=excluded.name,priority=excluded.priority,protocol=excluded.protocol,base_url=excluded.base_url,models_url=excluded.models_url,model=excluded.model,vision_model=excluded.vision_model,encrypted_secret=excluded.encrypted_secret,key_hint=excluded.key_hint,enabled=excluded.enabled,revision=excluded.revision,updated_at=excluded.updated_at,models_json='[]',models_checked_at=NULL,discovery_status='never'`,
+            )
+            .run(
+              wid,
+              input.kind,
+              resource.id,
+              resource.name,
+              priority,
+              resource.protocol,
+              resourceBaseUrl,
+              resource.modelsUrl,
+              resource.model,
+              input.kind === 'text' ? (resource.visionModel ?? old?.vision_model ?? '') : '',
+              resourceEncrypted,
+              resourceHint,
+              resource.enabled ? 1 : 0,
+              randomUUID(),
+              new Date().toISOString(),
+            );
+        }
+        const kept = new Set(backups.map(({ resource }) => resource.id));
+        for (const old of resources(wid, input.kind))
+          if (!kept.has(old.id))
+            sql
+              .prepare(
+                'DELETE FROM model_connection_resources WHERE workspace_id=? AND kind=? AND id=?',
+              )
+              .run(wid, input.kind, old.id);
+      }
+    })();
     return get(wid, input.kind);
   }
-  async function refreshModels(wid: string, kind: ModelConnectionKind) {
-    const saved = row(wid, kind);
+  async function previewModels(wid: string, raw: ModelDiscoveryInput): Promise<ModelDirectoryDto> {
+    const input = modelDiscoveryInputSchema.parse(raw);
+    const baseUrl = connectionUrl(input);
+    const saved = input.resourceId
+      ? resourceRow(wid, input.kind, input.resourceId)
+      : row(wid, input.kind);
+    if (!input.secret && saved && new URL(saved.base_url).origin !== baseUrl.origin)
+      throw new AppError(400, 'MODEL_CONNECTION_KEY_REQUIRED', '更换服务站点时请重新填写密钥。');
+    const secret = input.secret || (saved?.encrypted_secret ? decrypt(saved.encrypted_secret) : '');
+    if (!secret) throw new AppError(400, 'MODEL_CONNECTION_MISSING', '请先填写服务地址与密钥。');
+    let status: ModelDiscoveryStatus = 'connected';
+    let models: string[] = [];
+    const missingVideoDirectory = input.kind === 'video' && !input.modelsUrl;
+    if (missingVideoDirectory) status = 'unavailable';
+    else {
+      const url = validateModelServiceUrl(
+        input.modelsUrl || `${baseUrl.href.replace(/\/$/, '')}/models`,
+      );
+      try {
+        models = await discover(url, secret);
+      } catch (error) {
+        status = error instanceof DiscoveryError ? error.status : 'unavailable';
+      }
+    }
+    // A draft lookup never saves credentials, changes the active model or mutates its revision.
+    return {
+      models,
+      modelsCheckedAt: new Date().toISOString(),
+      discoveryStatus: status,
+      discoveryMessage: missingVideoDirectory
+        ? '该视频协议没有统一模型目录，请填写目录地址或手动指定模型。'
+        : messages[status],
+    };
+  }
+  async function refreshModels(wid: string, kind: ModelConnectionKind, resourceId?: string) {
+    const saved = resourceId ? resourceRow(wid, kind, resourceId) : row(wid, kind);
     if (!saved?.encrypted_secret)
       throw new AppError(400, 'MODEL_CONNECTION_MISSING', '请先保存服务地址与密钥。');
+    const table = resourceId ? 'model_connection_resources' : 'model_connections';
+    const condition = resourceId ? ' AND id=?' : '';
+    const identity = resourceId
+      ? [wid, kind, saved.revision, resourceId]
+      : [wid, kind, saved.revision];
     if (kind === 'video' && !saved.models_url) {
       sql
         .prepare(
-          "UPDATE model_connections SET models_json='[]',models_checked_at=?,discovery_status='unavailable' WHERE workspace_id=? AND kind=? AND revision=?",
+          `UPDATE ${table} SET models_json='[]',models_checked_at=?,discovery_status='unavailable' WHERE workspace_id=? AND kind=? AND revision=?${condition}`,
         )
-        .run(new Date().toISOString(), wid, kind, saved.revision);
+        .run(new Date().toISOString(), ...identity);
       return get(wid, kind);
     }
     const url = validateModelServiceUrl(saved.models_url || `${saved.base_url}/models`);
@@ -363,9 +534,9 @@ export function createModelConnectionsService(
     }
     const result = sql
       .prepare(
-        'UPDATE model_connections SET models_json=?,models_checked_at=?,discovery_status=? WHERE workspace_id=? AND kind=? AND revision=?',
+        `UPDATE ${table} SET models_json=?,models_checked_at=?,discovery_status=? WHERE workspace_id=? AND kind=? AND revision=?${condition}`,
       )
-      .run(JSON.stringify(models), new Date().toISOString(), status, wid, kind, saved.revision);
+      .run(JSON.stringify(models), new Date().toISOString(), status, ...identity);
     if (!result.changes)
       throw new AppError(
         409,
@@ -380,6 +551,7 @@ export function createModelConnectionsService(
     runtime,
     revision,
     update,
+    previewModels,
     refreshModels,
   };
 }

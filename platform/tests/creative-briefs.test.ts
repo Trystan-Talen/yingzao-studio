@@ -201,6 +201,29 @@ it('keeps the original wording and freezes compiled guidance only in quoted item
   expect(analyze).toHaveBeenCalledTimes(1);
 });
 
+it('direct nonnative creation does not call configured text planning or Dify workflows', async () => {
+  const original = input({
+    planningMode: 'direct',
+    prompt: '画一只太空猫',
+    referenceText: '主色为蓝色与白色',
+  });
+  const prepared = await prepare(original);
+  expect(prepared.status).toBe('ready');
+  expect(prepared.result.questions).toEqual([]);
+  expect(prepared.result.summary).toContain('不调用文本模型');
+  expect(analyze).not.toHaveBeenCalled();
+  const quoted = await request('POST', '/quotes', prepared.input);
+  expect(quoted.statusCode, quoted.body).toBe(200);
+  const row = app.services.db.sqlite
+    .prepare('SELECT items_json FROM quotes WHERE id=?')
+    .get(quoted.json().data.id) as { items_json: string };
+  const item = JSON.parse(row.items_json)[0] as JobInput;
+  expect(item.planningMode).toBe('direct');
+  expect(item.prompt).toContain(original.prompt);
+  expect(item.prompt).toContain(original.referenceText);
+  expect(item.prompt).not.toContain('策略');
+});
+
 it('does not quote or submit a preparation that still needs a necessary answer', async () => {
   analyze.mockImplementation(async (value) => clarification(value));
   const prepared = await prepare(input({ prompt: '做个高级一点的' }));
@@ -1182,6 +1205,47 @@ it('resolves selected product and its brand as versioned text without silently a
     expect.objectContaining({ id: asset.id, role: 'reference' }),
   );
 });
+
+it.each(['direct', 'assisted'] as const)(
+  'accepts explicit brand and product images through the gateway in %s mode using the owned execution snapshot',
+  async (planningMode) => {
+    const asset = await imageAsset();
+    const brand = app.services.core.references.createBrand(actor, wid, {
+      name: '常显品牌',
+      description: '青绿色',
+      referenceAssetIds: [asset.id],
+    });
+    const product = app.services.core.knowledge.createProduct(actor, wid, {
+      name: '香氛',
+      facts: ['容量30毫升'],
+      brandId: brand.id,
+      referenceAssetIds: [asset.id],
+    });
+    const value = input({
+      planningMode,
+      brandId: brand.id,
+      productId: product.id,
+      includeProductImages: true,
+    });
+    const prepared = await prepare(value);
+    expect(prepared.contextSources?.map((source) => source.kind)).toEqual(['brand', 'product']);
+    if (planningMode === 'direct') expect(analyze).not.toHaveBeenCalled();
+    else expect(analyze.mock.calls[0]![0].context.supportsReference).toBe(true);
+    const quote = app.services.quote(actor, wid, prepared.input);
+    const row = app.services.db.sqlite
+      .prepare('SELECT items_json FROM quotes WHERE id=?')
+      .get(quote.id) as { items_json: string };
+    const execution = JSON.parse(row.items_json)[0] as JobInput;
+    expect(execution.brandId).toBeUndefined();
+    expect(execution.referenceAssetIds).toEqual([asset.id]);
+    expect(() => app.services.quote(actor, wid, value)).toThrow();
+    expect(() =>
+      app.services.quote(actor, wid, { ...prepared.input, brandId: randomUUID() }),
+    ).toThrow();
+    const submitted = app.services.submit(actor, wid, prepared.input, quote.id, randomUUID());
+    expect(submitted.status).toBe('queued');
+  },
+);
 
 it('freezes library sources and personal context through clarification and refreshes only on a new preparation', async () => {
   const brand = app.services.core.references.createBrand(actor, wid, {

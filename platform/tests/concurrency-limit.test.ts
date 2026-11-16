@@ -97,9 +97,7 @@ function worker() {
 function activeCount() {
   return (
     db.sqlite
-      .prepare(
-        "SELECT COUNT(*) n FROM job_items WHERE workspace_id=? AND status IN ('running','reconciliation_required')",
-      )
+      .prepare("SELECT COUNT(*) n FROM job_items WHERE workspace_id=? AND status='running'")
       .get(wid) as { n: number }
   ).n;
 }
@@ -111,12 +109,22 @@ describe('100-slot workspace concurrency boundary with real submission and claim
     for (let i = 0; i < 99; i++) {
       const { job, quote } = submit();
       reserved += quote.maxCredits;
-      // An explicitly uncertain provider operation still occupies its slot and reserve.
+      // Existing running work consumes execution slots independently of its credit reserve.
+      db.sqlite
+        .prepare("UPDATE job_items SET status='running',phase='submitting' WHERE job_id=?")
+        .run(job.id);
+    }
+    const uncertainIds: string[] = [];
+    for (let i = 0; i < 2; i++) {
+      const { job, quote } = submit();
+      reserved += quote.maxCredits;
+      uncertainIds.push(job.id);
       db.sqlite
         .prepare(
           "UPDATE job_items SET status='reconciliation_required',phase='uncertain' WHERE job_id=?",
         )
         .run(job.id);
+      tasks.refresh(job.id);
     }
     expect(activeCount()).toBe(99);
     expect(tasks.balance(actor, wid).reserved).toBe(reserved);
@@ -149,12 +157,19 @@ describe('100-slot workspace concurrency boundary with real submission and claim
     expect(tasks.balance(actor, wid).reserved).toBe(reserved);
     expect(
       db.sqlite.prepare("SELECT COUNT(*) n FROM credit_ledger WHERE kind='reserve'").get(),
-    ).toEqual({ n: 101 });
+    ).toEqual({ n: 103 });
     expect(
       db.sqlite
         .prepare("SELECT COUNT(*) n FROM credit_ledger WHERE event_key LIKE 'final:%'")
         .get(),
     ).toEqual({ n: 0 });
+    for (const id of uncertainIds) {
+      expect(tasks.get(actor, wid, id).status).toBe('reconciliation_required');
+      expect(() => tasks.retryQuote(actor, wid, id)).toThrow();
+      expect(db.sqlite.prepare('SELECT kind FROM credit_ledger WHERE job_id=?').all(id)).toEqual([
+        { kind: 'reserve' },
+      ]);
+    }
   });
 
   it('preserves the global provider limit of four even with 100 workspace slots', () => {

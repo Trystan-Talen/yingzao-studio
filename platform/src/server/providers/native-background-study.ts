@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ProviderError } from '../tasks/types';
 import { nativeProviderJson } from './native-http';
+import { withModelFallback } from './native-fallback';
 import { nativeEndpoint, type NativePlannerConnection } from './native-planner';
 import { prepareNativeReferenceMedia, type NativeReferenceFile } from './native-reference-media';
 
@@ -144,7 +145,10 @@ const instructions = `你是局部背景编辑的视觉区域分析师，只分�
 export async function analyzeNativeBackgroundStudy(
   rawInput: NativeBackgroundStudyInput,
   connection: NativePlannerConnection,
-  options: { onResponse?: (raw: unknown) => void | Promise<void> } = {},
+  options: {
+    onResponse?: (raw: unknown) => void | Promise<void>;
+    beforeFallback?: () => void;
+  } = {},
 ): Promise<NativeBackgroundStudy> {
   const parsed = inputSchema.safeParse(rawInput);
   if (
@@ -178,20 +182,36 @@ export async function analyzeNativeBackgroundStudy(
       },
     },
   ];
-  const raw = await nativeProviderJson(nativeEndpoint(connection.baseUrl, '/chat/completions'), {
-    headers: { Authorization: `Bearer ${connection.secret}` },
-    body: {
-      model: connection.model,
-      messages: [
-        { role: 'system', content: instructions },
-        { role: 'user', content },
-      ],
-      response_format: { type: 'json_object' },
-      stream: false,
+  const { raw, model } = await withModelFallback(
+    {
+      ...connection,
+      fallbackResources: connection.fallbackResources?.map((resource) => ({
+        ...resource,
+        model: resource.visionModel ?? '',
+      })),
     },
-    submission: true,
-    timeoutMs: 300000,
-  });
+    async (resource) => ({
+      raw: await nativeProviderJson(nativeEndpoint(resource.baseUrl, '/chat/completions'), {
+        headers: { Authorization: `Bearer ${resource.secret}` },
+        body: {
+          model: resource.model,
+          messages: [
+            { role: 'system', content: instructions },
+            { role: 'user', content },
+          ],
+          response_format: { type: 'json_object' },
+          stream: false,
+        },
+        submission: true,
+        timeoutMs: 300000,
+      }),
+      model: resource.model,
+    }),
+    {
+      compatible: (resource) => resource.protocol === 'openai-chat' && !!resource.model.trim(),
+      beforeFallback: options.beforeFallback,
+    },
+  );
   if (options.onResponse) {
     try {
       await options.onResponse(raw);
@@ -221,7 +241,7 @@ export async function analyzeNativeBackgroundStudy(
       : {}),
     evidence: {
       sourceSha256: media.referenceSha256,
-      model: connection.model,
+      model,
       analyzedAt: new Date().toISOString(),
     },
   };

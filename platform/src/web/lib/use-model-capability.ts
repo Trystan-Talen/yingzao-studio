@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { ModelCapability, OperationCapability } from '../../contracts/jobs';
 import type {
@@ -140,14 +140,56 @@ export function useModelCapability(selection: ModelCapabilitySelection) {
   const query = useQuery(queryOptions);
   const data = active && capabilityMatchesSelection(query.data, selection) ? query.data : undefined;
   const [, setExpirationTick] = useState(0);
+  const renewalAttempt = useRef<{ scope: string; attempted: boolean } | null>(null);
+  const scope = JSON.stringify(queryOptions.queryKey);
+  const { refetch, error } = query;
+  const isExpired = !!data && !(Date.parse(data.expiresAt) > Date.now());
   useEffect(() => {
     if (!data) return;
-    const remaining = Date.parse(data.expiresAt) - Date.now();
-    if (!Number.isFinite(remaining) || remaining <= 0) return;
-    const timer = setTimeout(() => setExpirationTick((tick) => tick + 1), remaining + 1);
-    return () => clearTimeout(timer);
-  }, [data?.expiresAt]);
-  const isExpired = !!data && !(Date.parse(data.expiresAt) > Date.now());
+    const deadline = Date.parse(data.expiresAt);
+    if (!Number.isFinite(deadline)) return;
+    // A fresh result starts a new lease. Until one arrives, allow only one automatic
+    // recovery attempt, even if a server responds with a different expired deadline.
+    if (renewalAttempt.current?.scope !== scope || !isExpired)
+      renewalAttempt.current = { scope, attempted: false };
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const renewExpired = () => {
+      clearTimeout(timer);
+      const remaining = deadline - Date.now();
+      if (remaining > 0) {
+        // Browser timers and wall time can drift independently. An early callback
+        // must keep the remaining deadline instead of losing renewal permanently.
+        timer = setTimeout(renewExpired, remaining + 1);
+        return;
+      }
+      setExpirationTick((tick) => tick + 1);
+      if (
+        !data.canGenerate ||
+        operation?.available === false ||
+        error ||
+        document.visibilityState === 'hidden' ||
+        renewalAttempt.current?.attempted
+      )
+        return;
+      renewalAttempt.current = { scope, attempted: true };
+      // Share a focus/mount refresh already in flight instead of aborting and restarting it.
+      void refetch({ cancelRefetch: false });
+    };
+    // Also recover expiry observed during rendering, without waiting for a throttled timer.
+    renewExpired();
+    const resume = () => {
+      if (document.visibilityState === 'visible') renewExpired();
+    };
+    document.addEventListener('visibilitychange', resume);
+    window.addEventListener('focus', resume);
+    window.addEventListener('pageshow', resume);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('visibilitychange', resume);
+      window.removeEventListener('focus', resume);
+      window.removeEventListener('pageshow', resume);
+    };
+  }, [scope, data?.expiresAt, data?.canGenerate, operation?.available, error, refetch, isExpired]);
   return {
     data,
     model: data?.model ?? selectedModel,

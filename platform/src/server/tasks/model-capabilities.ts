@@ -377,7 +377,10 @@ export function createModelCapabilityService(config: AppConfig, dependencies: De
         dto.reasonCode = 'CONFIGURATION_CHANGED';
       }
       if (!dto.canGenerate) dto.expiresAt = new Date(Date.now() + FAILURE_TTL).toISOString();
-      dto.reason = messages[dto.reasonCode];
+      dto.reason =
+        dto.reasonCode === 'NOT_CONFIGURED' && operation.reason
+          ? operation.reason
+          : messages[dto.reasonCode];
       if (identity(wid, input).key === current.key) remember(current.key, dto);
       return dto;
     };

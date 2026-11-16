@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-11-15T15:02:03.039Z",
+  "files": [
+    {
+      "path": "platform/src/web/lib/use-model-capability.ts",
+      "sha256": "979927ef69c0de324532522f09c8e33b2b71aa7f9d7cc501fca5203cfcfca202"
+    },
+    {
+      "path": "platform/src/web/components/ModelCapabilityStatus.tsx",
+      "sha256": "9514d9173c182b72a9d0105e33182b0e8161982aed79cf1b8007e86b04f01298"
+    },
+    {
+      "path": "platform/src/web/styles/brand/create.css",
+      "sha256": "1a5dda8dc1f994b0cb53611752d524b5e0a418a598f15c98a85f19ed146296ef"
+    },
+    {
+      "path": "platform/src/web/styles/brand/fixes.css",
+      "sha256": "a7de13961c4866ee1f86f95afe36a8ca05cffbeb96bad094c9a075b4cb9607ed"
+    },
+    {
+      "path": "platform/src/web/styles/creative.css",
+      "sha256": "f9b7d6f44307ce015233174140e1dca04fcf973fb364dfc93749c66f38e10334"
+    },
+    {
+      "path": "platform/tests/model-capability-expiry.test.ts",
+      "sha256": "a89fb24368e86cec946635340ae0b43a12cdcddeb425434311d626f282f63da4"
+    },
+    {
+      "path": "platform/tests/e2e/model-capability-expiry.spec.ts",
+      "sha256": "e0f297e116a129876f0b7f7e5527d378e4b4791518efc792e8f2f50574b96472"
+    }
+  ]
+}

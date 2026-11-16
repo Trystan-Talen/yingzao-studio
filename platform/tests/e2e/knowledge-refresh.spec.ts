@@ -23,11 +23,14 @@ async function openProductCreation(page: Page, studio: Studio, validUntil?: stri
     facts: ['容量30毫升'],
     validUntil,
   });
+  await page.reload();
+  await flow.composer
+    .getByRole('combobox', { name: '参考产品', exact: true })
+    .selectOption(product.id);
   await flow.prompt.fill('按所选资料绘制一只白杯，纯白背景，不添加文字。');
   await flow.composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   await settings.getByText('更多偏好', { exact: true }).click();
-  await settings.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
   await settings.getByRole('checkbox', { name: '使用创作记忆', exact: true }).uncheck();
   await settings.getByRole('button', { name: '完成', exact: true }).click();
   return {
@@ -135,11 +138,10 @@ test('refreshes an expired product cached in a continuously visible page after a
   await page.clock.fastForward(61_000);
   await flow.composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
-  await settings.getByText('更多偏好', { exact: true }).click();
-  await expect(
-    settings.getByText('产品资料已过期，请更新资料或重新选择。', { exact: true }),
-  ).toBeVisible();
   await settings.getByRole('button', { name: '完成', exact: true }).click();
+  await expect(
+    flow.composer.getByText('产品资料已过期，请更新资料或重新选择。', { exact: true }),
+  ).toBeVisible();
   studio.services.core.knowledge.updateProduct(
     flow.actor,
     flow.account.workspace.id,
@@ -197,13 +199,14 @@ test('explicitly refreshes updated library sources without changing the request 
     brandId: brand.id,
     referenceAssetIds: [account.reference.id],
   });
+  await page.reload();
+  await composer.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
+  await composer.getByRole('checkbox', { name: '带入产品参考图', exact: true }).check();
   const original = '按照所选产品和品牌资料创作香氛主图，完整瓶身，纯白背景，不添加文字。';
   await prompt.fill(original);
   await composer.getByRole('button', { name: '更多创作设置', exact: true }).click();
   const settings = page.getByRole('dialog', { name: '创作设置', exact: true });
   await settings.getByText('更多偏好', { exact: true }).click();
-  await settings.getByRole('combobox', { name: '参考产品', exact: true }).selectOption(product.id);
-  await settings.getByRole('checkbox', { name: '带入产品参考图', exact: true }).check();
   await settings.getByRole('checkbox', { name: '使用创作记忆', exact: true }).uncheck();
   await settings.getByRole('button', { name: '完成', exact: true }).click();
   const generate = composer.getByRole('button', { name: '生成图片', exact: true });

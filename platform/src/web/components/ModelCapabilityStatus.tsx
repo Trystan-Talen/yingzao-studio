@@ -1,3 +1,4 @@
+import { LoaderCircle } from 'lucide-react';
 import { capabilityParameterLabels, type ModelCapabilityState } from '../lib/use-model-capability';
 import { dateTime } from '../lib/api';
 import { t } from '../lib/i18n';
@@ -16,18 +17,21 @@ export function ModelCapabilityStatus({
   const needsConnection = data?.reasonCode === 'NOT_CONFIGURED';
   const documented = data?.source === 'provider-documentation';
   const configuredPipeline = data?.providerId === 'native' && data.source === 'local-adapter';
+  const blocking = Boolean(
+    isFetching || error || isExpired || selectionIssue || (data && !canGenerate),
+  );
   const summary = isFetching
     ? '正在核查当前模型…'
     : error
       ? '模型信息未能更新，请重试后再生成。'
       : needsConnection
-        ? '请在设置中连接服务'
+        ? data.reason || '请在设置中连接服务'
         : isExpired
           ? '模型信息已过期，请刷新后再生成。'
           : !data
             ? '请先选择可用的服务和模型。'
             : !canGenerate
-              ? '当前模型暂不可用，请刷新或更换模型。'
+              ? data.reason || '当前模型暂不可用，请刷新或更换模型。'
               : configuredPipeline
                 ? '编排配置已就绪；使用当前协议支持的参数，尚未验证远端生成。'
                 : documented
@@ -36,9 +40,15 @@ export function ModelCapabilityStatus({
                     ? '可查询的模型参数已更新'
                     : '当前接入未取得完整参数结构，使用已接入的选项。';
   return (
-    <div className="model-capability-status" aria-live="polite">
+    <div
+      className="model-capability-status"
+      data-blocking={blocking}
+      aria-live="polite"
+      aria-busy={isFetching || undefined}
+    >
       <details>
         <summary className="field-hint">
+          {isFetching && <LoaderCircle size={14} className="spin" aria-hidden="true" />}
           {t(
             canGenerate && !isExpired && !error && !isFetching
               ? configuredPipeline
@@ -143,7 +153,11 @@ export function ModelCapabilityStatus({
       )}
       {!needsConnection && !isFetching && (error || isExpired || (data && !canGenerate)) && (
         <div className="inline-actions">
-          <Button variant="ghost" onClick={() => void capability.refresh()}>
+          <Button
+            variant="ghost"
+            disabled={!capability.canRefresh}
+            onClick={() => void capability.refresh()}
+          >
             {t('重试核查')}
           </Button>
         </div>

@@ -460,7 +460,11 @@ export function createTaskServices(db: DatabaseContext, core: CoreServices, conf
     retryItemIds: string[] | null = null,
   ): QuoteDto {
     if (input.providerId === 'native') {
-      const nativeRevision = settings.connections.revision(wid, input.operation);
+      const nativeRevision = settings.connections.revision(
+        wid,
+        input.operation,
+        input.planningMode,
+      );
       items = items.map((item) => ({
         ...item,
         nativeRevision: item.nativeRevision || nativeRevision,

@@ -30,6 +30,7 @@ import type { CreativePreparation } from '../../contracts/creative-intent';
 import { checkCreativePreparation } from '../lib/creative-brief';
 import { CreditEstimate } from './CreditEstimate';
 import { creativeConfigurationChanged } from '../lib/creative-brief';
+import { DemoModeGenerationNotice, isDemoGenerationBlocked } from './DemoModeGenerationNotice';
 import '../styles/job-submit.css';
 
 export function JobCreatedReceipt({ job }: { job: Job }) {
@@ -56,6 +57,7 @@ export function JobSubmit({
   beforePrepareInput,
   prepareInput,
   recoveryScope,
+  creationPurpose,
   quoteFactory,
   secondaryActions,
   onRequestPrompt,
@@ -77,6 +79,7 @@ export function JobSubmit({
   beforePrepareInput?: (input: JobInput) => Promise<JobInput | null>;
   prepareInput?: (input: JobInput) => Promise<JobInput>;
   recoveryScope?: string;
+  creationPurpose?: 'creation' | 'replica';
   quoteFactory?: (input: JobInput) => Promise<Quote | { input: JobInput; quote: Quote }>;
   secondaryActions?: ReactNode;
   /** An empty new home prompt stays actionable, without bypassing submission validation. */
@@ -110,12 +113,15 @@ export function JobSubmit({
     () =>
       journal.value.find(
         (entry) =>
-          entry.scope === scope ||
-          (scope.startsWith('composer:') &&
-            !entry.scope.startsWith('retry:') &&
-            input.projectId &&
-            entry.input.projectId === input.projectId &&
-            entry.input.operation === input.operation),
+          (!creationPurpose || !!entry.input.replica === (creationPurpose === 'replica')) &&
+          (entry.scope === scope ||
+            (creationPurpose === 'replica' &&
+              entry.scope === scope.replace(/^replica:/, 'composer:')) ||
+            (scope.startsWith('composer:') &&
+              !entry.scope.startsWith('retry:') &&
+              input.projectId &&
+              entry.input.projectId === input.projectId &&
+              entry.input.operation === input.operation)),
       ) ?? null,
   );
   const [recoveryMissing, setRecoveryMissing] = useState(false);
@@ -511,15 +517,22 @@ export function JobSubmit({
         </Notice>
       )}
       {!validated.success && <Notice tone="warning">{t('请检查必填参数与数值范围。')}</Notice>}
-      {!operation?.available && (
-        <Notice>
-          {t(operation?.reason ?? '该能力尚未连接生成服务。素材与参数仍可编辑并保存。')}{' '}
-          <Link to="/settings?tab=providers">
-            {t('连接服务')}
-            <ArrowUpRight size={12} />
-          </Link>
-        </Notice>
-      )}
+      {!operation?.available &&
+        (isDemoGenerationBlocked(operation?.reason) ? (
+          <DemoModeGenerationNotice confirmedDemo />
+        ) : (
+          <Notice>
+            {t(operation?.reason ?? '该能力尚未连接生成服务。素材与参数仍可编辑并保存。')}{' '}
+            <Link
+              to={
+                input.providerId === 'native' ? '/settings?tab=models' : '/settings?tab=providers'
+              }
+            >
+              {t(input.providerId === 'native' ? '配置模型' : '连接服务')}
+              <ArrowUpRight size={12} />
+            </Link>
+          </Notice>
+        ))}
       {!confirmGeneration && operation?.available && (
         <p className="field-hint">
           {t(
@@ -639,6 +652,9 @@ export function JobSubmit({
                 </div>
               </section>
             )}
+            {snapshot.planningMode === 'direct' && (
+              <p className="field-hint">{t('思考模式已关闭：本次跳过文本规划，直接生成。')}</p>
+            )}
             {needsContextReview && referencePreparation && (
               <CreativeContextSources preparation={referencePreparation} />
             )}
@@ -693,7 +709,12 @@ export function JobSubmit({
               open={mediaQuote ? undefined : true}
             >
               <summary hidden={!mediaQuote}>{t('查看详细配置与计费')}</summary>
-              {quote.creativeSummary && <CreativeSummary {...quote.creativeSummary} />}
+              {quote.creativeSummary && (
+                <CreativeSummary
+                  {...quote.creativeSummary}
+                  direct={snapshot.planningMode === 'direct'}
+                />
+              )}
               {mediaQuote && snapshot.prompt && (
                 <section className="studio-quote-original" aria-label={t('原始描述')}>
                   <h4>{t('原始描述')}</h4>
